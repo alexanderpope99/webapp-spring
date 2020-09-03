@@ -3,7 +3,6 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-// import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,47 +19,49 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ActIdentitate;
 import net.guides.springboot2.crud.repository.ActIdentitateRepository;
 
+
 @RestController
-@RequestMapping("/actidentitate")
+@RequestMapping("/oresuplimentare")
 public class ActIdentitateController {
     @Autowired
-    private ActIdentitateRepository actIdentitateRepository;
+    private ActIdentitateRepository oresuplimentareRepository;
 
-    @GetMapping("")
-    public List<ActIdentitate> getAllActIdentitates() {
-        return actIdentitateRepository.findAll();
+    @GetMapping
+    public List<ActIdentitate> getAllPersoane() {
+        return oresuplimentareRepository.findAll();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ActIdentitate> getActIdentitateById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        ActIdentitate actIdentitate = actIdentitateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + id));
-        return ResponseEntity.ok().body(actIdentitate);
+    public ResponseEntity<ActIdentitate> getActIdentitateById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
+    {
+        ActIdentitate oresuplimentare = oresuplimentareRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + id));
+
+        return ResponseEntity.ok().body(oresuplimentare);
     }
 
-    @PostMapping("")
-    public ActIdentitate createActIdentitate(@RequestBody ActIdentitate actIdentitate) {
-        return actIdentitateRepository.save(actIdentitate);
+    @PostMapping
+        public ActIdentitate createActIdentitate(@RequestBody ActIdentitate oresuplimentare) {
+        return oresuplimentareRepository.save(oresuplimentare);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ActIdentitate> updateActIdentitate(@PathVariable(value = "id") Long actIdentitateId,  @RequestBody ActIdentitate actIdentitateDetails) throws ResourceNotFoundException {
-        ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
-                .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + actIdentitateId));
+    public ResponseEntity<ActIdentitate> updateActIdentitate(@PathVariable(value = "id") Long id,  @RequestBody ActIdentitate newActIdentitate) throws ResourceNotFoundException {
+        ActIdentitate oresuplimentare = oresuplimentareRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + id));
 
-        actIdentitateDetails.setId(actIdentitate.getId());
-        final ActIdentitate updatedActIdentitate = actIdentitateRepository.save(actIdentitateDetails);
+        newActIdentitate.setId(oresuplimentare.getId());
+        final ActIdentitate updatedActIdentitate = oresuplimentareRepository.save(newActIdentitate);
         return ResponseEntity.ok(updatedActIdentitate);
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteActIdentitate(@PathVariable(value = "id") Long actIdentitateId)
+    public Map<String, Boolean> deleteActIdentitate(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
-        ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
-                .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + actIdentitateId));
+        ActIdentitate oresuplimentare = oresuplimentareRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + id));
 
-        actIdentitateRepository.delete(actIdentitate);
+        oresuplimentareRepository.delete(oresuplimentare);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
