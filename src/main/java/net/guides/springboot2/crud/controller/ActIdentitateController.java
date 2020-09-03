@@ -3,7 +3,7 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+// import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,48 +21,40 @@ import net.guides.springboot2.crud.model.ActIdentitate;
 import net.guides.springboot2.crud.repository.ActIdentitateRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/actidentitate")
 public class ActIdentitateController {
     @Autowired
     private ActIdentitateRepository actIdentitateRepository;
 
-    @GetMapping("/actidentitate")
+    @GetMapping("")
     public List<ActIdentitate> getAllActIdentitates() {
         return actIdentitateRepository.findAll();
     }
 
-    @GetMapping("/actidentitate/{id}")
-    public ResponseEntity<ActIdentitate> getActIdentitateById(@PathVariable(value = "id") Long actIdentitateId)
+    @GetMapping("{id}")
+    public ResponseEntity<ActIdentitate> getActIdentitateById(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
-        ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
-                .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + actIdentitateId));
+        ActIdentitate actIdentitate = actIdentitateRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + id));
         return ResponseEntity.ok().body(actIdentitate);
     }
 
-    @PostMapping("/actidentitate")
+    @PostMapping("")
     public ActIdentitate createActIdentitate(@RequestBody ActIdentitate actIdentitate) {
         return actIdentitateRepository.save(actIdentitate);
     }
 
-    @PutMapping("/actidentitate/{id}")
-    public ResponseEntity<ActIdentitate> updateActIdentitate(@PathVariable(value = "id") Long actIdentitateId,
-                                                             @RequestBody ActIdentitate actIdentitateDetails) throws ResourceNotFoundException {
+    @PutMapping("{id}")
+    public ResponseEntity<ActIdentitate> updateActIdentitate(@PathVariable(value = "id") Long actIdentitateId,  @RequestBody ActIdentitate actIdentitateDetails) throws ResourceNotFoundException {
         ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
                 .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + actIdentitateId));
 
-                actIdentitate.setCnp(actIdentitateDetails.getCnp());
-                actIdentitate.setDataEliberarii(actIdentitateDetails.getDataEliberarii());
-                actIdentitate.setDataNasterii(actIdentitateDetails.getDataNasterii());
-                actIdentitate.setEliberatDe(actIdentitateDetails.getEliberatDe());
-                actIdentitate.setLoculNasterii(actIdentitateDetails.getLoculNasterii());
-                actIdentitate.setNumar(actIdentitateDetails.getNumar());
-                actIdentitate.setSerie(actIdentitateDetails.getSerie());
-                actIdentitate.setTip(actIdentitateDetails.getTip());
-        final ActIdentitate updatedActIdentitate = actIdentitateRepository.save(actIdentitate);
+        actIdentitateDetails.setId(actIdentitate.getId());
+        final ActIdentitate updatedActIdentitate = actIdentitateRepository.save(actIdentitateDetails);
         return ResponseEntity.ok(updatedActIdentitate);
     }
 
-    @DeleteMapping("/actidentitate/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteActIdentitate(@PathVariable(value = "id") Long actIdentitateId)
             throws ResourceNotFoundException {
         ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)

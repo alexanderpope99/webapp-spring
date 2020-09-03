@@ -17,24 +17,22 @@ public class ActIdentitate {
     private String tip;
     private String serie;
     private String numar;
-    private Date dataNasterii;
-    private String eliberatDe;
-    private String dataEliberarii;
-    private String loculNasterii;
+    private Date datanasterii;
+    private String eliberatde;
+    private String daaeliberarii;
+    private String loculnasterii;
 
-    public ActIdentitate() {
+    public ActIdentitate() { }
 
-    }
-
-    public ActIdentitate(String cnp, String tip, String serie, String numar, Date dataNasterii, String eliberatDe, String dataEliberarii, String loculNasterii) {
+    public ActIdentitate(String cnp, String tip, String serie, String numar, Date datanasterii, String eliberatde, String daaeliberarii, String loculnasterii) {
         this.cnp = cnp;
         this.tip = tip;
         this.serie = serie;
         this.numar = numar;
-        this.dataNasterii = dataNasterii;
-        this.eliberatDe = eliberatDe;
-        this.dataEliberarii = dataEliberarii;
-        this.loculNasterii = loculNasterii;
+        this.datanasterii = datanasterii;
+        this.eliberatde = eliberatde;
+        this.daaeliberarii = daaeliberarii;
+        this.loculnasterii = loculnasterii;
     }
 
     @Id
@@ -46,7 +44,7 @@ public class ActIdentitate {
         this.id = id;
     }
 
-    @Column(name = "cnp", nullable = false)
+    @Column(name = "cnp")
     public String getCnp() {
         return cnp;
     }
@@ -54,7 +52,7 @@ public class ActIdentitate {
         this.cnp = cnp;
     }
 
-    @Column(name = "tip", nullable = false)
+    @Column(name = "tip")
     public String getTip() {
         return tip;
     }
@@ -62,7 +60,7 @@ public class ActIdentitate {
         this.tip = tip;
     }
 
-    @Column(name = "serie", nullable = false)
+    @Column(name = "serie")
     public String getSerie() {
         return serie;
     }
@@ -70,7 +68,7 @@ public class ActIdentitate {
         this.serie = serie;
     }
 
-    @Column(name = "numar", nullable = false)
+    @Column(name = "numar")
     public String getNumar() {
         return numar;
     }
@@ -78,36 +76,36 @@ public class ActIdentitate {
         this.numar = numar;
     }
 
-    @Column(name = "datanasterii", nullable = false)
-    public Date getDataNasterii() {
-        return dataNasterii;
+    @Column(name = "datanasterii")
+    public Date getdatanasterii() {
+        return datanasterii;
     }
-    public void setDataNasterii(Date dataNasterii) {
-        this.dataNasterii = dataNasterii;
-    }
-
-    @Column(name = "eliberatde", nullable = false)
-    public String getEliberatDe() {
-        return eliberatDe;
-    }
-    public void setEliberatDe(String eliberatDe) {
-        this.eliberatDe = eliberatDe;
+    public void setdatanasterii(Date datanasterii) {
+        this.datanasterii = datanasterii;
     }
 
-    @Column(name = "dataeliberarii", nullable = false)
-    public String getDataEliberarii() {
-        return dataEliberarii;
+    @Column(name = "eliberatde")
+    public String geteliberatde() {
+        return eliberatde;
     }
-    public void setDataEliberarii(String dataEliberarii) {
-        this.dataEliberarii = dataEliberarii;
+    public void seteliberatde(String eliberatde) {
+        this.eliberatde = eliberatde;
     }
 
-    @Column(name = "loculnasterii", nullable = false)
-    public String getLoculNasterii() {
-        return loculNasterii;
+    @Column(name = "daaeliberarii")
+    public String getdaaeliberarii() {
+        return daaeliberarii;
     }
-    public void setLoculNasterii(String loculNasterii) {
-        this.loculNasterii = loculNasterii;
+    public void setdaaeliberarii(String daaeliberarii) {
+        this.daaeliberarii = daaeliberarii;
+    }
+
+    @Column(name = "loculnasterii")
+    public String getloculnasterii() {
+        return loculnasterii;
+    }
+    public void setloculnasterii(String loculnasterii) {
+        this.loculnasterii = loculnasterii;
     }
 
 }
