@@ -21,7 +21,7 @@ import net.guides.springboot2.crud.repository.ActIdentitateRepository;
 
 
 @RestController
-@RequestMapping("/oresuplimentare")
+@RequestMapping("/actidentitate")
 public class ActIdentitateController {
     @Autowired
     private ActIdentitateRepository oresuplimentareRepository;
