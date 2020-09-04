@@ -39,7 +39,7 @@ public class AlteBeneficii {
         this.id = id;
     }
 
-    @Column(name = "nume", nullable = false)
+    @Column(name = "nume")
     public String getNume() {
         return nume;
     }
@@ -47,7 +47,7 @@ public class AlteBeneficii {
         this.nume = nume;
     }
 
-    @Column(name = "valoare", nullable = false)
+    @Column(name = "valoare")
     public double getValoare() {
         return valoare;
     }
@@ -55,7 +55,7 @@ public class AlteBeneficii {
         this.valoare = valoare;
     }
 
-    @Column(name = "procent", nullable = false)
+    @Column(name = "procent")
     public double getProcent() {
         return procent;
     }
@@ -63,7 +63,7 @@ public class AlteBeneficii {
         this.procent = procent;
     }
 
-    @Column(name = "aplicare", nullable = false)
+    @Column(name = "aplicare")
     public String getAplicare() {
         return aplicare;
     }
@@ -71,7 +71,7 @@ public class AlteBeneficii {
         this.aplicare = aplicare;
     }
 
-    @Column(name = "idcontract", nullable = false)
+    @Column(name = "idcontract")
     public int getIdcontract() {
         return idcontract;
     }

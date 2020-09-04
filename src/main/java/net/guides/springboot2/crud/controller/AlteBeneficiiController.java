@@ -50,11 +50,7 @@ public class AlteBeneficiiController {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)
                 .orElseThrow(() -> new ResourceNotFoundException("AlteBeneficii not found for this id :: " + alteBeneficiiId));
 
-        alteBeneficii.setAplicare(alteBeneficiiDetails.getAplicare());
-        alteBeneficii.setIdcontract(alteBeneficiiDetails.getIdcontract());
-        alteBeneficii.setNume(alteBeneficiiDetails.getNume());
-        alteBeneficii.setProcent(alteBeneficiiDetails.getProcent());
-        alteBeneficii.setValoare(alteBeneficiiDetails.getValoare());
+        alteBeneficiiDetails.setId((alteBeneficii.getId()));
         final AlteBeneficii updatedAlteBeneficii = alteBeneficiiRepository.save(alteBeneficii);
         return ResponseEntity.ok(updatedAlteBeneficii);
     }

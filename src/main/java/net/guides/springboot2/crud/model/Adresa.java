@@ -37,7 +37,7 @@ public class Adresa {
         this.id = id;
     }
 
-    @Column(name = "adresa", nullable = false)
+    @Column(name = "adresa")
     public String getAdresa() {
         return adresa;
     }
@@ -45,7 +45,7 @@ public class Adresa {
         this.adresa = adresa;
     }
 
-    @Column(name = "localitate", nullable = false)
+    @Column(name = "localitate")
     public String getLocalitate() {
         return localitate;
     }
@@ -53,7 +53,7 @@ public class Adresa {
         this.localitate = localitate;
     }
 
-    @Column(name = "judet", nullable = false)
+    @Column(name = "judet")
     public String getJudet() {
         return judet;
     }
@@ -61,7 +61,7 @@ public class Adresa {
         this.judet = judet;
     }
 
-    @Column(name = "tara", nullable = false)
+    @Column(name = "tara")
     public String getTara() {
         return tara;
     }

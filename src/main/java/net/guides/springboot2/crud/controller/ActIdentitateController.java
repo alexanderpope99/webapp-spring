@@ -50,14 +50,7 @@ public class ActIdentitateController {
         ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
                 .orElseThrow(() -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + actIdentitateId));
 
-                actIdentitate.setCnp(actIdentitateDetails.getCnp());
-                actIdentitate.setDataEliberarii(actIdentitateDetails.getDataEliberarii());
-                actIdentitate.setDataNasterii(actIdentitateDetails.getDataNasterii());
-                actIdentitate.setEliberatDe(actIdentitateDetails.getEliberatDe());
-                actIdentitate.setLoculNasterii(actIdentitateDetails.getLoculNasterii());
-                actIdentitate.setNumar(actIdentitateDetails.getNumar());
-                actIdentitate.setSerie(actIdentitateDetails.getSerie());
-                actIdentitate.setTip(actIdentitateDetails.getTip());
+                actIdentitateDetails.setId(actIdentitate.getId());
         final ActIdentitate updatedActIdentitate = actIdentitateRepository.save(actIdentitate);
         return ResponseEntity.ok(updatedActIdentitate);
     }
