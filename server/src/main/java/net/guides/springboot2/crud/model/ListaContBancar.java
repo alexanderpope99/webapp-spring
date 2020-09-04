@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
@@ -42,3 +44,16 @@ public class ListaContBancar {
     }
 }
 
+class ListaContBancarId implements Serializable {
+	private static final long serialVersionUID = 1L;
+	protected long idsocietate;
+    protected String iban;
+
+    public ListaContBancarId() {
+    }
+
+    public ListaContBancarId(long idsocietate, String iban) {
+        this.idsocietate = idsocietate;
+        this.iban = iban;
+    }
+}

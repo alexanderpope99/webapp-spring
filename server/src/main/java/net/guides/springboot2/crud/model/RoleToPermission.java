@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -43,3 +45,16 @@ public class RoleToPermission {
     }
 }
 
+class RoleToPermissionId implements Serializable {
+	private static final long serialVersionUID = 1L;
+	protected long roleid;
+    protected long permissionid;
+
+    public RoleToPermissionId() {
+    }
+
+    public RoleToPermissionId(long roleid, long permissionid) {
+        this.roleid = roleid;
+        this.permissionid = permissionid;
+    }
+}
