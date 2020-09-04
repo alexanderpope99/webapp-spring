@@ -8,17 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "permission")
-public class Permission {
+@Table(name = "role")
+public class Role {
 
     private long id;
     @Column(name = "name")
     private String name;
+    @Column(name = "desc")
+    private String desc;
 
-    public Permission() { }
+    public Role() { }
 
-    public Permission( String name ) {
+    public Role( String name, String desc ) {
         this.name = name;
+        this.desc = desc;
     }
 
     @Id
@@ -31,13 +34,19 @@ public class Permission {
     }
 
     // GETTERS
+    public String getDesc() {
+        return desc;
+    }
     public String getName() {
         return name;
     }
 
     // SETTERS
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
     public void setName(String name) {
         this.name = name;
     }
-} 
+}
 
