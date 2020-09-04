@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f6dd5144-010f-4029-beaa-1c15fd27b366" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/MavenWrapperDownloader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/Application.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/ActIdentitateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/AdresaController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/AlteBeneficiiController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/AlteDrepturiController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/AngajatController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/BursePrivateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/CMController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/COController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/CaenController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/CentruCostController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/CondicaController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/ContBancarController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/ContractController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/DepartamentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/EchipaController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/ListaContBancarController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/ListaSalariatContractController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/OresuplimentareController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/PermissionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/PersoanaController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/PersoanaIntretinereController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/PrimeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/PunctDeLucruController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/RetineriController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/RoleController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/RoleToPermissionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/SocietateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/SponsorizariController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/SporController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/SporPermanentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/StatSalariatController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/TicheteController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/UserToRoleController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/controller/ZileCODisponibileController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/exception/ErrorDetails.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/exception/ResourceNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ActIdentitate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Adresa.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/AlteBeneficii.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/AlteDrepturi.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Angajat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/BursePrivate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/CM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/CO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Caen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/CentruCost.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Condica.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ContBancar.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Contract.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Departament.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Echipa.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ListaContBancar.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ListaContBancarId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ListaSalariatContract.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ListaSalariatContractId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Oresuplimentare.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Permission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Persoana.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/PersoanaIntretinere.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Prime.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/PunctDeLucru.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Retineri.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/RoleToPermission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/RoleToPermissionId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Societate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Sponsorizari.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Spor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/SporPermanent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/StatSalariat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/Tichete.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/UserToRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/UserToRoleId.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/model/ZileCODisponibile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/ActIdentitateRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/AdresaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/AlteBeneficiiRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/AlteDrepturiRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/AngajatRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/BursePrivateRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/CMRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/CORepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/CaenRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/CentruCostRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/CondicaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/ContBancarRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/ContractRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/DepartamentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/EchipaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/ListaContBancarRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/ListaSalariatContractRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/OresuplimentareRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/PermissionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/PersoanaIntretinereRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/PersoanaRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/PrimeRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/PunctDeLucruRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/RetineriRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/RoleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/RoleToPermissionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/SocietateRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/SponsorizariRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/SporPermanentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/SporRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/StatSalariatRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/TicheteRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/UserToRoleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/guides/springboot2/crud/repository/ZileCODisponibileRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/webapp/webapp/WebappApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1h36mGUp2OzhZlHkTj0a5GRsY5h" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/server" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f6dd5144-010f-4029-beaa-1c15fd27b366" name="Default Changelist" comment="" />
+      <created>1599227585572</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1599227585572</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1599227625397">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1599227625397" />
+  </component>
+</project>

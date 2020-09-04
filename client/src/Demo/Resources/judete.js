@@ -1,0 +1,53 @@
+const judete = [
+  'BUCUREȘTI',
+  'ALBA',
+  'ARAD',
+  'ARGEȘ',
+  'BACĂU',
+  'BIHOR',
+  'BISTRIȚA-NĂSĂUD',
+  'BOTOȘANI',
+  'BRAȘOV',
+  'BRĂILA',
+  'BUZĂU',
+  'CARAȘ-SEVERIN',
+  'CĂLĂRAȘI',
+  'CLUJ',
+  'CONSTANȚA',
+  'COVASNA',
+  'DÂMBOVIȚA',
+  'DOLJ',
+  'GALAȚI',
+  'GIURGIU',
+  'GORJ',
+  'HUNEDOARA',
+  'IALOMIȚA',
+  'IAȘI',
+  'ILFOV',
+  'MARAMUREȘ',
+  'MEHEDINȚI',
+  'MUREȘ',
+  'NEAMȚ',
+  'OLT',
+  'PRAHOVA',
+  'SATU MARE',
+  'SĂLAJ',
+  'SIBIU',
+  'SUCEAVA',
+  'TELEORMAN',
+  'TULCEA',
+  'VASLUI',
+  'VÂLCEA',
+  'VRANCEA'
+]
+
+const sectoare = [
+  'SECTOR 1',
+  'SECTOR 2',
+  'SECTOR 3',
+  'SECTOR 4',
+  'SECTOR 5',
+  'SECTOR 6'
+]
+
+export {judete, sectoare}
