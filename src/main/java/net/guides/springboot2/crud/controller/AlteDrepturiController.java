@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.AlteDrepturi;
 import net.guides.springboot2.crud.repository.AlteDrepturiRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/altedrepturi")
 public class AlteDrepturiController {
     @Autowired
     private AlteDrepturiRepository alteDrepturiRepository;
 
-    @GetMapping("/altedrepturi")
+    @GetMapping
     public List<AlteDrepturi> getAllAlteDrepturis() {
         return alteDrepturiRepository.findAll();
     }
 
-    @GetMapping("/altedrepturi/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<AlteDrepturi> getAlteDrepturiById(@PathVariable(value = "id") Long alteDrepturiId)
             throws ResourceNotFoundException {
         AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId)
@@ -39,12 +39,12 @@ public class AlteDrepturiController {
         return ResponseEntity.ok().body(alteDrepturi);
     }
 
-    @PostMapping("/altedrepturi")
+    @PostMapping
     public AlteDrepturi createAlteDrepturi(@RequestBody AlteDrepturi alteDrepturi) {
         return alteDrepturiRepository.save(alteDrepturi);
     }
 
-    @PutMapping("/altedrepturi/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<AlteDrepturi> updateAlteDrepturi(@PathVariable(value = "id") Long alteDrepturiId,
                                                            @RequestBody AlteDrepturi alteDrepturiDetails) throws ResourceNotFoundException {
         AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId)
@@ -55,7 +55,7 @@ public class AlteDrepturiController {
         return ResponseEntity.ok(updatedAlteDrepturi);
     }
 
-    @DeleteMapping("/altedrepturi/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteAlteDrepturi(@PathVariable(value = "id") Long alteDrepturiId)
             throws ResourceNotFoundException {
         AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId)

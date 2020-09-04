@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.ListaContBancar;
 import net.guides.springboot2.crud.repository.ListaContBancarRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/listacontbancar")
 public class ListaContBancarController {
     @Autowired
     private ListaContBancarRepository listaContBancarRepository;
 
-    @GetMapping("/listacontbancar")
+    @GetMapping
     public List<ListaContBancar> getAllListaContBancars() {
         return listaContBancarRepository.findAll();
     }
 
-    @GetMapping("/listacontbancar/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ListaContBancar> getListaContBancarById(@PathVariable(value = "id") Long listaContBancarId)
             throws ResourceNotFoundException {
         ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId)
@@ -39,12 +39,12 @@ public class ListaContBancarController {
         return ResponseEntity.ok().body(listaContBancar);
     }
 
-    @PostMapping("/listacontbancar")
+    @PostMapping
     public ListaContBancar createListaContBancar(@RequestBody ListaContBancar listaContBancar) {
         return listaContBancarRepository.save(listaContBancar);
     }
 
-    @PutMapping("/listacontbancar/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<ListaContBancar> updateListaContBancar(@PathVariable(value = "id") Long listaContBancarId,
                                                                  @RequestBody ListaContBancar listaContBancarDetails) throws ResourceNotFoundException {
         ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId)
@@ -56,7 +56,7 @@ public class ListaContBancarController {
         return ResponseEntity.ok(updatedListaContBancar);
     }
 
-    @DeleteMapping("/listacontbancar/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteListaContBancar(@PathVariable(value = "id") Long listaContBancarId)
             throws ResourceNotFoundException {
         ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId)

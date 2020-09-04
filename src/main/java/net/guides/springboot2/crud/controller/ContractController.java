@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.repository.ContractRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/contract")
 public class ContractController {
     @Autowired
     private ContractRepository contractRepository;
 
-    @GetMapping("/contract")
+    @GetMapping
     public List<Contract> getAllContracts() {
         return contractRepository.findAll();
     }
 
-    @GetMapping("/contract/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Contract> getContractById(@PathVariable(value = "id") Long contractId)
             throws ResourceNotFoundException {
         Contract contract = contractRepository.findById(contractId)
@@ -39,12 +39,12 @@ public class ContractController {
         return ResponseEntity.ok().body(contract);
     }
 
-    @PostMapping("/contract")
+    @PostMapping
     public Contract createContract(@RequestBody Contract contract) {
         return contractRepository.save(contract);
     }
 
-    @PutMapping("/contract/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Contract> updateContract(@PathVariable(value = "id") Long contractId,
                                                    @RequestBody Contract contractDetails) throws ResourceNotFoundException {
         Contract contract = contractRepository.findById(contractId)
@@ -55,7 +55,7 @@ public class ContractController {
         return ResponseEntity.ok(updatedContract);
     }
 
-    @DeleteMapping("/contract/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteContract(@PathVariable(value = "id") Long contractId)
             throws ResourceNotFoundException {
         Contract contract = contractRepository.findById(contractId)

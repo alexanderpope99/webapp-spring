@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.AlteBeneficii;
 import net.guides.springboot2.crud.repository.AlteBeneficiiRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/altebeneficii")
 public class AlteBeneficiiController {
     @Autowired
     private AlteBeneficiiRepository alteBeneficiiRepository;
 
-    @GetMapping("/alteBeneficii")
+    @GetMapping
     public List<AlteBeneficii> getAllAlteBeneficiis() {
         return alteBeneficiiRepository.findAll();
     }
 
-    @GetMapping("/alteBeneficii/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<AlteBeneficii> getAlteBeneficiiById(@PathVariable(value = "id") Long alteBeneficiiId)
             throws ResourceNotFoundException {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)
@@ -39,12 +39,12 @@ public class AlteBeneficiiController {
         return ResponseEntity.ok().body(alteBeneficii);
     }
 
-    @PostMapping("/alteBeneficii")
+    @PostMapping
     public AlteBeneficii createAlteBeneficii(@RequestBody AlteBeneficii alteBeneficii) {
         return alteBeneficiiRepository.save(alteBeneficii);
     }
 
-    @PutMapping("/alteBeneficii/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<AlteBeneficii> updateAlteBeneficii(@PathVariable(value = "id") Long alteBeneficiiId,
                                                              @RequestBody AlteBeneficii alteBeneficiiDetails) throws ResourceNotFoundException {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)
@@ -55,7 +55,7 @@ public class AlteBeneficiiController {
         return ResponseEntity.ok(updatedAlteBeneficii);
     }
 
-    @DeleteMapping("/alteBeneficii/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteAlteBeneficii(@PathVariable(value = "id") Long alteBeneficiiId)
             throws ResourceNotFoundException {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)

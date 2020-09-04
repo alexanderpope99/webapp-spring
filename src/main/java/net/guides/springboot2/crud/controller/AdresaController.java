@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.repository.AdresaRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/adresa")
 public class AdresaController {
     @Autowired
     private AdresaRepository departamentRepository;
 
-    @GetMapping("/adresa")
+    @GetMapping
     public List<Adresa> getAllAdresas() {
         return departamentRepository.findAll();
     }
 
-    @GetMapping("/adresa/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Adresa> getAdresaById(@PathVariable(value = "id") Long departamentId)
             throws ResourceNotFoundException {
         Adresa departament = departamentRepository.findById(departamentId)
@@ -39,12 +39,12 @@ public class AdresaController {
         return ResponseEntity.ok().body(departament);
     }
 
-    @PostMapping("/adresa")
+    @PostMapping
     public Adresa createAdresa(@RequestBody Adresa departament) {
         return departamentRepository.save(departament);
     }
 
-    @PutMapping("/adresa/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Adresa> updateAdresa(@PathVariable(value = "id") Long departamentId,
                                                @RequestBody Adresa departamentDetails) throws ResourceNotFoundException {
         Adresa departament = departamentRepository.findById(departamentId)
@@ -55,7 +55,7 @@ public class AdresaController {
         return ResponseEntity.ok(updatedAdresa);
     }
 
-    @DeleteMapping("/adresa/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteAdresa(@PathVariable(value = "id") Long departamentId)
             throws ResourceNotFoundException {
         Adresa departament = departamentRepository.findById(departamentId)

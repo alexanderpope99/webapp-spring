@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Condica;
 import net.guides.springboot2.crud.repository.CondicaRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/condica")
 public class CondicaController {
     @Autowired
     private CondicaRepository condicaRepository;
 
-    @GetMapping("/condica")
+    @GetMapping
     public List<Condica> getAllCondicas() {
         return condicaRepository.findAll();
     }
 
-    @GetMapping("/condica/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Condica> getCondicaById(@PathVariable(value = "id") Long condicaId)
             throws ResourceNotFoundException {
         Condica condica = condicaRepository.findById(condicaId)
@@ -39,12 +39,12 @@ public class CondicaController {
         return ResponseEntity.ok().body(condica);
     }
 
-    @PostMapping("/condica")
+    @PostMapping
     public Condica createCondica(@RequestBody Condica condica) {
         return condicaRepository.save(condica);
     }
 
-    @PutMapping("/condica/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Condica> updateCondica(@PathVariable(value = "id") Long condicaId,
                                                  @RequestBody Condica condicaDetails) throws ResourceNotFoundException {
         Condica condica = condicaRepository.findById(condicaId)
@@ -55,7 +55,7 @@ public class CondicaController {
         return ResponseEntity.ok(updatedCondica);
     }
 
-    @DeleteMapping("/condica/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteCondica(@PathVariable(value = "id") Long condicaId)
             throws ResourceNotFoundException {
         Condica condica = condicaRepository.findById(condicaId)

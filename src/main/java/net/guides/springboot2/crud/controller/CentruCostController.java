@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.CentruCost;
 import net.guides.springboot2.crud.repository.CentruCostRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/centrucost")
 public class CentruCostController {
     @Autowired
     private CentruCostRepository centruCostRepository;
 
-    @GetMapping("/centrucost")
+    @GetMapping
     public List<CentruCost> getAllCentruCosts() {
         return centruCostRepository.findAll();
     }
 
-    @GetMapping("/centrucost/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<CentruCost> getCentruCostById(@PathVariable(value = "id") Long centruCostId)
             throws ResourceNotFoundException {
         CentruCost centruCost = centruCostRepository.findById(centruCostId)
@@ -39,12 +39,12 @@ public class CentruCostController {
         return ResponseEntity.ok().body(centruCost);
     }
 
-    @PostMapping("/centrucost")
+    @PostMapping
     public CentruCost createCentruCost(@RequestBody CentruCost centruCost) {
         return centruCostRepository.save(centruCost);
     }
 
-    @PutMapping("/centrucost/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<CentruCost> updateCentruCost(@PathVariable(value = "id") Long centruCostId,
                                                        @RequestBody CentruCost centruCostDetails) throws ResourceNotFoundException {
         CentruCost centruCost = centruCostRepository.findById(centruCostId)
@@ -55,7 +55,7 @@ public class CentruCostController {
         return ResponseEntity.ok(updatedCentruCost);
     }
 
-    @DeleteMapping("/centrucost/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteCentruCost(@PathVariable(value = "id") Long centruCostId)
             throws ResourceNotFoundException {
         CentruCost centruCost = centruCostRepository.findById(centruCostId)

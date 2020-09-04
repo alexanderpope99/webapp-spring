@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.repository.CORepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/co")
 public class COController {
     @Autowired
     private CORepository coRepository;
 
-    @GetMapping("/co")
+    @GetMapping
     public List<CO> getAllCOs() {
         return coRepository.findAll();
     }
 
-    @GetMapping("/co/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<CO> getCOById(@PathVariable(value = "id") Long coId)
             throws ResourceNotFoundException {
         CO co = coRepository.findById(coId)
@@ -39,12 +39,12 @@ public class COController {
         return ResponseEntity.ok().body(co);
     }
 
-    @PostMapping("/co")
+    @PostMapping
     public CO createCO(@RequestBody CO co) {
         return coRepository.save(co);
     }
 
-    @PutMapping("/co/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<CO> updateCO(@PathVariable(value = "id") Long coId,
                                        @RequestBody CO coDetails) throws ResourceNotFoundException {
         CO co = coRepository.findById(coId)
@@ -55,7 +55,7 @@ public class COController {
         return ResponseEntity.ok(updatedCO);
     }
 
-    @DeleteMapping("/co/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteCO(@PathVariable(value = "id") Long coId)
             throws ResourceNotFoundException {
         CO co = coRepository.findById(coId)

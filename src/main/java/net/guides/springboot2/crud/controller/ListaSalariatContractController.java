@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.ListaSalariatContract;
 import net.guides.springboot2.crud.repository.ListaSalariatContractRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/listasalariatcontract")
 public class ListaSalariatContractController {
     @Autowired
     private ListaSalariatContractRepository listaSalariatContractRepository;
 
-    @GetMapping("/listasalariatcontract")
+    @GetMapping
     public List<ListaSalariatContract> getAllListaSalariatContracts() {
         return listaSalariatContractRepository.findAll();
     }
 
-    @GetMapping("/listasalariatcontract/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ListaSalariatContract> getListaSalariatContractById(@PathVariable(value = "id") Long listaSalariatContractId)
             throws ResourceNotFoundException {
         ListaSalariatContract listaSalariatContract = listaSalariatContractRepository.findById(listaSalariatContractId)
@@ -39,12 +39,12 @@ public class ListaSalariatContractController {
         return ResponseEntity.ok().body(listaSalariatContract);
     }
 
-    @PostMapping("/listasalariatcontract")
+    @PostMapping
     public ListaSalariatContract createListaSalariatContract(@RequestBody ListaSalariatContract listaSalariatContract) {
         return listaSalariatContractRepository.save(listaSalariatContract);
     }
 
-    @PutMapping("/listasalariatcontract/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<ListaSalariatContract> updateListaSalariatContract(@PathVariable(value = "id") Long listaSalariatContractId,
                                                                              @RequestBody ListaSalariatContract listaSalariatContractDetails) throws ResourceNotFoundException {
         ListaSalariatContract listaSalariatContract = listaSalariatContractRepository.findById(listaSalariatContractId)
@@ -56,7 +56,7 @@ public class ListaSalariatContractController {
         return ResponseEntity.ok(updatedListaSalariatContract);
     }
 
-    @DeleteMapping("/listasalariatcontract/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteListaSalariatContract(@PathVariable(value = "id") Long listaSalariatContractId)
             throws ResourceNotFoundException {
         ListaSalariatContract listaSalariatContract = listaSalariatContractRepository.findById(listaSalariatContractId)

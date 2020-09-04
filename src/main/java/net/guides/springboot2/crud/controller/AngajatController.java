@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/angajat")
 public class AngajatController {
     @Autowired
     private AngajatRepository angajatRepository;
 
-    @GetMapping("/angajat")
+    @GetMapping
     public List<Angajat> getAllAngajats() {
         return angajatRepository.findAll();
     }
 
-    @GetMapping("/angajat/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") Long angajatId)
             throws ResourceNotFoundException {
         Angajat angajat = angajatRepository.findById(angajatId)
@@ -39,12 +39,12 @@ public class AngajatController {
         return ResponseEntity.ok().body(angajat);
     }
 
-    @PostMapping("/angajat")
+    @PostMapping
     public Angajat createAngajat(@RequestBody Angajat angajat) {
         return angajatRepository.save(angajat);
     }
 
-    @PutMapping("/angajat/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") Long angajatId,
                                                  @RequestBody Angajat angajatDetails) throws ResourceNotFoundException {
         Angajat angajat = angajatRepository.findById(angajatId)
@@ -55,7 +55,7 @@ public class AngajatController {
         return ResponseEntity.ok(updatedAngajat);
     }
 
-    @DeleteMapping("/angajat/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteAngajat(@PathVariable(value = "id") Long angajatId)
             throws ResourceNotFoundException {
         Angajat angajat = angajatRepository.findById(angajatId)

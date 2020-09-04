@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.repository.CMRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/cm")
 public class CMController {
     @Autowired
     private CMRepository cmRepository;
 
-    @GetMapping("/cm")
+    @GetMapping
     public List<CM> getAllCMs() {
         return cmRepository.findAll();
     }
 
-    @GetMapping("/cm/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<CM> getCMById(@PathVariable(value = "id") Long cmId)
             throws ResourceNotFoundException {
         CM cm = cmRepository.findById(cmId)
@@ -39,12 +39,12 @@ public class CMController {
         return ResponseEntity.ok().body(cm);
     }
 
-    @PostMapping("/cm")
+    @PostMapping
     public CM createCM(@RequestBody CM cm) {
         return cmRepository.save(cm);
     }
 
-    @PutMapping("/cm/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<CM> updateCM(@PathVariable(value = "id") Long cmId,
                                        @RequestBody CM cmDetails) throws ResourceNotFoundException {
         CM cm = cmRepository.findById(cmId)
@@ -55,7 +55,7 @@ public class CMController {
         return ResponseEntity.ok(updatedCM);
     }
 
-    @DeleteMapping("/cm/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteCM(@PathVariable(value = "id") Long cmId)
             throws ResourceNotFoundException {
         CM cm = cmRepository.findById(cmId)

@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.ContBancar;
 import net.guides.springboot2.crud.repository.ContBancarRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/contbancar")
 public class ContBancarController {
     @Autowired
     private ContBancarRepository contBancarRepository;
 
-    @GetMapping("/contbancar")
+    @GetMapping
     public List<ContBancar> getAllContBancars() {
         return contBancarRepository.findAll();
     }
 
-    @GetMapping("/contbancar/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ContBancar> getContBancarById(@PathVariable(value = "id") Long contBancarId)
             throws ResourceNotFoundException {
         ContBancar contBancar = contBancarRepository.findById(contBancarId)
@@ -39,12 +39,12 @@ public class ContBancarController {
         return ResponseEntity.ok().body(contBancar);
     }
 
-    @PostMapping("/contbancar")
+    @PostMapping
     public ContBancar createContBancar(@RequestBody ContBancar contBancar) {
         return contBancarRepository.save(contBancar);
     }
 
-    @PutMapping("/contbancar/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<ContBancar> updateContBancar(@PathVariable(value = "id") Long contBancarId,
                                                        @RequestBody ContBancar contBancarDetails) throws ResourceNotFoundException {
         ContBancar contBancar = contBancarRepository.findById(contBancarId)
@@ -55,7 +55,7 @@ public class ContBancarController {
         return ResponseEntity.ok(updatedContBancar);
     }
 
-    @DeleteMapping("/contbancar/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteContBancar(@PathVariable(value = "id") Long contBancarId)
             throws ResourceNotFoundException {
         ContBancar contBancar = contBancarRepository.findById(contBancarId)

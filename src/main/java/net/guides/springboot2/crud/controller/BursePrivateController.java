@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.BursePrivate;
 import net.guides.springboot2.crud.repository.BursePrivateRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/burseprivate")
 public class BursePrivateController {
     @Autowired
     private BursePrivateRepository bursePrivateRepository;
 
-    @GetMapping("/burseprivate")
+    @GetMapping
     public List<BursePrivate> getAllBursePrivates() {
         return bursePrivateRepository.findAll();
     }
 
-    @GetMapping("/burseprivate/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<BursePrivate> getBursePrivateById(@PathVariable(value = "id") Long bursePrivateId)
             throws ResourceNotFoundException {
         BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId)
@@ -39,12 +39,12 @@ public class BursePrivateController {
         return ResponseEntity.ok().body(bursePrivate);
     }
 
-    @PostMapping("/burseprivate")
+    @PostMapping
     public BursePrivate createBursePrivate(@RequestBody BursePrivate bursePrivate) {
         return bursePrivateRepository.save(bursePrivate);
     }
 
-    @PutMapping("/burseprivate/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<BursePrivate> updateBursePrivate(@PathVariable(value = "id") Long bursePrivateId,
                                                            @RequestBody BursePrivate bursePrivateDetails) throws ResourceNotFoundException {
         BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId)
@@ -55,7 +55,7 @@ public class BursePrivateController {
         return ResponseEntity.ok(updatedBursePrivate);
     }
 
-    @DeleteMapping("/burseprivate/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteBursePrivate(@PathVariable(value = "id") Long bursePrivateId)
             throws ResourceNotFoundException {
         BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId)

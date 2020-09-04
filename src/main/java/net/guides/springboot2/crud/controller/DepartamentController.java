@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Departament;
 import net.guides.springboot2.crud.repository.DepartamentRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/departament")
 public class DepartamentController {
     @Autowired
     private DepartamentRepository departamentRepository;
 
-    @GetMapping("/departament")
+    @GetMapping
     public List<Departament> getAllDepartaments() {
         return departamentRepository.findAll();
     }
 
-    @GetMapping("/departament/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Departament> getDepartamentById(@PathVariable(value = "id") Long departamentId)
             throws ResourceNotFoundException {
         Departament departament = departamentRepository.findById(departamentId)
@@ -39,12 +39,12 @@ public class DepartamentController {
         return ResponseEntity.ok().body(departament);
     }
 
-    @PostMapping("/departament")
+    @PostMapping
     public Departament createDepartament(@RequestBody Departament departament) {
         return departamentRepository.save(departament);
     }
 
-    @PutMapping("/departament/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Departament> updateDepartament(@PathVariable(value = "id") Long departamentId,
                                                          @RequestBody Departament departamentDetails) throws ResourceNotFoundException {
         Departament departament = departamentRepository.findById(departamentId)
@@ -55,7 +55,7 @@ public class DepartamentController {
         return ResponseEntity.ok(updatedDepartament);
     }
 
-    @DeleteMapping("/departament/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteDepartament(@PathVariable(value = "id") Long departamentId)
             throws ResourceNotFoundException {
         Departament departament = departamentRepository.findById(departamentId)

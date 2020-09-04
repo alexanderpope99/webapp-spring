@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Caen;
 import net.guides.springboot2.crud.repository.CaenRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/caen")
 public class CaenController {
     @Autowired
     private CaenRepository caenRepository;
 
-    @GetMapping("/caen")
+    @GetMapping
     public List<Caen> getAllCaens() {
         return caenRepository.findAll();
     }
 
-    @GetMapping("/caen/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Caen> getCaenById(@PathVariable(value = "id") Long caenId)
             throws ResourceNotFoundException {
         Caen caen = caenRepository.findById(caenId)
@@ -39,12 +39,12 @@ public class CaenController {
         return ResponseEntity.ok().body(caen);
     }
 
-    @PostMapping("/caen")
+    @PostMapping
     public Caen createCaen(@RequestBody Caen caen) {
         return caenRepository.save(caen);
     }
 
-    @PutMapping("/caen/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Caen> updateCaen(@PathVariable(value = "id") Long caenId,
                                            @RequestBody Caen caenDetails) throws ResourceNotFoundException {
         Caen caen = caenRepository.findById(caenId)
@@ -55,7 +55,7 @@ public class CaenController {
         return ResponseEntity.ok(updatedCaen);
     }
 
-    @DeleteMapping("/caen/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteCaen(@PathVariable(value = "id") Long caenId)
             throws ResourceNotFoundException {
         Caen caen = caenRepository.findById(caenId)

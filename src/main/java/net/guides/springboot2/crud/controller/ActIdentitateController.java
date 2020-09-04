@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.ActIdentitate;
 import net.guides.springboot2.crud.repository.ActIdentitateRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/actidentitate")
 public class ActIdentitateController {
     @Autowired
     private ActIdentitateRepository actIdentitateRepository;
 
-    @GetMapping("/actidentitate")
+    @GetMapping
     public List<ActIdentitate> getAllActIdentitates() {
         return actIdentitateRepository.findAll();
     }
 
-    @GetMapping("/actidentitate/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ActIdentitate> getActIdentitateById(@PathVariable(value = "id") Long actIdentitateId)
             throws ResourceNotFoundException {
         ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
@@ -39,12 +39,12 @@ public class ActIdentitateController {
         return ResponseEntity.ok().body(actIdentitate);
     }
 
-    @PostMapping("/actidentitate")
+    @PostMapping
     public ActIdentitate createActIdentitate(@RequestBody ActIdentitate actIdentitate) {
         return actIdentitateRepository.save(actIdentitate);
     }
 
-    @PutMapping("/actidentitate/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<ActIdentitate> updateActIdentitate(@PathVariable(value = "id") Long actIdentitateId,
                                                              @RequestBody ActIdentitate actIdentitateDetails) throws ResourceNotFoundException {
         ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)
@@ -55,7 +55,7 @@ public class ActIdentitateController {
         return ResponseEntity.ok(updatedActIdentitate);
     }
 
-    @DeleteMapping("/actidentitate/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteActIdentitate(@PathVariable(value = "id") Long actIdentitateId)
             throws ResourceNotFoundException {
         ActIdentitate actIdentitate = actIdentitateRepository.findById(actIdentitateId)

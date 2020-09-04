@@ -21,17 +21,17 @@ import net.guides.springboot2.crud.model.Echipa;
 import net.guides.springboot2.crud.repository.EchipaRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/echipa")
 public class EchipaController {
     @Autowired
     private EchipaRepository echipaRepository;
 
-    @GetMapping("/echipa")
+    @GetMapping
     public List<Echipa> getAllEchipas() {
         return echipaRepository.findAll();
     }
 
-    @GetMapping("/echipa/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Echipa> getEchipaById(@PathVariable(value = "id") Long echipaId)
             throws ResourceNotFoundException {
         Echipa echipa = echipaRepository.findById(echipaId)
@@ -39,12 +39,12 @@ public class EchipaController {
         return ResponseEntity.ok().body(echipa);
     }
 
-    @PostMapping("/echipa")
+    @PostMapping
     public Echipa createEchipa(@RequestBody Echipa echipa) {
         return echipaRepository.save(echipa);
     }
 
-    @PutMapping("/echipa/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Echipa> updateEchipa(@PathVariable(value = "id") Long echipaId,
                                                @RequestBody Echipa echipaDetails) throws ResourceNotFoundException {
         Echipa echipa = echipaRepository.findById(echipaId)
@@ -55,7 +55,7 @@ public class EchipaController {
         return ResponseEntity.ok(updatedEchipa);
     }
 
-    @DeleteMapping("/echipa/{id}")
+    @DeleteMapping("{id}")
     public Map<String, Boolean> deleteEchipa(@PathVariable(value = "id") Long echipaId)
             throws ResourceNotFoundException {
         Echipa echipa = echipaRepository.findById(echipaId)
