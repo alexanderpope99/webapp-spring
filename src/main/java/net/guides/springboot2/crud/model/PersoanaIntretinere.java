@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ public class PersoanaIntretinere {
     @Column(name = "cnp")
     private String cnp;
     @Column(name = "datanasterii")
-    private String datanasterii;
+    private Date datanasterii;
     @Column(name = "grad")
     private String grad;
     @Column(name = "gradinvaliditate")
@@ -33,7 +35,7 @@ public class PersoanaIntretinere {
 
     public PersoanaIntretinere() { }
 
-    public PersoanaIntretinere( String nume, String prenume, String cnp, String datanasterii, String grad, String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Long idangajat ) {
+    public PersoanaIntretinere( String nume, String prenume, String cnp, Date datanasterii, String grad, String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Long idangajat ) {
         this.nume = nume;
         this.prenume = prenume;
         this.cnp = cnp;
@@ -60,7 +62,7 @@ public class PersoanaIntretinere {
     public Boolean getCoasigurat() {
         return coasigurat;
     }
-    public String getDatanasterii() {
+    public Date getDatanasterii() {
         return datanasterii;
     }
     public String getGrad() {
@@ -88,7 +90,7 @@ public class PersoanaIntretinere {
     public void setCoasigurat(Boolean coasigurat) {
         this.coasigurat = coasigurat;
     }
-    public void setDatanasterii(String datanasterii) {
+    public void setDatanasterii(Date datanasterii) {
         this.datanasterii = datanasterii;
     }
     public void setGrad(String grad) {

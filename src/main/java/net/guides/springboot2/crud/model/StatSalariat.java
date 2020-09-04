@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,14 +15,14 @@ public class StatSalariat {
 
     private long id;
     @Column(name = "data")
-    private String data;
+    private Date data;
     @Column(name = "idcontract")
     private Long idcontract;
     
 
     public StatSalariat() { }
 
-    public StatSalariat( String data, Long idcontract ) {
+    public StatSalariat( Date data, Long idcontract ) {
         this.data = data;
         this.idcontract = idcontract;
     }
@@ -35,7 +37,7 @@ public class StatSalariat {
     }
 
     // GETTERS
-    public String getData() {
+    public Date getData() {
         return data;
     }
     public Long getIdcontract() {
@@ -43,7 +45,7 @@ public class StatSalariat {
     }
 
     // SETTERS
-    public void setData(String data) {
+    public void setData(Date data) {
         this.data = data;
     }
     public void setIdcontract(Long idcontract) {
