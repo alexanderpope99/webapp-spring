@@ -21,7 +21,7 @@ import net.guides.springboot2.crud.repository.TicheteRepository;
 
 
 @RestController
-@RequestMapping("/statsalariat")
+@RequestMapping("/tichete")
 public class TicheteController {
     @Autowired
     private TicheteRepository ticheteRepository;
