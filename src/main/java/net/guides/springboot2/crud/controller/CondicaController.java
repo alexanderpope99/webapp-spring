@@ -1,4 +1,4 @@
-package net.guides.springboot2.crud.condicantroller;
+package net.guides.springboot2.crud.controller;
 
 import java.util.HashMap;
 import java.util.List;
