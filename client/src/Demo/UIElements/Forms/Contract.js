@@ -151,10 +151,10 @@ class Contract extends React.Component {
 
     // console.log('centruCost:', this.state.centruCost);
 
-    var idpunctlucru = null,
-      idcentrucost = null,
-      idechipa = null,
-      iddepartament = null;
+    var punctlucru = null,
+      centrucost = null,
+      echipa = null,
+      departament = null;
 
     // const centrucost_body = {
     //   // TODO
@@ -192,10 +192,10 @@ class Contract extends React.Component {
       marca: this.state.marca,
       data: this.state.dataContract,
       dataincepere: this.state.dataIncepere,
-      idpunctlucru: idpunctlucru,
-      idcentrucost: idcentrucost,
-      idechipa: idechipa,
-      iddepartament: iddepartament,
+      idpunctlucru: punctlucru === null ? null : punctlucru.id,
+      idcentrucost: centrucost === null ? null : centrucost.id,
+      idechipa: echipa === null ? null : echipa.id,
+      iddepartament: departament === null ? null : departament.id,
       functiedebaza: this.state.functieBaza,
       calculdeduceri: this.state.deduceri,
       studiisuperioare: this.state.studiiSuperioare,
@@ -220,29 +220,30 @@ class Contract extends React.Component {
       pensionar: this.state.pensionar,
       spor: this.state.spor,
     };
+    console.log(contract_body);
 
-    const idcontract = await fetch('http://localhost:5000/contract', {
+    const contract = await fetch('http://localhost:5000/contract', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contract_body),
     })
-      .then((idcontract) => idcontract.json())
+      .then((contract) => contract.json())
       .catch((err) => {
         console.log(err.message);
       });
 
     if (typeof this.props.asChild === 'undefined') {
-      if (typeof idcontract === 'number') {
+      if (typeof contract.id === 'number') {
         // console.log('idcontract:', idcontract);
         this.clearFields();
         this.setState({
           show: true,
           modalMessage: 'Contract adăugat cu succes.',
         });
-        console.log('idcontract:', idcontract);
-        return idcontract;
+        console.log('idcontract:', contract.id);
+        return contract.id;
       } else return;
-    } else if (typeof idcontract === 'number') return idcontract;
+    } else if (typeof contract.id === 'number') return contract.id;
     else return;
   }
 

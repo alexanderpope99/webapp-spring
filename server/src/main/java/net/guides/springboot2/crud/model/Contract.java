@@ -18,33 +18,33 @@ public class Contract {
     private String marca;
     private Date data;
     private Date dataincepere;
-    private int idpunctlucru;
-    private int idcentrucost;
-    private int idechipa;
-    private int iddepartament;
-    private boolean functiedebaza;
-    private boolean calculdeduceri;
-    private boolean studiisuperioare;
+    private Integer idpunctlucru;
+    private Integer idcentrucost;
+    private Integer idechipa;
+    private Integer iddepartament;
+    private Boolean functiedebaza;
+    private Boolean calculdeduceri;
+    private Boolean studiisuperioare;
     private String normalucru;
-    private double salariutarifar;
+    private Double salariutarifar;
     private String monedasalariu;
     private String modplata;
     private String conditiimunca;
-    private boolean pensieprivata;
-    private double cotizatiepensieprivata;
-    private double avans;
+    private Boolean pensieprivata;
+    private Double cotizatiepensieprivata;
+    private Double avans;
     private String monedaavans;
-    private int zilecoan;
+    private Integer zilecoan;
     private Date ultimazilucru;
     private String casasanatate;
     private String gradinvaliditate;
     private String functie;
     private String nivelstudii;
     private String cor;
-    private boolean sindicat;
-    private double cotizatiesindicat;
+    private Boolean sindicat;
+    private Double cotizatiesindicat;
     private String spor;
-    private boolean pensionar;
+    private Boolean pensionar;
 
 
 
@@ -52,7 +52,7 @@ public class Contract {
 
     }
 
-    public Contract(String tip, String nr, String marca, Date data, Date dataincepere, int idpunctlucru, int idcentrucost, int idechipa, int iddepartament, boolean functiedebaza, boolean calculdeduceri, boolean studiisuperioare, String normalucru, double salariutarifar, String monedasalariu, String modplata, String conditiimunca, boolean pensieprivata, double cotizatiepensieprivata, double avans, String monedaavans, int zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, boolean sindicat, double cotizatiesindicat, String spor, boolean pensionar) {
+    public Contract(String tip, String nr, String marca, Date data, Date dataincepere, Integer idpunctlucru, Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, String normalucru, Double salariutarifar, String monedasalariu, String modplata, String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
         this.tip = tip;
         this.nr = nr;
         this.marca = marca;
@@ -142,65 +142,65 @@ public class Contract {
     }
 
     @Column(name="idpunctlucru")
-    public int getIdpunctlucru() {
+    public Integer getIdpunctlucru() {
         return idpunctlucru;
     }
 
-    public void setIdpunctlucru(int idpunctlucru) {
+    public void setIdpunctlucru(Integer idpunctlucru) {
         this.idpunctlucru = idpunctlucru;
     }
 
     @Column(name="idcentrucost")
-    public int getIdcentrucost() {
+    public Integer getIdcentrucost() {
         return idcentrucost;
     }
 
-    public void setIdcentrucost(int idcentrucost) {
+    public void setIdcentrucost(Integer idcentrucost) {
         this.idcentrucost = idcentrucost;
     }
 
     @Column(name="echipa")
-    public int getIdechipa() {
+    public Integer getIdechipa() {
         return idechipa;
     }
 
-    public void setIdechipa(int idechipa) {
+    public void setIdechipa(Integer idechipa) {
         this.idechipa = idechipa;
     }
 
     @Column(name="iddepartament")
-    public int getIddepartament() {
+    public Integer getIddepartament() {
         return iddepartament;
     }
 
-    public void setIddepartament(int iddepartament) {
+    public void setIddepartament(Integer iddepartament) {
         this.iddepartament = iddepartament;
     }
 
     @Column(name="functiedebaza")
-    public boolean isFunctiedebaza() {
+    public Boolean isFunctiedebaza() {
         return functiedebaza;
     }
 
-    public void setFunctiedebaza(boolean functiedebaza) {
+    public void setFunctiedebaza(Boolean functiedebaza) {
         this.functiedebaza = functiedebaza;
     }
 
     @Column(name="calculdeduceri")
-    public boolean isCalculdeduceri() {
+    public Boolean isCalculdeduceri() {
         return calculdeduceri;
     }
 
-    public void setCalculdeduceri(boolean calculdeduceri) {
+    public void setCalculdeduceri(Boolean calculdeduceri) {
         this.calculdeduceri = calculdeduceri;
     }
 
     @Column(name="studiisuperioare")
-    public boolean isStudiisuperioare() {
+    public Boolean isStudiisuperioare() {
         return studiisuperioare;
     }
 
-    public void setStudiisuperioare(boolean studiisuperioare) {
+    public void setStudiisuperioare(Boolean studiisuperioare) {
         this.studiisuperioare = studiisuperioare;
     }
 
@@ -214,11 +214,11 @@ public class Contract {
     }
 
     @Column(name="salariutarifar")
-    public double getSalariutarifar() {
+    public Double getSalariutarifar() {
         return salariutarifar;
     }
 
-    public void setSalariutarifar(double salariutarifar) {
+    public void setSalariutarifar(Double salariutarifar) {
         this.salariutarifar = salariutarifar;
     }
 
@@ -250,29 +250,29 @@ public class Contract {
     }
 
     @Column(name="pensieprivata")
-    public boolean isPensieprivata() {
+    public Boolean isPensieprivata() {
         return pensieprivata;
     }
 
-    public void setPensieprivata(boolean pensieprivata) {
+    public void setPensieprivata(Boolean pensieprivata) {
         this.pensieprivata = pensieprivata;
     }
 
     @Column(name="cotizatiepensieprivata")
-    public double getCotizatiepensieprivata() {
+    public Double getCotizatiepensieprivata() {
         return cotizatiepensieprivata;
     }
 
-    public void setCotizatiepensieprivata(double cotizatiepensieprivata) {
+    public void setCotizatiepensieprivata(Double cotizatiepensieprivata) {
         this.cotizatiepensieprivata = cotizatiepensieprivata;
     }
 
     @Column(name="avans")
-    public double getAvans() {
+    public Double getAvans() {
         return avans;
     }
 
-    public void setAvans(double avans) {
+    public void setAvans(Double avans) {
         this.avans = avans;
     }
 
@@ -286,11 +286,11 @@ public class Contract {
     }
 
     @Column(name="zilecoan")
-    public int getZilecoan() {
+    public Integer getZilecoan() {
         return zilecoan;
     }
 
-    public void setZilecoan(int zilecoan) {
+    public void setZilecoan(Integer zilecoan) {
         this.zilecoan = zilecoan;
     }
 
@@ -349,20 +349,20 @@ public class Contract {
     }
 
     @Column(name="sindicat")
-    public boolean isSindicat() {
+    public Boolean isSindicat() {
         return sindicat;
     }
 
-    public void setSindicat(boolean sindicat) {
+    public void setSindicat(Boolean sindicat) {
         this.sindicat = sindicat;
     }
 
     @Column(name="cotizatiesindicat")
-    public double getCotizatiesindicat() {
+    public Double getCotizatiesindicat() {
         return cotizatiesindicat;
     }
 
-    public void setCotizatiesindicat(double cotizatiesindicat) {
+    public void setCotizatiesindicat(Double cotizatiesindicat) {
         this.cotizatiesindicat = cotizatiesindicat;
     }
 
@@ -376,11 +376,11 @@ public class Contract {
     }
 
     @Column(name="pensionar")
-    public boolean isPensionar() {
+    public Boolean isPensionar() {
         return pensionar;
     }
 
-    public void setPensionar(boolean pensionar) {
+    public void setPensionar(Boolean pensionar) {
         this.pensionar = pensionar;
     }
 }
