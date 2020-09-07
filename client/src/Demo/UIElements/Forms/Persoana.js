@@ -12,6 +12,7 @@ class Persoana extends React.Component {
     this.onChangeCnp = this.onChangeCnp.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
+    this.createAngajat = this.createAngajat.bind(this);
 
     // PostgreSQL uses the  yyyy-mm-dd
     this.state = {
@@ -140,7 +141,15 @@ class Persoana extends React.Component {
     }
 
     return true;
-  } 
+  }
+
+  async createAngajat(idpersoana) {
+    await fetch('http://localhost:5000/angajat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idpersoana: idpersoana }),
+    }).catch((err) => console.error(err));
+  }
 
   async onSubmit(e) {
     try {
@@ -228,6 +237,9 @@ class Persoana extends React.Component {
           modalMessage: 'Persoana adaugată cu succes.',
         });
         console.log('idpersoana:', persoana.id);
+
+        await this.createAngajat(persoana.id);
+
         return persoana.id;
       } else return;
     } else if (typeof persoana.id === 'number') return persoana.id;

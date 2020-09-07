@@ -50,13 +50,6 @@ export default {
           icon: 'feather icon-file-text',
         },
         {
-          id: 'add-contract',
-          title: 'Contract de muncă',
-          type: 'item',
-          url: '/forms/add-contract',
-          icon: 'feather icon-file-text',
-        },
-        {
           id: 'angajat',
           title: 'Angajat',
           type: 'item',

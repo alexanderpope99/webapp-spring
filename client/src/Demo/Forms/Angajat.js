@@ -7,6 +7,20 @@ import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 // import AddContract from './AddContract';
 
+/*
+  TODO
+  * fetch date contract when selecting anagajat
+  * insert prop to see when selected id changes
+  * inside EditAngajat set prop when changing selection
+  * when focusing pill 'contract' fetch if person has contract:
+  *   ├─has contract: method = 'PUT, 'button text = "Actualizează"
+  *   └─ no contract: method 'POST' => 1. create contract -> get idcontract,
+  *                                    2. create angajat with idpersoana + idcontract
+  * 
+  * change add persoana to create persoana and create angajat with idpersoana
+  *
+*/
+
 class Angajat extends React.Component {
   constructor(props) {
     super(props);
