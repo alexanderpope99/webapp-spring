@@ -19,8 +19,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RoleToPermission;
 import net.guides.springboot2.crud.repository.RoleToPermissionRepository;
 
-import org.springframework.data.domain.Sort;
-
 @RestController
 @RequestMapping("/roletopermission")
 public class RoleToPermissionController {
@@ -29,7 +27,7 @@ public class RoleToPermissionController {
 
     @GetMapping
     public List<RoleToPermission> getAllPersoane() {
-        return roleToPermissionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return roleToPermissionRepository.findAll();
     }
 
     @GetMapping("{roleid}+{permissionid}")

@@ -28,7 +28,7 @@ public class ContBancarController {
 
     @GetMapping
     public List<ContBancar> getAllContBancars() {
-        return contBancarRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return contBancarRepository.findAll(Sort.by(Sort.Direction.ASC, "iban"));
     }
 
     @GetMapping("{id}")

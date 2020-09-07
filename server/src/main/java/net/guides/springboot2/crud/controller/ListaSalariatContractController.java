@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ListaSalariatContract;
 import net.guides.springboot2.crud.repository.ListaSalariatContractRepository;
-import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/listasalariatcontract")
@@ -28,7 +27,7 @@ public class ListaSalariatContractController {
 
     @GetMapping
     public List<ListaSalariatContract> getAllListaSalariatContracts() {
-        return listaSalariatContractRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return listaSalariatContractRepository.findAll();
     }
 
     @GetMapping("{id}")

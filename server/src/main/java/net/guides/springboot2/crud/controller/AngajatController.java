@@ -28,7 +28,12 @@ public class AngajatController {
 
     @GetMapping
     public List<Angajat> getAllAngajats() {
-        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
+    }
+
+    @GetMapping("/alf")
+    public List<Angajat> getAngajatsAlphabetically() {
+        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
     }
 
     @GetMapping("{id}")

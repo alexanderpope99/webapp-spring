@@ -2,8 +2,6 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,19 +9,17 @@ import javax.persistence.Table;
 @Table(name = "angajat")
 public class Angajat {
 
-    private long id;
-    private int idpersoana;
-    private int idcontract;
-    private int idsocietate;
-    private int co;
-    private int cm;
+    private Integer idpersoana;
+    private Integer idcontract;
+    private Integer idsocietate;
+    private Integer co;
+    private Integer cm;
 
     public Angajat() {
 
     }
 
-    public Angajat(int idpersoana, int idcontract, int idsocietate, int co, int cm) {
-        this.idpersoana = idpersoana;
+    public Angajat(Integer idcontract, Integer idsocietate, Integer co, Integer cm) {
         this.idcontract = idcontract;
         this.idsocietate = idsocietate;
         this.co = co;
@@ -31,57 +27,48 @@ public class Angajat {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-
     @Column(name = "idpersoana")
-    public int getIdpersoana() {
+    public Integer getIdpersoana() {
         return idpersoana;
     }
 
-    public void setIdpersoana(int idpersoana) {
+    public void setIdpersoana(Integer idpersoana) {
         this.idpersoana = idpersoana;
     }
 
     @Column(name = "idcontract")
-    public int getIdcontract() {
+    public Integer getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Integer idcontract) {
         this.idcontract = idcontract;
     }
 
     @Column(name = "idsocietate")
-    public int getIdsocietate() {
+    public Integer getIdsocietate() {
         return idsocietate;
     }
 
-    public void setIdsocietate(int idsocietate) {
+    public void setIdsocietate(Integer idsocietate) {
         this.idsocietate = idsocietate;
     }
 
     @Column(name = "co")
-    public int getCo() {
+    public Integer getCo() {
         return co;
     }
 
-    public void setCo(int co) {
+    public void setCo(Integer co) {
         this.co = co;
     }
 
     @Column(name = "cm")
-    public int getCm() {
+    public Integer getCm() {
         return cm;
     }
 
-    public void setCm(int cm) {
+    public void setCm(Integer cm) {
         this.cm = cm;
     }
 }
-

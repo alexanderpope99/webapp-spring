@@ -19,8 +19,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.UserToRole;
 import net.guides.springboot2.crud.repository.UserToRoleRepository;
 
-import org.springframework.data.domain.Sort;
-
 @RestController
 @RequestMapping("/usertorole")
 public class UserToRoleController {
@@ -29,7 +27,7 @@ public class UserToRoleController {
 
     @GetMapping
     public List<UserToRole> getAllPersoane() {
-        return userToRoleRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return userToRoleRepository.findAll();
     }
 
     @GetMapping("{roleid}+{permissionid}")
