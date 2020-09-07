@@ -19,7 +19,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.repository.PersoanaRepository;
 
-
 @RestController
 @RequestMapping("/persoana")
 public class PersoanaController {

@@ -7,9 +7,8 @@ import java.util.Date;
 @Entity
 @IdClass(ListaSalariatContractId.class)
 @Table(name = "echipa")
-public class ListaSalariatContract implements Serializable {
-
-    @Id
+public class ListaSalariatContract {
+	@Id
     private int idsalariat;
     @Id
     private int idcontract;
@@ -56,7 +55,8 @@ public class ListaSalariatContract implements Serializable {
 }
 
 class ListaSalariatContractId implements Serializable {
-    protected int idsalariat;
+	private static final long serialVersionUID = 1L;
+	protected int idsalariat;
     protected int idcontract;
     protected Date dataschimbare;
 
