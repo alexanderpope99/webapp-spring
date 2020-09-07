@@ -155,8 +155,8 @@ class Persoana extends React.Component {
       if (['', '-'].indexOf(this.state[key]) !== -1) this.state[key] = null;
     }
 
-    var idactidentitate = null,
-      idadresa = null;
+    var actidentitate = null,
+      adresa = null;
 
     // query only if any adrese fields is filled
     if (
@@ -170,12 +170,12 @@ class Persoana extends React.Component {
         judet: this.state.judet,
         tara: null,
       };
-      idadresa = await fetch('http://localhost:5000/adresa', {
+      adresa = await fetch('http://localhost:5000/adresa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adresa_body),
-      }).then((idadresa) => idadresa.json());
-      console.log('idadresa', idadresa);
+      }).then((adresa) => adresa.json());
+      console.log('idadresa:', adresa.id);
     }
 
     // query only if any actitentitate field is filled
@@ -192,45 +192,45 @@ class Persoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      idactidentitate = await fetch('http://localhost:5000/actidentitate', {
+      actidentitate = await fetch('http://localhost:5000/actidentitate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(buletin_body),
-      }).then((idactidentitate) => idactidentitate.json());
-      console.log('idactidentitate', idactidentitate);
+      }).then((actidentitate) => actidentitate.json());
+      console.log('idactidentitate:', actidentitate.id);
     }
 
     const persoana_body = {
       gen: this.state.gen,
       nume: this.state.nume,
       prenume: this.state.prenume,
-      idactidentitate: idactidentitate,
-      idadresa: idadresa,
+      idactidentitate: actidentitate === null ? null : actidentitate.id,
+      idadresa: adresa === null ? null : adresa.id,
       starecivila: this.state.starecivila,
       email: this.state.email,
       telefon: this.state.telefon,
       cnp: this.state.cnp,
     };
 
-    const idpersoana = await fetch('http://localhost:5000/persoana', {
+    const persoana = await fetch('http://localhost:5000/persoana', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(persoana_body),
     })
-      .then((idpersoana) => idpersoana.json())
+      .then((persoana) => persoana.json())
       .catch((err) => console.error('error:', err.message));
 
     if (typeof this.props.asChild === 'undefined') {
-      if (typeof idpersoana === 'number') {
+      if (typeof persoana.id === 'number') {
         this.clearFields();
         this.setState({
           show: true,
           modalMessage: 'Persoana adaugată cu succes.',
         });
-        console.log('idpersoana:', idpersoana);
-        return idpersoana;
+        console.log('idpersoana:', persoana.id);
+        return persoana.id;
       } else return;
-    } else if (typeof idpersoana === 'number') return idpersoana;
+    } else if (typeof persoana.id === 'number') return persoana.id;
     else return;
   }
 
