@@ -137,7 +137,7 @@ class Contract extends React.Component {
     return true;
   }
 
-  async onSubmit(e) {
+  async onSubmit(e, method, idcontract) {
     e.preventDefault();
 
     if (!this.hasRequired()) return;
@@ -218,9 +218,8 @@ class Contract extends React.Component {
       pensionar: this.state.pensionar,
       spor: this.state.spor,
     };
-
-    const contract = await fetch('http://localhost:5000/contract', {
-      method: 'POST',
+    const contract = await fetch(`http://localhost:5000/contract/${idcontract}`, {
+      method: method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contract_body),
     })
@@ -235,12 +234,12 @@ class Contract extends React.Component {
         this.clearFields();
         this.setState({
           show: true,
-          modalMessage: 'Contract adăugat cu succes.',
+          modalMessage: method === 'POST' ? 'Contract adăugat cu succes.' : 'Contract actualizat.',
         });
         console.log('idcontract:', contract.id);
-        return contract.id;
+        return contract;
       } else return;
-    } else if (typeof contract.id === 'number') return contract.id;
+    } else if (typeof contract.id === 'number') return contract;
     else return;
   }
 
@@ -258,7 +257,7 @@ class Contract extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Form onSubmit={this.onSubmit}>
+        <Form onSubmit={(e) => this.onSubmit(e, 'POST', null)}>
           <Row>
             <Col md={6}>
               <Form.Group controlId="tip">

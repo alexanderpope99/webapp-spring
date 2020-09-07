@@ -51,7 +51,7 @@ public class ContractController {
                 .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
 
         contractDetails.setId(contract.getId());
-        final Contract updatedContract = contractRepository.save(contract);
+        final Contract updatedContract = contractRepository.save(contractDetails);
         return ResponseEntity.ok(updatedContract);
     }
 

@@ -10,12 +10,14 @@ import Contract from '../UIElements/Forms/Contract';
 /*
   TODO
   * fetch date contract when selecting anagajat
-  * insert prop to see when selected id changes
-  * inside EditAngajat set prop when changing selection
-  * when focusing pill 'contract' fetch if person has contract:
-  *   ├─has contract: method = 'PUT, 'button text = "Actualizează"
-  *   └─ no contract: method 'POST' => 1. create contract -> get idcontract,
-  *                                    2. create angajat with idpersoana + idcontract
+  *
+  * when focusing pill 'contract' check if person has contract:
+  *   |> has contract: 1. method = 'PUT, 'button text = "Actualizează"
+  *                    2. populate form with fetched data
+  *                    
+  *   |>  no contract: method ='POST' => 1. create contract -> get idcontract,
+  *                                     2. create angajat with idpersoana + idcontract
+  *                                     3. button text = "Adaugă"
 */
 
 class Angajat extends React.Component {
@@ -32,6 +34,8 @@ class Angajat extends React.Component {
       modalMessage: '',
 
       key: 'date-personale',
+
+      buttonText: 'Adaugă'
     };
   }
 
@@ -44,6 +48,7 @@ class Angajat extends React.Component {
 
   onSubmit = async (e) => {
     // field checking functions
+    
     if (!this.persoana.current.hasRequired()) {
       this.setState({
         key: 'date-personale',
@@ -62,7 +67,26 @@ class Angajat extends React.Component {
     }
 
     const idpersoana = await this.persoana.current.getIdOfSelected();
-    const idcontract = await this.contract.current.onSubmit(e); // create contract, return id
+
+    // get angajat, see if it has idcontract
+    const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then((res) => res.json())
+    .catch((err) => console.error(err));
+
+    var idcontract = angajat.idcontract;
+    if(idcontract === null) {
+      // does not have idcontract
+      let contract = await this.contract.current.onSubmit(e, 'POST', ''); // post/put contract
+      idcontract = contract.id;
+    }
+    else {
+      // has idcontract
+      await this.contract.current.onSubmit(e, 'PUT', idcontract) // update existring contract
+    }
+
     console.log('idpersoana:', idpersoana);
     console.log('idcontract:', idcontract);
     if (typeof idpersoana === 'number' && typeof idcontract === 'number') {
@@ -81,9 +105,9 @@ class Angajat extends React.Component {
         .then((res) => res.json())
         .catch((err) => console.log(err.message));
 
-      console.log('idangajat:', angajat.id);
+      console.log('idangajat:', angajat.idpersoana);
 
-      if (typeof angajat.id === 'number') {
+      if (typeof angajat.idpersoana === 'number') {
         this.setState({
           key: 'date-personale',
           show: true,
@@ -143,7 +167,7 @@ class Angajat extends React.Component {
               <Tab eventKey="contract" title="Contract de munca">
                 <Contract ref={this.contract} asChild />
                 <Button variant="outline-primary" onClick={this.onSubmit}>
-                  Adaugă
+                  {this.state.buttonText}
                 </Button>
               </Tab>
             </Tabs>
