@@ -268,37 +268,27 @@ class EditPersoana extends React.Component {
           if (actidentitate !== null)
             this.setState({
               idactidentitate: actidentitate.id,
-              tipact: ['null', null].indexOf(actidentitate.tipact) > -1 ? '' : actidentitate.tip,
-              serie: ['null', null].indexOf(actidentitate.serie) > -1 ? '' : actidentitate.serie,
-              numar: ['null', null].indexOf(actidentitate.numar) > -1 ? '' : actidentitate.numar,
+              tipact: actidentitate.tip === null ? '' : actidentitate.tip,
+              serie: actidentitate.serie === null ? '' : actidentitate.serie,
+              numar: actidentitate.numar === null ? '' : actidentitate.numar,
               loculnasterii:
-                ['null', null].indexOf(actidentitate.loculnasterii) > -1
-                  ? ''
-                  : actidentitate.loculnasterii,
-              eliberatde:
-                ['null', null].indexOf(actidentitate.eliberatde) > -1
-                  ? ''
-                  : actidentitate.eliberatde,
+                actidentitate.loculnasterii === null ? '' : actidentitate.loculnasterii,
+              eliberatde: actidentitate.eliberatde === null ? '' : actidentitate.eliberatde,
               dataeliberarii:
-                ['null', null].indexOf(actidentitate.dataeliberarii) > -1
-                  ? ''
-                  : actidentitate.dataeliberarii.substring(0, 10),
+                actidentitate.dataeliberarii === null ? '' : actidentitate.dataeliberarii,
             });
           // console.log('idactidentitate:', actidentitate.id);
         });
     }
 
     this.setState({
-      cnp: ['null', null].indexOf(persoana.cnp) > -1 ? '' : persoana.cnp,
-      email:
-        ['null', null].indexOf(persoana.email) > -1 || persoana.email === null
-          ? ''
-          : persoana.email,
-      gen: ['null', null].indexOf(persoana.gen) > -1 ? '' : persoana.gen,
-      nume: ['null', null].indexOf(persoana.nume) > -1 ? '' : persoana.nume,
-      prenume: ['null', null].indexOf(persoana.prenumep) > -1 ? '' : persoana.prenume,
-      starecivila: ['null', null].indexOf(persoana.starecivila) > -1 ? '' : persoana.starecivila,
-      telefon: ['null', null].indexOf(persoana.telefon) > -1 ? '' : persoana.telefon,
+      cnp: persoana.cnp === null ? '' : persoana.cnp,
+      email: persoana.email === null ? '' : persoana.email,
+      gen: persoana.gen === null ? '' : persoana.gen,
+      nume: persoana.nume === null ? '' : persoana.nume,
+      prenume: persoana.prenume === null ? '' : persoana.prenume,
+      starecivila: persoana.starecivila === null ? '' : persoana.starecivila,
+      telefon: persoana.telefon === null ? '' : persoana.telefon,
       datanasterii: this.getDatanasteriiByCNP(persoana.cnp),
     });
   }
@@ -336,6 +326,7 @@ class EditPersoana extends React.Component {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(adresa_body),
         }).then((idadresa) => idadresa.json());
+        idadresa = idadresa.id;
         console.log('added adresa, id =', idadresa);
       }
     } else {
@@ -353,18 +344,18 @@ class EditPersoana extends React.Component {
     }
 
     if (this.state.idactidentitate === null) {
-      // persoana nu are adresa
+      // persoana nu are actidentitate
       if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
-        // daca se completeaza adresa, adauga in baza de date
+        // daca se completeaza actidentitate, adauga in baza de date
         let buletin_body = {
           cnp: this.state.cnp,
           tip: this.state.tipact,
           serie: this.state.serie,
           numar: this.state.numar,
-          datanasterii: this.state.datanasterii === '' ? null : "'" + this.state.datanasterii + "'",
+          datanasterii: this.state.datanasterii === '' ? null : this.state.datanasterii,
           eliberatde: this.state.eliberatde,
           dataeliberarii:
-            this.state.dataeliberarii === '' ? null : "'" + this.state.dataeliberarii + "'",
+            this.state.dataeliberarii === '' ? null : this.state.dataeliberarii,
           loculnasterii: this.state.loculnasterii,
         };
 
@@ -372,8 +363,10 @@ class EditPersoana extends React.Component {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(buletin_body),
-        }).then((idactidentitate) => idactidentitate.json());
-        console.log('idactidentitate', idactidentitate);
+        }).then((idactidentitate) => idactidentitate.json())
+        .catch((err) => console.error(err));
+        idactidentitate = idactidentitate.id;
+        console.log('idactidentitate:', idactidentitate);
       }
     } else {
       let buletin_body = {
@@ -490,7 +483,11 @@ class EditPersoana extends React.Component {
                     <OverlayTrigger
                       placement="bottom"
                       delay={{ show: 250, hide: 250 }}
-                      overlay={<Tooltip id="update-button" style={{opacity: ".4"}}>Adaugă o persoană nouă</Tooltip>}
+                      overlay={
+                        <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                          Adaugă o persoană nouă
+                        </Tooltip>
+                      }
                     >
                       <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
                         <Add fontSize="small" className="m-0" />
