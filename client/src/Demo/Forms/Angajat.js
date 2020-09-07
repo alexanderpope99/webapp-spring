@@ -73,7 +73,7 @@ class Angajat extends React.Component {
         cm: null,
       };
       // update angajat in database
-      const idangajat = await fetch('http://localhost:5000/angajat', {
+      const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(angajat_body),
@@ -81,9 +81,9 @@ class Angajat extends React.Component {
         .then((res) => res.json())
         .catch((err) => console.log(err.message));
 
-      console.log('idangajat:', idangajat);
+      console.log('idangajat:', angajat.id);
 
-      if (typeof idangajat === 'number') {
+      if (typeof angajat.id === 'number') {
         this.setState({
           key: 'date-personale',
           show: true,

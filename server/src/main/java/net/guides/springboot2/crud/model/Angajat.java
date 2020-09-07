@@ -9,17 +9,17 @@ import javax.persistence.Table;
 @Table(name = "angajat")
 public class Angajat {
 
-    private Integer idpersoana;
-    private Integer idcontract;
-    private Integer idsocietate;
-    private Integer co;
-    private Integer cm;
+    private Long idpersoana;
+    private Long idcontract;
+    private Long idsocietate;
+    private Long co;
+    private Long cm;
 
     public Angajat() {
 
     }
 
-    public Angajat(Integer idcontract, Integer idsocietate, Integer co, Integer cm) {
+    public Angajat(Long idcontract, Long idsocietate, Long co, Long cm) {
         this.idcontract = idcontract;
         this.idsocietate = idsocietate;
         this.co = co;
@@ -28,47 +28,47 @@ public class Angajat {
 
     @Id
     @Column(name = "idpersoana")
-    public Integer getIdpersoana() {
+    public Long getIdpersoana() {
         return idpersoana;
     }
 
-    public void setIdpersoana(Integer idpersoana) {
+    public void setIdpersoana(Long idpersoana) {
         this.idpersoana = idpersoana;
     }
 
     @Column(name = "idcontract")
-    public Integer getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(Integer idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 
     @Column(name = "idsocietate")
-    public Integer getIdsocietate() {
+    public Long getIdsocietate() {
         return idsocietate;
     }
 
-    public void setIdsocietate(Integer idsocietate) {
+    public void setIdsocietate(Long idsocietate) {
         this.idsocietate = idsocietate;
     }
 
     @Column(name = "co")
-    public Integer getCo() {
+    public Long getCo() {
         return co;
     }
 
-    public void setCo(Integer co) {
+    public void setCo(Long co) {
         this.co = co;
     }
 
     @Column(name = "cm")
-    public Integer getCm() {
+    public Long getCm() {
         return cm;
     }
 
-    public void setCm(Integer cm) {
+    public void setCm(Long cm) {
         this.cm = cm;
     }
 }
