@@ -2,8 +2,6 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,7 +9,6 @@ import javax.persistence.Table;
 @Table(name = "angajat")
 public class Angajat {
 
-    private long id;
     private Integer idpersoana;
     private Integer idcontract;
     private Integer idsocietate;
@@ -22,8 +19,7 @@ public class Angajat {
 
     }
 
-    public Angajat(Integer idpersoana, Integer idcontract, Integer idsocietate, Integer co, Integer cm) {
-        this.idpersoana = idpersoana;
+    public Angajat(Integer idcontract, Integer idsocietate, Integer co, Integer cm) {
         this.idcontract = idcontract;
         this.idsocietate = idsocietate;
         this.co = co;
@@ -31,14 +27,6 @@ public class Angajat {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-
     @Column(name = "idpersoana")
     public Integer getIdpersoana() {
         return idpersoana;
@@ -84,4 +72,3 @@ public class Angajat {
         this.cm = cm;
     }
 }
-

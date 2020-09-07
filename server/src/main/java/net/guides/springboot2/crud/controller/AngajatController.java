@@ -28,7 +28,12 @@ public class AngajatController {
 
     @GetMapping
     public List<Angajat> getAllAngajats() {
-        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
+    }
+
+    @GetMapping("/alf")
+    public List<Angajat> getAngajatsAlphabetically() {
+        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
     }
 
     @GetMapping("{id}")
@@ -50,7 +55,7 @@ public class AngajatController {
         Angajat angajat = angajatRepository.findById(angajatId)
                 .orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
 
-        angajatDetails.setId(angajat.getId());
+        angajatDetails.setIdpersoana(angajat.getIdpersoana());
         final Angajat updatedAngajat = angajatRepository.save(angajat);
         return ResponseEntity.ok(updatedAngajat);
     }
