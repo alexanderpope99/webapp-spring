@@ -16,9 +16,6 @@ import Contract from '../UIElements/Forms/Contract';
   *   ├─has contract: method = 'PUT, 'button text = "Actualizează"
   *   └─ no contract: method 'POST' => 1. create contract -> get idcontract,
   *                                    2. create angajat with idpersoana + idcontract
-  * 
-  * change add persoana to create persoana and create angajat with idpersoana
-  *
 */
 
 class Angajat extends React.Component {
@@ -65,25 +62,24 @@ class Angajat extends React.Component {
     }
 
     const idpersoana = await this.persoana.current.getIdOfSelected();
-    console.log(idpersoana);
-    const idcontract = await this.contract.current.onSubmit(e);
+    const idcontract = await this.contract.current.onSubmit(e); // create contract, return id
     console.log('idpersoana:', idpersoana);
     console.log('idcontract:', idcontract);
     if (typeof idpersoana === 'number' && typeof idcontract === 'number') {
-      // console.log('idpersoana:', idpersoana);
-      // console.log('idcontract:', idcontract);
       let angajat_body = {
         idpersoana: idpersoana,
         idcontract: idcontract,
         co: null,
         cm: null,
       };
-      // create angajat in database
+      // update angajat in database
       const idangajat = await fetch('http://localhost:5000/angajat', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(angajat_body),
-      }).then((res) => res.json());
+      })
+        .then((res) => res.json())
+        .catch((err) => console.log(err.message));
 
       console.log('idangajat:', idangajat);
 
@@ -97,7 +93,6 @@ class Angajat extends React.Component {
         this.contract.current.clearFields();
         window.scrollTo(0, 0);
       }
-      // .catch((err) => console.log(err.message));
     }
   };
 

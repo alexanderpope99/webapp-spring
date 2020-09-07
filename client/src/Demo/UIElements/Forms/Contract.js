@@ -149,8 +149,6 @@ class Contract extends React.Component {
     }
     //TODO - VALIDĂRI
 
-    // console.log('centruCost:', this.state.centruCost);
-
     var punctlucru = null,
       centrucost = null,
       echipa = null,
@@ -220,7 +218,6 @@ class Contract extends React.Component {
       pensionar: this.state.pensionar,
       spor: this.state.spor,
     };
-    console.log(contract_body);
 
     const contract = await fetch('http://localhost:5000/contract', {
       method: 'POST',
