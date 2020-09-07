@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ListaContBancar;
 import net.guides.springboot2.crud.repository.ListaContBancarRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/listacontbancar")
@@ -28,14 +28,14 @@ public class ListaContBancarController {
 
     @GetMapping
     public List<ListaContBancar> getAllListaContBancars() {
-        return listaContBancarRepository.findAll();
+        return listaContBancarRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<ListaContBancar> getListaContBancarById(@PathVariable(value = "id") Long listaContBancarId)
             throws ResourceNotFoundException {
-        ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId)
-                .orElseThrow(() -> new ResourceNotFoundException("ListaContBancar not found for this id :: " + listaContBancarId));
+        ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId).orElseThrow(
+                () -> new ResourceNotFoundException("ListaContBancar not found for this id :: " + listaContBancarId));
         return ResponseEntity.ok().body(listaContBancar);
     }
 
@@ -46,9 +46,9 @@ public class ListaContBancarController {
 
     @PutMapping("{id}")
     public ResponseEntity<ListaContBancar> updateListaContBancar(@PathVariable(value = "id") Long listaContBancarId,
-                                                                 @RequestBody ListaContBancar listaContBancarDetails) throws ResourceNotFoundException {
-        ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId)
-                .orElseThrow(() -> new ResourceNotFoundException("ListaContBancar not found for this id :: " + listaContBancarId));
+            @RequestBody ListaContBancar listaContBancarDetails) throws ResourceNotFoundException {
+        ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId).orElseThrow(
+                () -> new ResourceNotFoundException("ListaContBancar not found for this id :: " + listaContBancarId));
 
         listaContBancarDetails.setIdsocietate(listaContBancar.getIdsocietate());
         listaContBancarDetails.setIban((listaContBancar.getIban()));
@@ -59,8 +59,8 @@ public class ListaContBancarController {
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteListaContBancar(@PathVariable(value = "id") Long listaContBancarId)
             throws ResourceNotFoundException {
-        ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId)
-                .orElseThrow(() -> new ResourceNotFoundException("ListaContBancar not found for this id :: " + listaContBancarId));
+        ListaContBancar listaContBancar = listaContBancarRepository.findById(listaContBancarId).orElseThrow(
+                () -> new ResourceNotFoundException("ListaContBancar not found for this id :: " + listaContBancarId));
 
         listaContBancarRepository.delete(listaContBancar);
         Map<String, Boolean> response = new HashMap<>();

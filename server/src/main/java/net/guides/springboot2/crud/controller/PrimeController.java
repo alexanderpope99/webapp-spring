@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Prime;
 import net.guides.springboot2.crud.repository.PrimeRepository;
-
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/prime")
@@ -28,27 +28,27 @@ public class PrimeController {
 
     @GetMapping
     public List<Prime> getAllPersoane() {
-        return primeRepository.findAll();
+        return primeRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Prime> getPrimeById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Prime> getPrimeById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Prime prime = primeRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
 
         return ResponseEntity.ok().body(prime);
     }
 
     @PostMapping
-        public Prime createPrime(@RequestBody Prime prime) {
+    public Prime createPrime(@RequestBody Prime prime) {
         return primeRepository.save(prime);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Prime> updatePrime(@PathVariable(value = "id") Long id,  @RequestBody Prime newPrime) throws ResourceNotFoundException {
+    public ResponseEntity<Prime> updatePrime(@PathVariable(value = "id") Long id, @RequestBody Prime newPrime)
+            throws ResourceNotFoundException {
         Prime prime = primeRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
 
         newPrime.setId(prime.getId());
         final Prime updatedPrime = primeRepository.save(newPrime);
@@ -56,8 +56,7 @@ public class PrimeController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deletePrime(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deletePrime(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Prime prime = primeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
 

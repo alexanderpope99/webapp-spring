@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Sponsorizari;
 import net.guides.springboot2.crud.repository.SponsorizariRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/sponsorizari")
@@ -28,27 +29,28 @@ public class SponsorizariController {
 
     @GetMapping
     public List<Sponsorizari> getAllPersoane() {
-        return sponsorizariRepository.findAll();
+        return sponsorizariRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Sponsorizari> getSponsorizariById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Sponsorizari> getSponsorizariById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
 
         return ResponseEntity.ok().body(sponsorizari);
     }
 
     @PostMapping
-        public Sponsorizari createSponsorizari(@RequestBody Sponsorizari sponsorizari) {
+    public Sponsorizari createSponsorizari(@RequestBody Sponsorizari sponsorizari) {
         return sponsorizariRepository.save(sponsorizari);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Sponsorizari> updateSponsorizari(@PathVariable(value = "id") Long id,  @RequestBody Sponsorizari newSponsorizari) throws ResourceNotFoundException {
+    public ResponseEntity<Sponsorizari> updateSponsorizari(@PathVariable(value = "id") Long id,
+            @RequestBody Sponsorizari newSponsorizari) throws ResourceNotFoundException {
         Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
 
         newSponsorizari.setId(sponsorizari.getId());
         final Sponsorizari updatedSponsorizari = sponsorizariRepository.save(newSponsorizari);

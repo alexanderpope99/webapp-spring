@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.AlteDrepturi;
 import net.guides.springboot2.crud.repository.AlteDrepturiRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/altedrepturi")
@@ -28,14 +29,14 @@ public class AlteDrepturiController {
 
     @GetMapping
     public List<AlteDrepturi> getAllAlteDrepturis() {
-        return alteDrepturiRepository.findAll();
+        return alteDrepturiRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
     public ResponseEntity<AlteDrepturi> getAlteDrepturiById(@PathVariable(value = "id") Long alteDrepturiId)
             throws ResourceNotFoundException {
-        AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId)
-                .orElseThrow(() -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
+        AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId).orElseThrow(
+                () -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
         return ResponseEntity.ok().body(alteDrepturi);
     }
 
@@ -46,9 +47,9 @@ public class AlteDrepturiController {
 
     @PutMapping("{id}")
     public ResponseEntity<AlteDrepturi> updateAlteDrepturi(@PathVariable(value = "id") Long alteDrepturiId,
-                                                           @RequestBody AlteDrepturi alteDrepturiDetails) throws ResourceNotFoundException {
-        AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId)
-                .orElseThrow(() -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
+            @RequestBody AlteDrepturi alteDrepturiDetails) throws ResourceNotFoundException {
+        AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId).orElseThrow(
+                () -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
 
         alteDrepturiDetails.setId(alteDrepturi.getId());
         final AlteDrepturi updatedAlteDrepturi = alteDrepturiRepository.save(alteDrepturi);
@@ -58,8 +59,8 @@ public class AlteDrepturiController {
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteAlteDrepturi(@PathVariable(value = "id") Long alteDrepturiId)
             throws ResourceNotFoundException {
-        AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId)
-                .orElseThrow(() -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
+        AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId).orElseThrow(
+                () -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
 
         alteDrepturiRepository.delete(alteDrepturi);
         Map<String, Boolean> response = new HashMap<>();

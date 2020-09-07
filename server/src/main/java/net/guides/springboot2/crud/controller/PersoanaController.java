@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,27 +28,28 @@ public class PersoanaController {
 
     @GetMapping
     public List<Persoana> getAllPersoane() {
-        return persoanaRepository.findAll();
+        return persoanaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Persoana> getPersoanaById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Persoana> getPersoanaById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         Persoana persoana = persoanaRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
 
         return ResponseEntity.ok().body(persoana);
     }
 
     @PostMapping
-        public Persoana createPersoana(@RequestBody Persoana persoana) {
+    public Persoana createPersoana(@RequestBody Persoana persoana) {
         return persoanaRepository.save(persoana);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Persoana> updatePersoana(@PathVariable(value = "id") Long id,  @RequestBody Persoana newPersoana) throws ResourceNotFoundException {
+    public ResponseEntity<Persoana> updatePersoana(@PathVariable(value = "id") Long id,
+            @RequestBody Persoana newPersoana) throws ResourceNotFoundException {
         Persoana persoana = persoanaRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
 
         newPersoana.setId(persoana.getId());
         final Persoana updatedPersoana = persoanaRepository.save(newPersoana);
@@ -55,8 +57,7 @@ public class PersoanaController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deletePersoana(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deletePersoana(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Persoana persoana = persoanaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
 

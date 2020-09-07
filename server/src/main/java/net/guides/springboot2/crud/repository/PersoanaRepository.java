@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Persoana;
 
 @Repository
-public interface PersoanaRepository extends JpaRepository<Persoana, Long>{ }
+public interface PersoanaRepository extends JpaRepository<Persoana, Long> {
+}

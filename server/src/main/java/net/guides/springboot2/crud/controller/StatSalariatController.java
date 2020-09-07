@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.StatSalariat;
 import net.guides.springboot2.crud.repository.StatSalariatRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/statsalariat")
@@ -28,27 +29,28 @@ public class StatSalariatController {
 
     @GetMapping
     public List<StatSalariat> getAllPersoane() {
-        return statSalariatRepository.findAll();
+        return statSalariatRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<StatSalariat> getStatSalariatById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<StatSalariat> getStatSalariatById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         StatSalariat statSalariat = statSalariatRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("StatSalariat not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("StatSalariat not found for this id :: " + id));
 
         return ResponseEntity.ok().body(statSalariat);
     }
 
     @PostMapping
-        public StatSalariat createStatSalariat(@RequestBody StatSalariat statSalariat) {
+    public StatSalariat createStatSalariat(@RequestBody StatSalariat statSalariat) {
         return statSalariatRepository.save(statSalariat);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<StatSalariat> updateStatSalariat(@PathVariable(value = "id") Long id,  @RequestBody StatSalariat newStatSalariat) throws ResourceNotFoundException {
+    public ResponseEntity<StatSalariat> updateStatSalariat(@PathVariable(value = "id") Long id,
+            @RequestBody StatSalariat newStatSalariat) throws ResourceNotFoundException {
         StatSalariat statSalariat = statSalariatRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("StatSalariat not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("StatSalariat not found for this id :: " + id));
 
         newStatSalariat.setId(statSalariat.getId());
         final StatSalariat updatedStatSalariat = statSalariatRepository.save(newStatSalariat);

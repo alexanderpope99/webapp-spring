@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/oresuplimentare")
@@ -28,27 +29,28 @@ public class OresuplimentareController {
 
     @GetMapping
     public List<Oresuplimentare> getAllPersoane() {
-        return oresuplimentareRepository.findAll();
+        return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
         return ResponseEntity.ok().body(oresuplimentare);
     }
 
     @PostMapping
-        public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
+    public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
         return oresuplimentareRepository.save(oresuplimentare);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") Long id,  @RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
+    public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") Long id,
+            @RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
         Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
         newOresuplimentare.setId(oresuplimentare.getId());
         final Oresuplimentare updatedOresuplimentare = oresuplimentareRepository.save(newOresuplimentare);

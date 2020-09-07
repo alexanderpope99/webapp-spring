@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,27 +28,27 @@ public class AdresaController {
 
     @GetMapping
     public List<Adresa> getAllPersoane() {
-        return adresaRepository.findAll();
+        return adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Adresa> getAdresaById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Adresa> getAdresaById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Adresa adresa = adresaRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 
         return ResponseEntity.ok().body(adresa);
     }
 
     @PostMapping
-        public Adresa createAdresa(@RequestBody Adresa adresa) {
+    public Adresa createAdresa(@RequestBody Adresa adresa) {
         return adresaRepository.save(adresa);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Adresa> updateAdresa(@PathVariable(value = "id") Long id,  @RequestBody Adresa newAdresa) throws ResourceNotFoundException {
+    public ResponseEntity<Adresa> updateAdresa(@PathVariable(value = "id") Long id, @RequestBody Adresa newAdresa)
+            throws ResourceNotFoundException {
         Adresa adresa = adresaRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 
         newAdresa.setId(adresa.getId());
         final Adresa updatedAdresa = adresaRepository.save(newAdresa);
@@ -55,8 +56,7 @@ public class AdresaController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteAdresa(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteAdresa(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Adresa adresa = adresaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 

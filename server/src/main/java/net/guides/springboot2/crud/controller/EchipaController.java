@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Echipa;
 import net.guides.springboot2.crud.repository.EchipaRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/echipa")
@@ -28,7 +28,7 @@ public class EchipaController {
 
     @GetMapping
     public List<Echipa> getAllEchipas() {
-        return echipaRepository.findAll();
+        return echipaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
@@ -46,7 +46,7 @@ public class EchipaController {
 
     @PutMapping("{id}")
     public ResponseEntity<Echipa> updateEchipa(@PathVariable(value = "id") Long echipaId,
-                                               @RequestBody Echipa echipaDetails) throws ResourceNotFoundException {
+            @RequestBody Echipa echipaDetails) throws ResourceNotFoundException {
         Echipa echipa = echipaRepository.findById(echipaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
 

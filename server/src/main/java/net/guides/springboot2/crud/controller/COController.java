@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.repository.CORepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/co")
@@ -28,12 +28,11 @@ public class COController {
 
     @GetMapping
     public List<CO> getAllCOs() {
-        return coRepository.findAll();
+        return coRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CO> getCOById(@PathVariable(value = "id") Long coId)
-            throws ResourceNotFoundException {
+    public ResponseEntity<CO> getCOById(@PathVariable(value = "id") Long coId) throws ResourceNotFoundException {
         CO co = coRepository.findById(coId)
                 .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
         return ResponseEntity.ok().body(co);
@@ -45,8 +44,8 @@ public class COController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<CO> updateCO(@PathVariable(value = "id") Long coId,
-                                       @RequestBody CO coDetails) throws ResourceNotFoundException {
+    public ResponseEntity<CO> updateCO(@PathVariable(value = "id") Long coId, @RequestBody CO coDetails)
+            throws ResourceNotFoundException {
         CO co = coRepository.findById(coId)
                 .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
 
@@ -56,8 +55,7 @@ public class COController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCO(@PathVariable(value = "id") Long coId)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteCO(@PathVariable(value = "id") Long coId) throws ResourceNotFoundException {
         CO co = coRepository.findById(coId)
                 .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
 

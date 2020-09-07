@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.repository.RoleRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/role")
@@ -28,27 +29,27 @@ public class RoleController {
 
     @GetMapping
     public List<Role> getAllPersoane() {
-        return roleRepository.findAll();
+        return roleRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Role> getRoleById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Role> getRoleById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Role role = roleRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
 
         return ResponseEntity.ok().body(role);
     }
 
     @PostMapping
-        public Role createRole(@RequestBody Role role) {
+    public Role createRole(@RequestBody Role role) {
         return roleRepository.save(role);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable(value = "id") Long id,  @RequestBody Role newRole) throws ResourceNotFoundException {
+    public ResponseEntity<Role> updateRole(@PathVariable(value = "id") Long id, @RequestBody Role newRole)
+            throws ResourceNotFoundException {
         Role role = roleRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
 
         newRole.setId(role.getId());
         final Role updatedRole = roleRepository.save(newRole);
@@ -56,8 +57,7 @@ public class RoleController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteRole(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteRole(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
 

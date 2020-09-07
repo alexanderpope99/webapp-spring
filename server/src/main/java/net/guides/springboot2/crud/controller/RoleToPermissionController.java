@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RoleToPermission;
 import net.guides.springboot2.crud.repository.RoleToPermissionRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/roletopermission")
@@ -28,27 +29,31 @@ public class RoleToPermissionController {
 
     @GetMapping
     public List<RoleToPermission> getAllPersoane() {
-        return roleToPermissionRepository.findAll();
+        return roleToPermissionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{roleid}+{permissionid}")
-    public ResponseEntity<RoleToPermission> getRoleToPermissionById(@PathVariable(value="roleid") Long roleid, @PathVariable(value="permissionid") Long permissionid) throws ResourceNotFoundException
-    {
+    public ResponseEntity<RoleToPermission> getRoleToPermissionById(@PathVariable(value = "roleid") Long roleid,
+            @PathVariable(value = "permissionid") Long permissionid) throws ResourceNotFoundException {
         RoleToPermission roleToPermission = roleToPermissionRepository.findByRoleidAndPermissionid(roleid, permissionid)
-        .orElseThrow(() -> new ResourceNotFoundException("RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
 
         return ResponseEntity.ok().body(roleToPermission);
     }
 
     @PostMapping
-        public RoleToPermission createRoleToPermission(@RequestBody RoleToPermission roleToPermission) {
+    public RoleToPermission createRoleToPermission(@RequestBody RoleToPermission roleToPermission) {
         return roleToPermissionRepository.save(roleToPermission);
     }
 
     @PutMapping("{roleid}+{permissionid}")
-    public ResponseEntity<RoleToPermission> updateRoleToPermission(@PathVariable(value = "roleid") Long roleid, @PathVariable(value="permissionid") Long permissionid, @RequestBody RoleToPermission newRoleToPermission) throws ResourceNotFoundException {
+    public ResponseEntity<RoleToPermission> updateRoleToPermission(@PathVariable(value = "roleid") Long roleid,
+            @PathVariable(value = "permissionid") Long permissionid, @RequestBody RoleToPermission newRoleToPermission)
+            throws ResourceNotFoundException {
         RoleToPermission roleToPermission = roleToPermissionRepository.findByRoleidAndPermissionid(roleid, permissionid)
-        .orElseThrow(() -> new ResourceNotFoundException("RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
 
         newRoleToPermission.setPermissionid(roleToPermission.getPermissionid());
         newRoleToPermission.setRoleid(roleToPermission.getRoleid());
@@ -58,10 +63,11 @@ public class RoleToPermissionController {
     }
 
     @DeleteMapping("{roleid}+{permissionid}")
-    public Map<String, Boolean> deleteRoleToPermission(@PathVariable(value = "roleid") Long roleid, @PathVariable(value="permissionid") Long permissionid )
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteRoleToPermission(@PathVariable(value = "roleid") Long roleid,
+            @PathVariable(value = "permissionid") Long permissionid) throws ResourceNotFoundException {
         RoleToPermission roleToPermission = roleToPermissionRepository.findByRoleidAndPermissionid(roleid, permissionid)
-                .orElseThrow(() -> new ResourceNotFoundException("RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
 
         roleToPermissionRepository.delete(roleToPermission);
         Map<String, Boolean> response = new HashMap<>();

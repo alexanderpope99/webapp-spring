@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.UserRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/user")
@@ -28,27 +29,27 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllPersoane() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         User user = userRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping
-        public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id,  @RequestBody User newUser) throws ResourceNotFoundException {
+    public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long id, @RequestBody User newUser)
+            throws ResourceNotFoundException {
         User user = userRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 
         newUser.setId(user.getId());
         final User updatedUser = userRepository.save(newUser);
@@ -56,8 +57,7 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 

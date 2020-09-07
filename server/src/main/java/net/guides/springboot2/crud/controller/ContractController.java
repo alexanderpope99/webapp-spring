@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.repository.ContractRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/contract")
@@ -28,7 +28,7 @@ public class ContractController {
 
     @GetMapping
     public List<Contract> getAllContracts() {
-        return contractRepository.findAll();
+        return contractRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
@@ -46,7 +46,7 @@ public class ContractController {
 
     @PutMapping("{id}")
     public ResponseEntity<Contract> updateContract(@PathVariable(value = "id") Long contractId,
-                                                   @RequestBody Contract contractDetails) throws ResourceNotFoundException {
+            @RequestBody Contract contractDetails) throws ResourceNotFoundException {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
 

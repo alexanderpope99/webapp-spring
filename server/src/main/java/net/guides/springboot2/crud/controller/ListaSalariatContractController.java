@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ListaSalariatContract;
 import net.guides.springboot2.crud.repository.ListaSalariatContractRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/listasalariatcontract")
@@ -28,14 +28,15 @@ public class ListaSalariatContractController {
 
     @GetMapping
     public List<ListaSalariatContract> getAllListaSalariatContracts() {
-        return listaSalariatContractRepository.findAll();
+        return listaSalariatContractRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ListaSalariatContract> getListaSalariatContractById(@PathVariable(value = "id") Long listaSalariatContractId)
-            throws ResourceNotFoundException {
+    public ResponseEntity<ListaSalariatContract> getListaSalariatContractById(
+            @PathVariable(value = "id") Long listaSalariatContractId) throws ResourceNotFoundException {
         ListaSalariatContract listaSalariatContract = listaSalariatContractRepository.findById(listaSalariatContractId)
-                .orElseThrow(() -> new ResourceNotFoundException("ListaSalariatContract not found for this id :: " + listaSalariatContractId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "ListaSalariatContract not found for this id :: " + listaSalariatContractId));
         return ResponseEntity.ok().body(listaSalariatContract);
     }
 
@@ -45,14 +46,17 @@ public class ListaSalariatContractController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ListaSalariatContract> updateListaSalariatContract(@PathVariable(value = "id") Long listaSalariatContractId,
-                                                                             @RequestBody ListaSalariatContract listaSalariatContractDetails) throws ResourceNotFoundException {
+    public ResponseEntity<ListaSalariatContract> updateListaSalariatContract(
+            @PathVariable(value = "id") Long listaSalariatContractId,
+            @RequestBody ListaSalariatContract listaSalariatContractDetails) throws ResourceNotFoundException {
         ListaSalariatContract listaSalariatContract = listaSalariatContractRepository.findById(listaSalariatContractId)
-                .orElseThrow(() -> new ResourceNotFoundException("ListaSalariatContract not found for this id :: " + listaSalariatContractId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "ListaSalariatContract not found for this id :: " + listaSalariatContractId));
 
         listaSalariatContractDetails.setIdcontract(listaSalariatContract.getIdcontract());
         listaSalariatContractDetails.setIdsalariat((listaSalariatContract.getIdsalariat()));
-        final ListaSalariatContract updatedListaSalariatContract = listaSalariatContractRepository.save(listaSalariatContract);
+        final ListaSalariatContract updatedListaSalariatContract = listaSalariatContractRepository
+                .save(listaSalariatContract);
         return ResponseEntity.ok(updatedListaSalariatContract);
     }
 
@@ -60,7 +64,8 @@ public class ListaSalariatContractController {
     public Map<String, Boolean> deleteListaSalariatContract(@PathVariable(value = "id") Long listaSalariatContractId)
             throws ResourceNotFoundException {
         ListaSalariatContract listaSalariatContract = listaSalariatContractRepository.findById(listaSalariatContractId)
-                .orElseThrow(() -> new ResourceNotFoundException("ListaSalariatContract not found for this id :: " + listaSalariatContractId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "ListaSalariatContract not found for this id :: " + listaSalariatContractId));
 
         listaSalariatContractRepository.delete(listaSalariatContract);
         Map<String, Boolean> response = new HashMap<>();

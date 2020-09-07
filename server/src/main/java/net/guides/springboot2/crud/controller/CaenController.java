@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Caen;
 import net.guides.springboot2.crud.repository.CaenRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/caen")
@@ -28,12 +28,11 @@ public class CaenController {
 
     @GetMapping
     public List<Caen> getAllCaens() {
-        return caenRepository.findAll();
+        return caenRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Caen> getCaenById(@PathVariable(value = "id") Long caenId)
-            throws ResourceNotFoundException {
+    public ResponseEntity<Caen> getCaenById(@PathVariable(value = "id") Long caenId) throws ResourceNotFoundException {
         Caen caen = caenRepository.findById(caenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
         return ResponseEntity.ok().body(caen);
@@ -45,8 +44,8 @@ public class CaenController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Caen> updateCaen(@PathVariable(value = "id") Long caenId,
-                                           @RequestBody Caen caenDetails) throws ResourceNotFoundException {
+    public ResponseEntity<Caen> updateCaen(@PathVariable(value = "id") Long caenId, @RequestBody Caen caenDetails)
+            throws ResourceNotFoundException {
         Caen caen = caenRepository.findById(caenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
 
@@ -56,8 +55,7 @@ public class CaenController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCaen(@PathVariable(value = "id") Long caenId)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteCaen(@PathVariable(value = "id") Long caenId) throws ResourceNotFoundException {
         Caen caen = caenRepository.findById(caenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
 

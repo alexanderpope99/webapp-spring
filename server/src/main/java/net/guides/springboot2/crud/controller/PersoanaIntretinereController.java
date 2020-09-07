@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.PersoanaIntretinere;
 import net.guides.springboot2.crud.repository.PersoanaIntretinereRepository;
-
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/persoanaintretinere")
@@ -28,30 +28,32 @@ public class PersoanaIntretinereController {
 
     @GetMapping
     public List<PersoanaIntretinere> getAllPersoane() {
-        return persoanaIntretinereRepository.findAll();
+        return persoanaIntretinereRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<PersoanaIntretinere> getPersoanaIntretinereById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<PersoanaIntretinere> getPersoanaIntretinereById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         PersoanaIntretinere persoanaIntretinere = persoanaIntretinereRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
 
         return ResponseEntity.ok().body(persoanaIntretinere);
     }
 
     @PostMapping
-        public PersoanaIntretinere createPersoanaIntretinere(@RequestBody PersoanaIntretinere persoanaIntretinere) {
+    public PersoanaIntretinere createPersoanaIntretinere(@RequestBody PersoanaIntretinere persoanaIntretinere) {
         return persoanaIntretinereRepository.save(persoanaIntretinere);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<PersoanaIntretinere> updatePersoanaIntretinere(@PathVariable(value = "id") Long id,  @RequestBody PersoanaIntretinere newPersoanaIntretinere) throws ResourceNotFoundException {
+    public ResponseEntity<PersoanaIntretinere> updatePersoanaIntretinere(@PathVariable(value = "id") Long id,
+            @RequestBody PersoanaIntretinere newPersoanaIntretinere) throws ResourceNotFoundException {
         PersoanaIntretinere persoanaIntretinere = persoanaIntretinereRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
 
         newPersoanaIntretinere.setId(persoanaIntretinere.getId());
-        final PersoanaIntretinere updatedPersoanaIntretinere = persoanaIntretinereRepository.save(newPersoanaIntretinere);
+        final PersoanaIntretinere updatedPersoanaIntretinere = persoanaIntretinereRepository
+                .save(newPersoanaIntretinere);
         return ResponseEntity.ok(updatedPersoanaIntretinere);
     }
 

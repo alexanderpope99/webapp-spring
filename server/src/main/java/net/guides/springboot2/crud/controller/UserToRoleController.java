@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.UserToRole;
 import net.guides.springboot2.crud.repository.UserToRoleRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/usertorole")
@@ -28,27 +29,31 @@ public class UserToRoleController {
 
     @GetMapping
     public List<UserToRole> getAllPersoane() {
-        return userToRoleRepository.findAll();
+        return userToRoleRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{roleid}+{permissionid}")
-    public ResponseEntity<UserToRole> getUserToRoleById(@PathVariable(value="roleid") Long roleid, @PathVariable(value="userid") Long userid) throws ResourceNotFoundException
-    {
+    public ResponseEntity<UserToRole> getUserToRoleById(@PathVariable(value = "roleid") Long roleid,
+            @PathVariable(value = "userid") Long userid) throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
-        .orElseThrow(() -> new ResourceNotFoundException("UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
 
         return ResponseEntity.ok().body(userToRole);
     }
 
     @PostMapping
-        public UserToRole createUserToRole(@RequestBody UserToRole userToRole) {
+    public UserToRole createUserToRole(@RequestBody UserToRole userToRole) {
         return userToRoleRepository.save(userToRole);
     }
 
     @PutMapping("{userid}+{roleid}")
-    public ResponseEntity<UserToRole> updateUserToRole(@PathVariable(value = "roleid") Long roleid, @PathVariable(value="userid") Long userid, @RequestBody UserToRole newUserToRole) throws ResourceNotFoundException {
+    public ResponseEntity<UserToRole> updateUserToRole(@PathVariable(value = "roleid") Long roleid,
+            @PathVariable(value = "userid") Long userid, @RequestBody UserToRole newUserToRole)
+            throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
-        .orElseThrow(() -> new ResourceNotFoundException("UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
 
         newUserToRole.setRoleid(userToRole.getRoleid());
         newUserToRole.setUserid(userToRole.getUserid());
@@ -58,10 +63,11 @@ public class UserToRoleController {
     }
 
     @DeleteMapping("{roleid}+{permissionid}")
-    public Map<String, Boolean> deleteUserToRole(@PathVariable(value = "roleid") Long roleid, @PathVariable(value="userid") Long userid )
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteUserToRole(@PathVariable(value = "roleid") Long roleid,
+            @PathVariable(value = "userid") Long userid) throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
-                .orElseThrow(() -> new ResourceNotFoundException("UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
 
         userToRoleRepository.delete(userToRole);
         Map<String, Boolean> response = new HashMap<>();

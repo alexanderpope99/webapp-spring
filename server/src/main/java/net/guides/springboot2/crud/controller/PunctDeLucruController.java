@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.PunctDeLucru;
 import net.guides.springboot2.crud.repository.PunctDeLucruRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/punctdelucru")
@@ -28,27 +29,28 @@ public class PunctDeLucruController {
 
     @GetMapping
     public List<PunctDeLucru> getAllPersoane() {
-        return punctDeLucruRepository.findAll();
+        return punctDeLucruRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<PunctDeLucru> getPunctDeLucruById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<PunctDeLucru> getPunctDeLucruById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
 
         return ResponseEntity.ok().body(punctDeLucru);
     }
 
     @PostMapping
-        public PunctDeLucru createPunctDeLucru(@RequestBody PunctDeLucru punctDeLucru) {
+    public PunctDeLucru createPunctDeLucru(@RequestBody PunctDeLucru punctDeLucru) {
         return punctDeLucruRepository.save(punctDeLucru);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<PunctDeLucru> updatePunctDeLucru(@PathVariable(value = "id") Long id,  @RequestBody PunctDeLucru newPunctDeLucru) throws ResourceNotFoundException {
+    public ResponseEntity<PunctDeLucru> updatePunctDeLucru(@PathVariable(value = "id") Long id,
+            @RequestBody PunctDeLucru newPunctDeLucru) throws ResourceNotFoundException {
         PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
 
         newPunctDeLucru.setId(punctDeLucru.getId());
         final PunctDeLucru updatedPunctDeLucru = punctDeLucruRepository.save(newPunctDeLucru);

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Permission;
 import net.guides.springboot2.crud.repository.PermissionRepository;
-
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/permission")
@@ -28,27 +28,28 @@ public class PermissionController {
 
     @GetMapping
     public List<Permission> getAllPersoane() {
-        return permissionRepository.findAll();
+        return permissionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Permission> getPermissionById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Permission> getPermissionById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         Permission permission = permissionRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
 
         return ResponseEntity.ok().body(permission);
     }
 
     @PostMapping
-        public Permission createPermission(@RequestBody Permission permission) {
+    public Permission createPermission(@RequestBody Permission permission) {
         return permissionRepository.save(permission);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Permission> updatePermission(@PathVariable(value = "id") Long id,  @RequestBody Permission newPermission) throws ResourceNotFoundException {
+    public ResponseEntity<Permission> updatePermission(@PathVariable(value = "id") Long id,
+            @RequestBody Permission newPermission) throws ResourceNotFoundException {
         Permission permission = permissionRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
 
         newPermission.setId(permission.getId());
         final Permission updatedPermission = permissionRepository.save(newPermission);
@@ -56,8 +57,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deletePermission(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deletePermission(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
 

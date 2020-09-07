@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.repository.CMRepository;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/cm")
@@ -28,12 +28,11 @@ public class CMController {
 
     @GetMapping
     public List<CM> getAllCMs() {
-        return cmRepository.findAll();
+        return cmRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CM> getCMById(@PathVariable(value = "id") Long cmId)
-            throws ResourceNotFoundException {
+    public ResponseEntity<CM> getCMById(@PathVariable(value = "id") Long cmId) throws ResourceNotFoundException {
         CM cm = cmRepository.findById(cmId)
                 .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
         return ResponseEntity.ok().body(cm);
@@ -45,8 +44,8 @@ public class CMController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<CM> updateCM(@PathVariable(value = "id") Long cmId,
-                                       @RequestBody CM cmDetails) throws ResourceNotFoundException {
+    public ResponseEntity<CM> updateCM(@PathVariable(value = "id") Long cmId, @RequestBody CM cmDetails)
+            throws ResourceNotFoundException {
         CM cm = cmRepository.findById(cmId)
                 .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
 
@@ -56,8 +55,7 @@ public class CMController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCM(@PathVariable(value = "id") Long cmId)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteCM(@PathVariable(value = "id") Long cmId) throws ResourceNotFoundException {
         CM cm = cmRepository.findById(cmId)
                 .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
 

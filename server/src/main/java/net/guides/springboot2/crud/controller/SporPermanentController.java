@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.SporPermanent;
 import net.guides.springboot2.crud.repository.SporPermanentRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/sporpermanent")
@@ -28,27 +29,28 @@ public class SporPermanentController {
 
     @GetMapping
     public List<SporPermanent> getAllPersoane() {
-        return sporPermanentRepository.findAll();
+        return sporPermanentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<SporPermanent> getSporPermanentById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<SporPermanent> getSporPermanentById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         SporPermanent sporPermanent = sporPermanentRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
 
         return ResponseEntity.ok().body(sporPermanent);
     }
 
     @PostMapping
-        public SporPermanent createSporPermanent(@RequestBody SporPermanent sporPermanent) {
+    public SporPermanent createSporPermanent(@RequestBody SporPermanent sporPermanent) {
         return sporPermanentRepository.save(sporPermanent);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<SporPermanent> updateSporPermanent(@PathVariable(value = "id") Long id,  @RequestBody SporPermanent newSporPermanent) throws ResourceNotFoundException {
+    public ResponseEntity<SporPermanent> updateSporPermanent(@PathVariable(value = "id") Long id,
+            @RequestBody SporPermanent newSporPermanent) throws ResourceNotFoundException {
         SporPermanent sporPermanent = sporPermanentRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
 
         newSporPermanent.setId(sporPermanent.getId());
         final SporPermanent updatedSporPermanent = sporPermanentRepository.save(newSporPermanent);

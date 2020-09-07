@@ -21,9 +21,11 @@ public class Persoana {
     private String telefon;
     private String cnp;
 
-    public Persoana() { }
+    public Persoana() {
+    }
 
-    public Persoana(Long id, String nume, String prenume, Long idactidentitate, Long idadresa, String starecivila, String email, String telefon, String cnp ) {
+    public Persoana(String nume, String prenume, Long idactidentitate, Long idadresa, String starecivila, String email,
+            String telefon, String cnp) {
         this.nume = nume;
         this.prenume = prenume;
         this.idactidentitate = idactidentitate;
@@ -40,6 +42,7 @@ public class Persoana {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -48,6 +51,7 @@ public class Persoana {
     public String getNume() {
         return nume;
     }
+
     public void setNume(String nume) {
         this.nume = nume;
     }
@@ -56,46 +60,52 @@ public class Persoana {
     public String getPrenume() {
         return prenume;
     }
+
     public void setPrenume(String prenume) {
         this.prenume = prenume;
     }
-    
+
     @Column(name = "idactidentitate")
     public Long getIdactidentitate() {
         return idactidentitate;
     }
+
     public void setIdactidentitate(Long idactidentitate) {
         this.idactidentitate = idactidentitate;
     }
-    
+
     @Column(name = "idadresa")
     public Long getIdadresa() {
         return idadresa;
     }
+
     public void setIdadresa(Long idadresa) {
         this.idadresa = idadresa;
     }
-    
+
     @Column(name = "starecivila")
     public String getStarecivila() {
         return starecivila;
     }
+
     public void setStarecivila(String starecivila) {
         this.starecivila = starecivila;
     }
-    
+
     @Column(name = "email")
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     @Column(name = "telefon")
     public String getTelefon() {
         return telefon;
     }
+
     public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
@@ -104,9 +114,9 @@ public class Persoana {
     public String getCnp() {
         return cnp;
     }
+
     public void setCnp(String cnp) {
         this.cnp = cnp;
     }
-    
-}
 
+}

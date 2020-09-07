@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Tichete;
 import net.guides.springboot2.crud.repository.TicheteRepository;
 
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/tichete")
@@ -28,27 +29,28 @@ public class TicheteController {
 
     @GetMapping
     public List<Tichete> getAllPersoane() {
-        return ticheteRepository.findAll();
+        return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Tichete> getTicheteById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
+    public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
         Tichete tichete = ticheteRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
         return ResponseEntity.ok().body(tichete);
     }
 
     @PostMapping
-        public Tichete createTichete(@RequestBody Tichete tichete) {
+    public Tichete createTichete(@RequestBody Tichete tichete) {
         return ticheteRepository.save(tichete);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") Long id,  @RequestBody Tichete newTichete) throws ResourceNotFoundException {
+    public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") Long id, @RequestBody Tichete newTichete)
+            throws ResourceNotFoundException {
         Tichete tichete = ticheteRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
         newTichete.setId(tichete.getId());
         final Tichete updatedTichete = ticheteRepository.save(newTichete);
@@ -56,8 +58,7 @@ public class TicheteController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         Tichete tichete = ticheteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
