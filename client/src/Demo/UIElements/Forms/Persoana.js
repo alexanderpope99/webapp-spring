@@ -528,8 +528,8 @@ class Persoana extends React.Component {
 
           {typeof this.props.asChild === 'undefined' ? (
             <Row>
-              <Col md={6}>
-                <Button variant="outline-primary" type="submit">
+              <Col md={12}>
+                <Button variant="success" className="float-right m-0 pl-5 pr-5" type="submit">
                   Adaugă
                 </Button>
               </Col>

@@ -16,14 +16,12 @@ public class CO {
     private String tip;
     private Date dela;
     private Date panala;
-    private boolean sporuripermanente;
-    private int idcontract;
+    private Boolean sporuripermanente;
+    private Integer idcontract;
 
-    public CO() {
+    public CO() { }
 
-    }
-
-    public CO(String tip, Date dela, Date panala, boolean sporuripermanente, int idcontract) {
+    public CO(String tip, Date dela, Date panala, Boolean sporuripermanente, Integer idcontract) {
         this.tip = tip;
         this.dela = dela;
         this.panala = panala;
@@ -68,20 +66,20 @@ public class CO {
     }
 
     @Column(name = "sporuripermanente")
-    public boolean isSporuripermanente() {
+    public Boolean isSporuripermanente() {
         return sporuripermanente;
     }
 
-    public void setSporuripermanente(boolean sporuripermanente) {
+    public void setSporuripermanente(Boolean sporuripermanente) {
         this.sporuripermanente = sporuripermanente;
     }
 
     @Column(name = "idcontract")
-    public int getIdcontract() {
+    public Integer getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Integer idcontract) {
         this.idcontract = idcontract;
     }
 }

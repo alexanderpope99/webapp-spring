@@ -79,35 +79,35 @@ public class ActIdentitate {
     }
 
     @Column(name = "datanasterii")
-    public Date getDataNasterii() {
+    public Date getDatanasterii() {
         return datanasterii;
     }
-    public void setDataNasterii(Date dataNasterii) {
-        this.datanasterii = dataNasterii;
+    public void setDatanasterii(Date datanasterii) {
+        this.datanasterii = datanasterii;
     }
 
     @Column(name = "eliberatde")
-    public String getEliberatDe() {
+    public String getEliberatde() {
         return eliberatde;
     }
-    public void setEliberatDe(String eliberatDe) {
-        this.eliberatde = eliberatDe;
+    public void setEliberatde(String eliberatde) {
+        this.eliberatde = eliberatde;
     }
 
     @Column(name = "dataeliberarii")
-    public String getDataEliberarii() {
+    public String getDataeliberarii() {
         return dataeliberarii;
     }
-    public void setDataEliberarii(String dataEliberarii) {
-        this.dataeliberarii = dataEliberarii;
+    public void setDataeliberarii(String dataeliberarii) {
+        this.dataeliberarii = dataeliberarii;
     }
 
     @Column(name = "loculnasterii")
-    public String getLoculNasterii() {
+    public String getLoculnasterii() {
         return loculnasterii;
     }
-    public void setLoculNasterii(String loculNasterii) {
-        this.loculnasterii = loculNasterii;
+    public void setLoculnasterii(String loculnasterii) {
+        this.loculnasterii = loculnasterii;
     }
 
 }

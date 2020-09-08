@@ -38,6 +38,13 @@ public class COController {
         return ResponseEntity.ok().body(co);
     }
 
+    @GetMapping("idc={id}")
+    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") Integer coId) throws ResourceNotFoundException {
+        List<CO> co = coRepository.findByIdcontract(coId)
+                .orElseThrow(() -> new ResourceNotFoundException("CO not found for this idcontract :: " + coId));
+        return ResponseEntity.ok().body(co);
+    }
+
     @PostMapping
     public CO createCO(@RequestBody CO co) {
         return coRepository.save(co);
@@ -50,7 +57,7 @@ public class COController {
                 .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
 
         coDetails.setId(co.getId());
-        final CO updatedCO = coRepository.save(co);
+        final CO updatedCO = coRepository.save(coDetails);
         return ResponseEntity.ok(updatedCO);
     }
 

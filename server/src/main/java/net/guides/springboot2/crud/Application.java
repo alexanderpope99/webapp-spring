@@ -12,9 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-    }
+  }
     
-    @Bean
+  @Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override

@@ -6,7 +6,7 @@ class Societati extends React.Component {
   /*
     TODO
     * on click "Editeaza" -> redirect to Edit societate page (same as persoane)
-    * on click "Sterge" -> prompt confirm popover, delete only on user confirm
+    * on click "Sterge" -> prompt confirm, delete only on user confirmation
   */
   constructor(props) {
     super(props);

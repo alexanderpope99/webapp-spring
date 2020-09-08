@@ -51,7 +51,7 @@ public class ActIdentitateController {
                 () -> new ResourceNotFoundException("ActIdentitate not found for this id :: " + actIdentitateId));
 
         actIdentitateDetails.setId(actIdentitate.getId());
-        final ActIdentitate updatedActIdentitate = actIdentitateRepository.save(actIdentitate);
+        final ActIdentitate updatedActIdentitate = actIdentitateRepository.save(actIdentitateDetails);
         return ResponseEntity.ok(updatedActIdentitate);
     }
 

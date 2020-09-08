@@ -30,6 +30,7 @@ const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
 const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
+const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -72,6 +73,7 @@ const routes = [
     { path: '/tables/angajati-tabel', exact: true, name: 'Tabel Angajati', component: AngajatiTabel },
     { path: '/tables/societati-tabel', exact: true, name: 'Tabel Societati', component: SocietatiTabel },
     { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
+    { path: '/tables/concedii-odihna', exact: true, name: 'Concedii Odihna', component: ConcediiOdihna },
 
     // EDIT
     { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },

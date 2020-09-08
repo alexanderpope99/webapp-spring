@@ -5,6 +5,7 @@ import Aux from '../../hoc/_Aux';
 // import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
+import ConcediiOdihna from '../Tables/ConcediiOdihna';
 // import AddContract from './AddContract';
 
 /*
@@ -12,10 +13,10 @@ import Contract from '../UIElements/Forms/Contract';
   * fetch date contract when focusint tab 'contract'
   *
   * when focusing pill 'contract' check if person has contract:
-  *   |> has contract: 1. method = 'PUT, 'button text = "Actualizează"
+  *   |> has contract: 1. method = 'PUT'
   *                    2. populate form with contract data
-  *                    
-  *   |>  no contract: 1. method = 'POST', button text = "Adaugă"
+  *
+  *   |>  no contract: 1. method = 'POST'
   *                    2. clearFields()
 */
 
@@ -28,8 +29,10 @@ class Angajat extends React.Component {
 
     this.persoana = React.createRef();
     this.contract = React.createRef();
+    this.co = React.createRef();
 
     this.state = {
+      angajat: null,
       idpersoana: null,
       idcontract: null,
 
@@ -38,14 +41,12 @@ class Angajat extends React.Component {
 
       key: 'date-personale',
 
-      buttonText: 'Adaugă',
-
       method: 'POST',
     };
   }
 
   componentDidMount() {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
   handleClose() {
@@ -55,32 +56,45 @@ class Angajat extends React.Component {
     });
   }
 
-  async onFocusContract() {
+  async getSelectedAngajatData() {
     // get id of selected angajat
     const idpersoana = this.persoana.current.getIdOfSelected();
-    if(idpersoana === null || idpersoana === -1) {
+    if (idpersoana === null || idpersoana === -1) {
       this.contract.current.clearFields();
       return;
-    }
+    } else this.contract.current.setState({ buttonDisabled: false });
 
-    this.setState({idpersoana: idpersoana});
+    // this.setState({ idpersoana: idpersoana });
 
     // get angajat with selected id
     const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-    }).then((res) => res.json())
-    .catch((err) => console.error(err));
+    })
+      .then((res) => res.json())
+      .catch((err) => console.error(err));
 
+    this.setState({
+      angajat: angajat,
+      idcontract: angajat.idcontract,
+      idpersoana: angajat.idpersoana,
+    });
+
+    return angajat;
+  }
+
+  async onFocusContract() {
+    // can also work with state.angajat
+    const angajat = await this.getSelectedAngajatData();
+    if(typeof angajat === 'undefined')
+      return;
     const idcontract = angajat.idcontract;
-    this.setState({idcontract: idcontract});
-
+    const idpersoana = angajat.idpersoana;
+    
     // if angajat has contract
     if (idcontract !== null) {
       // change onSubmit method to 'PUT'
       this.setState({ method: 'PUT' });
-      // set submit button text
-      this.setState({ buttonText: 'Actualizează' });
 
       // fetch data from contract
       const contract = await fetch(
@@ -89,13 +103,12 @@ class Angajat extends React.Component {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         }
-      ).then((res) => res.json())
-      .catch((err) => console.error(err));
+      )
+        .then((res) => res.json())
+        .catch((err) => console.error(err));
 
-      // fill form
-      console.log(`${idpersoana} has ${idcontract}`);
+      //* FILL FORM
       this.contract.current.fillForm(contract);
-      
     } else {
       // selected angajat is missing contract
       // method will be post
@@ -103,9 +116,16 @@ class Angajat extends React.Component {
       // fields will be empty
       this.contract.current.clearFields();
       console.log(`${idpersoana} missing contract`);
-      // change submit button text
-      this.setState({ buttonText: 'Adaugă' });
     }
+  }
+
+  async onFocusCO() {
+    // can also work with state.angajat
+    const angajat = await this.getSelectedAngajatData();
+    if(typeof angajat === 'undefined')
+      return;
+    
+    this.co.current.setAngajat(angajat);
   }
 
   onSubmit = async (e) => {
@@ -126,15 +146,6 @@ class Angajat extends React.Component {
       return;
     }
 
-    
-    // // get angajat, see if it has idcontract
-    // const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
-      //   method: 'GET',
-    //   headers: { 'Content-Type': 'application/json' },
-    // })
-    //   .then((res) => res.json())
-    //   .catch((err) => console.error(err));
-    
     // handle contract
     const idpersoana = this.state.idpersoana;
     var idcontract = this.state.idcontract; // will change is person is missing contract
@@ -143,7 +154,7 @@ class Angajat extends React.Component {
       // does not have idcontract
       let contract = await this.contract.current.onSubmit(e, 'POST', ''); // post/put contract
       idcontract = contract.id;
-      this.setState({idcontract: contract.id});
+      this.setState({ idcontract: contract.id });
     } else {
       // has idcontract
       await this.contract.current.onSubmit(e, 'PUT', idcontract); // update existring Contract
@@ -173,7 +184,10 @@ class Angajat extends React.Component {
         this.setState({
           key: 'date-personale',
           show: true,
-          modalMessage: 'Angajat adaugat cu succes.🚀',
+          modalMessage:
+            this.state.method === 'POST'
+              ? 'Angajat adaugat cu succes ✔'
+              : 'Datele angajatului actualizate 📝',
         });
         this.persoana.current.clearFields(true);
         this.contract.current.clearFields();
@@ -211,13 +225,14 @@ class Angajat extends React.Component {
                 this.setState({
                   key: key,
                 });
-                if(key==='contract') this.onFocusContract();
+                if (key === 'contract') this.onFocusContract();
+                else if (key === 'co') this.onFocusCO();
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
                 <Row className="m-0 p-0">
                   <Col md={12} className="m-0 p-0">
-                    <EditPersoana ref={this.persoana} asChild />
+                    <EditPersoana ref={this.persoana} />
                     <Button
                       className="float-right"
                       variant="outline-primary"
@@ -232,11 +247,35 @@ class Angajat extends React.Component {
                   </Col>
                 </Row>
               </Tab>
+
               <Tab eventKey="contract" title="Contract de munca">
-                <Contract ref={this.contract} asChild />
-                <Button variant="outline-primary" onClick={this.onSubmit}>
-                  {this.state.buttonText}
-                </Button>
+                <Contract ref={this.contract} asChild idcontract={this.state.idcontract} />
+                <Row className="m-0 p-0">
+                  <Col md={12} className="m-0 p-0 ">
+                    <Button
+                      className="float-right"
+                      variant="outline-primary"
+                      onClick={() => {
+                        this.setState({ key: 'co' });
+                        window.scrollTo(0, 0);
+                        this.onFocusContract();
+                      }}
+                    >
+                      Următor
+                    </Button>
+                  </Col>
+                </Row>
+              </Tab>
+
+              <Tab eventKey="co" title="C.O.">
+                <Row className="m-0 p-0">
+                  <Col md={12} className="m-0 p-0">
+                    <ConcediiOdihna ref={this.co} />
+                    <Button variant="success" className="float-right m-0" onClick={this.onSubmit}>
+                      Salvează modificările
+                    </Button>
+                  </Col>
+                </Row>
               </Tab>
             </Tabs>
           </Col>
