@@ -61,6 +61,7 @@ class Contract extends React.Component {
 
       show: false,
       modalMessage: '', //text
+      buttonDisabled: true,
     };
   }
 
@@ -116,7 +117,7 @@ class Contract extends React.Component {
       punctDeLucru: contract.idpunctdelucru,
       centruCost: contract.idcentrucost,
       echipa: contract.idechipa,
-      departament: contract.iddepartament ,
+      departament: contract.iddepartament,
       functieBaza: this.state.functiedebaza,
       deduceri: contract.calculdeduceri,
       studiiSuperioare: contract.studiisuperioare,
@@ -131,12 +132,12 @@ class Contract extends React.Component {
       cotizațiePensie: contract.cotizatiepensieprivata,
       avans: contract.avans === null ? '' : contract.avans,
       monedăAvans: contract.monedaavans,
-      zileCOan: contract.zilecoan = null ? '' : contract.zilecoan,
+      zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
       ultimaZiLucru: contract.ultimazilucru === null ? '' : contract.ultimazilucru.substring(0, 10),
-      casăSănătate: contract.casasanatate === null ? '' : contract.casasanatate , //text
+      casăSănătate: contract.casasanatate === null ? '' : contract.casasanatate, //text
       gradInvalid: contract.gradinvaliditate === null ? '' : contract.gradinvaliditate, //text
       funcție: contract.functie === null ? '' : contract.functie, //text
-      nivelStudii: contract.nivelstudii === null ? '' : contract.nivelstudii , //text
+      nivelStudii: contract.nivelstudii === null ? '' : contract.nivelstudii, //text
       cor: contract.cor,
       pensionar: contract.pensionar,
       spor: contract.spor,
@@ -190,10 +191,10 @@ class Contract extends React.Component {
     }
     //TODO - VALIDĂRI
 
-    var punctlucru = null,
-      centrucost = null,
-      echipa = null,
-      departament = null;
+    // var punctlucru = null,
+    //   centrucost = null,
+    //   echipa = null,
+    //   departament = null;
 
     // const centrucost_body = {
     //   // TODO
@@ -280,8 +281,14 @@ class Contract extends React.Component {
         console.log('idcontract:', contract.id);
         return contract;
       } else return;
-    } else if (typeof contract.id === 'number') return contract;
-    else return;
+    } else if (typeof contract.id === 'number') {
+      this.setState({
+        show: true,
+        modalMessage: method === 'POST' ? 'Contract adăugat cu succes.' : 'Contract actualizat.',
+      });
+      console.log('idcontract:', contract.id);
+      return contract;
+    } else return;
   }
 
   render() {
@@ -298,7 +305,7 @@ class Contract extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Form onSubmit={(e) => this.onSubmit(e, 'POST', null)}>
+        <Form onSubmit={this.onSubmit}>
           <Row>
             <Col md={6}>
               <Form.Group controlId="tip">
@@ -823,7 +830,19 @@ class Contract extends React.Component {
                 </Button>
               </Col>
             </Row>
-          ) : null}
+          ) : (
+            <Row>
+              <Col md={6}>
+                <Button
+                  variant="outline-primary"
+                  onClick={(e) => this.onSubmit(e, 'PUT', this.props.idcontract)}
+                  disabled={this.state.buttonDisabled}
+                >
+                  Actualizează contract
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Form>
       </div>
     );

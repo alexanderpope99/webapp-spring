@@ -756,9 +756,9 @@ class EditPersoana extends React.Component {
 
                   {typeof this.props.asChild === 'undefined' ? (
                     <Row>
-                      <Col md={10}>
-                        <Button variant="outline-primary" onClick={this.onSubmit}>
-                          Salvează modificările
+                      <Col md={12}>
+                        <Button variant="outline-primary" onClick={this.onSubmit} disabled={this.state.selectednume === '-' ? true : false}>
+                          Actualizează datele personale
                         </Button>
                       </Col>
                     </Row>
