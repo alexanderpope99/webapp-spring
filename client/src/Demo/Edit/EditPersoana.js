@@ -80,6 +80,7 @@ class EditPersoana extends React.Component {
     if (withSelect)
       this.setState({
         selectednume: '-',
+        id: -1,
       });
 
     this.setState({
@@ -213,6 +214,10 @@ class EditPersoana extends React.Component {
     return this.state.id;
   }
 
+  getSelectedNume() {
+    return this.state.selectednume;
+  }
+
   hasRequired() {
     if (this.state.nume === '') return false;
 
@@ -294,11 +299,7 @@ class EditPersoana extends React.Component {
   }
 
   async onSubmit(e) {
-    try {
-      e.preventDefault();
-    } catch (err) {
-      console.log(err);
-    }
+    e.preventDefault();
 
     if (!this.hasRequired()) return -1;
 

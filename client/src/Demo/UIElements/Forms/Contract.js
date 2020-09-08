@@ -231,10 +231,10 @@ class Contract extends React.Component {
       marca: this.state.marca,
       data: this.state.dataContract,
       dataincepere: this.state.dataIncepere,
-      idpunctlucru: punctlucru.id,  // null or int
-      idcentrucost: centrucost.id,
-      idechipa: echipa.id,
-      iddepartament: departament.id,
+      idpunctlucru: null, //punctlucru.id,  // null or int
+      idcentrucost: null, //centrucost.id,
+      idechipa: null, //echipa.id,
+      iddepartament: null, //departament.id,
       functiedebaza: this.state.functieBaza,
       calculdeduceri: this.state.deduceri,
       studiisuperioare: this.state.studiiSuperioare,

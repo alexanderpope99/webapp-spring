@@ -126,25 +126,27 @@ class Angajat extends React.Component {
       return;
     }
 
-    const idpersoana = this.state.idpersoana;
-
-    // get angajat, see if it has idcontract
-    const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
-      .catch((err) => console.error(err));
-
+    
+    // // get angajat, see if it has idcontract
+    // const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
+      //   method: 'GET',
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+    //   .then((res) => res.json())
+    //   .catch((err) => console.error(err));
+    
     // handle contract
-    var idcontract = angajat.idcontract;
+    const idpersoana = this.state.idpersoana;
+    var idcontract = this.state.idcontract; // will change is person is missing contract
+
     if (idcontract === null) {
       // does not have idcontract
       let contract = await this.contract.current.onSubmit(e, 'POST', ''); // post/put contract
       idcontract = contract.id;
+      this.setState({idcontract: contract.id});
     } else {
       // has idcontract
-      await this.contract.current.onSubmit(e, 'PUT', idcontract); // update existring contract
+      await this.contract.current.onSubmit(e, 'PUT', idcontract); // update existring Contract
     }
 
     console.log('idpersoana:', idpersoana);
@@ -175,6 +177,10 @@ class Angajat extends React.Component {
         });
         this.persoana.current.clearFields(true);
         this.contract.current.clearFields();
+        this.setState({
+          idpersoana: null,
+          idcontract: null,
+        });
         window.scrollTo(0, 0);
       }
     }
