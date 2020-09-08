@@ -112,7 +112,7 @@ class EditPersoana extends React.Component {
 
   componentDidMount() {
     this.getNumeintreg();
-
+    window.scrollTo(0, 0);
     // console.log(this.state);
   }
 
