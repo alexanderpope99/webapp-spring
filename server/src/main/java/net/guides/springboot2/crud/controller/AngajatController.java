@@ -56,7 +56,7 @@ public class AngajatController {
                 .orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
 
         angajatDetails.setIdpersoana(angajat.getIdpersoana());
-        final Angajat updatedAngajat = angajatRepository.save(angajat);
+        final Angajat updatedAngajat = angajatRepository.save(angajatDetails);
         return ResponseEntity.ok(updatedAngajat);
     }
 
