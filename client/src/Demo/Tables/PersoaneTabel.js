@@ -118,6 +118,7 @@ class PersoaneTabel extends React.Component {
       }),
     });
   }
+
   async onRefresh() {
     const persoane = await fetch('http://localhost:5000/persoana', {
       method: 'GET',
@@ -131,6 +132,7 @@ class PersoaneTabel extends React.Component {
 
     this.renderPersoane();
   }
+
   render() {
     return (
       <Aux>
@@ -142,7 +144,11 @@ class PersoaneTabel extends React.Component {
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}
-                  overlay={<Tooltip id="refresh-button" style={{opacity: ".4"}}>Refresh</Tooltip>}
+                  overlay={
+                    <Tooltip id="refresh-button" style={{ opacity: '.4' }}>
+                      Refresh
+                    </Tooltip>
+                  }
                 >
                   <Button
                     variant="outline-info"
@@ -158,7 +164,11 @@ class PersoaneTabel extends React.Component {
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}
-                  overlay={<Tooltip id="add-button" style={{opacity: ".4"}}>Adaugă o persoană nouă</Tooltip>}
+                  overlay={
+                    <Tooltip id="add-button" style={{ opacity: '.4' }}>
+                      Adaugă o persoană nouă
+                    </Tooltip>
+                  }
                 >
                   <Button
                     href="/forms/add-persoana"

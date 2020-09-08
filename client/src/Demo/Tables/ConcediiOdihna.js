@@ -25,7 +25,7 @@ class COTabel extends React.Component {
 
     this.handleClose = this.handleClose.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.resetModals = this.resetModals.bind(this); 
+    this.resetModals = this.resetModals.bind(this);
     this.addCO = this.addCO.bind(this);
     this.editCO = this.editCO.bind(this);
     this.deleteCO = this.deleteCO.bind(this);
@@ -49,9 +49,12 @@ class COTabel extends React.Component {
   }
 
   setAngajat(angajat) {
-    this.setState({
-      angajat: angajat
-    });
+    this.setState(
+      {
+        angajat: angajat,
+      },
+      this.onRefresh
+    );
   }
 
   componentDidMount() {
@@ -59,20 +62,30 @@ class COTabel extends React.Component {
   }
 
   async onRefresh() {
-    if(typeof this.state.angajat === 'undefined')
+    if (typeof this.state.angajat === 'undefined') return;
+    if (this.state.angajat.idcontract === null) {
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'Nu se pot crea concedii in lipsa unui contract de munca',
+      });
       return;
+    }
     //? fetch must be after idcontract
     const co = await fetch(`http://localhost:5000/co/idc=${this.state.angajat.idcontract}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
-    }).then((co) => co.json());
+    })
+      .then((co) => (co.status !== 200 ? null : co.json()))
+      .catch((err) => console.error(err));
 
-    this.setState({
-      co: co,
-    });
+    if (co !== null) {
+      this.setState({
+        co: co,
+      });
 
-    this.renderCO();
+      this.renderCO();
+    }
   }
 
   resetModals() {
@@ -115,16 +128,15 @@ class COTabel extends React.Component {
   }
 
   async addCO() {
-    if(this.state.angajat.idcontract === null) {
+    if (this.state.angajat.idcontract === null) {
       this.setState({
         show_confirm: true,
-        modalMessage: '❗ Angajatul are nevoide de un contract de muncă'
-      })
+        modalMessage: '❗ Angajatul are nevoide de un contract de muncă',
+      });
       return;
     }
-    if(typeof this.state.angajat === 'undefined')
-      return;
-      
+    if (typeof this.state.angajat === 'undefined') return;
+
     const co_body = {
       dela: this.state.dela,
       panala: this.state.panala,
@@ -141,7 +153,7 @@ class COTabel extends React.Component {
       .then((res) => {
         console.log(res.status);
         // return res.json();
-        if (res.status == 200) {
+        if (res.status === 200) {
           // close add modal
           this.handleClose();
           // open confirm modal <- closes on OK button
@@ -171,7 +183,7 @@ class COTabel extends React.Component {
       .then((res) => {
         console.log(res.status);
         // return res.json();
-        if (res.status == 200) {
+        if (res.status === 200) {
           // close add modal
           this.handleClose();
           // open confirm modal <- closes on OK button
@@ -193,8 +205,8 @@ class COTabel extends React.Component {
         }
         return (
           <tr key={co.id}>
-            <th>{co.dela}</th>
-            <th>{co.panala}</th>
+            <th>{co.dela === null ? '' : co.dela.substring(0, 10)}</th>
+            <th>{co.panala === null ? '' : co.panala.substring(0, 10)}</th>
             <th>{co.tip}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <Button
@@ -356,14 +368,13 @@ class COTabel extends React.Component {
                   </Button>
                 </OverlayTrigger>
 
-                
-                  <Button
-                    variant="outline-info"
-                    className="float-right"
-                    onClick={() => this.setState({ show: true })}
-                  >
-                    Adaugă concediu
-                  </Button>
+                <Button
+                  variant="outline-info"
+                  className="float-right"
+                  onClick={() => this.setState({ show: true })}
+                >
+                  Adaugă concediu
+                </Button>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>

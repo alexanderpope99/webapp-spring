@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,5 @@ import net.guides.springboot2.crud.model.CO;
 
 @Repository
 public interface CORepository extends JpaRepository<CO, Long>{
-  Optional<CO> findByIdcontract(Integer idcontract);
+  Optional<List<CO>> findByIdcontract(Integer idcontract);
 }
