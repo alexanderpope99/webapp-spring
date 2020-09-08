@@ -25,7 +25,10 @@ class COTabel extends React.Component {
 
     this.handleClose = this.handleClose.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.resetModals = this.resetModals.bind(this);
+    this.resetModals = this.resetModals.bind(this); 
+    this.addCO = this.addCO.bind(this);
+    this.editCO = this.editCO.bind(this);
+    this.deleteCO = this.deleteCO.bind(this);
 
     this.state = {
       angajat: props.angajat,
@@ -46,7 +49,6 @@ class COTabel extends React.Component {
   }
 
   setAngajat(angajat) {
-    console.log(angajat);
     this.setState({
       angajat: angajat
     });
@@ -57,15 +59,17 @@ class COTabel extends React.Component {
   }
 
   async onRefresh() {
+    if(typeof this.state.angajat === 'undefined')
+      return;
     //? fetch must be after idcontract
-    const co = await fetch(`http://localhost:5000/co&idc=${this.state.angajat.idcontract}`, {
+    const co = await fetch(`http://localhost:5000/co/idc=${this.state.angajat.idcontract}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
     }).then((co) => co.json());
 
     this.setState({
-      persoane: co,
+      co: co,
     });
 
     this.renderCO();
@@ -101,8 +105,8 @@ class COTabel extends React.Component {
       });
   }
 
-  deleteCO(id) {
-    fetch(`http://localhost:5000/co/${id}`, {
+  async deleteCO(id) {
+    await fetch(`http://localhost:5000/co/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -111,6 +115,16 @@ class COTabel extends React.Component {
   }
 
   async addCO() {
+    if(this.state.angajat.idcontract === null) {
+      this.setState({
+        show_confirm: true,
+        modalMessage: '❗ Angajatul are nevoide de un contract de muncă'
+      })
+      return;
+    }
+    if(typeof this.state.angajat === 'undefined')
+      return;
+      
     const co_body = {
       dela: this.state.dela,
       panala: this.state.panala,
@@ -274,7 +288,7 @@ class COTabel extends React.Component {
                   type="date"
                   value={this.state.panala}
                   onChange={(e) => {
-                    this.setState({ dela: e.target.value });
+                    this.setState({ panala: e.target.value });
                   }}
                 />
               </Form.Group>
