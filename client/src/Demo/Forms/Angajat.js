@@ -40,7 +40,6 @@ class Angajat extends React.Component {
 
       key: 'date-personale',
 
-      method: 'POST',
     };
 
     // window.scrollTo(0, 0);
@@ -96,38 +95,44 @@ class Angajat extends React.Component {
     const idcontract = angajat.idcontract;
     const idpersoana = angajat.idpersoana;
 
+    var contract =  null;
     // if angajat has contract
     if (idcontract !== null) {
-      // change onSubmit method to 'PUT'
-      this.setState({ method: 'PUT' });
-
       // fetch data from contract
-      const contract = await fetch(
-        `http://localhost:5000/contract/${idcontract === null ? '' : idcontract}`,
+      contract = await fetch(
+        `http://localhost:5000/contract/${idcontract}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         }
       )
-        .then((res) => res.json())
-        .catch((err) => console.error(err));
-
-      //* FILL FORM
-      this.contract.current.fillForm(contract);
-    } else {
-      // selected angajat is missing contract
-      // method will be post
-      this.setState({ method: 'POST' });
-      // fields will be empty
-      this.contract.current.clearFields();
-      console.log(`${idpersoana} missing contract`);
+        .then(res => res.json())
+        .catch(err => console.error(err));
     }
+    //* FILL FORM
+    console.log(idpersoana);
+    this.contract.current.fillForm(contract, idpersoana); // here it gets the idcontract and idangajat
+    // } else {
+      // selected angajat is missing contract
+      // fields will be empty
+      // this.contract.current.clearFields();
+      // console.log(idpersoana);
+      // this.contract.current.fillForm(contract, idpersoana); // here it gets the idcontract and idangajat
+      // console.log(`${idpersoana} missing contract`);
+    // }
   }
 
   async onFocusCO() {
     // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
     if (typeof angajat === 'undefined') return;
+    if(angajat.idcontract === null) {
+      this.setState({
+        show: true,
+        modalMessage: "Pentru concedii, angajatul are nevoie de un contract de muncă.",
+        key: 'contract'
+      })
+    }
 
     this.co.current.setAngajat(angajat);
   }
@@ -169,7 +174,7 @@ class Angajat extends React.Component {
               </Tab>
 
               <Tab eventKey="contract" title="Contract de munca">
-                <Contract ref={this.contract} asChild idcontract={this.state.idcontract} />
+                <Contract ref={this.contract} idcontract={this.state.idcontract} idangajat={this.state.idangajat} />
               </Tab>
 
               <Tab eventKey="co" title="C.O.">

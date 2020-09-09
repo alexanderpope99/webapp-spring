@@ -24,7 +24,7 @@ class COTabel extends React.Component {
     super(props);
 
     this.handleClose = this.handleClose.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
+    this.fillTable = this.fillTable.bind(this);
     this.resetModals = this.resetModals.bind(this);
     this.addCO = this.addCO.bind(this);
     this.editCO = this.editCO.bind(this);
@@ -53,21 +53,21 @@ class COTabel extends React.Component {
       {
         angajat: angajat,
       },
-      () => this.onRefresh()
+      () => this.fillTable()
     );
   }
 
   componentDidMount() {
-    this.onRefresh();
+    this.fillTable();
   }
 
-  async onRefresh() {
+  async fillTable() {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
       this.setState({
-        show_confirm: true,
-        modalMessage: 'Angajatul nu are un contract.',
-        co: [],
+        // show_confirm: true,
+        // modalMessage: 'Angajatul nu are un contract.',
+        co: []
       }, this.renderCO);
 
       return;
@@ -133,7 +133,7 @@ class COTabel extends React.Component {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
-      .then(this.onRefresh)
+      .then(this.fillTable)
       .catch((err) => console.error(err));
   }
 
@@ -171,7 +171,7 @@ class COTabel extends React.Component {
             show_confirm: true,
             modalMessage: this.state.tip + ' adăugat cu succes 💾',
           });
-          this.onRefresh();
+          this.fillTable();
         }
       })
       .catch((err) => console.error('err:', err));
@@ -372,7 +372,7 @@ class COTabel extends React.Component {
                     variant="outline-info"
                     size="sm"
                     style={{ fontSize: '1.25rem', float: 'right' }}
-                    onClick={this.onRefresh}
+                    onClick={this.fillTable}
                   >
                     <Refresh className="m-0 p-0" />
                     {/* ↺ */}

@@ -110,42 +110,50 @@ class Contract extends React.Component {
     });
   }
 
-  fillForm(contract) {
-    this.setState({
-      id: contract.id,
-      modelContract: contract.tip === null ? '' : contract.tip, //text
-      numărContract: contract.nr === null ? '' : contract.nr, //text
-      marca: contract.marca === null ? '' : contract.marca, //text
-      dataContract: contract.data === null ? '' : contract.data.substring(0, 10),
-      dataIncepere: contract.dataincepere === null ? '' : contract.dataincepere.substring(0, 10),
-      punctDeLucru: contract.idpunctdelucru,
-      centruCost: contract.idcentrucost,
-      echipa: contract.idechipa,
-      departament: contract.iddepartament,
-      functieBaza: this.state.functiedebaza,
-      deduceri: contract.calculdeduceri,
-      studiiSuperioare: contract.studiisuperioare,
-      normăLucru: contract.normalucru,
-      salariu: contract.salariu === null ? '' : contract.salariu,
-      monedăSalariu: contract.monedasalariu,
-      modPlată: contract.modplata,
-      condițiiMuncă: contract.conditiimunca,
-      sindicat: contract.sindicat,
-      cotizațieSindicat: contract.cotizatiesindicat,
-      pensiePrivată: contract.pensieprivata,
-      cotizațiePensie: contract.cotizatiepensieprivata,
-      avans: contract.avans === null ? '' : contract.avans,
-      monedăAvans: contract.monedaavans,
-      zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
-      ultimaZiLucru: contract.ultimazilucru === null ? '' : contract.ultimazilucru.substring(0, 10),
-      casăSănătate: contract.casasanatate === null ? '' : contract.casasanatate, //text
-      gradInvalid: contract.gradinvaliditate === null ? '' : contract.gradinvaliditate, //text
-      funcție: contract.functie === null ? '' : contract.functie, //text
-      nivelStudii: contract.nivelstudii === null ? '' : contract.nivelstudii, //text
-      cor: contract.cor,
-      pensionar: contract.pensionar,
-      spor: contract.spor,
-    });
+  fillForm(contract, idangajat) {
+    if (contract === null) {
+      this.clearFields();
+      this.setState({
+        idangajat: idangajat,
+      });
+    } else
+      this.setState({
+        idangajat: idangajat,
+        id: contract.id,
+        modelContract: contract.tip === null ? '' : contract.tip, //text
+        numărContract: contract.nr === null ? '' : contract.nr, //text
+        marca: contract.marca === null ? '' : contract.marca, //text
+        dataContract: contract.data === null ? '' : contract.data.substring(0, 10),
+        dataIncepere: contract.dataincepere === null ? '' : contract.dataincepere.substring(0, 10),
+        punctDeLucru: contract.idpunctdelucru,
+        centruCost: contract.idcentrucost,
+        echipa: contract.idechipa,
+        departament: contract.iddepartament,
+        functieBaza: this.state.functiedebaza,
+        deduceri: contract.calculdeduceri,
+        studiiSuperioare: contract.studiisuperioare,
+        normăLucru: contract.normalucru,
+        salariu: contract.salariu === null ? '' : contract.salariu,
+        monedăSalariu: contract.monedasalariu,
+        modPlată: contract.modplata,
+        condițiiMuncă: contract.conditiimunca,
+        sindicat: contract.sindicat,
+        cotizațieSindicat: contract.cotizatiesindicat,
+        pensiePrivată: contract.pensieprivata,
+        cotizațiePensie: contract.cotizatiepensieprivata,
+        avans: contract.avans === null ? '' : contract.avans,
+        monedăAvans: contract.monedaavans,
+        zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
+        ultimaZiLucru:
+          contract.ultimazilucru === null ? '' : contract.ultimazilucru.substring(0, 10),
+        casăSănătate: contract.casasanatate === null ? '' : contract.casasanatate, //text
+        gradInvalid: contract.gradinvaliditate === null ? '' : contract.gradinvaliditate, //text
+        funcție: contract.functie === null ? '' : contract.functie, //text
+        nivelStudii: contract.nivelstudii === null ? '' : contract.nivelstudii, //text
+        cor: contract.cor,
+        pensionar: contract.pensionar,
+        spor: contract.spor,
+      });
   }
 
   onChangeCentrucost(selected) {
@@ -183,52 +191,23 @@ class Contract extends React.Component {
     return true;
   }
 
-  async onSubmit(e, method, idcontract) {
+  async onSubmit(e, idcontract, idangajat) {
     e.preventDefault();
+    // console.log(idcontract, idangajat);
 
     if (!this.hasRequired()) return;
 
     for (const key in this.state) {
       if (this.state[key] === '' || this.state[key] === "''" || this.state[key] === '-')
         this.state[key] = null;
-      // console.log(this.state[key]);
     }
-    //TODO - VALIDĂRI
 
-    // var punctlucru = null,
-    //   centrucost = null,
-    //   echipa = null,
-    //   departament = null;
-
-    // const centrucost_body = {
-    //   // TODO
-    //   idadresa: null,
-    //   idsocietate: null,
-    //   nume: this.state.centruCost,
-    // };
-
-    // idpunctlucru = await fetch(`http://localhost:5000/idpunctlucru/${this.state.punctDeLucru}`, {
-    //   method: 'GET',
-    //   headers: { 'Content-Type': 'application/json' },
-    // }).then((idpunctlucru) => idpunctlucru.json());
-
-    // idcentrucost = await fetch('http://localhost:5000/centrucost', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(centrucost_body),
-    // }).then((idcentrucost) => idcentrucost.json());
-
-    // const departament_body = {
-    //   idadresa: null,
-    //   idsocietate: null,
-    //   nume: this.state.departament,
-    // }
-
-    // iddepartament = await fetch('http://localhost:5000/departament', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(departament_body),
-    // }).then((iddepartament) => iddepartament.json());
+    var method = 'PUT';
+    // if person is missing contract
+    if (idcontract === null) {
+      method = 'POST';
+      idcontract = '';
+    }
 
     const contract_body = {
       tip: this.state.modelContract,
@@ -265,7 +244,7 @@ class Contract extends React.Component {
       spor: this.state.spor,
     };
     const contract = await fetch(`http://localhost:5000/contract/${idcontract}`, {
-      method: method,
+      method: method, //PUT if idcontract !== null : POST if idcontract === null
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contract_body),
     })
@@ -274,24 +253,24 @@ class Contract extends React.Component {
         console.log(err.message);
       });
 
-    if (typeof this.props.asChild === 'undefined') {
-      if (typeof contract.id === 'number') {
-        // console.log('idcontract:', idcontract);
-        this.clearFields();
-        this.setState({
-          show: true,
-          modalMessage: method === 'POST' ? 'Contract adăugat cu succes.' : 'Contract actualizat.',
-        });
-        console.log('idcontract:', contract.id);
-        return contract;
-      } else return;
-    } else if (typeof contract.id === 'number') {
+    if (typeof contract.id === 'number') {
       this.setState({
         show: true,
-        modalMessage: method === 'POST' ? 'Contract adăugat cu succes.' : 'Contract actualizat.',
+        modalMessage: method === 'POST' ? 'Contract adăugat cu succes' : 'Contract actualizat',
       });
+
+      if (method === 'POST') {
+        // update angajat with idangajat from functon props
+        await fetch(`http://localhost:5000/angajat/${idangajat}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idcontract: contract.id,
+            idpersoana: idangajat,
+          }),
+        }).catch((err) => console.error(err));
+      }
       console.log('idcontract:', contract.id);
-      // window.scrollTo(0, 0);
       return contract;
     } else return;
   }
@@ -310,7 +289,7 @@ class Contract extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Form onSubmit={this.onSubmit}>
+        <Form onSubmit={(e) => e.preventDefault()}>
           <Row>
             <Col md={6}>
               <Form.Group controlId="tip">
@@ -827,27 +806,18 @@ class Contract extends React.Component {
               </Form.Group>
             </Col>
           </Row>
-          {typeof this.props.asChild === 'undefined' ? (
-            <Row>
-              <Col md={6}>
-                <Button variant="outline-primary" type="submit">
-                  Adaugă
-                </Button>
-              </Col>
-            </Row>
-          ) : (
-            <Row>
-              <Col md={6}>
-                <Button
-                  variant={this.state.buttonDisabled ? "outline-dark" : "outline-primary"}
-                  onClick={(e) => this.onSubmit(e, 'PUT', this.props.idcontract)}
-                  disabled={this.state.buttonDisabled}
-                >
-                  Actualizează contract
-                </Button>
-              </Col>
-            </Row>
-          )}
+
+          <Row>
+            <Col md={6}>
+              <Button
+                variant={this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'}
+                onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
+                disabled={this.state.buttonDisabled}
+              >
+                Actualizează contract
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </div>
     );
