@@ -66,8 +66,10 @@ class COTabel extends React.Component {
     if (this.state.angajat.idcontract === null) {
       this.setState({
         show_confirm: true,
-        modalMessage: 'Nu se pot crea concedii in lipsa unui contract de munca',
-      });
+        modalMessage: 'Angajatul nu are un contract.',
+        co: [],
+      }, this.renderCO);
+
       return;
     }
     //? fetch must be with idcontract
@@ -76,19 +78,23 @@ class COTabel extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
     })
-      .then((co) => (co.status !== 200 ? null : co.json()))
-      .catch((err) => console.error(err));
+      .then(co => co.status !== 200 ? null : co.json())
+      .catch(err => console.error('err', err));
 
     if (co !== null) {
-      this.setState({
-        co: co,
-      }, this.renderCO);
-
-    }
-    else  {
-      this.setState({
-        co: [],
-      }, this.renderCO);
+      this.setState(
+        {
+          co: co,
+        },
+        this.renderCO
+      );
+    } else {
+      this.setState(
+        {
+          co: [],
+        },
+        this.renderCO
+      );
     }
   }
 
@@ -155,9 +161,9 @@ class COTabel extends React.Component {
       body: JSON.stringify(co_body),
     })
       .then((res) => {
-        console.log(res.status);
+        // console.log(res.status);
         // return res.json();
-        if (res.status === 200) {
+        if (res.ok === 200) {
           // close add modal
           this.handleClose();
           // open confirm modal <- closes on OK button
@@ -165,9 +171,10 @@ class COTabel extends React.Component {
             show_confirm: true,
             modalMessage: this.state.tip + ' adăugat cu succes 💾',
           });
+          this.onRefresh();
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error('err:', err));
   }
 
   async editCO(co) {

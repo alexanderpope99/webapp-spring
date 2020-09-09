@@ -65,6 +65,10 @@ class Contract extends React.Component {
     };
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
   clearFields() {
     this.setState({
       id: null,
@@ -287,6 +291,7 @@ class Contract extends React.Component {
         modalMessage: method === 'POST' ? 'Contract adăugat cu succes.' : 'Contract actualizat.',
       });
       console.log('idcontract:', contract.id);
+      // window.scrollTo(0, 0);
       return contract;
     } else return;
   }
@@ -834,7 +839,7 @@ class Contract extends React.Component {
             <Row>
               <Col md={6}>
                 <Button
-                  variant="outline-primary"
+                  variant={this.state.buttonDisabled ? "outline-dark" : "outline-primary"}
                   onClick={(e) => this.onSubmit(e, 'PUT', this.props.idcontract)}
                   disabled={this.state.buttonDisabled}
                 >

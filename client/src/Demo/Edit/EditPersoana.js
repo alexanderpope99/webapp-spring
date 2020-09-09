@@ -298,6 +298,12 @@ class EditPersoana extends React.Component {
     });
   }
 
+  handleClose() {
+    this.setState({
+      show: false,
+    });
+  }
+
   async onSubmit(e) {
     e.preventDefault();
 
@@ -355,8 +361,7 @@ class EditPersoana extends React.Component {
           numar: this.state.numar,
           datanasterii: this.state.datanasterii === '' ? null : this.state.datanasterii,
           eliberatde: this.state.eliberatde,
-          dataeliberarii:
-            this.state.dataeliberarii === '' ? null : this.state.dataeliberarii,
+          dataeliberarii: this.state.dataeliberarii === '' ? null : this.state.dataeliberarii,
           loculnasterii: this.state.loculnasterii,
         };
 
@@ -364,8 +369,9 @@ class EditPersoana extends React.Component {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(buletin_body),
-        }).then((idactidentitate) => idactidentitate.json())
-        .catch((err) => console.error(err));
+        })
+          .then((idactidentitate) => idactidentitate.json())
+          .catch((err) => console.error(err));
         idactidentitate = idactidentitate.id;
         console.log('idactidentitate:', idactidentitate);
       }
@@ -413,14 +419,9 @@ class EditPersoana extends React.Component {
       show: true,
       modalMessage: 'Persoană actualizată cu succes.',
     });
+    // window.scrollTo(0, 0);
 
     return this.state.id;
-  }
-
-  handleClose() {
-    this.setState({
-      show: false,
-    });
   }
 
   render() {
@@ -757,7 +758,13 @@ class EditPersoana extends React.Component {
                   {typeof this.props.asChild === 'undefined' ? (
                     <Row>
                       <Col md={12}>
-                        <Button variant="outline-primary" onClick={this.onSubmit} disabled={this.state.selectednume === '-' ? true : false}>
+                        <Button
+                          variant={
+                            this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'
+                          }
+                          onClick={this.onSubmit}
+                          disabled={this.state.selectednume === '-' ? true : false}
+                        >
                           Actualizează datele personale
                         </Button>
                       </Col>

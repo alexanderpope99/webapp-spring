@@ -9,7 +9,6 @@ import ConcediiOdihna from '../Tables/ConcediiOdihna';
 // import AddContract from './AddContract';
 
 /*
-  TODO
   * fetch date contract when focusint tab 'contract'
   *
   * when focusing pill 'contract' check if person has contract:
@@ -23,7 +22,7 @@ import ConcediiOdihna from '../Tables/ConcediiOdihna';
 class Angajat extends React.Component {
   constructor(props) {
     super(props);
-    this.onSubmit = this.onSubmit.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
 
@@ -43,9 +42,15 @@ class Angajat extends React.Component {
 
       method: 'POST',
     };
+
+    // window.scrollTo(0, 0);
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
+  componentDidUpdate() {
     window.scrollTo(0, 0);
   }
 
@@ -54,6 +59,7 @@ class Angajat extends React.Component {
       show: false,
       modalMessage: '',
     });
+    window.scrollTo(0, 0);
   }
 
   async getSelectedAngajatData() {
@@ -86,11 +92,10 @@ class Angajat extends React.Component {
   async onFocusContract() {
     // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
-    if(typeof angajat === 'undefined')
-      return;
+    if (typeof angajat === 'undefined') return;
     const idcontract = angajat.idcontract;
     const idpersoana = angajat.idpersoana;
-    
+
     // if angajat has contract
     if (idcontract !== null) {
       // change onSubmit method to 'PUT'
@@ -122,83 +127,10 @@ class Angajat extends React.Component {
   async onFocusCO() {
     // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
-    if(typeof angajat === 'undefined')
-      return;
-    
+    if (typeof angajat === 'undefined') return;
+
     this.co.current.setAngajat(angajat);
   }
-
-  onSubmit = async (e) => {
-    // field checking if's
-    if (!this.persoana.current.hasRequired()) {
-      this.setState({
-        key: 'date-personale',
-        show: true,
-        modalMessage: 'Persoana trebuie să aibă Nume și Prenume.',
-      });
-      window.scrollTo(0, 0);
-      return;
-    }
-    if (!this.contract.current.hasRequired()) {
-      this.setState({
-        key: 'contract',
-      });
-      return;
-    }
-
-    // handle contract
-    const idpersoana = this.state.idpersoana;
-    var idcontract = this.state.idcontract; // will change is person is missing contract
-
-    if (idcontract === null) {
-      // does not have idcontract
-      let contract = await this.contract.current.onSubmit(e, 'POST', ''); // post/put contract
-      idcontract = contract.id;
-      this.setState({ idcontract: contract.id });
-    } else {
-      // has idcontract
-      await this.contract.current.onSubmit(e, 'PUT', idcontract); // update existring Contract
-    }
-
-    console.log('idpersoana:', idpersoana);
-    console.log('idcontract:', idcontract);
-    if (typeof idpersoana === 'number' && typeof idcontract === 'number') {
-      let angajat_body = {
-        idpersoana: idpersoana,
-        idcontract: idcontract,
-        co: null,
-        cm: null,
-      };
-      // update angajat in database
-      const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(angajat_body),
-      })
-        .then((res) => res.json())
-        .catch((err) => console.log(err.message));
-
-      console.log('idangajat:', angajat.idpersoana);
-
-      if (typeof angajat.idpersoana === 'number') {
-        this.setState({
-          key: 'date-personale',
-          show: true,
-          modalMessage:
-            this.state.method === 'POST'
-              ? 'Angajat adaugat cu succes ✔'
-              : 'Datele angajatului actualizate 📝',
-        });
-        this.persoana.current.clearFields(true);
-        this.contract.current.clearFields();
-        this.setState({
-          idpersoana: null,
-          idcontract: null,
-        });
-        window.scrollTo(0, 0);
-      }
-    }
-  };
 
   render() {
     return (
@@ -216,7 +148,10 @@ class Angajat extends React.Component {
         </Modal>
         <Row>
           <Col>
-            <h5>Date angajat</h5>
+            <h5>
+              Date angajat
+            </h5>
+
             <hr />
             <Tabs
               variant="pills"
@@ -230,54 +165,18 @@ class Angajat extends React.Component {
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
-                <Row className="m-0 p-0">
-                  <Col md={12} className="m-0 p-0">
-                    <EditPersoana ref={this.persoana} />
-                    <Button
-                      className="float-right"
-                      variant="outline-primary"
-                      onClick={() => {
-                        this.setState({ key: 'contract' });
-                        window.scrollTo(0, 0);
-                        this.onFocusContract();
-                      }}
-                    >
-                      Următor
-                    </Button>
-                  </Col>
-                </Row>
+                <EditPersoana ref={this.persoana} />
               </Tab>
 
               <Tab eventKey="contract" title="Contract de munca">
                 <Contract ref={this.contract} asChild idcontract={this.state.idcontract} />
-                <Row className="m-0 p-0">
-                  <Col md={12} className="m-0 p-0 ">
-                    <Button
-                      className="float-right"
-                      variant="outline-primary"
-                      onClick={() => {
-                        this.setState({ key: 'co' });
-                        window.scrollTo(0, 0);
-                        this.onFocusContract();
-                      }}
-                    >
-                      Următor
-                    </Button>
-                  </Col>
-                </Row>
               </Tab>
 
               <Tab eventKey="co" title="C.O.">
-                <Row className="m-0 p-0">
-                  <Col md={12} className="m-0 p-0">
-                    <ConcediiOdihna ref={this.co} />
-                    <Button variant="success" className="float-right m-0" onClick={this.onSubmit}>
-                      Salvează modificările
-                    </Button>
-                  </Col>
-                </Row>
+                <ConcediiOdihna ref={this.co} />
               </Tab>
             </Tabs>
+            <Button onClick={() => window.scrollTo(0, 0)}>TO TOP</Button>
           </Col>
         </Row>
       </Aux>
@@ -286,3 +185,75 @@ class Angajat extends React.Component {
 }
 
 export default Angajat;
+
+// onSubmit = async (e) => {
+//   // field checking if's
+//   if (!this.persoana.current.hasRequired()) {
+//     this.setState({
+//       key: 'date-personale',
+//       show: true,
+//       modalMessage: 'Persoana trebuie să aibă Nume și Prenume.',
+//     });
+//     window.scrollTo(0, 0);
+//     return;
+//   }
+//   if (!this.contract.current.hasRequired()) {
+//     this.setState({
+//       key: 'contract',
+//     });
+//     return;
+//   }
+
+//   // handle contract
+//   const idpersoana = this.state.idpersoana;
+//   var idcontract = this.state.idcontract; // will change is person is missing contract
+
+//   if (idcontract === null) {
+//     // does not have idcontract
+//     let contract = await this.contract.current.onSubmit(e, 'POST', ''); // post/put contract
+//     idcontract = contract.id;
+//     this.setState({ idcontract: contract.id });
+//   } else {
+//     // has idcontract
+//     await this.contract.current.onSubmit(e, 'PUT', idcontract); // update existring Contract
+//   }
+
+//   console.log('idpersoana:', idpersoana);
+//   console.log('idcontract:', idcontract);
+//   if (typeof idpersoana === 'number' && typeof idcontract === 'number') {
+//     let angajat_body = {
+//       idpersoana: idpersoana,
+//       idcontract: idcontract,
+//       co: null,
+//       cm: null,
+//     };
+//     // update angajat in database
+//     const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(angajat_body),
+//     })
+//       .then((res) => res.json())
+//       .catch((err) => console.log(err.message));
+
+//     console.log('idangajat:', angajat.idpersoana);
+
+//     if (typeof angajat.idpersoana === 'number') {
+//       this.setState({
+//         key: 'date-personale',
+//         show: true,
+//         modalMessage:
+//           this.state.method === 'POST'
+//             ? 'Angajat adaugat cu succes ✔'
+//             : 'Datele angajatului actualizate 📝',
+//       });
+//       this.persoana.current.clearFields(true);
+//       this.contract.current.clearFields();
+//       this.setState({
+//         idpersoana: null,
+//         idcontract: null,
+//       });
+//       window.scrollTo(0, 0);
+//     }
+//   }
+// };
