@@ -53,7 +53,7 @@ class COTabel extends React.Component {
       {
         angajat: angajat,
       },
-      this.onRefresh
+      () => this.onRefresh()
     );
   }
 
@@ -70,7 +70,7 @@ class COTabel extends React.Component {
       });
       return;
     }
-    //? fetch must be after idcontract
+    //? fetch must be with idcontract
     const co = await fetch(`http://localhost:5000/co/idc=${this.state.angajat.idcontract}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -82,9 +82,13 @@ class COTabel extends React.Component {
     if (co !== null) {
       this.setState({
         co: co,
-      });
+      }, this.renderCO);
 
-      this.renderCO();
+    }
+    else  {
+      this.setState({
+        co: [],
+      }, this.renderCO);
     }
   }
 
@@ -131,7 +135,7 @@ class COTabel extends React.Component {
     if (this.state.angajat.idcontract === null) {
       this.setState({
         show_confirm: true,
-        modalMessage: '❗ Angajatul are nevoide de un contract de muncă',
+        modalMessage: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
     }
