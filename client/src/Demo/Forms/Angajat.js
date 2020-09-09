@@ -110,16 +110,7 @@ class Angajat extends React.Component {
         .catch(err => console.error(err));
     }
     //* FILL FORM
-    console.log(idpersoana);
     this.contract.current.fillForm(contract, idpersoana); // here it gets the idcontract and idangajat
-    // } else {
-      // selected angajat is missing contract
-      // fields will be empty
-      // this.contract.current.clearFields();
-      // console.log(idpersoana);
-      // this.contract.current.fillForm(contract, idpersoana); // here it gets the idcontract and idangajat
-      // console.log(`${idpersoana} missing contract`);
-    // }
   }
 
   async onFocusCO() {

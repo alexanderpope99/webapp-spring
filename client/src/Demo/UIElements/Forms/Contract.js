@@ -161,7 +161,6 @@ class Contract extends React.Component {
       if (typeof selected[0] === 'object') this.setState({ centruCost: selected[0].label });
       else this.setState({ centruCost: selected[0] });
     }
-    console.log(this.state.centruCost);
   }
 
   handleClose() {
@@ -248,9 +247,9 @@ class Contract extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contract_body),
     })
-      .then((contract) => contract.json())
-      .catch((err) => {
-        console.log(err.message);
+      .then(contract => contract.json())
+      .catch(err => {
+        console.error(err.message);
       });
 
     if (typeof contract.id === 'number') {
