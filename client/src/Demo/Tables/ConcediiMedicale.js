@@ -37,9 +37,31 @@ class COTabel extends React.Component {
 
       // add modal:
       show: false,
+      tip: 'Concediu de odihnă',
       dela: '',
       panala: '',
-      tip: 'Concediu de odihnă',
+      continuare: false,
+      datainceput: false,
+      serienrcertificat: '',
+      dataeliberare: '',
+      codurgenta: '',
+      procent: '',
+      codboalainfcont: '',
+      bazacalcul: '',
+      bazacalculplafonata: '',
+      zilebazacalcul: '',
+      mediezilnica: '',
+      zilefirma: '',
+      indemnizatiefirma: '',
+      zilefnuass: '',
+      indemnizatiefirmafnuass: '',
+      locprescriere: '',
+      nravizmedic: '',
+      codboala: '',
+      urgenta: false,
+      conditii: '',
+      idcontract: null,
+      
 
       // succes modal:
       show_confirm: false,
