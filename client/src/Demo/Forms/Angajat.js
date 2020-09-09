@@ -92,8 +92,9 @@ class Angajat extends React.Component {
     // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
     if (typeof angajat === 'undefined') return;
-    const idcontract = angajat.idcontract;
-    const idpersoana = angajat.idpersoana;
+    // declared just for typing convenience
+    let idcontract = angajat.idcontract;
+    let idpersoana = angajat.idpersoana;
 
     var contract =  null;
     // if angajat has contract
