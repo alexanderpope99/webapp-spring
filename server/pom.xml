@@ -19,18 +19,7 @@
 	</properties>
 
 	<dependencies>
-<<<<<<< HEAD
-
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>29.0-jre</version>
-		</dependency>
-
-    <dependency>
-=======
-    <!-- <dependency>
->>>>>>> fdee5b44e9ef5c1b1ba3596a306c7a3e1b97d66c
+     <!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency> -->
