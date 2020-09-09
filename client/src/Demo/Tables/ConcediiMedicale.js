@@ -26,6 +26,8 @@ class CMTabel extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
     this.addCM = this.addCM.bind(this);
+    this.editCM = this.editCM.bind(this);
+    this.updateCM = this.updateCM.bind(this);
     this.deleteCM = this.deleteCM.bind(this);
 
     this.state = {
@@ -34,12 +36,15 @@ class CMTabel extends React.Component {
       cm: [],
       cmComponent: null,
 
-      // cm details:
+      // cm modal:
       show: false,
+      isEdit: false,
+      id: '',
+      // cm modal fields
       dela: '',
       panala: '',
       continuare: false,
-      datainceput: false,
+      datainceput: '',
       serienrcertificat: '',
       dataeliberare: '',
       codurgenta: '',
@@ -65,14 +70,17 @@ class CMTabel extends React.Component {
       modalMessage: '',
     };
   }
-  
+
   clearCM() {
     this.setState({
-      tip: 'Concediu medical',
+      isEdit: false,
+      // cm modal fields
+      id: '',
+
       dela: '',
       panala: '',
       continuare: false,
-      datainceput: false,
+      datainceput: '',
       serienrcertificat: '',
       dataeliberare: '',
       codurgenta: '',
@@ -92,10 +100,9 @@ class CMTabel extends React.Component {
       urgenta: false,
       conditii: '',
       idcontract: null,
-    })
+    });
   }
 
-  // TODO
   setAngajat(angajat) {
     this.setState(
       {
@@ -109,7 +116,6 @@ class CMTabel extends React.Component {
     this.fillTable();
   }
 
-  // TODO
   async fillTable() {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
@@ -143,7 +149,6 @@ class CMTabel extends React.Component {
     }
   }
 
-  // TODO
   handleClose(confirmWindow) {
     if (confirmWindow)
       this.setState({
@@ -153,6 +158,7 @@ class CMTabel extends React.Component {
     else
       this.setState({
         show: false,
+        isEdit: false,
       });
   }
 
@@ -166,7 +172,6 @@ class CMTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  // TODO
   async addCM() {
     if (this.state.angajat.idcontract === null) {
       this.setState({
@@ -178,9 +183,7 @@ class CMTabel extends React.Component {
     if (typeof this.state.angajat === 'undefined') return;
 
     let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
-
-    console.log(cm_body);
-    return;
+    cm_body.idcontract = this.state.angajat.idcontract;
 
     let ok = await fetch('http://localhost:5000/cm', {
       method: 'POST',
@@ -203,40 +206,105 @@ class CMTabel extends React.Component {
     }
   }
 
+  async updateCM() {
+    let {
+      angajat,
+      cm,
+      cmComponent,
+      show,
+      show_confirm,
+      modalMessage,
+      id,
+      isEdit,
+      ...cm_body
+    } = this.state;
+    cm_body.idcontract = this.state.angajat.idcontract;
+
+    let ok = await fetch(`http://localhost:5000/cm/${this.state.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cm_body),
+    })
+      .then((res) => res.ok)
+      .catch((err) => console.error('err:', err));
+
+    if (ok) {
+      // close add modal
+      this.handleClose();
+      // open confirm modal <- closes on OK button
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'Concediu medical actualizat ✔',
+      });
+      this.fillTable();
+      this.clearCM();
+    }
+  }
+
+  async editCM(cm) {
+    if (this.state.angajat.idcontract === null) {
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'Angajatul are nevoide de un contract de muncă',
+      });
+      return;
+    }
+    if (typeof this.state.angajat === 'undefined') return;
+
+    for (let key in cm) if (cm[key] === '-') cm[key] = '';
+
+    this.setState(
+      {
+        id: cm.id,
+        dela: cm.dela.substring(0, 10),
+        panala: cm.panala.substring(0, 10),
+        continuare: cm.continuare,
+        datainceput: cm.datainceput.substring(0, 10),
+        serienrcertificat: cm.serienrcertificat,
+        dataeliberare: cm.dataeliberare.substring(0, 10),
+        codurgenta: cm.codurgenta,
+        procent: cm.procent,
+        codboalainfcont: cm.codboalainfcont,
+        bazacalcul: cm.bazacalcul,
+        bazacalculplafonata: cm.bazacalculplafonata,
+        zilebazacalcul: cm.zilebazacalcul,
+        mediezilnica: cm.mediezilnica,
+        zilefirma: cm.zilefirma,
+        indemnizatiefirma: cm.indemnizatiefirma,
+        zilefnuass: cm.zilefnuass,
+        indemnizatiefnuass: cm.indemnizatiefnuass,
+        locprescriere: cm.locprescriere,
+        nravizmedic: cm.nravizmedic,
+        codboala: cm.codboala,
+        urgenta: cm.urgenta,
+        conditii: cm.conditii,
+        idcontract: cm.idcontract,
+
+        isEdit: true,
+        show: true,
+      },
+      () => console.log(cm)
+    );
+  }
+
   // function to create react component with fetched data
   renderCM() {
+    console.log(this.state.continuare);
     this.setState({
       cmComponent: this.state.cm.map((cm, index) => {
         for (let key in cm) {
-          if (cm[key] === 'null' || cm[key] === null) cm[key] = '-';
+          if (cm[key] === '' || cm[key] === null) cm[key] = '-';
         }
         return (
           <tr key={cm.id}>
-            <th>{cm.dela === null ? '' : cm.dela.substring(0, 10)}</th>
-            <th>{cm.panala === null ? '' : cm.panala.substring(0, 10)}</th>
-            <th>{cm.continuare ? 'Da' : 'Nu'}</th>
-            <th>{cm.datainceput === null ? '' : cm.datainceput.substring(0, 10)}</th>
-            <th>{cm.serienrcertificat === null ? '' : cm.serienrcertificat}</th>
-            <th>{cm.dataeliberare === null ? '' : cm.dataeliberare.substring(0, 10)}</th>
-            <th>{cm.codurgenta === null ? '' : cm.codurgenta}</th>
-            <th>{cm.procent === null ? '' : cm.procent}</th>
-            <th>{cm.codboalainfcont === null ? '' : cm.codboalainfcont}</th>
-            <th>{cm.bazacalcul === null ? '' : cm.bazacalcul}</th>
-            <th>{cm.bazacalculplafonata === null ? '' : cm.bazacalculplafonata}</th>
-            <th>{cm.zilebazacalcul === null ? '' : cm.zilebazacalcul}</th>
-            <th>{cm.mediezilnica === null ? '' : cm.mediezilnica}</th>
-            <th>{cm.zilefirma === null ? '' : cm.zilefirma}</th>
-            <th>{cm.indemnizatiefirma === null ? '' : cm.indemnizatiefirma}</th>
-            <th>{cm.zilefnuass === null ? '' : cm.zilefnuass}</th>
-            <th>{cm.indemnizatiefnuass === null ? '' : cm.indemnizatiefnuass}</th>
-            <th>{cm.locprescriere === null ? '' : cm.locprescriere}</th>
-            <th>{cm.nravizmedic === null ? '' : cm.nravizmedic}</th>
-            <th>{cm.codboala === null ? '' : cm.codboala}</th>
-            <th>{cm.urgenta === null ? '' : cm.urgenta}</th>
-            <th>{cm.conditii === null ? '' : cm.conditii}</th>
-
             <th className="d-inline-flex flex-row justify-content-around">
-              //! ADD EDIT BUTTON HERE
+              <Button
+                variant="outline-secondary"
+                className="ml-2 p-1 rounded-circle border-0"
+                onClick={() => this.editCM(cm)}
+              >
+                <Edit fontSize="small" />
+              </Button>
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
@@ -285,6 +353,28 @@ class CMTabel extends React.Component {
                 )}
               </PopupState>
             </th>
+            <th>{cm.dela.substring(0, 10)}</th>
+            <th>{cm.panala.substring(0, 10)}</th>
+            <th>{cm.continuare ? 'Da' : 'Nu'}</th>
+            <th>{cm.datainceput.substring(0, 10)}</th>
+            <th>{cm.serienrcertificat}</th>
+            <th>{cm.dataeliberare.substring(0, 10)}</th>
+            <th>{cm.codurgenta}</th>
+            <th>{cm.procent}</th>
+            <th>{cm.codboalainfcont}</th>
+            <th>{cm.bazacalcul}</th>
+            <th>{cm.bazacalculplafonata}</th>
+            <th>{cm.zilebazacalcul}</th>
+            <th>{cm.mediezilnica}</th>
+            <th>{cm.zilefirma}</th>
+            <th>{cm.indemnizatiefirma}</th>
+            <th>{cm.zilefnuass}</th>
+            <th>{cm.indemnizatiefnuass}</th>
+            <th>{cm.locprescriere}</th>
+            <th>{cm.nravizmedic}</th>
+            <th>{cm.codboala}</th>
+            <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
+            <th>{cm.conditii}</th>
           </tr>
         );
       }),
@@ -294,17 +384,16 @@ class CMTabel extends React.Component {
   render() {
     return (
       <Aux>
-        {/* // ADD MODAL */}
+        {/* // C.M. MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Concediu de odihnă</Modal.Title>
+            <Modal.Title>Concediu medical</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
-                  required
                   type="date"
                   value={this.state.dela}
                   onChange={(e) => {
@@ -315,7 +404,6 @@ class CMTabel extends React.Component {
               <Form.Group id="panala">
                 <Form.Label>Până la (inclusiv)</Form.Label>
                 <Form.Control
-                  required
                   type="date"
                   value={this.state.panala}
                   onChange={(e) => {
@@ -323,27 +411,223 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-              <Form.Group id="tip">
-                <Form.Label>Motiv</Form.Label>
+              <Row>
+                <Col md={6}>
+                  <Form.Group id="continuare">
+                    <Form.Check
+                      custom
+                      type="checkbox"
+                      id="continuareCheck"
+                      label="Continuare"
+                      checked={this.state.continuare}
+                      value={this.state.continuare}
+                      onChange={(e) => {
+                        this.setState({ continuare: e.target.checked });
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group id="panala">
+                    <Form.Label>Dată început</Form.Label>
+                    <Form.Control
+                      type="date"
+                      value={this.state.datainceput}
+                      onChange={(e) => {
+                        this.setState({ datainceput: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Form.Group id="serienrcertificat">
+                <Form.Label>Serie și număr certificat</Form.Label>
                 <Form.Control
-                  required
-                  as="select"
-                  value={this.state.tip}
+                  type="text"
+                  value={this.state.serienrcertificat}
                   onChange={(e) => {
-                    this.setState({ tip: e.target.value });
+                    this.setState({ serienrcertificat: e.target.value });
                   }}
-                >
-                  <option>Concediu de odihnă</option>
-                  <option>Concediu fără plată</option>
-                  <option>Concediu pentru situații speciale</option>
-                  <option>Concediu pentru studii</option>
-                </Form.Control>
+                />
+              </Form.Group>
+              <Form.Group id="dataeliberare">
+                <Form.Label>Dată eliberare</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={this.state.dataeliberare}
+                  onChange={(e) => {
+                    this.setState({ dataeliberare: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="codurgenta">
+                <Form.Label>Cod urgență</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.codurgenta}
+                  onChange={(e) => {
+                    this.setState({ codurgenta: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="procent">
+                <Form.Label>Procent</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.procent}
+                  onChange={(e) => {
+                    this.setState({ procent: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="codboalainfcont">
+                <Form.Label>Cod boală infecțioasă/contagioasă</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.codboalainfcont}
+                  onChange={(e) => {
+                    this.setState({ codboalainfcont: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="bazacalcul">
+                <Form.Label>Bază calcul</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.bazacalcul}
+                  onChange={(e) => {
+                    this.setState({ bazacalcul: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="bazacalculplafonata">
+                <Form.Label>Bază calcul plafonată</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.bazacalculplafonata}
+                  onChange={(e) => {
+                    this.setState({ bazacalculplafonata: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="zilebazacalcul">
+                <Form.Label>Zile bază calcul</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.zilebazacalcul}
+                  onChange={(e) => {
+                    this.setState({ zilebazacalcul: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="mediezilnica">
+                <Form.Label>Medie zilnică</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.mediezilnica}
+                  onChange={(e) => {
+                    this.setState({ mediezilnica: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="zilefirma">
+                <Form.Label>Zile suportate de firmă</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.zilefirma}
+                  onChange={(e) => {
+                    this.setState({ zilefirma: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="indemnizatiefirma">
+                <Form.Label>Indemnizație firmă</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.indemnizatiefirma}
+                  onChange={(e) => {
+                    this.setState({ indemnizatiefirma: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="zilefnuass">
+                <Form.Label>Zile FNUASS</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.zilefnuass}
+                  onChange={(e) => {
+                    this.setState({ zilefnuass: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="indemnizatiefnuass">
+                <Form.Label>Indemnizație FNUASS</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.indemnizatiefnuass}
+                  onChange={(e) => {
+                    this.setState({ indemnizatiefnuass: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="locprescriere">
+                <Form.Label>Loc prescriere</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.locprescriere}
+                  onChange={(e) => {
+                    this.setState({ locprescriere: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="nravizmedic">
+                <Form.Label>Nr. aviz medical</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.nravizmedic}
+                  onChange={(e) => {
+                    this.setState({ nravizmedic: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="codboala">
+                <Form.Label>Cod boală</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.codboala}
+                  onChange={(e) => {
+                    this.setState({ codboala: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="urgenta">
+                <Form.Check
+                  custom
+                  type="checkbox"
+                  id="urgentaCheck"
+                  label="Urgență"
+                  checked={this.state.continuare}
+                  value={this.state.urgenta}
+                  onChange={(e) => {
+                    this.setState({ urgenta: e.target.checked });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="conditii">
+                <Form.Label>Condiții</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.conditii}
+                  onChange={(e) => {
+                    this.setState({ conditii: e.target.value });
+                  }}
+                />
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.addCM}>
-              Adaugă
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateCM : this.addCM}>
+              {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -391,14 +675,17 @@ class CMTabel extends React.Component {
                   variant="outline-info"
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
+                  disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu
                 </Button>
               </Card.Header>
+
               <Card.Body>
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th></th>
                       <th>Începând cu (inclusiv)</th>
                       <th>Până la (inclusiv)</th>
                       <th>Continuare</th>
@@ -421,10 +708,9 @@ class CMTabel extends React.Component {
                       <th>Cod boală infecțioasă/contagioasă</th>
                       <th>Urgență</th>
                       <th>Condiții</th>
-                      <th></th>
                     </tr>
                   </thead>
-                  <tbody>{this.state.coComponent}</tbody>
+                  <tbody>{this.state.cmComponent}</tbody>
                 </Table>
               </Card.Body>
             </Card>

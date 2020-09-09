@@ -11,7 +11,6 @@ import {
   Form,
 } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
 import Refresh from '@material-ui/icons/Refresh';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -183,8 +182,8 @@ class COTabel extends React.Component {
         }
         return (
           <tr key={co.id}>
-            <th>{co.dela === null ? '' : co.dela.substring(0, 10)}</th>
-            <th>{co.panala === null ? '' : co.panala.substring(0, 10)}</th>
+            <th>{co.dela.substring(0, 10)}</th>
+            <th>{co.panala.substring(0, 10)}</th>
             <th>{co.tip}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
@@ -341,6 +340,7 @@ class COTabel extends React.Component {
                   variant="outline-info"
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
+                  disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu
                 </Button>
