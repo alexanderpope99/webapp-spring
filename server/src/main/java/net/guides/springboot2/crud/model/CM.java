@@ -11,9 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "cm")
 public class CM {
-
     private long id;
-    private String tip;
     private Date dela;
     private Date panala;
     private Boolean continuare;
@@ -38,12 +36,9 @@ public class CM {
     private String conditii;
     private Integer idcontract;
 
-    public CM() {
+    public CM() { }
 
-    }
-
-    public CM(String tip, Date dela, Date panala, Boolean continuare, Date datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Integer idcontract) {
-        this.tip = tip;
+    public CM(Date dela, Date panala, Boolean continuare, Date datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Integer idcontract) {
         this.dela = dela;
         this.panala = panala;
         this.continuare = continuare;
@@ -76,15 +71,6 @@ public class CM {
     }
     public void setId(long id) {
         this.id = id;
-    }
-
-    @Column(name = "tip")
-    public String getTip() {
-        return tip;
-    }
-
-    public void setTip(String tip) {
-        this.tip = tip;
     }
 
     @Column(name = "dela")

@@ -41,11 +41,9 @@ public class CMController {
     @GetMapping("idc={id}")
     public ResponseEntity<List<CM>> getCMByIdcontract(@PathVariable(value = "id") Integer cmId) throws ResourceNotFoundException {
         List<CM> cm = cmRepository.findByIdcontract(cmId)
-                .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
+                .orElseThrow(() -> new ResourceNotFoundException("CM not found for this idcmntract :: " + cmId));
         return ResponseEntity.ok().body(cm);
     }
-
-  
 
     @PostMapping
     public CM createCM(@RequestBody CM cm) {

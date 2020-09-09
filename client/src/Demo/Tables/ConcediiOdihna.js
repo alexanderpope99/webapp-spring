@@ -162,16 +162,16 @@ class COTabel extends React.Component {
       .then(res => res.ok)
       .catch((err) => console.error('err:', err));
 
-      if (ok) {
-        // close add modal
-        this.handleClose();
-        // open confirm modal <- closes on OK button
-        this.setState({
-          show_confirm: true,
-          modalMessage: this.state.tip + ' adăugat cu succes 💾',
-        });
-        this.fillTable();
-      }
+    if (ok) {
+      // close add modal
+      this.handleClose();
+      // open confirm modal <- closes on OK button
+      this.setState({
+        show_confirm: true,
+        modalMessage: this.state.tip + ' adăugat cu succes 💾',
+      });
+      this.fillTable();
+    }
   }
 
   // function to create react component with fetched data
