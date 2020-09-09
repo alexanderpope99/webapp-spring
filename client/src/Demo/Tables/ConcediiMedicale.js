@@ -154,24 +154,26 @@ class COTabel extends React.Component {
       // in DB also has sporuripermanente
     };
 
-    let ok = await fetch('http://localhost:5000/co', {
+    await fetch('http://localhost:5000/co', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(co_body),
     })
-      .then(res => res.ok)
+      .then((res) => {
+        // console.log(res.status);
+        // return res.json();
+        if (res.ok === 200) {
+          // close add modal
+          this.handleClose();
+          // open confirm modal <- closes on OK button
+          this.setState({
+            show_confirm: true,
+            modalMessage: this.state.tip + ' adăugat cu succes 💾',
+          });
+          this.fillTable();
+        }
+      })
       .catch((err) => console.error('err:', err));
-
-      if (ok) {
-        // close add modal
-        this.handleClose();
-        // open confirm modal <- closes on OK button
-        this.setState({
-          show_confirm: true,
-          modalMessage: this.state.tip + ' adăugat cu succes 💾',
-        });
-        this.fillTable();
-      }
   }
 
   // function to create react component with fetched data
