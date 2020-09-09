@@ -1,11 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Backend
-
-### `cd backend`
-### `nodemon index`
-Starts API REST server on https://localhost:5000
-
 ## Frontend
 
 In the project directory, you can run:
