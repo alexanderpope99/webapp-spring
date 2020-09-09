@@ -10,6 +10,11 @@ import Aux from '../../hoc/_Aux';
 //import { isNumeric } from 'jquery';
 
 class AddContract extends React.Component {
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     return (
       <Aux>

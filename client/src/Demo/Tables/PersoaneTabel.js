@@ -24,6 +24,7 @@ class PersoaneTabel extends React.Component {
 
   componentDidMount() {
     this.onRefresh();
+    window.scrollTo(0, 0);
   }
   deletePersoana(id, nume, prenume) {
     // id = id.replace('"', '');

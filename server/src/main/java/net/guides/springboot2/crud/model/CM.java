@@ -11,41 +11,34 @@ import java.util.Date;
 @Entity
 @Table(name = "cm")
 public class CM {
-
     private long id;
-    private String tip;
     private Date dela;
     private Date panala;
-    private boolean continuare;
+    private Boolean continuare;
     private Date datainceput;
     private String serienrcertificat;
     private String dataeliberare;
     private String codurgenta;
-    private double procent;
+    private Double procent;
     private String codboalainfcont;
-    private double bazacalcul;
-    private double bazacalculplafonata;
-    private int zilebazacalcul;
-    private double mediezilnica;
-    private int zilefirma;
-    private double indemnizatiefirma;
-    private int zilefnuass;
-    private double indemnizatiefnuass;
+    private Double bazacalcul;
+    private Double bazacalculplafonata;
+    private Integer zilebazacalcul;
+    private Double mediezilnica;
+    private Integer zilefirma;
+    private Double indemnizatiefirma;
+    private Integer zilefnuass;
+    private Double indemnizatiefnuass;
     private String locprescriere;
     private String nravizmedic;
     private String codboala;
-    private boolean urgenta;
+    private Boolean urgenta;
     private String conditii;
-    private int idcontract;
+    private Integer idcontract;
 
+    public CM() { }
 
-
-    public CM() {
-
-    }
-
-    public CM(String tip, Date dela, Date panala, boolean continuare, Date datainceput, String serienrcertificat, String dataeliberare, String codurgenta, double procent, String codboalainfcont, double bazacalcul, double bazacalculplafonata, int zilebazacalcul, double mediezilnica, int zilefirma, double indemnizatiefirma, int zilefnuass, double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, boolean urgenta, String conditii, int idcontract) {
-        this.tip = tip;
+    public CM(Date dela, Date panala, Boolean continuare, Date datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Integer idcontract) {
         this.dela = dela;
         this.panala = panala;
         this.continuare = continuare;
@@ -80,15 +73,6 @@ public class CM {
         this.id = id;
     }
 
-    @Column(name = "tip")
-    public String getTip() {
-        return tip;
-    }
-
-    public void setTip(String tip) {
-        this.tip = tip;
-    }
-
     @Column(name = "dela")
     public Date getDela() {
         return dela;
@@ -107,12 +91,12 @@ public class CM {
         this.panala = panala;
     }
 
-    @Column(name = "contiuare")
-    public boolean isContinuare() {
+    @Column(name = "continuare")
+    public Boolean isContinuare() {
         return continuare;
     }
 
-    public void setContinuare(boolean continuare) {
+    public void setContinuare(Boolean continuare) {
         this.continuare = continuare;
     }
 
@@ -153,11 +137,11 @@ public class CM {
     }
 
     @Column(name = "procent")
-    public double getProcent() {
+    public Double getProcent() {
         return procent;
     }
 
-    public void setProcent(double procent) {
+    public void setProcent(Double procent) {
         this.procent = procent;
     }
 
@@ -171,74 +155,74 @@ public class CM {
     }
 
     @Column(name = "bazacalcul")
-    public double getBazacalcul() {
+    public Double getBazacalcul() {
         return bazacalcul;
     }
 
-    public void setBazacalcul(double bazacalcul) {
+    public void setBazacalcul(Double bazacalcul) {
         this.bazacalcul = bazacalcul;
     }
 
     @Column(name = "bazacalculplafonata")
-    public double getBazacalculplafonata() {
+    public Double getBazacalculplafonata() {
         return bazacalculplafonata;
     }
 
-    public void setBazacalculplafonata(double bazacalculplafonata) {
+    public void setBazacalculplafonata(Double bazacalculplafonata) {
         this.bazacalculplafonata = bazacalculplafonata;
     }
 
     @Column(name = "zilebazacalcul")
-    public int getZilebazacalcul() {
+    public Integer getZilebazacalcul() {
         return zilebazacalcul;
     }
 
-    public void setZilebazacalcul(int zilebazacalcul) {
+    public void setZilebazacalcul(Integer zilebazacalcul) {
         this.zilebazacalcul = zilebazacalcul;
     }
 
     @Column(name = "mediezilnica")
-    public double getMediezilnica() {
+    public Double getMediezilnica() {
         return mediezilnica;
     }
 
-    public void setMediezilnica(double mediezilnica) {
+    public void setMediezilnica(Double mediezilnica) {
         this.mediezilnica = mediezilnica;
     }
 
     @Column(name = "zilefirma")
-    public int getZilefirma() {
+    public Integer getZilefirma() {
         return zilefirma;
     }
 
-    public void setZilefirma(int zilefirma) {
+    public void setZilefirma(Integer zilefirma) {
         this.zilefirma = zilefirma;
     }
 
     @Column(name = "indemnizatiefirma")
-    public double getIndemnizatiefirma() {
+    public Double getIndemnizatiefirma() {
         return indemnizatiefirma;
     }
 
-    public void setIndemnizatiefirma(double indemnizatiefirma) {
+    public void setIndemnizatiefirma(Double indemnizatiefirma) {
         this.indemnizatiefirma = indemnizatiefirma;
     }
 
     @Column(name = "zilefnuass")
-    public int getZilefnuass() {
+    public Integer getZilefnuass() {
         return zilefnuass;
     }
 
-    public void setZilefnuass(int zilefnuass) {
+    public void setZilefnuass(Integer zilefnuass) {
         this.zilefnuass = zilefnuass;
     }
 
     @Column(name = "indemnizatiefnuass")
-    public double getIndemnizatiefnuass() {
+    public Double getIndemnizatiefnuass() {
         return indemnizatiefnuass;
     }
 
-    public void setIndemnizatiefnuass(double indemnizatiefnuass) {
+    public void setIndemnizatiefnuass(Double indemnizatiefnuass) {
         this.indemnizatiefnuass = indemnizatiefnuass;
     }
 
@@ -269,12 +253,12 @@ public class CM {
         this.codboala = codboala;
     }
 
-    @Column(name = "isurgenta")
-    public boolean isUrgenta() {
+    @Column(name = "urgenta")
+    public Boolean isUrgenta() {
         return urgenta;
     }
 
-    public void setUrgenta(boolean urgenta) {
+    public void setUrgenta(Boolean urgenta) {
         this.urgenta = urgenta;
     }
 
@@ -288,11 +272,11 @@ public class CM {
     }
 
     @Column(name = "idcontract")
-    public int getIdcontract() {
+    public Integer getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Integer idcontract) {
         this.idcontract = idcontract;
     }
 }

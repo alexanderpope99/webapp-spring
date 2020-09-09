@@ -19,34 +19,83 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
-class COTabel extends React.Component {
+class CMTabel extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
-    this.resetModals = this.resetModals.bind(this);
-    this.addCO = this.addCO.bind(this);
-    this.deleteCO = this.deleteCO.bind(this);
+    this.addCM = this.addCM.bind(this);
+    this.deleteCM = this.deleteCM.bind(this);
 
     this.state = {
       angajat: props.angajat,
 
-      co: [],
-      coComponent: null,
+      cm: [],
+      cmComponent: null,
 
-      // add modal:
+      // cm details:
       show: false,
       dela: '',
       panala: '',
-      tip: 'Concediu de odihnă',
+      continuare: false,
+      datainceput: false,
+      serienrcertificat: '',
+      dataeliberare: '',
+      codurgenta: '',
+      procent: '',
+      codboalainfcont: '',
+      bazacalcul: '',
+      bazacalculplafonata: '',
+      zilebazacalcul: '',
+      mediezilnica: '',
+      zilefirma: '',
+      indemnizatiefirma: '',
+      zilefnuass: '',
+      indemnizatiefnuass: '',
+      locprescriere: '',
+      nravizmedic: '',
+      codboala: '',
+      urgenta: false,
+      conditii: '',
+      idcontract: null,
 
       // succes modal:
       show_confirm: false,
       modalMessage: '',
     };
   }
+  
+  clearCM() {
+    this.setState({
+      tip: 'Concediu medical',
+      dela: '',
+      panala: '',
+      continuare: false,
+      datainceput: false,
+      serienrcertificat: '',
+      dataeliberare: '',
+      codurgenta: '',
+      procent: '',
+      codboalainfcont: '',
+      bazacalcul: '',
+      bazacalculplafonata: '',
+      zilebazacalcul: '',
+      mediezilnica: '',
+      zilefirma: '',
+      indemnizatiefirma: '',
+      zilefnuass: '',
+      indemnizatiefnuass: '',
+      locprescriere: '',
+      nravizmedic: '',
+      codboala: '',
+      urgenta: false,
+      conditii: '',
+      idcontract: null,
+    })
+  }
 
+  // TODO
   setAngajat(angajat) {
     this.setState(
       {
@@ -60,57 +109,41 @@ class COTabel extends React.Component {
     this.fillTable();
   }
 
+  // TODO
   async fillTable() {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
-      this.setState({
-        // show_confirm: true,
-        // modalMessage: 'Angajatul nu are un contract.',
-        co: []
-      }, this.renderCO);
+      this.setState({ cm: [] }, this.renderCM);
 
       return;
     }
     //? fetch must be with idcontract
-    const co = await fetch(`http://localhost:5000/co/idc=${this.state.angajat.idcontract}`, {
+    const cm = await fetch(`http://localhost:5000/cm/idc=${this.state.angajat.idcontract}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
     })
-      .then(co => co.status !== 200 ? null : co.json())
-      .catch(err => console.error('err', err));
+      .then((cm) => (cm.status !== 200 ? null : cm.json()))
+      .catch((err) => console.error('err', err));
 
-    if (co !== null) {
+    if (cm !== null) {
       this.setState(
         {
-          co: co,
+          cm: cm,
         },
-        this.renderCO
+        this.renderCM
       );
     } else {
       this.setState(
         {
-          co: [],
+          cm: [],
         },
-        this.renderCO
+        this.renderCM
       );
     }
   }
 
-  resetModals() {
-    this.setState({
-      // add modal:
-      show: false,
-      dela: '',
-      panala: '',
-      tip: 'Concediu de odihnă',
-
-      // succes modal:
-      show_confirm: false,
-      modalMessage: '',
-    });
-  }
-
+  // TODO
   handleClose(confirmWindow) {
     if (confirmWindow)
       this.setState({
@@ -120,15 +153,12 @@ class COTabel extends React.Component {
     else
       this.setState({
         show: false,
-        // reset data
-        dela: '',
-        panala: '',
-        tip: 'Concediu de odihnă',
       });
   }
 
-  async deleteCO(id) {
-    await fetch(`http://localhost:5000/co/${id}`, {
+  //* Works
+  async deleteCM(id) {
+    await fetch(`http://localhost:5000/cm/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -136,7 +166,8 @@ class COTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async addCO() {
+  // TODO
+  async addCM() {
     if (this.state.angajat.idcontract === null) {
       this.setState({
         show_confirm: true,
@@ -146,20 +177,17 @@ class COTabel extends React.Component {
     }
     if (typeof this.state.angajat === 'undefined') return;
 
-    const co_body = {
-      dela: this.state.dela,
-      panala: this.state.panala,
-      tip: this.state.tip,
-      idcontract: this.state.angajat.idcontract,
-      // in DB also has sporuripermanente
-    };
+    let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
 
-    let ok = await fetch('http://localhost:5000/co', {
+    console.log(cm_body);
+    return;
+
+    let ok = await fetch('http://localhost:5000/cm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(co_body),
+      body: JSON.stringify(cm_body),
     })
-      .then(res => res.ok)
+      .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -168,25 +196,47 @@ class COTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: this.state.tip + ' adăugat cu succes 💾',
+        modalMessage: 'Concediu medical adăugat cu succes 💾',
       });
       this.fillTable();
+      this.clearCM();
     }
   }
 
   // function to create react component with fetched data
-  renderCO() {
+  renderCM() {
     this.setState({
-      coComponent: this.state.co.map((co, index) => {
-        for (let key in co) {
-          if (co[key] === 'null' || co[key] === null) co[key] = '-';
+      cmComponent: this.state.cm.map((cm, index) => {
+        for (let key in cm) {
+          if (cm[key] === 'null' || cm[key] === null) cm[key] = '-';
         }
         return (
-          <tr key={co.id}>
-            <th>{co.dela === null ? '' : co.dela.substring(0, 10)}</th>
-            <th>{co.panala === null ? '' : co.panala.substring(0, 10)}</th>
-            <th>{co.tip}</th>
+          <tr key={cm.id}>
+            <th>{cm.dela === null ? '' : cm.dela.substring(0, 10)}</th>
+            <th>{cm.panala === null ? '' : cm.panala.substring(0, 10)}</th>
+            <th>{cm.continuare ? 'Da' : 'Nu'}</th>
+            <th>{cm.datainceput === null ? '' : cm.datainceput.substring(0, 10)}</th>
+            <th>{cm.serienrcertificat === null ? '' : cm.serienrcertificat}</th>
+            <th>{cm.dataeliberare === null ? '' : cm.dataeliberare.substring(0, 10)}</th>
+            <th>{cm.codurgenta === null ? '' : cm.codurgenta}</th>
+            <th>{cm.procent === null ? '' : cm.procent}</th>
+            <th>{cm.codboalainfcont === null ? '' : cm.codboalainfcont}</th>
+            <th>{cm.bazacalcul === null ? '' : cm.bazacalcul}</th>
+            <th>{cm.bazacalculplafonata === null ? '' : cm.bazacalculplafonata}</th>
+            <th>{cm.zilebazacalcul === null ? '' : cm.zilebazacalcul}</th>
+            <th>{cm.mediezilnica === null ? '' : cm.mediezilnica}</th>
+            <th>{cm.zilefirma === null ? '' : cm.zilefirma}</th>
+            <th>{cm.indemnizatiefirma === null ? '' : cm.indemnizatiefirma}</th>
+            <th>{cm.zilefnuass === null ? '' : cm.zilefnuass}</th>
+            <th>{cm.indemnizatiefnuass === null ? '' : cm.indemnizatiefnuass}</th>
+            <th>{cm.locprescriere === null ? '' : cm.locprescriere}</th>
+            <th>{cm.nravizmedic === null ? '' : cm.nravizmedic}</th>
+            <th>{cm.codboala === null ? '' : cm.codboala}</th>
+            <th>{cm.urgenta === null ? '' : cm.urgenta}</th>
+            <th>{cm.conditii === null ? '' : cm.conditii}</th>
+
             <th className="d-inline-flex flex-row justify-content-around">
+              //! ADD EDIT BUTTON HERE
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
@@ -216,7 +266,7 @@ class COTabel extends React.Component {
                           variant="outline-danger"
                           onClick={() => {
                             popupState.close();
-                            this.deleteCO(co.id);
+                            this.deleteCM(cm.id);
                           }}
                           className="mt-2 "
                         >
@@ -292,13 +342,13 @@ class COTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.addCO}>
+            <Button variant="primary" onClick={this.addCM}>
               Adaugă
             </Button>
           </Modal.Footer>
         </Modal>
 
-        {/* CONFIRM Modal */}
+        {/* CMNFIRM Modal */}
         <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -311,7 +361,7 @@ class COTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* PAGE CONTENTS */}
+        {/* PAGE CMNTENTS */}
         <Row>
           <Col>
             <Card>
@@ -351,7 +401,26 @@ class COTabel extends React.Component {
                     <tr>
                       <th>Începând cu (inclusiv)</th>
                       <th>Până la (inclusiv)</th>
-                      <th>Motiv</th>
+                      <th>Continuare</th>
+                      <th>Data început</th>
+                      <th>Serie si nr. certificat</th>
+                      <th>Data eliberare</th>
+                      <th>Cod urgență</th>
+                      <th>Procent</th>
+                      <th>Bază calcul</th>
+                      <th>Bază calcul fără plată</th>
+                      <th>Zile bază calul</th>
+                      <th>Medie zilnică</th>
+                      <th>Zile firmă</th>
+                      <th>Indemnizație firmă</th>
+                      <th>Zile FNUASS</th>
+                      <th>Indemnizație FNUASS</th>
+                      <th>Nr. aviz medic</th>
+                      <th>Loc prescriere</th>
+                      <th>Cod boală</th>
+                      <th>Cod boală infecțioasă/contagioasă</th>
+                      <th>Urgență</th>
+                      <th>Condiții</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -366,4 +435,4 @@ class COTabel extends React.Component {
   }
 }
 
-export default COTabel;
+export default CMTabel;

@@ -19,6 +19,7 @@
 	</properties>
 
 	<dependencies>
+<<<<<<< HEAD
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -27,9 +28,12 @@
 		</dependency>
 
     <dependency>
+=======
+    <!-- <dependency>
+>>>>>>> fdee5b44e9ef5c1b1ba3596a306c7a3e1b97d66c
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
