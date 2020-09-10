@@ -29,13 +29,15 @@ class RealizariRetineri extends React.Component {
 
       selected_persoana: '',
       angajati: [], // object: {idpersoana, idcontract, idsocietate}
-      nume_angajati: [],
+      persoane: [], // date personale
+      nume_persoane: [],
     };
   }
 
   componentDidMount() {
     this.setCurrentYearMonth(); // modifies state.an, state.luna
     this.setAngajatiWithContract(); // sets this.state.angajati
+    this.setPersoane(); // date personale, also fills nume_persoane
   }
 
   setCurrentYearMonth() {
@@ -60,24 +62,30 @@ class RealizariRetineri extends React.Component {
         if (res.ok) return res.json();
       })
       .catch((err) => console.error());
-    this.setState({angajati: angajati});
-
-    // get list of names and set them
-    
+    this.setState({ angajati: angajati });
   }
 
-  async setNumeAngajati() {
+  async setPersoane() {
     // get only people with contract
-    // list of people with contract = this.state.angajati
-    //* fetch for each in list ( long ) <- done on fronted 
     //* one query to get them all <- done on backend
-    const nume_angajati = await fetch('http://localhost:5000/persoana/c', {
+    const persoane = await fetch('http://localhost:5000/persoana/c', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
-    .then(res => {if(res.ok) return res.json()})
-    .catch(err => console.error(err));
+      .then((res) => {
+        if (res.ok) return res.json();
+      })
+      .catch((err) => console.error(err));
 
+    this.setState({ persoane: persoane }, () => {
+      //set nume_persoane
+      let nume_persoane = [];
+      for (let persoana of persoane) {
+        nume_persoane.push(persoana.nume + ' ' + persoana.prenume);
+        console.log(nume_persoane);
+      }
+      this.setState({ nume_persoane: nume_persoane });
+    });
   }
 
   handleClose() {
@@ -93,6 +101,10 @@ class RealizariRetineri extends React.Component {
     const this_year = new Date().getFullYear();
     const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
       <option key={year}>{year}</option>
+    ));
+
+    const nume_persoane_opt = this.state.nume_persoane.map((nume, index) => (
+      <option key="index">{nume}</option>
     ));
 
     return (
@@ -134,27 +146,26 @@ class RealizariRetineri extends React.Component {
             </Row>
           </Card.Header>
 
-          {/* NUMELE ANGAJATILOR CU CONTRACT */}
           <Card.Header>
-            <Card.Title as="h4">Persoana</Card.Title>
+            <Card.Title as="h4">Angajați</Card.Title>
             <InputGroup className="mb-3">
+              {/* NUMELE ANGAJATILOR CU CONTRACT */}
               <FormControl
                 placeholder="Recipient's username"
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
                 as="select"
                 value={this.state.selected_persoana}
-                onChange={(e) =>
-                  this.setState(
-                    {
-                      selected_persoana: e.target.value,
-                      id: this.getIdByNumeintreg(e.target.value),
-                    }
-                    // this.fillForm
-                  )
-                }
+                onChange={(e) => {
+                  this.setState({
+                    selected_persoana: e.target.value,
+                  });
+                  // fill form with corresponding data
+                }}
               >
                 <option>-</option>
+                {/* nume_persoane mapped to <option> */}
+                {nume_persoane_opt}
               </FormControl>
               <InputGroup.Append>
                 <OverlayTrigger
