@@ -12,18 +12,14 @@ public class Angajat {
     private Long idpersoana;
     private Long idcontract;
     private Long idsocietate;
-    private Long co;
-    private Long cm;
 
     public Angajat() {
 
     }
 
-    public Angajat(Long idcontract, Long idsocietate, Long co, Long cm) {
+    public Angajat(Long idcontract, Long idsocietate) {
         this.idcontract = idcontract;
         this.idsocietate = idsocietate;
-        this.co = co;
-        this.cm = cm;
     }
 
     @Id
@@ -52,23 +48,5 @@ public class Angajat {
 
     public void setIdsocietate(Long idsocietate) {
         this.idsocietate = idsocietate;
-    }
-
-    @Column(name = "co")
-    public Long getCo() {
-        return co;
-    }
-
-    public void setCo(Long co) {
-        this.co = co;
-    }
-
-    @Column(name = "cm")
-    public Long getCm() {
-        return cm;
-    }
-
-    public void setCm(Long cm) {
-        this.cm = cm;
     }
 }
