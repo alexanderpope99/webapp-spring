@@ -499,6 +499,7 @@ class EditPersoana extends React.Component {
               <Card.Header>
                 <Card.Title as="h5">Modifică datele</Card.Title>
               </Card.Header>
+              
               <Card.Body>
                 <Form>
                   <Row>

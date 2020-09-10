@@ -601,7 +601,7 @@ class CMTabel extends React.Component {
                   type="checkbox"
                   id="urgentaCheck"
                   label="Urgență"
-                  checked={this.state.continuare}
+                  checked={this.state.urgenta}
                   value={this.state.urgenta}
                   onChange={(e) => {
                     this.setState({ urgenta: e.target.checked });
