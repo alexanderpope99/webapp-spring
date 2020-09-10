@@ -34,7 +34,7 @@ class Contract extends React.Component {
       centruCost: '', //text
       echipa: '', //text,
       departament: '',
-      deduceri: false,
+      deduceri: true,
       studiiSuperioare: false,
       functieBaza: false,
       normăLucru: 'Normă întreagă', //text
@@ -67,7 +67,6 @@ class Contract extends React.Component {
   }
 
   componentDidMount() {
-    console.log('contract mount');
   }
 
   clearFields() {
@@ -80,7 +79,7 @@ class Contract extends React.Component {
       centruCost: '', //text
       echipa: '', //text,
       departament: '',
-      deduceri: false,
+      deduceri: true,
       studiiSuperioare: false,
       functieBaza: false,
       normăLucru: 'Normă întreagă', //text
@@ -130,7 +129,7 @@ class Contract extends React.Component {
         centruCost: contract.idcentrucost,
         echipa: contract.idechipa,
         departament: contract.iddepartament,
-        functieBaza: this.state.functiedebaza,
+        functieBaza: contract.functiedebaza,
         deduceri: contract.calculdeduceri,
         studiiSuperioare: contract.studiisuperioare,
         normăLucru: contract.normalucru,
@@ -432,7 +431,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="functieDeBazaCheck"
                   label="Funcție de bază"
-                  value={this.state.functieBaza}
+                  checked={this.state.functieBaza}
                   onChange={(e) => {
                     this.setState({ functieBaza: e.target.checked });
                   }}
@@ -446,7 +445,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="deduceriCheck"
                   label="Calcul deduceri"
-                  value={this.state.deduceri}
+                  checked={this.state.deduceri}
                   onChange={(e) => {
                     this.setState({ deduceri: e.target.checked });
                   }}
@@ -460,7 +459,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="studiiSuperioareCheck"
                   label="Studii superioare"
-                  value={this.state.studiiSuperioare}
+                  checked={this.state.studiiSuperioare}
                   onChange={(e) => {
                     this.setState({
                       studiiSuperioare: e.target.checked,
@@ -476,7 +475,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="pensionarCheck"
                   label="Pensionar"
-                  value={this.state.pensionar}
+                  checked={this.state.pensionar}
                   onChange={(e) => {
                     this.setState({ pensionar: e.target.checked });
                   }}

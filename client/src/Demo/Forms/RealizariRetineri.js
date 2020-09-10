@@ -218,7 +218,7 @@ class RealizariRetineri extends React.Component {
             <Form>
               <Row>
                 {/* LEFT */}
-                <Col md={6} className="border pt-3">
+                <Col md={6} className="border rounded pt-3">
                   <Row>
                     <Col md={12}>
                       <Form.Group id="totaltrepturi">
@@ -228,13 +228,13 @@ class RealizariRetineri extends React.Component {
                     </Col>
                     <Col md={12}>
                       <Form.Group id="cas">
-                        <Form.Label>Total drepturi</Form.Label>
+                        <Form.Label>CAS</Form.Label>
                         <Form.Control type="number" disabled value={this.state.cas} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="cass">
-                        <Form.Label></Form.Label>
+                        <Form.Label>CASS</Form.Label>
                         <Form.Control type="number" disabled value={this.state.cass} />
                       </Form.Group>
                     </Col>
@@ -260,7 +260,7 @@ class RealizariRetineri extends React.Component {
                 </Col>
 
                 {/* RIGHT */}
-                <Col md={6} className="border pt-3">
+                <Col md={6} className="border rounded pt-3">
                   <Row>
                     <Col md={6}>
                       <Form.Group id="functie">
