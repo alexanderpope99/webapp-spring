@@ -5,8 +5,6 @@ import {
   Card,
   Table,
   Button,
-  OverlayTrigger,
-  Tooltip,
   Modal,
   Form,
 } from 'react-bootstrap';
@@ -282,14 +280,11 @@ class CMTabel extends React.Component {
 
         isEdit: true,
         show: true,
-      },
-      () => console.log(cm)
-    );
+      });
   }
 
   // function to create react component with fetched data
   renderCM() {
-    console.log(this.state.continuare);
     this.setState({
       cmComponent: this.state.cm.map((cm, index) => {
         for (let key in cm) {
@@ -651,17 +646,11 @@ class CMTabel extends React.Component {
             <Card>
               <Card.Header>
                 <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
-                  overlay={
-                    <Tooltip id="refresh-button" style={{ opacity: '.4' }}>
-                      Refresh
-                    </Tooltip>
-                  }
-                >
                   <Button
-                    variant="outline-info"
+                    variant={
+                      typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
+                    }
+                    disabled={typeof this.state.angajat === 'undefined'}
                     size="sm"
                     style={{ fontSize: '1.25rem', float: 'right' }}
                     onClick={this.fillTable}
@@ -669,10 +658,11 @@ class CMTabel extends React.Component {
                     <Refresh className="m-0 p-0" />
                     {/* ↺ */}
                   </Button>
-                </OverlayTrigger>
 
                 <Button
-                  variant="outline-info"
+                  variant={
+                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
+                  }
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
                   disabled={typeof this.state.angajat === 'undefined'}

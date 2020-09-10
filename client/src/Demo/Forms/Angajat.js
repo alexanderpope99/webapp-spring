@@ -12,7 +12,7 @@ import ConcediiMedicale from '../Tables/ConcediiMedicale';
 /*
   * fetch date contract when focusint tab 'contract'
   *
-  * when focusing pill 'contract' check if person has contract:
+  * when focusing 'contract' check if person has contract:
   *   |> has contract: 1. method = 'PUT'
   *                    2. populate form with contract data
   *
@@ -44,14 +44,10 @@ class Angajat extends React.Component {
 
     };
 
-    // window.scrollTo(0, 0);
-  }
-
-  componentDidMount() {
     window.scrollTo(0, 0);
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     window.scrollTo(0, 0);
   }
 
@@ -60,7 +56,7 @@ class Angajat extends React.Component {
       show: false,
       modalMessage: '',
     });
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }
 
   async getSelectedAngajatData() {
@@ -124,8 +120,8 @@ class Angajat extends React.Component {
       this.setState({
         show: true,
         modalMessage: "Pentru concedii, angajatul are nevoie de un contract de muncă.",
-        key: 'contract'
-      })
+      }, () => this.setState({key: 'contract'}));
+      return;
     }
 
     this.co.current.setAngajat(angajat);
@@ -140,7 +136,8 @@ class Angajat extends React.Component {
         show: true,
         modalMessage: "Pentru concedii, angajatul are nevoie de un contract de muncă.",
         key: 'contract'
-      })
+      });
+      return;
     }
 
     this.cm.current.setAngajat(angajat);

@@ -23,6 +23,7 @@ class Contract extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
+    // this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
     this.state = {
       id: null,
@@ -54,8 +55,8 @@ class Contract extends React.Component {
       funcție: '', //text
       nivelStudii: '', //text
       cor: '',
-      dataIncepere: new Date().toJSON().slice(0, 10),
-      dataContract: new Date().toJSON().slice(0, 10),
+      dataIncepere: '',
+      dataContract: '',
       ultimaZiLucru: '',
       pensionar: false,
 
@@ -66,7 +67,7 @@ class Contract extends React.Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
+    console.log('contract mount');
   }
 
   clearFields() {
@@ -100,8 +101,8 @@ class Contract extends React.Component {
       funcție: '', //text
       nivelStudii: '', //text
       cor: '',
-      dataIncepere: new Date().toJSON().slice(0, 10),
-      dataContract: new Date().toJSON().slice(0, 10),
+      dataIncepere: '',
+      dataContract: '',
       ultimaZiLucru: '',
       pensionar: false,
 
@@ -355,7 +356,7 @@ class Contract extends React.Component {
                 <Form.Label>Data contract</Form.Label>
                 <Form.Control
                   type="date"
-                  value={new Date().toJSON().slice(0, 10)}
+                  value={this.state.dataContract}
                   selected={this.state.dataContract}
                   onChange={(e) => {
                     this.setState({ dataContract: e.target.value });

@@ -21,12 +21,11 @@ const UIBasicBasicTypography = React.lazy(() => import('./Demo/UIElements/Basic/
 const FormsElements = React.lazy(() => import('./Demo/Forms/FormsElements'));
 const AddSocietate = React.lazy(() => import('./Demo/Forms/AddSocietate'));
 const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
-const AddContract = React.lazy(() => import('./Demo/Forms/AddContract'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
+const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
-// const SocietyTable = React.lazy(() => import('./Demo/Tables/SocietyTable'));
 const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
@@ -41,10 +40,6 @@ const GoogleMap = React.lazy(() => import('./Demo/Maps/GoogleMap/index'));
 
 const OtherSamplePage = React.lazy(() => import('./Demo/Other/SamplePage'));
 const OtherDocs = React.lazy(() => import('./Demo/Other/Docs'));
-
-// TEST
-// const AngajatTest = React.lazy(() => import('./Demo/Forms/AngajatTest'));
-// const AddPersoanaTest = React.lazy(() => import('./Demo/Forms/AddPersoanaTest'));
 
 const routes = [
 
@@ -65,8 +60,9 @@ const routes = [
     { path: '/forms/form-basic', exact: true, name: 'Forms Elements', component: FormsElements },
     { path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: AddSocietate },
     { path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
-    { path: '/forms/add-contract', exact: true, name: 'Adauga Contract', component: AddContract },
     { path: '/forms/angajat', exact: true, name: 'Angajat', component: Angajat },
+    { path: '/forms/realizari-retineri', exact: true, name: 'Realizari / Retineri', component: RealizariRetineri },
+
 
     // TABLES
     { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
