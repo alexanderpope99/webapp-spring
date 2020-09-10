@@ -28,12 +28,14 @@ class RealizariRetineri extends React.Component {
       luna: '',
 
       selected_persoana: '',
+      angajati: [], // object: {idpersoana, idcontract, idsocietate}
+      nume_angajati: [],
     };
   }
 
   componentDidMount() {
-    this.setCurrentYearMonth();
-    this.getAngajatiWithContract();
+    this.setCurrentYearMonth(); // modifies state.an, state.luna
+    this.setAngajatiWithContract(); // sets this.state.angajati
   }
 
   setCurrentYearMonth() {
@@ -48,7 +50,7 @@ class RealizariRetineri extends React.Component {
     });
   }
 
-  async getAngajatiWithContract() {
+  async setAngajatiWithContract() {
     // fetch everyone with idcontract !== null
     const angajati = await fetch('http://localhost:5000/angajat/c', {
       method: 'GET',
@@ -58,7 +60,24 @@ class RealizariRetineri extends React.Component {
         if (res.ok) return res.json();
       })
       .catch((err) => console.error());
-    console.log(angajati);
+    this.setState({angajati: angajati});
+
+    // get list of names and set them
+    
+  }
+
+  async setNumeAngajati() {
+    // get only people with contract
+    // list of people with contract = this.state.angajati
+    //* fetch for each in list ( long ) <- done on fronted 
+    //* one query to get them all <- done on backend
+    const nume_angajati = await fetch('http://localhost:5000/persoana/c', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(res => {if(res.ok) return res.json()})
+    .catch(err => console.error(err));
+
   }
 
   handleClose() {
@@ -115,6 +134,7 @@ class RealizariRetineri extends React.Component {
             </Row>
           </Card.Header>
 
+          {/* NUMELE ANGAJATILOR CU CONTRACT */}
           <Card.Header>
             <Card.Title as="h4">Persoana</Card.Title>
             <InputGroup className="mb-3">
