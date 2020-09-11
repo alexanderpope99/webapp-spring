@@ -276,6 +276,7 @@ class Persoana extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
+        
         <Form onSubmit={this.onSubmit}>
           <Row>
             <Col md={3}>

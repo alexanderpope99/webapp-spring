@@ -5,13 +5,10 @@ import {
   Card,
   Table,
   Button,
-  OverlayTrigger,
-  Tooltip,
   Modal,
   Form,
 } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
 import Refresh from '@material-ui/icons/Refresh';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -63,11 +60,14 @@ class COTabel extends React.Component {
   async fillTable() {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
-      this.setState({
-        // show_confirm: true,
-        // modalMessage: 'Angajatul nu are un contract.',
-        co: []
-      }, this.renderCO);
+      this.setState(
+        {
+          // show_confirm: true,
+          // modalMessage: 'Angajatul nu are un contract.',
+          co: [],
+        },
+        this.renderCO
+      );
 
       return;
     }
@@ -77,8 +77,8 @@ class COTabel extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
     })
-      .then(co => co.status !== 200 ? null : co.json())
-      .catch(err => console.error('err', err));
+      .then((co) => (co.status !== 200 ? null : co.json()))
+      .catch((err) => console.error('err', err));
 
     if (co !== null) {
       this.setState(
@@ -159,7 +159,7 @@ class COTabel extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(co_body),
     })
-      .then(res => res.ok)
+      .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -183,8 +183,8 @@ class COTabel extends React.Component {
         }
         return (
           <tr key={co.id}>
-            <th>{co.dela === null ? '' : co.dela.substring(0, 10)}</th>
-            <th>{co.panala === null ? '' : co.panala.substring(0, 10)}</th>
+            <th>{co.dela.substring(0, 10)}</th>
+            <th>{co.panala.substring(0, 10)}</th>
             <th>{co.tip}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
@@ -317,17 +317,11 @@ class COTabel extends React.Component {
             <Card>
               <Card.Header>
                 <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
-                  overlay={
-                    <Tooltip id="refresh-button" style={{ opacity: '.4' }}>
-                      Refresh
-                    </Tooltip>
-                  }
-                >
                   <Button
-                    variant="outline-info"
+                    variant={
+                      typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
+                    }
+                    disabled={typeof this.state.angajat === 'undefined'}
                     size="sm"
                     style={{ fontSize: '1.25rem', float: 'right' }}
                     onClick={this.fillTable}
@@ -335,12 +329,14 @@ class COTabel extends React.Component {
                     <Refresh className="m-0 p-0" />
                     {/* ↺ */}
                   </Button>
-                </OverlayTrigger>
 
                 <Button
-                  variant="outline-info"
+                  variant={
+                      typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
+                    }
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
+                  disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu
                 </Button>

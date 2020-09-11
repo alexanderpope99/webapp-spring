@@ -36,10 +36,10 @@ export default {
           icon: 'feather icon-file-text',
         },
         {
-          id: 'concediu-odihna',
-          title: 'Concedii odihna',
+          id: 'realizari-retineri',
+          title: 'Realizari / Retineri',
           type: 'item',
-          url: '/tables/concedii-odihna',
+          url: '/forms/realizari-retineri',
           icon: 'feather icon-file-text',
         },
         // {

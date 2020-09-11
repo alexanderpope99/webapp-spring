@@ -113,7 +113,7 @@ class EditPersoana extends React.Component {
 
   componentDidMount() {
     this.getNumeintreg();
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     // console.log(this.state);
   }
 
@@ -426,7 +426,8 @@ class EditPersoana extends React.Component {
 
   render() {
     const luni_nr = [];
-    for (var i = 1; i < 13; ++i) luni_nr.push(<option key={i}>{i}</option>);
+    for (var i = 1; i < 13; ++i) 
+      luni_nr.push(<option key={i}>{i}</option>);
 
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
@@ -463,9 +464,6 @@ class EditPersoana extends React.Component {
                 <Card.Title as="h4">Persoana</Card.Title>
                 <InputGroup className="mb-3">
                   <FormControl
-                    placeholder="Recipient's username"
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
                     as="select"
                     value={this.state.selectednume}
                     onChange={(e) =>
@@ -501,6 +499,7 @@ class EditPersoana extends React.Component {
               <Card.Header>
                 <Card.Title as="h5">Modifică datele</Card.Title>
               </Card.Header>
+              
               <Card.Body>
                 <Form>
                   <Row>

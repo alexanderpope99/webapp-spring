@@ -8,21 +8,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "alteBeneficii")
+@Table(name = "altebeneficii")
 public class AlteBeneficii {
 
     private long id;
     private String nume;
-    private double valoare;
-    private double procent;
+    private Float valoare;
+    private Float procent;
     private String aplicare;
-    private int idcontract;
+    private Integer idcontract;
 
     public AlteBeneficii() {
 
     }
 
-    public AlteBeneficii(String nume, double valoare, double procent, String aplicare, int idcontract) {
+    public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Integer idcontract) {
         this.nume = nume;
         this.valoare = valoare;
         this.procent = procent;
@@ -48,18 +48,18 @@ public class AlteBeneficii {
     }
 
     @Column(name = "valoare")
-    public double getValoare() {
+    public Float getValoare() {
         return valoare;
     }
-    public void setValoare(double valoare) {
+    public void setValoare(Float valoare) {
         this.valoare = valoare;
     }
 
     @Column(name = "procent")
-    public double getProcent() {
+    public Float getProcent() {
         return procent;
     }
-    public void setProcent(double procent) {
+    public void setProcent(Float procent) {
         this.procent = procent;
     }
 
@@ -72,10 +72,10 @@ public class AlteBeneficii {
     }
 
     @Column(name = "idcontract")
-    public int getIdcontract() {
+    public Integer getIdcontract() {
         return idcontract;
     }
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Integer idcontract) {
         this.idcontract = idcontract;
     }
 }

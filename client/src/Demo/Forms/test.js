@@ -1,3 +1,3 @@
-let a = undefined;
+const today = new Date().toJSON();
 
-console.log(a === true);
+console.log(today);

@@ -23,6 +23,7 @@ class Contract extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
+    // this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
     this.state = {
       id: null,
@@ -33,7 +34,7 @@ class Contract extends React.Component {
       centruCost: '', //text
       echipa: '', //text,
       departament: '',
-      deduceri: false,
+      deduceri: true,
       studiiSuperioare: false,
       functieBaza: false,
       normăLucru: 'Normă întreagă', //text
@@ -54,8 +55,8 @@ class Contract extends React.Component {
       funcție: '', //text
       nivelStudii: '', //text
       cor: '',
-      dataIncepere: new Date().toJSON().slice(0, 10),
-      dataContract: new Date().toJSON().slice(0, 10),
+      dataIncepere: '',
+      dataContract: '',
       ultimaZiLucru: '',
       pensionar: false,
 
@@ -66,7 +67,6 @@ class Contract extends React.Component {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 0);
   }
 
   clearFields() {
@@ -79,7 +79,7 @@ class Contract extends React.Component {
       centruCost: '', //text
       echipa: '', //text,
       departament: '',
-      deduceri: false,
+      deduceri: true,
       studiiSuperioare: false,
       functieBaza: false,
       normăLucru: 'Normă întreagă', //text
@@ -100,8 +100,8 @@ class Contract extends React.Component {
       funcție: '', //text
       nivelStudii: '', //text
       cor: '',
-      dataIncepere: new Date().toJSON().slice(0, 10),
-      dataContract: new Date().toJSON().slice(0, 10),
+      dataIncepere: '',
+      dataContract: '',
       ultimaZiLucru: '',
       pensionar: false,
 
@@ -129,7 +129,7 @@ class Contract extends React.Component {
         centruCost: contract.idcentrucost,
         echipa: contract.idechipa,
         departament: contract.iddepartament,
-        functieBaza: this.state.functiedebaza,
+        functieBaza: contract.functiedebaza,
         deduceri: contract.calculdeduceri,
         studiiSuperioare: contract.studiisuperioare,
         normăLucru: contract.normalucru,
@@ -355,7 +355,7 @@ class Contract extends React.Component {
                 <Form.Label>Data contract</Form.Label>
                 <Form.Control
                   type="date"
-                  value={new Date().toJSON().slice(0, 10)}
+                  value={this.state.dataContract}
                   selected={this.state.dataContract}
                   onChange={(e) => {
                     this.setState({ dataContract: e.target.value });
@@ -431,7 +431,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="functieDeBazaCheck"
                   label="Funcție de bază"
-                  value={this.state.functieBaza}
+                  checked={this.state.functieBaza}
                   onChange={(e) => {
                     this.setState({ functieBaza: e.target.checked });
                   }}
@@ -445,7 +445,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="deduceriCheck"
                   label="Calcul deduceri"
-                  value={this.state.deduceri}
+                  checked={this.state.deduceri}
                   onChange={(e) => {
                     this.setState({ deduceri: e.target.checked });
                   }}
@@ -459,7 +459,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="studiiSuperioareCheck"
                   label="Studii superioare"
-                  value={this.state.studiiSuperioare}
+                  checked={this.state.studiiSuperioare}
                   onChange={(e) => {
                     this.setState({
                       studiiSuperioare: e.target.checked,
@@ -475,7 +475,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="pensionarCheck"
                   label="Pensionar"
-                  value={this.state.pensionar}
+                  checked={this.state.pensionar}
                   onChange={(e) => {
                     this.setState({ pensionar: e.target.checked });
                   }}

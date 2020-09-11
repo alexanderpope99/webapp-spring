@@ -36,6 +36,11 @@ public class PersoanaController {
         return persoanaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
+    @GetMapping("/c")
+    public List<Persoana> getAllWithContract() {
+      return persoanaRepository.findWithContract();
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Persoana> getPersoanaById(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {

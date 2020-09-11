@@ -8,18 +8,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "alteDrepturi")
+@Table(name = "altedrepturi")
 public class AlteDrepturi {
 
     private long id;
-    private double valoare;
-    private int idstat;
+    private Float valoare;
+    private Integer idstat;
 
     public AlteDrepturi() {
 
     }
 
-    public AlteDrepturi(double valoare, int idstat) {
+    public AlteDrepturi(Float valoare, Integer idstat) {
         this.valoare = valoare;
         this.idstat = idstat;
     }
@@ -34,18 +34,18 @@ public class AlteDrepturi {
     }
 
     @Column(name = "valoare")
-    public double getValoare() {
+    public Float getValoare() {
         return valoare;
     }
-    public void setValoare(double valoare) {
+    public void setValoare(Float valoare) {
         this.valoare = valoare;
     }
 
     @Column(name = "idstat")
-    public int getIdstat() {
+    public Integer getIdstat() {
         return idstat;
     }
-    public void setIdstat(int idstat) {
+    public void setIdstat(Integer idstat) {
         this.idstat = idstat;
     }
 }
