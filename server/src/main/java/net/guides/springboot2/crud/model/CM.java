@@ -6,16 +6,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cm")
 public class CM {
     private long id;
-    private Date dela;
-    private Date panala;
+    private LocalDate dela;
+    private LocalDate panala;
     private Boolean continuare;
-    private Date datainceput;
+    private LocalDate datainceput;
     private String serienrcertificat;
     private String dataeliberare;
     private String codurgenta;
@@ -38,7 +38,7 @@ public class CM {
 
     public CM() { }
 
-    public CM(Date dela, Date panala, Boolean continuare, Date datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Integer idcontract) {
+    public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Integer idcontract) {
         this.dela = dela;
         this.panala = panala;
         this.continuare = continuare;
@@ -74,20 +74,20 @@ public class CM {
     }
 
     @Column(name = "dela")
-    public Date getDela() {
+    public LocalDate getDela() {
         return dela;
     }
 
-    public void setDela(Date dela) {
+    public void setDela(LocalDate dela) {
         this.dela = dela;
     }
 
     @Column(name = "panala")
-    public Date getPanala() {
+    public LocalDate getPanala() {
         return panala;
     }
 
-    public void setPanala(Date panala) {
+    public void setPanala(LocalDate panala) {
         this.panala = panala;
     }
 
@@ -101,11 +101,11 @@ public class CM {
     }
 
     @Column(name = "datainceput")
-    public Date getDatainceput() {
+    public LocalDate getDatainceput() {
         return datainceput;
     }
 
-    public void setDatainceput(Date datainceput) {
+    public void setDatainceput(LocalDate datainceput) {
         this.datainceput = datainceput;
     }
 

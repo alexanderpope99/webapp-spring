@@ -10,5 +10,5 @@ import net.guides.springboot2.crud.model.CM;
 
 @Repository
 public interface CMRepository extends JpaRepository<CM, Long>{
-  Optional<List<CM>> findByIdcontract(Integer idcontract);
+  List<CM> findByIdcontract(Integer idcontract);
 }

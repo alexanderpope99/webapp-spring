@@ -45,7 +45,8 @@ class RealizariRetineri extends React.Component {
 
   setCurrentYearMonth() {
     let today = new Date();
-    let luna = months[today.getMonth() - 1];
+    let luna = months[today.getMonth()
+    ];
     let an = today.getFullYear();
     let zileLucratoare = this.getWorkingDaysInMonth(today.getMonth(), an);
 

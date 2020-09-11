@@ -111,6 +111,7 @@ class Contract extends React.Component {
   }
 
   fillForm(contract, idangajat) {
+    console.log({idangajat: idangajat, idcontract: contract.id});
     if (contract === null) {
       this.clearFields();
       this.setState({
