@@ -1,7 +1,5 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +13,11 @@ public class Deduceri {
 
     private long id;
     @Column(name = "dela")
-    private Date dela;
+    private Integer dela;
     @Column(name = "panala")
-    private Date panala;
+    private Integer panala;
+    @Column(name = "zero")
+    private Integer zero;
     @Column(name = "una")
     private Integer una;
     @Column(name = "doua")
@@ -29,9 +29,10 @@ public class Deduceri {
 
     public Deduceri() { }
 
-    public Deduceri( Date dela, Date panala, Integer una, Integer doua, Integer trei, Integer patru) {
+    public Deduceri( Integer dela, Integer panala, Integer zero, Integer una, Integer doua, Integer trei, Integer patru) {
         this.dela = dela;
         this.panala = panala;
+        this.zero = zero;
         this.una = una;
         this.doua = doua;
         this.trei = trei;
@@ -48,13 +49,13 @@ public class Deduceri {
     }
 
     // GETTERS
-    public Date getDela() {
+    public Integer getDela() {
       return dela;
     }
     public Integer getDoua() {
       return doua;
     }
-    public Date getPanala() {
+    public Integer getPanala() {
       return panala;
     }
     public Integer getPatru() {
@@ -66,15 +67,18 @@ public class Deduceri {
     public Integer getUna() {
       return una;
     }
+    public Integer getZero() {
+      return zero;
+    }
 
     // SETTERS
-    public void setDela(Date dela) {
+    public void setDela(Integer dela) {
       this.dela = dela;
     }
     public void setDoua(Integer doua) {
       this.doua = doua;
     }
-    public void setPanala(Date panala) {
+    public void setPanala(Integer panala) {
       this.panala = panala;
     }
     public void setPatru(Integer patru) {
@@ -85,6 +89,9 @@ public class Deduceri {
     }
     public void setUna(Integer una) {
       this.una = una;
+    }
+    public void setZero(Integer zero) {
+      this.zero = zero;
     }
 } 
 

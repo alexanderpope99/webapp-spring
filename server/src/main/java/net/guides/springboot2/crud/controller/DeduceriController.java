@@ -46,6 +46,21 @@ public class DeduceriController {
         return deduceriRepository.save(deduceri);
     }
 
+    @PostMapping("/all")
+    public void createAllDeduceri(@RequestBody Deduceri deducere) {
+        deduceriRepository.save(deducere);
+        int zero = 495, una = 655, doua = 815, trei = 975, patru = 1295;
+        for(int i=1951; i <= 3600; i+=50) {
+            deducere = new Deduceri(i, i+49, zero, una, doua, trei, patru);
+            deduceriRepository.save(deducere);
+            zero -= 15;
+            una -= 15;
+            doua -= 15;
+            trei -= 15;
+            patru -= 15;
+        }
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<Deduceri> updateDeduceri(@PathVariable(value = "id") Long id, @RequestBody Deduceri newDeduceri)
             throws ResourceNotFoundException {
