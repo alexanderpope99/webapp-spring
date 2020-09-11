@@ -12,8 +12,8 @@ import javax.persistence.Table;
 public class Departament {
 
     private long id;
-    private int idadresa;
-    private int idsocietate;
+    private Integer idadresa;
+    private Integer idsocietate;
     private String nume;
 
 
@@ -21,7 +21,7 @@ public class Departament {
 
     }
 
-    public Departament(int idadresa, int idsocietate, String nume) {
+    public Departament(Integer idadresa, Integer idsocietate, String nume) {
         this.idadresa = idadresa;
         this.idsocietate = idsocietate;
         this.nume = nume;
@@ -37,19 +37,19 @@ public class Departament {
     }
 
     @Column(name = "adresa")
-    public int getIdadresa() {
+    public Integer getIdadresa() {
         return idadresa;
     }
-    public void setIdadresa(int idadresa) {
+    public void setIdadresa(Integer idadresa) {
         this.idadresa = idadresa;
     }
 
     @Column(name = "idsocietate")
-    public int getIdsocietate() {
+    public Integer getIdsocietate() {
         return idsocietate;
     }
 
-    public void setIdsocietate(int idsocietate) {
+    public void setIdsocietate(Integer idsocietate) {
         this.idsocietate = idsocietate;
     }
 

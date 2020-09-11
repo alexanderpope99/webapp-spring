@@ -9,20 +9,20 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "bursePrivate")
+@Table(name = "burseprivate")
 public class BursePrivate {
 
     private long id;
-    private int idcontract;
+    private Integer idcontract;
     private Date data;
-    private double cota;
-    private double suma;
+    private Float cota;
+    private Float suma;
 
     public BursePrivate() {
 
     }
 
-    public BursePrivate(int idcontract, Date data, double cota, double suma) {
+    public BursePrivate(Integer idcontract, Date data, Float cota, Float suma) {
         this.idcontract = idcontract;
         this.data = data;
         this.cota = cota;
@@ -39,11 +39,11 @@ public class BursePrivate {
     }
 
     @Column(name = "idcontract")
-    public int getIdcontract() {
+    public Integer getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Integer idcontract) {
         this.idcontract = idcontract;
     }
 
@@ -57,20 +57,20 @@ public class BursePrivate {
     }
 
     @Column(name = "cota")
-    public double getCota() {
+    public Float getCota() {
         return cota;
     }
 
-    public void setCota(double cota) {
+    public void setCota(Float cota) {
         this.cota = cota;
     }
 
     @Column(name = "suma")
-    public double getSuma() {
+    public Float getSuma() {
         return suma;
     }
 
-    public void setSuma(double suma) {
+    public void setSuma(Float suma) {
         this.suma = suma;
     }
 }
