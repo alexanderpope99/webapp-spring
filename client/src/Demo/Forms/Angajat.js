@@ -109,7 +109,7 @@ class Angajat extends React.Component {
         .catch(err => console.error(err));
     }
     //* FILL FORM
-    this.contract.current.fillForm(contract, idpersoana); // here it gets the idcontract and idangajat
+    this.contract.current.fillForm(contract, idpersoana);
   }
 
   async onFocusCO() {
