@@ -588,7 +588,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="sindicatCheck"
                   label="Sindicat"
-                  value={this.state.sindicat}
+                  checked={this.state.sindicat}
                   onChange={(e) => {
                     this.setState({ sindicat: e.target.checked });
                   }}
@@ -620,7 +620,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="pensiePrivataCheck"
                   label="Pensie privată"
-                  value={this.state.pensiePrivată}
+                  checked={this.state.pensiePrivată}
                   onChange={(e) => {
                     this.setState({ pensiePrivată: e.target.checked });
                   }}
