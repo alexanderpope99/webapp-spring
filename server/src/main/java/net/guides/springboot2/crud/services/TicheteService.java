@@ -16,6 +16,7 @@ public class TicheteService {
         System.out.println(zileLibere);
         int wd = zileService.getZileLucratoareInLunaAnul(luna, an);
         return wd - zileLibere - zileSarbatori;
+
     }
     
 }  // class

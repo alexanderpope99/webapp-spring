@@ -23,10 +23,8 @@ public class CMService {
         if(concediiMedicale.size() == 0)
             return 0;
 
-
         LocalDate inceputLuna = LocalDate.of(an, luna, 1);
         int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
-        // findAllByIdContract
         LocalDate dela, panala;
         LocalDate day;
         int zileCM = 0;
@@ -42,4 +40,4 @@ public class CMService {
         }
         return zileCM;
     }
-}
+}  // class
