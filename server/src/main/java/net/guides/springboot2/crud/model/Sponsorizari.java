@@ -11,9 +11,9 @@ import javax.persistence.Table;
 @Table(name = "sponsorizari")
 public class Sponsorizari {
 
-    private long id;
+    private Long id;
     @Column(name = "idcontract")
-    private long idcontract;
+    private Long idcontract;
     @Column(name = "denumire")
     private String denumire;
     @Column(name = "cui")
@@ -52,7 +52,7 @@ public class Sponsorizari {
     public String getDenumire() {
         return denumire;
     }
-    public long getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
     public Double getSuma() {
@@ -70,7 +70,7 @@ public class Sponsorizari {
     public void setDenumire(String denumire) {
         this.denumire = denumire;
     }
-    public void setIdcontract(long idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
     public void setSuma(Double suma) {

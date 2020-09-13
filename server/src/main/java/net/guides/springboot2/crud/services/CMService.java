@@ -19,7 +19,7 @@ public class CMService {
     // DOAR ZILE C.M.
     public int getZileCM(int luna, int an, long idcontract) {
         // find all by idcontract
-        List<CM> concediiMedicale = cmRepository.findByIdcontract((int)idcontract);
+        List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
         if(concediiMedicale.size() == 0)
             return 0;
 

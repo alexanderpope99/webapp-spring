@@ -7,23 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.model.RealizariRetineri;
-import net.guides.springboot2.crud.services.RealizariRetineriService;
 import net.guides.springboot2.crud.services.TicheteService;
 
 
 @RestController
 @RequestMapping("/realizariretineri")
 public class RealizariRetineriController {
-    // @Autowired
-    // private RealizariRetineriRepository realizariRetineriRepository;
-    // @Autowired
-    // private RealizariRetineriService realizariService;
     @Autowired
     private TicheteService ticheteService;
 
 
     @GetMapping("idc={id}&mo={luna}&y={an}")
-    public RealizariRetineri getRealizariRetineriById(@PathVariable(value = "id") Integer idcontract, @PathVariable(value="luna") Integer luna, @PathVariable(value="an") Integer an){
+    public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") Long idcontract, @PathVariable(value="luna") Integer luna, @PathVariable(value="an") Integer an){
         // tichete = zile_lucratoare - zile_nelucrate
         int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
         return new RealizariRetineri(nrTichete);

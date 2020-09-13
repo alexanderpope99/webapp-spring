@@ -39,8 +39,8 @@ public class CMController {
     }
 
     @GetMapping("idc={id}")
-    public ResponseEntity<List<CM>> getCMByIdcontract(@PathVariable(value = "id") Integer cmId) throws ResourceNotFoundException {
-        List<CM> cm = cmRepository.findByIdcontract(cmId);
+    public ResponseEntity<List<CM>> getCMByIdcontract(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
+        List<CM> cm = cmRepository.findByIdcontract(idcontract);
         return ResponseEntity.ok().body(cm);
     }
 

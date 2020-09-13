@@ -34,11 +34,11 @@ public class CM {
     private String codboala;
     private Boolean urgenta;
     private String conditii;
-    private Integer idcontract;
+    private Long idcontract;
 
     public CM() { }
 
-    public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Integer idcontract) {
+    public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Long idcontract) {
         this.dela = dela;
         this.panala = panala;
         this.continuare = continuare;
@@ -272,11 +272,11 @@ public class CM {
     }
 
     @Column(name = "idcontract")
-    public Integer getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(Integer idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 }

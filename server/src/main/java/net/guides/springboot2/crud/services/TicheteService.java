@@ -18,4 +18,4 @@ public class TicheteService {
         return wd - zileLibere - zileSarbatori;
     }
     
-}
+}  // class

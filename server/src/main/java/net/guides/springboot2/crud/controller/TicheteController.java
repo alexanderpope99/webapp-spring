@@ -1,7 +1,5 @@
 package net.guides.springboot2.crud.controller;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Tichete;
 import net.guides.springboot2.crud.repository.TicheteRepository;
-import net.guides.springboot2.crud.services.ZileService;
 
 import org.springframework.data.domain.Sort;
 

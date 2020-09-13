@@ -15,13 +15,13 @@ public class Condica {
     private String inceput;
     private String sfarsit;
     private String pauzamasa;
-    private int idcontract;
+    private Long idcontract;
 
     public Condica() {
 
     }
 
-    public Condica(String inceput, String sfarsit, String pauzamasa, int idcontract) {
+    public Condica(String inceput, String sfarsit, String pauzamasa, Long idcontract) {
         this.inceput = inceput;
         this.sfarsit = sfarsit;
         this.pauzamasa = pauzamasa;
@@ -65,11 +65,11 @@ public class Condica {
     }
 
     @Column(name = "idcontract")
-    public int getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 }

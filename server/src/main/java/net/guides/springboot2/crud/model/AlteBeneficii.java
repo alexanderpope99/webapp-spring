@@ -16,13 +16,13 @@ public class AlteBeneficii {
     private Float valoare;
     private Float procent;
     private String aplicare;
-    private Integer idcontract;
+    private Long idcontract;
 
     public AlteBeneficii() {
 
     }
 
-    public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Integer idcontract) {
+    public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Long idcontract) {
         this.nume = nume;
         this.valoare = valoare;
         this.procent = procent;
@@ -72,10 +72,10 @@ public class AlteBeneficii {
     }
 
     @Column(name = "idcontract")
-    public Integer getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
-    public void setIdcontract(Integer idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 }

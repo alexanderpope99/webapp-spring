@@ -39,9 +39,14 @@ public class COController {
     }
 
     @GetMapping("idc={id}")
-    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") Integer coId) throws ResourceNotFoundException {
-        List<CO> co = coRepository.findByIdcontract(coId)
-                .orElseThrow(() -> new ResourceNotFoundException("CO not found for this idcontract :: " + coId));
+    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
+        List<CO> co = coRepository.findByIdcontract(idcontract);
+        return ResponseEntity.ok().body(co);
+    }
+
+    @GetMapping("fp&idc={id}")
+    public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
+        List<CO> co = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
         return ResponseEntity.ok().body(co);
     }
 

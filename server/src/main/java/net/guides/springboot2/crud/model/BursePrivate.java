@@ -13,7 +13,7 @@ import java.util.Date;
 public class BursePrivate {
 
     private long id;
-    private Integer idcontract;
+    private Long idcontract;
     private Date data;
     private Float cota;
     private Float suma;
@@ -22,7 +22,7 @@ public class BursePrivate {
 
     }
 
-    public BursePrivate(Integer idcontract, Date data, Float cota, Float suma) {
+    public BursePrivate(Long idcontract, Date data, Float cota, Float suma) {
         this.idcontract = idcontract;
         this.data = data;
         this.cota = cota;
@@ -39,11 +39,11 @@ public class BursePrivate {
     }
 
     @Column(name = "idcontract")
-    public Integer getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(Integer idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 
