@@ -128,9 +128,10 @@ class RealizariRetineri extends React.Component {
         if (res.ok) return res.json();
       })
       .catch((err) => console.error(err));
-    // console.log(contract);
+
     // form reacts to this.state.contract + other states
     this.setState({ contract: contract });
+    console.log(contract);
   }
 
   handleClose() {
@@ -224,7 +225,7 @@ class RealizariRetineri extends React.Component {
                     },
                     () => this.fillForm()
                   );
-                  // fill form with corresponding data
+                  // TODO: fill form with corresponding data
                 }}
               >
                 <option>-</option>
@@ -321,7 +322,7 @@ class RealizariRetineri extends React.Component {
                       <Form.Group id="normazilucru">
                         <Form.Label>Normă lucru</Form.Label>
                         <Form.Control
-                          type="number"
+                          type="text"
                           disabled
                           value={this.state.contract.normalucru || ''}
                         />

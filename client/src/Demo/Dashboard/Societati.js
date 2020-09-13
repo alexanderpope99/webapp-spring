@@ -1,15 +1,16 @@
 import React from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
+import SocietateContext from '../Context/SocietateContext';
 
 class Societati extends React.Component {
   /*
-    TODO
+    TODO\
     * on click "Editeaza" -> redirect to Edit societate page (same as persoane)
     * on click "Sterge" -> prompt confirm, delete only on user confirmation
   */
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.unselectAll = this.unselectAll.bind(this);
 
     this.state = {};
@@ -17,11 +18,7 @@ class Societati extends React.Component {
 
   async componentDidMount() {
     await this.getNumeSocietati();
-    let selected = await fetch('http://localhost:5000/selected', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    }).then((response) => response.json());
-    this.select(selected);
+    this.select(this.context.societate_selectata);
   }
 
   async getNumeSocietati() {
@@ -49,27 +46,10 @@ class Societati extends React.Component {
 
   select(nume_soc) {
     this.unselectAll();
-    this.setState({
-      [nume_soc]: '1',
-    });
-  }
-
-  async getNumeSocietate() {
-    await fetch('http://localhost:5000/selected', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(persoane),
-    }).then((response) => response.json());
-  }
-
-  async saveNumeSocietate(nume_soc) {
-    await fetch('http://localhost:5000/selected', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nume: nume_soc,
-      }),
-    });
+    if(nume_soc)
+      this.setState({
+        [nume_soc]: '1',
+      });
   }
 
   render() {
@@ -82,7 +62,7 @@ class Societati extends React.Component {
           }}
           onClick={() => {
             this.select(nume_soc);
-            this.saveNumeSocietate(nume_soc);
+            this.context.changeSelected(nume_soc);
           }}
         >
           <Card.Body>
@@ -107,5 +87,6 @@ class Societati extends React.Component {
     );
   }
 }
+Societati.contextType = SocietateContext;
 
 export default Societati;
