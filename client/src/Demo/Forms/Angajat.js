@@ -10,6 +10,11 @@ import ConcediiMedicale from '../Tables/ConcediiMedicale';
 // import AddContract from './AddContract';
 
 /*
+  TODO: change how selected angajat is read: React Context,
+  * advantages: 1> on pill change -> component does not update 3 times
+  *             2> can check if component actually updated, prompt user to save changes or not
+
+  ? how it works now:
   * fetch date contract when focusint tab 'contract'
   *
   * when focusing 'contract' check if person has contract:
