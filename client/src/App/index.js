@@ -19,7 +19,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      societate_selectata: '',
+      societate_selectata: {nume: '', id: 0},
       changeSelected: (newSelect) => {
         this.setState(
           { societate_selectata: newSelect },
