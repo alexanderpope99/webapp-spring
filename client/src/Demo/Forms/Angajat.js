@@ -55,6 +55,7 @@ class Angajat extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
+    // get id societate
   }
 
   handleClose() {
