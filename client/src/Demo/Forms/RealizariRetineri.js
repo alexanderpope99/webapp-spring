@@ -113,11 +113,35 @@ class RealizariRetineri extends React.Component {
       })
       .catch((err) => console.error(err));
     console.log(data);
-    this.setState({ nrtichete: data.nrtichete });
+    this.setState({ 
+      nrtichete: data.nrtichete, 
+      zilecm: data.zilecm, 
+      zilec: data.zilec 
+    });
   }
 
   clearForm() {
-    this.setState({});
+    this.setState({
+      totaldrepturi: '',
+      cas: '',
+      cass: '',
+      valoaretichete: '',
+      impozit: '',
+      restplata: '',
+
+      functie: '',
+      duratazilucru: '',
+      normalucru: '',
+      salariubrut: '',
+      orelucrate: '',
+      nrtichete: '',
+      zilecm: '',
+      zilec: '',
+      oresuplimentare: '',
+      zilelibere: '',
+      zileinvoire: '',
+      primabruta: '',
+    });
   }
 
   handleClose() {
@@ -212,7 +236,7 @@ class RealizariRetineri extends React.Component {
               <FormControl
                 aria-describedby="basic-addon2"
                 as="select"
-                value={this.state.selected_angajat}
+                value={this.state.selected_angajat.nume}
                 onChange={(e) => this.onSelect(e)}
               >
                 <option>-</option>
@@ -348,13 +372,13 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="zilecm">
                         <Form.Label>Zile concediu medical</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.zilecm || ''} />
+                        <Form.Control type="number" disabled value={this.state.zilecm} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      <Form.Group id="zilectotal">
+                      <Form.Group id="zilec">
                         <Form.Label>Zile concediu total</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.zilectotal || ''} />
+                        <Form.Control type="text" disabled value={this.state.zilec} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>

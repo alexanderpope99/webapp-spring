@@ -16,16 +16,12 @@ import net.guides.springboot2.crud.services.TicheteService;
 @RequestMapping("/realizariretineri")
 public class RealizariRetineriController {
     @Autowired
-    private TicheteService ticheteService;
-    @Autowired
     private RealizariRetineriService realizariRetineriService;
 
 
     @GetMapping("idc={id}&mo={luna}&y={an}")
     public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") Long idcontract, @PathVariable(value="luna") Integer luna, @PathVariable(value="an") Integer an){
-        // tichete = zile_lucratoare - zile_nelucrate
-        int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
-        return new RealizariRetineri(nrTichete);
+        return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
 
     @GetMapping("idp={id}&mo={luna}&y={an}")
