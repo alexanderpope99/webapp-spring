@@ -36,7 +36,7 @@ public class RealizariRetineriService {
       int nrTichete = getNrTichete(luna, an, idcontract);
       int zileCO = coService.getZileCO(luna, an, idcontract);
       int zileCM = cmService.getZileCM(luna, an, idcontract);
-      return new RealizariRetineri(nrTichete);
+      return new RealizariRetineri(nrTichete, zileCO, zileCM);
     }
 
 }
