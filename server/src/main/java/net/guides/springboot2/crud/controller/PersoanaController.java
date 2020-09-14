@@ -50,6 +50,11 @@ public class PersoanaController {
         return ResponseEntity.ok().body(persoana);
     }
 
+    @GetMapping("ids={id}&c")
+    public List<Persoana> getPersoanaByIdsocietate(@PathVariable(value = "id") Long idsocietate) {
+        return persoanaRepository.findWithContractAndIdsocietate(idsocietate);
+    }
+
     @PostMapping
     public Persoana createPersoana(@RequestBody Persoana persoana) {
         return persoanaRepository.save(persoana);

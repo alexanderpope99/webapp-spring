@@ -2,6 +2,8 @@ import React from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 
+import { getSocSel, setSocSel } from '../Resources/socsel';
+
 class Societati extends React.Component {
   /*
     TODO
@@ -33,7 +35,8 @@ class Societati extends React.Component {
         })
       );
     }
-    let selected = this.getSel();
+    let selected = getSocSel();
+    // console.log(selected);
     if (selected) this.select(selected.nume);
   }
 
@@ -48,24 +51,14 @@ class Societati extends React.Component {
   select(nume_soc) {
     this.unselectAll();
     if (nume_soc) {
+      let id = this.state[nume_soc].id;
       this.setState({
-        [nume_soc]: { opacity: '1', id: this.state[nume_soc].id },
+        [nume_soc]: { opacity: '1', id: id },
       });
 
-      this.setSel(nume_soc);
-      console.log(this.getSel());
+      setSocSel({id: id, nume: nume_soc});
+      console.log(getSocSel());
     }
-  }
-
-  getSel() {
-    let soc_sel = sessionStorage.getItem('socsel');
-    // console.log(JSON.parse(soc_sel));
-    return JSON.parse(soc_sel);
-  }
-
-  setSel(nume_soc) {
-    let socsel = { id: this.state[nume_soc].id, nume: nume_soc };
-    sessionStorage.setItem('socsel', JSON.stringify(socsel));
   }
 
   render() {

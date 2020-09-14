@@ -12,4 +12,7 @@ import net.guides.springboot2.crud.model.Persoana;
 public interface PersoanaRepository extends JpaRepository<Persoana, Long> {
   @Query(value = "select * from persoana where id in (select idpersoana from angajat where idcontract is not null) order by nume, prenume", nativeQuery = true)
   List<Persoana> findWithContract();
+
+  @Query(value = "select * from persoana where id in (select idpersoana from angajat where idcontract is not null and idsocietate = ?1) order by nume, prenume", nativeQuery = true)
+  List<Persoana> findWithContractAndIdsocietate(long idsocietate);
 }

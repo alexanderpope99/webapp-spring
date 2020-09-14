@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
+import { getSocSel, setSocSel } from '../Resources/socsel';
 // import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
@@ -33,16 +34,17 @@ class Angajat extends React.Component {
     this.cm = React.createRef();
 
     this.state = {
+      socsel: getSocSel(),
+
       angajat: null,
       idpersoana: null,
       idcontract: null,
-      idsocietate: null,
+      idsocietate: getSocSel().id,
 
       show: false,
       modalMessage: '',
 
-      key: 'date-personale',
-
+      key: 'date-personale', // selected pill
     };
 
     window.scrollTo(0, 0);
@@ -50,7 +52,6 @@ class Angajat extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    // get id societate
   }
 
   handleClose() {
@@ -58,7 +59,6 @@ class Angajat extends React.Component {
       show: false,
       modalMessage: '',
     });
-    // window.scrollTo(0, 0);
   }
 
   async getSelectedAngajatData() {
@@ -68,8 +68,6 @@ class Angajat extends React.Component {
       this.contract.current.clearFields();
       return;
     } else this.contract.current.setState({ buttonDisabled: false });
-
-    // this.setState({ idpersoana: idpersoana });
 
     // get angajat with selected id
     const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
@@ -83,6 +81,7 @@ class Angajat extends React.Component {
       angajat: angajat,
       idcontract: angajat.idcontract,
       idpersoana: angajat.idpersoana,
+      idsocietate: angajat.idsocietate,
     });
 
     return angajat;
@@ -164,7 +163,7 @@ class Angajat extends React.Component {
         <Row>
           <Col>
             <h5>
-              Date angajat
+              Date angajat {this.state.socsel.nume ? "- " + this.state.socsel.nume : ""}
             </h5>
 
             <hr />
