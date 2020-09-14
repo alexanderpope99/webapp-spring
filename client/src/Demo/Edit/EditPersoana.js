@@ -244,56 +244,55 @@ class EditPersoana extends React.Component {
       headers: { 'Content-Type': 'application/json' },
     }).then((persoana) => persoana.json());
 
-    if (persoana.idadresa !== null) {
+    if (persoana.idadresa) {
       await fetch(`http://localhost:5000/adresa/${persoana.idadresa}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
         .then((adresa) => adresa.json())
         .then((adresa) => {
-          if (adresa !== null)
+          if (adresa)
             this.setState({
               idadresa: adresa.id,
-              localitate: [null, 'null'].indexOf(adresa.localitate) > -1 ? '' : adresa.localitate,
-              judet: [null, 'null'].indexOf(adresa.judet) > -1 ? '' : adresa.judet,
+              localitate: adresa.localitate || '',
+              judet: adresa.judet || '',
               adresacompleta:
-                [null, 'null'].indexOf(adresa.adresacompleta) > -1 ? '' : adresa.adresa,
+                adresa.adresa || '',
               tipJudet: this.getTipJudet(adresa.localitate),
             });
         });
     }
 
-    if (persoana.idactidentitate !== null) {
+    if (persoana.idactidentitate) {
       await fetch(`http://localhost:5000/actidentitate/${persoana.idactidentitate}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
         .then((actidentitate) => actidentitate.json())
         .then((actidentitate) => {
-          if (actidentitate !== null)
+          if (actidentitate)
             this.setState({
               idactidentitate: actidentitate.id,
-              tipact: actidentitate.tip === null ? '' : actidentitate.tip,
-              serie: actidentitate.serie === null ? '' : actidentitate.serie,
-              numar: actidentitate.numar === null ? '' : actidentitate.numar,
+              tipact: actidentitate.tip || '',
+              serie: actidentitate.serie || '',
+              numar: actidentitate.numar || '',
               loculnasterii:
-                actidentitate.loculnasterii === null ? '' : actidentitate.loculnasterii,
-              eliberatde: actidentitate.eliberatde === null ? '' : actidentitate.eliberatde,
+                actidentitate.loculnasterii || '',
+              eliberatde: actidentitate.eliberatde || '',
               dataeliberarii:
-                actidentitate.dataeliberarii === null ? '' : actidentitate.dataeliberarii,
+                actidentitate.dataeliberarii || '',
             });
-          // console.log('idactidentitate:', actidentitate.id);
         });
     }
 
     this.setState({
-      cnp: persoana.cnp === null ? '' : persoana.cnp,
-      email: persoana.email === null ? '' : persoana.email,
-      gen: persoana.gen === null ? '' : persoana.gen,
-      nume: persoana.nume === null ? '' : persoana.nume,
-      prenume: persoana.prenume === null ? '' : persoana.prenume,
-      starecivila: persoana.starecivila === null ? '' : persoana.starecivila,
-      telefon: persoana.telefon === null ? '' : persoana.telefon,
+      cnp: persoana.cnp || '',
+      email: persoana.email || '',
+      gen: persoana.gen || '',
+      nume: persoana.nume || '',
+      prenume: persoana.prenume || '',
+      starecivila: persoana.starecivila || '',
+      telefon: persoana.telefon || '',
       datanasterii: this.getDatanasteriiByCNP(persoana.cnp),
     });
   }
@@ -316,7 +315,9 @@ class EditPersoana extends React.Component {
     var idadresa = this.state.idadresa,
       idactidentitate = this.state.idactidentitate;
 
+    // persoana nu are adresa asociata
     if (this.state.idadresa === null) {
+      // daca se completeaza, adauga in DB
       if (
         this.state.adresacompleta !== null ||
         this.state.localitate !== null ||
@@ -350,18 +351,18 @@ class EditPersoana extends React.Component {
       });
     }
 
+    // persoana nu are actidentitate
     if (this.state.idactidentitate === null) {
-      // persoana nu are actidentitate
+      // daca se completeaza actidentitate, adauga in baza de date
       if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
-        // daca se completeaza actidentitate, adauga in baza de date
         let buletin_body = {
           cnp: this.state.cnp,
           tip: this.state.tipact,
           serie: this.state.serie,
           numar: this.state.numar,
-          datanasterii: this.state.datanasterii === '' ? null : this.state.datanasterii,
+          datanasterii: this.state.datanasterii,
           eliberatde: this.state.eliberatde,
-          dataeliberarii: this.state.dataeliberarii === '' ? null : this.state.dataeliberarii,
+          dataeliberarii: this.state.dataeliberarii,
           loculnasterii: this.state.loculnasterii,
         };
 
@@ -376,14 +377,15 @@ class EditPersoana extends React.Component {
         console.log('idactidentitate:', idactidentitate);
       }
     } else {
+      // are act identitate => se actualizeaza
       let buletin_body = {
         cnp: this.state.cnp,
         tip: this.state.tipact,
         serie: this.state.serie,
         numar: this.state.numar,
-        datanasterii: this.state.datanasterii === '' ? null : this.state.datanasterii,
+        datanasterii: this.state.datanasterii,
         eliberatde: this.state.eliberatde,
-        dataeliberarii: this.state.dataeliberarii === '' ? null : this.state.dataeliberarii,
+        dataeliberarii: this.state.dataeliberarii,
         loculnasterii: this.state.loculnasterii,
       };
 
@@ -405,7 +407,7 @@ class EditPersoana extends React.Component {
       telefon: this.state.telefon,
       cnp: this.state.cnp,
     };
-    //update persoana
+    // update persoana
     await fetch(`http://localhost:5000/persoana/${this.state.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -419,15 +421,13 @@ class EditPersoana extends React.Component {
       show: true,
       modalMessage: 'Persoană actualizată cu succes.',
     });
-    // window.scrollTo(0, 0);
 
     return this.state.id;
   }
 
   render() {
     const luni_nr = [];
-    for (var i = 1; i < 13; ++i) 
-      luni_nr.push(<option key={i}>{i}</option>);
+    for (var i = 1; i < 13; ++i) luni_nr.push(<option key={i}>{i}</option>);
 
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
@@ -499,7 +499,7 @@ class EditPersoana extends React.Component {
               <Card.Header>
                 <Card.Title as="h5">Modifică datele</Card.Title>
               </Card.Header>
-              
+
               <Card.Body>
                 <Form>
                   <Row>

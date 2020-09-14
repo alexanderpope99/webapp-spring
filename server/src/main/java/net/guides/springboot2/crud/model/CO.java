@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "co")
@@ -14,14 +14,14 @@ public class CO {
 
     private long id;
     private String tip;
-    private Date dela;
-    private Date panala;
+    private LocalDate dela;
+    private LocalDate panala;
     private Boolean sporuripermanente;
-    private Integer idcontract;
+    private Long idcontract;
 
     public CO() { }
 
-    public CO(String tip, Date dela, Date panala, Boolean sporuripermanente, Integer idcontract) {
+    public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Long idcontract) {
         this.tip = tip;
         this.dela = dela;
         this.panala = panala;
@@ -48,20 +48,20 @@ public class CO {
     }
 
     @Column(name = "dela")
-    public Date getDela() {
+    public LocalDate getDela() {
         return dela;
     }
 
-    public void setDela(Date dela) {
+    public void setDela(LocalDate dela) {
         this.dela = dela;
     }
 
     @Column(name = "panala")
-    public Date getPanala() {
+    public LocalDate getPanala() {
         return panala;
     }
 
-    public void setPanala(Date panala) {
+    public void setPanala(LocalDate panala) {
         this.panala = panala;
     }
 
@@ -75,11 +75,11 @@ public class CO {
     }
 
     @Column(name = "idcontract")
-    public Integer getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(Integer idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 }

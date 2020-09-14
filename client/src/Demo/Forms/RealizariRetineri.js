@@ -19,6 +19,7 @@ class RealizariRetineri extends React.Component {
   constructor(props) {
     super(props);
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
+    this.getWorkingDaysInMonth = this.getWorkingDaysInMonth.bind(this);
     this.getIdByNumeComplet = this.getIdByNumeComplet.bind(this);
 
     this.state = {
@@ -44,14 +45,32 @@ class RealizariRetineri extends React.Component {
 
   setCurrentYearMonth() {
     let today = new Date();
-    let luna = months[today.getMonth() - 1];
+    let luna = months[today.getMonth()
+    ];
     let an = today.getFullYear();
+    let zileLucratoare = this.getWorkingDaysInMonth(today.getMonth(), an);
 
-    //  set them
     this.setState({
       an: an,
       luna: luna,
+      zileLucratoare: zileLucratoare,
     });
+  }
+  getWorkingDaysInMonth(month, year) {
+    var days = this.daysInMonth(month, year);
+    var weekdays = 0;
+    for (var i = 0; i < days; i++) {
+      if (this.isWeekday(year, month, i + 1)) weekdays++;
+    }
+    return weekdays;
+  }
+  isWeekday(_year, _month, _day) {
+    var day = new Date(_year, _month, _day).getDay();
+    // eslint-disable-next-line eqeqeq
+    return day !== 0 && day !== 6;
+  }
+  daysInMonth(month, year) {
+    return new Date(year, month, 0).getDate();
   }
 
   async setAngajatiWithContract() {
@@ -109,9 +128,10 @@ class RealizariRetineri extends React.Component {
         if (res.ok) return res.json();
       })
       .catch((err) => console.error(err));
-    // console.log(contract);
+
     // form reacts to this.state.contract + other states
     this.setState({ contract: contract });
+    console.log(contract);
   }
 
   handleClose() {
@@ -149,13 +169,21 @@ class RealizariRetineri extends React.Component {
 
         <Card>
           <Card.Header>
-            {/* LUNA + YEAR */}
+            {/* LUNA + AN */}
             <Row>
               <Col md={6}>
                 <FormControl
                   as="select"
                   value={this.state.luna}
-                  onChange={(e) => this.setState({ luna: e.target.value })}
+                  onChange={(e) =>
+                    this.setState({
+                      luna: e.target.value,
+                      zileLucratoare: this.getWorkingDaysInMonth(
+                        e.target.options.selectedIndex + 1,
+                        this.state.an
+                      ),
+                    })
+                  }
                 >
                   {luni}
                 </FormControl>
@@ -164,7 +192,15 @@ class RealizariRetineri extends React.Component {
                 <FormControl
                   as="select"
                   value={this.state.an}
-                  onChange={(e) => this.setState({ an: e.target.value })}
+                  onChange={(e) =>
+                    this.setState({
+                      an: e.target.value,
+                      zileLucratoare: this.getWorkingDaysInMonth(
+                        e.target.options.selectedIndex + 1,
+                        this.state.an
+                      )
+                    })
+                  }
                 >
                   {ani};
                 </FormControl>
@@ -189,7 +225,7 @@ class RealizariRetineri extends React.Component {
                     },
                     () => this.fillForm()
                   );
-                  // fill form with corresponding data
+                  // TODO: fill form with corresponding data
                 }}
               >
                 <option>-</option>
@@ -286,7 +322,7 @@ class RealizariRetineri extends React.Component {
                       <Form.Group id="normazilucru">
                         <Form.Label>Normă lucru</Form.Label>
                         <Form.Control
-                          type="number"
+                          type="text"
                           disabled
                           value={this.state.contract.normalucru || ''}
                         />
@@ -347,13 +383,21 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="zilelibere">
                         <Form.Label>Zile libere</Form.Label>
-                        <Form.Control type="text" value={this.state.zilelibere || ''} onChange={(e) => this.setState({ zilelibere: e.target.value })}/>
+                        <Form.Control
+                          type="text"
+                          value={this.state.zilelibere || ''}
+                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group id="zileinvoire">
                         <Form.Label>Zile învoire</Form.Label>
-                        <Form.Control type="text" value={this.state.zileinvoire || ''} onChange={(e) => this.setState({ zileinvoire: e.target.value })}/>
+                        <Form.Control
+                          type="text"
+                          value={this.state.zileinvoire || ''}
+                          onChange={(e) => this.setState({ zileinvoire: e.target.value })}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={6}>

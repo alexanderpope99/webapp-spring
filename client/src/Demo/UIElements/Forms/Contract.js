@@ -66,8 +66,7 @@ class Contract extends React.Component {
     };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   clearFields() {
     this.setState({
@@ -115,45 +114,50 @@ class Contract extends React.Component {
       this.clearFields();
       this.setState({
         idangajat: idangajat,
-      });
-    } else
-      this.setState({
-        idangajat: idangajat,
-        id: contract.id,
-        modelContract: contract.tip === null ? '' : contract.tip, //text
-        numărContract: contract.nr === null ? '' : contract.nr, //text
-        marca: contract.marca === null ? '' : contract.marca, //text
-        dataContract: contract.data === null ? '' : contract.data.substring(0, 10),
-        dataIncepere: contract.dataincepere === null ? '' : contract.dataincepere.substring(0, 10),
-        punctDeLucru: contract.idpunctdelucru,
-        centruCost: contract.idcentrucost,
-        echipa: contract.idechipa,
-        departament: contract.iddepartament,
-        functieBaza: contract.functiedebaza,
-        deduceri: contract.calculdeduceri,
-        studiiSuperioare: contract.studiisuperioare,
-        normăLucru: contract.normalucru,
-        salariu: contract.salariu === null ? '' : contract.salariu,
-        monedăSalariu: contract.monedasalariu,
-        modPlată: contract.modplata,
-        condițiiMuncă: contract.conditiimunca,
-        sindicat: contract.sindicat,
-        cotizațieSindicat: contract.cotizatiesindicat,
-        pensiePrivată: contract.pensieprivata,
-        cotizațiePensie: contract.cotizatiepensieprivata,
-        avans: contract.avans === null ? '' : contract.avans,
-        monedăAvans: contract.monedaavans,
-        zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
-        ultimaZiLucru:
-          contract.ultimazilucru === null ? '' : contract.ultimazilucru.substring(0, 10),
-        casăSănătate: contract.casasanatate === null ? '' : contract.casasanatate, //text
-        gradInvalid: contract.gradinvaliditate === null ? '' : contract.gradinvaliditate, //text
-        funcție: contract.functie === null ? '' : contract.functie, //text
-        nivelStudii: contract.nivelstudii === null ? '' : contract.nivelstudii, //text
-        cor: contract.cor,
-        pensionar: contract.pensionar,
-        spor: contract.spor,
-      });
+      }, () => console.log('idangajat:', idangajat, '\tidcontract:', null));
+    } else {
+      for (let key in contract) if (contract[key] === null) contract[key] = '';
+
+      this.setState(
+        {
+          idangajat: idangajat,
+          id: contract.id,
+          modelContract: contract.tip, //text
+          numărContract: contract.nr, //text
+          marca: contract.marca, //text
+          dataContract: contract.data.substring(0, 10),
+          dataIncepere: contract.dataincepere.substring(0, 10),
+          punctDeLucru: contract.idpunctdelucru,
+          centruCost: contract.idcentrucost,
+          echipa: contract.idechipa,
+          departament: contract.iddepartament,
+          functieBaza: contract.functiedebaza,
+          deduceri: contract.calculdeduceri,
+          studiiSuperioare: contract.studiisuperioare,
+          normăLucru: contract.normalucru,
+          salariu: contract.salariutarifar,
+          monedăSalariu: contract.monedasalariu,
+          modPlată: contract.modplata,
+          condițiiMuncă: contract.conditiimunca,
+          sindicat: contract.sindicat,
+          cotizațieSindicat: contract.cotizatiesindicat,
+          pensiePrivată: contract.pensieprivata,
+          cotizațiePensie: contract.cotizatiepensieprivata,
+          avans: contract.avans,
+          monedăAvans: contract.monedaavans,
+          zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
+          ultimaZiLucru: contract.ultimazilucru.substring(0, 10),
+          casăSănătate: contract.casasanatate, //text
+          gradInvalid: contract.gradinvaliditate, //text
+          funcție: contract.functie, //text
+          nivelStudii: contract.nivelstudii, //text
+          cor: contract.cor,
+          pensionar: contract.pensionar,
+          spor: contract.spor,
+        },
+        () => console.log('idangajat:', idangajat, '\tidcontract:', contract.id)
+      );
+    }
   }
 
   onChangeCentrucost(selected) {
@@ -247,8 +251,8 @@ class Contract extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contract_body),
     })
-      .then(contract => contract.json())
-      .catch(err => {
+      .then((contract) => contract.json())
+      .catch((err) => {
         console.error(err.message);
       });
 
@@ -516,6 +520,8 @@ class Contract extends React.Component {
                     placeholder="Salariu"
                     aria-label="Salariu"
                     aria-describedby="basic-addon2"
+                    value={this.state.salariu}
+                    onChange={(e) => this.setState({ salariu: e.target.value })}
                   />
 
                   <DropdownButton
@@ -587,7 +593,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="sindicatCheck"
                   label="Sindicat"
-                  value={this.state.sindicat}
+                  checked={this.state.sindicat}
                   onChange={(e) => {
                     this.setState({ sindicat: e.target.checked });
                   }}
@@ -619,7 +625,7 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="pensiePrivataCheck"
                   label="Pensie privată"
-                  value={this.state.pensiePrivată}
+                  checked={this.state.pensiePrivată}
                   onChange={(e) => {
                     this.setState({ pensiePrivată: e.target.checked });
                   }}
@@ -671,6 +677,8 @@ class Contract extends React.Component {
                     placeholder="Avans"
                     aria-label="Avans"
                     aria-describedby="basic-addon2"
+                    value={this.state.value}
+                    onChange={(e) => this.setState({ avans: e.target.value })}
                   />
 
                   <DropdownButton

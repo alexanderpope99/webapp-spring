@@ -7,9 +7,14 @@ import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
-// import AddContract from './AddContract';
+import SocietateContext from '../Context/SocietateContext';
 
 /*
+  TODO: change how selected angajat is read: React Context,
+  * advantages: 1> on pill change -> component does not update 3 times
+  *             2> can check if component actually updated, prompt user to save changes or not
+
+  ? how it works now:
   * fetch date contract when focusint tab 'contract'
   *
   * when focusing 'contract' check if person has contract:
@@ -21,8 +26,8 @@ import ConcediiMedicale from '../Tables/ConcediiMedicale';
 */
 
 class Angajat extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -36,6 +41,7 @@ class Angajat extends React.Component {
       angajat: null,
       idpersoana: null,
       idcontract: null,
+      idsocietate: null,
 
       show: false,
       modalMessage: '',
@@ -131,6 +137,8 @@ class Angajat extends React.Component {
     // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
     if (typeof angajat === 'undefined') return;
+
+    // angajatul nu are contract, deci nu se pot adauga concedii
     if(angajat.idcontract === null) {
       this.setState({
         show: true,
@@ -200,5 +208,6 @@ class Angajat extends React.Component {
     );
   }
 }
+Angajat.contextType = SocietateContext;
 
 export default Angajat;

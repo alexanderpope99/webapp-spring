@@ -9,9 +9,9 @@ import java.util.Date;
 @Table(name = "echipa")
 public class ListaSalariatContract {
 	@Id
-    private int idsalariat;
+    private Long idsalariat;
     @Id
-    private int idcontract;
+    private Long idcontract;
     private Date dataschimbare;
 
 
@@ -19,27 +19,27 @@ public class ListaSalariatContract {
 
     }
 
-    public ListaSalariatContract(int idsalariat, int idcontract, Date dataschimbare) {
+    public ListaSalariatContract(Long idsalariat, Long idcontract, Date dataschimbare) {
         this.idsalariat = idsalariat;
         this.idcontract = idcontract;
         this.dataschimbare = dataschimbare;
     }
 
     @Column(name="idsalariat")
-    public int getIdsalariat() {
+    public Long getIdsalariat() {
         return idsalariat;
     }
 
-    public void setIdsalariat(int idsalariat) {
+    public void setIdsalariat(Long idsalariat) {
         this.idsalariat = idsalariat;
     }
 
     @Column(name="idcontract")
-    public int getIdcontract() {
+    public Long getIdcontract() {
         return idcontract;
     }
 
-    public void setIdcontract(int idcontract) {
+    public void setIdcontract(Long idcontract) {
         this.idcontract = idcontract;
     }
 
@@ -56,14 +56,14 @@ public class ListaSalariatContract {
 
 class ListaSalariatContractId implements Serializable {
 	private static final long serialVersionUID = 1L;
-	protected int idsalariat;
-    protected int idcontract;
+	protected Long idsalariat;
+    protected Long idcontract;
     protected Date dataschimbare;
 
     public ListaSalariatContractId() {
     }
 
-    public ListaSalariatContractId(int idsalariat, int idcontract, Date dataschimbare) {
+    public ListaSalariatContractId(Long idsalariat, Long idcontract, Date dataschimbare) {
         this.idsalariat = idsalariat;
         this.idcontract = idcontract;
         this.dataschimbare = dataschimbare;
