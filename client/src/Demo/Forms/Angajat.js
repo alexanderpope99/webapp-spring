@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
-import { getSocSel, setSocSel } from '../Resources/socsel';
+import { getSocSel } from '../Resources/socsel';
 // import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';

@@ -14,82 +14,67 @@ import {
 import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
 import months from '../Resources/months';
+import { getSocSel } from '../Resources/socsel';
 
 class RealizariRetineri extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
-    this.getWorkingDaysInMonth = this.getWorkingDaysInMonth.bind(this);
-    this.getIdByNumeComplet = this.getIdByNumeComplet.bind(this);
 
     this.state = {
+      socsel: getSocSel(),
+
       show: false,
       modalMessage: '',
 
       an: '',
       luna: '',
 
-      selected_nume: 'a',
-      angajati: [], // object: {idpersoana, idcontract, idsocietate}
-      persoane: [], // date personale
-      nume_persoane: [],
-      contract: [],
+      selected_angajat: '',
+      lista_angajati: [], // object: {nume, id}
+      contract: [], // required for 4 fields
+
+      totaldrepturi: '',
+      cas: '',
+      cass: '',
+      valoaretichete: '',
+      impozit: '',
+      restplata: '',
+
+      functie: '',
+      duratazilucru: '',
+      normalucru: '',
+      salariubrut: '',
+      orelucrate: '',
+      nrtichete: '',
+      zilecm: '',
+      zilec: '',
+      oresuplimentare: '',
+      zilelibere: '',
+      zileinvoire: '',
+      primabruta: '',
     };
   }
 
   componentDidMount() {
     this.setCurrentYearMonth(); // modifies state.an, state.luna
-    this.setAngajatiWithContract(); // sets this.state.angajati
-    this.setPersoane(); // date personale, also fills nume_persoane
+    this.setPersoane(); // date personale, also fills lista_angajati
   }
 
   setCurrentYearMonth() {
     let today = new Date();
-    let luna = months[today.getMonth()
-    ];
+    let luna = months[today.getMonth()];
     let an = today.getFullYear();
-    let zileLucratoare = this.getWorkingDaysInMonth(today.getMonth(), an);
 
     this.setState({
       an: an,
-      luna: luna,
-      zileLucratoare: zileLucratoare,
+      luna: { nume: luna, nr: today.getMonth() + 1 },
     });
-  }
-  getWorkingDaysInMonth(month, year) {
-    var days = this.daysInMonth(month, year);
-    var weekdays = 0;
-    for (var i = 0; i < days; i++) {
-      if (this.isWeekday(year, month, i + 1)) weekdays++;
-    }
-    return weekdays;
-  }
-  isWeekday(_year, _month, _day) {
-    var day = new Date(_year, _month, _day).getDay();
-    // eslint-disable-next-line eqeqeq
-    return day !== 0 && day !== 6;
-  }
-  daysInMonth(month, year) {
-    return new Date(year, month, 0).getDate();
-  }
-
-  async setAngajatiWithContract() {
-    // fetch everyone with idcontract !== null
-    const angajati = await fetch('http://localhost:5000/angajat/c', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        if (res.ok) return res.json();
-      })
-      .catch((err) => console.error());
-    this.setState({ angajati: angajati });
   }
 
   async setPersoane() {
-    //* only people with contract
-    //* one query to get them all <- done on backend
-    const persoane = await fetch('http://localhost:5000/persoana/c', {
+    //* only people with contract <- done on backend
+    const persoane = await fetch(`http://localhost:5000/persoana/ids=${this.state.socsel.id}&c`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -98,40 +83,41 @@ class RealizariRetineri extends React.Component {
       })
       .catch((err) => console.error(err));
 
-    //* set nume_persoane
-    this.setState({ persoane: persoane }, () => {
-      let nume_persoane = [];
-      for (let persoana of persoane) {
-        nume_persoane.push(persoana.nume + ' ' + persoana.prenume);
-      }
-      this.setState({ nume_persoane: nume_persoane });
-    });
-  }
-
-  getIdByNumeComplet(nume_complet) {
-    const persoana = this.state.persoane.find(
-      (persoana) => persoana.nume + ' ' + persoana.prenume === nume_complet
-    );
-    if (typeof persoana === 'undefined') return null;
-    return persoana.id;
+    //* set lista_angajati
+    let lista_angajati = [];
+    for (let persoana of persoane) {
+      lista_angajati.push({ nume: persoana.nume + ' ' + persoana.prenume, id: persoana.id });
+    }
+    this.setState({ lista_angajati: lista_angajati });
   }
 
   async fillForm() {
+    let an = this.state.an;
+    let luna = this.state.luna.nr;
     // get id by numecomplet
-    const idpersoana = this.getIdByNumeComplet(this.state.selected_nume);
+    const idpersoana = this.state.selected_angajat.id;
+    if (!idpersoana) {
+      this.clearForm();
+      return;
+    }
     // get date contrat
-    const contract = await fetch(`http://localhost:5000/contract/idp=${idpersoana}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    const data = await fetch(
+      `http://localhost:5000/realizariretineri/idp=${idpersoana}&mo=${luna}&y=${an}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
       .then((res) => {
         if (res.ok) return res.json();
       })
       .catch((err) => console.error(err));
+    console.log(data);
+    this.setState({ nrtichete: data.nrtichete });
+  }
 
-    // form reacts to this.state.contract + other states
-    this.setState({ contract: contract });
-    console.log(contract);
+  clearForm() {
+    this.setState({});
   }
 
   handleClose() {
@@ -139,6 +125,21 @@ class RealizariRetineri extends React.Component {
       show: false,
       modalMessage: '',
     });
+  }
+
+  onSelect(e) {
+    const selectedIndex = e.target.options.selectedIndex;
+    const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
+
+    this.setState(
+      {
+        selected_angajat: {
+          nume: e.target.value,
+          id: idangajat,
+        },
+      },
+      () => this.fillForm()
+    );
   }
 
   render() {
@@ -149,8 +150,10 @@ class RealizariRetineri extends React.Component {
       <option key={year}>{year}</option>
     ));
 
-    const nume_persoane_opt = this.state.nume_persoane.map((nume, index) => (
-      <option key={index}>{nume}</option>
+    const nume_persoane_opt = this.state.lista_angajati.map((angajat) => (
+      <option key={angajat.id} data-key={angajat.id}>
+        {angajat.nume}
+      </option>
     ));
 
     return (
@@ -171,23 +174,21 @@ class RealizariRetineri extends React.Component {
           <Card.Header>
             {/* LUNA + AN */}
             <Row>
+              {/* LUNA */}
               <Col md={6}>
                 <FormControl
                   as="select"
-                  value={this.state.luna}
+                  value={this.state.luna.nume}
                   onChange={(e) =>
                     this.setState({
-                      luna: e.target.value,
-                      zileLucratoare: this.getWorkingDaysInMonth(
-                        e.target.options.selectedIndex + 1,
-                        this.state.an
-                      ),
+                      luna: { nume: e.target.value, nr: e.target.options.selectedIndex },
                     })
                   }
                 >
                   {luni}
                 </FormControl>
               </Col>
+              {/* AN */}
               <Col md={6}>
                 <FormControl
                   as="select"
@@ -195,10 +196,6 @@ class RealizariRetineri extends React.Component {
                   onChange={(e) =>
                     this.setState({
                       an: e.target.value,
-                      zileLucratoare: this.getWorkingDaysInMonth(
-                        e.target.options.selectedIndex + 1,
-                        this.state.an
-                      )
                     })
                   }
                 >
@@ -213,23 +210,13 @@ class RealizariRetineri extends React.Component {
             <InputGroup className="mb-3">
               {/* NUMELE ANGAJATILOR CU CONTRACT */}
               <FormControl
-                placeholder="Recipient's username"
-                aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
                 as="select"
-                value={this.state.selected_nume.nume_complet}
-                onChange={(e) => {
-                  this.setState(
-                    {
-                      selected_nume: e.target.value,
-                    },
-                    () => this.fillForm()
-                  );
-                  // TODO: fill form with corresponding data
-                }}
+                value={this.state.selected_angajat}
+                onChange={(e) => this.onSelect(e)}
               >
                 <option>-</option>
-                {/* nume_persoane mapped as <option> */}
+                {/* lista_angajati mapped as <option> */}
                 {nume_persoane_opt}
               </FormControl>
               <InputGroup.Append>
@@ -349,11 +336,11 @@ class RealizariRetineri extends React.Component {
 
                     <Col md={6}>
                       <Form.Group id="tichete">
-                        <Form.Label>Tichete</Form.Label>
+                        <Form.Label>Nr. Tichete</Form.Label>
                         <Form.Control
                           type="number"
-                          value={this.state.tichete || ''}
-                          onChange={(e) => this.setState({ tichete: e.target.value })}
+                          value={this.state.nrtichete || ''}
+                          onChange={(e) => this.setState({ nrtichete: e.target.value })}
                         />
                       </Form.Group>
                     </Col>

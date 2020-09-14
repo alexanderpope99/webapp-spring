@@ -2,11 +2,11 @@ import React from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 
 import { judete, sectoare } from '../../Resources/judete';
-import { getSocSel, setSocSel } from '../../Resources/socsel';
+import { getSocSel } from '../../Resources/socsel';
 
 class Persoana extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.onChangeLocalitate = this.onChangeLocalitate.bind(this);

@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
+import net.guides.springboot2.crud.services.RealizariRetineriService;
 import net.guides.springboot2.crud.services.TicheteService;
 
 
@@ -15,6 +17,8 @@ import net.guides.springboot2.crud.services.TicheteService;
 public class RealizariRetineriController {
     @Autowired
     private TicheteService ticheteService;
+    @Autowired
+    private RealizariRetineriService realizariRetineriService;
 
 
     @GetMapping("idc={id}&mo={luna}&y={an}")
@@ -22,6 +26,13 @@ public class RealizariRetineriController {
         // tichete = zile_lucratoare - zile_nelucrate
         int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
         return new RealizariRetineri(nrTichete);
+    }
+
+    @GetMapping("idp={id}&mo={luna}&y={an}")
+    public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value="id") Long idpersoana, @PathVariable(value="luna") Integer luna, @PathVariable(value="an") Integer an) throws ResourceNotFoundException{
+      // get contract of persoana
+      long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
+      return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
 }
     

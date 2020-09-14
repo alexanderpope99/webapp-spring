@@ -121,7 +121,7 @@ class EditPersoana extends React.Component {
   }
 
   async getNumeintreg() {
-    const persoane = await fetch(`http://localhost:5000/persoana/ids=${this.state.socsel.id}&c`, {
+    const persoane = await fetch(`http://localhost:5000/persoana/ids=${this.state.socsel.id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),

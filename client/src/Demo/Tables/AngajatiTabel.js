@@ -5,8 +5,8 @@ import MaterialTable from 'material-table';
 import Aux from '../../hoc/_Aux';
 
 class AngatjatiTabel extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       columns: [
         { title: '#id', field: 'id' },
