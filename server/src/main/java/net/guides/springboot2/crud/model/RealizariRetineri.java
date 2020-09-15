@@ -17,11 +17,12 @@ public class RealizariRetineri {
     private float impozit = 0;
     private float valoaretichete = 0;
     private int totaldrepturi = 0;
+    private int restplata = 0;
     private int nrpersoaneintretinere = 0;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, float cas, float cass, float cam, float impozit, float valoareTichete, int totalDrepturi, int nrpersoaneintretinere )
+    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere )
     {
         this.nrtichete = nrtichete;
         this.zileco = zileco;
@@ -36,7 +37,7 @@ public class RealizariRetineri {
         this.cam = cam;
         this.impozit = impozit;
         this.valoaretichete = valoareTichete;
-        this.totaldrepturi = totalDrepturi;
+        this.restplata = restplata;
         this.nrpersoaneintretinere = nrpersoaneintretinere;
     }
 
@@ -86,6 +87,9 @@ public class RealizariRetineri {
     public int getNrpersoaneintretinere() {
       return nrpersoaneintretinere;
     }
+    public int getRestplata() {
+      return restplata;
+    }
 
     //! SETTERS
     public void setNrtichete(int nrtichete) {
@@ -132,6 +136,9 @@ public class RealizariRetineri {
     }
     public void setNrpersoaneintretinere(int nrpersoaneintretinere) {
       this.nrpersoaneintretinere = nrpersoaneintretinere;
+    }
+    public void setRestplata(int restplata) {
+      this.restplata = restplata;
     }
 }
 

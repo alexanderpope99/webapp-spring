@@ -42,7 +42,7 @@ public class RealizariRetineriService {
         return contract.getId();
     }
 
-    public int getTotaldrepturi(Contract contract, float valoareTichete, ParametriiSalariu parametriiSalariu, int nrPersoaneIntretinere) {
+    public int getRestplata(Contract contract, float valoareTichete, ParametriiSalariu parametriiSalariu, int nrPersoaneIntretinere) {
         float salariuTarifar = contract.getSalariutarifar();
         float casSalariu = Math.round(salariuTarifar * parametriiSalariu.getCas() / 100);
         float cassSalariu = Math.round(salariuTarifar * parametriiSalariu.getCass() / 100);
@@ -54,14 +54,14 @@ public class RealizariRetineriService {
         if(salariuTarifar < 3600)
             deducere = deduceriService.getDeducereBySalariu(salariuTarifar, nrPersoaneIntretinere);
 
-        float totalDrepturi = salariuTarifar - casSalariu - cassSalariu;
+        float restPlata = salariuTarifar - casSalariu - cassSalariu;
         
-        totalDrepturi -= platesteImpozit * 
+        restPlata -= platesteImpozit * 
             Math.round(
-                (totalDrepturi + valoareTichete - deducere * areFunctieDebaza) * impozit
+                (restPlata + valoareTichete - deducere * areFunctieDebaza) * impozit
             );
 
-        return Math.round(totalDrepturi);
+        return Math.round(restPlata);
     }
 
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
@@ -82,10 +82,10 @@ public class RealizariRetineriService {
         float impozit = Math.round(salariuTarifar * parametriiSalariu.getImpozit() / 100);
         float valoareTichete = Math.round(parametriiSalariu.getValtichet() * nrTichete);
         int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
-        int totalDrepturi = getTotaldrepturi(contract, valoareTichete, parametriiSalariu, nrPersoaneIntretinere); // already rounded
+        int restPlata = getRestplata(contract, valoareTichete, parametriiSalariu, nrPersoaneIntretinere); // already rounded
 
 
-        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, zileLucratoare, cas, cass, cam, impozit, valoareTichete, totalDrepturi, nrPersoaneIntretinere );
+        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, zileLucratoare, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere );
     }
 
 }

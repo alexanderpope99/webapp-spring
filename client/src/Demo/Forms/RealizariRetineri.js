@@ -161,6 +161,13 @@ class RealizariRetineri extends React.Component {
       zileconeplatit: data.zileconeplatit,
       zilec: data.zilec,
       orelucrate: data.orelucrate,
+
+      totaldrepturi: contract.salariutarifar, // TODO
+      cas: data.cas,
+      cass: data.cass,
+      valoaretichete: data.valoaretichete,
+      impozit: data.impozit,
+      restplata: data.restplata,
     });
   }
 
@@ -311,7 +318,7 @@ class RealizariRetineri extends React.Component {
                     <Col md={12}>
                       <Form.Group id="valtichete">
                         <Form.Label>Valoare tichete</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.tichete} />
+                        <Form.Control type="number" disabled value={this.state.valoaretichete} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
