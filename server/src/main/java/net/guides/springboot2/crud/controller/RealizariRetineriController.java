@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.services.RealizariRetineriService;
-import net.guides.springboot2.crud.services.TicheteService;
 
 
 @RestController

@@ -137,7 +137,7 @@ class EditPersoana extends React.Component {
       () => {
         this.setState(
           {
-            selectednume: this.state.id === null ? '-' : this.getNumeintregById(this.state.id),
+            selectednume: this.state.id ? '-' : this.getNumeintregById(this.state.id),
           },
           this.fillForm
         );
@@ -161,7 +161,7 @@ class EditPersoana extends React.Component {
       if (nume.id == id) return nume.nume;
     }
 
-    return -1;
+    return '-';
   }
 
   getTipJudet(tipJudet) {
@@ -473,7 +473,7 @@ class EditPersoana extends React.Component {
                     onChange={(e) =>
                       this.setState(
                         {
-                          selectednume: e.target.value,
+                          selectednume: e.target.value || '-',
                           id: this.getIdByNumeintreg(e.target.value),
                         },
                         this.fillForm
