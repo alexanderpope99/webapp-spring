@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +34,8 @@ public class ParametriiSalariuController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
-
-        return ResponseEntity.ok().body(parametriiSalariu);
+    public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") Long id) {
+        return parametriiSalariuRepository.findById(id);
     }
 
     @PostMapping

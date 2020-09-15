@@ -31,7 +31,7 @@ public class PersoanaIntretinere {
     @Column(name = "coasigurat")
     private Boolean coasigurat;
     @Column(name = "idangajat")
-    private Long idaangajat;
+    private Long idangajat;
 
     public PersoanaIntretinere() { }
 
@@ -44,7 +44,7 @@ public class PersoanaIntretinere {
         this.gradinvaliditate = gradinvaliditate;
         this.intretinut = intretinut;
         this.coasigurat = coasigurat;
-        this.idaangajat = idangajat;
+        this.idangajat = idangajat;
     }
 
     @Id
@@ -71,8 +71,8 @@ public class PersoanaIntretinere {
     public String getGradinvaliditate() {
         return gradinvaliditate;
     }
-    public Long getIdaangajat() {
-        return idaangajat;
+    public Long getIdangajat() {
+        return idangajat;
     }
     public Boolean getIntretinut() {
         return intretinut;
@@ -99,8 +99,8 @@ public class PersoanaIntretinere {
     public void setGradinvaliditate(String gradinvaliditate) {
         this.gradinvaliditate = gradinvaliditate;
     }
-    public void setIdaangajat(Long idaangajat) {
-        this.idaangajat = idaangajat;
+    public void setIdangajat(Long idangajat) {
+        this.idangajat = idangajat;
     }
     public void setIntretinut(Boolean intretinut) {
         this.intretinut = intretinut;
