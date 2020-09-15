@@ -25,7 +25,7 @@ public class Contract {
     private Boolean functiedebaza;
     private Boolean calculdeduceri;
     private Boolean studiisuperioare;
-    private String normalucru;
+    private Integer normalucru;
     private Double salariutarifar;
     private String monedasalariu;
     private String modplata;
@@ -52,7 +52,7 @@ public class Contract {
 
     }
 
-    public Contract(String tip, String nr, String marca, Date data, Date dataincepere, Integer idpunctlucru, Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, String normalucru, Double salariutarifar, String monedasalariu, String modplata, String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
+    public Contract(String tip, String nr, String marca, Date data, Date dataincepere, Integer idpunctlucru, Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Double salariutarifar, String monedasalariu, String modplata, String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
         this.tip = tip;
         this.nr = nr;
         this.marca = marca;
@@ -205,11 +205,11 @@ public class Contract {
     }
 
     @Column(name="normalucru")
-    public String getNormalucru() {
+    public Integer getNormalucru() {
         return normalucru;
     }
 
-    public void setNormalucru(String normalucru) {
+    public void setNormalucru(Integer normalucru) {
         this.normalucru = normalucru;
     }
 

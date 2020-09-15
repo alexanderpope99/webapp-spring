@@ -28,15 +28,12 @@ public class RealizariRetineriService {
         return contract.getId();
     }
 
-    public int getNrTichete(int luna, int an, long idcontract) {
-        return ticheteService.getNrTichete(luna, an, idcontract);
-    }
-
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) {
-      int nrTichete = getNrTichete(luna, an, idcontract);
+      int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
       int zileCO = coService.getZileCO(luna, an, idcontract);
       int zileCM = cmService.getZileCM(luna, an, idcontract);
-      return new RealizariRetineri(nrTichete, zileCO, zileCM);
+      int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
+      return new RealizariRetineri(nrTichete, zileCO, zileCM, zileCONeplatit);
     }
 
 }

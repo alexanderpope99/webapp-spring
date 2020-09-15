@@ -48,9 +48,10 @@ class RealizariRetineri extends React.Component {
       orelucrate: '',
       nrtichete: '',
       zilecm: '',
+      zileco: '',
+      zileconeplatit: '',
       zilec: '',
       oresuplimentare: '',
-      zilelibere: '',
       zileinvoire: '',
       primabruta: '',
     };
@@ -100,7 +101,14 @@ class RealizariRetineri extends React.Component {
       this.clearForm();
       return;
     }
-    // get date contrat
+    // get contract
+    const contract = await fetch(`http://localhost:5000/contract/idp=${idpersoana}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => (res.ok ? res.json() : null))
+      .catch((err) => console.error(err));
+    console.log('contract:', contract);
+      // get date realizariretineri
     const data = await fetch(
       `http://localhost:5000/realizariretineri/idp=${idpersoana}&mo=${luna}&y=${an}`,
       {
@@ -108,15 +116,19 @@ class RealizariRetineri extends React.Component {
         headers: { 'Content-Type': 'application/json' },
       }
     )
-      .then((res) => {
-        if (res.ok) return res.json();
-      })
+      .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
-    console.log(data);
-    this.setState({ 
-      nrtichete: data.nrtichete, 
-      zilecm: data.zilecm, 
-      zilec: data.zilec 
+    console.log('data:', data);
+    this.setState({
+      functie: contract.functie,
+      duratazilucru: contract.duratazilucru,
+      normalucru: contract.normalucru,
+
+      nrtichete: data.nrtichete,
+      zilecm: data.zilecm,
+      zileco: data.zileco,
+      zileconeplatit: data.zileconeplatit,
+      zilec: data.zilec,
     });
   }
 
@@ -136,9 +148,10 @@ class RealizariRetineri extends React.Component {
       orelucrate: '',
       nrtichete: '',
       zilecm: '',
+      zileco: '',
+      zileconeplatit: '',
       zilec: '',
       oresuplimentare: '',
-      zilelibere: '',
       zileinvoire: '',
       primabruta: '',
     });
@@ -315,7 +328,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.contract.functie || ''}
+                          value={this.state.functie || ''}
                         />
                       </Form.Group>
                     </Col>
@@ -325,7 +338,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="number"
                           disabled
-                          value={this.state.contract.duratazilucru || ''}
+                          value={this.state.duratazilucru || ''}
                         />
                       </Form.Group>
                     </Col>
@@ -335,7 +348,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.contract.normalucru || ''}
+                          value={this.state.normalucru || ''}
                         />
                       </Form.Group>
                     </Col>
@@ -345,7 +358,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.contract.salaritarifar || ''}
+                          value={this.state.salaritarifar || ''}
                         />
                       </Form.Group>
                     </Col>
@@ -377,27 +390,17 @@ class RealizariRetineri extends React.Component {
                     </Col>
                     <Col md={6}>
                       <Form.Group id="zilec">
-                        <Form.Label>Zile concediu total</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.zilec} />
+                        <Form.Label>Zile concediu odihna</Form.Label>
+                        <Form.Control type="text" disabled value={this.state.zileco} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      <Form.Group id="oresuplimentare">
-                        <Form.Label>Ore suplimentare</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.oresuplimentare || ''}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="zilelibere">
+                      <Form.Group id="zileconeplatit">
                         <Form.Label>Zile libere</Form.Label>
                         <Form.Control
-                          type="text"
-                          value={this.state.zilelibere || ''}
-                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
+                          type="number"
+                          value={this.state.zileconeplatit}
+                          onChange={(e) => this.setState({ zileconeplatit: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -408,6 +411,16 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           value={this.state.zileinvoire || ''}
                           onChange={(e) => this.setState({ zileinvoire: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="oresuplimentare">
+                        <Form.Label>Ore suplimentare</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.oresuplimentare || ''}
                         />
                       </Form.Group>
                     </Col>

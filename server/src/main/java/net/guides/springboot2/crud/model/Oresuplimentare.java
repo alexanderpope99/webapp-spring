@@ -20,18 +20,18 @@ public class Oresuplimentare {
     private Boolean includenormale;
     @Column(name = "total")
     private Double total;
-    @Column(name = "idcontract")
-    private Long idcontract;
+    @Column(name = "idstatsalariat")
+    private Long idstatsalariat;
 
 
     public Oresuplimentare() { }
 
-    public Oresuplimentare( Long nr, Double procent, Boolean includenormale, Double total, Long idcontract ) {
+    public Oresuplimentare( Long nr, Double procent, Boolean includenormale, Double total, Long idstatsalariat ) {
         this.nr = nr;
         this.procent = procent;
         this.includenormale = includenormale;
         this.total = total;
-        this.idcontract = idcontract;
+        this.idstatsalariat = idstatsalariat;
     }
 
     @Id
@@ -43,11 +43,11 @@ public class Oresuplimentare {
         this.id = id;
     }
 
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
+    public void setIdstatsalariat(Long idstatsalariat) {
+        this.idstatsalariat = idstatsalariat;
     }
-    public Long getIdcontract() {
-        return idcontract;
+    public Long getIdstatsalariat() {
+        return idstatsalariat;
     }
 
     public void setProcent(Double procent) {

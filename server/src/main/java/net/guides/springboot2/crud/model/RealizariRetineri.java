@@ -5,13 +5,15 @@ public class RealizariRetineri {
 
     private int nrtichete = 0;
     private int zileco = 0;
+    private int zileconeplatit = 0;
     private int zilecm = 0;
     private int zilec  = 0;
     public RealizariRetineri() { }
 
-    public RealizariRetineri( int nrtichete, int zileco, int zilecm ) {
+    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit ) {
         this.nrtichete = nrtichete;
         this.zileco = zileco;
+        this.zileconeplatit = zileconeplatit;
         this.zilecm = zilecm;
         this.zilec  = zileco + zilecm;
     }
@@ -29,6 +31,9 @@ public class RealizariRetineri {
     public int getZilec() {
       return zilec;
     }
+    public int getZileconeplatit() {
+      return zileconeplatit;
+    }
     
     // SETTERS
     public void setNrtichete(int nrtichete) {
@@ -42,6 +47,9 @@ public class RealizariRetineri {
     }
     public void setZilec(int zilec) {
       this.zilec = zilec;
+    }
+    public void setZileconeplatit(int zileconeplatit) {
+      this.zileconeplatit = zileconeplatit;
     }
 }
 
