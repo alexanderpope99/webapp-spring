@@ -1,19 +1,15 @@
 package net.guides.springboot2.crud.services;
 
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.controller.ParametriiSalariuController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.repository.ContractRepository;
-import net.guides.springboot2.crud.repository.DeduceriRepository;
 import net.guides.springboot2.crud.repository.ParametriiSalariuRepository;
-import net.guides.springboot2.crud.repository.PersoanaIntretinereRepository;
 
 @Service
 public class RealizariRetineriService {
@@ -38,8 +34,6 @@ public class RealizariRetineriService {
     private ContractRepository contractRepository;
     @Autowired
     private ParametriiSalariuRepository parametriiSalariuRepository;
-    @Autowired
-    private DeduceriRepository deduceriRepository;
 
     public long getIdContractByIdPersoana(long idpersoana)
             throws ResourceNotFoundException {
@@ -48,47 +42,50 @@ public class RealizariRetineriService {
         return contract.getId();
     }
 
-    public void getTotaldrepturi(Contract contract, int nrTichete) throws ResourceNotFoundException {
-        ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById((long)1).orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: "));
-
+    public int getTotaldrepturi(Contract contract, float valoareTichete, ParametriiSalariu parametriiSalariu, int nrPersoaneIntretinere) {
         float salariuTarifar = contract.getSalariutarifar();
-        float casSalariu = salariuTarifar * parametriiSalariu.getCas() / 100;
-        float cassSalariu = salariuTarifar * parametriiSalariu.getCass() / 100;
-        boolean platesteImpozit = contract.isCalculdeduceri();
+        float casSalariu = Math.round(salariuTarifar * parametriiSalariu.getCas() / 100);
+        float cassSalariu = Math.round(salariuTarifar * parametriiSalariu.getCass() / 100);
+        int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
+        
+        int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
         float impozit = parametriiSalariu.getImpozit() / 100;
-        float impozitSalariu = salariuTarifar * impozit;
-        float cam = salariuTarifar * parametriiSalariu.getCam() / 100;
-        boolean areFunctieDebaza = contract.isFunctiedebaza();
-        float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
-        String strPersoaneIntretinere = persoaneIntretinereService.getStrPersoaneIntretinere(contract.getId());
-        
-        Float deducere = (float) 0;
+        float deducere = (float) 0;
         if(salariuTarifar < 3600)
-            deducere = deduceriService.getDeducereBySalariu(salariuTarifar, strPersoaneIntretinere);
-        deducere = deducere == null ? 0 : deducere;
-        
+            deducere = deduceriService.getDeducereBySalariu(salariuTarifar, nrPersoaneIntretinere);
+
         float totalDrepturi = salariuTarifar - casSalariu - cassSalariu;
-        if(platesteImpozit) {
-            
-            if(areFunctieDebaza) {
-                impozitSalariu = (totalDrepturi + valoareTichete - deducere) * impozit;
-            }
-        }
+        
+        totalDrepturi -= platesteImpozit * 
+            Math.round(
+                (totalDrepturi + valoareTichete - deducere * areFunctieDebaza) * impozit
+            );
+
+        return Math.round(totalDrepturi);
     }
 
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
-      Contract contract = contractRepository.findById(idcontract).orElseThrow(() -> new ResourceNotFoundException("Contract not found for this idcontract :: " + idcontract));
+        Contract contract = contractRepository.findById(idcontract).orElseThrow(() -> new ResourceNotFoundException("Contract not found for this idcontract :: " + idcontract));
 
-      int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
-      int zileCO = coService.getZileCO(luna, an, idcontract);
-      int zileCM = cmService.getZileCM(luna, an, idcontract);
-      int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
-      int duratazilucru = contract.getNormalucru();
-      int zileLucratoare = zileService.getZileLucratoareInLunaAnul(luna, an);
+        ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById((long)1).orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: "));
 
-      getTotaldrepturi(contract, nrTichete);
-    
-      return new RealizariRetineri(nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, zileLucratoare);
+        int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+        int zileCO = coService.getZileCO(luna, an, idcontract);
+        int zileCM = cmService.getZileCM(luna, an, idcontract);
+        int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
+        int duratazilucru = contract.getNormalucru();
+        int zileLucratoare = zileService.getZileLucratoareInLunaAnul(luna, an);
+        float salariuTarifar = contract.getSalariutarifar();
+        float cas = Math.round(salariuTarifar * parametriiSalariu.getCas() / 100);
+        float cass = Math.round(salariuTarifar * parametriiSalariu.getCass() / 100);
+        float cam = Math.round(salariuTarifar * parametriiSalariu.getCam() / 100);
+        float impozit = Math.round(salariuTarifar * parametriiSalariu.getImpozit() / 100);
+        float valoareTichete = Math.round(parametriiSalariu.getValtichet() * nrTichete);
+        int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
+        int totalDrepturi = getTotaldrepturi(contract, valoareTichete, parametriiSalariu, nrPersoaneIntretinere); // already rounded
+
+
+        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, zileLucratoare, cas, cass, cam, impozit, valoareTichete, totalDrepturi, nrPersoaneIntretinere );
     }
 
 }

@@ -11,22 +11,21 @@ public class DeduceriService {
   @Autowired
   private DeduceriRepository deduceriRepository;
 
-  public float getDeducereBySalariu(float salariu, String strNrPersoaneIntretinere) {
+  public float getDeducereBySalariu(float salariu, int nrNrPersoaneIntretinere) {
     Deduceri deduceri = deduceriRepository.getDeducereBySalariu(salariu);
-    switch (strNrPersoaneIntretinere) {
-      case "zero":
+    switch (nrNrPersoaneIntretinere) {
+      case 0:
         return deduceri.getZero();
-      case "una":
+      case 1:
         return deduceri.getUna();
-      case "doua":
+      case 2:
         return deduceri.getDoua();
-      case "trei":
+      case 3:
         return deduceri.getDoua();
-      case "patru":
+      case 4:
         return deduceri.getPatru();
       default:
         return deduceri.getPatru();
     }
   }
-  
 }

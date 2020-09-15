@@ -223,11 +223,6 @@ class Contract extends React.Component {
 
     if (!this.hasRequired()) return;
 
-    for (const key in this.state) {
-      if (this.state[key] === '' || this.state[key] === "''" || this.state[key] === '-')
-        this.state[key] = null;
-    }
-
     var method = 'PUT';
     // if person is missing contract
     if (idcontract === null) {
@@ -297,7 +292,6 @@ class Contract extends React.Component {
         }).catch((err) => console.error(err));
       }
       console.log('idcontract:', contract.id);
-      return contract;
     } else return;
   }
 
