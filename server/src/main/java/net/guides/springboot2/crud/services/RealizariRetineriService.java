@@ -15,6 +15,8 @@ public class RealizariRetineriService {
     @Autowired
     private TicheteService ticheteService;
     @Autowired
+    private ZileService zileService;
+    @Autowired
     private COService coService;
     @Autowired
     private CMService cmService;
@@ -28,12 +30,17 @@ public class RealizariRetineriService {
         return contract.getId();
     }
 
-    public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) {
+    public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
+      Contract contract = contractRepository.findById(idcontract).orElseThrow(() -> new ResourceNotFoundException("Contract not found for this idcontract :: " + idcontract));
+
       int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
       int zileCO = coService.getZileCO(luna, an, idcontract);
       int zileCM = cmService.getZileCM(luna, an, idcontract);
       int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
-      return new RealizariRetineri(nrTichete, zileCO, zileCM, zileCONeplatit);
+      int duratazilucru = contract.getNormalucru();
+      int zileLucratoare = zileService.getZileLucratoareInLunaAnul(luna, an);
+
+      return new RealizariRetineri(nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, zileLucratoare);
     }
 
 }

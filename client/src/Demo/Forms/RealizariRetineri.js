@@ -20,6 +20,7 @@ class RealizariRetineri extends React.Component {
   constructor() {
     super();
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
+    this.numberWithCommas = this.numberWithCommas.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -56,10 +57,38 @@ class RealizariRetineri extends React.Component {
       primabruta: '',
     };
   }
+  clearForm() {
+    this.setState({
+      totaldrepturi: '',
+      cas: '',
+      cass: '',
+      valoaretichete: '',
+      impozit: '',
+      restplata: '',
+
+      functie: '',
+      duratazilucru: '',
+      normalucru: '',
+      salariubrut: '',
+      orelucrate: '',
+      nrtichete: '',
+      zilecm: '',
+      zileco: '',
+      zileconeplatit: '',
+      zilec: '',
+      oresuplimentare: '',
+      zileinvoire: '',
+      primabruta: '',
+    });
+  }
 
   componentDidMount() {
     this.setCurrentYearMonth(); // modifies state.an, state.luna
     this.setPersoane(); // date personale, also fills lista_angajati
+  }
+
+  numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   setCurrentYearMonth() {
@@ -105,10 +134,11 @@ class RealizariRetineri extends React.Component {
     const contract = await fetch(`http://localhost:5000/contract/idp=${idpersoana}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-    }).then((res) => (res.ok ? res.json() : null))
+    })
+      .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
     console.log('contract:', contract);
-      // get date realizariretineri
+    // get date realizariretineri
     const data = await fetch(
       `http://localhost:5000/realizariretineri/idp=${idpersoana}&mo=${luna}&y=${an}`,
       {
@@ -121,39 +151,16 @@ class RealizariRetineri extends React.Component {
     console.log('data:', data);
     this.setState({
       functie: contract.functie,
-      duratazilucru: contract.duratazilucru,
-      normalucru: contract.normalucru,
+      duratazilucru: contract.normalucru,
+      normalucru: data.norma, // zile lucratoare in luna respectiva
+      salariubrut: contract.salariutarifar,
 
       nrtichete: data.nrtichete,
       zilecm: data.zilecm,
       zileco: data.zileco,
       zileconeplatit: data.zileconeplatit,
       zilec: data.zilec,
-    });
-  }
-
-  clearForm() {
-    this.setState({
-      totaldrepturi: '',
-      cas: '',
-      cass: '',
-      valoaretichete: '',
-      impozit: '',
-      restplata: '',
-
-      functie: '',
-      duratazilucru: '',
-      normalucru: '',
-      salariubrut: '',
-      orelucrate: '',
-      nrtichete: '',
-      zilecm: '',
-      zileco: '',
-      zileconeplatit: '',
-      zilec: '',
-      oresuplimentare: '',
-      zileinvoire: '',
-      primabruta: '',
+      orelucrate: data.orelucrate,
     });
   }
 
@@ -217,9 +224,12 @@ class RealizariRetineri extends React.Component {
                   as="select"
                   value={this.state.luna.nume}
                   onChange={(e) =>
-                    this.setState({
-                      luna: { nume: e.target.value, nr: e.target.options.selectedIndex },
-                    })
+                    this.setState(
+                      {
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex },
+                      },
+                      this.fillForm
+                    )
                   }
                 >
                   {luni}
@@ -236,7 +246,7 @@ class RealizariRetineri extends React.Component {
                     })
                   }
                 >
-                  {ani};
+                  {ani}
                 </FormControl>
               </Col>
             </Row>
@@ -325,11 +335,7 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="functie">
                         <Form.Label>Funcție</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.functie || ''}
-                        />
+                        <Form.Control type="text" disabled value={this.state.functie || ''} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -345,11 +351,7 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="normazilucru">
                         <Form.Label>Normă lucru</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.normalucru || ''}
-                        />
+                        <Form.Control type="text" disabled value={this.state.normalucru || ''} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -358,7 +360,11 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.salaritarifar || ''}
+                          value={
+                            this.state.salariubrut
+                              ? this.numberWithCommas(this.state.salariubrut)
+                              : ''
+                          }
                         />
                       </Form.Group>
                     </Col>
