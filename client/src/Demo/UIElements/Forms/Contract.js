@@ -16,8 +16,8 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 //import { isNumeric } from 'jquery';
 
 class Contract extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleClose = this.handleClose.bind(this);
     this.onChangeCentrucost = this.onChangeCentrucost.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -36,10 +36,10 @@ class Contract extends React.Component {
       departament: '',
       deduceri: true,
       studiiSuperioare: false,
-      functieBaza: false,
-      normăLucru: 'Normă întreagă', //text
+      functieBaza: true,
+      normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
       monedăSalariu: 'RON', //text
-      salariu: 0,
+      salariu: '',
       modPlată: 'Nespecificat', //text
       condițiiMuncă: 'Smechere', //text
       sindicat: false,
@@ -80,11 +80,11 @@ class Contract extends React.Component {
       departament: '',
       deduceri: true,
       studiiSuperioare: false,
-      functieBaza: false,
-      normăLucru: 'Normă întreagă', //text
+      functieBaza: true,
+      normăLucru: {nrOre: 8, nume: 'Normă întreagă'}, //text
       monedăSalariu: 'RON', //text
-      salariu: 0,
-      modPlată: 'Transfer bancar', //text
+      salariu: '',
+      modPlată: 'Nespecificat', //text
       condițiiMuncă: 'Smechere', //text
       sindicat: false,
       cotizațieSindicat: '',
@@ -107,6 +107,29 @@ class Contract extends React.Component {
       show: false,
       modalMessage: '', //text
     });
+  }
+
+  getNumeNorma(nrOre) {
+    switch (nrOre) {
+      case 8:
+        return 'Normă întreagă'
+        case 7:
+          return 'Normă parțială 7/8'
+          case 6:
+        return 'Normă parțială 6/8'
+        case 5:
+        return 'Normă parțială 5/8'
+        case 4:
+        return 'Normă parțială 4/8'
+        case 3:
+        return 'Normă parțială 3/8'
+        case 2:
+        return 'Normă parțială 2/8'
+        case 1:
+        return 'Normă parțială 1/8'
+      default:
+        break;
+    }
   }
 
   fillForm(contract, idangajat) {
@@ -137,7 +160,7 @@ class Contract extends React.Component {
           functieBaza: contract.functiedebaza,
           deduceri: contract.calculdeduceri,
           studiiSuperioare: contract.studiisuperioare,
-          normăLucru: contract.normalucru,
+          normăLucru: {nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru)},
           salariu: contract.salariutarifar,
           monedăSalariu: contract.monedasalariu,
           modPlată: contract.modplata,
@@ -204,15 +227,6 @@ class Contract extends React.Component {
 
     if (!this.hasRequired()) return;
 
-    for (const key in this.state) {
-      if (
-        this.state[key] === '' ||
-        this.state[key] === "''" ||
-        this.state[key] === '-'
-      )
-        this.state[key] = null;
-    }
-
     var method = 'PUT';
     // if person is missing contract
     if (idcontract === null) {
@@ -233,7 +247,7 @@ class Contract extends React.Component {
       functiedebaza: this.state.functieBaza,
       calculdeduceri: this.state.deduceri,
       studiisuperioare: this.state.studiiSuperioare,
-      normalucru: this.state.normăLucru,
+      normalucru: this.state.normăLucru.nrOre,
       salariutarifar: this.state.salariu,
       monedasalariu: this.state.monedăSalariu,
       modplata: this.state.modPlată,
@@ -289,7 +303,6 @@ class Contract extends React.Component {
         }).catch((err) => console.error(err));
       }
       console.log('idcontract:', contract.id);
-      return contract;
     } else return;
   }
 
@@ -508,9 +521,9 @@ class Contract extends React.Component {
                 <Form.Label>Normă de lucru</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.normăLucru}
+                  value={this.state.normăLucru.nume}
                   onChange={(e) => {
-                    this.setState({ normăLucru: e.target.value });
+                    this.setState({ normăLucru: {nrOre: 8 - e.target.options.selectedIndex, nume: e.target.value }}, () => console.log(this.state.normăLucru));
                   }}
                 >
                   <option>Normă întreagă</option>
@@ -532,6 +545,7 @@ class Contract extends React.Component {
                 <InputGroup>
                   <FormControl
                     type="number"
+                    required
                     placeholder="Salariu"
                     aria-label="Salariu"
                     aria-describedby="basic-addon2"

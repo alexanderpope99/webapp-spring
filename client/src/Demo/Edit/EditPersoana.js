@@ -14,6 +14,7 @@ import {
 import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
+import { getSocSel } from '../Resources/socsel';
 
 class EditPersoana extends React.Component {
   constructor(props) {
@@ -40,6 +41,8 @@ class EditPersoana extends React.Component {
     // console.log(IdFromURL);
 
     this.state = {
+      socsel: getSocSel(),
+
       show: false,
       modalMessage: '',
 
@@ -118,7 +121,7 @@ class EditPersoana extends React.Component {
   }
 
   async getNumeintreg() {
-    const persoane = await fetch('http://localhost:5000/persoana', {
+    const persoane = await fetch(`http://localhost:5000/persoana/ids=${this.state.socsel.id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -134,10 +137,7 @@ class EditPersoana extends React.Component {
       () => {
         this.setState(
           {
-            selectednume:
-              this.state.id === null
-                ? '-'
-                : this.getNumeintregById(this.state.id),
+            selectednume: this.state.id ? '-' : this.getNumeintregById(this.state.id),
           },
           this.fillForm
         );
@@ -161,7 +161,7 @@ class EditPersoana extends React.Component {
       if (nume.id == id) return nume.nume;
     }
 
-    return -1;
+    return '-';
   }
 
   getTipJudet(tipJudet) {
@@ -323,7 +323,7 @@ class EditPersoana extends React.Component {
 
     // persoana nu are adresa asociata
     if (this.state.idadresa === null) {
-      // daca se completeaza, adauga in DB
+      // daca se completeaza -> adauga in DB | daca nu -> nimic
       if (
         this.state.adresacompleta !== null ||
         this.state.localitate !== null ||
@@ -344,6 +344,7 @@ class EditPersoana extends React.Component {
         console.log('added adresa, id =', idadresa);
       }
     } else {
+      // persoana are adresa => se actualizeaza
       let adresa_body = {
         adresa: this.state.adresacompleta,
         localitate: this.state.localitate,
@@ -359,12 +360,8 @@ class EditPersoana extends React.Component {
 
     // persoana nu are actidentitate
     if (this.state.idactidentitate === null) {
-      // daca se completeaza actidentitate, adauga in baza de date
-      if (
-        this.state.serie !== null ||
-        this.state.numar !== null ||
-        this.state.cnp !== null
-      ) {
+      // daca se completeaza actidentitate -> adauga in baza de date | daca nu -> nimic
+      if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
         let buletin_body = {
           cnp: this.state.cnp,
           tip: this.state.tipact,
@@ -486,7 +483,7 @@ class EditPersoana extends React.Component {
                     onChange={(e) =>
                       this.setState(
                         {
-                          selectednume: e.target.value,
+                          selectednume: e.target.value || '-',
                           id: this.getIdByNumeintreg(e.target.value),
                         },
                         this.fillForm

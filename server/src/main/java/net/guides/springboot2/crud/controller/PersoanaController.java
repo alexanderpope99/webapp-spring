@@ -26,19 +26,15 @@ public class PersoanaController {
     @Autowired
     private PersoanaRepository persoanaRepository;
 
-    @GetMapping("/alf")
+    @GetMapping("/sortbyid")
     public List<Persoana> getAllPersoaneAlphabetically() {
-        return persoanaRepository.findAll(Sort.by(Sort.Order.asc("nume"), Sort.Order.asc("prenume")));
+        return persoanaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping
     public List<Persoana> getAllPersoane() {
-        return persoanaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
-
-    @GetMapping("/c")
-    public List<Persoana> getAllWithContract() {
-      return persoanaRepository.findWithContract();
+        return persoanaRepository.findAll(Sort.by(Sort.Order.asc("nume"), Sort.Order.asc("prenume")));
+        
     }
 
     @GetMapping("{id}")
@@ -48,6 +44,16 @@ public class PersoanaController {
                 .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
 
         return ResponseEntity.ok().body(persoana);
+    }
+
+    @GetMapping("ids={id}&c")
+    public List<Persoana> getPersoanaByIdsocietate(@PathVariable(value = "id") Long idsocietate) {
+        return persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
+    }
+
+    @GetMapping("ids={id}")
+    public List<Persoana> getPersoanaByIdsocietateNoC(@PathVariable(value = "id") Long idsocietate) {
+        return persoanaRepository.getPersoanaByIdsocietateNoContract(idsocietate);
     }
 
     @PostMapping

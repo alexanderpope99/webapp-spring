@@ -8,7 +8,6 @@ import Loader from './layout/Loader';
 import Aux from '../hoc/_Aux';
 import ScrollToTop from './layout/ScrollToTop';
 import routes from '../route';
-import SocietateContext from '../Demo/Context/SocietateContext';
 
 const AdminLayout = Loadable({
   loader: () => import('./layout/AdminLayout'),
@@ -16,16 +15,6 @@ const AdminLayout = Loadable({
 });
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      societate_selectata: '',
-      changeSelected: (newSelect) => {
-        this.setState({ societate_selectata: newSelect });
-      },
-    };
-  }
-
   render() {
     const menu = routes.map((route, index) => {
       return route.component ? (
@@ -41,7 +30,6 @@ class App extends Component {
 
     return (
       <Aux>
-        <SocietateContext.Provider value={this.state}>
           <ScrollToTop>
             <Suspense fallback={<Loader />}>
               <Switch>
@@ -50,7 +38,6 @@ class App extends Component {
               </Switch>
             </Suspense>
           </ScrollToTop>
-        </SocietateContext.Provider>
       </Aux>
     );
   }

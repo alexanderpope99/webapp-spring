@@ -27,6 +27,8 @@ public class Societate {
     @Column(name = "email")
     private String email;
 
+    private Long selected;
+
 
     public Societate() { }
 
@@ -48,53 +50,56 @@ public class Societate {
         this.id = id;
     }
 
-    public String getNume() {
-        return nume;
-    }
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
-    public Long getIdcaen() {
-        return idcaen;
-    }
-    public void setIdcaen(Long idcaen) {
-        this.idcaen = idcaen;
-    }
-
+    // GETTERS
     public Double getCapsoc() {
         return capsoc;
     }
-    public void setCapsoc(Double capsoc) {
-        this.capsoc = capsoc;
-    }
-
     public String getCif() {
         return cif;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public Long getIdadresa() {
+        return idadresa;
+    }
+    public Long getIdcaen() {
+        return idcaen;
+    }
+    public String getNume() {
+        return nume;
+    }
+    public String getRegcom() {
+        return regcom;
+    }
+    public Long getSelected() {
+        return selected;
+    }
+
+    // SETTERS
+    public void setCapsoc(Double capsoc) {
+        this.capsoc = capsoc;
     }
     public void setCif(String cif) {
         this.cif = cif;
     }
-    
-    public String getEmail() {
-        return email;
-    }
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getIdadresa() {
-        return idadresa;
     }
     public void setIdadresa(Long idadresa) {
         this.idadresa = idadresa;
     }
-    
-    public String getRegcom() {
-        return regcom;
+    public void setIdcaen(Long idcaen) {
+        this.idcaen = idcaen;
+    }
+    public void setNume(String nume) {
+        this.nume = nume;
     }
     public void setRegcom(String regcom) {
         this.regcom = regcom;
+    }
+    public void setSelected(Long selected) {
+        this.selected = selected;
     }
 }
 

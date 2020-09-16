@@ -9,14 +9,13 @@ public class TicheteService {
 
     @Autowired
     private ZileService zileService;
-
+    
     public int getNrTichete(int luna, int an, long idcontract) {
         int zileSarbatori = 0;
         int zileLibere = zileService.getZileLibereInLunaAnul(luna, an, idcontract);
-        System.out.println(zileLibere);
         int wd = zileService.getZileLucratoareInLunaAnul(luna, an);
         return wd - zileLibere - zileSarbatori;
-
     }
+
     
 }  // class

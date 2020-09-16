@@ -2,10 +2,11 @@ import React from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 
 import { judete, sectoare } from '../../Resources/judete';
+import { getSocSel } from '../../Resources/socsel';
 
 class Persoana extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.onChangeLocalitate = this.onChangeLocalitate.bind(this);
@@ -16,6 +17,8 @@ class Persoana extends React.Component {
 
     // PostgreSQL uses the  yyyy-mm-dd
     this.state = {
+      socsel: getSocSel(),
+
       show: false,
       modalMessage: '',
       capitala: 'Județ',
@@ -48,6 +51,8 @@ class Persoana extends React.Component {
 
   clearFields(e) {
     this.setState({
+      socsel: getSocSel(),
+
       show: false,
       modalMessage: '',
       capitala: 'Județ',
@@ -147,16 +152,12 @@ class Persoana extends React.Component {
     await fetch('http://localhost:5000/angajat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idpersoana: idpersoana }),
+      body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
     }).catch((err) => console.error(err));
   }
 
   async onSubmit(e) {
-    try {
-      e.preventDefault();
-    } catch (err) {
-      console.log(err);
-    }
+    e.preventDefault();
 
     if (!this.hasRequired()) return;
 
@@ -167,7 +168,7 @@ class Persoana extends React.Component {
     var actidentitate = null,
       adresa = null;
 
-    // query only if any adrese fields is filled
+    // POST only if any adrese fields is filled
     if (
       this.state.adresacompleta !== null ||
       this.state.localitate !== null ||
@@ -187,7 +188,7 @@ class Persoana extends React.Component {
       console.log('idadresa:', adresa.id);
     }
 
-    // query only if any actitentitate field is filled
+    // POST only if any actitentitate field is filled
     if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
       const buletin_body = {
         cnp: this.state.cnp,
@@ -276,7 +277,7 @@ class Persoana extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        
+
         <Form onSubmit={this.onSubmit}>
           <Row>
             <Col md={3}>

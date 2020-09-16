@@ -1,11 +1,14 @@
 import React from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
-import SocietateContext from '../Context/SocietateContext';
+
+import { getSocSel, setSocSel } from '../Resources/socsel';
 
 class Societati extends React.Component {
   /*
-    TODO\
+    TODO
+    * selecteaza societate la fiecare adaugare/citire care are legatura cu societeatea
+    * : adauga persoana | lista angajati | editeaza angajat | reailzari retineri
     * on click "Editeaza" -> redirect to Edit societate page (same as persoane)
     * on click "Sterge" -> prompt confirm, delete only on user confirmation
   */
@@ -18,7 +21,6 @@ class Societati extends React.Component {
 
   async componentDidMount() {
     await this.getNumeSocietati();
-    this.select(this.context.societate_selectata);
   }
 
   async getNumeSocietati() {
@@ -27,29 +29,36 @@ class Societati extends React.Component {
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => response.json());
     if (Array.isArray(societati)) {
-      societati.forEach((item) =>
+      societati.forEach((societate) =>
         this.setState({
-          [item.nume]: '.3',
+          [societate.nume]: { opacity: '.3', id: societate.id },
         })
       );
     }
+    let selected = getSocSel();
+    // console.log(selected);
+    if (selected) this.select(selected.nume);
   }
 
   unselectAll() {
-    for (let key in this.state) {
+    for (let nume_soc in this.state) {
       this.setState({
-        [key]: '.3',
-      })
+        [nume_soc]: { opacity: '.3', id: this.state[nume_soc].id },
+      });
     }
-      
   }
 
   select(nume_soc) {
     this.unselectAll();
-    if(nume_soc)
+    if (nume_soc) {
+      let id = this.state[nume_soc].id;
       this.setState({
-        [nume_soc]: '1',
+        [nume_soc]: { opacity: '1', id: id },
       });
+
+      setSocSel({id: id, nume: nume_soc});
+      console.log(getSocSel());
+    }
   }
 
   render() {
@@ -57,13 +66,16 @@ class Societati extends React.Component {
       <Col md={6} xl={4} key={nume_soc}>
         <Card
           style={{
-            opacity: this.state[nume_soc],
-            cursor: this.state[nume_soc] === '1' ? '' : 'pointer',
+            opacity: this.state[nume_soc].opacity,
+            cursor: this.state[nume_soc].opacity === '1' ? '' : 'pointer',
           }}
-          onClick={() => {
-            this.select(nume_soc);
-            this.context.changeSelected(nume_soc);
-          }}
+          onClick={
+            this.state[nume_soc].opacity === '.3'
+              ? () => {
+                  this.select(nume_soc);
+                }
+              : null
+          }
         >
           <Card.Body>
             <h3 className="d-flex justify-content-around pb-5">{nume_soc}</h3>
@@ -87,6 +99,5 @@ class Societati extends React.Component {
     );
   }
 }
-Societati.contextType = SocietateContext;
 
 export default Societati;

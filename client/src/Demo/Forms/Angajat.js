@@ -2,18 +2,14 @@ import React from 'react';
 import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
+import { getSocSel } from '../Resources/socsel';
 // import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
-import SocietateContext from '../Context/SocietateContext';
 
 /*
-  TODO: change how selected angajat is read: React Context,
-  * advantages: 1> on pill change -> component does not update 3 times
-  *             2> can check if component actually updated, prompt user to save changes or not
-
   ? how it works now:
   * fetch date contract when focusint tab 'contract'
   *
@@ -38,15 +34,17 @@ class Angajat extends React.Component {
     this.cm = React.createRef();
 
     this.state = {
+      socsel: getSocSel(),
+
       angajat: null,
       idpersoana: null,
       idcontract: null,
-      idsocietate: null,
+      idsocietate: getSocSel().id,
 
       show: false,
       modalMessage: '',
 
-      key: 'date-personale',
+      key: 'date-personale', // selected pill
     };
 
     window.scrollTo(0, 0);
@@ -61,7 +59,6 @@ class Angajat extends React.Component {
       show: false,
       modalMessage: '',
     });
-    // window.scrollTo(0, 0);
   }
 
   async getSelectedAngajatData() {
@@ -71,8 +68,6 @@ class Angajat extends React.Component {
       this.contract.current.clearFields();
       return;
     } else this.contract.current.setState({ buttonDisabled: false });
-
-    // this.setState({ idpersoana: idpersoana });
 
     // get angajat with selected id
     const angajat = await fetch(
@@ -89,6 +84,7 @@ class Angajat extends React.Component {
       angajat: angajat,
       idcontract: angajat.idcontract,
       idpersoana: angajat.idpersoana,
+      idsocietate: angajat.idsocietate,
     });
 
     return angajat;
@@ -171,7 +167,9 @@ class Angajat extends React.Component {
         </Modal>
         <Row>
           <Col>
-            <h5>Date angajat</h5>
+            <h5>
+              Date angajat {this.state.socsel.nume ? "- " + this.state.socsel.nume : ""}
+            </h5>
 
             <hr />
             <Tabs
@@ -218,6 +216,5 @@ class Angajat extends React.Component {
     );
   }
 }
-Angajat.contextType = SocietateContext;
 
 export default Angajat;
