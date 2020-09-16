@@ -15,6 +15,7 @@ import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
+import { server } from '../Resources/server-address';
 
 class RealizariRetineri extends React.Component {
   constructor() {
@@ -104,7 +105,7 @@ class RealizariRetineri extends React.Component {
 
   async setPersoane() {
     //* only people with contract <- done on backend
-    const persoane = await fetch(`http://localhost:5000/persoana/ids=${this.state.socsel.id}&c`, {
+    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -131,7 +132,7 @@ class RealizariRetineri extends React.Component {
       return;
     }
     // get contract
-    const contract = await fetch(`http://localhost:5000/contract/idp=${idpersoana}`, {
+    const contract = await fetch(`${server.address}/contract/idp=${idpersoana}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -140,7 +141,7 @@ class RealizariRetineri extends React.Component {
     console.log('contract:', contract);
     // get date realizariretineri
     const data = await fetch(
-      `http://localhost:5000/realizariretineri/idp=${idpersoana}&mo=${luna}&y=${an}`,
+      `${server.address}/realizariretineri/idp=${idpersoana}&mo=${luna}&y=${an}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

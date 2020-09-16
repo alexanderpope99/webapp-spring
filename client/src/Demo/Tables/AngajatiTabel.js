@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import MaterialTable from 'material-table';
 
 import Aux from '../../hoc/_Aux';
+import { server } from '../Resources/server-address';
 
 class AngatjatiTabel extends React.Component {
   constructor() {
@@ -21,14 +22,14 @@ class AngatjatiTabel extends React.Component {
   }
 
   async deletePersoana(state) {
-    await fetch(`http://localhost:5000/persoana/${state.id}`, {
+    await fetch(`${server.address}/persoana/${state.id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
   async getData() {
-    const persoane = await fetch('http://localhost:5000/persoana', {
+    const persoane = await fetch(`${server.address}/persoana`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     }).then((persoane) => persoane.json());

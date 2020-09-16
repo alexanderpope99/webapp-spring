@@ -3,10 +3,12 @@ import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
+import { server } from '../Resources/server-address';
+
 
 class AddSocietate extends React.Component {
   constructor(props) {
-    super(props);
+    super();
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeLocalitate = this.onChangeLocalitate.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -85,7 +87,7 @@ class AddSocietate extends React.Component {
     var caen_id = null;
     if (this.state.idcaen !== null) {
       caen_id = await fetch(
-        `http://192.168.2.159:5000/caen/${this.state.idcaen}`,
+        `${server.address}/caen/${this.state.idcaen}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -111,7 +113,7 @@ class AddSocietate extends React.Component {
         tara: null,
       };
       // console.log(JSON.stringify(adresa_body));
-      adr_id = await fetch('http://localhost:5000/adresa', {
+      adr_id = await fetch(`${server.address}/adresa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adresa_body),
@@ -130,7 +132,7 @@ class AddSocietate extends React.Component {
       telefon: this.state.telefon,
     };
     // ADD SOCIETATE TO DATABASE
-    await fetch('http://localhost:5000/societate', {
+    await fetch(`${server.address}/societate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(societate_body),

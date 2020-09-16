@@ -10,9 +10,11 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
+import { server } from '../Resources/server-address';
+
 class PersoaneTabel extends React.Component {
   constructor(props) {
-    super(props);
+    super();
 
     this.onRefresh = this.onRefresh.bind(this);
 
@@ -29,7 +31,7 @@ class PersoaneTabel extends React.Component {
   deletePersoana(id, nume, prenume) {
     // id = id.replace('"', '');
     // console.log(id);
-    fetch(`http://localhost:5000/persoana/${id}`, {
+    fetch(`${server.address}/persoana/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -121,7 +123,7 @@ class PersoaneTabel extends React.Component {
   }
 
   async onRefresh() {
-    const persoane = await fetch('http://localhost:5000/persoana', {
+    const persoane = await fetch(`${server.address}/persoana`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),

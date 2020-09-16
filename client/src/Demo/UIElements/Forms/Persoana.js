@@ -3,6 +3,7 @@ import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 
 import { judete, sectoare } from '../../Resources/judete';
 import { getSocSel } from '../../Resources/socsel';
+import { server } from '../../Resources/server-address';
 
 class Persoana extends React.Component {
   constructor() {
@@ -149,7 +150,7 @@ class Persoana extends React.Component {
   }
 
   async createAngajat(idpersoana) {
-    await fetch('http://localhost:5000/angajat', {
+    await fetch(`${server.address}/angajat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
@@ -180,7 +181,7 @@ class Persoana extends React.Component {
         judet: this.state.judet,
         tara: null,
       };
-      adresa = await fetch('http://localhost:5000/adresa', {
+      adresa = await fetch(`${server.address}/adresa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adresa_body),
@@ -202,7 +203,7 @@ class Persoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      actidentitate = await fetch('http://localhost:5000/actidentitate', {
+      actidentitate = await fetch(`${server.address}/actidentitate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(buletin_body),
@@ -222,7 +223,7 @@ class Persoana extends React.Component {
       cnp: this.state.cnp,
     };
 
-    const persoana = await fetch('http://localhost:5000/persoana', {
+    const persoana = await fetch(`${server.address}/persoana`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(persoana_body),

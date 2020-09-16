@@ -3,9 +3,11 @@ import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 
+import { server } from '../Resources/server-address';
+
 class AddUser extends React.Component {
   constructor(props) {
-    super(props);
+    super();
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
@@ -54,7 +56,7 @@ class AddUser extends React.Component {
       societateselectată: this.state.societateselectată,
     };
     // ADD User TO DATABASE
-    await fetch('http://localhost:5000/user', {
+    await fetch(`${server.address}/user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user_body),

@@ -15,10 +15,11 @@ import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { getSocSel } from '../Resources/socsel';
+import { server } from '../Resources/server-address';
 
 class EditPersoana extends React.Component {
   constructor(props) {
-    super(props);
+    super();
     this.hasRequired = this.hasRequired.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.getTipJudet = this.getTipJudet.bind(this);
@@ -121,7 +122,7 @@ class EditPersoana extends React.Component {
   }
 
   async getNumeintreg() {
-    const persoane = await fetch(`http://localhost:5000/persoana/ids=${this.state.socsel.id}`, {
+    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -242,13 +243,13 @@ class EditPersoana extends React.Component {
       return;
     }
 
-    const persoana = await fetch(`http://localhost:5000/persoana/${id}`, {
+    const persoana = await fetch(`${server.address}/persoana/${id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     }).then((persoana) => persoana.json());
 
     if (persoana.idadresa) {
-      await fetch(`http://localhost:5000/adresa/${persoana.idadresa}`, {
+      await fetch(`${server.address}/adresa/${persoana.idadresa}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -267,7 +268,7 @@ class EditPersoana extends React.Component {
 
     if (persoana.idactidentitate) {
       await fetch(
-        `http://192.168.2.159/actidentitate/${persoana.idactidentitate}`,
+        `${server.address}/actidentitate/${persoana.idactidentitate}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -335,7 +336,7 @@ class EditPersoana extends React.Component {
           judet: this.state.judet,
           tara: null,
         };
-        idadresa = await fetch('http://localhost:5000/adresa', {
+        idadresa = await fetch(`${server.address}/adresa`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(adresa_body),
@@ -351,7 +352,7 @@ class EditPersoana extends React.Component {
         judet: this.state.judet,
         tara: null,
       };
-      await fetch(`http://localhost:5000/adresa/${this.state.idadresa}`, {
+      await fetch(`${server.address}/adresa/${this.state.idadresa}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adresa_body),
@@ -373,7 +374,7 @@ class EditPersoana extends React.Component {
           loculnasterii: this.state.loculnasterii,
         };
 
-        idactidentitate = await fetch('http://localhost:5000/actidentitate', {
+        idactidentitate = await fetch(`${server.address}/actidentitate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(buletin_body),
@@ -397,7 +398,7 @@ class EditPersoana extends React.Component {
       };
 
       await fetch(
-        `http://192.168.2.159/actidentitate/${this.state.idactidentitate}`,
+        `${server.address}/actidentitate/${this.state.idactidentitate}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -418,7 +419,7 @@ class EditPersoana extends React.Component {
       cnp: this.state.cnp,
     };
     // update persoana
-    await fetch(`http://localhost:5000/persoana/${this.state.id}`, {
+    await fetch(`${server.address}/persoana/${this.state.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(persoana_body),
