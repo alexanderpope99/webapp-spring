@@ -42,11 +42,11 @@ public class ContractController {
     @GetMapping("idp={id}")
     public ResponseEntity<Contract> getContractByIdPersoana(@PathVariable(value = "id") Long idpersoana)
             throws ResourceNotFoundException {
-        Contract contract = contractRepository.findByIdPersoana(idpersoana)
-                .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
+        Contract contract = contractRepository.findByIdPersoana(idpersoana).orElseThrow(
+                () -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
         return ResponseEntity.ok().body(contract);
     }
-    
+
     @PostMapping
     public Contract createContract(@RequestBody Contract contract) {
         return contractRepository.save(contract);

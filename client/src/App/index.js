@@ -21,9 +21,7 @@ class App extends Component {
     this.state = {
       societate_selectata: '',
       changeSelected: (newSelect) => {
-        this.setState(
-          { societate_selectata: newSelect },
-        );
+        this.setState({ societate_selectata: newSelect });
       },
     };
   }

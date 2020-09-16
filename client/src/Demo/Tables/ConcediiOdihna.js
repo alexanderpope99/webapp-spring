@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Card,
-  Table,
-  Button,
-  Modal,
-  Form,
-} from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Refresh from '@material-ui/icons/Refresh';
 import Popover from '@material-ui/core/Popover';
@@ -72,11 +64,14 @@ class COTabel extends React.Component {
       return;
     }
     //? fetch must be with idcontract
-    const co = await fetch(`http://localhost:5000/co/idc=${this.state.angajat.idcontract}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(persoane),
-    })
+    const co = await fetch(
+      `http://192.168.2.159/co/idc=${this.state.angajat.idcontract}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        // body: JSON.stringify(persoane),
+      }
+    )
       .then((co) => (co.status !== 200 ? null : co.json()))
       .catch((err) => console.error('err', err));
 
@@ -210,7 +205,9 @@ class COTabel extends React.Component {
                     >
                       <Box p={2}>
                         <Typography>Sigur ștergeți concediul?</Typography>
-                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                        <Typography variant="caption">
+                          Datele nu mai pot fi recuperate
+                        </Typography>
                         <br />
                         <Button
                           variant="outline-danger"
@@ -299,7 +296,10 @@ class COTabel extends React.Component {
         </Modal>
 
         {/* CONFIRM Modal */}
-        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
+        <Modal
+          show={this.state.show_confirm}
+          onHide={() => this.handleClose(true)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
@@ -317,23 +317,27 @@ class COTabel extends React.Component {
             <Card>
               <Card.Header>
                 <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
-                  <Button
-                    variant={
-                      typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                    }
-                    disabled={typeof this.state.angajat === 'undefined'}
-                    size="sm"
-                    style={{ fontSize: '1.25rem', float: 'right' }}
-                    onClick={this.fillTable}
-                  >
-                    <Refresh className="m-0 p-0" />
-                    {/* ↺ */}
-                  </Button>
+                <Button
+                  variant={
+                    typeof this.state.angajat === 'undefined'
+                      ? 'outline-dark'
+                      : 'outline-primary'
+                  }
+                  disabled={typeof this.state.angajat === 'undefined'}
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
+                  onClick={this.fillTable}
+                >
+                  <Refresh className="m-0 p-0" />
+                  {/* ↺ */}
+                </Button>
 
                 <Button
                   variant={
-                      typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                    }
+                    typeof this.state.angajat === 'undefined'
+                      ? 'outline-dark'
+                      : 'outline-primary'
+                  }
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
                   disabled={typeof this.state.angajat === 'undefined'}
