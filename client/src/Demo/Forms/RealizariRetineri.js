@@ -56,6 +56,8 @@ class RealizariRetineri extends React.Component {
       oresuplimentare: '',
       zileinvoire: '',
       primabruta: '',
+
+      zilelibere: 0,
     };
   }
   clearForm() {
@@ -80,6 +82,8 @@ class RealizariRetineri extends React.Component {
       oresuplimentare: '',
       zileinvoire: '',
       primabruta: '',
+
+      zilelibere: 0,
     });
   }
 
@@ -194,18 +198,19 @@ class RealizariRetineri extends React.Component {
     );
   }
 
+  onSubmit(e) {
+    e.preventDefault();
+
+    // send ore suplimentare +
+  }
+
   render() {
-    const luni = months.map((luna_nume, index) => (
-      <option key={index}>{luna_nume}</option>
-    ));
+    const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
     const this_year = new Date().getFullYear();
-    const ani = [
-      this_year - 1,
-      this_year,
-      this_year + 1,
-      this_year + 2,
-    ].map((year) => <option key={year}>{year}</option>);
+    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
+      <option key={year}>{year}</option>
+    ));
 
     const nume_persoane_opt = this.state.lista_angajati.map((angajat) => (
       <option key={angajat.id} data-key={angajat.id}>
@@ -228,8 +233,8 @@ class RealizariRetineri extends React.Component {
         </Modal>
 
         <Card>
+          {/* LUNA + AN */}
           <Card.Header>
-            {/* LUNA + AN */}
             <Row>
               {/* LUNA */}
               <Col md={6}>
@@ -239,7 +244,7 @@ class RealizariRetineri extends React.Component {
                   onChange={(e) =>
                     this.setState(
                       {
-                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex },
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
                       },
                       this.fillForm
                     )
@@ -289,11 +294,7 @@ class RealizariRetineri extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button
-                    href="/forms/angajat"
-                    variant="outline-info"
-                    className="pb-0"
-                  >
+                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
                     <Add fontSize="small" className="m-0" />
                   </Button>
                 </OverlayTrigger>
@@ -302,7 +303,7 @@ class RealizariRetineri extends React.Component {
           </Card.Header>
 
           <Card.Body>
-            <Form>
+            <Form onSubmit={this.onSubmit}>
               <Row>
                 {/* LEFT */}
                 <Col md={6} className="border rounded pt-3">
@@ -310,49 +311,73 @@ class RealizariRetineri extends React.Component {
                     <Col md={12}>
                       <Form.Group id="totaltrepturi">
                         <Form.Label>Total drepturi</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.totaldrepturi
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.totaldrepturi
                               ? this.numberWithCommas(this.state.totaldrepturi)
-                              : ''} />
+                              : ''
+                          }
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="cas">
                         <Form.Label>CAS</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.cas
-                              ? this.numberWithCommas(this.state.cas)
-                              : ''} />
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : ''}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="cass">
                         <Form.Label>CASS</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.cass
-                              ? this.numberWithCommas(this.state.cass)
-                              : ''} />
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : ''}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="valoaretichete">
                         <Form.Label>Valoare tichete</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.valoaretichete
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.valoaretichete
                               ? this.numberWithCommas(this.state.valoaretichete)
-                              : ''} />
+                              : ''
+                          }
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="impozit">
                         <Form.Label>Impozit</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.impozit
-                              ? this.numberWithCommas(this.state.impozit)
-                              : ''} />
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : ''
+                          }
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="restplata">
                         <Form.Label>Rest de plată</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.restplata
-                              ? this.numberWithCommas(this.state.restplata)
-                              : ''} />
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.restplata ? this.numberWithCommas(this.state.restplata) : ''
+                          }
+                        />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -402,11 +427,7 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="orelucrate">
                         <Form.Label>Ore lucrate</Form.Label>
-                        <Form.Control
-                          type="number"
-                          disabled
-                          value={this.state.orelucrate || ''}
-                        />
+                        <Form.Control type="number" disabled value={this.state.orelucrate || ''} />
                       </Form.Group>
                     </Col>
 
@@ -438,8 +459,8 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Zile libere</Form.Label>
                         <Form.Control
                           type="number"
-                          value={this.state.zileconeplatit}
-                          onChange={(e) => this.setState({ zileconeplatit: e.target.value })}
+                          value={this.state.zilelibere}
+                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -469,13 +490,21 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           value={this.state.primabruta || ''}
-                          onChange={(e) =>
-                            this.setState({ primabruta: e.target.value })
-                          }
+                          onChange={(e) => this.setState({ primabruta: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
                   </Row>
+                </Col>
+
+                <Col md={12} className="m-0 ml-0 mt-3">
+                  <Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    type="submit"
+                  >
+                    Recalculează
+                  </Button>
                 </Col>
               </Row>
             </Form>

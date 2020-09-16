@@ -66,11 +66,11 @@ class AdminLayout extends Component {
                     <div className="page-wrapper">
                       <Suspense fallback={<Loader />}>
                         <Switch>
-                          {sessionStorage.getItem('logged') === 'true' ? (
-                            menu
-                          ) : (
+                          {/* {sessionStorage.getItem('logged') === 'true' ? ( */}
+                            {menu}
+                          {/* ) : (
                             <Redirect to="/auth/signin-1" />
-                          )}
+                          )} */}
                           <Redirect from="/" to={this.props.defaultPath} />
                         </Switch>
                       </Suspense>
