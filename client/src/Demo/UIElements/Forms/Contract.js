@@ -16,8 +16,8 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 //import { isNumeric } from 'jquery';
 
 class Contract extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleClose = this.handleClose.bind(this);
     this.onChangeCentrucost = this.onChangeCentrucost.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -36,10 +36,10 @@ class Contract extends React.Component {
       departament: '',
       deduceri: true,
       studiiSuperioare: false,
-      functieBaza: false,
-      normăLucru: {nrOre: 8, nume: 'Normă întreagă'}, //text
+      functieBaza: true,
+      normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
       monedăSalariu: 'RON', //text
-      salariu: 0,
+      salariu: '',
       modPlată: 'Nespecificat', //text
       condițiiMuncă: 'Smechere', //text
       sindicat: false,
@@ -80,10 +80,10 @@ class Contract extends React.Component {
       departament: '',
       deduceri: true,
       studiiSuperioare: false,
-      functieBaza: false,
+      functieBaza: true,
       normăLucru: {nrOre: 8, nume: 'Normă întreagă'}, //text
       monedăSalariu: 'RON', //text
-      salariu: 0,
+      salariu: '',
       modPlată: 'Nespecificat', //text
       condițiiMuncă: 'Smechere', //text
       sindicat: false,
@@ -534,6 +534,7 @@ class Contract extends React.Component {
                 <InputGroup>
                   <FormControl
                     type="number"
+                    required
                     placeholder="Salariu"
                     aria-label="Salariu"
                     aria-describedby="basic-addon2"

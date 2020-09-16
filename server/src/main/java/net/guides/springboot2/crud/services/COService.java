@@ -17,7 +17,7 @@ public class COService {
     private CORepository coRepository;
 
     public int getZileCONeplatite(int luna, int an, long idcontract) {
-        List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontract(idcontract);
+        List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
         if(concediiOdihnaNeplatite.size() == 0)
             return 0;
 

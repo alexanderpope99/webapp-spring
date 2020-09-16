@@ -35,31 +35,31 @@ public class RealizariRetineriService {
     @Autowired
     private ParametriiSalariuRepository parametriiSalariuRepository;
 
+    private float impozitSalariu = 0;
+
     public long getIdContractByIdPersoana(long idpersoana)
             throws ResourceNotFoundException {
         Contract contract = contractRepository.findByIdPersoana(idpersoana)
                 .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
         return contract.getId();
     }
-
-    public int getRestplata(Contract contract, float valoareTichete, ParametriiSalariu parametriiSalariu, int nrPersoaneIntretinere) {
-        float salariuTarifar = contract.getSalariutarifar();
-        float casSalariu = Math.round(salariuTarifar * parametriiSalariu.getCas() / 100);
-        float cassSalariu = Math.round(salariuTarifar * parametriiSalariu.getCass() / 100);
+    
+    public int getRestplata(Contract contract, float valoareTichete, ParametriiSalariu parametriiSalariu, int nrPersoaneIntretinere, float totalDrepturi) {
+        float casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
+        float cassSalariu = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
         int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
         
         int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
         float impozit = parametriiSalariu.getImpozit() / 100;
-        float deducere = (float) 0;
-        if(salariuTarifar < 3600)
-            deducere = deduceriService.getDeducereBySalariu(salariuTarifar, nrPersoaneIntretinere);
+        float deducere = 0;
+        if(totalDrepturi < 3600)
+            deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere);
 
-        float restPlata = salariuTarifar - casSalariu - cassSalariu;
+        float restPlata = totalDrepturi - casSalariu - cassSalariu;
+
+        this.impozitSalariu = (restPlata + valoareTichete - deducere * areFunctieDebaza) * impozit;
         
-        restPlata -= platesteImpozit * 
-            Math.round(
-                (restPlata + valoareTichete - deducere * areFunctieDebaza) * impozit
-            );
+        restPlata -= platesteImpozit * impozitSalariu;
 
         return Math.round(restPlata);
     }
@@ -70,22 +70,36 @@ public class RealizariRetineriService {
         ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById((long)1).orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: "));
 
         int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+
         int zileCO = coService.getZileCO(luna, an, idcontract);
-        int zileCM = cmService.getZileCM(luna, an, idcontract);
         int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
+        int zileCM = cmService.getZileCM(luna, an, idcontract);
+
+        int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
         int duratazilucru = contract.getNormalucru();
-        int zileLucratoare = zileService.getZileLucratoareInLunaAnul(luna, an);
+
+        int zileLucrate = norma - zileCO - zileCM;
+        int oreLucrate = zileLucrate * duratazilucru;
+        int zilePlatite = norma - zileCONeplatit;
+        // int orePlatite = zilePlatite * duratazilucru;
+        
         float salariuTarifar = contract.getSalariutarifar();
-        float cas = Math.round(salariuTarifar * parametriiSalariu.getCas() / 100);
-        float cass = Math.round(salariuTarifar * parametriiSalariu.getCass() / 100);
-        float cam = Math.round(salariuTarifar * parametriiSalariu.getCam() / 100);
-        float impozit = Math.round(salariuTarifar * parametriiSalariu.getImpozit() / 100);
-        float valoareTichete = Math.round(parametriiSalariu.getValtichet() * nrTichete);
+        
+        float salariuPeZi = salariuTarifar / norma;
+        float salariuPeOra = salariuTarifar / norma / duratazilucru;
+
+        float totalDrepturi = salariuPeZi * zilePlatite;
+
+        float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
+        float cass = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
+        float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
+        float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
         int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
-        int restPlata = getRestplata(contract, valoareTichete, parametriiSalariu, nrPersoaneIntretinere); // already rounded
+        int restPlata = getRestplata(contract, valoareTichete, parametriiSalariu, nrPersoaneIntretinere, totalDrepturi); // already rounded
+        float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, zileLucratoare, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere );
+        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere );
     }
 
 }

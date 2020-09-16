@@ -162,7 +162,7 @@ class RealizariRetineri extends React.Component {
       zilec: data.zilec,
       orelucrate: data.orelucrate,
 
-      totaldrepturi: contract.salariutarifar, // TODO
+      totaldrepturi: data.totaldrepturi,
       cas: data.cas,
       cass: data.cass,
       valoaretichete: data.valoaretichete,
@@ -300,37 +300,49 @@ class RealizariRetineri extends React.Component {
                     <Col md={12}>
                       <Form.Group id="totaltrepturi">
                         <Form.Label>Total drepturi</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.totaldrepturi} />
+                        <Form.Control type="text" disabled value={this.state.totaldrepturi
+                              ? this.numberWithCommas(this.state.totaldrepturi)
+                              : ''} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="cas">
                         <Form.Label>CAS</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.cas} />
+                        <Form.Control type="text" disabled value={this.state.cas
+                              ? this.numberWithCommas(this.state.cas)
+                              : ''} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="cass">
                         <Form.Label>CASS</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.cass} />
+                        <Form.Control type="text" disabled value={this.state.cass
+                              ? this.numberWithCommas(this.state.cass)
+                              : ''} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
-                      <Form.Group id="valtichete">
+                      <Form.Group id="valoaretichete">
                         <Form.Label>Valoare tichete</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.valoaretichete} />
+                        <Form.Control type="text" disabled value={this.state.valoaretichete
+                              ? this.numberWithCommas(this.state.valoaretichete)
+                              : ''} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="impozit">
                         <Form.Label>Impozit</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.impozit} />
+                        <Form.Control type="text" disabled value={this.state.impozit
+                              ? this.numberWithCommas(this.state.impozit)
+                              : ''} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="restplata">
                         <Form.Label>Rest de plată</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.restplata} />
+                        <Form.Control type="text" disabled value={this.state.restplata
+                              ? this.numberWithCommas(this.state.restplata)
+                              : ''} />
                       </Form.Group>
                     </Col>
                   </Row>

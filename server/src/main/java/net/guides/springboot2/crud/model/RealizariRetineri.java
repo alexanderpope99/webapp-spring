@@ -8,36 +8,56 @@ public class RealizariRetineri {
     private int zileconeplatit = 0;
     private int zilecm = 0;
     private int zilec  = 0;
-    private int duratazilucru = 0; // contract.normalucru
+
     private int norma = 0; // nr zile lucratoare in luna
+    private int duratazilucru = 0; // contract.normalucru
+    private int zilelucrate = 0;
     private int orelucrate = 0;
+
+    private float totaldrepturi = 0;
+
+    private float salariupezi = 0;
+    private float salariupeora = 0;
+
     private float cas = 0;
     private float cass = 0;
     private float cam = 0;
     private float impozit = 0;
     private float valoaretichete = 0;
-    private int totaldrepturi = 0;
+
     private int restplata = 0;
+
     private int nrpersoaneintretinere = 0;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere )
+    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere )
     {
         this.nrtichete = nrtichete;
         this.zileco = zileco;
         this.zileconeplatit = zileconeplatit;
         this.zilecm = zilecm;
         this.zilec  = zileco + zilecm;
-        this.duratazilucru = duratazilucru;
+
         this.norma = norma;
-        this.orelucrate = norma * duratazilucru;
+        this.duratazilucru = duratazilucru;
+        this.zilelucrate = zilelucrate;
+        this.orelucrate = orelucrate;
+
+        
+        this.salariupezi = salariupezi;
+        this.salariupeora = salariupeora;
+
+        this.totaldrepturi = totaldrepturi;
+
         this.cas = cas;
         this.cass = cass;
         this.cam = cam;
         this.impozit = impozit;
         this.valoaretichete = valoareTichete;
+
         this.restplata = restplata;
+
         this.nrpersoaneintretinere = nrpersoaneintretinere;
     }
 
@@ -82,13 +102,22 @@ public class RealizariRetineri {
       return valoaretichete;
     }
     public int getTotaldrepturi() {
-      return totaldrepturi;
+      return Math.round(totaldrepturi);
     }
     public int getNrpersoaneintretinere() {
       return nrpersoaneintretinere;
     }
     public int getRestplata() {
       return restplata;
+    }
+    public float getSalariupeora() {
+      return salariupeora;
+    }
+    public float getSalariupezi() {
+      return salariupezi;
+    }
+    public int getZilelucrate() {
+      return zilelucrate;
     }
 
     //! SETTERS
@@ -139,6 +168,15 @@ public class RealizariRetineri {
     }
     public void setRestplata(int restplata) {
       this.restplata = restplata;
+    }
+    public void setSalariupeora(int salariupeora) {
+      this.salariupeora = salariupeora;
+    }
+    public void setSalariupezi(int salariupezi) {
+      this.salariupezi = salariupezi;
+    }
+    public void setZilelucrate(int zilelucrate) {
+      this.zilelucrate = zilelucrate;
     }
 }
 
