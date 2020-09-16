@@ -54,7 +54,10 @@ class AdminLayout extends Component {
         <Fullscreen enabled={this.props.isFullScreen}>
           <Navigation />
           <NavBar />
-          <div className="pcoded-main-container" onClick={() => this.mobileOutClickHandler}>
+          <div
+            className="pcoded-main-container"
+            onClick={() => this.mobileOutClickHandler}
+          >
             <div className="pcoded-wrapper">
               <div className="pcoded-content">
                 <div className="pcoded-inner-content">
@@ -63,7 +66,11 @@ class AdminLayout extends Component {
                     <div className="page-wrapper">
                       <Suspense fallback={<Loader />}>
                         <Switch>
-                          {menu}
+                          {sessionStorage.getItem('logged') === 'true' ? (
+                            menu
+                          ) : (
+                            <Redirect to="/auth/signin-1" />
+                          )}
                           <Redirect from="/" to={this.props.defaultPath} />
                         </Switch>
                       </Suspense>
@@ -96,4 +103,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(windowSize(AdminLayout));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(windowSize(AdminLayout));

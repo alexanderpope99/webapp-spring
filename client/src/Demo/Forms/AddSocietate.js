@@ -78,15 +78,19 @@ class AddSocietate extends React.Component {
     }
 
     for (const key in this.state) {
-      if (this.state[key] === '' || this.state[key] === "''") this.state[key] = null;
+      if (this.state[key] === '' || this.state[key] === "''")
+        this.state[key] = null;
     }
 
     var caen_id = null;
     if (this.state.idcaen !== null) {
-      caen_id = await fetch(`http://localhost:5000/caen/${this.state.idcaen}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }).then((res) => (res.status === 200 ? res.json() : -1));
+      caen_id = await fetch(
+        `http://192.168.2.159:5000/caen/${this.state.idcaen}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ).then((res) => (res.status === 200 ? res.json() : -1));
 
       if (caen_id === -1) {
         caen_id = null;
@@ -207,7 +211,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               adresa: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -228,9 +233,11 @@ class AddSocietate extends React.Component {
                         <Form.Control
                           as="select"
                           value={this.state.judet}
-                          onChange={(e) => this.setState({
-                            judet: e.target.value,
-                          })}
+                          onChange={(e) =>
+                            this.setState({
+                              judet: e.target.value,
+                            })
+                          }
                         >
                           <option>-</option>
                           {list()}
@@ -247,7 +254,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               idcaen: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -261,7 +269,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               cif: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -275,7 +284,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               capsoc: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -289,7 +299,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               regcom: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -303,7 +314,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               telefon: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>
@@ -317,7 +329,8 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               email: e.target.value,
-                            })}
+                            })
+                          }
                         />
                       </Form.Group>
                     </Col>

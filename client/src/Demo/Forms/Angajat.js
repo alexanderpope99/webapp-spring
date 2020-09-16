@@ -70,10 +70,13 @@ class Angajat extends React.Component {
     } else this.contract.current.setState({ buttonDisabled: false });
 
     // get angajat with selected id
-    const angajat = await fetch(`http://localhost:5000/angajat/${idpersoana}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    const angajat = await fetch(
+      `http://192.168.2.159:5000/angajat/${idpersoana}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
       .then((res) => res.json())
       .catch((err) => console.error(err));
 
@@ -95,19 +98,16 @@ class Angajat extends React.Component {
     let idcontract = angajat.idcontract;
     let idpersoana = angajat.idpersoana;
 
-    var contract =  null;
+    var contract = null;
     // if angajat has contract
     if (idcontract !== null) {
       // fetch data from contract
-      contract = await fetch(
-        `http://localhost:5000/contract/${idcontract}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
-        .then(res => res.json())
-        .catch(err => console.error(err));
+      contract = await fetch(`http://localhost:5000/contract/${idcontract}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then((res) => res.json())
+        .catch((err) => console.error(err));
     }
     //* FILL FORM
     this.contract.current.fillForm(contract, idpersoana);
@@ -117,11 +117,15 @@ class Angajat extends React.Component {
     // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
     if (typeof angajat === 'undefined') return;
-    if(angajat.idcontract === null) {
-      this.setState({
-        show: true,
-        modalMessage: "Pentru concedii, angajatul are nevoie de un contract de muncă.",
-      }, () => this.setState({key: 'contract'}));
+    if (angajat.idcontract === null) {
+      this.setState(
+        {
+          show: true,
+          modalMessage:
+            'Pentru concedii, angajatul are nevoie de un contract de muncă.',
+        },
+        () => this.setState({ key: 'contract' })
+      );
       return;
     }
 
@@ -134,11 +138,12 @@ class Angajat extends React.Component {
     if (typeof angajat === 'undefined') return;
 
     // angajatul nu are contract, deci nu se pot adauga concedii
-    if(angajat.idcontract === null) {
+    if (angajat.idcontract === null) {
       this.setState({
         show: true,
-        modalMessage: "Pentru concedii, angajatul are nevoie de un contract de muncă.",
-        key: 'contract'
+        modalMessage:
+          'Pentru concedii, angajatul are nevoie de un contract de muncă.',
+        key: 'contract',
       });
       return;
     }
@@ -184,7 +189,11 @@ class Angajat extends React.Component {
               </Tab>
 
               <Tab eventKey="contract" title="Contract de munca">
-                <Contract ref={this.contract} idcontract={this.state.idcontract} idangajat={this.state.idangajat} />
+                <Contract
+                  ref={this.contract}
+                  idcontract={this.state.idcontract}
+                  idangajat={this.state.idangajat}
+                />
               </Tab>
 
               <Tab eventKey="co" title="C.O.">
@@ -194,9 +203,13 @@ class Angajat extends React.Component {
               <Tab eventKey="cm" title="C.M.">
                 <ConcediiMedicale ref={this.cm} />
               </Tab>
-
             </Tabs>
-            <Button onClick={() => window.scrollTo(0, 0)} className="float-center">TO TOP</Button>
+            <Button
+              onClick={() => window.scrollTo(0, 0)}
+              className="float-center"
+            >
+              TO TOP
+            </Button>
           </Col>
         </Row>
       </Aux>

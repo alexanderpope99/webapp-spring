@@ -259,18 +259,20 @@ class EditPersoana extends React.Component {
               idadresa: adresa.id,
               localitate: adresa.localitate || '',
               judet: adresa.judet || '',
-              adresacompleta:
-                adresa.adresa || '',
+              adresacompleta: adresa.adresa || '',
               tipJudet: this.getTipJudet(adresa.localitate),
             });
         });
     }
 
     if (persoana.idactidentitate) {
-      await fetch(`http://localhost:5000/actidentitate/${persoana.idactidentitate}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
+      await fetch(
+        `http://192.168.2.159/actidentitate/${persoana.idactidentitate}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
         .then((actidentitate) => actidentitate.json())
         .then((actidentitate) => {
           if (actidentitate)
@@ -279,11 +281,9 @@ class EditPersoana extends React.Component {
               tipact: actidentitate.tip || '',
               serie: actidentitate.serie || '',
               numar: actidentitate.numar || '',
-              loculnasterii:
-                actidentitate.loculnasterii || '',
+              loculnasterii: actidentitate.loculnasterii || '',
               eliberatde: actidentitate.eliberatde || '',
-              dataeliberarii:
-                actidentitate.dataeliberarii || '',
+              dataeliberarii: actidentitate.dataeliberarii || '',
             });
         });
     }
@@ -312,7 +312,10 @@ class EditPersoana extends React.Component {
     if (!this.hasRequired()) return -1;
 
     for (let key in this.state)
-      if (typeof this.state[key] === 'string' && ['', '-'].indexOf(this.state[key]) !== -1)
+      if (
+        typeof this.state[key] === 'string' &&
+        ['', '-'].indexOf(this.state[key]) !== -1
+      )
         this.state[key] = null;
 
     var idadresa = this.state.idadresa,
@@ -393,11 +396,14 @@ class EditPersoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      await fetch(`http://localhost:5000/actidentitate/${this.state.idactidentitate}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(buletin_body),
-      });
+      await fetch(
+        `http://192.168.2.159/actidentitate/${this.state.idactidentitate}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(buletin_body),
+        }
+      );
     }
 
     let persoana_body = {
@@ -437,7 +443,9 @@ class EditPersoana extends React.Component {
       return <option key={index}>{judet}</option>;
     });
 
-    const sectoareObj = sectoare.map((sector, index) => <option key={index}>{sector}</option>);
+    const sectoareObj = sectoare.map((sector, index) => (
+      <option key={index}>{sector}</option>
+    ));
 
     const listaJudete = () => {
       if (this.state.tipJudet === 'Județ') return judeteObj;
@@ -445,7 +453,9 @@ class EditPersoana extends React.Component {
     };
 
     const listaNumeintreg = () =>
-      this.state.numeintreg.map((nume, index) => <option key={nume.id}>{nume.nume}</option>);
+      this.state.numeintreg.map((nume, index) => (
+        <option key={nume.id}>{nume.nume}</option>
+      ));
 
     return (
       <Aux>
@@ -493,7 +503,11 @@ class EditPersoana extends React.Component {
                         </Tooltip>
                       }
                     >
-                      <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
+                      <Button
+                        href="/forms/add-persoana"
+                        variant="outline-info"
+                        className="pb-0"
+                      >
                         <Add fontSize="small" className="m-0" />
                       </Button>
                     </OverlayTrigger>
@@ -763,10 +777,14 @@ class EditPersoana extends React.Component {
                       <Col md={12}>
                         <Button
                           variant={
-                            this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'
+                            this.state.selectednume === '-'
+                              ? 'outline-dark'
+                              : 'outline-primary'
                           }
                           onClick={this.onSubmit}
-                          disabled={this.state.selectednume === '-' ? true : false}
+                          disabled={
+                            this.state.selectednume === '-' ? true : false
+                          }
                         >
                           Actualizează datele personale
                         </Button>

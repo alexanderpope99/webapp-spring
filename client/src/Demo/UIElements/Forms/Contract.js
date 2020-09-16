@@ -135,9 +135,12 @@ class Contract extends React.Component {
   fillForm(contract, idangajat) {
     if (contract === null) {
       this.clearFields();
-      this.setState({
-        idangajat: idangajat,
-      }, () => console.log('idangajat:', idangajat, '\tidcontract:', null));
+      this.setState(
+        {
+          idangajat: idangajat,
+        },
+        () => console.log('idangajat:', idangajat, '\tidcontract:', null)
+      );
     } else {
       for (let key in contract) if (contract[key] === null) contract[key] = '';
 
@@ -185,7 +188,8 @@ class Contract extends React.Component {
 
   onChangeCentrucost(selected) {
     if (typeof selected[0] !== 'undefined' || selected.length !== 0) {
-      if (typeof selected[0] === 'object') this.setState({ centruCost: selected[0].label });
+      if (typeof selected[0] === 'object')
+        this.setState({ centruCost: selected[0].label });
       else this.setState({ centruCost: selected[0] });
     }
   }
@@ -255,7 +259,8 @@ class Contract extends React.Component {
       avans: this.state.avans,
       monedaavans: this.state.monedăAvans,
       zilecoan: this.state.zileCOan,
-      ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
+      ultimazilucru:
+        this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
       casasanatate: this.state.casăSănătate,
       gradinvaliditate: this.state.gradInvalid,
       functie: this.state.funcție,
@@ -264,11 +269,14 @@ class Contract extends React.Component {
       pensionar: this.state.pensionar,
       spor: this.state.spor,
     };
-    const contract = await fetch(`http://localhost:5000/contract/${idcontract}`, {
-      method: method, //PUT if idcontract !== null : POST if idcontract === null
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(contract_body),
-    })
+    const contract = await fetch(
+      `http://192.168.2.159/contract/${idcontract}`,
+      {
+        method: method, //PUT if idcontract !== null : POST if idcontract === null
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contract_body),
+      }
+    )
       .then((contract) => contract.json())
       .catch((err) => {
         console.error(err.message);
@@ -277,7 +285,10 @@ class Contract extends React.Component {
     if (typeof contract.id === 'number') {
       this.setState({
         show: true,
-        modalMessage: method === 'POST' ? 'Contract adăugat cu succes' : 'Contract actualizat',
+        modalMessage:
+          method === 'POST'
+            ? 'Contract adăugat cu succes'
+            : 'Contract actualizat',
       });
 
       if (method === 'POST') {
@@ -605,7 +616,10 @@ class Contract extends React.Component {
             </Col>
             <Col md={12} />
             <Col md={1}>
-              <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
+              <Form.Group
+                id="sindicat"
+                style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}
+              >
                 <Form.Check
                   custom
                   type="checkbox"
@@ -835,8 +849,12 @@ class Contract extends React.Component {
           <Row>
             <Col md={6}>
               <Button
-                variant={this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'}
-                onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
+                variant={
+                  this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'
+                }
+                onClick={(e) =>
+                  this.onSubmit(e, this.state.id, this.state.idangajat)
+                }
                 disabled={this.state.buttonDisabled}
               >
                 Actualizează contract

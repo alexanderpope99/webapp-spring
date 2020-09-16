@@ -35,9 +35,15 @@ class AngatjatiTabel extends React.Component {
 
     //for loop to keep only the display-able data in state.data
     for (let pers in persoane) {
-      let { gen, idactidentitate, idadresa, starecivila, cnp, idsocietate, ...newpers } = persoane[
-        pers
-      ];
+      let {
+        gen,
+        idactidentitate,
+        idadresa,
+        starecivila,
+        cnp,
+        idsocietate,
+        ...newpers
+      } = persoane[pers];
       persoane[pers] = newpers;
     }
 
@@ -69,7 +75,8 @@ class AngatjatiTabel extends React.Component {
                   icon: 'add',
                   tooltip: 'Adaugă Persoană',
                   isFreeAction: true,
-                  onClick: (e) => (window.location.href = '/forms/add-persoana'),
+                  onClick: (e) =>
+                    (window.location.href = '/forms/add-persoana'),
                 },
                 {
                   icon: 'refresh',

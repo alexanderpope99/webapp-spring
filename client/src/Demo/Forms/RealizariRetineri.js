@@ -194,12 +194,17 @@ class RealizariRetineri extends React.Component {
   }
 
   render() {
-    const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
+    const luni = months.map((luna_nume, index) => (
+      <option key={index}>{luna_nume}</option>
+    ));
 
     const this_year = new Date().getFullYear();
-    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
-      <option key={year}>{year}</option>
-    ));
+    const ani = [
+      this_year - 1,
+      this_year,
+      this_year + 1,
+      this_year + 2,
+    ].map((year) => <option key={year}>{year}</option>);
 
     const nume_persoane_opt = this.state.lista_angajati.map((angajat) => (
       <option key={angajat.id} data-key={angajat.id}>
@@ -283,7 +288,11 @@ class RealizariRetineri extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
+                  <Button
+                    href="/forms/angajat"
+                    variant="outline-info"
+                    className="pb-0"
+                  >
                     <Add fontSize="small" className="m-0" />
                   </Button>
                 </OverlayTrigger>
@@ -392,7 +401,11 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="orelucrate">
                         <Form.Label>Ore lucrate</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.orelucrate || ''} />
+                        <Form.Control
+                          type="number"
+                          disabled
+                          value={this.state.orelucrate || ''}
+                        />
                       </Form.Group>
                     </Col>
 
@@ -455,7 +468,9 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           value={this.state.primabruta || ''}
-                          onChange={(e) => this.setState({ primabruta: e.target.value })}
+                          onChange={(e) =>
+                            this.setState({ primabruta: e.target.value })
+                          }
                         />
                       </Form.Group>
                     </Col>

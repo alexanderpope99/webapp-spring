@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Card,
-  Table,
-  Button,
-  Modal,
-  Form,
-} from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Refresh from '@material-ui/icons/Refresh';
@@ -122,11 +114,14 @@ class CMTabel extends React.Component {
       return;
     }
     //? fetch must be with idcontract
-    const cm = await fetch(`http://localhost:5000/cm/idc=${this.state.angajat.idcontract}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(persoane),
-    })
+    const cm = await fetch(
+      `http://192.168.2.159/cm/idc=${this.state.angajat.idcontract}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        // body: JSON.stringify(persoane),
+      }
+    )
       .then((cm) => (cm.status !== 200 ? null : cm.json()))
       .catch((err) => console.error('err', err));
 
@@ -180,7 +175,15 @@ class CMTabel extends React.Component {
     }
     if (typeof this.state.angajat === 'undefined') return;
 
-    let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
+    let {
+      angajat,
+      cm,
+      cmComponent,
+      show,
+      show_confirm,
+      modalMessage,
+      ...cm_body
+    } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
     let ok = await fetch('http://localhost:5000/cm', {
@@ -251,36 +254,35 @@ class CMTabel extends React.Component {
 
     for (let key in cm) if (cm[key] === '-') cm[key] = '';
 
-    this.setState(
-      {
-        id: cm.id,
-        dela: cm.dela.substring(0, 10),
-        panala: cm.panala.substring(0, 10),
-        continuare: cm.continuare,
-        datainceput: cm.datainceput.substring(0, 10),
-        serienrcertificat: cm.serienrcertificat,
-        dataeliberare: cm.dataeliberare.substring(0, 10),
-        codurgenta: cm.codurgenta,
-        procent: cm.procent,
-        codboalainfcont: cm.codboalainfcont,
-        bazacalcul: cm.bazacalcul,
-        bazacalculplafonata: cm.bazacalculplafonata,
-        zilebazacalcul: cm.zilebazacalcul,
-        mediezilnica: cm.mediezilnica,
-        zilefirma: cm.zilefirma,
-        indemnizatiefirma: cm.indemnizatiefirma,
-        zilefnuass: cm.zilefnuass,
-        indemnizatiefnuass: cm.indemnizatiefnuass,
-        locprescriere: cm.locprescriere,
-        nravizmedic: cm.nravizmedic,
-        codboala: cm.codboala,
-        urgenta: cm.urgenta,
-        conditii: cm.conditii,
-        idcontract: cm.idcontract,
+    this.setState({
+      id: cm.id,
+      dela: cm.dela.substring(0, 10),
+      panala: cm.panala.substring(0, 10),
+      continuare: cm.continuare,
+      datainceput: cm.datainceput.substring(0, 10),
+      serienrcertificat: cm.serienrcertificat,
+      dataeliberare: cm.dataeliberare.substring(0, 10),
+      codurgenta: cm.codurgenta,
+      procent: cm.procent,
+      codboalainfcont: cm.codboalainfcont,
+      bazacalcul: cm.bazacalcul,
+      bazacalculplafonata: cm.bazacalculplafonata,
+      zilebazacalcul: cm.zilebazacalcul,
+      mediezilnica: cm.mediezilnica,
+      zilefirma: cm.zilefirma,
+      indemnizatiefirma: cm.indemnizatiefirma,
+      zilefnuass: cm.zilefnuass,
+      indemnizatiefnuass: cm.indemnizatiefnuass,
+      locprescriere: cm.locprescriere,
+      nravizmedic: cm.nravizmedic,
+      codboala: cm.codboala,
+      urgenta: cm.urgenta,
+      conditii: cm.conditii,
+      idcontract: cm.idcontract,
 
-        isEdit: true,
-        show: true,
-      });
+      isEdit: true,
+      show: true,
+    });
   }
 
   // function to create react component with fetched data
@@ -323,7 +325,9 @@ class CMTabel extends React.Component {
                     >
                       <Box p={2}>
                         <Typography>Sigur ștergeți concediul?</Typography>
-                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                        <Typography variant="caption">
+                          Datele nu mai pot fi recuperate
+                        </Typography>
                         <br />
                         <Button
                           variant="outline-danger"
@@ -621,14 +625,20 @@ class CMTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateCM : this.addCM}>
+            <Button
+              variant="primary"
+              onClick={this.state.isEdit ? this.updateCM : this.addCM}
+            >
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
 
         {/* CMNFIRM Modal */}
-        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
+        <Modal
+          show={this.state.show_confirm}
+          onHide={() => this.handleClose(true)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
@@ -646,22 +656,26 @@ class CMTabel extends React.Component {
             <Card>
               <Card.Header>
                 <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
-                  <Button
-                    variant={
-                      typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                    }
-                    disabled={typeof this.state.angajat === 'undefined'}
-                    size="sm"
-                    style={{ fontSize: '1.25rem', float: 'right' }}
-                    onClick={this.fillTable}
-                  >
-                    <Refresh className="m-0 p-0" />
-                    {/* ↺ */}
-                  </Button>
+                <Button
+                  variant={
+                    typeof this.state.angajat === 'undefined'
+                      ? 'outline-dark'
+                      : 'outline-primary'
+                  }
+                  disabled={typeof this.state.angajat === 'undefined'}
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
+                  onClick={this.fillTable}
+                >
+                  <Refresh className="m-0 p-0" />
+                  {/* ↺ */}
+                </Button>
 
                 <Button
                   variant={
-                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
+                    typeof this.state.angajat === 'undefined'
+                      ? 'outline-dark'
+                      : 'outline-primary'
                   }
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
