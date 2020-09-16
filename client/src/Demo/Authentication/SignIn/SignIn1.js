@@ -5,6 +5,7 @@ import { Button, Modal } from 'react-bootstrap';
 import './../../../assets/scss/style.scss';
 import Aux from '../../../hoc/_Aux';
 import Breadcrumb from '../../../App/layout/AdminLayout/Breadcrumb';
+import { server } from '../../Resources/server-address';
 
 class SignUp1 extends React.Component {
   constructor() {
@@ -18,7 +19,7 @@ class SignUp1 extends React.Component {
   }
   async handleClick() {
     await fetch(
-      `http://localhost:5000/user/usr=${this.state.username}/pass=${this.state.password}`,
+      `${server.address}/user/usr=${this.state.username}/pass=${this.state.password}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

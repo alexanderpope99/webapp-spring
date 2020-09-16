@@ -9,9 +9,11 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
+import { server } from '../Resources/server-address';
+
 class CMTabel extends React.Component {
   constructor(props) {
-    super(props);
+    super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
@@ -115,7 +117,7 @@ class CMTabel extends React.Component {
     }
     //? fetch must be with idcontract
     const cm = await fetch(
-      `http://localhost:5000/cm/idc=${this.state.angajat.idcontract}`,
+      `${server.address}/cm/idc=${this.state.angajat.idcontract}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -157,7 +159,7 @@ class CMTabel extends React.Component {
 
   //* Works
   async deleteCM(id) {
-    await fetch(`http://localhost:5000/cm/${id}`, {
+    await fetch(`${server.address}/cm/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -186,7 +188,7 @@ class CMTabel extends React.Component {
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
-    let ok = await fetch('http://localhost:5000/cm', {
+    let ok = await fetch(`${server.address}/cm`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cm_body),
@@ -221,7 +223,7 @@ class CMTabel extends React.Component {
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
-    let ok = await fetch(`http://localhost:5000/cm/${this.state.id}`, {
+    let ok = await fetch(`${server.address}/cm/${this.state.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cm_body),

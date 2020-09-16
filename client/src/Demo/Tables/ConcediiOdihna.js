@@ -8,9 +8,11 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
+import { server } from '../Resources/server-address';
+
 class COTabel extends React.Component {
   constructor(props) {
-    super(props);
+    super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
@@ -65,7 +67,7 @@ class COTabel extends React.Component {
     }
     //? fetch must be with idcontract
     const co = await fetch(
-      `http://localhost:5000/co/idc=${this.state.angajat.idcontract}`,
+      `${server.address}/co/idc=${this.state.angajat.idcontract}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -123,7 +125,7 @@ class COTabel extends React.Component {
   }
 
   async deleteCO(id) {
-    await fetch(`http://localhost:5000/co/${id}`, {
+    await fetch(`${server.address}/co/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -149,7 +151,7 @@ class COTabel extends React.Component {
       // in DB also has sporuripermanente
     };
 
-    let ok = await fetch('http://localhost:5000/co', {
+    let ok = await fetch(`${server.address}/co`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(co_body),

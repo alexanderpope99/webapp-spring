@@ -11,9 +11,7 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
-
-// import Aux from '../../../hoc/_Aux';
-//import { isNumeric } from 'jquery';
+import { server } from '../../Resources/server-address';
 
 class Contract extends React.Component {
   constructor() {
@@ -270,7 +268,7 @@ class Contract extends React.Component {
       spor: this.state.spor,
     };
     const contract = await fetch(
-      `http://localhost:5000/contract/${idcontract}`,
+      `${server.address}/contract/${idcontract}`,
       {
         method: method, //PUT if idcontract !== null : POST if idcontract === null
         headers: { 'Content-Type': 'application/json' },
@@ -293,7 +291,7 @@ class Contract extends React.Component {
 
       if (method === 'POST') {
         // update angajat with idangajat from functon props
-        await fetch(`http://localhost:5000/angajat/${idangajat}`, {
+        await fetch(`${server.address}/angajat/${idangajat}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

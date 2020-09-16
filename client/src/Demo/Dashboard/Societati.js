@@ -3,6 +3,7 @@ import { Row, Col, Card, Button } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 
 import { getSocSel, setSocSel } from '../Resources/socsel';
+import { server } from '../Resources/server-address';
 
 class Societati extends React.Component {
   /*
@@ -24,7 +25,7 @@ class Societati extends React.Component {
   }
 
   async getNumeSocietati() {
-    let societati = await fetch('http://localhost:5000/societate', {
+    let societati = await fetch(`${server.address}/societate`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     }).then((response) => response.json());

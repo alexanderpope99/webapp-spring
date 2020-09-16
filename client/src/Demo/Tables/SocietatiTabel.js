@@ -7,6 +7,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
+import { server } from '../Resources/server-address';
 
 class SocietatiTabel extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class SocietatiTabel extends React.Component {
   deleteSocietate(id) {
     // id = id.replace('"', '');
     // console.log(id);
-    const response = fetch(`http://localhost:5000/societate/${id}`, {
+    const response = fetch(`${server.address}/societate/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -110,7 +111,7 @@ class SocietatiTabel extends React.Component {
   async onRefresh() {
     // e.preventDefault();
 
-    const societati = await fetch('http://localhost:5000/societate', {
+    const societati = await fetch(`${server.address}/societate`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(societati),

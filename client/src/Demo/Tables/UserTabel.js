@@ -9,9 +9,11 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Edit from '@material-ui/icons/Edit';
 
 import Aux from '../../hoc/_Aux';
+import { server } from '../Resources/server-address';
+
 class UserTabel extends React.Component {
   constructor(props) {
-    super(props);
+    super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
@@ -48,7 +50,7 @@ class UserTabel extends React.Component {
   async fillTable() {
     if (typeof this.state.users === 'undefined') return;
     //? fetch
-    const users = await fetch('http://localhost:5000/user/', {
+    const users = await fetch(`${server.address}/user/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -111,7 +113,7 @@ class UserTabel extends React.Component {
   }
 
   async deleteUser(id) {
-    await fetch(`http://localhost:5000/user/${id}`, {
+    await fetch(`${server.address}/user/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -151,7 +153,7 @@ class UserTabel extends React.Component {
       societateselectată: this.state.societateselectată,
     };
 
-    let ok = await fetch('http://localhost:5000/user', {
+    let ok = await fetch(`${server.address}/user`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user_body),
@@ -181,7 +183,7 @@ class UserTabel extends React.Component {
       societateselectată: this.state.societateselectată,
     };
 
-    let ok = await fetch(`http://localhost:5000/user/${this.state.id}`, {
+    let ok = await fetch(`${server.address}/user/${this.state.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user_body),

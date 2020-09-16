@@ -3,6 +3,7 @@ import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
+import { server } from '../Resources/server-address';
 // import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
@@ -71,7 +72,7 @@ class Angajat extends React.Component {
 
     // get angajat with selected id
     const angajat = await fetch(
-      `http://localhost:5000/angajat/${idpersoana}`,
+      `${server.address}/angajat/${idpersoana}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -102,7 +103,7 @@ class Angajat extends React.Component {
     // if angajat has contract
     if (idcontract !== null) {
       // fetch data from contract
-      contract = await fetch(`http://localhost:5000/contract/${idcontract}`, {
+      contract = await fetch(`${server.address}/contract/${idcontract}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
