@@ -267,7 +267,7 @@ class EditPersoana extends React.Component {
 
     if (persoana.idactidentitate) {
       await fetch(
-        `http://192.168.2.159/actidentitate/${persoana.idactidentitate}`,
+        `http://localhost:5000/actidentitate/${persoana.idactidentitate}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -397,7 +397,7 @@ class EditPersoana extends React.Component {
       };
 
       await fetch(
-        `http://192.168.2.159/actidentitate/${this.state.idactidentitate}`,
+        `http://localhost:5000/actidentitate/${this.state.idactidentitate}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

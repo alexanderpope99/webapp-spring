@@ -85,7 +85,7 @@ class AddSocietate extends React.Component {
     var caen_id = null;
     if (this.state.idcaen !== null) {
       caen_id = await fetch(
-        `http://192.168.2.159:5000/caen/${this.state.idcaen}`,
+        `http://localhost:5000/caen/${this.state.idcaen}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },

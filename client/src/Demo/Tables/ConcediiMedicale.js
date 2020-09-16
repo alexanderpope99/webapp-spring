@@ -115,7 +115,7 @@ class CMTabel extends React.Component {
     }
     //? fetch must be with idcontract
     const cm = await fetch(
-      `http://192.168.2.159/cm/idc=${this.state.angajat.idcontract}`,
+      `http://localhost:5000/cm/idc=${this.state.angajat.idcontract}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

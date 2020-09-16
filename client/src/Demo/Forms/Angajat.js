@@ -71,7 +71,7 @@ class Angajat extends React.Component {
 
     // get angajat with selected id
     const angajat = await fetch(
-      `http://192.168.2.159:5000/angajat/${idpersoana}`,
+      `http://localhost:5000/angajat/${idpersoana}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

@@ -270,7 +270,7 @@ class Contract extends React.Component {
       spor: this.state.spor,
     };
     const contract = await fetch(
-      `http://192.168.2.159/contract/${idcontract}`,
+      `http://localhost:5000/contract/${idcontract}`,
       {
         method: method, //PUT if idcontract !== null : POST if idcontract === null
         headers: { 'Content-Type': 'application/json' },

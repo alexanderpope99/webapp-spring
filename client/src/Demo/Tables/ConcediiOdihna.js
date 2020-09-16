@@ -65,7 +65,7 @@ class COTabel extends React.Component {
     }
     //? fetch must be with idcontract
     const co = await fetch(
-      `http://192.168.2.159/co/idc=${this.state.angajat.idcontract}`,
+      `http://localhost:5000/co/idc=${this.state.angajat.idcontract}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
