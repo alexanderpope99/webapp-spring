@@ -10,6 +10,7 @@ import {
   FormControl,
   OverlayTrigger,
   Tooltip,
+  Table,
 } from 'react-bootstrap';
 import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
@@ -24,6 +25,8 @@ class RealizariRetineri extends React.Component {
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.recalculeaza = this.recalculeaza.bind(this);
+    this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -36,7 +39,7 @@ class RealizariRetineri extends React.Component {
 
       selected_angajat: '',
       lista_angajati: [], // object: {nume, id}
-      contract: [], // required for 4 fields
+      idcontract: '',
 
       // realizari
       functie: '',
@@ -49,7 +52,7 @@ class RealizariRetineri extends React.Component {
       zileco: '',
       zileconeplatit: '',
       zilec: '',
-      oresuplimentare: 0, // user input
+      oresuplimentare: [], // user input
       zileinvoire: 0, // user input
       primabruta: 0, // user input
       zilelibere: 0, // user input
@@ -77,7 +80,7 @@ class RealizariRetineri extends React.Component {
   }
   clearForm() {
     this.setState({
-      contract: [], // required for 4 fields
+      idcontract: '',
 
       // realizari
       functie: '',
@@ -94,6 +97,8 @@ class RealizariRetineri extends React.Component {
       zileinvoire: 0, // user input
       primabruta: 0, // user input
       zilelibere: 0, // user input
+      salariupezi: 0,
+      salariupeora: 0,
 
       // retineri
       avansnet: 0,
@@ -166,6 +171,8 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
+    
+
     // get contract by idpersoana :: contract body needed for 4 fields
     const contract = await fetch(`${server.address}/contract/idp=${idpersoana}`, {
       method: 'GET',
@@ -174,6 +181,15 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
     console.log('contract:', contract);
+
+    // TODO: get ore suplimentare by idcontract
+    const oresuplimentare = await fetch(`${server.address}/oresuplimentare/idc=${contract.id}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(res => (res.ok ? res.json() : null))
+      .catch(err => console.error(err));
+    console.log(oresuplimentare);
 
     // get date realizariretineri
     const data = await fetch(
@@ -220,6 +236,10 @@ class RealizariRetineri extends React.Component {
       impozit: data.impozit,
       restplata: data.restplata,
       cam: data.cam,
+
+      //
+      idcontract: contract.id,
+      oresuplimentare: oresuplimentare,
     });
   }
 
@@ -282,9 +302,14 @@ class RealizariRetineri extends React.Component {
       cam: data.cam,
       impozit: data.impozit,
       valoaretichete: data.valoaretichete,
-    })
-    
+    });
+  }
 
+  veziOreSuplimentare() {
+    console.log('editez ore suplimentare');
+    this.setState({
+      show: true,
+    });
   }
 
   onSubmit(e) {
@@ -301,6 +326,8 @@ class RealizariRetineri extends React.Component {
       <option key={year}>{year}</option>
     ));
 
+    const tabel_ore = this.state.oresuplimentare;
+
     const nume_persoane_opt = this.state.lista_angajati.map((angajat) => (
       <option key={angajat.id} data-key={angajat.id}>
         {angajat.nume}
@@ -311,14 +338,20 @@ class RealizariRetineri extends React.Component {
       <Aux>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Date incomplete</Modal.Title>
+            <Modal.Title>Ore suplimentare</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.handleClose}>
-              OK
-            </Button>
-          </Modal.Footer>
+          <Modal.Body>
+            <Table responsive hover>
+              <thead>
+                <tr>
+                  <th>nr.</th>
+                  <th>procent</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>{tabel_ore}</tbody>
+            </Table>
+          </Modal.Body>
         </Modal>
 
         <Card>
@@ -455,8 +488,14 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Nr. Tichete</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={
-                            this.state.nrtichete - this.state.zilelibere - this.state.zileinvoire
+                            this.state.nrtichete - this.state.zilelibere - this.state.zileinvoire <
+                            0
+                              ? 0
+                              : this.state.nrtichete -
+                                this.state.zilelibere -
+                                this.state.zileinvoire
                           }
                           onChange={(e) => this.setState({ nrtichete: e.target.value })}
                         />
@@ -466,13 +505,11 @@ class RealizariRetineri extends React.Component {
                       <Form.Group id="zilecm">
                         <Form.Label>Zile concediu medical</Form.Label>
                         <InputGroup>
-                          <Form.Control type="number" disabled value={this.state.zilecm} />
+                          <Form.Control type="number" disabled min="0" value={this.state.zilecm} />
                           {this.state.zilecm ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                Sumă brută:{' '}
-                                {(this.state.zilecm * this.state.salariupezi).toFixed(0)}{' '}
-                                RON
+                                Brut: {(this.state.zilecm * this.state.salariupezi).toFixed(0)} RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}
@@ -483,7 +520,7 @@ class RealizariRetineri extends React.Component {
                       <Form.Group id="zileco">
                         <Form.Label>Zile concediu odihna</Form.Label>
                         <InputGroup>
-                          <Form.Control type="number" disabled value={this.state.zileco} />
+                          <Form.Control type="number" disabled min="0" value={this.state.zileco} />
                           {this.state.zileco ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
@@ -501,10 +538,10 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Zile libere</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.zilelibere}
                           onChange={(e) => this.setState({ zilelibere: e.target.value })}
                         />
-                        
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -512,6 +549,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Zile învoire</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.zileinvoire}
                           onChange={(e) => this.setState({ zileinvoire: e.target.value })}
                         />
@@ -522,11 +560,18 @@ class RealizariRetineri extends React.Component {
                       <Form.Group id="oresuplimentare">
                         <Form.Label>Ore suplimentare</Form.Label>
                         <InputGroup>
-                        <Form.Control type="text" disabled value={this.state.oresuplimentare} />
-                        <InputGroup.Append>
-                            <Button variant="outline-secondary border" style={{fontSize: "1.5rem"}} className="pt-0 pb-0">+</Button>
-                            <Button variant="outline-secondary border" style={{fontSize: "1.5rem"}} className="pt-0 pb-0">-</Button>
-                        </InputGroup.Append>
+                          <Form.Control type="text" disabled value={this.state.oresuplimentare} />
+                          <InputGroup.Append>
+                            <Button
+                              variant={
+                                this.state.selected_angajat ? 'outline-secondary' : 'outline-light'
+                              }
+                              disabled={!this.state.selected_angajat}
+                              onClick={() => this.veziOreSuplimentare()}
+                            >
+                              Vezi
+                            </Button>
+                          </InputGroup.Append>
                         </InputGroup>
                       </Form.Group>
                     </Col>
@@ -535,6 +580,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Primă brută</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.primabruta}
                           onChange={(e) => this.setState({ primabruta: e.target.value })}
                         />
@@ -554,6 +600,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Avans</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.avansnet}
                           onChange={(e) => this.setState({ avansnet: e.target.value })}
                         />
@@ -564,6 +611,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Pensie facultativă</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.pensiefacultativa}
                           onChange={(e) => this.setState({ pensiefacultativa: e.target.value })}
                         />
@@ -574,6 +622,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Pensie alimentară</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.pensiealimentara}
                           onChange={(e) => this.setState({ pensiealimentara: e.target.value })}
                         />
@@ -584,6 +633,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Popriri</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.popriri}
                           onChange={(e) => this.setState({ popriri: e.target.value })}
                         />
@@ -594,6 +644,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Împrumuturi</Form.Label>
                         <Form.Control
                           type="number"
+                          min="0"
                           value={this.state.imprumuturi}
                           onChange={(e) => this.setState({ imprumuturi: e.target.value })}
                         />
@@ -602,7 +653,7 @@ class RealizariRetineri extends React.Component {
                     <Col md={12}>
                       <Form.Group id="deducere">
                         <Form.Label>Deducere personală</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.deducere} />
+                        <Form.Control type="number" disabled min="0" value={this.state.deducere} />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -690,7 +741,7 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    
+
                     <Col md={4}>
                       <Form.Group id="cam">
                         <Form.Label>CAM</Form.Label>

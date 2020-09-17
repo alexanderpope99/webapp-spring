@@ -8,8 +8,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
-import net.guides.springboot2.crud.repository.ContractRepository;
-import net.guides.springboot2.crud.repository.ParametriiSalariuRepository;
 
 @Service
 public class RealizariRetineriService {

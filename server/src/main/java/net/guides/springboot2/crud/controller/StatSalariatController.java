@@ -28,7 +28,7 @@ public class StatSalariatController {
     private StatSalariatRepository statSalariatRepository;
 
     @GetMapping
-    public List<StatSalariat> getAllPersoane() {
+    public List<StatSalariat> getAllStatSalariat() {
         return statSalariatRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 

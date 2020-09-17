@@ -41,6 +41,15 @@ public class OresuplimentareController {
         return ResponseEntity.ok().body(oresuplimentare);
     }
 
+    @GetMapping("idc={id}")
+    public ResponseEntity<Oresuplimentare> getOresuplimentareByIdcontract(@PathVariable(value = "id") Long contract)
+            throws ResourceNotFoundException {
+        Oresuplimentare oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(contract)
+                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this contract :: " + contract));
+
+        return ResponseEntity.ok().body(oresuplimentare);
+    }
+
     @PostMapping
     public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
         return oresuplimentareRepository.save(oresuplimentare);
