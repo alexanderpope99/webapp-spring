@@ -855,7 +855,7 @@ class Contract extends React.Component {
                 }
                 disabled={this.state.buttonDisabled}
               >
-                Actualizează contract
+                {this.state.id ? "Actualizează contract" : "Adaugă contract"}
               </Button>
             </Col>
           </Row>

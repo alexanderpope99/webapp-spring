@@ -16,12 +16,14 @@ import Aux from '../../hoc/_Aux';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
+import { Typography } from '@material-ui/core';
 
 class RealizariRetineri extends React.Component {
   constructor() {
     super();
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
+    this.recalculeaza = this.recalculeaza.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -36,13 +38,7 @@ class RealizariRetineri extends React.Component {
       lista_angajati: [], // object: {nume, id}
       contract: [], // required for 4 fields
 
-      totaldrepturi: '',
-      cas: '',
-      cass: '',
-      valoaretichete: '',
-      impozit: '',
-      restplata: '',
-
+      // realizari
       functie: '',
       duratazilucru: '',
       normalucru: '',
@@ -53,20 +49,34 @@ class RealizariRetineri extends React.Component {
       zileco: '',
       zileconeplatit: '',
       zilec: '',
-      oresuplimentare: '',
-      zileinvoire: '',
-      primabruta: '',
+      oresuplimentare: 0, // user input
+      zileinvoire: 0, // user input
+      primabruta: 0, // user input
+      zilelibere: 0, // user input
+
+      // retineri
+      avansnet: 0,
+      pensiefacultativa: 0,
+      pensiealimentara: 0,
+      popriri: 0,
+      imprumuturi: 0,
+      deducere: 0,
+
+      // total
+      totaldrepturi: '',
+      cas: '',
+      cass: '',
+      cam: '',
+      valoaretichete: '',
+      impozit: '',
+      restplata: '',
     };
   }
   clearForm() {
     this.setState({
-      totaldrepturi: '',
-      cas: '',
-      cass: '',
-      valoaretichete: '',
-      impozit: '',
-      restplata: '',
+      contract: [], // required for 4 fields
 
+      // realizari
       functie: '',
       duratazilucru: '',
       normalucru: '',
@@ -77,9 +87,27 @@ class RealizariRetineri extends React.Component {
       zileco: '',
       zileconeplatit: '',
       zilec: '',
-      oresuplimentare: '',
-      zileinvoire: '',
-      primabruta: '',
+      oresuplimentare: 0, // user input
+      zileinvoire: 0, // user input
+      primabruta: 0, // user input
+      zilelibere: 0, // user input
+
+      // retineri
+      avansnet: 0,
+      pensiefacultativa: 0,
+      pensiealimentara: 0,
+      popriri: 0,
+      imprumuturi: 0,
+      deducere: 0,
+
+      // total
+      totaldrepturi: '',
+      cas: '',
+      cass: '',
+      cam: '',
+      valoaretichete: '',
+      impozit: '',
+      restplata: '',
     });
   }
 
@@ -151,24 +179,34 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
     console.log('data:', data);
     this.setState({
+      //* realizari
       functie: contract.functie,
       duratazilucru: contract.normalucru,
       normalucru: data.norma, // zile lucratoare in luna respectiva
       salariubrut: contract.salariutarifar,
-
+      orelucrate: data.orelucrate,
       nrtichete: data.nrtichete,
       zilecm: data.zilecm,
       zileco: data.zileco,
       zileconeplatit: data.zileconeplatit,
       zilec: data.zilec,
-      orelucrate: data.orelucrate,
 
+      //* retineri
+      // avansnet: 0,
+      // pensiefacultativa: 0,
+      // pensiealimentara: 0,
+      // popriri: 0,
+      // imprumuturi: 0,
+      deducere: data.deducere,
+
+      //* total
       totaldrepturi: data.totaldrepturi,
       cas: data.cas,
       cass: data.cass,
       valoaretichete: data.valoaretichete,
       impozit: data.impozit,
       restplata: data.restplata,
+      cam: data.cam,
     });
   }
 
@@ -194,18 +232,23 @@ class RealizariRetineri extends React.Component {
     );
   }
 
+  recalculeaza() {
+    console.log('recalculeaza()');
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+
+    // send ore suplimentare + prima bruta + nr tichete + avans
+  }
+
   render() {
-    const luni = months.map((luna_nume, index) => (
-      <option key={index}>{luna_nume}</option>
-    ));
+    const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
     const this_year = new Date().getFullYear();
-    const ani = [
-      this_year - 1,
-      this_year,
-      this_year + 1,
-      this_year + 2,
-    ].map((year) => <option key={year}>{year}</option>);
+    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
+      <option key={year}>{year}</option>
+    ));
 
     const nume_persoane_opt = this.state.lista_angajati.map((angajat) => (
       <option key={angajat.id} data-key={angajat.id}>
@@ -228,8 +271,8 @@ class RealizariRetineri extends React.Component {
         </Modal>
 
         <Card>
+          {/* SELECT LUNA + AN */}
           <Card.Header>
-            {/* LUNA + AN */}
             <Row>
               {/* LUNA */}
               <Col md={6}>
@@ -239,7 +282,7 @@ class RealizariRetineri extends React.Component {
                   onChange={(e) =>
                     this.setState(
                       {
-                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex },
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
                       },
                       this.fillForm
                     )
@@ -264,7 +307,7 @@ class RealizariRetineri extends React.Component {
               </Col>
             </Row>
           </Card.Header>
-
+          {/* SELECT ANGAJAT */}
           <Card.Header>
             <Card.Title as="h4">Angajat</Card.Title>
             <InputGroup className="mb-3">
@@ -289,11 +332,7 @@ class RealizariRetineri extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button
-                    href="/forms/angajat"
-                    variant="outline-info"
-                    className="pb-0"
-                  >
+                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
                     <Add fontSize="small" className="m-0" />
                   </Button>
                 </OverlayTrigger>
@@ -302,69 +341,18 @@ class RealizariRetineri extends React.Component {
           </Card.Header>
 
           <Card.Body>
-            <Form>
+            <Form onSubmit={this.onSubmit}>
               <Row>
-                {/* LEFT */}
-                <Col md={6} className="border rounded pt-3">
-                  <Row>
-                    <Col md={12}>
-                      <Form.Group id="totaltrepturi">
-                        <Form.Label>Total drepturi</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.totaldrepturi
-                              ? this.numberWithCommas(this.state.totaldrepturi)
-                              : ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="cas">
-                        <Form.Label>CAS</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.cas
-                              ? this.numberWithCommas(this.state.cas)
-                              : ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="cass">
-                        <Form.Label>CASS</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.cass
-                              ? this.numberWithCommas(this.state.cass)
-                              : ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="valoaretichete">
-                        <Form.Label>Valoare tichete</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.valoaretichete
-                              ? this.numberWithCommas(this.state.valoaretichete)
-                              : ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="impozit">
-                        <Form.Label>Impozit</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.impozit
-                              ? this.numberWithCommas(this.state.impozit)
-                              : ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="restplata">
-                        <Form.Label>Rest de plată</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.restplata
-                              ? this.numberWithCommas(this.state.restplata)
-                              : ''} />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </Col>
-
-                {/* RIGHT */}
-                <Col md={6} className="border rounded pt-3">
+                {/* REALIZARI = LEFT TOP */}
+                <Col md={8} className="border rounded pt-3">
+                  <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                    Realizări
+                  </Typography>
                   <Row>
                     <Col md={6}>
                       <Form.Group id="functie">
                         <Form.Label>Funcție</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.functie || ''} />
+                        <Form.Control type="text" disabled value={this.state.functie || '-'} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -397,30 +385,32 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-
-                    {/* // TODO */}
                     <Col md={6}>
                       <Form.Group id="orelucrate">
                         <Form.Label>Ore lucrate</Form.Label>
                         <Form.Control
                           type="number"
                           disabled
-                          value={this.state.orelucrate || ''}
+                          value={
+                            this.state.orelucrate -
+                            this.state.duratazilucru *
+                              (Number(this.state.zilelibere) + Number(this.state.zileinvoire))
+                          }
                         />
                       </Form.Group>
                     </Col>
-
                     <Col md={6}>
                       <Form.Group id="tichete">
                         <Form.Label>Nr. Tichete</Form.Label>
                         <Form.Control
                           type="number"
-                          value={this.state.nrtichete || ''}
+                          value={
+                            this.state.nrtichete - this.state.zilelibere - this.state.zileinvoire
+                          }
                           onChange={(e) => this.setState({ nrtichete: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
-
                     <Col md={6}>
                       <Form.Group id="zilecm">
                         <Form.Label>Zile concediu medical</Form.Label>
@@ -438,8 +428,8 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Zile libere</Form.Label>
                         <Form.Control
                           type="number"
-                          value={this.state.zileconeplatit}
-                          onChange={(e) => this.setState({ zileconeplatit: e.target.value })}
+                          value={this.state.zilelibere}
+                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -447,20 +437,17 @@ class RealizariRetineri extends React.Component {
                       <Form.Group id="zileinvoire">
                         <Form.Label>Zile învoire</Form.Label>
                         <Form.Control
-                          type="text"
-                          value={this.state.zileinvoire || ''}
+                          type="number"
+                          value={this.state.zileinvoire}
                           onChange={(e) => this.setState({ zileinvoire: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
+                    {/* TODO */}
                     <Col md={6}>
                       <Form.Group id="oresuplimentare">
                         <Form.Label>Ore suplimentare</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.oresuplimentare || ''}
-                        />
+                        <Form.Control type="text" disabled value={this.state.oresuplimentare} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -468,14 +455,205 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Primă brută</Form.Label>
                         <Form.Control
                           type="text"
-                          value={this.state.primabruta || ''}
-                          onChange={(e) =>
-                            this.setState({ primabruta: e.target.value })
-                          }
+                          value={this.state.primabruta}
+                          onChange={(e) => this.setState({ primabruta: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="retineri">
+                        <Form.Label>Primă brută</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          // value={this.state.primabruta}
+                          // onChange={(e) => this.setState({ primabruta: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
                   </Row>
+                </Col>
+
+                {/* RETINERI = RIGHT */}
+                <Col md={4} className="border rounded pt-3">
+                  <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                    Rețineri
+                  </Typography>
+                  <Row>
+                    <Col md={12}>
+                      <Form.Group id="avansnet">
+                        <Form.Label>Avans</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.avansnet}
+                          onChange={(e) => this.setState({ avansnet: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="pensiefacultativa">
+                        <Form.Label>Pensie facultativă</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.pensiefacultativa }
+                          onChange={(e) => this.setState({ pensiefacultativa  : e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="pensiealimentara">
+                        <Form.Label>Pensie alimentară</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.pensiealimentara}
+                          onChange={(e) => this.setState({ pensiealimentara: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="popriri">
+                        <Form.Label>Popriri</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.popriri}
+                          onChange={(e) => this.setState({ popriri: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="imprumuturi">
+                        <Form.Label>Împrumuturi</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.imprumuturi}
+                          onChange={(e) => this.setState({ imprumuturi: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="deducere">
+                        <Form.Label>Deducere personală</Form.Label>
+                        <Form.Control
+                          type="number"
+                          disabled
+                          value={this.state.deducere}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Col>
+
+                {/* TOTAL = LEFT BOTTOM */}
+                <Col md={6} className="border rounded pt-3">
+                  <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                    Total
+                  </Typography>
+                  <Row>
+                    <Col md={12}>
+                      <Form.Group id="totaltrepturi">
+                        <Form.Label>Total drepturi</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.totaldrepturi
+                              ? this.numberWithCommas(this.state.totaldrepturi)
+                              : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="cas">
+                        <Form.Label>CAS</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : ''}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="cass">
+                        <Form.Label>CASS</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : ''}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="valoaretichete">
+                        <Form.Label>Valoare tichete</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.valoaretichete
+                              ? this.numberWithCommas(this.state.valoaretichete)
+                              : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="impozit">
+                        <Form.Label>Impozit</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="restplata">
+                        <Form.Label>Rest de plată</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.restplata
+                              ? this.numberWithCommas(
+                                  Number(this.state.restplata) - Number(this.state.avansnet)
+                                )
+                              : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="cam">
+                        <Form.Label>CAM</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cam ? this.numberWithCommas(this.state.cam) : ''}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Col>
+
+                {/* BUTTONS */}
+                <Col md={12} className="m-0 ml-0 mt-3">
+                  <Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    onClick={this.recalculeaza}
+                  >
+                    Recalculează
+                  </Button>
+                  <Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    type="submit"
+                  >
+                    Salvează
+                  </Button>
                 </Col>
               </Row>
             </Form>

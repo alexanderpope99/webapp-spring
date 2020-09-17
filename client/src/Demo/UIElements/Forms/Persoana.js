@@ -50,7 +50,7 @@ class Persoana extends React.Component {
     };
   }
 
-  clearFields(e) {
+  clearFields() {
     this.setState({
       socsel: getSocSel(),
 
@@ -155,16 +155,13 @@ class Persoana extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
     }).catch((err) => console.error(err));
+    console.log(idpersoana, this.state.socsel);
   }
 
   async onSubmit(e) {
     e.preventDefault();
 
     if (!this.hasRequired()) return;
-
-    for (const key in this.state) {
-      if (['', '-'].indexOf(this.state[key]) !== -1) this.state[key] = null;
-    }
 
     var actidentitate = null,
       adresa = null;
@@ -196,10 +193,9 @@ class Persoana extends React.Component {
         tip: this.state.tipact,
         serie: this.state.serie,
         numar: this.state.numar,
-        datanasterii: this.state.datanasterii === '' ? null : "'" + this.state.datanasterii + "'",
+        datanasterii: this.state.datanasterii,
         eliberatde: this.state.eliberatde,
-        dataeliberarii:
-          this.state.dataeliberarii === '' ? null : "'" + this.state.dataeliberarii + "'",
+        dataeliberarii: this.state.dataeliberarii,
         loculnasterii: this.state.loculnasterii,
       };
 
@@ -207,7 +203,8 @@ class Persoana extends React.Component {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(buletin_body),
-      }).then((actidentitate) => actidentitate.json());
+      }).then((res) => res.json());
+
       console.log('idactidentitate:', actidentitate.id);
     }
 
@@ -222,6 +219,7 @@ class Persoana extends React.Component {
       telefon: this.state.telefon,
       cnp: this.state.cnp,
     };
+    console.log(persoana_body);
 
     const persoana = await fetch(`${server.address}/persoana`, {
       method: 'POST',
@@ -231,21 +229,18 @@ class Persoana extends React.Component {
       .then((persoana) => persoana.json())
       .catch((err) => console.error('error:', err.message));
 
-    if (typeof this.props.asChild === 'undefined') {
-      if (typeof persoana.id === 'number') {
-        this.clearFields();
-        this.setState({
-          show: true,
-          modalMessage: 'Persoana adaugată cu succes.',
-        });
-        console.log('idpersoana:', persoana.id);
+    if (typeof persoana.id === 'number') {
+      this.clearFields();
+      this.setState({
+        show: true,
+        modalMessage: 'Persoana adaugată cu succes.',
+      });
+      console.log('idpersoana:', persoana.id);
 
-        await this.createAngajat(persoana.id);
+      await this.createAngajat(persoana.id);
 
-        return persoana.id;
-      } else return;
-    } else if (typeof persoana.id === 'number') return persoana.id;
-    else return;
+      return persoana.id;
+    } else return;
   }
 
   render() {
@@ -397,7 +392,7 @@ class Persoana extends React.Component {
             <Col md={12} />
 
             <Col md={6}>
-              <Form.Group>
+              <Form.Group controlId="eliberatde">
                 <Form.Label>Eliberat de</Form.Label>
                 <Form.Control
                   type="text"

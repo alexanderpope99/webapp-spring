@@ -28,10 +28,11 @@ public class RealizariRetineri {
     private int restplata = 0;
 
     private int nrpersoaneintretinere = 0;
+    private int deducere = 0;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere )
+    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere, int deducere )
     {
         this.nrtichete = nrtichete;
         this.zileco = zileco;
@@ -59,6 +60,7 @@ public class RealizariRetineri {
         this.restplata = restplata;
 
         this.nrpersoaneintretinere = nrpersoaneintretinere;
+        this.deducere = deducere;
     }
 
     //! GETTERS
@@ -119,6 +121,9 @@ public class RealizariRetineri {
     public int getZilelucrate() {
       return zilelucrate;
     }
+    public int getDeducere() {
+      return deducere;
+    }
 
     //! SETTERS
     public void setNrtichete(int nrtichete) {
@@ -177,6 +182,9 @@ public class RealizariRetineri {
     }
     public void setZilelucrate(int zilelucrate) {
       this.zilelucrate = zilelucrate;
+    }
+    public void setDeducere(int deducere) {
+      this.deducere = deducere;
     }
 }
 
