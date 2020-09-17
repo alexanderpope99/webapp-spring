@@ -35,7 +35,9 @@ public class RealizariRetineriService {
     @Autowired
     private ParametriiSalariuRepository parametriiSalariuRepository;
 
+    // recalculate mereu
     private float impozitSalariu = 0;
+    private float deducere = 0;
 
     public long getIdContractByIdPersoana(long idpersoana)
             throws ResourceNotFoundException {
@@ -51,9 +53,9 @@ public class RealizariRetineriService {
         
         int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
         float impozit = parametriiSalariu.getImpozit() / 100;
-        float deducere = 0;
         if(totalDrepturi < 3600)
-            deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere);
+            this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere);
+        else this.deducere = 0;
 
         float restPlata = totalDrepturi - casSalariu - cassSalariu;
 
@@ -99,7 +101,7 @@ public class RealizariRetineriService {
         float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere );
+        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
     }
 
 }

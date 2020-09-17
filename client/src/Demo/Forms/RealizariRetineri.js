@@ -16,6 +16,7 @@ import Aux from '../../hoc/_Aux';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
+import { Typography } from '@material-ui/core';
 
 class RealizariRetineri extends React.Component {
   constructor() {
@@ -37,6 +38,31 @@ class RealizariRetineri extends React.Component {
       lista_angajati: [], // object: {nume, id}
       contract: [], // required for 4 fields
 
+      // realizari
+      functie: '',
+      duratazilucru: '',
+      normalucru: '',
+      salariubrut: '',
+      orelucrate: '',
+      nrtichete: '',
+      zilecm: '',
+      zileco: '',
+      zileconeplatit: '',
+      zilec: '',
+      oresuplimentare: 0, // user input
+      zileinvoire: 0, // user input
+      primabruta: 0, // user input
+      zilelibere: 0, // user input
+
+      // retineri
+      avansnet: 0,
+      pensiefacultativa: 0,
+      pensiealimentara: 0,
+      popriri: 0,
+      imprumuturi: 0,
+      deducere: 0,
+
+      // total
       totaldrepturi: '',
       cas: '',
       cass: '',
@@ -44,33 +70,13 @@ class RealizariRetineri extends React.Component {
       valoaretichete: '',
       impozit: '',
       restplata: '',
-
-      functie: '',
-      duratazilucru: '',
-      normalucru: '',
-      salariubrut: '',
-      orelucrate: '',
-      nrtichete: '',
-      zilecm: '',
-      zileco: '',
-      zileconeplatit: '',
-      zilec: '',
-      oresuplimentare: 0,
-      zileinvoire: 0,
-      primabruta: 0,
-
-      zilelibere: 0,
     };
   }
   clearForm() {
     this.setState({
-      totaldrepturi: '',
-      cas: '',
-      cass: '',
-      valoaretichete: '',
-      impozit: '',
-      restplata: '',
+      contract: [], // required for 4 fields
 
+      // realizari
       functie: '',
       duratazilucru: '',
       normalucru: '',
@@ -81,11 +87,27 @@ class RealizariRetineri extends React.Component {
       zileco: '',
       zileconeplatit: '',
       zilec: '',
-      oresuplimentare: '',
-      zileinvoire: '',
-      primabruta: '',
+      oresuplimentare: 0, // user input
+      zileinvoire: 0, // user input
+      primabruta: 0, // user input
+      zilelibere: 0, // user input
 
-      zilelibere: 0,
+      // retineri
+      avansnet: 0,
+      pensiefacultativa: 0,
+      pensiealimentara: 0,
+      popriri: 0,
+      imprumuturi: 0,
+      deducere: 0,
+
+      // total
+      totaldrepturi: '',
+      cas: '',
+      cass: '',
+      cam: '',
+      valoaretichete: '',
+      impozit: '',
+      restplata: '',
     });
   }
 
@@ -157,25 +179,34 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
     console.log('data:', data);
     this.setState({
+      //* realizari
       functie: contract.functie,
       duratazilucru: contract.normalucru,
       normalucru: data.norma, // zile lucratoare in luna respectiva
       salariubrut: contract.salariutarifar,
-
+      orelucrate: data.orelucrate,
       nrtichete: data.nrtichete,
       zilecm: data.zilecm,
       zileco: data.zileco,
       zileconeplatit: data.zileconeplatit,
       zilec: data.zilec,
-      orelucrate: data.orelucrate,
 
+      //* retineri
+      // avansnet: 0,
+      // pensiefacultativa: 0,
+      // pensiealimentara: 0,
+      // popriri: 0,
+      // imprumuturi: 0,
+      deducere: data.deducere,
+
+      //* total
       totaldrepturi: data.totaldrepturi,
       cas: data.cas,
       cass: data.cass,
-      cam: data.cam,
       valoaretichete: data.valoaretichete,
       impozit: data.impozit,
       restplata: data.restplata,
+      cam: data.cam,
     });
   }
 
@@ -202,7 +233,7 @@ class RealizariRetineri extends React.Component {
   }
 
   recalculeaza() {
-    console.log("recalculeaza()");
+    console.log('recalculeaza()');
   }
 
   onSubmit(e) {
@@ -312,13 +343,16 @@ class RealizariRetineri extends React.Component {
           <Card.Body>
             <Form onSubmit={this.onSubmit}>
               <Row>
-                {/* LEFT */}
-                <Col md={6} className="border rounded pt-3">
+                {/* REALIZARI = LEFT TOP */}
+                <Col md={8} className="border rounded pt-3">
+                  <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                    Realizări
+                  </Typography>
                   <Row>
                     <Col md={6}>
                       <Form.Group id="functie">
                         <Form.Label>Funcție</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.functie || ''} />
+                        <Form.Control type="text" disabled value={this.state.functie || '-'} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -426,11 +460,94 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
+                    <Col md={12}>
+                      <Form.Group id="retineri">
+                        <Form.Label>Primă brută</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          // value={this.state.primabruta}
+                          // onChange={(e) => this.setState({ primabruta: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
                   </Row>
                 </Col>
 
-                {/* RIGHT */}
+                {/* RETINERI = RIGHT */}
+                <Col md={4} className="border rounded pt-3">
+                  <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                    Rețineri
+                  </Typography>
+                  <Row>
+                    <Col md={12}>
+                      <Form.Group id="avansnet">
+                        <Form.Label>Avans</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.avansnet}
+                          onChange={(e) => this.setState({ avansnet: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="pensiefacultativa">
+                        <Form.Label>Pensie facultativă</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.pensiefacultativa }
+                          onChange={(e) => this.setState({ pensiefacultativa  : e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="pensiealimentara">
+                        <Form.Label>Pensie alimentară</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.pensiealimentara}
+                          onChange={(e) => this.setState({ pensiealimentara: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="popriri">
+                        <Form.Label>Popriri</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.popriri}
+                          onChange={(e) => this.setState({ popriri: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="imprumuturi">
+                        <Form.Label>Împrumuturi</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.imprumuturi}
+                          onChange={(e) => this.setState({ imprumuturi: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={12}>
+                      <Form.Group id="deducere">
+                        <Form.Label>Deducere personală</Form.Label>
+                        <Form.Control
+                          type="number"
+                          disabled
+                          value={this.state.deducere}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Col>
+
+                {/* TOTAL = LEFT BOTTOM */}
                 <Col md={6} className="border rounded pt-3">
+                  <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                    Total
+                  </Typography>
                   <Row>
                     <Col md={12}>
                       <Form.Group id="totaltrepturi">
@@ -499,7 +616,11 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           disabled
                           value={
-                            this.state.restplata ? this.numberWithCommas(this.state.restplata) : ''
+                            this.state.restplata
+                              ? this.numberWithCommas(
+                                  Number(this.state.restplata) - Number(this.state.avansnet)
+                                )
+                              : ''
                           }
                         />
                       </Form.Group>
