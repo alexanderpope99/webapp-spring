@@ -53,6 +53,8 @@ class RealizariRetineri extends React.Component {
       zileinvoire: 0, // user input
       primabruta: 0, // user input
       zilelibere: 0, // user input
+      salariupezi: 0,
+      salariupeora: 0,
 
       // retineri
       avansnet: 0,
@@ -185,6 +187,8 @@ class RealizariRetineri extends React.Component {
       normalucru: data.norma, // zile lucratoare in luna respectiva
       salariubrut: contract.salariutarifar,
       orelucrate: data.orelucrate,
+      salariupezi: data.salariupezi,
+      salariupeora: data.salariupeora,
       nrtichete: data.nrtichete,
       zilecm: data.zilecm,
       zileco: data.zileco,
@@ -414,13 +418,35 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="zilecm">
                         <Form.Label>Zile concediu medical</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.zilecm} />
+                        <InputGroup>
+                          <Form.Control type="number" disabled value={this.state.zilecm} />
+                          {this.state.zilecm ? (
+                            <InputGroup.Append>
+                              <InputGroup.Text style={{ fontSize: '0.75rem' }}>
+                                Sumă brută:{' '}
+                                {(this.state.zilecm * this.state.salariupezi).toFixed(0)}{' '}
+                                RON
+                              </InputGroup.Text>
+                            </InputGroup.Append>
+                          ) : null}
+                        </InputGroup>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      <Form.Group id="zilec">
+                      <Form.Group id="zileco">
                         <Form.Label>Zile concediu odihna</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.zileco} />
+                        <InputGroup>
+                          <Form.Control type="number" disabled value={this.state.zileco} />
+                          {this.state.zileco ? (
+                            <InputGroup.Append>
+                              <InputGroup.Text style={{ fontSize: '0.75rem' }}>
+                                Sumă brută:{' '}
+                                {(this.state.zileconeplatit * this.state.salariupezi).toFixed(0)}{' '}
+                                RON
+                              </InputGroup.Text>
+                            </InputGroup.Append>
+                          ) : null}
+                        </InputGroup>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -431,6 +457,7 @@ class RealizariRetineri extends React.Component {
                           value={this.state.zilelibere}
                           onChange={(e) => this.setState({ zilelibere: e.target.value })}
                         />
+                        
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -447,27 +474,22 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="oresuplimentare">
                         <Form.Label>Ore suplimentare</Form.Label>
+                        <InputGroup>
                         <Form.Control type="text" disabled value={this.state.oresuplimentare} />
+                        <InputGroup.Append>
+                            <Button variant="outline-secondary border" style={{fontSize: "1.5rem"}} className="pt-0 pb-0">+</Button>
+                            <Button variant="outline-secondary border" style={{fontSize: "1.5rem"}} className="pt-0 pb-0">-</Button>
+                        </InputGroup.Append>
+                        </InputGroup>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group id="primabruta">
                         <Form.Label>Primă brută</Form.Label>
                         <Form.Control
-                          type="text"
+                          type="number"
                           value={this.state.primabruta}
                           onChange={(e) => this.setState({ primabruta: e.target.value })}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="retineri">
-                        <Form.Label>Primă brută</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          // value={this.state.primabruta}
-                          // onChange={(e) => this.setState({ primabruta: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -495,8 +517,8 @@ class RealizariRetineri extends React.Component {
                         <Form.Label>Pensie facultativă</Form.Label>
                         <Form.Control
                           type="number"
-                          value={this.state.pensiefacultativa }
-                          onChange={(e) => this.setState({ pensiefacultativa  : e.target.value })}
+                          value={this.state.pensiefacultativa}
+                          onChange={(e) => this.setState({ pensiefacultativa: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -533,11 +555,7 @@ class RealizariRetineri extends React.Component {
                     <Col md={12}>
                       <Form.Group id="deducere">
                         <Form.Label>Deducere personală</Form.Label>
-                        <Form.Control
-                          type="number"
-                          disabled
-                          value={this.state.deducere}
-                        />
+                        <Form.Control type="number" disabled value={this.state.deducere} />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -636,17 +654,18 @@ class RealizariRetineri extends React.Component {
                       </Form.Group>
                     </Col>
                   </Row>
-                </Col>
-
-                {/* BUTTONS */}
-                <Col md={12} className="m-0 ml-0 mt-3">
                   <Button
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat}
                     onClick={this.recalculeaza}
+                    className="mb-3"
                   >
                     Recalculează
                   </Button>
+                </Col>
+
+                {/* BUTTONS */}
+                <Col md={12} className="m-0 ml-0 mt-3">
                   <Button
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat}
