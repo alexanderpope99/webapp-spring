@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 
 @Repository
-public interface RealizariRetineriRepository extends JpaRepository<RealizariRetineri, Long>{ }
+public interface RealizariRetineriRepository extends JpaRepository<RealizariRetineri, Long>{ 
+    public RealizariRetineri findByLunaAndAn(int luna, int an);
+}

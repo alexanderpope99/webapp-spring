@@ -25,13 +25,13 @@ public class RealizariRetineriController {
 
     @GetMapping("idp={id}&mo={luna}&y={an}")
     public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value="id") Long idpersoana, @PathVariable(value="luna") Integer luna, @PathVariable(value="an") Integer an) throws ResourceNotFoundException {
-      // get contract of persoana
-      long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
-      return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
+        // get contract of persoana
+        long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
+        return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
 
-    @GetMapping("restplata/idp={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
-    public RealizariRetineri getRestPlata(
+    @GetMapping("calc/idp={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
+    public RealizariRetineri calcRealizariRetineri (
         @PathVariable(value="id") Long idpersoana, 
         @PathVariable(value="luna") Integer luna, 
         @PathVariable(value="an") Integer an,

@@ -283,7 +283,7 @@ class RealizariRetineri extends React.Component {
     let nrt = this.state.nrtichete;
 
     const data = await fetch(
-      `${server.address}/realizariretineri/restplata/idp=${idpersoana}&mo=${luna}&y=${an}&ttd=${ttd}&nrt=${nrt}`,
+      `${server.address}/realizariretineri/calc/idp=${idpersoana}&mo=${luna}&y=${an}&ttd=${ttd}&nrt=${nrt}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

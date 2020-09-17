@@ -41,11 +41,11 @@ public class OresuplimentareController {
         return ResponseEntity.ok().body(oresuplimentare);
     }
 
-    @GetMapping("idc={id}")
-    public ResponseEntity<Oresuplimentare> getOresuplimentareByIdcontract(@PathVariable(value = "id") Long contract)
+    @GetMapping("idss={id}")
+    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdcontract(@PathVariable(value = "id") Long idstat)
             throws ResourceNotFoundException {
-        Oresuplimentare oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(contract)
-                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this contract :: " + contract));
+        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat)
+                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this idstat :: " + idstat));
 
         return ResponseEntity.ok().body(oresuplimentare);
     }

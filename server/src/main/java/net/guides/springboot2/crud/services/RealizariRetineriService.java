@@ -8,14 +8,13 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
+import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 
 @Service
 public class RealizariRetineriService {
     RealizariRetineriService() {}
 
     // SERVICES
-    @Autowired
-    private TicheteService ticheteService;
     @Autowired
     private ZileService zileService;
     @Autowired
@@ -32,6 +31,8 @@ public class RealizariRetineriService {
     private ParametriiSalariuService parametriiSalariuService;
 
     // REPOSITORIES
+    @Autowired
+    private RealizariRetineriRepository realizariRetineriRepository;
 
     private float impozitSalariu = 0;
     private float deducere = 0;
@@ -70,41 +71,7 @@ public class RealizariRetineriService {
     }
 
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
-        Contract contract = contractService.getContractById(idcontract);
-
-        ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
-
-        int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
-
-        int zileCO = coService.getZileCO(luna, an, idcontract);
-        int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
-        int zileCM = cmService.getZileCM(luna, an, idcontract);
-
-        int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
-        int duratazilucru = contract.getNormalucru();
-
-        int zileLucrate = norma - zileCO - zileCM;
-        int oreLucrate = zileLucrate * duratazilucru;
-        int zilePlatite = norma - zileCONeplatit;
-        // int orePlatite = zilePlatite * duratazilucru;
-        
-        float salariuTarifar = contract.getSalariutarifar();
-        
-        float salariuPeZi = salariuTarifar / norma;
-        float salariuPeOra = salariuTarifar / norma / duratazilucru;
-
-        float totalDrepturi = salariuPeZi * zilePlatite;
-
-        float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
-        float cass = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
-        float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
-        float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
-        int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
-        int restPlata = getRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere); // already rounded
-        float impozit = Math.round(this.impozitSalariu);
-
-
-        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
+        return realizariRetineriRepository.findByLunaAndAn(luna, an);
     }
 
     public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, float totalDrepturiModifier, int nrTichete) throws ResourceNotFoundException {
@@ -139,6 +106,6 @@ public class RealizariRetineriService {
         float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
+        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
     }
 }

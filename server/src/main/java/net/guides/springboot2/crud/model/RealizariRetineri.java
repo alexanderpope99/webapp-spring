@@ -1,38 +1,73 @@
 package net.guides.springboot2.crud.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "statsalariat")
 public class RealizariRetineri {
 
+    private long id;
+    @Column(name = "idcontract")
+    private Long idcontract;
+    @Column(name = "luna")
+    private int luna;
+    @Column(name = "an")
+    private int an;
+    @Column(name = "nrtichete")
     private int nrtichete = 0;
+    @Column(name = "zileco")
     private int zileco = 0;
+    @Column(name = "zileconeplatit")
     private int zileconeplatit = 0;
+    @Column(name = "zilecm")
     private int zilecm = 0;
+    @Column(name = "zilec")
     private int zilec  = 0;
 
+    @Column(name = "norma")
     private int norma = 0; // nr zile lucratoare in luna
+    @Column(name = "duratazilucru")
     private int duratazilucru = 0; // contract.normalucru
+    @Column(name = "zilelucrate")
     private int zilelucrate = 0;
+    @Column(name = "orelucrate")
     private int orelucrate = 0;
 
+    @Column(name = "totaldrepturi")
     private float totaldrepturi = 0;
 
+    @Column(name = "salariupezi")
     private float salariupezi = 0;
+    @Column(name = "salariupeora")
     private float salariupeora = 0;
 
+    @Column(name = "cas")
     private float cas = 0;
+    @Column(name = "cass")
     private float cass = 0;
+    @Column(name = "cam")
     private float cam = 0;
+    @Column(name = "impozit")
     private float impozit = 0;
+    @Column(name = "valoaretichete")
     private float valoaretichete = 0;
 
+    @Column(name = "restplata")
     private int restplata = 0;
 
+    @Column(name = "nrpersoaneintretinere")
     private int nrpersoaneintretinere = 0;
+    @Column(name = "deducere")
     private int deducere = 0;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere, int deducere )
+    public RealizariRetineri( long idcontract, int luna, int an, int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere, int deducere )
     {
         this.nrtichete = nrtichete;
         this.zileco = zileco;
@@ -63,6 +98,15 @@ public class RealizariRetineri {
         this.deducere = deducere;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     //! GETTERS
     public int getNrtichete() {
       return nrtichete;
