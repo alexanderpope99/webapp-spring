@@ -12,20 +12,36 @@ class SignUp1 extends React.Component {
     super();
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      username: '',
-      password: '',
+      username:
+        localStorage.getItem('savedCheckbox') === 'true'
+          ? localStorage.getItem('savedUsername')
+          : '',
+      password:
+        localStorage.getItem('savedCheckbox') === 'true'
+          ? localStorage.getItem('savedPassword')
+          : '',
       show: false,
+      checked: localStorage.getItem('savedCheckbox') === 'true' ? true : false,
     };
   }
-  async handleClick() {
+  async handleClick(e) {
+    e.preventDefault();
     await fetch(`${server.address}/user/usr=${this.state.username}/pass=${this.state.password}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
         if (res.ok) {
-          sessionStorage.setItem('logged', true);
-          sessionStorage.setItem('username', this.state.username);
+          localStorage.setItem('logged', true);
+          localStorage.setItem('username', this.state.username);
+          if (localStorage.getItem('savedCheckbox') === 'true') {
+            localStorage.setItem('savedUsername', this.state.username);
+            localStorage.setItem('savedPassword', this.state.password);
+          } else {
+            localStorage.removeItem('savedCheckbox');
+            localStorage.removeItem('savedUsername', this.state.username);
+            localStorage.removeItem('savedPassword', this.state.password);
+          }
           window.location.href = '/dashboard/societati';
         } else {
           this.setState({ show: true });
@@ -38,7 +54,7 @@ class SignUp1 extends React.Component {
   render() {
     return (
       <Aux>
-        <Form onSubmit={this.handleClick}>
+        <Form onSubmit={(e) => this.handleClick(e)}>
           <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
             <Modal.Header closeButton>
               <Modal.Title>Utilizator invalid</Modal.Title>
@@ -71,6 +87,7 @@ class SignUp1 extends React.Component {
                           username: e.target.value,
                         })
                       }
+                      value={this.state.username}
                       type="username"
                       className="form-control"
                       placeholder="Username"
@@ -83,6 +100,7 @@ class SignUp1 extends React.Component {
                           password: e.target.value,
                         })
                       }
+                      value={this.state.password}
                       type="password"
                       className="form-control"
                       placeholder="password"
@@ -90,7 +108,18 @@ class SignUp1 extends React.Component {
                   </div>
                   <div className="form-group text-left">
                     <div className="checkbox checkbox-fill d-inline">
-                      <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" />
+                      <input
+                        onChange={() => {
+                          localStorage.setItem('savedCheckbox', !this.state.checked);
+                          this.setState({
+                            checked: !this.state.checked,
+                          });
+                        }}
+                        checked={this.state.checked}
+                        type="checkbox"
+                        name="checkbox-fill-1"
+                        id="checkbox-fill-a1"
+                      />
                       <label htmlFor="checkbox-fill-a1" className="cr">
                         {' '}
                         Save credentials
@@ -100,12 +129,12 @@ class SignUp1 extends React.Component {
                   <button type="submit" className="btn btn-primary shadow-2 mb-4">
                     Login
                   </button>
-                  <p className="mb-2 text-muted">
+                  {/* <p className="mb-2 text-muted">
                     Forgot password? <NavLink to="/auth/reset-password-1">Reset</NavLink>
                   </p>
                   <p className="mb-0 text-muted">
                     Don’t have an account? <NavLink to="/auth/signup-1">Signup</NavLink>
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>

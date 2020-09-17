@@ -39,11 +39,7 @@ class NavRight extends Component {
                   </li>
                   <li className="notification">
                     <div className="media">
-                      <img
-                        className="img-radius"
-                        src={Avatar1}
-                        alt="Generic placeholder"
-                      />
+                      <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
                       <div className="media-body">
                         <p>
                           <strong>John Doe</strong>
@@ -61,11 +57,7 @@ class NavRight extends Component {
                   </li>
                   <li className="notification">
                     <div className="media">
-                      <img
-                        className="img-radius"
-                        src={Avatar2}
-                        alt="Generic placeholder"
-                      />
+                      <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
                       <div className="media-body">
                         <p>
                           <strong>Joseph William</strong>
@@ -80,11 +72,7 @@ class NavRight extends Component {
                   </li>
                   <li className="notification">
                     <div className="media">
-                      <img
-                        className="img-radius"
-                        src={Avatar3}
-                        alt="Generic placeholder"
-                      />
+                      <img className="img-radius" src={Avatar3} alt="Generic placeholder" />
                       <div className="media-body">
                         <p>
                           <strong>Sara Soudein</strong>
@@ -122,18 +110,14 @@ class NavRight extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
-                  <img
-                    src={Avatar1}
-                    className="img-radius"
-                    alt="User Profile"
-                  />
-                  <span>{sessionStorage.getItem('username')}</span>
+                  <img src={Avatar1} className="img-radius" alt="User Profile" />
+                  <span>{localStorage.getItem('username')}</span>
                   <a
                     href={DEMO.BLANK_LINK}
                     className="dud-logout"
                     title="Logout"
                     onClick={() => {
-                      sessionStorage.setItem('logged', false);
+                      localStorage.setItem('logged', false);
                       window.location.href = '/auth/signin-1';
                     }}
                   >
