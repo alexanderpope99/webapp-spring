@@ -29,5 +29,17 @@ public class RealizariRetineriController {
       long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
       return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
+
+    @GetMapping("restplata/idp={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
+    public RealizariRetineri getRestPlata(
+        @PathVariable(value="id") Long idpersoana, 
+        @PathVariable(value="luna") Integer luna, 
+        @PathVariable(value="an") Integer an,
+        @PathVariable(value="ttd") Float totalDrepturi,
+        @PathVariable(value="nrt") Integer nrTichete
+        ) throws ResourceNotFoundException {
+            long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
+            return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, totalDrepturi, nrTichete);
+    }
 }
     

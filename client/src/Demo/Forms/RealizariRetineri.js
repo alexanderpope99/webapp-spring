@@ -63,6 +63,7 @@ class RealizariRetineri extends React.Component {
       popriri: 0,
       imprumuturi: 0,
       deducere: 0,
+      nrpersoaneintretinere: 0,
 
       // total
       totaldrepturi: '',
@@ -101,6 +102,7 @@ class RealizariRetineri extends React.Component {
       popriri: 0,
       imprumuturi: 0,
       deducere: 0,
+      nrpersoaneintretinere: 0,
 
       // total
       totaldrepturi: '',
@@ -153,15 +155,18 @@ class RealizariRetineri extends React.Component {
   }
 
   async fillForm() {
+    // get an, luna from select components
     let an = this.state.an;
     let luna = this.state.luna.nr;
-    // get id by numecomplet
+
+    // get idpersoana from select component
     const idpersoana = this.state.selected_angajat.id;
     if (!idpersoana) {
       this.clearForm();
       return;
     }
-    // get contract
+
+    // get contract by idpersoana :: contract body needed for 4 fields
     const contract = await fetch(`${server.address}/contract/idp=${idpersoana}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -169,9 +174,10 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
     console.log('contract:', contract);
+
     // get date realizariretineri
     const data = await fetch(
-      `${server.address}/realizariretineri/idp=${idpersoana}&mo=${luna}&y=${an}`,
+      `${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -179,7 +185,9 @@ class RealizariRetineri extends React.Component {
     )
       .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
+
     console.log('data:', data);
+
     this.setState({
       //* realizari
       functie: contract.functie,
@@ -202,6 +210,7 @@ class RealizariRetineri extends React.Component {
       // popriri: 0,
       // imprumuturi: 0,
       deducere: data.deducere,
+      nrpersoaneintretinere: data.nrpersoaneintretinere,
 
       //* total
       totaldrepturi: data.totaldrepturi,
@@ -236,14 +245,43 @@ class RealizariRetineri extends React.Component {
     );
   }
 
-  recalculeaza() {
-    console.log('recalculeaza()');
+  async recalculeaza() {
+    console.log('recalculez...');
+
+    // get an, luna from select components
+    let an = this.state.an;
+    let luna = this.state.luna.nr;
+
+    // get idpersoana from select component
+    const idpersoana = this.state.selected_angajat.id;
+    if (!idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    let ttd = Number(this.state.totaldrepturi) + Number(this.state.primabruta);
+    let nrt = this.state.nrtichete;
+
+    const data = await fetch(
+      `${server.address}/realizariretineri/restplata/idp=${idpersoana}&mo=${luna}&y=${an}&ttd=${ttd}&nrt=${nrt}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .catch((err) => console.error(err));
+
+    // totaldrepturi
+    
+
+    console.log(data);
   }
 
   onSubmit(e) {
     e.preventDefault();
 
-    // send ore suplimentare + prima bruta + nr tichete + avans
+    // save ore suplimentare + prima bruta + nr tichete + avans + luna+an in DB
   }
 
   render() {
@@ -562,12 +600,12 @@ class RealizariRetineri extends React.Component {
                 </Col>
 
                 {/* TOTAL = LEFT BOTTOM */}
-                <Col md={6} className="border rounded pt-3">
+                <Col md={12} className="border rounded pt-3">
                   <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
                     Total
                   </Typography>
                   <Row>
-                    <Col md={12}>
+                    <Col md={6}>
                       <Form.Group id="totaltrepturi">
                         <Form.Label>Total drepturi</Form.Label>
                         <Form.Control
@@ -581,53 +619,7 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={12}>
-                      <Form.Group id="cas">
-                        <Form.Label>CAS</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : ''}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="cass">
-                        <Form.Label>CASS</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : ''}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="valoaretichete">
-                        <Form.Label>Valoare tichete</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={
-                            this.state.valoaretichete
-                              ? this.numberWithCommas(this.state.valoaretichete)
-                              : ''
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
-                      <Form.Group id="impozit">
-                        <Form.Label>Impozit</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={
-                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : ''
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={12}>
+                    <Col md={6}>
                       <Form.Group id="restplata">
                         <Form.Label>Rest de plată</Form.Label>
                         <Form.Control
@@ -643,7 +635,54 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={12}>
+                    <Col md={4}>
+                      <Form.Group id="cas">
+                        <Form.Label>CAS</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : ''}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                      <Form.Group id="cass">
+                        <Form.Label>CASS</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : ''}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                      <Form.Group id="valoaretichete">
+                        <Form.Label>Valoare tichete</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.valoaretichete
+                              ? this.numberWithCommas(this.state.valoaretichete)
+                              : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                      <Form.Group id="impozit">
+                        <Form.Label>Impozit</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    
+                    <Col md={4}>
                       <Form.Group id="cam">
                         <Form.Label>CAM</Form.Label>
                         <Form.Control
