@@ -109,7 +109,7 @@ public class RealizariRetineriService {
         return new RealizariRetineri( nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
     }
 
-    public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, float totalDrepturi, int nrTichete) throws ResourceNotFoundException {
+    public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, float totalDrepturiModifier, int nrTichete) throws ResourceNotFoundException {
         Contract contract = contractService.getContractById(idcontract);
 
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
@@ -124,6 +124,8 @@ public class RealizariRetineriService {
         int zileLucrate = norma - zileCO - zileCM;
         int oreLucrate = zileLucrate * duratazilucru;
         int zilePlatite = norma - zileCONeplatit;
+
+        float totalDrepturi = contract.getSalariutarifar() + totalDrepturiModifier;
 
         float salariuPeZi = totalDrepturi / norma;
         float salariuPeOra = totalDrepturi / norma / duratazilucru;

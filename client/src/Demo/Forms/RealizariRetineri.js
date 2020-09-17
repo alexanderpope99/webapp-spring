@@ -259,7 +259,7 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    let ttd = Number(this.state.totaldrepturi) + Number(this.state.primabruta);
+    let ttd = this.state.primabruta;
     let nrt = this.state.nrtichete;
 
     const data = await fetch(
@@ -272,16 +272,25 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
 
+    console.log(data);
     // totaldrepturi
+    this.setState({
+      totaldrepturi: data.totaldrepturi,
+      restplata: data.restplata,
+      cas: data.cas,
+      cass: data.cass,
+      cam: data.cam,
+      impozit: data.impozit,
+      valoaretichete: data.valoaretichete,
+    })
     
 
-    console.log(data);
   }
 
   onSubmit(e) {
     e.preventDefault();
 
-    // save ore suplimentare + prima bruta + nr tichete + avans + luna+an in DB
+    // POST/PUT ore suplimentare + prima bruta + nr tichete + avans + luna+an
   }
 
   render() {
@@ -697,7 +706,7 @@ class RealizariRetineri extends React.Component {
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat}
                     onClick={this.recalculeaza}
-                    className="mb-3"
+                    className="mb-3 float-right"
                   >
                     Recalculează
                   </Button>
