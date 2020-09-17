@@ -22,6 +22,7 @@ class RealizariRetineri extends React.Component {
     super();
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
+    this.recalculeaza = this.recalculeaza.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -39,6 +40,7 @@ class RealizariRetineri extends React.Component {
       totaldrepturi: '',
       cas: '',
       cass: '',
+      cam: '',
       valoaretichete: '',
       impozit: '',
       restplata: '',
@@ -53,9 +55,9 @@ class RealizariRetineri extends React.Component {
       zileco: '',
       zileconeplatit: '',
       zilec: '',
-      oresuplimentare: '',
-      zileinvoire: '',
-      primabruta: '',
+      oresuplimentare: 0,
+      zileinvoire: 0,
+      primabruta: 0,
 
       zilelibere: 0,
     };
@@ -170,6 +172,7 @@ class RealizariRetineri extends React.Component {
       totaldrepturi: data.totaldrepturi,
       cas: data.cas,
       cass: data.cass,
+      cam: data.cam,
       valoaretichete: data.valoaretichete,
       impozit: data.impozit,
       restplata: data.restplata,
@@ -198,10 +201,14 @@ class RealizariRetineri extends React.Component {
     );
   }
 
+  recalculeaza() {
+    console.log("recalculeaza()");
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
-    // send ore suplimentare +
+    // send ore suplimentare + prima bruta + nr tichete + avans
   }
 
   render() {
@@ -233,7 +240,7 @@ class RealizariRetineri extends React.Component {
         </Modal>
 
         <Card>
-          {/* LUNA + AN */}
+          {/* SELECT LUNA + AN */}
           <Card.Header>
             <Row>
               {/* LUNA */}
@@ -269,7 +276,7 @@ class RealizariRetineri extends React.Component {
               </Col>
             </Row>
           </Card.Header>
-
+          {/* SELECT ANGAJAT */}
           <Card.Header>
             <Card.Title as="h4">Angajat</Card.Title>
             <InputGroup className="mb-3">
@@ -306,6 +313,123 @@ class RealizariRetineri extends React.Component {
             <Form onSubmit={this.onSubmit}>
               <Row>
                 {/* LEFT */}
+                <Col md={6} className="border rounded pt-3">
+                  <Row>
+                    <Col md={6}>
+                      <Form.Group id="functie">
+                        <Form.Label>Funcție</Form.Label>
+                        <Form.Control type="text" disabled value={this.state.functie || ''} />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="duratailucru">
+                        <Form.Label>Durată zi lucru</Form.Label>
+                        <Form.Control
+                          type="number"
+                          disabled
+                          value={this.state.duratazilucru || ''}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="normazilucru">
+                        <Form.Label>Normă lucru</Form.Label>
+                        <Form.Control type="text" disabled value={this.state.normalucru || ''} />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="salariubrut">
+                        <Form.Label>Salariu brut</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.salariubrut
+                              ? this.numberWithCommas(this.state.salariubrut)
+                              : ''
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="orelucrate">
+                        <Form.Label>Ore lucrate</Form.Label>
+                        <Form.Control
+                          type="number"
+                          disabled
+                          value={
+                            this.state.orelucrate -
+                            this.state.duratazilucru *
+                              (Number(this.state.zilelibere) + Number(this.state.zileinvoire))
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="tichete">
+                        <Form.Label>Nr. Tichete</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={
+                            this.state.nrtichete - this.state.zilelibere - this.state.zileinvoire
+                          }
+                          onChange={(e) => this.setState({ nrtichete: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="zilecm">
+                        <Form.Label>Zile concediu medical</Form.Label>
+                        <Form.Control type="number" disabled value={this.state.zilecm} />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="zilec">
+                        <Form.Label>Zile concediu odihna</Form.Label>
+                        <Form.Control type="text" disabled value={this.state.zileco} />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="zileconeplatit">
+                        <Form.Label>Zile libere</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.zilelibere}
+                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="zileinvoire">
+                        <Form.Label>Zile învoire</Form.Label>
+                        <Form.Control
+                          type="number"
+                          value={this.state.zileinvoire}
+                          onChange={(e) => this.setState({ zileinvoire: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                    {/* TODO */}
+                    <Col md={6}>
+                      <Form.Group id="oresuplimentare">
+                        <Form.Label>Ore suplimentare</Form.Label>
+                        <Form.Control type="text" disabled value={this.state.oresuplimentare} />
+                      </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                      <Form.Group id="primabruta">
+                        <Form.Label>Primă brută</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={this.state.primabruta}
+                          onChange={(e) => this.setState({ primabruta: e.target.value })}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Col>
+
+                {/* RIGHT */}
                 <Col md={6} className="border rounded pt-3">
                   <Row>
                     <Col md={12}>
@@ -380,130 +504,34 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                  </Row>
-                </Col>
-
-                {/* RIGHT */}
-                <Col md={6} className="border rounded pt-3">
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group id="functie">
-                        <Form.Label>Funcție</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.functie || ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="duratailucru">
-                        <Form.Label>Durată zi lucru</Form.Label>
-                        <Form.Control
-                          type="number"
-                          disabled
-                          value={this.state.duratazilucru || ''}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="normazilucru">
-                        <Form.Label>Normă lucru</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.normalucru || ''} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="salariubrut">
-                        <Form.Label>Salariu brut</Form.Label>
+                    <Col md={12}>
+                      <Form.Group id="cam">
+                        <Form.Label>CAM</Form.Label>
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.salariubrut
-                              ? this.numberWithCommas(this.state.salariubrut)
-                              : ''
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-
-                    {/* // TODO */}
-                    <Col md={6}>
-                      <Form.Group id="orelucrate">
-                        <Form.Label>Ore lucrate</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.orelucrate || ''} />
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group id="tichete">
-                        <Form.Label>Nr. Tichete</Form.Label>
-                        <Form.Control
-                          type="number"
-                          value={this.state.nrtichete || ''}
-                          onChange={(e) => this.setState({ nrtichete: e.target.value })}
-                        />
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group id="zilecm">
-                        <Form.Label>Zile concediu medical</Form.Label>
-                        <Form.Control type="number" disabled value={this.state.zilecm} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="zilec">
-                        <Form.Label>Zile concediu odihna</Form.Label>
-                        <Form.Control type="text" disabled value={this.state.zileco} />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="zileconeplatit">
-                        <Form.Label>Zile libere</Form.Label>
-                        <Form.Control
-                          type="number"
-                          value={this.state.zilelibere}
-                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="zileinvoire">
-                        <Form.Label>Zile învoire</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={this.state.zileinvoire || ''}
-                          onChange={(e) => this.setState({ zileinvoire: e.target.value })}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="oresuplimentare">
-                        <Form.Label>Ore suplimentare</Form.Label>
-                        <Form.Control
-                          type="text"
-                          disabled
-                          value={this.state.oresuplimentare || ''}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group id="primabruta">
-                        <Form.Label>Primă brută</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={this.state.primabruta || ''}
-                          onChange={(e) => this.setState({ primabruta: e.target.value })}
+                          value={this.state.cam ? this.numberWithCommas(this.state.cam) : ''}
                         />
                       </Form.Group>
                     </Col>
                   </Row>
                 </Col>
 
+                {/* BUTTONS */}
                 <Col md={12} className="m-0 ml-0 mt-3">
+                  <Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    onClick={this.recalculeaza}
+                  >
+                    Recalculează
+                  </Button>
                   <Button
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat}
                     type="submit"
                   >
-                    Recalculează
+                    Salvează
                   </Button>
                 </Col>
               </Row>
