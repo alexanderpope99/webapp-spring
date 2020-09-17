@@ -5,13 +5,14 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-
 const DashboardDefault = React.lazy(() => import('./Demo/Dashboard/Default'));
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
 
 const UIBasicButton = React.lazy(() => import('./Demo/UIElements/Basic/Button'));
 const UIBasicBadges = React.lazy(() => import('./Demo/UIElements/Basic/Badges'));
-const UIBasicBreadcrumbPagination = React.lazy(() => import('./Demo/UIElements/Basic/BreadcrumbPagination'));
+const UIBasicBreadcrumbPagination = React.lazy(() =>
+  import('./Demo/UIElements/Basic/BreadcrumbPagination')
+);
 
 const UIBasicCollapse = React.lazy(() => import('./Demo/UIElements/Basic/Collapse'));
 const UIBasicTabsPills = React.lazy(() => import('./Demo/UIElements/Basic/TabsPills'));
@@ -30,6 +31,9 @@ const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
+const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
+const RoleTabel = React.lazy(() => import('./Demo/Tables/RoleTabel'));
+const PermissionTabel = React.lazy(() => import('./Demo/Tables/PermissionTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -42,46 +46,76 @@ const OtherSamplePage = React.lazy(() => import('./Demo/Other/SamplePage'));
 const OtherDocs = React.lazy(() => import('./Demo/Other/Docs'));
 
 const routes = [
+  // LOGIN?
 
-    // LOGIN?
-    
+  // CARDS
+  { path: '/dashboard/societati', exact: true, name: 'Societati', component: Societati },
+  { path: '/dashboard/default', exact: true, name: 'Default', component: DashboardDefault },
+  { path: '/basic/button', exact: true, name: 'Basic Button', component: UIBasicButton },
+  { path: '/basic/badges', exact: true, name: 'Basic Badges', component: UIBasicBadges },
+  {
+    path: '/basic/breadcrumb-paging',
+    exact: true,
+    name: 'Basic Breadcrumb Pagination',
+    component: UIBasicBreadcrumbPagination,
+  },
+  { path: '/basic/collapse', exact: true, name: 'Basic Collapse', component: UIBasicCollapse },
+  {
+    path: '/basic/tabs-pills',
+    exact: true,
+    name: 'Basic Tabs & Pills',
+    component: UIBasicTabsPills,
+  },
+  {
+    path: '/basic/typography',
+    exact: true,
+    name: 'Basic Typography',
+    component: UIBasicBasicTypography,
+  },
 
-    // CARDS
-    { path: '/dashboard/societati', exact: true, name: 'Societati', component: Societati },
-    { path: '/dashboard/default', exact: true, name: 'Default', component: DashboardDefault },
-    { path: '/basic/button', exact: true, name: 'Basic Button', component: UIBasicButton },
-    { path: '/basic/badges', exact: true, name: 'Basic Badges', component: UIBasicBadges },
-    { path: '/basic/breadcrumb-paging', exact: true, name: 'Basic Breadcrumb Pagination', component: UIBasicBreadcrumbPagination },
-    { path: '/basic/collapse', exact: true, name: 'Basic Collapse', component: UIBasicCollapse },
-    { path: '/basic/tabs-pills', exact: true, name: 'Basic Tabs & Pills', component: UIBasicTabsPills },
-    { path: '/basic/typography', exact: true, name: 'Basic Typography', component: UIBasicBasicTypography },
+  // FORMS
+  { path: '/forms/form-basic', exact: true, name: 'Forms Elements', component: FormsElements },
+  { path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: AddSocietate },
+  { path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
+  { path: '/forms/angajat', exact: true, name: 'Angajat', component: Angajat },
+  {
+    path: '/forms/realizari-retineri',
+    exact: true,
+    name: 'Realizari / Retineri',
+    component: RealizariRetineri,
+  },
 
-    // FORMS
-    { path: '/forms/form-basic', exact: true, name: 'Forms Elements', component: FormsElements },
-    { path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: AddSocietate },
-    { path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
-    { path: '/forms/angajat', exact: true, name: 'Angajat', component: Angajat },
-    { path: '/forms/realizari-retineri', exact: true, name: 'Realizari / Retineri', component: RealizariRetineri },
+  // TABLES
+  { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
+  { path: '/tables/angajati-tabel', exact: true, name: 'Tabel Angajati', component: AngajatiTabel },
+  {
+    path: '/tables/societati-tabel',
+    exact: true,
+    name: 'Tabel Societati',
+    component: SocietatiTabel,
+  },
+  { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
+  {
+    path: '/tables/concedii-odihna',
+    exact: true,
+    name: 'Concedii Odihna',
+    component: ConcediiOdihna,
+  },
+  { path: '/tables/user-tabel', exact: true, name: 'User Tabel', component: UserTabel },
+  { path: '/tables/role-tabel', exact: true, name: 'Role Tabel', component: RoleTabel },
+  { path: '/tables/permission-tabel', exact: true, name: 'Role Tabel', component: PermissionTabel },
 
+  // EDIT
+  { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
 
-    // TABLES
-    { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
-    { path: '/tables/angajati-tabel', exact: true, name: 'Tabel Angajati', component: AngajatiTabel },
-    { path: '/tables/societati-tabel', exact: true, name: 'Tabel Societati', component: SocietatiTabel },
-    { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
-    { path: '/tables/concedii-odihna', exact: true, name: 'Concedii Odihna', component: ConcediiOdihna },
+  { path: '/charts/nvd3', exact: true, name: 'Nvd3 Chart', component: Nvd3Chart },
+  { path: '/maps/google-map', exact: true, name: 'Google Map', component: GoogleMap },
+  { path: '/sample-page', exact: true, name: 'Sample Page', component: OtherSamplePage },
+  { path: '/docs', exact: true, name: 'Documentation', component: OtherDocs },
 
-    // EDIT
-    { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
-
-    { path: '/charts/nvd3', exact: true, name: 'Nvd3 Chart', component: Nvd3Chart },
-    { path: '/maps/google-map', exact: true, name: 'Google Map', component: GoogleMap },
-    { path: '/sample-page', exact: true, name: 'Sample Page', component: OtherSamplePage },
-    { path: '/docs', exact: true, name: 'Documentation', component: OtherDocs },
-
-    // TEST
-    // { path: '/test/angajat', exact: true, name: 'Angajat Test', component: AngajatTest },
-    // { path: '/test/add-persoana', exact: true, name: 'Add Persoana Test', component: AddPersoanaTest },
+  // TEST
+  // { path: '/test/angajat', exact: true, name: 'Angajat Test', component: AngajatTest },
+  // { path: '/test/add-persoana', exact: true, name: 'Add Persoana Test', component: AddPersoanaTest },
 ];
 
 export default routes;

@@ -87,6 +87,35 @@ export default {
       ],
     },
     {
+      id: 'configuration',
+      title: 'Configuration',
+      type: 'group',
+      icon: 'icon-group',
+      children: [
+        {
+          id: 'user-tabel',
+          title: 'Tabel Useri',
+          type: 'item',
+          url: '/tables/user-tabel',
+          icon: 'feather icon-file-text',
+        },
+        {
+          id: 'role-tabel',
+          title: 'Tabel Role',
+          type: 'item',
+          url: '/tables/role-tabel',
+          icon: 'feather icon-file-text',
+        },
+        {
+          id: 'permission-tabel',
+          title: 'Tabel Permission',
+          type: 'item',
+          url: '/tables/permission-tabel',
+          icon: 'feather icon-file-text',
+        },
+      ],
+    },
+    {
       id: 'ui-element',
       title: 'UI ELEMENT',
       type: 'group',
