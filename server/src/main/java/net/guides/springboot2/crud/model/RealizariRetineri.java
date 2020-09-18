@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "statsalariat")
+@Table(name = "realizariretineri")
 public class RealizariRetineri {
 
     private long id;
@@ -69,6 +69,10 @@ public class RealizariRetineri {
 
     public RealizariRetineri( long idcontract, int luna, int an, int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere, int deducere )
     {
+		this.idcontract = idcontract;
+		this.luna = luna;
+		this.an = an;
+
         this.nrtichete = nrtichete;
         this.zileco = zileco;
         this.zileconeplatit = zileconeplatit;

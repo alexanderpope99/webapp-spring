@@ -171,8 +171,6 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    
-
     // get contract by idpersoana :: contract body needed for 4 fields
     const contract = await fetch(`${server.address}/contract/idp=${idpersoana}`, {
       method: 'GET',
@@ -183,17 +181,18 @@ class RealizariRetineri extends React.Component {
     console.log('contract:', contract);
 
     // TODO: get ore suplimentare by idcontract
-    const oresuplimentare = await fetch(`${server.address}/oresuplimentare/idc=${contract.id}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then(res => (res.ok ? res.json() : null))
-      .catch(err => console.error(err));
-    console.log(oresuplimentare);
+    let oresuplimentare = [];
+    // const oresuplimentare = await fetch(`${server.address}/oresuplimentare/idss=${contract.id}`, {
+    //   method: 'GET',
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+    //   .then(res => (res.ok ? res.json() : null))
+    //   .catch(err => console.error(err));
+    // console.log(oresuplimentare);
 
     // calc realizariretineri
     const data = await fetch(
-      `${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`,
+      `${server.address}/realizariretineri/calc/idp=${idpersoana}&mo=${luna}&y=${an}&ttd=${0}&nrt=${this.state.nrtichete}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },

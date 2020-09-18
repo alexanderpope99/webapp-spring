@@ -42,10 +42,8 @@ public class OresuplimentareController {
     }
 
     @GetMapping("idss={id}")
-    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdcontract(@PathVariable(value = "id") Long idstat)
-            throws ResourceNotFoundException {
-        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat)
-                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this idstat :: " + idstat));
+    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdcontract(@PathVariable(value = "id") Long idstat) {
+        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat);
 
         return ResponseEntity.ok().body(oresuplimentare);
     }
