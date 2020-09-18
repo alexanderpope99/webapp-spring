@@ -8,4 +8,6 @@ import net.guides.springboot2.crud.model.RealizariRetineri;
 @Repository
 public interface RealizariRetineriRepository extends JpaRepository<RealizariRetineri, Long>{ 
     public RealizariRetineri findByLunaAndAn(int luna, int an);
+    
+    public RealizariRetineri findByLunaAndAnAndIdcontract(int luna, int an, long idcontract);
 }

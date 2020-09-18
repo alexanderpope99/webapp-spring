@@ -1,9 +1,11 @@
 package net.guides.springboot2.crud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyNameException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,16 +46,19 @@ public class RealizariRetineriController {
         ) throws ResourceNotFoundException {
             long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
             return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, totalDrepturi, nrTichete);
-    }
+	}
+	
+	@PostMapping("")
+	
 
-    @PostMapping("save/idss={idss}&mo={luna}&y={an}")
+    @PutMapping("update/idc={idc}&mo={luna}&y={an}")
     public RealizariRetineri saveRealizariRetineri(
-        RealizariRetineri newRealizariRetineri,
-        @PathVariable(name="luna") int luna,
+		@PathVariable(name="luna") int luna,
         @PathVariable(name="an") int an,
-        @PathVariable(name="idss") long idstatsalariat) throws ResourceNotFoundException {
+        @PathVariable(name="idc") long idcontract,
+		RealizariRetineri newRealizariRetineri) throws ResourceNotFoundException {
 
-        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAn(luna, an);
+        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 
         newRealizariRetineri.setId(oldRealizariRetineri.getId());
 
