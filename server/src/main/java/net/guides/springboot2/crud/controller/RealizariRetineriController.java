@@ -35,15 +35,14 @@ public class RealizariRetineriController {
         return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
 
-    @GetMapping("calc/idp={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
+    @GetMapping("calc/idc={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
     public RealizariRetineri calcRealizariRetineri (
-        @PathVariable(value="id") Long idpersoana, 
+        @PathVariable(value="id") Long idcontract, 
         @PathVariable(value="luna") Integer luna, 
         @PathVariable(value="an") Integer an,
         @PathVariable(value="ttd") Float totalDrepturi,
         @PathVariable(value="nrt") Integer nrTichete
         ) throws ResourceNotFoundException {
-            long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
             return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, totalDrepturi, nrTichete);
 	}
 	
@@ -69,6 +68,25 @@ public class RealizariRetineriController {
 
         final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
 
+        return updatedRR;
+	}
+	
+	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
+    public RealizariRetineri calcThenUpdateRealizariRetineri(
+		@PathVariable(value="id") Long idcontract, 
+        @PathVariable(value="luna") Integer luna, 
+        @PathVariable(value="an") Integer an,
+        @PathVariable(value="ttd") Float totalDrepturiModifier,
+        @PathVariable(value="nrt") Integer nrTichete
+		) throws ResourceNotFoundException {
+
+		RealizariRetineri oldRealizariRetineri = getRealizariRetineriByIdcontract(idcontract, luna, an);
+		long idstat = oldRealizariRetineri.getId();
+
+		RealizariRetineri newRealizariRetineri = calcRealizariRetineri(idcontract, luna, an, totalDrepturiModifier, nrTichete);
+        newRealizariRetineri.setId(idstat);
+
+        final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
         return updatedRR;
     }
 }
