@@ -168,6 +168,15 @@ public class RealizariRetineri {
     public int getDeducere() {
       return deducere;
     }
+    public int getAn() {
+      return an;
+    }
+    public Long getIdcontract() {
+      return idcontract;
+    }
+    public int getLuna() {
+      return luna;
+    }
 
     //! SETTERS
     public void setNrtichete(int nrtichete) {
@@ -229,6 +238,15 @@ public class RealizariRetineri {
     }
     public void setDeducere(int deducere) {
       this.deducere = deducere;
+    }
+    public void setAn(int an) {
+      this.an = an;
+    }
+    public void setIdcontract(Long idcontract) {
+      this.idcontract = idcontract;
+    }
+    public void setLuna(int luna) {
+      this.luna = luna;
     }
 }
 

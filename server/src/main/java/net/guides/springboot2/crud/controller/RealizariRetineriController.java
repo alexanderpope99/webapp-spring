@@ -3,11 +3,13 @@ package net.guides.springboot2.crud.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
+import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.services.RealizariRetineriService;
 
 
@@ -16,6 +18,8 @@ import net.guides.springboot2.crud.services.RealizariRetineriService;
 public class RealizariRetineriController {
     @Autowired
     private RealizariRetineriService realizariRetineriService;
+    @Autowired
+    private RealizariRetineriRepository realizariRetineriRepository;
 
 
     @GetMapping("idc={id}&mo={luna}&y={an}")
@@ -40,6 +44,22 @@ public class RealizariRetineriController {
         ) throws ResourceNotFoundException {
             long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
             return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, totalDrepturi, nrTichete);
+    }
+
+    @PostMapping("save/idss={idss}&mo={luna}&y={an}")
+    public RealizariRetineri saveRealizariRetineri(
+        RealizariRetineri newRealizariRetineri,
+        @PathVariable(name="luna") int luna,
+        @PathVariable(name="an") int an,
+        @PathVariable(name="idss") long idstatsalariat) throws ResourceNotFoundException {
+
+        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAn(luna, an);
+
+        newRealizariRetineri.setId(oldRealizariRetineri.getId());
+
+        final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
+
+        return updatedRR;
     }
 }
     

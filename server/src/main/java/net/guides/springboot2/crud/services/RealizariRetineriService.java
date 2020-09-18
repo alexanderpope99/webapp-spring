@@ -43,7 +43,7 @@ public class RealizariRetineriService {
         return contract.getId();
     }
 
-    public int getRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
+    public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
 
         Contract contract = contractService.getContractById(idcontract);
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
@@ -102,7 +102,7 @@ public class RealizariRetineriService {
         float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
         float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
         int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
-        int restPlata = getRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere); // already rounded
+        int restPlata = calcRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere); // rv is rounded
         float impozit = Math.round(this.impozitSalariu);
 
 

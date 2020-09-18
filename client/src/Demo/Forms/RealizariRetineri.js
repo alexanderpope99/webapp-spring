@@ -191,7 +191,7 @@ class RealizariRetineri extends React.Component {
       .catch(err => console.error(err));
     console.log(oresuplimentare);
 
-    // get date realizariretineri
+    // calc realizariretineri
     const data = await fetch(
       `${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`,
       {
