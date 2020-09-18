@@ -33,6 +33,7 @@ class RealizariRetineri extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
     this.addOrasuplimentara = this.addOrasuplimentara.bind(this);
+    this.renderTabelore = this.renderTabelore.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
@@ -360,18 +361,8 @@ class RealizariRetineri extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(ore_body),
     })
-      .then((res) => (res.ok ? res.json() : null))
+      .then(this.renderTabelore)
       .catch((err) => console.error(err));
-
-    let oreSuplimentare = await this.getOresuplimentare(
-      this.state.idcontract,
-      this.state.luna.nr,
-      this.state.an
-    );
-
-    this.setState({
-      oresuplimentare: oreSuplimentare,
-    });
   }
 
   async deleteOra(id) {
@@ -379,17 +370,23 @@ class RealizariRetineri extends React.Component {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
-      .then(res => res.ok ? res.json() : null)
+      .then(this.renderTabelore)
       .catch((err) => console.error(err));
+  }
 
+  async renderTabelore() {
     let oreSuplimentare = await this.getOresuplimentare(
       this.state.idcontract,
       this.state.luna.nr,
       this.state.an
     );
+    let totaloresuplimentare = 0;
+    for(let ora of oreSuplimentare)
+      totaloresuplimentare += ora.total;
 
     this.setState({
       oresuplimentare: oreSuplimentare,
+      totaloresuplimentare: totaloresuplimentare,
     });
   }
 
@@ -422,9 +419,9 @@ class RealizariRetineri extends React.Component {
 
       return (
         <tr key={ora.id}>
-          <th>{ora.nr}</th>
-          <th>{ora.procent}</th>
-          <th>{ora.total}</th>
+          <th>{ora.nr} ore</th>
+          <th>{ora.procent}%</th>
+          <th>{ora.total} RON</th>
           <th className="d-inline-flex flex-row justify-content-around">
             <PopupState variant="popover" popupId="demo-popup-popover">
               {(popupState) => (
@@ -523,9 +520,9 @@ class RealizariRetineri extends React.Component {
                     size="sm"
                     type="number"
                     value={
-                      Number(this.state.nrore) *
+                      (Number(this.state.nrore) *
                       (Number(this.state.procent) / 100) *
-                      Number(this.state.salariupeora)
+                      Number(this.state.salariupeora)).toFixed(0)
                     }
                     disabled
                   />
