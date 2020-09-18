@@ -119,6 +119,20 @@ class RealizariRetineri extends React.Component {
       restplata: '',
     });
   }
+  clearUserInput() {
+    this.setState({
+      oresuplimentare: [],
+      zileinvoire: 0,
+      primabruta: 0,
+      zilelibere: 0,
+
+      avansnet: 0,
+      pensiefacultativa: 0,
+      pensiealimentara: 0,
+      popriri: 0,
+      imprumuturi: 0,
+    })
+  }
 
   componentDidMount() {
     this.setCurrentYearMonth(); // modifies state.an, state.luna
@@ -160,6 +174,7 @@ class RealizariRetineri extends React.Component {
   }
 
   async fillForm() {
+    this.clearUserInput();
     // get an, luna from select components
     let an = this.state.an;
     let luna = this.state.luna.nr;
@@ -190,11 +205,11 @@ class RealizariRetineri extends React.Component {
     //   .catch(err => console.error(err));
     // console.log(oresuplimentare);
 
-    // calc realizariretineri
+    // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calculates => saves to DB
     const data = await fetch(
-      `${server.address}/realizariretineri/calc/idp=${idpersoana}&mo=${luna}&y=${an}&ttd=${0}&nrt=${this.state.nrtichete}`,
+      `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       }
     )
@@ -282,9 +297,9 @@ class RealizariRetineri extends React.Component {
     let nrt = this.state.nrtichete;
 
     const data = await fetch(
-      `${server.address}/realizariretineri/calc/idp=${idpersoana}&mo=${luna}&y=${an}&ttd=${ttd}&nrt=${nrt}`,
+      `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&ttd=${ttd}&nrt=${nrt}`,
       {
-        method: 'GET',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       }
     )
@@ -366,6 +381,7 @@ class RealizariRetineri extends React.Component {
                     this.setState(
                       {
                         luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+
                       },
                       this.fillForm
                     )
