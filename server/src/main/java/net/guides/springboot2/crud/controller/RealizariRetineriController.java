@@ -47,20 +47,13 @@ public class RealizariRetineriController {
             return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, totalDrepturi, nrTichete);
 	}
 	
-	@PostMapping("save/idc={id}&mo={luna}&y-{an}")
+	@PostMapping("save/idc={id}&mo={luna}&y={an}")
 	public RealizariRetineri saveRealizariRetineri(
 		@PathVariable(value="id") Long idcontract,
 		@PathVariable(value="luna") Integer luna,
 		@PathVariable(value="an") Integer an
 	) throws ResourceNotFoundException {	
-
 		return realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
-		// // get nr tichere by idcontract
-		// int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
-
-		// RealizariRetineri realizariRetineri = realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, 0, nrTichete);
-
-		// return realizariRetineri;
 	}
 
     @PutMapping("update/idc={idc}&mo={luna}&y={an}")

@@ -45,7 +45,7 @@ public class RealizariRetineriService {
     }
 
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
-        return realizariRetineriRepository.findByLunaAndAn(luna, an);
+        return realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 	}
 	
 	public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
@@ -111,6 +111,9 @@ public class RealizariRetineriService {
 	}	// calcRealizariRetineri
 
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
+		if(realizariRetineriRepository.existsByLunaAndAnAndIdcontract(luna, an, idcontract))
+			return getRealizariRetineri(luna, an, idcontract);
+
 		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
 
 		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete);
