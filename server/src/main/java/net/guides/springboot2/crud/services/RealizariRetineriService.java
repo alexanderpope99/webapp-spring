@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.services;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,9 @@ public class RealizariRetineriService {
     @Autowired
     private ContractService contractService;
     @Autowired
-    private ParametriiSalariuService parametriiSalariuService;
+	private ParametriiSalariuService parametriiSalariuService;
+	@Autowired
+	private TicheteService ticheteService;
 
     // REPOSITORIES
     @Autowired
@@ -43,7 +44,11 @@ public class RealizariRetineriService {
         return contract.getId();
     }
 
-    public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
+    public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
+        return realizariRetineriRepository.findByLunaAndAn(luna, an);
+	}
+	
+	public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
 
         Contract contract = contractService.getContractById(idcontract);
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
@@ -68,11 +73,7 @@ public class RealizariRetineriService {
         restPlata -= platesteImpozit * impozitSalariu;
 
         return Math.round(restPlata);
-    }
-
-    public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
-        return realizariRetineriRepository.findByLunaAndAn(luna, an);
-    }
+    }	// calcRestPlata
 
     public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, float totalDrepturiModifier, int nrTichete) throws ResourceNotFoundException {
         Contract contract = contractService.getContractById(idcontract);
@@ -106,6 +107,16 @@ public class RealizariRetineriService {
         float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
-    }
+        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
+	}	// calcRealizariRetineri
+
+	public RealizariRetineri saveRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
+		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+
+		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete);
+
+		return realizariRetineriRepository.save(realizariRetineri);
+
+		// return realizariRetineri;
+	}
 }

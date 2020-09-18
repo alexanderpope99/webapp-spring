@@ -39,7 +39,7 @@ public class RealizariRetineri {
     private Integer orelucrate = 0;
 
     @Column(name = "totaldrepturi")
-    private Float totaldrepturi = 0f;
+    private Integer totaldrepturi = 0;
 
     @Column(name = "salariupezi")
     private Float salariupezi = 0f;
@@ -67,7 +67,7 @@ public class RealizariRetineri {
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecm, Integer zileconeplatit, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Float totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere )
+    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecm, Integer zileconeplatit, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere )
     {
 		this.idcontract = idcontract;
 		this.luna = luna;
@@ -222,7 +222,7 @@ public class RealizariRetineri {
     public void setValoaretichete(Float valoaretichete) {
       this.valoaretichete = valoaretichete;
     }
-    public void setTotaldrepturi(Float totaldrepturi) {
+    public void setTotaldrepturi(Integer totaldrepturi) {
       this.totaldrepturi = totaldrepturi;
     }
     public void setNrpersoaneintretinere(Integer nrpersoaneintretinere) {
