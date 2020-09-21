@@ -63,15 +63,20 @@ public class RealizariRetineri {
     @Column(name = "nrpersoaneintretinere")
     private Integer nrpersoaneintretinere = 0;
     @Column(name = "deducere")
-    private Integer deducere = 0;
+	private Integer deducere = 0;
+	
+    @Column(name = "primabruta")
+	private Integer primabruta;
+	@Column(name = "totaloresuplimentare")
+	private Integer totaloresuplimentare;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecm, Integer zileconeplatit, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere )
+    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecm, Integer zileconeplatit, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta, Integer totaloresuplimentare )
     {
-		this.idcontract = idcontract;
-		this.luna = luna;
-		this.an = an;
+        this.idcontract = idcontract;
+        this.luna = luna;
+        this.an = an;
 
         this.nrtichete = nrtichete;
         this.zileco = zileco;
@@ -99,7 +104,9 @@ public class RealizariRetineri {
         this.restplata = restplata;
 
         this.nrpersoaneintretinere = nrpersoaneintretinere;
-        this.deducere = deducere;
+		this.deducere = deducere;
+		this.primabruta = primabruta;
+		this.totaloresuplimentare = totaloresuplimentare;
     }
 
     @Id
@@ -180,7 +187,13 @@ public class RealizariRetineri {
     }
     public Integer getLuna() {
       return luna;
-    }
+	}
+	public Integer getPrimabruta() {
+		return primabruta;
+	}
+	public Integer getTotaloresuplimentare() {
+		return totaloresuplimentare;
+	}
 
     //! SETTERS
     public void setNrtichete(Integer nrtichete) {
@@ -251,6 +264,12 @@ public class RealizariRetineri {
     }
     public void setLuna(Integer luna) {
       this.luna = luna;
-    }
+	}
+	public void setPrimabruta(Integer primabruta) {
+		this.primabruta = primabruta;
+	}
+	public void setTotaloresuplimentare(Integer totaloresuplimentare) {
+		this.totaloresuplimentare = totaloresuplimentare;
+	}
 }
 

@@ -27,6 +27,9 @@ class PersoaneTabel extends React.Component {
   }
 
   componentDidMount() {
+    if(!getSocSel())
+      window.location.href = "/dashboard/societati";
+
     this.onRefresh();
     window.scrollTo(0, 0);
   }

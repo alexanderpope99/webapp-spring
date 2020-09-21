@@ -75,7 +75,7 @@ public class RealizariRetineriService {
         return Math.round(restPlata);
     }	// calcRestPlata
 
-    public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, float totalDrepturiModifier, int nrTichete) throws ResourceNotFoundException {
+    public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, int primaBruta, int nrTichete, int totalOreSuplimentare) throws ResourceNotFoundException {
         Contract contract = contractService.getContractById(idcontract);
 
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
@@ -91,7 +91,7 @@ public class RealizariRetineriService {
         int oreLucrate = zileLucrate * duratazilucru;
         int zilePlatite = norma - zileCONeplatit;
 
-        float totalDrepturi = contract.getSalariutarifar() + totalDrepturiModifier;
+        float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
 
         float salariuPeZi = totalDrepturi / norma;
         float salariuPeOra = totalDrepturi / norma / duratazilucru;
@@ -107,7 +107,7 @@ public class RealizariRetineriService {
         float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere );
+        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere, primaBruta, totalOreSuplimentare );
 	}	// calcRealizariRetineri
 
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
@@ -116,7 +116,7 @@ public class RealizariRetineriService {
 
 		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
 
-		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete);
+		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
 
 		return realizariRetineriRepository.save(realizariRetineri);
 

@@ -21,11 +21,12 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
-import { Typography } from '@material-ui/core';
+import { Input, Typography } from '@material-ui/core';
 
 class RealizariRetineri extends React.Component {
   constructor() {
     super();
+
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.recalculeaza = this.recalculeaza.bind(this);
@@ -35,6 +36,7 @@ class RealizariRetineri extends React.Component {
     this.addOrasuplimentara = this.addOrasuplimentara.bind(this);
     this.renderTabelore = this.renderTabelore.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.calcNrTichete = this.calcNrTichete.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -107,7 +109,7 @@ class RealizariRetineri extends React.Component {
       zileconeplatit: '',
       zilec: '',
       zileinvoire: 0, // user input
-      primabruta: 0, // user input
+      primabruta: 0,
       zilelibere: 0, // user input
       salariupezi: 0,
       salariupeora: 0,
@@ -115,7 +117,7 @@ class RealizariRetineri extends React.Component {
       oresuplimentare: [], // user input
       nrore: 0,
       procent: '',
-      total: 0,
+      totaloresuplimentare: 0,
 
       // retineri
       avansnet: 0,
@@ -152,6 +154,9 @@ class RealizariRetineri extends React.Component {
   }
 
   componentDidMount() {
+    if(!getSocSel())
+      window.location.href = "/dashboard/societati";
+
     this.setCurrentYearMonth(); // modifies state.an, state.luna
     this.setPersoane(); // date personale, also fills lista_angajati
   }
@@ -212,7 +217,7 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
     console.log('contract:', contract);
 
-    // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calculates => saves to DB
+    // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calc => saves to DB
     const data = await fetch(
       `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
       {
@@ -270,6 +275,7 @@ class RealizariRetineri extends React.Component {
       idcontract: contract.id,
       oresuplimentare: oresuplimentare,
       totaloresuplimentare: totaloresuplimentare,
+      primabruta: data.primabruta,
     });
   }
 
@@ -302,11 +308,12 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    let ttd = this.state.primabruta;
+    let pb = this.state.primabruta;
     let nrt = this.state.nrtichete;
+    let tos = this.state.totaloresuplimentare;
 
     const data = await fetch(
-      `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&ttd=${ttd}&nrt=${nrt}`,
+      `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -316,7 +323,7 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
 
     console.log(data);
-    // totaldrepturi
+    // total
     this.setState({
       totaldrepturi: data.totaldrepturi,
       restplata: data.restplata,
@@ -325,7 +332,26 @@ class RealizariRetineri extends React.Component {
       cam: data.cam,
       impozit: data.impozit,
       valoaretichete: data.valoaretichete,
-    });
+    }, this.fillForm);
+  }
+
+  async calcNrTichete() {
+    if(!this.state.selected_angajat) return;
+
+    let idc = this.state.idcontract;
+    let luna = this.state.luna.nr;
+    let an = this.state.an;
+    let nrTichete = await fetch(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+    console.log(nrTichete);
+    this.setState({
+      nrtichete: nrTichete
+    })
   }
 
   async getOresuplimentare(idc, luna, an) {
@@ -381,8 +407,7 @@ class RealizariRetineri extends React.Component {
       this.state.an
     );
     let totaloresuplimentare = 0;
-    for(let ora of oreSuplimentare)
-      totaloresuplimentare += ora.total;
+    for (let ora of oreSuplimentare) totaloresuplimentare += ora.total;
 
     this.setState({
       oresuplimentare: oreSuplimentare,
@@ -396,7 +421,6 @@ class RealizariRetineri extends React.Component {
       modalMessage: '',
       nrore: 0,
       procent: '',
-      total: 0,
     });
   }
 
@@ -519,11 +543,11 @@ class RealizariRetineri extends React.Component {
                   <Form.Control
                     size="sm"
                     type="number"
-                    value={
-                      (Number(this.state.nrore) *
+                    value={(
+                      Number(this.state.nrore) *
                       (Number(this.state.procent) / 100) *
-                      Number(this.state.salariupeora)).toFixed(0)
-                    }
+                      Number(this.state.salariupeora)
+                    ).toFixed(0)}
                     disabled
                   />
                 </Form.Group>
@@ -693,19 +717,19 @@ class RealizariRetineri extends React.Component {
                     <Col md={6}>
                       <Form.Group id="tichete">
                         <Form.Label>Nr. Tichete</Form.Label>
+                        <InputGroup>
                         <Form.Control
                           type="number"
                           min="0"
-                          value={
-                            this.state.nrtichete - this.state.zilelibere - this.state.zileinvoire <
-                            0
-                              ? 0
-                              : this.state.nrtichete -
-                                this.state.zilelibere -
-                                this.state.zileinvoire
-                          }
+                          value={this.state.nrtichete}
                           onChange={(e) => this.setState({ nrtichete: e.target.value })}
                         />
+                        <InputGroup.Append>
+                          <Button onClick={this.calcNrTichete} size="sm" className="p-0 pl-2 pr-2"
+                            variant={this.state.selected_angajat ? "outline-info" : "outline-dark"}
+                            disabled={this.state.selected_angajat ? false : true}>Caclulează<br/>automat</Button>
+                        </InputGroup.Append>
+                        </InputGroup>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -732,7 +756,7 @@ class RealizariRetineri extends React.Component {
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
                                 Sumă brută:{' '}
-                                {(this.state.zileconeplatit * this.state.salariupezi).toFixed(0)}{' '}
+                                {(this.state.zileco * this.state.salariupezi).toFixed(0)}{' '}
                                 RON
                               </InputGroup.Text>
                             </InputGroup.Append>
@@ -770,12 +794,12 @@ class RealizariRetineri extends React.Component {
                           <Form.Control
                             type="text"
                             disabled
-                            value={this.state.totaloresuplimentare + " RON"}
+                            value={this.state.totaloresuplimentare + ' RON'}
                           />
                           <InputGroup.Append>
                             <Button
                               variant={
-                                this.state.selected_angajat ? 'outline-secondary' : 'outline-dark'
+                                this.state.selected_angajat ? 'outline-info' : 'outline-dark'
                               }
                               disabled={!this.state.selected_angajat}
                               onClick={() => this.veziOreSuplimentare()}
@@ -960,6 +984,23 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           disabled
                           value={this.state.cam ? this.numberWithCommas(this.state.cam) : ''}
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={4}>
+                      <Form.Group id="cheltuieliangajator">
+                        <Form.Label>Cheltuieli angajator</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={
+                            this.state.cam
+                              ? this.numberWithCommas(
+                                  Number(this.state.cam) + Number(this.state.totaldrepturi)
+                                )
+                              : ''
+                          }
                         />
                       </Form.Group>
                     </Col>
