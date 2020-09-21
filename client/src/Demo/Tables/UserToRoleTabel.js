@@ -11,21 +11,21 @@ import Edit from '@material-ui/icons/Edit';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 
-class PermissionTabel extends React.Component {
+class RoleTabel extends React.Component {
   constructor(props) {
     super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
     this.resetModals = this.resetModals.bind(this);
-    this.addPermission = this.addPermission.bind(this);
-    this.deletePermission = this.deletePermission.bind(this);
-    this.editPermission = this.editPermission.bind(this);
-    this.updatePermission = this.updatePermission.bind(this);
+    this.addRole = this.addRole.bind(this);
+    this.deleteRole = this.deleteRole.bind(this);
+    this.editRole = this.editRole.bind(this);
+    this.updateRole = this.updateRole.bind(this);
 
     this.state = {
-      permissions: [],
-      permissionComponent: null,
+      roles: [],
+      roleComponent: null,
 
       // add modal:
       id: '',
@@ -45,9 +45,9 @@ class PermissionTabel extends React.Component {
   }
 
   async fillTable() {
-    if (typeof this.state.permissions === 'undefined') return;
+    if (typeof this.state.roles === 'undefined') return;
     //? fetch
-    const permissions = await fetch(`${server.address}/permission/`, {
+    const roles = await fetch(`${server.address}/role/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -55,19 +55,19 @@ class PermissionTabel extends React.Component {
       .then((res) => (res.status !== 200 ? null : res.json()))
       .catch((err) => console.error('err', err));
 
-    if (permissions !== null) {
+    if (roles !== null) {
       this.setState(
         {
-          permissions: permissions,
+          roles: roles,
         },
-        this.renderPermission
+        this.renderRole
       );
     } else {
       this.setState(
         {
-          permissions: [],
+          roles: [],
         },
-        this.renderPermission
+        this.renderRole
       );
     }
   }
@@ -78,6 +78,7 @@ class PermissionTabel extends React.Component {
       id: '',
       show: false,
       nume: '',
+      desc: '',
 
       // succes modal:
       show_confirm: false,
@@ -97,12 +98,13 @@ class PermissionTabel extends React.Component {
         // reset data
         id: '',
         nume: '',
+        desc: '',
         isEdit: false,
       });
   }
 
-  async deletePermission(id) {
-    await fetch(`${server.address}/permission/${id}`, {
+  async deleteRole(id) {
+    await fetch(`${server.address}/role/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -110,27 +112,29 @@ class PermissionTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async editPermission(permission) {
-    if (typeof this.state.permissions === 'undefined') return;
+  async editRole(role) {
+    if (typeof this.state.roles === 'undefined') return;
 
     this.setState({
-      id: permission.id,
-      nume: permission.nume,
+      id: role.id,
+      nume: role.nume,
+      desc: role.desc,
       show: true,
       isEdit: true,
     });
   }
 
-  async addPermission() {
-    if (typeof this.state.permissions === 'undefined') return;
-    const permission_body = {
+  async addRole() {
+    if (typeof this.state.roles === 'undefined') return;
+    const role_body = {
       name: this.state.nume,
+      descriere: this.state.desc,
     };
 
-    let ok = await fetch(`${server.address}/permission`, {
+    let ok = await fetch(`${server.address}/role`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(permission_body),
+      body: JSON.stringify(role_body),
     })
       .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
@@ -141,22 +145,23 @@ class PermissionTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: 'Permission adăugat cu succes 💾',
+        modalMessage: 'Role adăugat cu succes 💾',
       });
       this.fillTable();
     }
   }
 
-  async updatePermission() {
-    const permission_body = {
+  async updateRole() {
+    const role_body = {
       id: this.state.id,
       name: this.state.nume,
+      descriere: this.state.desc,
     };
 
-    let ok = await fetch(`${server.address}/permission/${this.state.id}`, {
+    let ok = await fetch(`${server.address}/role/${this.state.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(permission_body),
+      body: JSON.stringify(role_body),
     })
       .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
@@ -167,29 +172,29 @@ class PermissionTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: 'Permission actualizat ✔',
+        modalMessage: 'Role actualizat ✔',
       });
       this.fillTable();
     }
   }
 
   // function to create react component with fetched data
-  renderPermission() {
+  renderRole() {
     this.setState({
-      permissionComponent: this.state.permissions.map((permission, index) => {
-        for (let key in permission) {
-          if (permission[key] === 'null' || permission[key] === null) permission[key] = '-';
+      roleComponent: this.state.roles.map((role, index) => {
+        for (let key in role) {
+          if (role[key] === 'null' || role[key] === null) role[key] = '-';
         }
         return (
-          <tr key={permission.id}>
-            <th>{permission.id}</th>
-            <th>{permission.name}</th>
+          <tr key={role.id}>
+            <th>{role.name}</th>
+            <th>{role.descriere}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
                     <Button
-                      onClick={() => this.editPermission(permission)}
+                      onClick={() => this.editRole(role)}
                       variant="outline-secondary"
                       className="ml-2 p-1 rounded-circle border-0"
                     >
@@ -214,14 +219,14 @@ class PermissionTabel extends React.Component {
                       }}
                     >
                       <Box p={2}>
-                        <Typography>Sigur ștergeți permission-ul?</Typography>
+                        <Typography>Sigur ștergeți roleul?</Typography>
                         <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
                           variant="outline-danger"
                           onClick={() => {
                             popupState.close();
-                            this.deletePermission(permission.id);
+                            this.deleteRole(role.id);
                           }}
                           className="mt-2 "
                         >
@@ -252,7 +257,7 @@ class PermissionTabel extends React.Component {
         {/* // ADD MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Permission</Modal.Title>
+            <Modal.Title>Role</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -267,13 +272,21 @@ class PermissionTabel extends React.Component {
                   }}
                 />
               </Form.Group>
+              <Form.Group id="desc">
+                <Form.Label>Descriere</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={this.state.desc}
+                  onChange={(e) => {
+                    this.setState({ desc: e.target.value });
+                  }}
+                />
+              </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="primary"
-              onClick={this.state.isEdit ? this.updatePermission : this.addPermission}
-            >
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateRole : this.addRole}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
@@ -297,7 +310,7 @@ class PermissionTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă permission-uri</Card.Title>
+                <Card.Title as="h5">Listă role-uri</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -325,7 +338,7 @@ class PermissionTabel extends React.Component {
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>{this.state.permissionComponent}</tbody>
+                  <tbody>{this.state.roleComponent}</tbody>
                 </Table>
               </Card.Body>
             </Card>
@@ -336,4 +349,4 @@ class PermissionTabel extends React.Component {
   }
 }
 
-export default PermissionTabel;
+export default RoleTabel;

@@ -212,6 +212,7 @@ class UserTabel extends React.Component {
         }
         return (
           <tr key={user.id}>
+            <th>{user.id}</th>
             <th>{user.username}</th>
             <th>{user.nume}</th>
             <th>{user.prenume}</th>
@@ -246,9 +247,7 @@ class UserTabel extends React.Component {
                     >
                       <Box p={2}>
                         <Typography>Sigur ștergeți userul?</Typography>
-                        <Typography variant="caption">
-                          Datele nu mai pot fi recuperate
-                        </Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
                           variant="outline-danger"
@@ -347,20 +346,14 @@ class UserTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="primary"
-              onClick={this.state.isEdit ? this.updateUser : this.addUser}
-            >
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateUser : this.addUser}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
 
         {/* CONFIRM Modal */}
-        <Modal
-          show={this.state.show_confirm}
-          onHide={() => this.handleClose(true)}
-        >
+        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>

@@ -14,14 +14,15 @@ public class Role {
     private long id;
     @Column(name = "name")
     private String name;
-    @Column(name = "desc")
-    private String desc;
+    @Column(name = "descriere")
+    private String descriere;
 
-    public Role() { }
+    public Role() {
+    }
 
-    public Role( String name, String desc ) {
+    public Role(String name, String descriere) {
         this.name = name;
-        this.desc = desc;
+        this.descriere = descriere;
     }
 
     @Id
@@ -29,24 +30,26 @@ public class Role {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     // GETTERS
-    public String getDesc() {
-        return desc;
+    public String getDescriere() {
+        return descriere;
     }
+
     public String getName() {
         return name;
     }
 
     // SETTERS
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescriere(String descriere) {
+        this.descriere = descriere;
     }
+
     public void setName(String name) {
         this.name = name;
     }
 }
-

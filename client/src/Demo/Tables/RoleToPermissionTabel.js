@@ -11,27 +11,25 @@ import Edit from '@material-ui/icons/Edit';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 
-class PermissionTabel extends React.Component {
+class RoleToPermissionTabel extends React.Component {
   constructor(props) {
     super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
     this.resetModals = this.resetModals.bind(this);
-    this.addPermission = this.addPermission.bind(this);
-    this.deletePermission = this.deletePermission.bind(this);
-    this.editPermission = this.editPermission.bind(this);
-    this.updatePermission = this.updatePermission.bind(this);
+    this.addRoleToPermission = this.addRoleToPermission.bind(this);
+    this.deleteRoleToPermission = this.deleteRoleToPermission.bind(this);
+    this.editRoleToPermission = this.editRoleToPermission.bind(this);
+    this.updateRoleToPermission = this.updateRoleToPermission.bind(this);
 
     this.state = {
-      permissions: [],
-      permissionComponent: null,
+      roles: [],
+      roleComponent: null,
 
       // add modal:
-      id: '',
-      show: false,
-      nume: '',
-      desc: '',
+      roleid: '',
+      permissionid: '',
 
       // succes modal:
       show_confirm: false,
@@ -45,9 +43,9 @@ class PermissionTabel extends React.Component {
   }
 
   async fillTable() {
-    if (typeof this.state.permissions === 'undefined') return;
+    if (typeof this.state.rolesToPermissions === 'undefined') return;
     //? fetch
-    const permissions = await fetch(`${server.address}/permission/`, {
+    const rolesToPermissions = await fetch(`${server.address}/roletopermission/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -55,19 +53,19 @@ class PermissionTabel extends React.Component {
       .then((res) => (res.status !== 200 ? null : res.json()))
       .catch((err) => console.error('err', err));
 
-    if (permissions !== null) {
+    if (rolesToPermissions !== null) {
       this.setState(
         {
-          permissions: permissions,
+          rolesToPermissions: rolesToPermissions,
         },
-        this.renderPermission
+        this.renderRoleToPermission
       );
     } else {
       this.setState(
         {
-          permissions: [],
+          rolesToPermissions: [],
         },
-        this.renderPermission
+        this.renderRoleToPermission
       );
     }
   }
@@ -75,9 +73,8 @@ class PermissionTabel extends React.Component {
   resetModals() {
     this.setState({
       // add modal:
-      id: '',
-      show: false,
-      nume: '',
+      roleid: '',
+      permissionid: '',
 
       // succes modal:
       show_confirm: false,
@@ -95,14 +92,14 @@ class PermissionTabel extends React.Component {
       this.setState({
         show: false,
         // reset data
-        id: '',
-        nume: '',
+        roleid: '',
+        permissionid: '',
         isEdit: false,
       });
   }
 
-  async deletePermission(id) {
-    await fetch(`${server.address}/permission/${id}`, {
+  async deleteRoleToPermission(roleid, permissionid) {
+    await fetch(`${server.address}/roletopermission/${roleid}+${permissionid}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -110,27 +107,28 @@ class PermissionTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async editPermission(permission) {
-    if (typeof this.state.permissions === 'undefined') return;
+  async editRoleToPermission(roleToPermission) {
+    if (typeof this.state.rolesToPermissions === 'undefined') return;
 
     this.setState({
-      id: permission.id,
-      nume: permission.nume,
+      roleid: '',
+      permissionid: '',
       show: true,
       isEdit: true,
     });
   }
 
-  async addPermission() {
-    if (typeof this.state.permissions === 'undefined') return;
-    const permission_body = {
-      name: this.state.nume,
+  async addRoleToPermission() {
+    if (typeof this.state.rolesToPermissions === 'undefined') return;
+    const roleToPermission_body = {
+      roleid: this.state.roleid,
+      permissionid: this.state.permissionid,
     };
 
-    let ok = await fetch(`${server.address}/permission`, {
+    let ok = await fetch(`${server.address}/roletopermission`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(permission_body),
+      body: JSON.stringify(roleToPermission_body),
     })
       .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
@@ -141,23 +139,26 @@ class PermissionTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: 'Permission adăugat cu succes 💾',
+        modalMessage: 'RoleToPermission adăugat cu succes 💾',
       });
       this.fillTable();
     }
   }
 
-  async updatePermission() {
-    const permission_body = {
-      id: this.state.id,
-      name: this.state.nume,
+  async updateRoleToPermission() {
+    const roleToPermission_body = {
+      roleid: this.state.roleid,
+      permissionid: this.state.permissionid,
     };
 
-    let ok = await fetch(`${server.address}/permission/${this.state.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(permission_body),
-    })
+    let ok = await fetch(
+      `${server.address}/roletopermission/${this.state.roleid}+${this.state.permissionid}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(roleToPermission_body),
+      }
+    )
       .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
 
@@ -167,29 +168,30 @@ class PermissionTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: 'Permission actualizat ✔',
+        modalMessage: 'Role actualizat ✔',
       });
       this.fillTable();
     }
   }
 
   // function to create react component with fetched data
-  renderPermission() {
+  renderRoleToPermission() {
     this.setState({
-      permissionComponent: this.state.permissions.map((permission, index) => {
-        for (let key in permission) {
-          if (permission[key] === 'null' || permission[key] === null) permission[key] = '-';
+      roleToPermissionComponent: this.state.rolesToPermissions.map((roleToPermission, index) => {
+        for (let key in roleToPermission) {
+          if (roleToPermission[key] === 'null' || roleToPermission[key] === null)
+            roleToPermission[key] = '-';
         }
         return (
-          <tr key={permission.id}>
-            <th>{permission.id}</th>
-            <th>{permission.name}</th>
+          <tr key={roleToPermission.roleid + roleToPermission.permissionId}>
+            <th>{roleToPermission.roleid}</th>
+            <th>{roleToPermission.permissionid}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
                     <Button
-                      onClick={() => this.editPermission(permission)}
+                      onClick={() => this.editRoleToPermission(roleToPermission)}
                       variant="outline-secondary"
                       className="ml-2 p-1 rounded-circle border-0"
                     >
@@ -214,14 +216,14 @@ class PermissionTabel extends React.Component {
                       }}
                     >
                       <Box p={2}>
-                        <Typography>Sigur ștergeți permission-ul?</Typography>
+                        <Typography>Sigur ștergeți această relație?</Typography>
                         <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
                           variant="outline-danger"
                           onClick={() => {
                             popupState.close();
-                            this.deletePermission(permission.id);
+                            this.deleteRole(roleToPermission.id);
                           }}
                           className="mt-2 "
                         >
@@ -252,18 +254,29 @@ class PermissionTabel extends React.Component {
         {/* // ADD MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Permission</Modal.Title>
+            <Modal.Title>RoleToPermission</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group id="nume">
-                <Form.Label>Nume</Form.Label>
+              <Form.Group id="roleid">
+                <Form.Label>RoleId</Form.Label>
                 <Form.Control
                   required
                   type="text"
-                  value={this.state.nume}
+                  value={this.state.roleid}
                   onChange={(e) => {
-                    this.setState({ nume: e.target.value });
+                    this.setState({ roleid: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="permissionid">
+                <Form.Label>PermissionId</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={this.state.permissionid}
+                  onChange={(e) => {
+                    this.setState({ permissionid: e.target.value });
                   }}
                 />
               </Form.Group>
@@ -272,7 +285,7 @@ class PermissionTabel extends React.Component {
           <Modal.Footer>
             <Button
               variant="primary"
-              onClick={this.state.isEdit ? this.updatePermission : this.addPermission}
+              onClick={this.state.isEdit ? this.updateRoleToPermission : this.addRoleToPermission}
             >
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
@@ -297,7 +310,7 @@ class PermissionTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă permission-uri</Card.Title>
+                <Card.Title as="h5">Listă relații</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -320,12 +333,12 @@ class PermissionTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>Nume</th>
-                      <th>Desc</th>
+                      <th>RoleId</th>
+                      <th>PermissionId</th>
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>{this.state.permissionComponent}</tbody>
+                  <tbody>{this.state.roleToPermissionComponent}</tbody>
                 </Table>
               </Card.Body>
             </Card>
@@ -336,4 +349,4 @@ class PermissionTabel extends React.Component {
   }
 }
 
-export default PermissionTabel;
+export default RoleToPermissionTabel;

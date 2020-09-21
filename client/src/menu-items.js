@@ -113,6 +113,20 @@ export default {
           url: '/tables/permission-tabel',
           icon: 'feather icon-file-text',
         },
+        {
+          id: 'role-to-permission-tabel',
+          title: 'Tabel Role-to-Permission',
+          type: 'item',
+          url: '/tables/role-to-permission-tabel',
+          icon: 'feather icon-file-text',
+        },
+        {
+          id: 'user-to-role-tabel',
+          title: 'Tabel User-to-Role',
+          type: 'item',
+          url: '/tables/user-to-role-tabel',
+          icon: 'feather icon-file-text',
+        },
       ],
     },
     {

@@ -28,10 +28,10 @@ class RoleTabel extends React.Component {
       roleComponent: null,
 
       // add modal:
-      show: false,
       id: '',
+      show: false,
       nume: '',
-      descriere: '',
+      desc: '',
 
       // succes modal:
       show_confirm: false,
@@ -78,7 +78,7 @@ class RoleTabel extends React.Component {
       id: '',
       show: false,
       nume: '',
-      descriere: '',
+      desc: '',
 
       // succes modal:
       show_confirm: false,
@@ -98,7 +98,7 @@ class RoleTabel extends React.Component {
         // reset data
         id: '',
         nume: '',
-        descriere: '',
+        desc: '',
         isEdit: false,
       });
   }
@@ -117,8 +117,8 @@ class RoleTabel extends React.Component {
 
     this.setState({
       id: role.id,
-      nume: '',
-      descriere: '',
+      nume: role.nume,
+      desc: role.desc,
       show: true,
       isEdit: true,
     });
@@ -127,9 +127,8 @@ class RoleTabel extends React.Component {
   async addRole() {
     if (typeof this.state.roles === 'undefined') return;
     const role_body = {
-      nume: this.state.nume,
-      descriere: this.state.descriere,
-      societateselectată: this.state.societateselectată,
+      name: this.state.nume,
+      descriere: this.state.desc,
     };
 
     let ok = await fetch(`${server.address}/role`, {
@@ -155,9 +154,8 @@ class RoleTabel extends React.Component {
   async updateRole() {
     const role_body = {
       id: this.state.id,
-      nume: this.state.nume,
-      descriere: this.state.descriere,
-      societateselectată: this.state.societateselectată,
+      name: this.state.nume,
+      descriere: this.state.desc,
     };
 
     let ok = await fetch(`${server.address}/role/${this.state.id}`, {
@@ -189,7 +187,8 @@ class RoleTabel extends React.Component {
         }
         return (
           <tr key={role.id}>
-            <th>{role.nume}</th>
+            <th>{role.id}</th>
+            <th>{role.name}</th>
             <th>{role.descriere}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
@@ -221,7 +220,7 @@ class RoleTabel extends React.Component {
                       }}
                     >
                       <Box p={2}>
-                        <Typography>Sigur ștergeți role-ul?</Typography>
+                        <Typography>Sigur ștergeți roleul?</Typography>
                         <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
@@ -274,14 +273,14 @@ class RoleTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-              <Form.Group id="nume">
+              <Form.Group id="desc">
                 <Form.Label>Descriere</Form.Label>
                 <Form.Control
                   required
                   type="text"
-                  value={this.state.descriere}
+                  value={this.state.desc}
                   onChange={(e) => {
-                    this.setState({ descriere: e.target.value });
+                    this.setState({ desc: e.target.value });
                   }}
                 />
               </Form.Group>
@@ -312,7 +311,7 @@ class RoleTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă roluri</Card.Title>
+                <Card.Title as="h5">Listă role-uri</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -335,7 +334,7 @@ class RoleTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>Name</th>
+                      <th>Nume</th>
                       <th>Desc</th>
                       <th></th>
                     </tr>
