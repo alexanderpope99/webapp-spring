@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Retineri;
 
 @Repository
-public interface RetineriRepository extends JpaRepository<Retineri, Long>{ }
+public interface RetineriRepository extends JpaRepository<Retineri, Long>{
+	public Retineri findByIdstat(long idstat);
+}

@@ -11,12 +11,18 @@ public class TicheteService {
 
     @Autowired
     private ZileService zileService;
+    @Autowired
+    private CMService cmService;
+    @Autowired
+    private COService coService;
     
     public int getNrTichete(int luna, int an, long idcontract) {
         int zileSarbatori = 0;
-        int zileLibere = zileService.getZileLibereInLunaAnul(luna, an, idcontract);
+        int zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
+        int zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
+
         int wd = zileService.getZileLucratoareInLunaAnul(luna, an);
-        return wd - zileLibere - zileSarbatori;
+        return wd - zileCMLucratoare - zileCOLucratoare - zileSarbatori;
     }
 
     

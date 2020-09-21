@@ -17,6 +17,31 @@ public class CMService {
     private CMRepository cmRepository;
 
     // DOAR ZILE C.M.
+    public int getZileCMLucratoare(int luna, int an, long idcontract) {
+        // find all by idcontract
+        List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
+        if(concediiMedicale.size() == 0)
+            return 0;
+
+        LocalDate inceputLuna = LocalDate.of(an, luna, 1);
+        int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
+        LocalDate dela, panala;
+        LocalDate day;
+        int zileCM = 0;
+        for(CM concediu : concediiMedicale) {
+            dela = concediu.getDela();
+            panala = concediu.getPanala();
+
+            for(int i=1; i <= nrZileLuna; ++i) {
+                day = LocalDate.of(an, luna, i);
+                if(day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
+                    if(day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
+                        zileCM++;
+            }
+        }
+        return zileCM;
+    }
+
     public int getZileCM(int luna, int an, long idcontract) {
         // find all by idcontract
         List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
@@ -40,4 +65,6 @@ public class CMService {
         }
         return zileCM;
     }
+
+
 }  // class

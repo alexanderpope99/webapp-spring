@@ -35,15 +35,16 @@ public class RealizariRetineriController {
         return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
 
-    @GetMapping("calc/idc={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
+    @GetMapping("calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
     public RealizariRetineri calcRealizariRetineri (
         @PathVariable(value="id") Long idcontract, 
         @PathVariable(value="luna") Integer luna, 
         @PathVariable(value="an") Integer an,
-        @PathVariable(value="ttd") Float totalDrepturi,
-        @PathVariable(value="nrt") Integer nrTichete
+        @PathVariable(value="pb") Integer primabruta,
+        @PathVariable(value="nrt") Integer nrTichete,
+        @PathVariable(value="tos") Integer totalOreSuplimentare
         ) throws ResourceNotFoundException {
-            return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, totalDrepturi, nrTichete);
+            return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primabruta, nrTichete, totalOreSuplimentare);
 	}
 	
 	@PostMapping("save/idc={id}&mo={luna}&y={an}")
@@ -71,19 +72,20 @@ public class RealizariRetineriController {
         return updatedRR;
 	}
 	
-	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&ttd={ttd}&nrt={nrt}")
+	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
     public RealizariRetineri calcThenUpdateRealizariRetineri(
 		@PathVariable(value="id") Long idcontract, 
         @PathVariable(value="luna") Integer luna, 
         @PathVariable(value="an") Integer an,
-        @PathVariable(value="ttd") Float totalDrepturiModifier,
-        @PathVariable(value="nrt") Integer nrTichete
+        @PathVariable(value="pb") Integer primaBruta,
+        @PathVariable(value="nrt") Integer nrTichete,
+        @PathVariable(value="tos") Integer totalOreSuplimentare
 		) throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = getRealizariRetineriByIdcontract(idcontract, luna, an);
 		long idstat = oldRealizariRetineri.getId();
 
-		RealizariRetineri newRealizariRetineri = calcRealizariRetineri(idcontract, luna, an, totalDrepturiModifier, nrTichete);
+		RealizariRetineri newRealizariRetineri = realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primaBruta, nrTichete, totalOreSuplimentare);
         newRealizariRetineri.setId(idstat);
 
         final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
