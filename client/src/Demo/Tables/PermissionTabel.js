@@ -28,9 +28,10 @@ class PermissionTabel extends React.Component {
       permissionComponent: null,
 
       // add modal:
-      show: false,
       id: '',
+      show: false,
       nume: '',
+      desc: '',
 
       // succes modal:
       show_confirm: false,
@@ -114,7 +115,7 @@ class PermissionTabel extends React.Component {
 
     this.setState({
       id: permission.id,
-      nume: '',
+      nume: permission.nume,
       show: true,
       isEdit: true,
     });
@@ -123,9 +124,7 @@ class PermissionTabel extends React.Component {
   async addPermission() {
     if (typeof this.state.permissions === 'undefined') return;
     const permission_body = {
-      nume: this.state.nume,
-      descriere: this.state.descriere,
-      societateselectată: this.state.societateselectată,
+      name: this.state.nume,
     };
 
     let ok = await fetch(`${server.address}/permission`, {
@@ -151,8 +150,7 @@ class PermissionTabel extends React.Component {
   async updatePermission() {
     const permission_body = {
       id: this.state.id,
-      nume: this.state.nume,
-      societateselectată: this.state.societateselectată,
+      name: this.state.nume,
     };
 
     let ok = await fetch(`${server.address}/permission/${this.state.id}`, {
@@ -184,7 +182,8 @@ class PermissionTabel extends React.Component {
         }
         return (
           <tr key={permission.id}>
-            <th>{permission.nume}</th>
+            <th>{permission.id}</th>
+            <th>{permission.name}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
@@ -298,7 +297,7 @@ class PermissionTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă permisiuni</Card.Title>
+                <Card.Title as="h5">Listă permission-uri</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -322,6 +321,7 @@ class PermissionTabel extends React.Component {
                   <thead>
                     <tr>
                       <th>Nume</th>
+                      <th>Desc</th>
                       <th></th>
                     </tr>
                   </thead>

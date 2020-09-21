@@ -35,6 +35,9 @@ const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const RoleTabel = React.lazy(() => import('./Demo/Tables/RoleTabel'));
 const PermissionTabel = React.lazy(() => import('./Demo/Tables/PermissionTabel'));
 
+const RoleToPermissionTabel = React.lazy(() => import('./Demo/Tables/RoleToPermissionTabel'));
+const UserToRoleTabel = React.lazy(() => import('./Demo/Tables/UserToRoleTabel'));
+
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
 
@@ -104,6 +107,19 @@ const routes = [
   { path: '/tables/user-tabel', exact: true, name: 'User Tabel', component: UserTabel },
   { path: '/tables/role-tabel', exact: true, name: 'Role Tabel', component: RoleTabel },
   { path: '/tables/permission-tabel', exact: true, name: 'Role Tabel', component: PermissionTabel },
+
+  {
+    path: '/tables/role-to-permission-tabel',
+    exact: true,
+    name: 'Role-to-Permission Tabel',
+    component: RoleToPermissionTabel,
+  },
+  {
+    path: '/tables/user-to-role-tabel',
+    exact: true,
+    name: 'User-to-Role Tabel',
+    component: UserToRoleTabel,
+  },
 
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
