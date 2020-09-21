@@ -1,39 +1,78 @@
 package net.guides.springboot2.crud.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "realizariretineri")
 public class RealizariRetineri {
 
-    private int nrtichete = 0;
-    private int zileco = 0;
-    private int zileconeplatit = 0;
-    private int zilecm = 0;
-    private int zilec  = 0;
+    private long id;
+    @Column(name = "idcontract")
+    private Long idcontract;
+    @Column(name = "luna")
+    private Integer luna;
+    @Column(name = "an")
+    private Integer an;
+    @Column(name = "nrtichete")
+    private Integer nrtichete = 0;
+    @Column(name = "zileco")
+    private Integer zileco = 0;
+    @Column(name = "zileconeplatit")
+    private Integer zileconeplatit = 0;
+    @Column(name = "zilecm")
+    private Integer zilecm = 0;
+    @Column(name = "zilec")
+    private Integer zilec  = 0;
 
-    private int norma = 0; // nr zile lucratoare in luna
-    private int duratazilucru = 0; // contract.normalucru
-    private int zilelucrate = 0;
-    private int orelucrate = 0;
+    @Column(name = "norma")
+    private Integer norma = 0; // nr zile lucratoare in luna
+    @Column(name = "duratazilucru")
+    private Integer duratazilucru = 0; // contract.normalucru
+    @Column(name = "zilelucrate")
+    private Integer zilelucrate = 0;
+    @Column(name = "orelucrate")
+    private Integer orelucrate = 0;
 
-    private float totaldrepturi = 0;
+    @Column(name = "totaldrepturi")
+    private Integer totaldrepturi = 0;
 
-    private float salariupezi = 0;
-    private float salariupeora = 0;
+    @Column(name = "salariupezi")
+    private Float salariupezi = 0f;
+    @Column(name = "salariupeora")
+    private Float salariupeora = 0f;
 
-    private float cas = 0;
-    private float cass = 0;
-    private float cam = 0;
-    private float impozit = 0;
-    private float valoaretichete = 0;
+    @Column(name = "cas")
+    private Float cas = 0f;
+    @Column(name = "cass")
+    private Float cass = 0f;
+    @Column(name = "cam")
+    private Float cam = 0f;
+    @Column(name = "impozit")
+    private Float impozit = 0f;
+    @Column(name = "valoaretichete")
+    private Float valoaretichete = 0f;
 
-    private int restplata = 0;
+    @Column(name = "restplata")
+    private Integer restplata = 0;
 
-    private int nrpersoaneintretinere = 0;
-    private int deducere = 0;
+    @Column(name = "nrpersoaneintretinere")
+    private Integer nrpersoaneintretinere = 0;
+    @Column(name = "deducere")
+    private Integer deducere = 0;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( int nrtichete, int zileco, int zilecm, int zileconeplatit, int duratazilucru, int norma, int zilelucrate, int orelucrate, float totaldrepturi, float salariupezi, float salariupeora, float cas, float cass, float cam, float impozit, float valoareTichete, int restplata, int nrpersoaneintretinere, int deducere )
+    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecm, Integer zileconeplatit, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere )
     {
+		this.idcontract = idcontract;
+		this.luna = luna;
+		this.an = an;
+
         this.nrtichete = nrtichete;
         this.zileco = zileco;
         this.zileconeplatit = zileconeplatit;
@@ -63,128 +102,155 @@ public class RealizariRetineri {
         this.deducere = deducere;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     //! GETTERS
-    public int getNrtichete() {
+    public Integer getNrtichete() {
       return nrtichete;
     }
-    public int getZilecm() {
+    public Integer getZilecm() {
       return zilecm;
     }
-    public int getZileco() {
+    public Integer getZileco() {
       return zileco;
     }
-    public int getZilec() {
+    public Integer getZilec() {
       return zilec;
     }
-    public int getZileconeplatit() {
+    public Integer getZileconeplatit() {
       return zileconeplatit;
     }
-    public int getDuratazilucru() {
+    public Integer getDuratazilucru() {
       return duratazilucru;
     }
-    public int getNorma() {
+    public Integer getNorma() {
       return norma;
     }
-    public int getOrelucrate() {
+    public Integer getOrelucrate() {
       return orelucrate;
     }
-    public float getCam() {
+    public Float getCam() {
       return cam;
     }
-    public float getCas() {
+    public Float getCas() {
       return cas;
     }
-    public float getCass() {
+    public Float getCass() {
       return cass;
     }
-    public float getImpozit() {
+    public Float getImpozit() {
       return impozit;
     }
-    public float getValoaretichete() {
+    public Float getValoaretichete() {
       return valoaretichete;
     }
-    public int getTotaldrepturi() {
+    public Integer getTotaldrepturi() {
       return Math.round(totaldrepturi);
     }
-    public int getNrpersoaneintretinere() {
+    public Integer getNrpersoaneintretinere() {
       return nrpersoaneintretinere;
     }
-    public int getRestplata() {
+    public Integer getRestplata() {
       return restplata;
     }
-    public float getSalariupeora() {
+    public Float getSalariupeora() {
       return salariupeora;
     }
-    public float getSalariupezi() {
+    public Float getSalariupezi() {
       return salariupezi;
     }
-    public int getZilelucrate() {
+    public Integer getZilelucrate() {
       return zilelucrate;
     }
-    public int getDeducere() {
+    public Integer getDeducere() {
       return deducere;
+    }
+    public Integer getAn() {
+      return an;
+    }
+    public Long getIdcontract() {
+      return idcontract;
+    }
+    public Integer getLuna() {
+      return luna;
     }
 
     //! SETTERS
-    public void setNrtichete(int nrtichete) {
+    public void setNrtichete(Integer nrtichete) {
       this.nrtichete = nrtichete;
     }
-    public void setZilecm(int zilecm) {
+    public void setZilecm(Integer zilecm) {
       this.zilecm = zilecm;
     }
-    public void setZileco(int zileco) {
+    public void setZileco(Integer zileco) {
       this.zileco = zileco;
     }
-    public void setZilec(int zilec) {
+    public void setZilec(Integer zilec) {
       this.zilec = zilec;
     }
-    public void setZileconeplatit(int zileconeplatit) {
+    public void setZileconeplatit(Integer zileconeplatit) {
       this.zileconeplatit = zileconeplatit;
     }
-    public void setDuratazilucru(int duratazilucru) {
+    public void setDuratazilucru(Integer duratazilucru) {
       this.duratazilucru = duratazilucru;
     }
-    public void setNorma(int norma) {
+    public void setNorma(Integer norma) {
       this.norma = norma;
     }
-    public void setOrelucrate(int orelucrate) {
+    public void setOrelucrate(Integer orelucrate) {
       this.orelucrate = orelucrate;
     }
-    public void setCam(float cam) {
+    public void setCam(Float cam) {
       this.cam = cam;
     }
-    public void setCas(float cas) {
+    public void setCas(Float cas) {
       this.cas = cas;
     }
-    public void setCass(float cass) {
+    public void setCass(Float cass) {
       this.cass = cass;
     }
-    public void setImpozit(float impozit) {
+    public void setImpozit(Float impozit) {
       this.impozit = impozit;
     }
-    public void setValoaretichete(float valoaretichete) {
+    public void setValoaretichete(Float valoaretichete) {
       this.valoaretichete = valoaretichete;
     }
-    public void setTotaldrepturi(int totaldrepturi) {
+    public void setTotaldrepturi(Integer totaldrepturi) {
       this.totaldrepturi = totaldrepturi;
     }
-    public void setNrpersoaneintretinere(int nrpersoaneintretinere) {
+    public void setNrpersoaneintretinere(Integer nrpersoaneintretinere) {
       this.nrpersoaneintretinere = nrpersoaneintretinere;
     }
-    public void setRestplata(int restplata) {
+    public void setRestplata(Integer restplata) {
       this.restplata = restplata;
     }
-    public void setSalariupeora(int salariupeora) {
+    public void setSalariupeora(Float salariupeora) {
       this.salariupeora = salariupeora;
     }
-    public void setSalariupezi(int salariupezi) {
+    public void setSalariupezi(Float salariupezi) {
       this.salariupezi = salariupezi;
     }
-    public void setZilelucrate(int zilelucrate) {
+    public void setZilelucrate(Integer zilelucrate) {
       this.zilelucrate = zilelucrate;
     }
-    public void setDeducere(int deducere) {
+    public void setDeducere(Integer deducere) {
       this.deducere = deducere;
+    }
+    public void setAn(Integer an) {
+      this.an = an;
+    }
+    public void setIdcontract(Long idcontract) {
+      this.idcontract = idcontract;
+    }
+    public void setLuna(Integer luna) {
+      this.luna = luna;
     }
 }
 

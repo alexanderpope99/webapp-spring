@@ -28,7 +28,7 @@ public class TicheteController {
     private TicheteRepository ticheteRepository;
 
     @GetMapping
-    public List<Tichete> getAllPersoane() {
+    public List<Tichete> getAllTichete() {
         return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 

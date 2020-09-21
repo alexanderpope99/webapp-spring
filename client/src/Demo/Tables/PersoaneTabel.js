@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { getSocSel } from '../Resources/socsel';
 
 class PersoaneTabel extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class PersoaneTabel extends React.Component {
     this.onRefresh = this.onRefresh.bind(this);
 
     this.state = {
+      socsel: getSocSel(),
       persoane: [],
       persoaneComponent: null,
     };
@@ -123,7 +125,7 @@ class PersoaneTabel extends React.Component {
   }
 
   async onRefresh() {
-    const persoane = await fetch(`${server.address}/persoana`, {
+    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),

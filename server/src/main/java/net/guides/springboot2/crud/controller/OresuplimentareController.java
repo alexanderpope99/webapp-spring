@@ -41,6 +41,23 @@ public class OresuplimentareController {
         return ResponseEntity.ok().body(oresuplimentare);
     }
 
+    @GetMapping("/api/idc={id}&mo={luna}&y={an}")
+    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByLunaAnIdcontract(
+        @PathVariable(value = "id") Long idcontract, 
+        @PathVariable(value = "luna") Integer luna, 
+        @PathVariable(value = "an") Integer an) {
+        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
+
+        return ResponseEntity.ok().body(oresuplimentare);
+    }
+
+    @GetMapping("idss={id}")
+    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable(value = "id") Long idstat) {
+        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat);
+
+        return ResponseEntity.ok().body(oresuplimentare);
+    }
+
     @PostMapping
     public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
         return oresuplimentareRepository.save(oresuplimentare);
