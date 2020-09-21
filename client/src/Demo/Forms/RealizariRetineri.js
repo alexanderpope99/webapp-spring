@@ -21,7 +21,7 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
-import { Input, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 class RealizariRetineri extends React.Component {
   constructor() {
@@ -74,7 +74,8 @@ class RealizariRetineri extends React.Component {
       procent: '',
       totaloresuplimentare: 0,
 
-      // retineri
+			// retineri
+			idretineri: 0,
       avansnet: 0,
       pensiefacultativa: 0,
       pensiealimentara: 0,
@@ -119,7 +120,8 @@ class RealizariRetineri extends React.Component {
       procent: '',
       totaloresuplimentare: 0,
 
-      // retineri
+			// retineri
+			idretineri: 0,
       avansnet: 0,
       pensiefacultativa: 0,
       pensiealimentara: 0,
@@ -237,6 +239,13 @@ class RealizariRetineri extends React.Component {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
     }
 
+    const retineri = await fetch(`${server.address}/retineri/ids=${data.id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    })
+			.then(res => res.json())
+			.catch(err => console.error(err));
+
     this.setState({
       //* realizari
       functie: contract.functie,
@@ -252,12 +261,13 @@ class RealizariRetineri extends React.Component {
       zileconeplatit: data.zileconeplatit,
       zilec: data.zilec,
 
-      //* retineri
-      // avansnet: 0,
-      // pensiefacultativa: 0,
-      // pensiealimentara: 0,
-      // popriri: 0,
-      // imprumuturi: 0,
+			//* retineri
+			idretineri: retineri.id,
+      avansnet: retineri.avansnet,
+      pensiefacultativa: retineri.pensiefacultativa,
+      pensiealimentara: retineri.pensiealimentara,
+      popriri: retineri.popriri,
+      imprumuturi: retineri.imprumuturi,
       deducere: data.deducere,
       nrpersoaneintretinere: data.nrpersoaneintretinere,
 
@@ -306,7 +316,23 @@ class RealizariRetineri extends React.Component {
     if (!idpersoana) {
       this.clearForm();
       return;
-    }
+		}
+		
+		// save retineri to DB
+		await fetch(`${server.address}/retineri/${this.state.idretineri}`, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				idstat: this.state.idstat,
+				avansnet: this.state.avansnet,
+				pensiealimentara: this.state.pensiealimentara,
+				pensiefacultativa: this.state.pensiefacultativa,
+				popriri: this.state.popriri,
+				imprumuturi: this.state.imprumuturi,
+			})
+		})
+			.then(res => res.json())
+			.catch(err => console.error(err));
 
     let pb = this.state.primabruta;
     let nrt = this.state.nrtichete;
@@ -322,7 +348,7 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.ok ? res.json() : null))
       .catch((err) => console.error(err));
 
-    console.log(data);
+		console.log(data);
     // total
     this.setState({
       totaldrepturi: data.totaldrepturi,
@@ -362,7 +388,6 @@ class RealizariRetineri extends React.Component {
         headers: { 'Content-Type': 'application/json' },
       }
     ).then((res) => res.json());
-    console.log(oresuplimentare);
 
     return oresuplimentare;
   }

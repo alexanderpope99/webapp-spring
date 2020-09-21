@@ -29,7 +29,9 @@ public class RealizariRetineriService {
     @Autowired
 	private ParametriiSalariuService parametriiSalariuService;
 	@Autowired
-	private TicheteService ticheteService;
+    private TicheteService ticheteService;
+    @Autowired
+    private RetineriService retineriService;
 
     // REPOSITORIES
     @Autowired
@@ -114,12 +116,14 @@ public class RealizariRetineriService {
 		if(realizariRetineriRepository.existsByLunaAndAnAndIdcontract(luna, an, idcontract))
 			return getRealizariRetineri(luna, an, idcontract);
 
-		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+        int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+        
+        
+        RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
+        // empty retinere
+		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
+        retineriService.saveRetinere(realizariRetineri.getId());
 
-		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
-
-		return realizariRetineriRepository.save(realizariRetineri);
-
-		// return realizariRetineri;
+        return realizariRetineri;
 	}
 }

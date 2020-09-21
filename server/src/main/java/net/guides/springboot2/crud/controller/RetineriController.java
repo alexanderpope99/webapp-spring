@@ -32,6 +32,11 @@ public class RetineriController {
         return retineriRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
+    @GetMapping("ids={ids}")
+    public Retineri getRetineriByIdstat(@PathVariable(value="ids") Long id) {
+        return retineriRepository.findByIdstat(id);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Retineri> getRetineriById(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
