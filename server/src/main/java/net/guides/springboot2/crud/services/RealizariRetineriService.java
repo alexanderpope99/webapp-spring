@@ -83,15 +83,18 @@ public class RealizariRetineriService {
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 
         int zileCO = coService.getZileCO(luna, an, idcontract);
+        int zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
         int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
+        int zileCONeplatitLucratoare = coService.getZileCONeplatiteLucratoare(luna, an, idcontract);
         int zileCM = cmService.getZileCM(luna, an, idcontract);
+        int zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
 
         int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
         int duratazilucru = contract.getNormalucru();
 
-        int zileLucrate = norma - zileCO - zileCM;
+        int zileLucrate = norma - zileCOLucratoare - zileCMLucratoare;
         int oreLucrate = zileLucrate * duratazilucru;
-        int zilePlatite = norma - zileCONeplatit;
+        int zilePlatite = norma - zileCONeplatitLucratoare;
 
         float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
 
@@ -109,7 +112,7 @@ public class RealizariRetineriService {
         float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCM, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere, primaBruta, totalOreSuplimentare );
+        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM, zileCMLucratoare, zileCONeplatit, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere, primaBruta, totalOreSuplimentare );
 	}	// calcRealizariRetineri
 
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {

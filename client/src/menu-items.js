@@ -63,13 +63,13 @@ export default {
         //   url: '/edit/edit-persoana',
         //   icon: 'feather icon-file-text',
         // },
-        {
-          id: 'angajati-tabel',
-          title: 'Tabel Angajati',
-          type: 'item',
-          url: '/tables/angajati-tabel',
-          icon: 'feather icon-file-text',
-        },
+        // {
+        //   id: 'angajati-tabel',
+        //   title: 'Tabel Angajati',
+        //   type: 'item',
+        //   url: '/tables/angajati-tabel',
+        //   icon: 'feather icon-file-text',
+        // },
         // {
         //   id: 'add-societate',
         //   title: 'Adauga Societate',

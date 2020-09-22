@@ -11,7 +11,7 @@ import Edit from '@material-ui/icons/Edit';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 
-class RoleTabel extends React.Component {
+class UserToRoleTabel extends React.Component {
   constructor() {
     super();
 

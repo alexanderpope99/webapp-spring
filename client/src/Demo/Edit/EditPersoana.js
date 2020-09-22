@@ -39,7 +39,6 @@ class EditPersoana extends React.Component {
       let params = new URLSearchParams(search);
       IdFromURL = params.get('id');
     }
-    // console.log(IdFromURL);
 
     this.state = {
       socsel: getSocSel(),
@@ -117,7 +116,6 @@ class EditPersoana extends React.Component {
 
   componentDidMount() {
     this.getNumeintreg();
-    console.log(this.state.id);
     if(this.state.id)
       this.fillForm();
     // window.scrollTo(0, 0);
@@ -225,14 +223,15 @@ class EditPersoana extends React.Component {
 
   async fillForm() {
     this.clearFields();
-    // console.log(this.state.numeintreg);
-    const id = this.getIdByNumeintreg(this.state.selectednume);
-    // console.log(id);
+
+    const id = this.state.id;
+    
     if (id === -1) {
       this.setState({
         selectednume: '-',
       });
       this.clearFields();
+      console.log('nothing selected');
       return;
     }
 
@@ -288,6 +287,8 @@ class EditPersoana extends React.Component {
       starecivila: persoana.starecivila || '',
       telefon: persoana.telefon || '',
       datanasterii: this.getDatanasteriiByCNP(persoana.cnp),
+
+      selectednume: this.getNumeintregById(id)
     });
   }
 

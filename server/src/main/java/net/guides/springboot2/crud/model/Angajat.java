@@ -11,13 +11,13 @@ public class Angajat {
 
     private Long idpersoana;
     private Long idcontract;
-    private Long idsocietate;
+    private Integer idsocietate;
 
     public Angajat() {
 
     }
 
-    public Angajat(Long idcontract, Long idsocietate) {
+    public Angajat(Long idcontract, Integer idsocietate) {
         this.idcontract = idcontract;
         this.idsocietate = idsocietate;
     }
@@ -42,11 +42,11 @@ public class Angajat {
     }
 
     @Column(name = "idsocietate")
-    public Long getIdsocietate() {
+    public Integer getIdsocietate() {
         return idsocietate;
     }
 
-    public void setIdsocietate(Long idsocietate) {
+    public void setIdsocietate(Integer idsocietate) {
         this.idsocietate = idsocietate;
     }
 }
