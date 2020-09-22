@@ -23,10 +23,10 @@ public class DownloadsController {
 		HttpServletResponse response)
 	{
 		try{
-			File myFile = new File("src/main/java/net/guides/springboot2/crud/downloads/dec112.pdf");
+			File myFile = new File("src/main/java/net/guides/springboot2/crud/downloads/"+fileName);
 			InputStream fileAsIS = new FileInputStream(myFile);
 
-			response.setContentType("application/pdf");
+			// response.setContentType("application/pdf");
 			IOUtils.copy(fileAsIS, response.getOutputStream());
 
 			response.flushBuffer();
