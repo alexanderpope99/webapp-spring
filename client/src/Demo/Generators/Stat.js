@@ -5,7 +5,7 @@ class Stat extends React.Component {
 	render() {
 		return (
 			<React.Fragment>
-				<Button onClicl={() => console.log('aaa')}>cicke me</Button>
+				<Button onClick={() => console.log('aaa')}>cicke me</Button>
 			</React.Fragment>
 		)
 	}

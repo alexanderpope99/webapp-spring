@@ -38,5 +38,37 @@ public class ZileService {
                 workingDays++;
         }
         return workingDays;
-    }
+		}
+		
+		public String getNumeLunaByNr(int nrLuna) {
+			switch (nrLuna) {
+				case 1:
+					return "Ianuarie";
+				case 2:
+					return "Februarie";
+				case 3:
+					return "Martie";
+				case 4:
+					return "Aprilie";
+				case 5:
+					return "Mai";
+				case 6:
+					return "Iunie";
+				case 7:
+					return "Iulie";
+				case 8:
+					return "August";
+				case 9:
+					return "Septembrie";
+				case 10:
+					return "Octombrie";
+				case 11:
+					return "Noiembrie";
+				case 12:
+					return "Decembrie";
+			
+				default:
+					return "Ianuarie";
+			}
+		}
 }
