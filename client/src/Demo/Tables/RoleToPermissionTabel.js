@@ -24,8 +24,8 @@ class RoleToPermissionTabel extends React.Component {
     this.updateRoleToPermission = this.updateRoleToPermission.bind(this);
 
     this.state = {
-      roles: [],
-      roleComponent: null,
+      rolesToPermissions: [],
+      roleToPermissionComponent: null,
 
       // add modal:
       roleid: '',
@@ -183,20 +183,17 @@ class RoleToPermissionTabel extends React.Component {
             roleToPermission[key] = '-';
         }
         return (
-          <tr key={roleToPermission.roleid + roleToPermission.permissionId}>
-            <th>{roleToPermission.roleid}</th>
-            <th>{roleToPermission.permissionid}</th>
+          <tr key={roleToPermission.roleid + roleToPermission.permissionid}>
+            <th>
+              {roleToPermission.roleid}+' '+{roleToPermission.roleName}
+            </th>
+            <th>
+              {roleToPermission.permissionid}+' '+{roleToPermission.permissionName}
+            </th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
-                    <Button
-                      onClick={() => this.editRoleToPermission(roleToPermission)}
-                      variant="outline-secondary"
-                      className="ml-2 p-1 rounded-circle border-0"
-                    >
-                      <Edit fontSize="small" />
-                    </Button>
                     <Button
                       variant="outline-secondary"
                       className="m-0 p-1 rounded-circle border-0"
@@ -223,7 +220,10 @@ class RoleToPermissionTabel extends React.Component {
                           variant="outline-danger"
                           onClick={() => {
                             popupState.close();
-                            this.deleteRole(roleToPermission.id);
+                            this.deleteRoleToPermission(
+                              roleToPermission.roleid,
+                              roleToPermission.permissionid
+                            );
                           }}
                           className="mt-2 "
                         >

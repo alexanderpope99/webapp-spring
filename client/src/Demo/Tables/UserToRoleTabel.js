@@ -11,27 +11,25 @@ import Edit from '@material-ui/icons/Edit';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 
-class RoleTabel extends React.Component {
+class UserToRoleTabel extends React.Component {
   constructor(props) {
     super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
     this.resetModals = this.resetModals.bind(this);
-    this.addRole = this.addRole.bind(this);
-    this.deleteRole = this.deleteRole.bind(this);
-    this.editRole = this.editRole.bind(this);
-    this.updateRole = this.updateRole.bind(this);
+    this.addUserToRole = this.addUserToRole.bind(this);
+    this.deleteUserToRole = this.deleteUserToRole.bind(this);
+    this.editUserToRole = this.editUserToRole.bind(this);
+    this.updateUserToRole = this.updateUserToRole.bind(this);
 
     this.state = {
-      roles: [],
-      roleComponent: null,
+      userToRoles: [],
+      UserToRoleComponent: null,
 
       // add modal:
-      id: '',
-      show: false,
-      nume: '',
-      desc: '',
+      userid: '',
+      roleid: '',
 
       // succes modal:
       show_confirm: false,
@@ -45,9 +43,9 @@ class RoleTabel extends React.Component {
   }
 
   async fillTable() {
-    if (typeof this.state.roles === 'undefined') return;
+    if (typeof this.state.userToRoles === 'undefined') return;
     //? fetch
-    const roles = await fetch(`${server.address}/role/`, {
+    const userToRoles = await fetch(`${server.address}/usertorole/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -55,19 +53,19 @@ class RoleTabel extends React.Component {
       .then((res) => (res.status !== 200 ? null : res.json()))
       .catch((err) => console.error('err', err));
 
-    if (roles !== null) {
+    if (userToRoles !== null) {
       this.setState(
         {
-          roles: roles,
+          userToRoles: userToRoles,
         },
-        this.renderRole
+        this.renderUserToRole
       );
     } else {
       this.setState(
         {
-          roles: [],
+          userToRoles: [],
         },
-        this.renderRole
+        this.renderUserToRole
       );
     }
   }
@@ -75,10 +73,8 @@ class RoleTabel extends React.Component {
   resetModals() {
     this.setState({
       // add modal:
-      id: '',
-      show: false,
-      nume: '',
-      desc: '',
+      roleid: '',
+      userid: '',
 
       // succes modal:
       show_confirm: false,
@@ -96,15 +92,14 @@ class RoleTabel extends React.Component {
       this.setState({
         show: false,
         // reset data
-        id: '',
-        nume: '',
-        desc: '',
+        roleid: '',
+        userid: '',
         isEdit: false,
       });
   }
 
-  async deleteRole(id) {
-    await fetch(`${server.address}/role/${id}`, {
+  async deleteUserToRole(roleid, userid) {
+    await fetch(`${server.address}/usertorole/role=${roleid}/user=${userid}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -112,29 +107,28 @@ class RoleTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async editRole(role) {
-    if (typeof this.state.roles === 'undefined') return;
+  async editUserToRole(userToRole) {
+    if (typeof this.state.userToRoles === 'undefined') return;
 
     this.setState({
-      id: role.id,
-      nume: role.nume,
-      desc: role.desc,
+      roleid: '',
+      userid: '',
       show: true,
       isEdit: true,
     });
   }
 
-  async addRole() {
-    if (typeof this.state.roles === 'undefined') return;
-    const role_body = {
-      name: this.state.nume,
-      descriere: this.state.desc,
+  async addUserToRole() {
+    if (typeof this.state.userToRoles === 'undefined') return;
+    const userToRole_body = {
+      roleid: this.state.roleid,
+      userid: this.state.userid,
     };
 
-    let ok = await fetch(`${server.address}/role`, {
+    let ok = await fetch(`${server.address}/usertorole`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(role_body),
+      body: JSON.stringify(userToRole_body),
     })
       .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
@@ -145,23 +139,22 @@ class RoleTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: 'Role adăugat cu succes 💾',
+        modalMessage: 'UserToRole adăugat cu succes 💾',
       });
       this.fillTable();
     }
   }
 
-  async updateRole() {
-    const role_body = {
-      id: this.state.id,
-      name: this.state.nume,
-      descriere: this.state.desc,
+  async updateUserToRole() {
+    const userToRole_body = {
+      roleid: this.state.roleid,
+      userid: this.state.userid,
     };
 
-    let ok = await fetch(`${server.address}/role/${this.state.id}`, {
+    let ok = await fetch(`${server.address}/usertorole/${this.state.roleid}+${this.state.userid}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(role_body),
+      body: JSON.stringify(userToRole_body),
     })
       .then((res) => res.ok)
       .catch((err) => console.error('err:', err));
@@ -179,27 +172,20 @@ class RoleTabel extends React.Component {
   }
 
   // function to create react component with fetched data
-  renderRole() {
+  renderUserToRole() {
     this.setState({
-      roleComponent: this.state.roles.map((role, index) => {
-        for (let key in role) {
-          if (role[key] === 'null' || role[key] === null) role[key] = '-';
+      userToRoleComponent: this.state.userToRoles.map((userToRole, index) => {
+        for (let key in userToRole) {
+          if (userToRole[key] === 'null' || userToRole[key] === null) userToRole[key] = '-';
         }
         return (
-          <tr key={role.id}>
-            <th>{role.name}</th>
-            <th>{role.descriere}</th>
+          <tr key={userToRole.roleid + userToRole.userid}>
+            <th>{userToRole.roleid}</th>
+            <th>{userToRole.userid}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
-                    <Button
-                      onClick={() => this.editRole(role)}
-                      variant="outline-secondary"
-                      className="ml-2 p-1 rounded-circle border-0"
-                    >
-                      <Edit fontSize="small" />
-                    </Button>
                     <Button
                       variant="outline-secondary"
                       className="m-0 p-1 rounded-circle border-0"
@@ -219,14 +205,14 @@ class RoleTabel extends React.Component {
                       }}
                     >
                       <Box p={2}>
-                        <Typography>Sigur ștergeți roleul?</Typography>
+                        <Typography>Sigur ștergeți această relație?</Typography>
                         <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
                           variant="outline-danger"
                           onClick={() => {
                             popupState.close();
-                            this.deleteRole(role.id);
+                            this.deleteUserToRole(userToRole.roleid, userToRole.userid);
                           }}
                           className="mt-2 "
                         >
@@ -257,36 +243,39 @@ class RoleTabel extends React.Component {
         {/* // ADD MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Role</Modal.Title>
+            <Modal.Title>UserToRole</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group id="nume">
-                <Form.Label>Nume</Form.Label>
+              <Form.Group id="roleid">
+                <Form.Label>RoleId</Form.Label>
                 <Form.Control
                   required
                   type="text"
-                  value={this.state.nume}
+                  value={this.state.roleid}
                   onChange={(e) => {
-                    this.setState({ nume: e.target.value });
+                    this.setState({ roleid: e.target.value });
                   }}
                 />
               </Form.Group>
-              <Form.Group id="desc">
-                <Form.Label>Descriere</Form.Label>
+              <Form.Group id="userid">
+                <Form.Label>UserId</Form.Label>
                 <Form.Control
                   required
                   type="text"
-                  value={this.state.desc}
+                  value={this.state.userid}
                   onChange={(e) => {
-                    this.setState({ desc: e.target.value });
+                    this.setState({ userid: e.target.value });
                   }}
                 />
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateRole : this.addRole}>
+            <Button
+              variant="primary"
+              onClick={this.state.isEdit ? this.updateUserToRole : this.addUserToRole}
+            >
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
@@ -310,7 +299,7 @@ class RoleTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă role-uri</Card.Title>
+                <Card.Title as="h5">Listă relații</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -333,12 +322,12 @@ class RoleTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>Nume</th>
-                      <th>Desc</th>
+                      <th>RoleId</th>
+                      <th>UserId</th>
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>{this.state.roleComponent}</tbody>
+                  <tbody>{this.state.userToRoleComponent}</tbody>
                 </Table>
               </Card.Body>
             </Card>
@@ -349,4 +338,4 @@ class RoleTabel extends React.Component {
   }
 }
 
-export default RoleTabel;
+export default UserToRoleTabel;

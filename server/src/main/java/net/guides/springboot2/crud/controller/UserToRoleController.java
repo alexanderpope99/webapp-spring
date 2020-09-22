@@ -30,7 +30,7 @@ public class UserToRoleController {
         return userToRoleRepository.findAll();
     }
 
-    @GetMapping("{roleid}+{permissionid}")
+    @GetMapping("{roleid}+{userid}")
     public ResponseEntity<UserToRole> getUserToRoleById(@PathVariable(value = "roleid") Long roleid,
             @PathVariable(value = "userid") Long userid) throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
@@ -45,7 +45,7 @@ public class UserToRoleController {
         return userToRoleRepository.save(userToRole);
     }
 
-    @PutMapping("{userid}+{roleid}")
+    @PutMapping("{roleid}+{userid}")
     public ResponseEntity<UserToRole> updateUserToRole(@PathVariable(value = "roleid") Long roleid,
             @PathVariable(value = "userid") Long userid, @RequestBody UserToRole newUserToRole)
             throws ResourceNotFoundException {
@@ -60,7 +60,7 @@ public class UserToRoleController {
         return ResponseEntity.ok(updatedUserToRole);
     }
 
-    @DeleteMapping("{roleid}+{permissionid}")
+    @DeleteMapping("/role={roleid}/user={userid}")
     public Map<String, Boolean> deleteUserToRole(@PathVariable(value = "roleid") Long roleid,
             @PathVariable(value = "userid") Long userid) throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)

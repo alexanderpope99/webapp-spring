@@ -393,6 +393,7 @@ class UserTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th>Id</th>
                       <th>Username</th>
                       <th>Nume</th>
                       <th>Prenume</th>
