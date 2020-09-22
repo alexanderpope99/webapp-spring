@@ -39,24 +39,25 @@ class SocietatiTabel extends React.Component {
         this.onRefresh();
       })
       .catch(console.log('could not connect to db'));
-  }
-
+	}
+	
   // function to render in react
-  renderSocietati() {
+  async renderSocietati() {
     // console.log('render called');
     this.setState({
       societatiComponent: this.state.societati.map((soc, index) => {
-        for (let key in soc) {
-          if (soc[key] === 'null' || soc[key] === null) soc[key] = '-';
-        }
+        // for (let key in soc) {
+        //   if (!soc[key]) soc[key] = '-';
+        // }
         // console.log(soc);
         return (
           <tr key={soc.id}>
-            <th>{soc.nume}</th>
-            <th>{soc.email}</th>
-            <th>{soc.idcaen}</th>
-            <th>{soc.cif}</th>
-            <th>{soc.regcom}</th>
+            <th>{soc.nume || '-'}</th>
+            <th>{soc.email || '-'}</th>
+            <th>{soc.idcaen || '-'}</th>
+            <th>{soc.cif || '-'}</th>
+            <th>{soc.regcom || '-'}</th>
+						<th>{soc.nrangajati || 0}</th>
             <th>
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
@@ -110,11 +111,20 @@ class SocietatiTabel extends React.Component {
   async onRefresh() {
     // e.preventDefault();
 
-    const societati = await fetch(`${server.address}/societate`, {
+    let societati = await fetch(`${server.address}/societate`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(societati),
-    }).then((societati) => societati.json());
+		}).then((societati) => societati.json());
+		
+    societati = await Promise.all(societati.map(async (societate) => {
+      let nrAngajati = await fetch(`${server.address}/angajat/ids=${societate.id}/count`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+			}).then((res) => res.json());
+			
+			return { ...societate, nrangajati: nrAngajati };
+		}));
+		console.log(societati);
 
     this.state.societati = societati;
 
@@ -155,7 +165,8 @@ class SocietatiTabel extends React.Component {
                       <th>email</th>
                       <th>CAEN</th>
                       <th>CIF</th>
-                      <th>Registrul Comertului</th>
+                      <th>Reg. Com.</th>
+                      <th>Nr. Angajați</th>
                       <th></th>
                     </tr>
                   </thead>

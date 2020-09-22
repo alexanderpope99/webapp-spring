@@ -63,13 +63,13 @@ export default {
         //   url: '/edit/edit-persoana',
         //   icon: 'feather icon-file-text',
         // },
-        {
-          id: 'angajati-tabel',
-          title: 'Tabel Angajati',
-          type: 'item',
-          url: '/tables/angajati-tabel',
-          icon: 'feather icon-file-text',
-        },
+        // {
+        //   id: 'angajati-tabel',
+        //   title: 'Tabel Angajati',
+        //   type: 'item',
+        //   url: '/tables/angajati-tabel',
+        //   icon: 'feather icon-file-text',
+        // },
         // {
         //   id: 'add-societate',
         //   title: 'Adauga Societate',
@@ -85,7 +85,22 @@ export default {
           icon: 'feather icon-file-text',
         },
       ],
-    },
+		},
+		{
+      id: 'generare-fisiere',
+      title: 'Generare Fisiere',
+      type: 'group',
+      icon: 'icon-group',
+			children: [
+				{
+					id: 'stat',
+					title: 'State salarii',
+					type: 'item',
+					url: '/state-salarii',
+					icon: 'feather icon-file-text'
+				}
+			]
+		},
     {
       id: 'configuration',
       title: 'Configuration',

@@ -27,8 +27,7 @@ class PersoaneTabel extends React.Component {
   }
 
   componentDidMount() {
-    if(!getSocSel())
-      window.location.href = "/dashboard/societati";
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
 
     this.onRefresh();
     window.scrollTo(0, 0);
@@ -147,7 +146,10 @@ class PersoaneTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă Persoane Înregistrate</Card.Title>
+                <Card.Title as="h5">
+                  Listă Persoane Înregistrate
+                  {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
+                </Card.Title>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}

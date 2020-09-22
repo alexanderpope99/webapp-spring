@@ -16,6 +16,7 @@ class Societati extends React.Component {
   constructor() {
     super();
     this.unselectAll = this.unselectAll.bind(this);
+    this.downloadButton = this.downloadButton.bind(this);
 
     this.state = {};
   }
@@ -57,9 +58,27 @@ class Societati extends React.Component {
         [nume_soc]: { opacity: '1', id: id },
       });
 
-      setSocSel({id: id, nume: nume_soc});
+      setSocSel({ id: id, nume: nume_soc });
       console.log(getSocSel());
     }
+  }
+
+  async downloadButton() {
+    console.log('trying to download...');
+    await fetch(`${server.address}/download/text.txt`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/octet-stream' },
+    })
+      .then((res) => res.blob())
+      .then((blob) => {
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = "text.txt";
+        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+        a.click();
+        a.remove();  //afterwards we remove the element again
+      });
   }
 
   render() {
@@ -95,6 +114,7 @@ class Societati extends React.Component {
 
     return (
       <Aux>
+        <Button onClick={this.downloadButton}>download</Button>
         <Row>{societatiComponent}</Row>
       </Aux>
     );

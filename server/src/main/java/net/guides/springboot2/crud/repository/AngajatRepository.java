@@ -9,5 +9,9 @@ import net.guides.springboot2.crud.model.Angajat;
 
 @Repository
 public interface AngajatRepository extends JpaRepository<Angajat, Long>{
-  List<Angajat> findByIdcontractNotNull();
+	List<Angajat> findByIdcontractNotNull();
+	List<Angajat> findByIdsocietate(int idsocietate);
+	List<Angajat> findByIdsocietateAndIdcontractNotNull(int idsocietate);
+	
+	int countByIdsocietate(int idsocietate);
 }

@@ -26,12 +26,12 @@ public class AngajatController {
     @Autowired
     private AngajatRepository angajatRepository;
 
-    @GetMapping
+    @GetMapping("/sortbyid")
     public List<Angajat> getAllAngajats() {
         return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
     }
 
-    @GetMapping("/alf")
+    @GetMapping
     public List<Angajat> getAngajatsAlphabetically() {
         return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
     }
@@ -47,7 +47,12 @@ public class AngajatController {
     @GetMapping("/c")
     public List<Angajat> getAngajatByIdWhereIdcontractNotNull() {
         return angajatRepository.findByIdcontractNotNull();
-    }
+		}
+		
+		@GetMapping("/ids={ids}/count")
+		public int countAngajatiByIdsocietate(@PathVariable(name="ids") int idsocietate) {
+			return angajatRepository.countByIdsocietate(idsocietate);
+		}
 
     @PostMapping
     public Angajat createAngajat(@RequestBody Angajat angajat) {
