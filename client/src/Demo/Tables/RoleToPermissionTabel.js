@@ -12,7 +12,7 @@ import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 
 class RoleToPermissionTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.handleClose = this.handleClose.bind(this);

@@ -10,8 +10,8 @@ import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 
 class SocietatiTabel extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.onRefresh = this.onRefresh.bind(this);
 
@@ -52,7 +52,6 @@ class SocietatiTabel extends React.Component {
         // console.log(soc);
         return (
           <tr key={soc.id}>
-            <th>{soc.id}</th>
             <th>{soc.nume}</th>
             <th>{soc.email}</th>
             <th>{soc.idcaen}</th>
@@ -152,7 +151,6 @@ class SocietatiTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>#id</th>
                       <th>Nume</th>
                       <th>email</th>
                       <th>CAEN</th>
