@@ -39,8 +39,8 @@ class SocietatiTabel extends React.Component {
         this.onRefresh();
       })
       .catch(console.log('could not connect to db'));
-  }
-
+	}
+	
   // function to render in react
   async renderSocietati() {
     // console.log('render called');
