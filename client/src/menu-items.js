@@ -85,7 +85,22 @@ export default {
           icon: 'feather icon-file-text',
         },
       ],
-    },
+		},
+		{
+      id: 'generare-fisiere',
+      title: 'Generare Fisiere',
+      type: 'group',
+      icon: 'icon-group',
+			children: [
+				{
+					id: 'stat',
+					title: 'State salarii',
+					type: 'item',
+					url: '/state-salarii',
+					icon: 'feather icon-file-text'
+				}
+			]
+		},
     {
       id: 'configuration',
       title: 'Configuration',
