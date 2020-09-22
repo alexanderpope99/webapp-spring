@@ -6,10 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,13 @@ public class StatSalariiService {
 	@Autowired
 	private AdresaRepository adresaRepository;
 
+	private void setRegionBorder(CellRangeAddress region, Sheet sheet) {
+        RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
+    }
+
 	//! WRAP IN TRY-CATCH BLOCK
 	public void createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById((long) idsocietate)
@@ -49,9 +59,7 @@ public class StatSalariiService {
 		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
 
-		// List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
+		List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
 		String downloadsLocation = "C:\\Users\\florin\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\downloads";
 		String statTemplateLocation = downloadsLocation + "\\templates\\StatSalarii.xlsx";
 		
@@ -68,14 +76,24 @@ public class StatSalariiService {
 		writerCell = stat.getRow(2).getCell(0);
 		writerCell.setCellValue("Nr. Reg. Com.: " + societate.getRegcom()); // nr reg com
 		writerCell = stat.getRow(3).getCell(0);
-		writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa());
+		writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 		writerCell = stat.getRow(4).getCell(0);
-		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate());
+		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet + localitate
 
-		// write luna, an
+		//* write luna, an
 		writerCell = stat.getRow(4).getCell(11);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
+
+		int nrAngajat = 0;
+		//* write angajati:
+		for(Angajat angajat : angajati) {
+			//* 1. create borders
+			String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
+			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+			nrAngajat++;
+		}
 
 		String newFileLocation = downloadsLocation + "\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
 		
