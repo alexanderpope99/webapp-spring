@@ -102,7 +102,7 @@ class AddSocietate extends React.Component {
       }
     }
 
-    var adr_id = null;
+    var idadresa = null;
     // if aresa hass all fields null, don't add adresa or idadresa
     if (this.state.adresa !== null || this.state.localitate !== null) {
       // FIRST ADD ADRESA TO DATABASE
@@ -113,12 +113,13 @@ class AddSocietate extends React.Component {
         tara: null,
       };
       // console.log(JSON.stringify(adresa_body));
-      adr_id = await fetch(`${server.address}/adresa`, {
+      let adresa = await fetch(`${server.address}/adresa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adresa_body),
       }).then((res) => res.json());
-      console.log('idadresa:', adr_id);
+      idadresa = adresa.id;
+      console.log('idadresa:', adresa);
     }
     // build societate JSON for POST with adr_id as idadresa
     const societate_body = {
@@ -127,10 +128,11 @@ class AddSocietate extends React.Component {
       cif: this.state.cif,
       capsoc: this.state.capsoc,
       regcom: this.state.regcom,
-      idadresa: adr_id,
+      idadresa: idadresa,
       email: this.state.email,
-      telefon: this.state.telefon,
+      telefon: this.state.telefon
     };
+    console.log(societate_body);
     // ADD SOCIETATE TO DATABASE
     await fetch(`${server.address}/societate`, {
       method: 'POST',
@@ -142,7 +144,7 @@ class AddSocietate extends React.Component {
         //alert("Societate adaugata cu succes!");
         this.setState({
           show: true,
-          message: 'Societate adăugată cu succes!',
+          modalMessage: 'Societate adăugată cu succes!',
         });
       })
       .then(this.clearFields());
@@ -166,9 +168,9 @@ class AddSocietate extends React.Component {
       <Aux>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Date incomplete</Modal.Title>
+            <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this.state.message}</Modal.Body>
+          <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.handleClose}>
               OK

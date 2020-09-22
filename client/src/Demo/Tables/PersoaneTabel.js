@@ -57,7 +57,6 @@ class PersoaneTabel extends React.Component {
         return (
           // TODO
           <tr key={pers.id}>
-            <th>{pers.id}</th>
             <th>{pers.nume}</th>
             <th>{pers.prenume}</th>
             <th>{pers.email}</th>
@@ -192,7 +191,6 @@ class PersoaneTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>#id</th>
                       <th>Nume</th>
                       <th>Prenume</th>
                       <th>email</th>
