@@ -29,7 +29,7 @@ public class DownloadsController {
 			// response.setContentType("application/pdf");
 			IOUtils.copy(fileAsIS, response.getOutputStream());
 
-			response.flushBuffer();
+			response.getOutputStream().flush();
 
 		} catch (IOException ex) {
 			throw new RuntimeException("IOError writing file to output stream");
