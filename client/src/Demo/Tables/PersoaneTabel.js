@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { getSocSel } from '../Resources/socsel';
 
 class PersoaneTabel extends React.Component {
   constructor(props) {
@@ -19,12 +20,16 @@ class PersoaneTabel extends React.Component {
     this.onRefresh = this.onRefresh.bind(this);
 
     this.state = {
+      socsel: getSocSel(),
       persoane: [],
       persoaneComponent: null,
     };
   }
 
   componentDidMount() {
+    if(!getSocSel())
+      window.location.href = "/dashboard/societati";
+
     this.onRefresh();
     window.scrollTo(0, 0);
   }
@@ -52,7 +57,6 @@ class PersoaneTabel extends React.Component {
         return (
           // TODO
           <tr key={pers.id}>
-            <th>{pers.id}</th>
             <th>{pers.nume}</th>
             <th>{pers.prenume}</th>
             <th>{pers.email}</th>
@@ -123,7 +127,7 @@ class PersoaneTabel extends React.Component {
   }
 
   async onRefresh() {
-    const persoane = await fetch(`${server.address}/persoana`, {
+    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify(persoane),
@@ -187,7 +191,6 @@ class PersoaneTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>#id</th>
                       <th>Nume</th>
                       <th>Prenume</th>
                       <th>email</th>

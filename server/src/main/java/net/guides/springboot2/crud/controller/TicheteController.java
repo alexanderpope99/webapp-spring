@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Tichete;
 import net.guides.springboot2.crud.repository.TicheteRepository;
+import net.guides.springboot2.crud.services.TicheteService;
 
 import org.springframework.data.domain.Sort;
 
@@ -25,10 +26,12 @@ import org.springframework.data.domain.Sort;
 @RequestMapping("/tichete")
 public class TicheteController {
     @Autowired
-    private TicheteRepository ticheteRepository;
+	private TicheteRepository ticheteRepository;
+	@Autowired
+	private TicheteService ticheteService;
 
     @GetMapping
-    public List<Tichete> getAllPersoane() {
+    public List<Tichete> getAllTichete() {
         return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
@@ -39,6 +42,14 @@ public class TicheteController {
                 .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
         return ResponseEntity.ok().body(tichete);
+    }
+
+    @GetMapping("nr/idc={idc}&mo={luna}&y={an}")
+    public int getNrTicheteByLunaAnIdcontract(
+        @PathVariable(value = "idc") long idcontract,
+        @PathVariable(value = "luna") int luna,
+        @PathVariable(value = "an") int an) {
+			return ticheteService.getNrTichete(luna, an, idcontract);
     }
 
     @PostMapping

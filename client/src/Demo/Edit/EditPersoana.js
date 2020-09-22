@@ -117,6 +117,9 @@ class EditPersoana extends React.Component {
 
   componentDidMount() {
     this.getNumeintreg();
+    console.log(this.state.id);
+    if(this.state.id)
+      this.fillForm();
     // window.scrollTo(0, 0);
     // console.log(this.state);
   }
@@ -128,22 +131,12 @@ class EditPersoana extends React.Component {
       // body: JSON.stringify(persoane),
     }).then((persoane) => persoane.json());
 
-    this.setState(
-      {
-        numeintreg: persoane.map((pers, index) => ({
-          id: pers.id,
-          nume: pers.nume + ' ' + pers.prenume,
-        })),
-      },
-      () => {
-        this.setState(
-          {
-            selectednume: this.state.id ? '-' : this.getNumeintregById(this.state.id),
-          },
-          this.fillForm
-        );
-      }
-    );
+    this.setState({
+      numeintreg: persoane.map((pers, index) => ({
+        id: pers.id,
+        nume: pers.nume + ' ' + pers.prenume,
+      })),
+    });
     // console.log('nume intregi:', this.state.numeintreg);
   }
 
@@ -267,13 +260,10 @@ class EditPersoana extends React.Component {
     }
 
     if (persoana.idactidentitate) {
-      await fetch(
-        `${server.address}/actidentitate/${persoana.idactidentitate}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
+      await fetch(`${server.address}/actidentitate/${persoana.idactidentitate}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
         .then((actidentitate) => actidentitate.json())
         .then((actidentitate) => {
           if (actidentitate)
@@ -311,13 +301,6 @@ class EditPersoana extends React.Component {
     e.preventDefault();
 
     if (!this.hasRequired()) return -1;
-
-    for (let key in this.state)
-      if (
-        typeof this.state[key] === 'string' &&
-        ['', '-'].indexOf(this.state[key]) !== -1
-      )
-        this.state[key] = null;
 
     var idadresa = this.state.idadresa,
       idactidentitate = this.state.idactidentitate;
@@ -397,14 +380,11 @@ class EditPersoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      await fetch(
-        `${server.address}/actidentitate/${this.state.idactidentitate}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(buletin_body),
-        }
-      );
+      await fetch(`${server.address}/actidentitate/${this.state.idactidentitate}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buletin_body),
+      });
     }
 
     let persoana_body = {
@@ -444,19 +424,16 @@ class EditPersoana extends React.Component {
       return <option key={index}>{judet}</option>;
     });
 
-    const sectoareObj = sectoare.map((sector, index) => (
-      <option key={index}>{sector}</option>
-    ));
+    const sectoareObj = sectoare.map((sector, index) => <option key={index}>{sector}</option>);
 
     const listaJudete = () => {
       if (this.state.tipJudet === 'Județ') return judeteObj;
       return sectoareObj;
     };
 
-    const listaNumeintreg = () =>
-      this.state.numeintreg.map((nume, index) => (
-        <option key={nume.id}>{nume.nume}</option>
-      ));
+    const listaNumeintreg = this.state.numeintreg.map((nume, index) => (
+      <option key={nume.id}>{nume.nume}</option>
+    ));
 
     return (
       <Aux>
@@ -492,7 +469,7 @@ class EditPersoana extends React.Component {
                     }
                   >
                     <option>-</option>
-                    {listaNumeintreg()}
+                    {listaNumeintreg}
                   </FormControl>
                   <InputGroup.Append>
                     <OverlayTrigger
@@ -504,11 +481,7 @@ class EditPersoana extends React.Component {
                         </Tooltip>
                       }
                     >
-                      <Button
-                        href="/forms/add-persoana"
-                        variant="outline-info"
-                        className="pb-0"
-                      >
+                      <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
                         <Add fontSize="small" className="m-0" />
                       </Button>
                     </OverlayTrigger>
@@ -778,14 +751,10 @@ class EditPersoana extends React.Component {
                       <Col md={12}>
                         <Button
                           variant={
-                            this.state.selectednume === '-'
-                              ? 'outline-dark'
-                              : 'outline-primary'
+                            this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'
                           }
                           onClick={this.onSubmit}
-                          disabled={
-                            this.state.selectednume === '-' ? true : false
-                          }
+                          disabled={this.state.selectednume === '-' ? true : false}
                         >
                           Actualizează datele personale
                         </Button>

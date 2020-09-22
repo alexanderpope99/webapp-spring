@@ -25,6 +25,10 @@ import ConcediiMedicale from '../Tables/ConcediiMedicale';
 class Angajat extends React.Component {
   constructor() {
     super();
+
+    if(!getSocSel())
+      window.location.href = "/dashboard/societati";
+      
     // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -52,6 +56,8 @@ class Angajat extends React.Component {
   }
 
   componentDidMount() {
+    
+
     window.scrollTo(0, 0);
   }
 

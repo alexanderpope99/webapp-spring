@@ -66,14 +66,11 @@ class COTabel extends React.Component {
       return;
     }
     //? fetch must be with idcontract
-    const co = await fetch(
-      `${server.address}/co/idc=${this.state.angajat.idcontract}`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        // body: JSON.stringify(persoane),
-      }
-    )
+    const co = await fetch(`${server.address}/co/idc=${this.state.angajat.idcontract}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      // body: JSON.stringify(persoane),
+    })
       .then((co) => (co.status !== 200 ? null : co.json()))
       .catch((err) => console.error('err', err));
 
@@ -175,9 +172,8 @@ class COTabel extends React.Component {
   renderCO() {
     this.setState({
       coComponent: this.state.co.map((co, index) => {
-        for (let key in co) {
-          if (co[key] === 'null' || co[key] === null) co[key] = '-';
-        }
+        for (let key in co) if (!co[key]) co[key] = '-';
+
         return (
           <tr key={co.id}>
             <th>{co.dela.substring(0, 10)}</th>
@@ -207,9 +203,7 @@ class COTabel extends React.Component {
                     >
                       <Box p={2}>
                         <Typography>Sigur ștergeți concediul?</Typography>
-                        <Typography variant="caption">
-                          Datele nu mai pot fi recuperate
-                        </Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
                           variant="outline-danger"
@@ -298,10 +292,7 @@ class COTabel extends React.Component {
         </Modal>
 
         {/* CONFIRM Modal */}
-        <Modal
-          show={this.state.show_confirm}
-          onHide={() => this.handleClose(true)}
-        >
+        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
@@ -321,9 +312,7 @@ class COTabel extends React.Component {
                 <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
                 <Button
                   variant={
-                    typeof this.state.angajat === 'undefined'
-                      ? 'outline-dark'
-                      : 'outline-primary'
+                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   disabled={typeof this.state.angajat === 'undefined'}
                   size="sm"
@@ -336,9 +325,7 @@ class COTabel extends React.Component {
 
                 <Button
                   variant={
-                    typeof this.state.angajat === 'undefined'
-                      ? 'outline-dark'
-                      : 'outline-primary'
+                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   className="float-right"
                   onClick={() => this.setState({ show: true })}

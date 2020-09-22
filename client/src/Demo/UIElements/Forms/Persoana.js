@@ -226,10 +226,10 @@ class Persoana extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(persoana_body),
     })
-      .then((persoana) => persoana.json())
+      .then((res) => res.ok ? res.json() : null)
       .catch((err) => console.error('error:', err.message));
 
-    if (typeof persoana.id === 'number') {
+    if (persoana) {
       this.clearFields();
       this.setState({
         show: true,
@@ -238,8 +238,6 @@ class Persoana extends React.Component {
       console.log('idpersoana:', persoana.id);
 
       await this.createAngajat(persoana.id);
-
-      return persoana.id;
     } else return;
   }
 

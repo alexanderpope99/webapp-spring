@@ -12,15 +12,27 @@ import javax.persistence.Table;
 public class Retineri {
 
     private long id;
-    @Column(name = "valoare")
-    private Double valoare;
+    @Column(name = "avansnet")
+    private Integer avansnet;
+    @Column(name = "pensiefacultativa")
+    private Integer pensiefacultativa;
+    @Column(name = "pensiealimentara")
+    private Integer pensiealimentara;
+    @Column(name = "popriri")
+    private Integer popriri;
+    @Column(name = "imprumuturi")
+    private Integer imprumuturi;
     @Column(name = "idstat")
     private Long idstat;
 
     public Retineri() { }
 
-    public Retineri( Double valoare, Long idstat ) {
-        this.valoare = valoare;
+    public Retineri( Integer avansnet, Integer pensiefacultativa, Integer pensiealimentara, Integer popriri, Integer imprumuturi, Long idstat ) {
+        this.avansnet = avansnet;
+        this.pensiefacultativa = pensiefacultativa;
+        this.pensiealimentara = pensiealimentara;
+        this.popriri = popriri;
+        this.imprumuturi = imprumuturi;
         this.idstat = idstat;
     }
 
@@ -37,16 +49,40 @@ public class Retineri {
     public Long getIdstat() {
         return idstat;
     }
-    public Double getValoare() {
-        return valoare;
+    public Integer getAvansnet() {
+        return avansnet;
+    }
+    public Integer getImprumuturi() {
+        return imprumuturi;
+    }
+    public Integer getPensiealimentara() {
+        return pensiealimentara;
+    }
+    public Integer getPensiefacultativa() {
+        return pensiefacultativa;
+    }
+    public Integer getPopriri() {
+        return popriri;
     }
 
     // SETTERS
     public void setIdstat(Long idstat) {
         this.idstat = idstat;
     }
-    public void setValoare(Double valoare) {
-        this.valoare = valoare;
+    public void setAvansnet(Integer avansnet) {
+        this.avansnet = avansnet;
+    }
+    public void setImprumuturi(Integer imprumuturi) {
+        this.imprumuturi = imprumuturi;
+    }
+    public void setPensiealimentara(Integer pensiealimentara) {
+        this.pensiealimentara = pensiealimentara;
+    }
+    public void setPensiefacultativa(Integer pensiefacultativa) {
+        this.pensiefacultativa = pensiefacultativa;
+    }
+    public void setPopriri(Integer popriri) {
+        this.popriri = popriri;
     }
 }
 

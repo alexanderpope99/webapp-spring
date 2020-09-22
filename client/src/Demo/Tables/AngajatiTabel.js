@@ -4,6 +4,7 @@ import MaterialTable from 'material-table';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { getSocSel } from '../Resources/socsel';
 
 class AngatjatiTabel extends React.Component {
   constructor() {
@@ -19,6 +20,11 @@ class AngatjatiTabel extends React.Component {
       data: [], // for display only
       persoane: this.getData(),
     };
+  }
+
+  componentDidMount() {
+    if(!getSocSel())
+      window.location.href = "/dashboard/societati";
   }
 
   async deletePersoana(state) {

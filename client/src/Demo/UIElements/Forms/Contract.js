@@ -12,6 +12,7 @@ import {
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
+import { getSocSel } from '../../Resources/socsel';
 
 class Contract extends React.Component {
   constructor() {
@@ -24,6 +25,7 @@ class Contract extends React.Component {
     // this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
     this.state = {
+      socsel: getSocSel(),
       id: null,
       modelContract: 'Contract de munca', //text
       numărContract: '', //text
@@ -47,7 +49,7 @@ class Contract extends React.Component {
       spor: 0,
       avans: 0,
       monedăAvans: 'RON', //text
-      zileCOan: 0,
+      zileCOan: 21,
       casăSănătate: '', //text
       gradInvalid: 'valid', //text
       funcție: '', //text
@@ -91,7 +93,7 @@ class Contract extends React.Component {
       spor: 0,
       avans: 0,
       monedăAvans: 'RON', //text
-      zileCOan: 0,
+      zileCOan: 21,
       casăSănătate: '', //text
       gradInvalid: 'valid', //text
       funcție: '', //text
@@ -275,12 +277,12 @@ class Contract extends React.Component {
         body: JSON.stringify(contract_body),
       }
     )
-      .then((contract) => contract.json())
+      .then(res => res.ok ? res.json() : null)
       .catch((err) => {
         console.error(err.message);
       });
 
-    if (typeof contract.id === 'number') {
+    if (contract) {
       this.setState({
         show: true,
         modalMessage:
@@ -297,11 +299,12 @@ class Contract extends React.Component {
           body: JSON.stringify({
             idcontract: contract.id,
             idpersoana: idangajat,
+            idsocietate: this.state.socsel.id,
           }),
         }).catch((err) => console.error(err));
       }
       console.log('idcontract:', contract.id);
-    } else return;
+    }
   }
 
   render() {

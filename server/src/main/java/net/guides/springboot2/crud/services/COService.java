@@ -24,6 +24,14 @@ public class COService {
         return zileC(luna, an, concediiOdihnaNeplatite);
     }
 
+    public int getZileCONeplatiteLucratoare(int luna, int an, long idcontract) {
+        List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
+        if(concediiOdihnaNeplatite.size() == 0)
+            return 0;
+
+        return zileCLucratoare(luna, an, concediiOdihnaNeplatite);
+    }
+
     public int getZileCO(int luna, int an, long idcontract) {
         List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
         if(concediiOdihna.size() == 0)
@@ -32,11 +40,18 @@ public class COService {
         return zileC(luna, an, concediiOdihna);
     }
 
+    public int getZileCOLucratoare(int luna, int an, long idcontract) {
+        List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
+        if(concediiOdihna.size() == 0)
+            return 0;
+
+        return zileCLucratoare(luna, an, concediiOdihna);
+    }
     
     private int zileC(int luna, int an, List<CO> concedii) {
         LocalDate inceputLuna = LocalDate.of(an, luna, 1);
         int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
-        // findAllByIdContract
+
         LocalDate dela, panala;
         LocalDate day;
         int zileC = 0;
@@ -48,6 +63,27 @@ public class COService {
                 day = LocalDate.of(an, luna, i);
                 if(day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
                     zileC++;
+            }
+        }
+        return zileC;
+    }
+    
+    private int zileCLucratoare(int luna, int an, List<CO> concedii) {
+        LocalDate inceputLuna = LocalDate.of(an, luna, 1);
+        int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
+
+        LocalDate dela, panala;
+        LocalDate day;
+        int zileC = 0;
+        for(CO concediu : concedii) {
+            dela = concediu.getDela();
+            panala = concediu.getPanala();
+
+            for(int i=1; i <= nrZileLuna; ++i) {
+                day = LocalDate.of(an, luna, i);
+                if(day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
+                    if(day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
+                        zileC++;
             }
         }
         return zileC;
