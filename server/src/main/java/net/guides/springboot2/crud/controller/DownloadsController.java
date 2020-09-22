@@ -26,7 +26,8 @@ public class DownloadsController {
 			File myFile = new File("src/main/java/net/guides/springboot2/crud/downloads/"+fileName);
 			InputStream fileAsIS = new FileInputStream(myFile);
 
-			// response.setContentType("application/pdf");
+			response.setContentType("application/octet-stream");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + '"');
 			IOUtils.copy(fileAsIS, response.getOutputStream());
 
 			response.getOutputStream().flush();
