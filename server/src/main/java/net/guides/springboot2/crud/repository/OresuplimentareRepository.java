@@ -15,5 +15,8 @@ public interface OresuplimentareRepository extends JpaRepository<Oresuplimentare
     @Query(
         value = "select * from oresuplimentare where idstatsalariat = (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract = ?3)", 
         nativeQuery = true)
-    List<Oresuplimentare> findByLunaAndAnAndIdcontract(int luna, int an, long idcontract);
+		List<Oresuplimentare> findByLunaAndAnAndIdcontract(int luna, int an, long idcontract);
+		
+		@Query(value = "SELECT COALESCE( (select sum(nr) from oresuplimentare where idstatsalariat = ?1), 0)", nativeQuery = true)
+		Integer countNrOreSuplimentareByIdstat(long idstat);
 }

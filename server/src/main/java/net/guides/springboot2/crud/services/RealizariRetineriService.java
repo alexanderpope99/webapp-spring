@@ -7,6 +7,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
+import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 
 @Service
@@ -31,7 +32,9 @@ public class RealizariRetineriService {
 	@Autowired
     private TicheteService ticheteService;
     @Autowired
-    private RetineriService retineriService;
+	private RetineriService retineriService;
+	@Autowired
+	private OresuplimentareRepository oresuplimentareRepository;
 
     // REPOSITORIES
     @Autowired
@@ -112,7 +115,13 @@ public class RealizariRetineriService {
         float impozit = Math.round(this.impozitSalariu);
 
 
-        return new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM, zileCMLucratoare, zileCONeplatit, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere, primaBruta, totalOreSuplimentare );
+		RealizariRetineri rr =  new RealizariRetineri( idcontract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM, zileCMLucratoare, zileCONeplatit, zileCONeplatit, duratazilucru, norma, zileLucrate, oreLucrate, (int)totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int)this.deducere, primaBruta, totalOreSuplimentare );
+
+		int nrOreSuplimentare = oresuplimentareRepository.countNrOreSuplimentareByIdstat(rr.getId());
+		
+		rr.setNroresuplimentare(nrOreSuplimentare);
+
+		return rr;
 	}	// calcRealizariRetineri
 
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {

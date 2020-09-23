@@ -11,12 +11,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
-import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,12 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
-import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
-import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
@@ -47,8 +46,6 @@ public class StatSalariiService {
 
 	@Autowired
 	private PersoanaRepository persoanaRepository;
-	@Autowired
-	private AngajatRepository angajatRepository;
 	@Autowired
 	private SocietateRepository societateRepository;
 	@Autowired
@@ -89,15 +86,18 @@ public class StatSalariiService {
 		//* create styles
 		CellStyle salariuStyle = workbook.createCellStyle();
 		CellStyle functieStyle = workbook.createCellStyle();
+		CellStyle nrContractStyle = workbook.createCellStyle();
 		Font font = workbook.createFont();
 		font.setFontHeightInPoints((short)7);
 		functieStyle.setFont(font);
+		functieStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		DataFormat format = workbook.createDataFormat();
 		salariuStyle.setDataFormat(format.getFormat("#,##0"));
 		
+		nrContractStyle.setAlignment(HorizontalAlignment.RIGHT);
+		
 		Cell salariuWriter = stat.getRow(0).getCell(0);
 		Cell functieWriter = stat.getRow(0).getCell(0);
-		functieWriter.setCellStyle(functieStyle);
 		
 		//* write date societate
 		Cell writerCell = stat.getRow(0).getCell(0);
@@ -116,8 +116,6 @@ public class StatSalariiService {
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
 		
-		Row r = stat.createRow(50);
-		Cell c = r.getCell(4);
 		
 		//* write angajati:
 		int nrAngajat = 0;
@@ -152,20 +150,27 @@ public class StatSalariiService {
 			writerCell.setCellValue(persoana.getCnp());
 		
 			writerCell = row3.createCell(2); // nr contract
+			writerCell.setCellStyle(nrContractStyle);
 			writerCell.setCellValue(contract.getNr());
 		
 			//* SALARIU
 			salariuWriter = row1.createCell(4); // salariu din contract
 			salariuWriter.setCellStyle(salariuStyle);
 			salariuWriter.setCellValue(contract.getSalariutarifar());
-			salariuWriter = row2.createCell(4);
+			salariuWriter = row2.createCell(4); // sume incluse ...
 			salariuWriter.setCellValue(0);
-			salariuWriter = row3.createCell(4);
+			salariuWriter = row3.createCell(4); // spor weekend
+			salariuWriter.setCellValue(0);
+			salariuWriter = row3.createCell(3); // spor vechime
 			salariuWriter.setCellValue(0);
 		
-		
+			//* ZILE
 			writerCell = row1.createCell(5); // NZ
 			writerCell.setCellValue(8);
+			writerCell = row2.createCell(5); // NO
+			writerCell.setCellValue(contract.getNormalucru());
+			writerCell = row3.createCell(5); // SPL = ore suplimentare
+			writerCell.setCellValue(realizariRetineri.getNroresuplimentare());
 		
 			// writerCell = row1.getCell()
 			//* set borders

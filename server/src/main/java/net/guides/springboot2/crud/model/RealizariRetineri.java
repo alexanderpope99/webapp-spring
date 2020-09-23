@@ -75,6 +75,8 @@ public class RealizariRetineri {
 	private Integer primabruta;
 	@Column(name = "totaloresuplimentare")
 	private Integer totaloresuplimentare;
+	@Column(name = "nroresuplimentare")
+	private Integer nroresuplimentare;
     
     public RealizariRetineri() { }
 
@@ -115,6 +117,7 @@ public class RealizariRetineri {
         this.nrpersoaneintretinere = nrpersoaneintretinere;
 		this.deducere = deducere;
 		this.primabruta = primabruta;
+
 		this.totaloresuplimentare = totaloresuplimentare;
     }
 
@@ -212,6 +215,9 @@ public class RealizariRetineri {
 	public Integer getZileconeplatitlucratoare() {
 		return zileconeplatitlucratoare;
 	}
+	public Integer getNroresuplimentare() {
+		return nroresuplimentare;
+	}
 
 	//! SETTERS
 	public void setNrtichete(Integer nrtichete) {
@@ -297,6 +303,9 @@ public class RealizariRetineri {
 	}
 	public void setZileconeplatitlucratoare(Integer zileconeplatitlucratoare) {
 		this.zileconeplatitlucratoare = zileconeplatitlucratoare;
+	}
+	public void setNroresuplimentare(Integer nroresuplimentare) {
+		this.nroresuplimentare = nroresuplimentare;
 	}
 }
 
