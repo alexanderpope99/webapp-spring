@@ -71,7 +71,7 @@ public class StatSalariiService {
 		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
 				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
 
-		List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
+		// List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
 		List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
 
 		// File currDir = new File(".");
@@ -85,7 +85,7 @@ public class StatSalariiService {
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatSalarii.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet stat = workbook.getSheetAt(0);
-
+		
 		//* create styles
 		CellStyle salariuStyle = workbook.createCellStyle();
 		CellStyle functieStyle = workbook.createCellStyle();
@@ -94,7 +94,11 @@ public class StatSalariiService {
 		functieStyle.setFont(font);
 		DataFormat format = workbook.createDataFormat();
 		salariuStyle.setDataFormat(format.getFormat("#,##0"));
-
+		
+		Cell salariuWriter = stat.getRow(0).getCell(0);
+		Cell functieWriter = stat.getRow(0).getCell(0);
+		functieWriter.setCellStyle(functieStyle);
+		
 		//* write date societate
 		Cell writerCell = stat.getRow(0).getCell(0);
 		writerCell.setCellValue(societate.getNume()); // nume soc
@@ -106,42 +110,67 @@ public class StatSalariiService {
 		writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 		writerCell = stat.getRow(4).getCell(0);
 		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet + localitate
-
+		
 		//* write luna, an
 		writerCell = stat.getRow(4).getCell(11);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
-
+		
+		Row r = stat.createRow(50);
+		Cell c = r.getCell(4);
+		
 		//* write angajati:
 		int nrAngajat = 0;
 		for(Persoana persoana : persoane) {
 			int rowNr = 14 + nrAngajat * 3;
-			// get contract + stat(luna, an, idcontract);
+			Row row1 = stat.createRow(rowNr);
+			Row row2 = stat.createRow(rowNr+1);
+			Row row3 = stat.createRow(rowNr+2);
+		
+			//* 1. get contract + stat(luna, an, idcontract);
 			Contract contract = contractRepository.findByIdPersoana(persoana.getId()).orElseThrow(
 				() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + persoana.getId()));
-
+		
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, contract.getId());
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 				
-			//* 1. create borders
-			String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
-			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			//* 2. set styles, merged cells etc
 			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 1, 2));
-
-			//* 3. insert data
-			Row row1 = stat.getRow(rowNr);
-
-			writerCell = row1.getCell(0);
+		
+			
+			//* 3. insert data:
+			writerCell = row1.createCell(0);
 			writerCell.setCellValue(nrAngajat+1); // indexing
-
-			writerCell = row1.getCell(1); // nume complet
+		
+			//* nume, functie, cnp
+			writerCell = row1.createCell(1); // nume complet
 			writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
-
-			writerCell = row1.getCell(4); // salariu din contract
-			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(contract.getSalariutarifar());
-
+			functieWriter = row2.createCell(1); // functie
+			functieWriter.setCellStyle(functieStyle);
+			functieWriter.setCellValue(contract.getFunctie());
+			writerCell = row3.createCell(1); // cnp
+			writerCell.setCellValue(persoana.getCnp());
+		
+			writerCell = row3.createCell(2); // nr contract
+			writerCell.setCellValue(contract.getNr());
+		
+			//* SALARIU
+			salariuWriter = row1.createCell(4); // salariu din contract
+			salariuWriter.setCellStyle(salariuStyle);
+			salariuWriter.setCellValue(contract.getSalariutarifar());
+			salariuWriter = row2.createCell(4);
+			salariuWriter.setCellValue(0);
+			salariuWriter = row3.createCell(4);
+			salariuWriter.setCellValue(0);
+		
+		
+			writerCell = row1.createCell(5); // NZ
+			writerCell.setCellValue(8);
+		
+			// writerCell = row1.getCell()
+			//* set borders
+			String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
+			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			nrAngajat++;
 		}
 
