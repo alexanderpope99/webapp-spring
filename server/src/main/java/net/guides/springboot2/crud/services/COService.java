@@ -16,7 +16,7 @@ public class COService {
     @Autowired
     private CORepository coRepository;
 
-    public int getZileCONeplatite(int luna, int an, long idcontract) {
+    public int getZileCFP(int luna, int an, long idcontract) {
         List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
         if(concediiOdihnaNeplatite.size() == 0)
             return 0;
@@ -24,7 +24,7 @@ public class COService {
         return zileC(luna, an, concediiOdihnaNeplatite);
     }
 
-    public int getZileCONeplatiteLucratoare(int luna, int an, long idcontract) {
+    public int getZileCFPLucratoare(int luna, int an, long idcontract) {
         List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
         if(concediiOdihnaNeplatite.size() == 0)
             return 0;
@@ -32,7 +32,7 @@ public class COService {
         return zileCLucratoare(luna, an, concediiOdihnaNeplatite);
     }
 
-    public int getZileCO(int luna, int an, long idcontract) {
+    public int getZileCOTotal(int luna, int an, long idcontract) {
         List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
         if(concediiOdihna.size() == 0)
             return 0;
@@ -47,7 +47,31 @@ public class COService {
 
         return zileCLucratoare(luna, an, concediiOdihna);
     }
-    
+		
+	public int getZileCS(int luna, int an, long idcontract) {
+		List<CO> cs = coRepository.findByIdcontractAndTip(idcontract, "Concediu pentru studii");
+        if(cs.size() == 0)
+            return 0;
+
+        return zileC(luna, an, cs);
+	}
+
+	public int getZileST(int luna, int an, long idcontract) {
+		List<CO> st = coRepository.findByIdcontractAndTip(idcontract, "Concediu pentru situații speciale");
+		if(st.size() == 0)
+			return 0;
+
+		return zileC(luna, an, st);
+	}	
+
+	public int getZileCO(int luna, int an, long idcontract) {
+		List<CO> st = coRepository.findByIdcontractAndTip(idcontract, "Concediu de odihnă");
+		if(st.size() == 0)
+			return 0;
+
+		return zileC(luna, an, st);
+	}	
+
     private int zileC(int luna, int an, List<CO> concedii) {
         LocalDate inceputLuna = LocalDate.of(an, luna, 1);
         int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());

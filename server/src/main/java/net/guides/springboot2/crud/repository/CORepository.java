@@ -11,5 +11,5 @@ import net.guides.springboot2.crud.model.CO;
 public interface CORepository extends JpaRepository<CO, Long>{
   List<CO> findByIdcontract(Long idcontract);
 
-  List<CO> findByIdcontractAndTip(Long idcontract, String tip);
+	List<CO> findByIdcontractAndTip(Long idcontract, String tip);
 }

@@ -23,23 +23,7 @@ public class CMService {
         if(concediiMedicale.size() == 0)
             return 0;
 
-        LocalDate inceputLuna = LocalDate.of(an, luna, 1);
-        int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
-        LocalDate dela, panala;
-        LocalDate day;
-        int zileCM = 0;
-        for(CM concediu : concediiMedicale) {
-            dela = concediu.getDela();
-            panala = concediu.getPanala();
-
-            for(int i=1; i <= nrZileLuna; ++i) {
-                day = LocalDate.of(an, luna, i);
-                if(day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
-                    if(day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
-                        zileCM++;
-            }
-        }
-        return zileCM;
+        return zileCLucratoare(luna, an, concediiMedicale);
     }
 
     public int getZileCM(int luna, int an, long idcontract) {
@@ -48,23 +32,52 @@ public class CMService {
         if(concediiMedicale.size() == 0)
             return 0;
 
+        return zileC(luna, an, concediiMedicale);
+    }
+
+	// public int getZileFNUASS(int luna, int an, long idcontract) {
+	// 	List<CM> cm = cmRepository.findByIdcontractInLunaAnul(idcontract)
+	// }
+
+	private int zileC(int luna, int an, List<CM> concedii) {
         LocalDate inceputLuna = LocalDate.of(an, luna, 1);
         int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
+
         LocalDate dela, panala;
         LocalDate day;
-        int zileCM = 0;
-        for(CM concediu : concediiMedicale) {
+        int zileC = 0;
+        for(CM concediu : concedii) {
             dela = concediu.getDela();
             panala = concediu.getPanala();
 
             for(int i=1; i <= nrZileLuna; ++i) {
                 day = LocalDate.of(an, luna, i);
                 if(day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
-                    zileCM++;
+                    zileC++;
             }
         }
-        return zileCM;
+        return zileC;
     }
+    
+    private int zileCLucratoare(int luna, int an, List<CM> concedii) {
+        LocalDate inceputLuna = LocalDate.of(an, luna, 1);
+        int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
 
+        LocalDate dela, panala;
+        LocalDate day;
+        int zileC = 0;
+        for(CM concediu : concedii) {
+            dela = concediu.getDela();
+            panala = concediu.getPanala();
+
+            for(int i=1; i <= nrZileLuna; ++i) {
+                day = LocalDate.of(an, luna, i);
+                if(day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
+                    if(day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
+                        zileC++;
+            }
+        }
+        return zileC;
+    }
 
 }  // class

@@ -66,14 +66,14 @@ public class RealizariRetineriService {
         float impozit = parametriiSalariu.getImpozit() / 100;
 
         if(totalDrepturi < 3600)
-            this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere);
+            this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere) * areFunctieDebaza;
         else this.deducere = 0;
 
         float restPlata = totalDrepturi - casSalariu - cassSalariu;
 
         float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
 
-        this.impozitSalariu = (restPlata + valoareTichete - deducere * areFunctieDebaza) * impozit;
+        this.impozitSalariu = (restPlata + valoareTichete - deducere) * impozit;
         
         restPlata -= platesteImpozit * impozitSalariu;
 
@@ -85,10 +85,10 @@ public class RealizariRetineriService {
 
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 
-        int zileCO = coService.getZileCO(luna, an, idcontract);
+        int zileCO = coService.getZileCOTotal(luna, an, idcontract);
         int zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
-        int zileCONeplatit = coService.getZileCONeplatite(luna, an, idcontract);
-        int zileCONeplatitLucratoare = coService.getZileCONeplatiteLucratoare(luna, an, idcontract);
+        int zileCONeplatit = coService.getZileCFP(luna, an, idcontract);
+        int zileCONeplatitLucratoare = coService.getZileCFPLucratoare(luna, an, idcontract);
         int zileCM = cmService.getZileCM(luna, an, idcontract);
         int zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
 
@@ -99,7 +99,7 @@ public class RealizariRetineriService {
         int oreLucrate = zileLucrate * duratazilucru;
         int zilePlatite = norma - zileCONeplatitLucratoare;
 
-        float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
+		float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
 
         float salariuPeZi = totalDrepturi / norma;
         float salariuPeOra = totalDrepturi / norma / duratazilucru;

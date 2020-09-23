@@ -20,7 +20,7 @@ public class ZileService {
         int zileCM = cmService.getZileCM(luna, an, idcontract);
         
         // get zile co fara plata in luna, anul
-        int zileCO = coService.getZileCONeplatite(luna, an, idcontract);
+        int zileCO = coService.getZileCFP(luna, an, idcontract);
         
         // get zile sarbatoare in luna, anul
         
@@ -40,7 +40,7 @@ public class ZileService {
         return workingDays;
 		}
 		
-		public String getNumeLunaByNr(int nrLuna) {
+	public String getNumeLunaByNr(int nrLuna) {
 			switch (nrLuna) {
 				case 1:
 					return "Ianuarie";

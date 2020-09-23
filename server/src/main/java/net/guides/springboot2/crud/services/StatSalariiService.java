@@ -43,6 +43,10 @@ public class StatSalariiService {
 	private RetineriService retineriService;
 	@Autowired
 	private ZileService zileService;
+	@Autowired
+	private COService coService;
+	@Autowired
+	private CMService cmService; 
 
 	@Autowired
 	private PersoanaRepository persoanaRepository;
@@ -87,6 +91,8 @@ public class StatSalariiService {
 		CellStyle salariuStyle = workbook.createCellStyle();
 		CellStyle functieStyle = workbook.createCellStyle();
 		CellStyle nrContractStyle = workbook.createCellStyle();
+		CellStyle centered = workbook.createCellStyle();
+		centered.setAlignment(HorizontalAlignment.CENTER);
 		Font font = workbook.createFont();
 		font.setFontHeightInPoints((short)7);
 		functieStyle.setFont(font);
@@ -128,19 +134,18 @@ public class StatSalariiService {
 			//* 1. get contract + stat(luna, an, idcontract);
 			Contract contract = contractRepository.findByIdPersoana(persoana.getId()).orElseThrow(
 				() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + persoana.getId()));
+
+			long idcontract = contract.getId();
 		
-			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, contract.getId());
+			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 				
-			//* 2. set styles, merged cells etc
-			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 1, 2));
-		
-			
 			//* 3. insert data:
 			writerCell = row1.createCell(0);
 			writerCell.setCellValue(nrAngajat+1); // indexing
-		
+			
 			//* nume, functie, cnp
+			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 1, 2));
 			writerCell = row1.createCell(1); // nume complet
 			writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
 			functieWriter = row2.createCell(1); // functie
@@ -164,15 +169,51 @@ public class StatSalariiService {
 			salariuWriter = row3.createCell(3); // spor vechime
 			salariuWriter.setCellValue(0);
 		
-			//* ZILE
+			//* ORE
 			writerCell = row1.createCell(5); // NZ
 			writerCell.setCellValue(8);
 			writerCell = row2.createCell(5); // NO
 			writerCell.setCellValue(contract.getNormalucru());
 			writerCell = row3.createCell(5); // SPL = ore suplimentare
 			writerCell.setCellValue(realizariRetineri.getNroresuplimentare());
+
+			//* ZILE CO
+			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 6, 7));
+			writerCell = row1.createCell(6); // ZL
+			writerCell.setCellStyle(centered);
+			writerCell.setCellValue(realizariRetineri.getZilelucrate());
+			writerCell = row2.createCell(6); // CS
+			writerCell.setCellValue(coService.getZileCS(luna, an, idcontract));
+			writerCell = row2.createCell(7); // CO
+			writerCell.setCellValue(coService.getZileCO(luna, an, idcontract));
+			writerCell = row3.createCell(6); // CFP
+			writerCell.setCellValue(coService.getZileCFP(luna, an, idcontract));
+			writerCell = row3.createCell(7); // ST
+			writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
 		
-			// writerCell = row1.getCell()
+			//* ZILE CM
+			writerCell = row1.createCell(8); // CM
+			writerCell.setCellValue(cmService.getZileCM(luna, an, idcontract));
+			writerCell = row2.createCell(8); // FNUASS
+			writerCell.setCellValue(0);
+			writerCell = row3.createCell(8); // FAAMBP
+			writerCell.setCellValue(0);
+
+			//* ORE
+			writerCell = row1.createCell(9); // ore ind 75%
+			writerCell.setCellValue(0);
+			writerCell = row2.createCell(9); // ore somaj
+			writerCell.setCellValue(0);
+			writerCell = row1.createCell(10); // ore lucrate
+			writerCell.setCellValue(realizariRetineri.getOrelucrate());
+			writerCell = row2.createCell(10); // ore absent
+			writerCell.setCellValue(0);
+			writerCell = row2.createCell(10); // Val. ore supl.
+			writerCell.setCellValue(realizariRetineri.getTotaloresuplimentare());
+
+
+
+
 			//* set borders
 			String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
