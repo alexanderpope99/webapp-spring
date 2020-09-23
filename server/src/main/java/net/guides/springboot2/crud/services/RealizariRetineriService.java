@@ -121,6 +121,8 @@ public class RealizariRetineriService {
 		
 		rr.setNroresuplimentare(nrOreSuplimentare);
 
+		// media zilnica pe 6 luni = venitTotal6luni / nrZileLucrate6luni
+
 		return rr;
 	}	// calcRealizariRetineri
 
