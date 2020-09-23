@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +15,8 @@ public interface PersoanaRepository extends JpaRepository<Persoana, Long> {
   List<Persoana> getPersoanaByIdsocietateNoContract(long idsocietate);
 
   @Query(value = "select * from persoana where id in (select idpersoana from angajat where idcontract is not null and idsocietate = ?1) order by nume, prenume", nativeQuery = true)
-  List<Persoana> getPersoanaByIdsocietateWithContract(long idsocietate);
+	List<Persoana> getPersoanaByIdsocietateWithContract(long idsocietate);
+
+	@Query(value = "select nume, cnp from persoana where id in (select idpersoana from angajat where idcontract is nou null and id societate = ?1) order by nume", nativeQuery =  true)
+	Map<String, String> getNumeCnpPersoanaByIdsocietate(long idsocietate);
 }
