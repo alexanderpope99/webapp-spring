@@ -36,13 +36,7 @@ public class RealizariRetineriService {
     @Autowired
     private TicheteService ticheteService;
     @Autowired
-<<<<<<< HEAD
     private RetineriService retineriService;
-    @Autowired
-    private OresuplimentareRepository oresuplimentareRepository;=======
-    private RetineriService retineriService;
-
-    >>>>>>>415 b3aca17ad6df328990dbce7e67bc8dddf8bf8
 
     // REPOSITORIES
     @Autowired
@@ -57,21 +51,8 @@ public class RealizariRetineriService {
     private float impozitSalariu = 0;
     private float deducere = 0;
 
-    <<<<<<<HEAD
-
-    public long getIdContractByIdPersoana(long idpersoana) throws ResourceNotFoundException {
-        Contract contract = contractService.getContractByIdpersoana(idpersoana);
-        return contract.getId();
-    }
-
-    public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
-        return realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
-    }
-
-    public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete,
-            int nrPersoaneIntretinere) throws ResourceNotFoundException {
-=======
-	// gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu datele existente
+    // gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu
+    // datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
         RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 
@@ -86,8 +67,8 @@ public class RealizariRetineriService {
         return rv;
     }
 
-    public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
->>>>>>> 415b3aca17ad6df328990dbce7e67bc8dddf8bf8
+    public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete,
+            int nrPersoaneIntretinere) throws ResourceNotFoundException {
 
         Contract contract = contractService.getContractById(idcontract);
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
