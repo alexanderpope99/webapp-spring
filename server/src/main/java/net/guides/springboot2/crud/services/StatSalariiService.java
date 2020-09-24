@@ -64,7 +64,6 @@ public class StatSalariiService {
         RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
     }
 
-	//! WRAP IN TRY-CATCH BLOCK
 	public void createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
 		try {
 		Societate societate = societateRepository.findById((long) idsocietate)

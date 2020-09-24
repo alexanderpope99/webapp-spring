@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.model.CM;
+import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CMRepository;
 
 @Service
@@ -14,9 +15,12 @@ public class CMService {
     CMService() {}
 
     @Autowired
-    private CMRepository cmRepository;
+	private CMRepository cmRepository;
+	@Autowired
+	private BazacalculService bazacalculService;
+	@Autowired
+	private AngajatRepository angajatRepository;
 
-    // DOAR ZILE C.M.
     public int getZileCMLucratoare(int luna, int an, long idcontract) {
         // find all by idcontract
         List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
@@ -36,10 +40,13 @@ public class CMService {
 	}
 	
 	public int getValCM(int luna, int an, long idcontract) {
+		// get idangajat of idcontract
+		long idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
 		// media zilnica pe 6 luni = venitTotal6luni / nrZileLucrate6luni <- din bazacalcul
+		float mediaZilnica = bazacalculService.getMediaZilnicaUltimele6Luni(luna, an, idangajat);
+		int zileLucratoare = getZileCMLucratoare(luna, an, idcontract);
 
-
-		return 0;
+		return Math.round(mediaZilnica * zileLucratoare);
 	}
 
 	// public int getZileFNUASS(int luna, int an, long idcontract) {

@@ -82,7 +82,7 @@ public class RealizariRetineriController {
         @PathVariable(value="tos") Integer totalOreSuplimentare
 		) throws ResourceNotFoundException {
 
-		RealizariRetineri oldRealizariRetineri = getRealizariRetineriByIdcontract(idcontract, luna, an);
+		RealizariRetineri oldRealizariRetineri = realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 		long idstat = oldRealizariRetineri.getId();
 
 		RealizariRetineri newRealizariRetineri = realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primaBruta, nrTichete, totalOreSuplimentare);

@@ -11,19 +11,25 @@ import javax.persistence.Table;
 @Table(name="bazacalcul")
 public class Bazacalcul {
 	public Bazacalcul() {}
-
+	
 	private long id;
 	@Column(name = "luna")
 	private int luna;
+	@Column(name = "an")
+	private int an;
 	@Column(name = "zilelucrate")
 	private int zilelucrate;
 	@Column(name = "salariurealizat")
 	private int salariurealizat;
-
-	public Bazacalcul( int luna, int zilelucrate, int salariurealizat ) {
+	@Column(name = "idangajat")
+	private long idangajat;
+	
+	public Bazacalcul( int luna, int an, int zilelucrate, int salariurealizat, long idangajat ) {
 		this.luna = luna;
+		this.an = an;
 		this.zilelucrate = zilelucrate;
 		this.salariurealizat = salariurealizat;
+		this.idangajat = idangajat;
 	}
 
 	@Id
@@ -33,6 +39,12 @@ public class Bazacalcul {
     }
     public void setId(long id) {
         this.id = id;
+	}
+	public int getAn() {
+		return an;
+	}
+	public long getIdangajat() {
+		return idangajat;
 	}
 	
 	//! GETTERS
@@ -55,5 +67,11 @@ public class Bazacalcul {
 	}
 	public void setZilelucrate(int zilelucrate) {
 		this.zilelucrate = zilelucrate;
+	}
+	public void setAn(int an) {
+		this.an = an;
+	}
+	public void setIdangajat(long idangajat) {
+		this.idangajat = idangajat;
 	}
 }

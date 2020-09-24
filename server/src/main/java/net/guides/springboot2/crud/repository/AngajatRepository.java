@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import net.guides.springboot2.crud.model.Angajat;
@@ -14,4 +15,10 @@ public interface AngajatRepository extends JpaRepository<Angajat, Long>{
 	List<Angajat> findByIdsocietateAndIdcontractNotNull(int idsocietate);
 	
 	int countByIdsocietate(int idsocietate);
+
+	Angajat findByIdcontract(long idcontract);
+	@Query(value = "select idcontract from angajat where idpersoana = ?1", nativeQuery = true)
+	long findIdcontractByIdpersoana(long idangajat);
+	@Query(value = "select idpersoana from angajat where idcontract = ?1", nativeQuery = true)
+	long findIdpersoanaByIdcontract(long idcontract);
 }

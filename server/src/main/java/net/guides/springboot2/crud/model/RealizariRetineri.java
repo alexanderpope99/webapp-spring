@@ -37,6 +37,9 @@ public class RealizariRetineri {
 	@Column(name = "zileplatite")
 	private Integer zileplatite = 0;
 
+	@Column(name = "valcm")
+	private Integer valcm;
+
     @Column(name = "norma")
     private Integer norma = 0; // nr zile lucratoare in luna
     @Column(name = "duratazilucru")
@@ -228,6 +231,9 @@ public class RealizariRetineri {
 	public Integer getNroresuplimentare() {
 		return nroresuplimentare;
 	}
+	public Integer getValcm() {
+		return valcm;
+	}
 
 	//! SETTERS
 	public void setNrtichete(Integer nrtichete) {
@@ -322,6 +328,9 @@ public class RealizariRetineri {
 	}
 	public void setNroresuplimentare(Integer nroresuplimentare) {
 		this.nroresuplimentare = nroresuplimentare;
+	}
+	public void setValcm(Integer valcm) {
+		this.valcm = valcm;
 	}
 }
 
