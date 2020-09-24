@@ -207,7 +207,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getOrelucrate());
 			writerCell = row2.createCell(10); // ore absent
 			writerCell.setCellValue(0);
-			writerCell = row2.createCell(10); // Val. ore supl.
+			writerCell = row3.createCell(10); // Val. ore supl.
 			writerCell.setCellValue(realizariRetineri.getTotaloresuplimentare());
 			
 			//* Salariu
@@ -223,7 +223,7 @@ public class StatSalariiService {
 			//* CM valoare
 			writerCell = row1.createCell(12); // cm societate
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(realizariRetineri.getValcm());
 			writerCell = row2.createCell(12); // CM din FNUASS
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(0); // TODO
@@ -237,10 +237,10 @@ public class StatSalariiService {
 			writerCell.setCellValue(0); // TODO
 			writerCell = row2.createCell(13); // total prime
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(realizariRetineri.getPrimabruta());
 			writerCell = row3.createCell(12); // alte drepturi
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(0);
 
 			//* drepturi
 			writerCell = row1.createCell(14); // val tichetemasa
@@ -248,7 +248,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getValoaretichete());
 			writerCell = row2.createCell(14); // venit brut
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getTotaldrepturi()); // TODO
+			writerCell.setCellValue(realizariRetineri.getTotaldrepturi());
 			writerCell = row3.createCell(14); // somaj 0.5%
 			writerCell.setCellValue(0);
 
@@ -258,7 +258,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(0); // TODO
 			writerCell = row2.createCell(15); // total prime
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(realizariRetineri.getPrimabruta());
 			writerCell = row3.createCell(15); // alte drepturi
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(0); // TODO
@@ -279,7 +279,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(0); 
 			writerCell = row2.createCell(17); // venit net
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getRestplata());  // TODO
+			writerCell.setCellValue(realizariRetineri.getRestplata());
 			writerCell = row3.createCell(17); // baza impozit
 			writerCell.setCellValue(0); 
 
@@ -289,7 +289,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row2.createCell(18); // rest plata brut
-			writerCell.setCellValue(realizariRetineri.getRestplata()); // TODO
+			writerCell.setCellValue(realizariRetineri.getRestplata() + retineri.getAvansnet());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.createCell(18); // alte retineri
 			writerCell.setCellValue(0); // TODO
@@ -297,13 +297,13 @@ public class StatSalariiService {
 			//*
 			writerCell = row1.createCell(19); // sume neimpozabile
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(0);
 			writerCell = row2.createCell(19); // avans
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(retineri.getAvansnet());
 			writerCell = row3.createCell(19); // rest plata net
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getRestplata()); // TODO
+			writerCell.setCellValue(realizariRetineri.getRestplata());
 
 
 			//* set borders

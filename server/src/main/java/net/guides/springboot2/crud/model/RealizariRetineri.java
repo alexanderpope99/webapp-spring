@@ -75,7 +75,9 @@ public class RealizariRetineri {
     private Float valoaretichete = 0f;
 
     @Column(name = "restplata")
-    private Integer restplata = 0;
+	private Integer restplata = 0;
+	@Column(name = "restplataburt")
+	private Integer restplatabrut = 0;
 
     @Column(name = "nrpersoaneintretinere")
     private Integer nrpersoaneintretinere = 0;
@@ -224,7 +226,7 @@ public class RealizariRetineri {
 		return primabruta;
 	}
 	public Float getTotaloresuplimentare() {
-		return totaloresuplimentare;
+		return totaloresuplimentare == null ? 0 : totaloresuplimentare;
 	}
 	public Integer getZilecmlucratoare() {
 		return zilecmlucratoare;
@@ -243,6 +245,9 @@ public class RealizariRetineri {
 	}
 	public Integer getVenitnet() {
 		return venitnet;
+	}
+	public Integer getRestplatabrut() {
+		return restplatabrut;
 	}
 
 	//! SETTERS
@@ -347,6 +352,9 @@ public class RealizariRetineri {
 	}
 	public void setVenitnet(Integer venitnet) {
 		this.venitnet = venitnet;
+	}
+	public void setRestplatabrut(Integer restplatabrut) {
+		this.restplatabrut = restplatabrut;
 	}
 }
 

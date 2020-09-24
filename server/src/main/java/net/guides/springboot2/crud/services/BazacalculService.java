@@ -71,13 +71,13 @@ public class BazacalculService {
 			}
 		}
 
-		int nrZileLucrate = 0, salariuRealizat = 0;
+		float nrZileLucrate = 0, salariuRealizat = 0;
 		for(Bazacalcul bc : bazeCalculUltimele6Luni) {
 			nrZileLucrate += bc.getZilelucrate();
 			salariuRealizat += bc.getSalariurealizat();
 		}
-
-		return (salariuRealizat / nrZileLucrate);
+		
+		return salariuRealizat / nrZileLucrate;
 	}
 
 	public Bazacalcul updateBazacalcul(Bazacalcul newBazaCalcul, int luna, int an, long idangajat) {
