@@ -33,7 +33,9 @@ public class RealizariRetineri {
     @Column(name = "zilecmlucratoare")
     private Integer zilecmlucratoare = 0;
     @Column(name = "zilec")
-    private Integer zilec  = 0;
+	private Integer zilec  = 0;
+	@Column(name = "zileplatite")
+	private Integer zileplatite = 0;
 
     @Column(name = "norma")
     private Integer norma = 0; // nr zile lucratoare in luna
@@ -45,7 +47,9 @@ public class RealizariRetineri {
     private Integer orelucrate = 0;
 
     @Column(name = "totaldrepturi")
-    private Integer totaldrepturi = 0;
+	private Integer totaldrepturi = 0;
+	@Column(name = "salariurealizat")
+	private Integer salariurealizat = 0;
 
     @Column(name = "salariupezi")
     private Float salariupezi = 0f;
@@ -74,13 +78,13 @@ public class RealizariRetineri {
     @Column(name = "primabruta")
 	private Integer primabruta;
 	@Column(name = "totaloresuplimentare")
-	private Integer totaloresuplimentare;
+	private Float totaloresuplimentare;
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
     
     public RealizariRetineri() { }
 
-    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zileconeplatit,  Integer zileconeplatitlucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta, Integer totaloresuplimentare )
+    public RealizariRetineri( long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco, Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zileconeplatit,  Integer zileconeplatitlucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta, Float totaloresuplimentare )
     {
         this.idcontract = idcontract;
         this.luna = luna;
@@ -145,7 +149,10 @@ public class RealizariRetineri {
     }
     public Integer getZileconeplatit() {
       return zileconeplatit;
-    }
+	}
+	public Integer getZileplatite() {
+		return zileplatite;
+	}
     public Integer getDuratazilucru() {
       return duratazilucru;
     }
@@ -172,7 +179,10 @@ public class RealizariRetineri {
     }
     public Integer getTotaldrepturi() {
       return Math.round(totaldrepturi);
-    }
+	}
+	public Integer getSalariurealizat() {
+		return salariurealizat;
+	}
     public Integer getNrpersoaneintretinere() {
       return nrpersoaneintretinere;
     }
@@ -203,7 +213,7 @@ public class RealizariRetineri {
 	public Integer getPrimabruta() {
 		return primabruta;
 	}
-	public Integer getTotaloresuplimentare() {
+	public Float getTotaloresuplimentare() {
 		return totaloresuplimentare;
 	}
 	public Integer getZilecmlucratoare() {
@@ -231,6 +241,9 @@ public class RealizariRetineri {
 	}
 	public void setZilec(Integer zilec) {
 		this.zilec = zilec;
+	}
+	public void setZileplatite(Integer zileplatite) {
+		this.zileplatite = zileplatite;
 	}
 	public void setZileconeplatit(Integer zileconeplatit) {
 		this.zileconeplatit = zileconeplatit;
@@ -262,6 +275,9 @@ public class RealizariRetineri {
 	public void setTotaldrepturi(Integer totaldrepturi) {
 		this.totaldrepturi = totaldrepturi;
 	}
+	public void setSalariurealizat(Integer salariurealizat) {
+		this.salariurealizat = salariurealizat;
+	}
 	public void setNrpersoaneintretinere(Integer nrpersoaneintretinere) {
 		this.nrpersoaneintretinere = nrpersoaneintretinere;
 	}
@@ -292,7 +308,7 @@ public class RealizariRetineri {
 	public void setPrimabruta(Integer primabruta) {
 		this.primabruta = primabruta;
 	}
-	public void setTotaloresuplimentare(Integer totaloresuplimentare) {
+	public void setTotaloresuplimentare(Float totaloresuplimentare) {
 		this.totaloresuplimentare = totaloresuplimentare;
 	}
 	public void setZilecmlucratoare(Integer zilecmlucratoare) {

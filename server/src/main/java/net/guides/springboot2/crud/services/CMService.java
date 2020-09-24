@@ -33,7 +33,14 @@ public class CMService {
             return 0;
 
         return zileC(luna, an, concediiMedicale);
-    }
+	}
+	
+	public int getValCM(int luna, int an, long idcontract) {
+		// media zilnica pe 6 luni = venitTotal6luni / nrZileLucrate6luni <- din bazacalcul
+
+
+		return 0;
+	}
 
 	// public int getZileFNUASS(int luna, int an, long idcontract) {
 	// 	List<CM> cm = cmRepository.findByIdcontractInLunaAnul(idcontract)

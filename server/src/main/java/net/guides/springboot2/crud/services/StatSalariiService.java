@@ -215,7 +215,7 @@ public class StatSalariiService {
 			//* Salariu
 			writerCell = row1.createCell(11); // sal realizat
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getTotaldrepturi());
+			writerCell.setCellValue(realizariRetineri.getSalariurealizat()); // TODO
 			writerCell = row2.createCell(11); // valoare CO
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getZilecolucratoare() * realizariRetineri.getSalariupezi());
