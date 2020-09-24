@@ -64,7 +64,6 @@ public class StatSalariiService {
         RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
     }
 
-	//! WRAP IN TRY-CATCH BLOCK
 	public void createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
 		try {
 		Societate societate = societateRepository.findById((long) idsocietate)
@@ -211,11 +210,10 @@ public class StatSalariiService {
 			writerCell = row2.createCell(10); // Val. ore supl.
 			writerCell.setCellValue(realizariRetineri.getTotaloresuplimentare());
 			
-			// TODO
 			//* Salariu
 			writerCell = row1.createCell(11); // sal realizat
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getSalariurealizat()); // TODO
+			writerCell.setCellValue(realizariRetineri.getSalariurealizat());
 			writerCell = row2.createCell(11); // valoare CO
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getZilecolucratoare() * realizariRetineri.getSalariupezi());

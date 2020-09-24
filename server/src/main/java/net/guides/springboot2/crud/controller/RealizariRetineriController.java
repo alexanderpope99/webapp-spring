@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.model.RealizariRetineri;
+import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
+import net.guides.springboot2.crud.services.BazacalculService;
 import net.guides.springboot2.crud.services.RealizariRetineriService;
 
 
@@ -20,7 +23,12 @@ public class RealizariRetineriController {
     @Autowired
 	private RealizariRetineriService realizariRetineriService;
     @Autowired
-    private RealizariRetineriRepository realizariRetineriRepository;
+	private RealizariRetineriRepository realizariRetineriRepository;
+	@Autowired
+	private AngajatRepository angajatRepository;
+
+	@Autowired
+	private BazacalculService bazacalculService;
 
 
     @GetMapping("idc={id}&mo={luna}&y={an}")
@@ -31,7 +39,7 @@ public class RealizariRetineriController {
     @GetMapping("idp={id}&mo={luna}&y={an}")
     public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value="id") Long idpersoana, @PathVariable(value="luna") Integer luna, @PathVariable(value="an") Integer an) throws ResourceNotFoundException {
         // get contract of persoana
-        long idcontract = realizariRetineriService.getIdContractByIdPersoana(idpersoana);
+        long idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
         return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
     }
 
@@ -82,11 +90,20 @@ public class RealizariRetineriController {
         @PathVariable(value="tos") Integer totalOreSuplimentare
 		) throws ResourceNotFoundException {
 
-		RealizariRetineri oldRealizariRetineri = getRealizariRetineriByIdcontract(idcontract, luna, an);
+		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 		long idstat = oldRealizariRetineri.getId();
 
 		RealizariRetineri newRealizariRetineri = realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primaBruta, nrTichete, totalOreSuplimentare);
-        newRealizariRetineri.setId(idstat);
+		newRealizariRetineri.setId(idstat);
+		
+		long idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
+		// update bazacalcul
+		Bazacalcul bazaCalcul = new Bazacalcul(
+			luna, an, 
+			(int)newRealizariRetineri.getZilelucrate(), (int)newRealizariRetineri.getSalariurealizat(),
+			idangajat);
+		
+		bazacalculService.updateBazacalcul(bazaCalcul, luna, an, idangajat);
 
         final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
         return updatedRR;
