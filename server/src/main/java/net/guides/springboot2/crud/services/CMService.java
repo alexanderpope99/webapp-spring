@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.services;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class CMService {
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
 		LocalDate sfarsitLuna = LocalDate.of(an, luna, nrZileLuna);
 
-		return cmRepository.findInLunaAnulByIdcontract(inceputLuna, sfarsitLuna, idcontract);
+		return cmRepository.findByIdcontractAndDelaBetween(idcontract, inceputLuna, sfarsitLuna);
 	}
 	
 	public int getValCM(int luna, int an, long idcontract) {
@@ -57,7 +59,7 @@ public class CMService {
 		// media zilnica pe 6 luni = venitTotal6luni / nrZileLucrate6luni <- din bazacalcul
 		float mediaZilnica = bazacalculService.getMediaZilnicaUltimele6Luni(luna, an, idangajat);
 		for(CM cm : cms) {
-			valCM += this.zileCLucratoare(cm) * mediaZilnica * cm.getProcent();
+			valCM += this.zileCLucratoare(cm) * mediaZilnica * cm.getProcent() / 100;
 		}
 
 		return Math.round(valCM);
@@ -74,7 +76,7 @@ public class CMService {
 		int an = dela.getYear();
 		int luna = dela.getMonthValue();
 		int ziDela = dela.getDayOfMonth();
-		int zileC = ziDela - panala.getDayOfMonth();
+		int zileC = panala.getDayOfMonth() - ziDela + 1;
 
 		LocalDate day;
 		for(int i = ziDela; i < zileC; ++i) {
