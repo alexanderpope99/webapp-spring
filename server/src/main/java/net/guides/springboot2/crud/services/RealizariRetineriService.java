@@ -52,6 +52,7 @@ public class RealizariRetineriService {
 	private float deducere = 0;
 	private float venitNet = 0;
 	private float salariuRealizat = 0;
+	private float bazaImpozit = 0;
 
 	// gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
@@ -89,9 +90,11 @@ public class RealizariRetineriService {
 		float restPlata = totalDrepturi - casSalariu - cassSalariu;
 		this.venitNet = restPlata;
 
-        float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
+		float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
+		
+		this.bazaImpozit = restPlata + valoareTichete - deducere;
 
-        this.impozitSalariu = (restPlata + valoareTichete - deducere) * impozit;
+        this.impozitSalariu = bazaImpozit * impozit;
         
         restPlata -= platesteImpozit * impozitSalariu;
 
@@ -146,6 +149,7 @@ public class RealizariRetineriService {
 		rr.setNroresuplimentare(nrOreSuplimentare);
 		rr.setSalariurealizat((int)salariuRealizat);
 		rr.setVenitnet(Math.round(venitNet));
+		rr.setBazaimpozit(Math.round(bazaImpozit));
 
 		return rr;
 	}	// calcRealizariRetineri

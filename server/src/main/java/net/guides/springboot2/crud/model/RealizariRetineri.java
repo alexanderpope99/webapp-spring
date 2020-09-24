@@ -55,6 +55,8 @@ public class RealizariRetineri {
 	private Integer salariurealizat = 0;
 	@Column(name = "venitnet")
 	private Integer venitnet = 0;
+	@Column(name = "bazaimpozit")
+	private Integer bazaimpozit;
 
     @Column(name = "salariupezi")
     private Float salariupezi = 0f;
@@ -178,7 +180,10 @@ public class RealizariRetineri {
     }
     public Float getImpozit() {
       return impozit;
-    }
+	}
+	public Integer getBazaimpozit() {
+		return bazaimpozit;
+	}
     public Float getValoaretichete() {
       return valoaretichete;
     }
@@ -279,6 +284,9 @@ public class RealizariRetineri {
 	}
 	public void setImpozit(Float impozit) {
 		this.impozit = impozit;
+	}
+	public void setBazaimpozit(Integer bazaimpozit) {
+		this.bazaimpozit = bazaimpozit;
 	}
 	public void setValoaretichete(Float valoaretichete) {
 		this.valoaretichete = valoaretichete;
