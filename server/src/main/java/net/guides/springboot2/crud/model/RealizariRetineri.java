@@ -53,6 +53,8 @@ public class RealizariRetineri {
 	private Integer totaldrepturi = 0;
 	@Column(name = "salariurealizat")
 	private Integer salariurealizat = 0;
+	@Column(name = "venitnet")
+	private Integer venitnet = 0;
 
     @Column(name = "salariupezi")
     private Float salariupezi = 0f;
@@ -234,6 +236,9 @@ public class RealizariRetineri {
 	public Integer getValcm() {
 		return valcm;
 	}
+	public Integer getVenitnet() {
+		return venitnet;
+	}
 
 	//! SETTERS
 	public void setNrtichete(Integer nrtichete) {
@@ -331,6 +336,9 @@ public class RealizariRetineri {
 	}
 	public void setValcm(Integer valcm) {
 		this.valcm = valcm;
+	}
+	public void setVenitnet(Integer venitnet) {
+		this.venitnet = venitnet;
 	}
 }
 

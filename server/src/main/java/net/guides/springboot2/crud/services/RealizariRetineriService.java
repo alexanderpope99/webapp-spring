@@ -49,7 +49,9 @@ public class RealizariRetineriService {
 	private BazacalculRepository bazacalculRepository;
 
     private float impozitSalariu = 0;
-    private float deducere = 0;
+	private float deducere = 0;
+	private float venitNet = 0;
+	private float salariuRealizat = 0;
 
 	// gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
@@ -74,7 +76,7 @@ public class RealizariRetineriService {
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 
         float casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
-        float cassSalariu = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
+        float cassSalariu = Math.round(salariuRealizat * parametriiSalariu.getCass() / 100);
         int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
         
         int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
@@ -84,7 +86,8 @@ public class RealizariRetineriService {
             this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere) * areFunctieDebaza;
         else this.deducere = 0;
 
-        float restPlata = totalDrepturi - casSalariu - cassSalariu;
+		float restPlata = totalDrepturi - casSalariu - cassSalariu;
+		this.venitNet = restPlata;
 
         float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
 
@@ -119,14 +122,16 @@ public class RealizariRetineriService {
         float salariuPeZi = totalDrepturi / norma;
         float salariuPeOra = totalDrepturi / norma / duratazilucru;
 
-		int salariuRealizat = Math.round(salariuPeZi * zileLucrate + primaBruta + totalOreSuplimentare);
+		this.salariuRealizat = Math.round(salariuPeZi * zileLucrate + primaBruta + totalOreSuplimentare);
 		float valCO = zileCOLucratoare * salariuPeZi;
 		totalDrepturi = salariuRealizat + valCM + valCO;
 
         float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
-        float cass = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
-        float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
-        float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
+        float cass = Math.round(salariuRealizat * parametriiSalariu.getCass() / 100);
+		float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
+		
+		float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
+		
         int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
         int restPlata = calcRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere); // rv is rounded
         float impozit = Math.round(this.impozitSalariu);
@@ -139,7 +144,8 @@ public class RealizariRetineriService {
 		rr.setValcm(valCM);
 		rr.setZileplatite(zilePlatite);
 		rr.setNroresuplimentare(nrOreSuplimentare);
-		rr.setSalariurealizat(salariuRealizat);
+		rr.setSalariurealizat((int)salariuRealizat);
+		rr.setVenitnet(Math.round(venitNet));
 
 		return rr;
 	}	// calcRealizariRetineri
