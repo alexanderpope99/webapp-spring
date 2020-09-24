@@ -12,7 +12,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.repository.AngajatRepository;
-import net.guides.springboot2.crud.repository.BazacalculRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.services.BazacalculService;
 import net.guides.springboot2.crud.services.RealizariRetineriService;
@@ -25,8 +24,6 @@ public class RealizariRetineriController {
 	private RealizariRetineriService realizariRetineriService;
     @Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
-	@Autowired
-	private BazacalculRepository bazacalculRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
 

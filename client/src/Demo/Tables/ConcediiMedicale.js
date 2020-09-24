@@ -40,7 +40,7 @@ class CMTabel extends React.Component {
       serienrcertificat: '',
       dataeliberare: '',
       codurgenta: '',
-      procent: '',
+      procent: 100,
       codboalainfcont: '',
       bazacalcul: '',
       bazacalculplafonata: '',
@@ -76,7 +76,7 @@ class CMTabel extends React.Component {
       serienrcertificat: '',
       dataeliberare: '',
       codurgenta: '',
-      procent: '',
+      procent: 100,
       codboalainfcont: '',
       bazacalcul: '',
       bazacalculplafonata: '',
@@ -361,7 +361,7 @@ class CMTabel extends React.Component {
             <th>{cm.serienrcertificat}</th>
             <th>{cm.dataeliberare.substring(0, 10)}</th>
             <th>{cm.codurgenta}</th>
-            <th>{cm.procent}</th>
+            <th>{cm.procent}%</th>
             <th>{cm.codboalainfcont}</th>
             <th>{cm.bazacalcul}</th>
             <th>{cm.bazacalculplafonata}</th>
@@ -472,7 +472,7 @@ class CMTabel extends React.Component {
                 />
               </Form.Group>
               <Form.Group id="procent">
-                <Form.Label>Procent</Form.Label>
+                <Form.Label>Procent %</Form.Label>
                 <Form.Control
                   type="text"
                   value={this.state.procent}

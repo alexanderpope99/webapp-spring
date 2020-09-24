@@ -2,12 +2,10 @@ package net.guides.springboot2.crud.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
 
@@ -68,7 +66,7 @@ public class BazacalculService {
 			}
 		} // daca cele 6 luni sunt in anul selectat
 		else {
-			for(int i = luna6; i <= luna; ++i) {
+			for(int i = luna6; i <= luna - 1; ++i) {
 				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat));
 			}
 		}
@@ -79,7 +77,7 @@ public class BazacalculService {
 			salariuRealizat += bc.getSalariurealizat();
 		}
 
-		return (nrZileLucrate / salariuRealizat);
+		return (salariuRealizat / nrZileLucrate);
 	}
 
 	public Bazacalcul updateBazacalcul(Bazacalcul newBazaCalcul, int luna, int an, long idangajat) {

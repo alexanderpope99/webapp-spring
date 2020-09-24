@@ -59,7 +59,8 @@ class RealizariRetineri extends React.Component {
       salariubrut: '',
       orelucrate: '',
       nrtichete: '',
-      zilecm: '',
+			zilecm: '',
+			valcm: '',
       zileco: '',
       zileconeplatit: '',
       zilec: '',
@@ -105,7 +106,8 @@ class RealizariRetineri extends React.Component {
       salariubrut: '',
       orelucrate: '',
       nrtichete: '',
-      zilecm: '',
+			zilecm: '',
+			valcm: '',
       zileco: '',
       zileconeplatit: '',
       zilec: '',
@@ -256,6 +258,7 @@ class RealizariRetineri extends React.Component {
       salariupeora: data.salariupeora,
       nrtichete: data.nrtichete,
 			zilecm: data.zilecm,
+			valcm: data.valcm,
 			zilecmlucratoare: data.zilecmlucratoare,
 			zileco: data.zileco,
 			zilecolucratoare: data.zilecolucratoare,
@@ -306,6 +309,7 @@ class RealizariRetineri extends React.Component {
     );
   }
 
+  // recalculeaza total
   async recalculeaza() {
     console.log('recalculez...');
 
@@ -780,7 +784,7 @@ class RealizariRetineri extends React.Component {
                           {this.state.zilecm ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                Brut: {(this.state.zilecm * this.state.salariupezi).toFixed(0)} RON
+                                Brut: {(this.state.valcm).toFixed(0)} RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}
@@ -796,7 +800,7 @@ class RealizariRetineri extends React.Component {
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
                                 Sumă brută:{' '}
-                                {(this.state.zilecolucratoare * this.state.salariupezi).toFixed(0)} RON
+                                {(this.state.valcm).toFixed(0)} RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}
