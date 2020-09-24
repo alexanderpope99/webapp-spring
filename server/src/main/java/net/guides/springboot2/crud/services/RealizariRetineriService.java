@@ -51,15 +51,9 @@ public class RealizariRetineriService {
     private float impozitSalariu = 0;
     private float deducere = 0;
 
-    public long getIdContractByIdPersoana(long idpersoana)
-            throws ResourceNotFoundException {
-        Contract contract = contractService.getContractByIdpersoana(idpersoana);
-        return contract.getId();
-    }
-
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
 		RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
-		
+
 		long idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
 		boolean areBC = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna, an, idangajat);
 		if(!areBC) {

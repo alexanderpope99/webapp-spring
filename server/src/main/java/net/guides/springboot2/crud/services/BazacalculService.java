@@ -2,10 +2,12 @@ package net.guides.springboot2.crud.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
 
@@ -78,6 +80,16 @@ public class BazacalculService {
 		}
 
 		return (nrZileLucrate / salariuRealizat);
+	}
+
+	public Bazacalcul updateBazacalcul(Bazacalcul newBazaCalcul, int luna, int an, long idangajat) {
+		boolean areBC = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna, an, idangajat);
+		
+		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, idangajat);
+		if(areBC) {
+			newBazaCalcul.setId(oldBazacalcul.getId());
+		}
+		return bazacalculRepository.save(newBazaCalcul);
 	}
 
 }
