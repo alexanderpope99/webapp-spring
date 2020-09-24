@@ -1,55 +1,43 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { Button, Modal, Form } from 'react-bootstrap';
 
 import './../../../assets/scss/style.scss';
 import Aux from '../../../hoc/_Aux';
-import Breadcrumb from '../../../App/layout/AdminLayout/Breadcrumb';
-import { server } from '../../Resources/server-address';
+import AuthService from '../../../services/auth.service';
 
 class SignUp1 extends React.Component {
   constructor() {
     super();
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      username:
-        localStorage.getItem('savedCheckbox') === 'true'
-          ? localStorage.getItem('savedUsername')
-          : '',
-      password:
-        localStorage.getItem('savedCheckbox') === 'true'
-          ? localStorage.getItem('savedPassword')
-          : '',
+      username: '',
+      //     localStorage.getItem('savedCheckbox') === 'true'
+      //       ? localStorage.getItem('savedUsername')
+      //       : '',
+      password: '',
+      //     localStorage.getItem('savedCheckbox') === 'true'
+      //       ? localStorage.getItem('savedPassword')
+      //       : '',
       show: false,
-      checked: localStorage.getItem('savedCheckbox') === 'true' ? true : false,
+      //   checked: localStorage.getItem('savedCheckbox') === 'true' ? true : false,
     };
   }
   async handleClick(e) {
     e.preventDefault();
-    await fetch(`${server.address}/user/usr=${this.state.username}/pass=${this.state.password}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        if (res.ok) {
-          localStorage.setItem('logged', true);
-          localStorage.setItem('username', this.state.username);
-          if (localStorage.getItem('savedCheckbox') === 'true') {
-            localStorage.setItem('savedUsername', this.state.username);
-            localStorage.setItem('savedPassword', this.state.password);
-          } else {
-            localStorage.removeItem('savedCheckbox');
-            localStorage.removeItem('savedUsername', this.state.username);
-            localStorage.removeItem('savedPassword', this.state.password);
-          }
-          window.location.href = '/dashboard/societati';
-        } else {
-          this.setState({ show: true });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+
+    AuthService.login(this.state.username, this.state.password).then(
+      () => {
+        this.props.history.push('/profile');
+        window.location.href = '/dashboard/societati';
+      },
+      (error) => {
+        this.setState({ show: true });
+        const resMessage =
+          (error.response && error.response.data && error.response.data.message) ||
+          error.message ||
+          error.toString();
+      }
+    );
   }
   render() {
     return (
@@ -65,7 +53,6 @@ class SignUp1 extends React.Component {
               </Button>
             </Modal.Footer>
           </Modal>
-          <Breadcrumb />
           <div className="auth-wrapper">
             <div className="auth-content">
               <div className="auth-bg">

@@ -1,55 +1,39 @@
 package net.guides.springboot2.crud.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 public class Role {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "descriere")
-    private String descriere;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20)
+	private ERole name;
 
-    public Role() {
-    }
+	public Role() {
 
-    public Role(String name, String descriere) {
-        this.name = name;
-        this.descriere = descriere;
-    }
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
+	public Role(ERole name) {
+		this.name = name;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    // GETTERS
-    public String getDescriere() {
-        return descriere;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public ERole getName() {
+		return name;
+	}
 
-    // SETTERS
-    public void setDescriere(String descriere) {
-        this.descriere = descriere;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(ERole name) {
+		this.name = name;
+	}
 }

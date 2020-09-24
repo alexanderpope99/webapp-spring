@@ -9,12 +9,35 @@ import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
 import Avatar3 from '../../../../../assets/images/user/avatar-3.jpg';
 
+import AuthService from '../../../../../services/auth.service';
+
 class NavRight extends Component {
-  state = {
-    listOpen: false,
-  };
+  constructor() {
+    super();
+    this.logOut = this.logOut.bind(this);
+    this.state = {
+      listOpen: false,
+      currentUser: undefined,
+    };
+  }
+
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
+    }
+  }
+
+  logOut() {
+    AuthService.logout();
+    window.location.href = '/auth/signin-1';
+  }
 
   render() {
+    const { currentUser } = this.state;
     return (
       <Aux>
         <ul className="navbar-nav ml-auto">
@@ -111,15 +134,12 @@ class NavRight extends Component {
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
                   <img src={Avatar1} className="img-radius" alt="User Profile" />
-                  <span>{localStorage.getItem('username')}</span>
+                  <span>{JSON.parse(localStorage.getItem('user')).username}</span>
                   <a
                     href={DEMO.BLANK_LINK}
                     className="dud-logout"
                     title="Logout"
-                    onClick={() => {
-                      localStorage.setItem('logged', false);
-                      window.location.href = '/auth/signin-1';
-                    }}
+                    onClick={this.logOut}
                   >
                     <i className="feather icon-log-out" />
                   </a>
