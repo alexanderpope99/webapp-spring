@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,18 @@ public class StatSalariiService {
         RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
         RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
         RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
-    }
+	}
+	
+	private String sumFormula(char colName, int row, int nrAngajat) {
+		StringBuilder formula = new StringBuilder();
+		formula.append(colName).append(row);
+		
+		for(int i = 1; i < nrAngajat; i++) {
+			formula.append('+').append(colName).append(row+i*3);
+		}
+
+		return formula.toString();
+	}
 
 	public void createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
 		try {
@@ -305,13 +317,189 @@ public class StatSalariiService {
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getRestplata());
 
-
 			//* set borders
 			String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			nrAngajat++;
 		}
 
+		//* tabel total
+
+		XSSFFormulaEvaluator formulaEvaluator = (XSSFFormulaEvaluator) workbook.getCreationHelper().createFormulaEvaluator();
+		int rowNr = 14 + nrAngajat * 3;
+		Row row1 = stat.createRow(rowNr);
+		Row row2 = stat.createRow(rowNr+1);
+		Row row3 = stat.createRow(rowNr+2);
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 1, 2));
+		writerCell = row1.createCell(1); // nume complet
+		writerCell.setCellValue("TOTAL");
+
+		//* SALARIU
+		salariuWriter = row1.createCell(4); // salariu din contract
+		salariuWriter.setCellStyle(salariuStyle);
+		String formula = this.sumFormula('E', 15, nrAngajat);
+		salariuWriter.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(salariuWriter);
+
+		salariuWriter = row2.createCell(4); // sume incluse ...
+		salariuWriter.setCellStyle(salariuStyle);
+		formula = this.sumFormula('E', 16, nrAngajat);
+		salariuWriter.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(salariuWriter);
+
+		salariuWriter = row3.createCell(4); // spor weekend
+		salariuWriter.setCellStyle(salariuStyle);
+		formula = this.sumFormula('E', 17, nrAngajat);
+		salariuWriter.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(salariuWriter);
+		salariuWriter = row3.createCell(3); // spor vechime
+		salariuWriter.setCellStyle(salariuStyle);
+		formula = this.sumFormula('D', 17, nrAngajat);
+		salariuWriter.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(salariuWriter);
+	
+		//* ORE
+		writerCell = row1.createCell(5); // NZ
+		writerCell.setCellValue(8);
+		writerCell = row2.createCell(5); // NO
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(5); // SPL = ore suplimentare
+		writerCell.setCellValue(0);
+
+		//* ZILE CO
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 6, 7));
+		writerCell = row1.createCell(6); // ZL
+		writerCell.setCellStyle(centered);
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(6); // CS
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(7); // CO
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(6); // CFP
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(7); // ST
+		writerCell.setCellValue(0);
+	
+		//* ZILE CM
+		writerCell = row1.createCell(8); // CM
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(8); // FNUASS
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(8); // FAAMBP
+		writerCell.setCellValue(0);
+
+		//* ORE
+		writerCell = row1.createCell(9); // ore ind 75%
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(9); // ore somaj
+		writerCell.setCellValue(0);
+		writerCell = row1.createCell(10); // ore lucrate
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(10); // ore absent
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(10); // Val. ore supl.
+		writerCell.setCellValue(0);
+		
+		//* Salariu
+		writerCell = row1.createCell(11); // sal realizat
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(11); // valoare CO
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(11); // CO neefect.
+		writerCell.setCellValue(0);
+
+		//* CM valoare
+		writerCell = row1.createCell(12); // cm societate
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(12); // CM din FNUASS
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0); // TODO
+		writerCell = row3.createCell(12); // cm din FAAMBP
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0); // TODO
+		
+		//* drepturi
+		writerCell = row1.createCell(13); // total sporuri
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0); // TODO
+		writerCell = row2.createCell(13); // total prime
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(12); // alte drepturi
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+
+		//* drepturi
+		writerCell = row1.createCell(14); // val tichetemasa
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(14); // venit brut
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(14); // somaj 0.5%
+		writerCell.setCellValue(0);
+
+		//* 
+		writerCell = row1.createCell(15); // total sporuri
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0); // TODO
+		writerCell = row2.createCell(15); // total prime
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(15); // alte drepturi
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0); // TODO
+
+		//*
+		writerCell = row1.createCell(16); // CAS
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(16); // CASS
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(16); // Ded. pers.
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+
+		//*
+		writerCell = row1.createCell(17); // pensie pilon 3
+		writerCell.setCellValue(0); 
+		writerCell = row2.createCell(17); // venit net
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(17); // baza impozit
+		writerCell.setCellValue(0); 
+
+		//*
+		writerCell = row1.createCell(18); // impozit
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell.setCellStyle(salariuStyle);
+		writerCell = row2.createCell(18); // rest plata brut
+		writerCell.setCellValue(0);
+		writerCell.setCellStyle(salariuStyle);
+		writerCell = row3.createCell(18); // alte retineri
+		writerCell.setCellValue(0); // TODO
+
+		//*
+		writerCell = row1.createCell(19); // sume neimpozabile
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row2.createCell(19); // avans
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+		writerCell = row3.createCell(19); // rest plata net
+		writerCell.setCellStyle(salariuStyle);
+		writerCell.setCellValue(0);
+
+		String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* output the file
 		String newFileLocation = downloadsLocation + "\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
 		
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
