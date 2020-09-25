@@ -103,11 +103,17 @@ public class StatSalariiService {
 		CellStyle functieStyle = workbook.createCellStyle();
 		CellStyle nrContractStyle = workbook.createCellStyle();
 		CellStyle centered = workbook.createCellStyle();
+		CellStyle font10 = workbook.createCellStyle();
 		centered.setAlignment(HorizontalAlignment.CENTER);
+		Font font7 = workbook.createFont();
 		Font font = workbook.createFont();
-		font.setFontHeightInPoints((short)7);
-		functieStyle.setFont(font);
+		font7.setFontHeightInPoints((short)7);
+		font7.setFontName("Tahoma");
+		functieStyle.setFont(font7);
 		functieStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		font.setFontHeightInPoints((short)10);
+		font.setFontName("Tahoma");
+		font10.setFont(font);
 		DataFormat format = workbook.createDataFormat();
 		salariuStyle.setDataFormat(format.getFormat("#,##0"));
 		
@@ -592,9 +598,117 @@ public class StatSalariiService {
 		writerCell.setCellFormula(formula);
 		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//* SET BORDER
+		//* SET BORDER TOTAL
 		String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
 		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* TABEL FINAL
+		rowNr = 14 + (nrAngajat+1) * 3 + 1;
+		row1 = stat.createRow(rowNr);
+		row2 = stat.createRow(rowNr+1);
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 0, 3)); // obligatii angajator
+		stat.addMergedRegion(new CellRangeAddress(rowNr+2, rowNr+2, 0, 3)); // cas contr...
+		stat.addMergedRegion(new CellRangeAddress(rowNr+3, rowNr+3, 0, 3)); // contributie cam 2.25%
+		stat.addMergedRegion(new CellRangeAddress(rowNr+4, rowNr+4, 0, 3)); // contributie cam 0.3375%
+		stat.addMergedRegion(new CellRangeAddress(rowNr+5, rowNr+5, 1, 2)); // fond 4% pers cu handicap
+		stat.addMergedRegion(new CellRangeAddress(rowNr+7, rowNr+7, 1, 2)); // recapitulare salariati
+		stat.addMergedRegion(new CellRangeAddress(rowNr+8, rowNr+8, 1, 2)); // total retineri salariati
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 4, 7)); // baza de calcul
+		stat.addMergedRegion(new CellRangeAddress(rowNr+2, rowNr+2, 4, 7));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+3, rowNr+3, 4, 7));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+4, rowNr+4, 4, 7));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+5, rowNr+5, 4, 7));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+7, rowNr+7, 4, 7));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+8, rowNr+8, 4, 7));
+
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 8, 10)); // contributia
+		stat.addMergedRegion(new CellRangeAddress(rowNr+1, rowNr+1, 8, 10)); // calculata
+		stat.addMergedRegion(new CellRangeAddress(rowNr+2, rowNr+2, 8, 10));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+3, rowNr+3, 8, 10));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+4, rowNr+4, 8, 10));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+5, rowNr+5, 8, 10));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+7, rowNr+7, 8, 10));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+8, rowNr+8, 8, 10));
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 12, 15)); // obligatii angajator
+		stat.addMergedRegion(new CellRangeAddress(rowNr+1, rowNr+1, 12, 15)); // defalcate
+		stat.addMergedRegion(new CellRangeAddress(rowNr+2, rowNr+2, 12, 15)); // cas cond speciale 8%
+		stat.addMergedRegion(new CellRangeAddress(rowNr+3, rowNr+3, 12, 15)); // cas cond speciale 4%
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 16, 18)); // baza de calcul
+		stat.addMergedRegion(new CellRangeAddress(rowNr+2, rowNr+2, 16, 18));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+3, rowNr+3, 16, 18)); 
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 19, 20)); // contributia
+		stat.addMergedRegion(new CellRangeAddress(rowNr+1, rowNr+1, 19, 20)); // calculata
+		stat.addMergedRegion(new CellRangeAddress(rowNr+2, rowNr+2, 19, 20));
+		stat.addMergedRegion(new CellRangeAddress(rowNr+3, rowNr+3, 19, 20));
+
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr+7, rowNr+7, 11, 13)); // cass 10%***
+		stat.addMergedRegion(new CellRangeAddress(rowNr+8, rowNr+8, 11, 13));
+
+		stat.addMergedRegion(new CellRangeAddress(rowNr+7, rowNr+7, 14, 16)); // cass scutit***
+		stat.addMergedRegion(new CellRangeAddress(rowNr+8, rowNr+8, 14, 16));
+		
+		stat.addMergedRegion(new CellRangeAddress(rowNr+7, rowNr+7, 17, 19)); // impozit scutit cf. art 60 din CF
+		stat.addMergedRegion(new CellRangeAddress(rowNr+8, rowNr+8, 17, 19));
+
+		
+		//* OBLIGATII ANGAJATOR
+		writerCell = row1.createCell(0);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("OBLIGATII ANGAJATOR");
+		cellRange="$A$" + (rowNr+1) + ":$D$" + (rowNr+2);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* BAZA DE CALCUL
+		writerCell = row1.createCell(4);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("BAZA DE CALCUL");
+		cellRange="$E$" + (rowNr+1) + ":$H$" + (rowNr+2);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* CONTRIBUTIA CALCULATA
+		writerCell = row1.createCell(8);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("CONTRIBUTIA");
+		writerCell = row2.createCell(8);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("CALCULATA");
+		cellRange="$I$" + (rowNr+1) + ":$K$" + (rowNr+2);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* OBLIGATII ANGAJATOR DEFALCATE
+		writerCell = row1.createCell(12);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("OBLIGATII ANGAJATOR");
+		writerCell = row2.createCell(12);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("DEFALCATE");
+		cellRange="$M$" + (rowNr+1) + ":$P$" + (rowNr+2);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* BAZA DE CALCUL
+		writerCell = row1.createCell(16);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("BAZA DE CALCUL");
+		cellRange="$Q$" + (rowNr+1) + ":$S$" + (rowNr+2);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
+		//* CONTRIBUTIA CALCULATA
+		writerCell = row1.createCell(19);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("CONTRIBUTIA");
+		writerCell = row2.createCell(19);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("CALCULATA");
+		cellRange="$T$" + (rowNr+1) + ":$U$" + (rowNr+2);
+		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
+
 
 		//* OUTPUT THE FILE
 		String newFileLocation = downloadsLocation + "\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
