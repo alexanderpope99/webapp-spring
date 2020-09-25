@@ -369,6 +369,12 @@ class RealizariRetineri extends React.Component {
       },
       this.fillForm
     );
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   async recalculeazaTot() {
@@ -391,10 +397,15 @@ class RealizariRetineri extends React.Component {
       }
     )
       .then((res) => (res.ok ? res.json() : null))
-	  .catch((err) => console.error(err));
-	
-	this.fillForm();
-	
+      .catch((err) => console.error(err));
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+
+    this.fillForm();
   }
 
   async calcNrTichete() {
@@ -1039,9 +1050,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : 0
-                          }
+                          value={this.state.impozit ? this.numberWithCommas(this.state.impozit) : 0}
                         />
                       </Form.Group>
                     </Col>
@@ -1085,13 +1094,13 @@ class RealizariRetineri extends React.Component {
                 </Col>
 
                 <Button
-                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                    disabled={!this.state.selected_angajat}
-                    onClick={this.recalculeazaTot}
-                    className="mb-3 mt-3"
-                  >
-                    Resetează Calculul
-                  </Button>
+                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                  disabled={!this.state.selected_angajat}
+                  onClick={this.recalculeazaTot}
+                  className="mb-3 mt-3"
+                >
+                  Resetează Calculul
+                </Button>
               </Row>
             </Form>
           </Card.Body>

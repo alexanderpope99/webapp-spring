@@ -184,14 +184,7 @@ public class RealizariRetineriService {
 		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
 		
 		// update baza calcul
-		long idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
-		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, idangajat);
-		Bazacalcul bazaCalcul = new Bazacalcul(
-			luna, an, 
-			(int)realizariRetineri.getZilelucrate(), (int)realizariRetineri.getSalariurealizat(),
-			idangajat); 
-		bazaCalcul.setId(oldBazacalcul.getId());
-		bazacalculRepository.save(bazaCalcul);
+		bazacalculService.updateBazacalcul(realizariRetineri);
 
         // empty retinere
 		Retineri oldRetinere = retineriService.getRetinereByIdstat(realizariRetineri.getId());
