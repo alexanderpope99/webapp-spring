@@ -37,6 +37,9 @@ public class RealizariRetineri {
 	@Column(name = "zileplatite")
 	private Integer zileplatite = 0;
 
+	@Column(name = "impozitscutit")
+	private Integer impozitscutit;
+
 	@Column(name = "valcm")
 	private Integer valcm;
 
@@ -144,7 +147,10 @@ public class RealizariRetineri {
     //! GETTERS
     public Integer getNrtichete() {
       return nrtichete;
-    }
+	}
+	public Integer getImpozitscutit() {
+		return impozitscutit;
+	}
     public Integer getZilecm() {
       return zilecm;
     }
@@ -248,6 +254,9 @@ public class RealizariRetineri {
 	//! SETTERS
 	public void setNrtichete(Integer nrtichete) {
 		this.nrtichete = nrtichete;
+	}
+	public void setImpozitscutit(Integer impozitscutit) {
+		this.impozitscutit = impozitscutit;
 	}
 	public void setZilecm(Integer zilecm) {
 		this.zilecm = zilecm;

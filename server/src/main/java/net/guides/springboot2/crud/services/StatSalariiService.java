@@ -151,6 +151,7 @@ public class StatSalariiService {
 		
 		//! write angajati:
 		int nrAngajat = 0;
+		int impozitScutit = 0;
 		for(Persoana persoana : persoane) {
 			int rowNr = 14 + nrAngajat * 3;
 			Row row1 = stat.createRow(rowNr);
@@ -165,6 +166,9 @@ public class StatSalariiService {
 		
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
+
+			impozitScutit += realizariRetineri.getImpozitscutit();
+			System.out.println(impozitScutit);
 				
 			//* 3. insert data:
 			writerCell = row1.createCell(0);
@@ -882,8 +886,8 @@ public class StatSalariiService {
 		cellRange="R$" + (rowNr+8) + ":$T$" + (rowNr+8);
 		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 		writerCell = row9.createCell(17);
-		writerCell.setCellStyle(font10);
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(salariu10Style);
+		writerCell.setCellValue(impozitScutit);
 		cellRange="R$" + (rowNr+9) + ":$T$" + (rowNr+9);
 		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 

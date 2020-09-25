@@ -56,6 +56,7 @@ public class RealizariRetineriService {
 	private float venitNet = 0;
 	private float salariuRealizat = 0;
 	private float bazaImpozit = 0;
+	private float impozitScutit = 0;
 
 	// gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
@@ -73,7 +74,9 @@ public class RealizariRetineriService {
 	public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete, int nrPersoaneIntretinere) throws ResourceNotFoundException {
 
         Contract contract = contractService.getContractById(idcontract);
-        ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
+		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
+		
+		this.impozitScutit = 0;
 
         float casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
         float cassSalariu = Math.round(salariuRealizat * parametriiSalariu.getCass() / 100);
@@ -91,18 +94,24 @@ public class RealizariRetineriService {
 	
 		float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
 		
-		this.bazaImpozit =  (restPlata + valoareTichete - deducere ) * platesteImpozit;
-	
+		this.bazaImpozit =  (restPlata + valoareTichete - deducere );
+		
         this.impozitSalariu = bazaImpozit * impozit;
-        
-        restPlata -= impozitSalariu;
+		
+		if(platesteImpozit == 0)
+			this.impozitScutit += impozitSalariu;
+		
+		this.impozitSalariu *= platesteImpozit;
+
+        restPlata -= impozitSalariu * platesteImpozit;
 	
         return Math.round(restPlata);
     }	// calcRestPlata
 
 	// just calc, doesnt affect DB
     public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, int primaBruta, int nrTichete, float totalOreSuplimentare) throws ResourceNotFoundException {
-        Contract contract = contractService.getContractById(idcontract);
+		Contract contract = contractService.getContractById(idcontract);
+		int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
 
         ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 
@@ -149,7 +158,8 @@ public class RealizariRetineriService {
 		rr.setNroresuplimentare(nrOreSuplimentare);
 		rr.setSalariurealizat((int)salariuRealizat);
 		rr.setVenitnet(Math.round(venitNet));
-		rr.setBazaimpozit(Math.round(bazaImpozit));
+		rr.setBazaimpozit(Math.round(bazaImpozit * platesteImpozit));
+		rr.setImpozitscutit(Math.round(this.impozitScutit));
 
 		return rr;
 	}	// calcRealizariRetineri
