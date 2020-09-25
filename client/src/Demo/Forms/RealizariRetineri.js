@@ -30,7 +30,7 @@ class RealizariRetineri extends React.Component {
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.recalculeaza = this.recalculeaza.bind(this);
-    this.recalculeazaTot = this.recalculeazaTot.bind(this);
+    this.reseteazaCalculul = this.reseteazaCalculul.bind(this);
     this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
@@ -377,7 +377,7 @@ class RealizariRetineri extends React.Component {
     });
   }
 
-  async recalculeazaTot() {
+  async reseteazaCalculul() {
     console.log('recalculez TOT...');
 
     let an = this.state.an;
@@ -1096,7 +1096,7 @@ class RealizariRetineri extends React.Component {
                 <Button
                   variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                   disabled={!this.state.selected_angajat}
-                  onClick={this.recalculeazaTot}
+                  onClick={this.reseteazaCalculul}
                   className="mb-3 mt-3"
                 >
                   Resetează Calculul

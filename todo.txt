@@ -2,7 +2,9 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)
 
-stat salari: impozit scutit
+stat salarii:
+	1) intocmit de ... in josul paginii
+	2) stat individual	
 
 persoane intretinere
 

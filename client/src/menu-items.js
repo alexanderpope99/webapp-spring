@@ -87,8 +87,8 @@ export default {
       ],
 		},
 		{
-      id: 'generare-fisiere',
-      title: 'Generare Fisiere',
+      id: 'rapoarte',
+      title: 'Rapoarte',
       type: 'group',
       icon: 'icon-group',
 			children: [

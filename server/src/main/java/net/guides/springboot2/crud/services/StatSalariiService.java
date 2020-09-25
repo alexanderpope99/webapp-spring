@@ -76,7 +76,7 @@ public class StatSalariiService {
 		return formula.toString();
 	}
 
-	public void createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
+	public boolean createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
 		try {
 		Societate societate = societateRepository.findById((long) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
@@ -898,9 +898,12 @@ public class StatSalariiService {
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
 		workbook.close();
+
+		return true;
 		}
 		catch (IOException e) {
-            e.printStackTrace();
+			e.printStackTrace();
+			return false;
 		}
 	}
 }
