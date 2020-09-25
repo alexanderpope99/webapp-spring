@@ -134,7 +134,7 @@ public class StatSalariiService {
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
 		
 		
-		//* write angajati:
+		//! write angajati:
 		int nrAngajat = 0;
 		for(Persoana persoana : persoane) {
 			int rowNr = 14 + nrAngajat * 3;
@@ -182,32 +182,43 @@ public class StatSalariiService {
 		
 			//* ORE
 			writerCell = row1.createCell(5); // NZ
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(8);
 			writerCell = row2.createCell(5); // NO
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(contract.getNormalucru());
 			writerCell = row3.createCell(5); // SPL = ore suplimentare
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(realizariRetineri.getNroresuplimentare());
 
 			//* ZILE CO
 			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 6, 7));
 			writerCell = row1.createCell(6); // ZL
 			writerCell.setCellStyle(centered);
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(realizariRetineri.getZilelucrate());
 			writerCell = row2.createCell(6); // CS
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(coService.getZileCS(luna, an, idcontract));
 			writerCell = row2.createCell(7); // CO
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(coService.getZileCO(luna, an, idcontract));
 			writerCell = row3.createCell(6); // CFP
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(coService.getZileCFP(luna, an, idcontract));
 			writerCell = row3.createCell(7); // ST
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
 		
 			//* ZILE CM
 			writerCell = row1.createCell(8); // CM
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(cmService.getZileCM(luna, an, idcontract));
 			writerCell = row2.createCell(8); // FNUASS
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(0);
 			writerCell = row3.createCell(8); // FAAMBP
+			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(0);
 
 			//* ORE
@@ -324,7 +335,6 @@ public class StatSalariiService {
 		}
 
 		//* tabel total
-
 		XSSFFormulaEvaluator formulaEvaluator = (XSSFFormulaEvaluator) workbook.getCreationHelper().createFormulaEvaluator();
 		int rowNr = 14 + nrAngajat * 3;
 		Row row1 = stat.createRow(rowNr);
@@ -335,7 +345,7 @@ public class StatSalariiService {
 		writerCell = row1.createCell(1); // nume complet
 		writerCell.setCellValue("TOTAL");
 
-		//* SALARIU
+		//* SALARIU TOTAL
 		salariuWriter = row1.createCell(4); // salariu din contract
 		salariuWriter.setCellStyle(salariuStyle);
 		String formula = this.sumFormula('E', 15, nrAngajat);
@@ -359,147 +369,234 @@ public class StatSalariiService {
 		salariuWriter.setCellFormula(formula);
 		formulaEvaluator.evaluateFormulaCell(salariuWriter);
 	
-		//* ORE
-		writerCell = row1.createCell(5); // NZ
-		writerCell.setCellValue(8);
-		writerCell = row2.createCell(5); // NO
-		writerCell.setCellValue(0);
+		//* ORE TOTAL
 		writerCell = row3.createCell(5); // SPL = ore suplimentare
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('F', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//* ZILE CO
+		//* ZILE CO TOTAL
 		stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 6, 7));
 		writerCell = row1.createCell(6); // ZL
 		writerCell.setCellStyle(centered);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('G', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(6); // CS
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('G', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(7); // CO
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('H', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(6); // CFP
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('G', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(7); // ST
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('H', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 	
-		//* ZILE CM
+		//* ZILE CM TOTAL
 		writerCell = row1.createCell(8); // CM
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('I', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(8); // FNUASS
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('I', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(8); // FAAMBP
-		writerCell.setCellValue(0);
+		writerCell.setCellStyle(centered);
+		formula = this.sumFormula('I', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//* ORE
+		//* ORE TOTAL
 		writerCell = row1.createCell(9); // ore ind 75%
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('J', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(9); // ore somaj
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('J', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row1.createCell(10); // ore lucrate
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('K', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(10); // ore absent
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('K', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(10); // Val. ore supl.
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('K', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		
-		//* Salariu
+		//* Salariu TOTAL
 		writerCell = row1.createCell(11); // sal realizat
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('L', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(11); // valoare CO
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('L', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(11); // CO neefect.
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('L', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//* CM valoare
+		//* CM valoare TOTAL
 		writerCell = row1.createCell(12); // cm societate
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('M', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(12); // CM din FNUASS
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0); // TODO
+		formula = this.sumFormula('M', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(12); // cm din FAAMBP
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0); // TODO
+		formula = this.sumFormula('M', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell); 
 		
-		//* drepturi
+		//* drepturi TOTAL
 		writerCell = row1.createCell(13); // total sporuri
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0); // TODO
+		formula = this.sumFormula('N', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(13); // total prime
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('N', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(12); // alte drepturi
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('N', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//* drepturi
+		//* drepturi TOTAL
 		writerCell = row1.createCell(14); // val tichetemasa
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('O', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(14); // venit brut
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('O', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);;
 		writerCell = row3.createCell(14); // somaj 0.5%
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('O', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//* 
+		//* TOTAL
 		writerCell = row1.createCell(15); // total sporuri
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0); // TODO
+		formula = this.sumFormula('P', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(15); // total prime
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('P', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(15); // alte drepturi
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0); // TODO
+		formula = this.sumFormula('P', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//*
+		//* TOTAL
 		writerCell = row1.createCell(16); // CAS
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('Q', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(16); // CASS
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('Q', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(16); // Ded. pers.
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('Q', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//*
+		//* TOTAL
 		writerCell = row1.createCell(17); // pensie pilon 3
-		writerCell.setCellValue(0); 
+		formula = this.sumFormula('R', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(17); // venit net
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('R', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(17); // baza impozit
-		writerCell.setCellValue(0); 
+		formula = this.sumFormula('R', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
-		//*
+		//* TOTAL
 		writerCell = row1.createCell(18); // impozit
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
-		writerCell.setCellStyle(salariuStyle);
+		formula = this.sumFormula('S', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(18); // rest plata brut
-		writerCell.setCellValue(0);
 		writerCell.setCellStyle(salariuStyle);
+		formula = this.sumFormula('S', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(18); // alte retineri
-		writerCell.setCellValue(0); // TODO
+		writerCell.setCellStyle(salariuStyle);
+		formula = this.sumFormula('S', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell); 
 
-		//*
+		//* TOTAL
 		writerCell = row1.createCell(19); // sume neimpozabile
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('T', 15, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row2.createCell(19); // avans
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('T', 16, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 		writerCell = row3.createCell(19); // rest plata net
 		writerCell.setCellStyle(salariuStyle);
-		writerCell.setCellValue(0);
+		formula = this.sumFormula('T', 17, nrAngajat);
+		writerCell.setCellFormula(formula);
+		formulaEvaluator.evaluateFormulaCell(writerCell);
 
+		//* SET BORDER
 		String cellRange="$A$" + (15+nrAngajat*3) + ":$U$" + (17+nrAngajat*3);
 		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
-		//* output the file
+		//* OUTPUT THE FILE
 		String newFileLocation = downloadsLocation + "\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
 		
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
