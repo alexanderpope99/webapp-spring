@@ -86,14 +86,6 @@ public class CMService {
 		return zileC;
 	}
 
-	private int zileC(CM cm) {
-		LocalDate dela = cm.getDela();
-		LocalDate panala = cm.getPanala();
-		int zileC = dela.getDayOfMonth() - panala.getDayOfMonth();
-
-		return zileC;
-	}
-
 	private int zileC(int luna, int an, List<CM> concedii) {
         LocalDate inceputLuna = LocalDate.of(an, luna, 1);
         int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());

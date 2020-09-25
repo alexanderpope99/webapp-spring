@@ -76,8 +76,6 @@ public class RealizariRetineri {
 
     @Column(name = "restplata")
 	private Integer restplata = 0;
-	@Column(name = "restplataburt")
-	private Integer restplatabrut = 0;
 
     @Column(name = "nrpersoaneintretinere")
     private Integer nrpersoaneintretinere = 0;
@@ -184,7 +182,7 @@ public class RealizariRetineri {
       return impozit;
 	}
 	public Integer getBazaimpozit() {
-		return bazaimpozit;
+		return bazaimpozit == null ? 0 : bazaimpozit;
 	}
     public Float getValoaretichete() {
       return valoaretichete;
@@ -245,9 +243,6 @@ public class RealizariRetineri {
 	}
 	public Integer getVenitnet() {
 		return venitnet;
-	}
-	public Integer getRestplatabrut() {
-		return restplatabrut;
 	}
 
 	//! SETTERS
@@ -352,9 +347,6 @@ public class RealizariRetineri {
 	}
 	public void setVenitnet(Integer venitnet) {
 		this.venitnet = venitnet;
-	}
-	public void setRestplatabrut(Integer restplatabrut) {
-		this.restplatabrut = restplatabrut;
 	}
 }
 

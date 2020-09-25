@@ -30,6 +30,7 @@ class RealizariRetineri extends React.Component {
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.recalculeaza = this.recalculeaza.bind(this);
+    this.recalculeazaTot = this.recalculeazaTot.bind(this);
     this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
@@ -59,8 +60,8 @@ class RealizariRetineri extends React.Component {
       salariubrut: '',
       orelucrate: '',
       nrtichete: '',
-			zilecm: '',
-			valcm: '',
+      zilecm: '',
+      valcm: '',
       zileco: '',
       zileconeplatit: '',
       zilec: '',
@@ -106,8 +107,8 @@ class RealizariRetineri extends React.Component {
       salariubrut: '',
       orelucrate: '',
       nrtichete: '',
-			zilecm: '',
-			valcm: '',
+      zilecm: '',
+      valcm: '',
       zileco: '',
       zileconeplatit: '',
       zilec: '',
@@ -257,13 +258,13 @@ class RealizariRetineri extends React.Component {
       salariupezi: data.salariupezi,
       salariupeora: data.salariupeora,
       nrtichete: data.nrtichete,
-			zilecm: data.zilecm,
-			valcm: data.valcm,
-			zilecmlucratoare: data.zilecmlucratoare,
-			zileco: data.zileco,
-			zilecolucratoare: data.zilecolucratoare,
-			zileconeplatit: data.zileconeplatit,
-			zileconeplatitlucratoare: data.zileconeplatitlucratoare,
+      zilecm: data.zilecm,
+      valcm: data.valcm,
+      zilecmlucratoare: data.zilecmlucratoare,
+      zileco: data.zileco,
+      zilecolucratoare: data.zilecolucratoare,
+      zileconeplatit: data.zileconeplatit,
+      zileconeplatitlucratoare: data.zileconeplatitlucratoare,
       zilec: data.zilec,
 
       //* retineri
@@ -309,7 +310,7 @@ class RealizariRetineri extends React.Component {
     );
   }
 
-  // recalculeaza total
+  // recalculeaza doar total
   async recalculeaza() {
     console.log('recalculez...');
 
@@ -368,6 +369,32 @@ class RealizariRetineri extends React.Component {
       },
       this.fillForm
     );
+  }
+
+  async recalculeazaTot() {
+    console.log('recalculez TOT...');
+
+    let an = this.state.an;
+    let luna = this.state.luna.nr;
+
+    const idpersoana = this.state.selected_angajat.id;
+    if (!idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    const data = await fetch(
+      `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+      .then((res) => (res.ok ? res.json() : null))
+	  .catch((err) => console.error(err));
+	
+	this.fillForm();
+	
   }
 
   async calcNrTichete() {
@@ -784,7 +811,7 @@ class RealizariRetineri extends React.Component {
                           {this.state.zilecm ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                Brut: {(this.state.valcm).toFixed(0)} RON
+                                Brut: {this.state.valcm.toFixed(0)} RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}
@@ -799,8 +826,7 @@ class RealizariRetineri extends React.Component {
                           {this.state.zileco ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                Sumă brută:{' '}
-                                {(this.state.valcm).toFixed(0)} RON
+                                Sumă brută: {this.state.valcm.toFixed(0)} RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}
@@ -1014,7 +1040,7 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           disabled
                           value={
-                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : ''
+                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : 0
                           }
                         />
                       </Form.Group>
@@ -1057,6 +1083,15 @@ class RealizariRetineri extends React.Component {
                     Recalculează
                   </Button>
                 </Col>
+
+                <Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    onClick={this.recalculeazaTot}
+                    className="mb-3 mt-3"
+                  >
+                    Resetează Calculul
+                  </Button>
               </Row>
             </Form>
           </Card.Body>
