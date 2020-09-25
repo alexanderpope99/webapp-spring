@@ -7,19 +7,20 @@ import months from '../Resources/months';
 class Stat extends React.Component {
   constructor() {
     super();
-		this.download = this.download.bind(this);
-		this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
+    this.download = this.download.bind(this);
+    this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
 
     this.state = {
       socsel: getSocSel(),
       luna: '',
       an: '',
+      intocmitDe: '',
     };
-	}
-	
-	componentDidMount() {
-		this.setCurrentYearMonth();
-	}
+  }
+
+  componentDidMount() {
+    this.setCurrentYearMonth();
+  }
 
   setCurrentYearMonth() {
     let today = new Date();
@@ -32,15 +33,18 @@ class Stat extends React.Component {
     });
   }
 
-	// luna is object of type { nume: string, nr: int }
+  // luna is object of type { nume: string, nr: int }
   async download(luna, an) {
     console.log('trying to download...');
-		let societateNume = this.state.socsel.nume;
-		
-    await fetch(`${server.address}/download/Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/octet-stream' },
-    })
+    let societateNume = this.state.socsel.nume;
+
+    await fetch(
+      `${server.address}/download/Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/octet-stream' },
+      }
+    )
       .then((res) => res.blob())
       .then((blob) => {
         var url = window.URL.createObjectURL(blob);
@@ -51,22 +55,25 @@ class Stat extends React.Component {
         a.click();
         a.remove(); //afterwards we remove the element again
       });
+    console.log('downloaded');
   }
 
   async creeazaStatSalarii() {
-		// make request to create stat for soc, luna, an
-		let luna = this.state.luna;
-		let an = this.state.an;
+    // make request to create stat for soc, luna, an
+    let luna = this.state.luna;
+    let an = this.state.an;
+    let i = this.state.intocmitDe ? this.state.intocmitDe : '-';
+    const created = await fetch(
+      `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+      .then((res) => res.ok)
+      .catch((err) => console.error(err));
 
-		const created = await fetch(`${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}`, {
-			method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-		})
-		.then(res => res.ok)
-		.catch(err => console.error(err));
-
-		if(created)
-			this.download(luna, an);
+    if (created) this.download(luna, an);
   }
 
   render() {
@@ -82,7 +89,7 @@ class Stat extends React.Component {
         <Card.Body>
           <Row>
             {/* LUNA */}
-            <Col md={6}>
+            <Col md={4}>
               <FormControl
                 as="select"
                 value={this.state.luna.nume}
@@ -99,7 +106,7 @@ class Stat extends React.Component {
               </FormControl>
             </Col>
             {/* AN */}
-            <Col md={6}>
+            <Col md={4}>
               <FormControl
                 as="select"
                 value={this.state.an}
@@ -111,6 +118,18 @@ class Stat extends React.Component {
               >
                 {ani}
               </FormControl>
+            </Col>
+            <Col md={4}>
+              <FormControl
+								typr="text"
+								placeholder="Intocmid de"
+                value={this.state.intocmitDe}
+                onChange={(e) =>
+                  this.setState({
+                    intocmitDe: e.target.value,
+                  })
+                }
+              />
             </Col>
           </Row>
           <div className="mt-3">

@@ -17,12 +17,13 @@ public class StatSalariiController {
 	@Autowired
 	private StatSalariiService statSalariiService;
 
-	@GetMapping("/{ids}/mo={luna}&y={an}")
+	@GetMapping("/{ids}/mo={luna}&y={an}&i={i}")
 	public boolean createStatSalarii(
 		@PathVariable("ids") int ids,
 		@PathVariable("luna") int luna,
-		@PathVariable("an") int an
+		@PathVariable("an") int an,
+		@PathVariable("i") String i
 	) throws IOException, ResourceNotFoundException {
-		return statSalariiService.createStatSalarii(luna, an, ids);
+		return statSalariiService.createStatSalarii(luna, an, ids, i);
 	}
 }

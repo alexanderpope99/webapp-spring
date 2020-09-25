@@ -76,7 +76,7 @@ public class StatSalariiService {
 		return formula.toString();
 	}
 
-	public boolean createStatSalarii(int luna, int an, int idsocietate) throws IOException, ResourceNotFoundException {
+	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe) throws IOException, ResourceNotFoundException {
 		try {
 		Societate societate = societateRepository.findById((long) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
@@ -891,6 +891,31 @@ public class StatSalariiService {
 		cellRange="R$" + (rowNr+9) + ":$T$" + (rowNr+9);
 		setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
+		//* semnatura
+		row1 = stat.createRow(rowNr + 14);
+
+		writerCell = row1.createCell(1);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("INTOCMIT DE");
+
+		writerCell = row1.createCell(10);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("DIRECTOR DEP. FINANCIAR");
+		
+		writerCell = row1.createCell(18);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue("DIRECTOR GENERAL,");
+
+		row1 = stat.createRow(rowNr + 15);
+		
+		writerCell = row1.createCell(1);
+		writerCell.setCellStyle(font10);
+		writerCell.setCellValue(intocmitDe);
+	
+		row1 = stat.createRow(rowNr + 16);
+		writerCell.setCellStyle(functieStyle);
+		writerCell = row1.createCell(0);
+		writerCell.setCellValue("Legenda: R - retinut; C - calculat; *CAS 25% / 21.25% pt. societatile de constructii cf. OUG 114/2018; **CASS - 10% / 0% pt. societatile de constructii cf. OUG 114/2018; ***Contributii pt. societatile de constructii cf. ");
 
 		//* OUTPUT THE FILE
 		String newFileLocation = downloadsLocation + "\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
