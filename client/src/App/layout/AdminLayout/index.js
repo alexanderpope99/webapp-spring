@@ -48,8 +48,6 @@ class AdminLayout extends Component {
         />
       ) : null;
 	});
-	
-	console.log('mamaie');
 
     return (
       <Aux>

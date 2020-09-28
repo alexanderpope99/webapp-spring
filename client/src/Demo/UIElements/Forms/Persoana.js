@@ -152,17 +152,20 @@ class Persoana extends React.Component {
   }
 
   async createAngajat(idpersoana) {
+    console.log(authHeader());
     await axios
-      .post(`${server.address}/angajat`, {
-        headers: authHeader(),
-        body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
-      })
+      .post(
+        `${server.address}/angajat`,
+        { idpersoana: idpersoana, idsocietate: this.state.socsel.id },
+        { headers: authHeader() }
+      )
       .catch((err) => console.error(err));
     console.log(idpersoana, this.state.socsel);
   }
 
   async onSubmit(e) {
     e.preventDefault();
+    console.log(authHeader());
 
     if (!this.hasRequired()) return;
 
@@ -183,11 +186,8 @@ class Persoana extends React.Component {
       };
 
       adresa = await axios
-        .post(`${server.address}/adresa`, {
-          headers: authHeader(),
-          body: JSON.stringify(adresa_body),
-        })
-        .then((adresa) => adresa.json());
+        .post(`${server.address}/adresa`, adresa_body, { headers: authHeader() })
+        .then((adresa) => adresa.data);
       console.log('idadresa:', adresa.id);
     }
 
@@ -205,9 +205,8 @@ class Persoana extends React.Component {
       };
 
       await axios
-        .post(`${server.address}/actidentitate`, {
+        .post(`${server.address}/actidentitate`, buletin_body, {
           headers: authHeader(),
-          body: JSON.stringify(buletin_body),
         })
         .then((res) => {
           console.log(res.data.id);
@@ -228,11 +227,10 @@ class Persoana extends React.Component {
     };
     console.log(persoana_body);
 
+    console.log(authHeader());
+
     const persoana = await axios
-      .post(`${server.address}/persoana`, {
-        headers: authHeader(),
-        body: JSON.stringify(persoana_body),
-      })
+      .post(`${server.address}/persoana`, persoana_body, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error('error:', err.message));
 
