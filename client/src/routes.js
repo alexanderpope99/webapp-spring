@@ -34,12 +34,6 @@ const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
-const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
-const RoleTabel = React.lazy(() => import('./Demo/Tables/RoleTabel'));
-const PermissionTabel = React.lazy(() => import('./Demo/Tables/PermissionTabel'));
-
-const RoleToPermissionTabel = React.lazy(() => import('./Demo/Tables/RoleToPermissionTabel'));
-const UserToRoleTabel = React.lazy(() => import('./Demo/Tables/UserToRoleTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -89,10 +83,10 @@ const routes = [
     exact: true,
     name: 'Realizari / Retineri',
     component: RealizariRetineri,
-	},
-	
-	// DOWNLOADS
-	{ path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
+  },
+
+  // DOWNLOADS
+  { path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
 
   // TABLES
   { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
@@ -109,22 +103,6 @@ const routes = [
     exact: true,
     name: 'Concedii Odihna',
     component: ConcediiOdihna,
-  },
-  { path: '/tables/user-tabel', exact: true, name: 'User Tabel', component: UserTabel },
-  { path: '/tables/role-tabel', exact: true, name: 'Role Tabel', component: RoleTabel },
-  { path: '/tables/permission-tabel', exact: true, name: 'Role Tabel', component: PermissionTabel },
-
-  {
-    path: '/tables/role-to-permission-tabel',
-    exact: true,
-    name: 'Role-to-Permission Tabel',
-    component: RoleToPermissionTabel,
-  },
-  {
-    path: '/tables/user-to-role-tabel',
-    exact: true,
-    name: 'User-to-Role Tabel',
-    component: UserToRoleTabel,
   },
 
   // EDIT

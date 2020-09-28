@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class COTabel extends React.Component {
   constructor(props) {
@@ -66,12 +68,9 @@ class COTabel extends React.Component {
       return;
     }
     //? fetch must be with idcontract
-    const co = await fetch(`${server.address}/co/idc=${this.state.angajat.idcontract}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(persoane),
-    })
-      .then((co) => (co.status !== 200 ? null : co.json()))
+    const co = await axios
+      .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
+      .then((co) => (co.status !== 200 ? null : co.data))
       .catch((err) => console.error('err', err));
 
     if (co !== null) {
@@ -122,10 +121,8 @@ class COTabel extends React.Component {
   }
 
   async deleteCO(id) {
-    await fetch(`${server.address}/co/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    await axios
+      .delete(`${server.address}/co/${id}`, { headers: authHeader() })
       .then(this.fillTable)
       .catch((err) => console.error(err));
   }
@@ -148,12 +145,9 @@ class COTabel extends React.Component {
       // in DB also has sporuripermanente
     };
 
-    let ok = await fetch(`${server.address}/co`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(co_body),
-    })
-      .then((res) => res.ok)
+    let ok = await axios
+      .post(`${server.address}/co`, { headers: authHeader(), body: JSON.stringify(co_body) })
+      .then((res) => res.statusText)
       .catch((err) => console.error('err:', err));
 
     if (ok) {

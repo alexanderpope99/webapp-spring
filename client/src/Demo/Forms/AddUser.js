@@ -56,12 +56,9 @@ class AddUser extends React.Component {
       societateselectată: this.state.societateselectată,
     };
     // ADD User TO DATABASE
-    await fetch(`${server.address}/user`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user_body),
-    })
-      .then((user) => user.json())
+    await axios
+      .post(`${server.address}/user`, { headers: authHeader(), body: JSON.stringify(user_body) })
+      .then((user) => user.data)
       .then(() => {
         this.setState({
           show: true,

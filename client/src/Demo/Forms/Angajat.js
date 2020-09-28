@@ -9,6 +9,8 @@ import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 /*
   ? how it works now:
@@ -26,9 +28,8 @@ class Angajat extends React.Component {
   constructor() {
     super();
 
-    if(!getSocSel())
-      window.location.href = "/dashboard/societati";
-      
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+
     // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -56,8 +57,6 @@ class Angajat extends React.Component {
   }
 
   componentDidMount() {
-    
-
     window.scrollTo(0, 0);
   }
 
@@ -77,14 +76,10 @@ class Angajat extends React.Component {
     } else this.contract.current.setState({ buttonDisabled: false });
 
     // get angajat with selected id
-    const angajat = await fetch(
-      `${server.address}/angajat/${idpersoana}`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
-      .then((res) => res.json())
+
+    const angajat = await axios
+      .get(`${server.address}/angajat/${idpersoana}`, { headers: authHeader() })
+      .then((res) => res.data)
       .catch((err) => console.error(err));
 
     this.setState({
@@ -109,11 +104,9 @@ class Angajat extends React.Component {
     // if angajat has contract
     if (idcontract !== null) {
       // fetch data from contract
-      contract = await fetch(`${server.address}/contract/${idcontract}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((res) => res.json())
+      contract = await axios
+        .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
+        .then((res) => res.data)
         .catch((err) => console.error(err));
     }
     //* FILL FORM
@@ -128,8 +121,7 @@ class Angajat extends React.Component {
       this.setState(
         {
           show: true,
-          modalMessage:
-            'Pentru concedii, angajatul are nevoie de un contract de muncă.',
+          modalMessage: 'Pentru concedii, angajatul are nevoie de un contract de muncă.',
         },
         () => this.setState({ key: 'contract' })
       );
@@ -148,8 +140,7 @@ class Angajat extends React.Component {
     if (angajat.idcontract === null) {
       this.setState({
         show: true,
-        modalMessage:
-          'Pentru concedii, angajatul are nevoie de un contract de muncă.',
+        modalMessage: 'Pentru concedii, angajatul are nevoie de un contract de muncă.',
         key: 'contract',
       });
       return;
@@ -174,9 +165,7 @@ class Angajat extends React.Component {
         </Modal>
         <Row>
           <Col>
-            <h5>
-              Date angajat {this.state.socsel.nume ? "- " + this.state.socsel.nume : ""}
-            </h5>
+            <h5>Date angajat {this.state.socsel.nume ? '- ' + this.state.socsel.nume : ''}</h5>
 
             <hr />
             <Tabs
@@ -211,10 +200,7 @@ class Angajat extends React.Component {
                 <ConcediiMedicale ref={this.cm} />
               </Tab>
             </Tabs>
-            <Button
-              onClick={() => window.scrollTo(0, 0)}
-              className="float-center"
-            >
+            <Button onClick={() => window.scrollTo(0, 0)} className="float-center">
               TO TOP
             </Button>
           </Col>

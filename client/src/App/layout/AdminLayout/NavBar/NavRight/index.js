@@ -37,7 +37,6 @@ class NavRight extends Component {
   }
 
   render() {
-    const { currentUser } = this.state;
     return (
       <Aux>
         <ul className="navbar-nav ml-auto">

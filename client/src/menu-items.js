@@ -151,59 +151,6 @@ var items = [
     ],
   },
   {
-    id: 'ui-element',
-    title: 'UI ELEMENT',
-    type: 'group',
-    icon: 'icon-ui',
-    show: user.roles.includes('ROLE_ADMIN'),
-    children: [
-      {
-        id: 'basic',
-        title: 'Component',
-        type: 'collapse',
-        icon: 'feather icon-box',
-        children: [
-          {
-            id: 'button',
-            title: 'Button',
-            type: 'item',
-            url: '/basic/button',
-          },
-          {
-            id: 'badges',
-            title: 'Badges',
-            type: 'item',
-            url: '/basic/badges',
-          },
-          {
-            id: 'breadcrumb-pagination',
-            title: 'Breadcrumb & Pagination',
-            type: 'item',
-            url: '/basic/breadcrumb-paging',
-          },
-          {
-            id: 'collapse',
-            title: 'Collapse',
-            type: 'item',
-            url: '/basic/collapse',
-          },
-          {
-            id: 'tabs-pills',
-            title: 'Tabs & Pills',
-            type: 'item',
-            url: '/basic/tabs-pills',
-          },
-          {
-            id: 'typography',
-            title: 'Typography',
-            type: 'item',
-            url: '/basic/typography',
-          },
-        ],
-      },
-    ],
-  },
-  {
     id: 'ui-forms',
     title: 'Forms & Tables',
     type: 'group',
@@ -372,8 +319,6 @@ var items = [
     ],
   },
 ];
-
-console.log(user.roles.includes('ROLE_USER'));
 
 items = items.filter(function (value, index, arr) {
   return value.show === true;

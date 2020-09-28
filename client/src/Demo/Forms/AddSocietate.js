@@ -4,7 +4,8 @@ import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
-
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class AddSocietate extends React.Component {
   constructor(props) {
@@ -80,19 +81,14 @@ class AddSocietate extends React.Component {
     }
 
     for (const key in this.state) {
-      if (this.state[key] === '' || this.state[key] === "''")
-        this.state[key] = null;
+      if (this.state[key] === '' || this.state[key] === "''") this.state[key] = null;
     }
 
     var caen_id = null;
     if (this.state.idcaen !== null) {
-      caen_id = await fetch(
-        `${server.address}/caen/${this.state.idcaen}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      ).then((res) => (res.status === 200 ? res.json() : -1));
+      caen_id = await axios
+        .get(`${server.address}/caen/${this.state.idcaen}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : -1));
 
       if (caen_id === -1) {
         caen_id = null;
@@ -113,11 +109,12 @@ class AddSocietate extends React.Component {
         tara: null,
       };
       // console.log(JSON.stringify(adresa_body));
-      let adresa = await fetch(`${server.address}/adresa`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(adresa_body),
-      }).then((res) => res.json());
+      let adresa = await axios
+        .post(`${server.address}/adresa`, {
+          headers: authHeader(),
+          body: JSON.stringify(adresa_body),
+        })
+        .then((res) => res.data);
       idadresa = adresa.id;
       console.log('idadresa:', adresa);
     }
@@ -130,16 +127,16 @@ class AddSocietate extends React.Component {
       regcom: this.state.regcom,
       idadresa: idadresa,
       email: this.state.email,
-      telefon: this.state.telefon
+      telefon: this.state.telefon,
     };
     console.log(societate_body);
     // ADD SOCIETATE TO DATABASE
-    await fetch(`${server.address}/societate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(societate_body),
-    })
-      .then((societate_response) => societate_response.json())
+    await axios
+      .post(`${server.address}/societate`, {
+        headers: authHeader(),
+        body: JSON.stringify(societate_body),
+      })
+      .then((societate_response) => societate_response.data)
       .then(() => {
         //alert("Societate adaugata cu succes!");
         this.setState({

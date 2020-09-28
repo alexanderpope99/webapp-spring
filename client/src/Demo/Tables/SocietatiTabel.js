@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class SocietatiTabel extends React.Component {
   constructor() {
@@ -28,19 +30,17 @@ class SocietatiTabel extends React.Component {
   deleteSocietate(id) {
     // id = id.replace('"', '');
     // console.log(id);
-    const response = fetch(`${server.address}/societate/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => response.json())
+    const response = axios
+      .get(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
       .then(() => {
         console.log(response);
         // alert(`Deleted ${id}`);
         this.onRefresh();
       })
       .catch(console.log('could not connect to db'));
-	}
-	
+  }
+
   // function to render in react
   async renderSocietati() {
     // console.log('render called');
@@ -57,7 +57,7 @@ class SocietatiTabel extends React.Component {
             <th>{soc.idcaen || '-'}</th>
             <th>{soc.cif || '-'}</th>
             <th>{soc.regcom || '-'}</th>
-						<th>{soc.nrangajati || 0}</th>
+            <th>{soc.nrangajati || 0}</th>
             <th>
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
@@ -111,20 +111,20 @@ class SocietatiTabel extends React.Component {
   async onRefresh() {
     // e.preventDefault();
 
-    let societati = await fetch(`${server.address}/societate`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-		}).then((societati) => societati.json());
-		
-    societati = await Promise.all(societati.map(async (societate) => {
-      let nrAngajati = await fetch(`${server.address}/angajat/ids=${societate.id}/count`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-			}).then((res) => res.json());
-			
-			return { ...societate, nrangajati: nrAngajati };
-		}));
-		console.log(societati);
+    let societati = await axios
+      .get(`${server.address}/societate`, { headers: authHeader() })
+      .then((societati) => societati.data);
+
+    societati = await Promise.all(
+      societati.map(async (societate) => {
+        let nrAngajati = await axios
+          .get(`${server.address}/angajat/ids=${societate.id}/count`, { headers: authHeader() })
+          .then((res) => res.data);
+
+        return { ...societate, nrangajati: nrAngajati };
+      })
+    );
+    console.log(societati);
 
     this.state.societati = societati;
 
