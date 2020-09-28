@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Form, Button, FormControl } from 'react-bootstrap';
+import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
@@ -34,15 +35,17 @@ class Stat extends React.Component {
   }
 
   // luna is object of type { nume: string, nr: int }
-  async download(luna, an) {
+  async download(luna, an, token) {
     console.log('trying to download...');
     let societateNume = this.state.socsel.nume;
-
     await fetch(
       `${server.address}/download/Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`,
       {
         method: 'GET',
-        headers: { 'Content-Type': 'application/octet-stream' },
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'Authorization': `Bearer ${token}`,
+        },
       }
     )
       .then((res) => res.blob())
@@ -58,22 +61,28 @@ class Stat extends React.Component {
     console.log('downloaded');
   }
 
-  async creeazaStatSalarii() {
+  async creeazaStatSalarii(e) {
+	  e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
     let i = this.state.intocmitDe ? this.state.intocmitDe : '-';
+    const user = JSON.parse(localStorage.getItem('user'));
+
     const created = await fetch(
       `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}`,
       {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.accessToken}`,
+        },
       }
     )
       .then((res) => res.ok)
       .catch((err) => console.error(err));
 
-    if (created) this.download(luna, an);
+    if (created) this.download(luna, an, user.accessToken);
   }
 
   render() {
@@ -86,52 +95,57 @@ class Stat extends React.Component {
 
     return (
       <Card>
+        <Card.Header>
+          <Typography variant="h5">{this.state.socsel.nume}</Typography>
+        </Card.Header>
         <Card.Body>
-          <Row>
-            {/* LUNA */}
-            <Col md={4}>
-              <FormControl
-                as="select"
-                value={this.state.luna.nume}
-                onChange={(e) =>
-                  this.setState(
-                    {
-                      luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                    },
-                    this.fillForm
-                  )
-                }
-              >
-                {luni}
-              </FormControl>
-            </Col>
-            {/* AN */}
-            <Col md={4}>
-              <FormControl
-                as="select"
-                value={this.state.an}
-                onChange={(e) =>
-                  this.setState({
-                    an: e.target.value,
-                  })
-                }
-              >
-                {ani}
-              </FormControl>
-            </Col>
-            <Col md={4}>
-              <FormControl
-								typr="text"
-								placeholder="Intocmid de"
-                value={this.state.intocmitDe}
-                onChange={(e) =>
-                  this.setState({
-                    intocmitDe: e.target.value,
-                  })
-                }
-              />
-            </Col>
-          </Row>
+          <Form onSubmit={this.creeazaStatSalarii}>
+            <Row>
+              {/* LUNA */}
+              <Col md={4}>
+                <FormControl
+                  as="select"
+                  value={this.state.luna.nume}
+                  onChange={(e) =>
+                    this.setState(
+                      {
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                      },
+                      this.fillForm
+                    )
+                  }
+                >
+                  {luni}
+                </FormControl>
+              </Col>
+              {/* AN */}
+              <Col md={4}>
+                <FormControl
+                  as="select"
+                  value={this.state.an}
+                  onChange={(e) =>
+                    this.setState({
+                      an: e.target.value,
+                    })
+                  }
+                >
+                  {ani}
+                </FormControl>
+              </Col>
+              <Col md={4}>
+                <FormControl
+                  typr="text"
+                  placeholder="Intocmid de"
+                  value={this.state.intocmitDe}
+                  onChange={(e) =>
+                    this.setState({
+                      intocmitDe: e.target.value,
+                    })
+                  }
+                />
+              </Col>
+            </Row>
+          </Form>
           <div className="mt-3">
             <Button onClick={this.creeazaStatSalarii}>Stat salarii in Excel</Button>
           </div>

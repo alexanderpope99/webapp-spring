@@ -152,8 +152,7 @@ class Persoana extends React.Component {
   }
 
   async createAngajat(idpersoana) {
-    console.log(authHeader());
-    await axios
+		await axios
       .post(
         `${server.address}/angajat`,
         { idpersoana: idpersoana, idsocietate: this.state.socsel.id },
@@ -164,8 +163,9 @@ class Persoana extends React.Component {
   }
 
   async onSubmit(e) {
-    e.preventDefault();
-    console.log(authHeader());
+	e.preventDefault();
+	
+	
 
     if (!this.hasRequired()) return;
 
@@ -226,8 +226,6 @@ class Persoana extends React.Component {
       cnp: this.state.cnp,
     };
     console.log(persoana_body);
-
-    console.log(authHeader());
 
     const persoana = await axios
       .post(`${server.address}/persoana`, persoana_body, { headers: authHeader() })

@@ -909,13 +909,13 @@ public class StatSalariiService {
 		row1 = stat.createRow(rowNr + 15);
 		
 		writerCell = row1.createCell(1);
-		writerCell.setCellStyle(font10);
 		writerCell.setCellValue(intocmitDe);
+		writerCell.setCellStyle(font10);
 	
 		row1 = stat.createRow(rowNr + 16);
-		writerCell.setCellStyle(functieStyle);
 		writerCell = row1.createCell(0);
 		writerCell.setCellValue("Legenda: R - retinut; C - calculat; *CAS 25% / 21.25% pt. societatile de constructii cf. OUG 114/2018; **CASS - 10% / 0% pt. societatile de constructii cf. OUG 114/2018; ***Contributii pt. societatile de constructii cf. ");
+		writerCell.setCellStyle(functieStyle);
 
 		//* OUTPUT THE FILE
 		String newFileLocation = downloadsLocation + "downloads\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
