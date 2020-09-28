@@ -139,7 +139,7 @@ class SocietatiTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă Societăți</Card.Title>
+                <Card.Title as="h5">Societăți</Card.Title>
                 <Button
                   variant="outline-info"
                   size="sm"

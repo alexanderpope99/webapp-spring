@@ -55,70 +55,72 @@ class PersoaneTabel extends React.Component {
           if (!pers[key]) pers[key] = '-';
         }
         return (
-          // TODO
           <tr key={pers.id}>
             <th>{pers.nume}</th>
             <th>{pers.prenume}</th>
             <th>{pers.email}</th>
             <th>{pers.telefon}</th>
-            <th className="d-inline-flex flex-row justify-content-around">
-              <Button
-                href={`/edit/edit-persoana?id=${pers.id}`}
-                variant="outline-secondary"
-                className="ml-2 p-1 rounded-circle border-0"
-              >
-                <Edit fontSize="small" />
-              </Button>
+            {/* <th className="d-inline-flex"> */}
+            <th>
+              <div className="d-inline-flex">
+                <Button
+                  href={`/edit/edit-persoana?id=${pers.id}`}
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                >
+                  <Edit fontSize="small" />
+                </Button>
 
-              <PopupState variant="popover" popupId="demo-popup-popover">
-                {(popupState) => (
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      className="m-0 p-1 rounded-circle border-0"
-                      {...bindTrigger(popupState)}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </Button>
-                    <Popover
-                      {...bindPopover(popupState)}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                      }}
-                    >
-                      <Box p={2}>
-                        <Typography>
-                          Sigur ștergeți persoana {pers.nume} {pers.prenume}?
-                        </Typography>
-                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                        <br />
-                        <Button
-                          variant="outline-danger"
-                          onClick={() => {
-                            popupState.close();
-                            this.deletePersoana(pers.id, pers.nume, pers.prenume);
-                          }}
-                          className="mt-2 "
-                        >
-                          Da
-                        </Button>
-                        <Button
-                          variant="outline-persondary"
-                          onClick={popupState.close}
-                          className="mt-2"
-                        >
-                          Nu
-                        </Button>
-                      </Box>
-                    </Popover>
-                  </div>
-                )}
-              </PopupState>
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>
+                            Sigur ștergeți persoana {pers.nume} {pers.prenume}?
+                          </Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deletePersoana(pers.id, pers.nume, pers.prenume);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+								</div>
             </th>
           </tr>
         );
@@ -146,7 +148,7 @@ class PersoaneTabel extends React.Component {
             <Card>
               <Card.Header>
                 <Card.Title as="h5">
-                  Listă Persoane Înregistrate
+                  Persoane Înregistrate
                   {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
                 </Card.Title>
                 <OverlayTrigger
