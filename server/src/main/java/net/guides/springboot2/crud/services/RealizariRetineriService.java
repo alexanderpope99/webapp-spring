@@ -171,7 +171,7 @@ public class RealizariRetineriService {
         rr.setValcm(valCM);
         rr.setZileplatite(zilePlatite);
         rr.setNroresuplimentare(nrOreSuplimentare);
-        rr.setSalariurealizat(salariuRealizat);
+        rr.setSalariurealizat((int)salariuRealizat);
 
         return rr;
     } // calcRealizariRetineri

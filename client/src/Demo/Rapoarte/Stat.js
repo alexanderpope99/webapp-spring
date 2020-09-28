@@ -133,8 +133,7 @@ class Stat extends React.Component {
             </Col>
           </Row>
           <div className="mt-3">
-            <Button onClick={() => console.log('aaa')}>clicke me</Button>
-            <Button onClick={this.creeazaStatSalarii}>dont clicke me</Button>
+            <Button onClick={this.creeazaStatSalarii}>Stat salarii in Excel</Button>
           </div>
         </Card.Body>
       </Card>
