@@ -18,7 +18,6 @@ class Societati extends React.Component {
   constructor() {
     super();
     this.unselectAll = this.unselectAll.bind(this);
-    this.downloadButton = this.downloadButton.bind(this);
 
     this.state = {};
   }
@@ -66,27 +65,6 @@ class Societati extends React.Component {
     }
   }
 
-  async downloadButton() {
-    console.log('trying to download...');
-    await fetch(
-      `${server.address}/download/Stat Salarii - Ingenio Software S.A. - Septembrie 2020.xlsx`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/octet-stream' },
-      }
-    )
-      .then((res) => res.blob())
-      .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'Stat Salarii - Ingenio Software S.A. - Septembrie 2020.xlsx';
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click();
-        a.remove(); //afterwards we remove the element again
-      });
-  }
-
   render() {
     const societatiComponent = Object.keys(this.state).map((nume_soc) => (
       <Col md={6} xl={4} key={nume_soc}>
@@ -120,7 +98,7 @@ class Societati extends React.Component {
 
     return (
       <Aux>
-        <Button onClick={this.downloadButton}>download</Button>
+				<Button href="/forms/add-societate">Adaugă societate</Button>
         <Row>{societatiComponent}</Row>
       </Aux>
     );

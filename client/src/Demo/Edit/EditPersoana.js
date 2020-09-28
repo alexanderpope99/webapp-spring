@@ -34,8 +34,8 @@ class EditPersoana extends React.Component {
     this.fillForm = this.fillForm.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
     this.handleClose = this.handleClose.bind(this);
-		
-		let angajatSel = getAngajatSel();
+
+    let angajatSel = getAngajatSel();
     var idOfSelected = null;
     if (typeof props.location !== 'undefined') {
       let search = props.location.search; // returns the URL query String
@@ -44,9 +44,10 @@ class EditPersoana extends React.Component {
     }
     // exista un angajat selectat in sessionStorage
     else if (angajatSel) {
-			idOfSelected = angajatSel.idpersoana;
+      idOfSelected = angajatSel.idpersoana;
     }
     // else: idOfSelected remains null
+    console.log(idOfSelected);
 
     this.state = {
       socsel: getSocSel(),
@@ -313,12 +314,12 @@ class EditPersoana extends React.Component {
       idactidentitate = this.state.idactidentitate;
 
     // persoana nu are adresa asociata
-    if (this.state.idadresa === null) {
+    if (!this.state.idadresa) {
       // daca se completeaza -> adauga in DB | daca nu -> nimic
       if (
-        this.state.adresacompleta !== null ||
-        this.state.localitate !== null ||
-        this.state.judet !== null
+        this.state.adresacompleta ||
+        this.state.localitate ||
+        this.state.judet
       ) {
         let adresa_body = {
           adresa: this.state.adresacompleta,
@@ -349,9 +350,9 @@ class EditPersoana extends React.Component {
     }
 
     // persoana nu are actidentitate
-    if (this.state.idactidentitate === null) {
+    if (!this.state.idactidentitate) {
       // daca se completeaza actidentitate -> adauga in baza de date | daca nu -> nimic
-      if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
+      if (this.state.serie || this.state.numar || this.state.cnp) {
         let buletin_body = {
           cnp: this.state.cnp,
           tip: this.state.tipact,
@@ -384,8 +385,9 @@ class EditPersoana extends React.Component {
         dataeliberarii: this.state.dataeliberarii,
         loculnasterii: this.state.loculnasterii,
       };
+      console.log(buletin_body);
 
-      await axios.put(`${server.address}/actidentitate/${this.state.actidentitate}`, buletin_body, {
+      await axios.put(`${server.address}/actidentitate/${this.state.idactidentitate}`, buletin_body, {
         headers: authHeader(),
       });
     }
@@ -403,7 +405,7 @@ class EditPersoana extends React.Component {
     };
     // update persoana
 
-    await axios.put(`${server.address}/person/${this.state.id}`, persoana_body, {
+    await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, {
       headers: authHeader(),
     });
 

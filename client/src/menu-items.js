@@ -91,15 +91,15 @@ var items = [
     ],
   },
   {
-    id: 'generare-fisiere',
-    title: 'Generare Fisiere',
+    id: 'rapoarte',
+    title: 'Rapoarte',
     type: 'group',
     icon: 'icon-group',
     show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN'),
     children: [
       {
         id: 'stat',
-        title: 'State salarii',
+        title: 'Ștate salarii',
         type: 'item',
         url: '/state-salarii',
         icon: 'feather icon-file-text',
