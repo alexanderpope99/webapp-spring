@@ -15,6 +15,7 @@ import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { getSocSel } from '../Resources/socsel';
+import { getAngajatSel, setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
@@ -33,17 +34,23 @@ class EditPersoana extends React.Component {
     this.fillForm = this.fillForm.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
-    // console.log(props.location);
-    var IdFromURL = null;
+		
+		let angajatSel = getAngajatSel();
+    var idOfSelected = null;
     if (typeof props.location !== 'undefined') {
       let search = props.location.search; // returns the URL query String
       let params = new URLSearchParams(search);
-      IdFromURL = params.get('id');
+      idOfSelected = params.get('id');
     }
+    // exista un angajat selectat in sessionStorage
+    else if (angajatSel) {
+			idOfSelected = angajatSel.idpersoana;
+    }
+    // else: idOfSelected remains null
 
     this.state = {
       socsel: getSocSel(),
+      angajatsel: angajatSel,
 
       show: false,
       modalMessage: '',
@@ -53,7 +60,7 @@ class EditPersoana extends React.Component {
       numeintreg: [], // array of objects
       numeComponent: null,
 
-      id: IdFromURL,
+      id: idOfSelected,
       selectednume: '-',
 
       gen: 'Dl.',
@@ -82,11 +89,13 @@ class EditPersoana extends React.Component {
   }
 
   clearFields(withSelect) {
-    if (withSelect)
+    if (withSelect) {
       this.setState({
         selectednume: '-',
         id: -1,
       });
+      setAngajatSel(null);
+    }
 
     this.setState({
       tipJudet: 'Județ',
@@ -118,9 +127,8 @@ class EditPersoana extends React.Component {
 
   componentDidMount() {
     this.getNumeintreg();
+    // daca este selectat un angajat
     if (this.state.id) this.fillForm();
-    // window.scrollTo(0, 0);
-    // console.log(this.state);
   }
 
   async getNumeintreg() {
@@ -230,8 +238,7 @@ class EditPersoana extends React.Component {
       this.setState({
         selectednume: '-',
       });
-      this.clearFields();
-      console.log('nothing selected');
+      this.clearFields(true);
       return;
     }
 
@@ -239,6 +246,8 @@ class EditPersoana extends React.Component {
       .get(`${server.address}/persoana/${id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.log('err'));
+
+    setAngajatSel({ idpersoana: persoana.id, numeintreg: persoana.nume + ' ' + persoana.prenume });
 
     if (persoana.idadresa) {
       await axios

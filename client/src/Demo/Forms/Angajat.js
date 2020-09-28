@@ -11,6 +11,7 @@ import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import { getAngajatSel } from '../Resources/angajatsel';
 
 /*
   ? how it works now:
@@ -22,6 +23,9 @@ import authHeader from '../../services/auth-header';
   *
   *   |>  no contract: 1. method = 'POST'
   *                    2. clearFields()
+	? adding:
+	*	  |> in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
+	*		|> Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
 */
 
 class Angajat extends React.Component {
@@ -40,7 +44,8 @@ class Angajat extends React.Component {
     this.cm = React.createRef();
 
     this.state = {
-      socsel: getSocSel(),
+			socsel: getSocSel(),
+			angajatsel: getAngajatSel(),			
 
       angajat: null,
       idpersoana: null,
@@ -69,34 +74,34 @@ class Angajat extends React.Component {
 
   async getSelectedAngajatData() {
     // get id of selected angajat
-    const idpersoana = this.persoana.current.getIdOfSelected();
+		const angajatsel = getAngajatSel();
+		const idpersoana = angajatsel ? angajatsel.idpersoana : -1;
     if (idpersoana === null || idpersoana === -1) {
-      this.contract.current.clearFields();
+			this.contract.current.clearFields();
+			this.setState({angajatsel: null});
       return;
     } else this.contract.current.setState({ buttonDisabled: false });
-
-    // get angajat with selected id
 
     const angajat = await axios
       .get(`${server.address}/angajat/${idpersoana}`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+		.catch((err) => console.error(err));
 
     this.setState({
+			angajatsel: angajatsel,
       angajat: angajat,
       idcontract: angajat.idcontract,
       idpersoana: angajat.idpersoana,
       idsocietate: angajat.idsocietate,
-    });
+		});
 
     return angajat;
   }
 
   async onFocusContract() {
-    // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
-    if (typeof angajat === 'undefined') return;
-    // declared just for typing convenience
+    if (!angajat) return;
+    // declared for typing convenience
     let idcontract = angajat.idcontract;
     let idpersoana = angajat.idpersoana;
 
@@ -108,7 +113,7 @@ class Angajat extends React.Component {
         .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
-    }
+		}
     //* FILL FORM
     this.contract.current.fillForm(contract, idpersoana);
   }
@@ -126,7 +131,7 @@ class Angajat extends React.Component {
         () => this.setState({ key: 'contract' })
       );
       return;
-    }
+		}
 
     this.co.current.setAngajat(angajat);
   }
@@ -165,7 +170,12 @@ class Angajat extends React.Component {
         </Modal>
         <Row>
           <Col>
-            <h5>Date angajat {this.state.socsel.nume ? '- ' + this.state.socsel.nume : ''}</h5>
+            <h5>
+              {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
+              {this.state.angajatsel
+                ? ' - ' + this.state.angajatsel.numeintreg
+                : ''}
+            </h5>
 
             <hr />
             <Tabs

@@ -120,7 +120,7 @@ class CMTabel extends React.Component {
     //? fetch must be with idcontract
 
     const cm = await axios
-      .get(`${server.address}/cm/idc=${this.state.angajat.idcontarct}`, { headers: authHeader() })
+      .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       .then((cm) => (cm.status !== 200 ? null : cm.data))
       .catch((err) => console.error('err', err));
 

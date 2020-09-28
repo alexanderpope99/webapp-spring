@@ -1,10 +1,9 @@
 alte retineri
 alte drepturi
-retineri (doar avans merge)
+retineri (doar avans merge)	
 
-stat salarii:
-	1) intocmit de ... in josul paginii
-	2) stat individual	
+salveaza angajatul selectat in session storage:
+{ nume, idpersoana, idcontract }
 
 persoane intretinere
 
