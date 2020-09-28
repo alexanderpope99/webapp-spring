@@ -12,6 +12,7 @@
     "font-awesome": "^4.7.0",
     "google-maps-react": "^2.0.2",
     "jquery": "^3.5.1",
+    "js-file-download": "^0.4.12",
     "material-table": "^1.68.1",
     "material-ui-popup-state": "^1.6.1",
     "multiselect-react-dropdown": "^1.6.1",
