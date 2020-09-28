@@ -91,7 +91,7 @@ public class StatSalariiService {
 		// System.out.println(path);
 		// String downloadsLocation = 
 		// 	path.substring(0, path.length() - 1) + "src\\main\\java\\net\\guides\\springboot2\\crud\\downloads";
-		String downloadsLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\downloads\\";
+		String downloadsLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\";
 		String statTemplateLocation = downloadsLocation + "\\templates";
 		
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatSalarii.xlsx"));
@@ -918,7 +918,7 @@ public class StatSalariiService {
 		writerCell.setCellValue("Legenda: R - retinut; C - calculat; *CAS 25% / 21.25% pt. societatile de constructii cf. OUG 114/2018; **CASS - 10% / 0% pt. societatile de constructii cf. OUG 114/2018; ***Contributii pt. societatile de constructii cf. ");
 
 		//* OUTPUT THE FILE
-		String newFileLocation = downloadsLocation + "\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
+		String newFileLocation = downloadsLocation + "downloads\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
 		
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
