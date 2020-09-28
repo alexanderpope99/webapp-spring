@@ -37,6 +37,9 @@ public class RealizariRetineri {
 	@Column(name = "zileplatite")
 	private Integer zileplatite = 0;
 
+	@Column(name = "impozitscutit")
+	private Integer impozitscutit;
+
 	@Column(name = "valcm")
 	private Integer valcm;
 
@@ -53,6 +56,10 @@ public class RealizariRetineri {
 	private Integer totaldrepturi = 0;
 	@Column(name = "salariurealizat")
 	private Integer salariurealizat = 0;
+	@Column(name = "venitnet")
+	private Integer venitnet = 0;
+	@Column(name = "bazaimpozit")
+	private Integer bazaimpozit;
 
     @Column(name = "salariupezi")
     private Float salariupezi = 0f;
@@ -71,7 +78,7 @@ public class RealizariRetineri {
     private Float valoaretichete = 0f;
 
     @Column(name = "restplata")
-    private Integer restplata = 0;
+	private Integer restplata = 0;
 
     @Column(name = "nrpersoaneintretinere")
     private Integer nrpersoaneintretinere = 0;
@@ -140,7 +147,10 @@ public class RealizariRetineri {
     //! GETTERS
     public Integer getNrtichete() {
       return nrtichete;
-    }
+	}
+	public Integer getImpozitscutit() {
+		return impozitscutit;
+	}
     public Integer getZilecm() {
       return zilecm;
     }
@@ -176,7 +186,10 @@ public class RealizariRetineri {
     }
     public Float getImpozit() {
       return impozit;
-    }
+	}
+	public Integer getBazaimpozit() {
+		return bazaimpozit == null ? 0 : bazaimpozit;
+	}
     public Float getValoaretichete() {
       return valoaretichete;
     }
@@ -217,7 +230,7 @@ public class RealizariRetineri {
 		return primabruta;
 	}
 	public Float getTotaloresuplimentare() {
-		return totaloresuplimentare;
+		return totaloresuplimentare == null ? 0 : totaloresuplimentare;
 	}
 	public Integer getZilecmlucratoare() {
 		return zilecmlucratoare;
@@ -234,10 +247,16 @@ public class RealizariRetineri {
 	public Integer getValcm() {
 		return valcm;
 	}
+	public Integer getVenitnet() {
+		return venitnet;
+	}
 
 	//! SETTERS
 	public void setNrtichete(Integer nrtichete) {
 		this.nrtichete = nrtichete;
+	}
+	public void setImpozitscutit(Integer impozitscutit) {
+		this.impozitscutit = impozitscutit;
 	}
 	public void setZilecm(Integer zilecm) {
 		this.zilecm = zilecm;
@@ -274,6 +293,9 @@ public class RealizariRetineri {
 	}
 	public void setImpozit(Float impozit) {
 		this.impozit = impozit;
+	}
+	public void setBazaimpozit(Integer bazaimpozit) {
+		this.bazaimpozit = bazaimpozit;
 	}
 	public void setValoaretichete(Float valoaretichete) {
 		this.valoaretichete = valoaretichete;
@@ -331,6 +353,9 @@ public class RealizariRetineri {
 	}
 	public void setValcm(Integer valcm) {
 		this.valcm = valcm;
+	}
+	public void setVenitnet(Integer venitnet) {
+		this.venitnet = venitnet;
 	}
 }
 

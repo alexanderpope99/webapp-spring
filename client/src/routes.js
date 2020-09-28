@@ -26,7 +26,7 @@ const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
 
 // DOWNLOADS
-const Stat = React.lazy(() => import('./Demo/Generators/Stat'));
+const Stat = React.lazy(() => import('./Demo/Rapoarte/Stat'));
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));

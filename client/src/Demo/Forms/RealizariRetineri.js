@@ -32,6 +32,7 @@ class RealizariRetineri extends React.Component {
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.recalculeaza = this.recalculeaza.bind(this);
+    this.reseteazaCalculul = this.reseteazaCalculul.bind(this);
     this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
@@ -306,7 +307,7 @@ class RealizariRetineri extends React.Component {
     );
   }
 
-  // recalculeaza total
+  // recalculeaza doar total
   async recalculeaza() {
     console.log('recalculez...');
 
@@ -363,6 +364,43 @@ class RealizariRetineri extends React.Component {
       },
       this.fillForm
     );
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }
+
+  async reseteazaCalculul() {
+    console.log('recalculez TOT...');
+
+    let an = this.state.an;
+    let luna = this.state.luna.nr;
+
+    const idpersoana = this.state.selected_angajat.id;
+    if (!idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    const data = await fetch(
+      `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .catch((err) => console.error(err));
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+
+    this.fillForm();
   }
 
   async calcNrTichete() {
@@ -1002,9 +1040,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.impozit ? this.numberWithCommas(this.state.impozit) : ''
-                          }
+                          value={this.state.impozit ? this.numberWithCommas(this.state.impozit) : 0}
                         />
                       </Form.Group>
                     </Col>
@@ -1046,6 +1082,15 @@ class RealizariRetineri extends React.Component {
                     Recalculează
                   </Button>
                 </Col>
+
+                <Button
+                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                  disabled={!this.state.selected_angajat}
+                  onClick={this.reseteazaCalculul}
+                  className="mb-3 mt-3"
+                >
+                  Resetează Calculul
+                </Button>
               </Row>
             </Form>
           </Card.Body>

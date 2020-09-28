@@ -1,0 +1,31 @@
+alte retineri
+alte drepturi
+retineri (doar avans merge)
+
+stat salarii:
+	1) intocmit de ... in josul paginii
+	2) stat individual	
+
+persoane intretinere
+
+editor de parametrii salarii
+
+sarbatori
+
+la concedii -> optiunea de a sorta dupa descrescator, sau doar intr-o anumita luna
+
+_________________________________________
+
+admin = boss suprem
+
+director:
+	admin - configuratii
+
+contabil:
+	director - cereri de la angajati
+	
+angajat:
+	doar:
+	- date personale,
+	- face cereri
+
