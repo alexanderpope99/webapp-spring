@@ -4,6 +4,7 @@ import Aux from '../../hoc/_Aux';
 
 import { getSocSel, setSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
+import { setAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -53,7 +54,8 @@ class Societati extends React.Component {
   }
 
   select(nume_soc) {
-    this.unselectAll();
+		this.unselectAll();
+		setAngajatSel(null);
     if (nume_soc) {
       let id = this.state[nume_soc].id;
       this.setState({
@@ -78,7 +80,7 @@ class Societati extends React.Component {
               ? () => {
                   this.select(nume_soc);
                 }
-              : null
+							: null
           }
         >
           <Card.Body>

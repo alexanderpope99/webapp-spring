@@ -105,7 +105,7 @@ class Persoana extends React.Component {
   }
 
   getDatanasteriiByCNP(cnp) {
-    if (cnp === null || typeof cnp === 'undefined' || cnp === 'null') return '';
+    if (!cnp) return '';
 
     if (cnp.length > 6) {
       const an = cnp.substring(1, 3);
@@ -113,7 +113,7 @@ class Persoana extends React.Component {
       const zi = cnp.substring(5, 7);
       if (cnp[0] <= 2) return `19${an}-${luna}-${zi}`;
       else return `20${an}-${luna}-${zi}`;
-    } else if (cnp.length === 0) return '';
+    } else return '';
   }
 
   onChangeCnp(e) {
@@ -168,15 +168,11 @@ class Persoana extends React.Component {
 
     if (!this.hasRequired()) return;
 
-    var actidentitate = null,
-      adresa = null;
+    var idactidentitate = null,
+      idadresa = null;
 
     // POST only if any adrese fields is filled
-    if (
-      this.state.adresacompleta !== null ||
-      this.state.localitate !== null ||
-      this.state.judet !== null
-    ) {
+    if (this.state.adresacompleta || this.state.localitate || this.state.judet) {
       const adresa_body = {
         adresa: this.state.adresacompleta,
         localitate: this.state.localitate,
@@ -184,14 +180,16 @@ class Persoana extends React.Component {
         tara: null,
       };
 
-      adresa = await axios
+      idadresa = await axios
         .post(`${server.address}/adresa`, adresa_body, { headers: authHeader() })
-        .then((adresa) => adresa.data);
-      console.log('idadresa:', adresa.id);
+				.then((adresa) => adresa.data.id)
+				.catch(err => console.error(err));
+				return;
+      // console.log('idadresa:', adresa.id);
     }
 
     // POST only if any actitentitate field is filled
-    if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
+    if (this.state.serie || this.state.numar || this.state.cnp || this.state.eliberatde || this.state.dataeliberarii || this.state.datanasterii || this.state.loculnasterii) {
       const buletin_body = {
         cnp: this.state.cnp,
         tip: this.state.tipact,
@@ -201,15 +199,15 @@ class Persoana extends React.Component {
         eliberatde: this.state.eliberatde,
         dataeliberarii: this.state.dataeliberarii,
         loculnasterii: this.state.loculnasterii,
-      };
+			};
 
-      await axios
+      idactidentitate = await axios
         .post(`${server.address}/actidentitate`, buletin_body, {
           headers: authHeader(),
         })
         .then((res) => {
-          console.log(res.data.id);
-          return res.data;
+          console.log("idactidentitate:", res.data.id);
+          return res.data.id;
         });
     }
 
@@ -217,8 +215,8 @@ class Persoana extends React.Component {
       gen: this.state.gen,
       nume: this.state.nume,
       prenume: this.state.prenume,
-      idactidentitate: actidentitate === null ? null : actidentitate.id,
-      idadresa: adresa === null ? null : adresa.id,
+      idactidentitate: idactidentitate,
+      idadresa: idadresa,
       starecivila: this.state.starecivila,
       email: this.state.email,
       telefon: this.state.telefon,
@@ -276,7 +274,7 @@ class Persoana extends React.Component {
 
         <Form onSubmit={this.onSubmit}>
           <Row>
-						{/* dl/dna, nume, prenume */}
+            {/* dl/dna, nume, prenume */}
             <Col md={12} className="border rounded pt-3">
               <Row>
                 <Col md={3}>
@@ -382,7 +380,7 @@ class Persoana extends React.Component {
                       type="text"
                       placeholder="CNP"
                       value={this.state.cnp}
-                      onChange={this.onChangeCnp}
+                      onChange={(e) => this.onChangeCnp(e)}
                     />
                   </Form.Group>
                 </Col>

@@ -47,7 +47,6 @@ class EditPersoana extends React.Component {
       idOfSelected = angajatSel.idpersoana;
     }
     // else: idOfSelected remains null
-    console.log(idOfSelected);
 
     this.state = {
       socsel: getSocSel(),
@@ -187,23 +186,15 @@ class EditPersoana extends React.Component {
 
   getDatanasteriiByCNP(cnp) {
     // console.log('getDatanasteriiByCNP called |', cnp);
-    if (cnp === null || typeof cnp === 'undefined' || cnp === 'null') return '';
+    if (!cnp) return '';
 
     if (cnp.length > 6) {
       const an = cnp.substring(1, 3);
       const luna = cnp.substring(3, 5);
       const zi = cnp.substring(5, 7);
-      if (cnp[0] <= 2)
-        // this.setState({
-        return `19${an}-${luna}-${zi}`;
-      // });
-      // this.setState({
+      if (cnp[0] <= 2) return `19${an}-${luna}-${zi}`;
       else return `20${an}-${luna}-${zi}`;
-      // });
-    } else if (cnp.length === 0)
-      // this.setState({
-      return '';
-    // })
+    } else return '';
   }
 
   onChangeCnp(e) {
@@ -316,11 +307,7 @@ class EditPersoana extends React.Component {
     // persoana nu are adresa asociata
     if (!this.state.idadresa) {
       // daca se completeaza -> adauga in DB | daca nu -> nimic
-      if (
-        this.state.adresacompleta ||
-        this.state.localitate ||
-        this.state.judet
-      ) {
+      if (this.state.adresacompleta || this.state.localitate || this.state.judet) {
         let adresa_body = {
           adresa: this.state.adresacompleta,
           localitate: this.state.localitate,
@@ -387,9 +374,13 @@ class EditPersoana extends React.Component {
       };
       console.log(buletin_body);
 
-      await axios.put(`${server.address}/actidentitate/${this.state.idactidentitate}`, buletin_body, {
-        headers: authHeader(),
-      });
+      await axios.put(
+        `${server.address}/actidentitate/${this.state.idactidentitate}`,
+        buletin_body,
+        {
+          headers: authHeader(),
+        }
+      );
     }
 
     let persoana_body = {
