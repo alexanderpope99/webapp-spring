@@ -176,7 +176,7 @@ class CMTabel extends React.Component {
     cm_body.idcontract = this.state.angajat.idcontract;
 
     let ok = await axios
-      .post(`${server.address}/cm`, { headers: authHeader(), body: JSON.stringify(cm_body) })
+      .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
       .then((res) => res.statusText)
       .catch((err) => console.error('err:', err));
 
@@ -208,9 +208,8 @@ class CMTabel extends React.Component {
     cm_body.idcontract = this.state.angajat.idcontract;
 
     let ok = await axios
-      .put(`${server.address}/cm/${this.state.id}`, {
+      .put(`${server.address}/cm/${this.state.id}`, cm_body, {
         headers: authHeader(),
-        body: JSON.stringify(cm_body),
       })
       .then((res) => res.statusText)
       .catch((err) => console.error('err:', err));

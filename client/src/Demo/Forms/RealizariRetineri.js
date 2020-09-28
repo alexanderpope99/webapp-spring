@@ -324,17 +324,20 @@ class RealizariRetineri extends React.Component {
 
     // save retineri to DB
     await axios
-      .put(`${server.address}/retineri/${this.state.idretineri}`, {
-        headers: authHeader(),
-        body: JSON.stringify({
+      .put(
+        `${server.address}/retineri/${this.state.idretineri}`,
+        {
           idstat: this.state.idstat,
           avansnet: this.state.avansnet,
           pensiealimentara: this.state.pensiealimentara,
           pensiefacultativa: this.state.pensiefacultativa,
           popriri: this.state.popriri,
           imprumuturi: this.state.imprumuturi,
-        }),
-      })
+        },
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
@@ -391,7 +394,7 @@ class RealizariRetineri extends React.Component {
         headers: { 'Content-Type': 'application/json' },
       }
     )
-      .then((res) => (res.ok ? res.json() : null))
+      .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
     window.scrollTo({
@@ -447,9 +450,8 @@ class RealizariRetineri extends React.Component {
     };
 
     await axios
-      .post(`${server.address}/oresuplimentare`, {
+      .post(`${server.address}/oresuplimentare`, ore_body, {
         headers: authHeader(),
-        body: JSON.stringify(ore_body),
       })
       .then(this.renderTabelore)
       .catch((err) => console.error(err));

@@ -110,9 +110,8 @@ class AddSocietate extends React.Component {
       };
       // console.log(JSON.stringify(adresa_body));
       let adresa = await axios
-        .post(`${server.address}/adresa`, {
+        .post(`${server.address}/adresa`, adresa_body, {
           headers: authHeader(),
-          body: JSON.stringify(adresa_body),
         })
         .then((res) => res.data);
       idadresa = adresa.id;
@@ -132,9 +131,8 @@ class AddSocietate extends React.Component {
     console.log(societate_body);
     // ADD SOCIETATE TO DATABASE
     await axios
-      .post(`${server.address}/societate`, {
+      .post(`${server.address}/societate`, societate_body, {
         headers: authHeader(),
-        body: JSON.stringify(societate_body),
       })
       .then((societate_response) => societate_response.data)
       .then(() => {

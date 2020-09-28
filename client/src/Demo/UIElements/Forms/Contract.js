@@ -272,9 +272,8 @@ class Contract extends React.Component {
     let contract;
     if (method === 'PUT')
       contract = await axios
-        .put(`${server.address}/contract/${idcontract}`, {
+        .put(`${server.address}/contract/${idcontract}`, contract_body, {
           headers: authHeader(),
-          body: JSON.stringify(contract_body),
         })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) => {
@@ -282,9 +281,8 @@ class Contract extends React.Component {
         });
     else if (method === 'POST')
       contract = await axios
-        .post(`${server.address}/contract/${idcontract}`, {
+        .post(`${server.address}/contract/${idcontract}`, contract_body, {
           headers: authHeader(),
-          body: JSON.stringify(contract_body),
         })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) => {
@@ -300,13 +298,12 @@ class Contract extends React.Component {
       if (method === 'POST') {
         // update angajat with idangajat from functon props
         await axios
-          .put(`${server.address}/angajat/${idangajat}`, {
+          .put(`${server.address}/angajat/${idangajat}`,{
+			idcontract: contract.id,
+			idpersoana: idangajat,
+			idsocietate: this.state.socsel.id,
+		   ,{
             headers: authHeader(),
-            body: JSON.stringify({
-              idcontract: contract.id,
-              idpersoana: idangajat,
-              idsocietate: this.state.socsel.id,
-            }),
           })
           .catch((err) => console.error(err));
       }

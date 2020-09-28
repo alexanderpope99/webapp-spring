@@ -319,9 +319,8 @@ class EditPersoana extends React.Component {
         };
 
         idadresa = await axios
-          .post(`${server.address}/adresa`, {
+          .post(`${server.address}/adresa`, adresa_body, {
             headers: authHeader(),
-            body: JSON.stringify(adresa_body),
           })
           .then((idadresa) => idadresa.data);
         idadresa = idadresa.id;
@@ -335,9 +334,8 @@ class EditPersoana extends React.Component {
         judet: this.state.judet,
         tara: null,
       };
-      await axios.put(`${server.address}/adresa/${this.state.idadresa}`, {
+      await axios.put(`${server.address}/adresa/${this.state.idadresa}`, adresa_body, {
         headers: authHeader(),
-        body: JSON.stringify(adresa_body),
       });
     }
 
@@ -357,9 +355,8 @@ class EditPersoana extends React.Component {
         };
 
         idactidentitate = await axios
-          .post(`${server.address}/actidentitate`, {
+          .post(`${server.address}/actidentitate`, buletin_body, {
             headers: authHeader(),
-            body: JSON.stringify(buletin_body),
           })
           .then((idactidentitate) => idactidentitate.data)
           .catch((err) => console.error(err));
@@ -379,9 +376,8 @@ class EditPersoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      await axios.put(`${server.address}/actidentitate/${this.state.actidentitate}`, {
+      await axios.put(`${server.address}/actidentitate/${this.state.actidentitate}`, buletin_body, {
         headers: authHeader(),
-        body: JSON.stringify(buletin_body),
       });
     }
 
@@ -398,9 +394,8 @@ class EditPersoana extends React.Component {
     };
     // update persoana
 
-    await axios.put(`${server.address}/person/${this.state.id}`, {
+    await axios.put(`${server.address}/person/${this.state.id}`, persoana_body, {
       headers: authHeader(),
-      body: JSON.stringify(persoana_body),
     });
 
     this.getNumeintreg();

@@ -146,7 +146,7 @@ class COTabel extends React.Component {
     };
 
     let ok = await axios
-      .post(`${server.address}/co`, { headers: authHeader(), body: JSON.stringify(co_body) })
+      .post(`${server.address}/co`, co_body, { headers: authHeader() })
       .then((res) => res.statusText)
       .catch((err) => console.error('err:', err));
 
