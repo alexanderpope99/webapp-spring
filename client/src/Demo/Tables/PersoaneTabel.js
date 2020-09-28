@@ -52,7 +52,7 @@ class PersoaneTabel extends React.Component {
     this.setState({
       persoaneComponent: this.state.persoane.map((pers, index) => {
         for (let key in pers) {
-          if (pers[key] === 'null' || pers[key] === null) pers[key] = '-';
+          if (!pers[key]) pers[key] = '-';
         }
         return (
           // TODO
