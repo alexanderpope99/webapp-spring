@@ -20,6 +20,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
+import { getAngajatSel, setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import { Typography } from '@material-ui/core';
 import axios from 'axios';
@@ -43,14 +44,14 @@ class RealizariRetineri extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
-
+      // angajatsel: getAngajatSel(),
       show: false,
       modalMessage: '',
 
       an: '',
       luna: '',
 
-      selected_angajat: '',
+      selected_angajat: getAngajatSel(),
       lista_angajati: [], // object: {nume, id}
       idcontract: '',
       idstat: '',
@@ -160,10 +161,11 @@ class RealizariRetineri extends React.Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    this.setCurrentYearMonth(); // modifies state.an, state.luna
+		await this.setCurrentYearMonth(); // modifies state.an, state.luna
+	  this.fillForm();
     this.setPersoane(); // date personale, also fills lista_angajati
   }
 
@@ -171,7 +173,7 @@ class RealizariRetineri extends React.Component {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  setCurrentYearMonth() {
+  async setCurrentYearMonth() {
     let today = new Date();
     let luna = months[today.getMonth()];
     let an = today.getFullYear();
@@ -209,7 +211,7 @@ class RealizariRetineri extends React.Component {
     let luna = this.state.luna.nr;
 
     // get idpersoana from select component
-    const idpersoana = this.state.selected_angajat.id;
+    const idpersoana = this.state.selected_angajat ? this.state.selected_angajat.idpersoana : null;
     if (!idpersoana) {
       this.clearForm();
       return;
@@ -225,9 +227,13 @@ class RealizariRetineri extends React.Component {
 
     // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calc => saves to DB
     const data = await axios
-      .post(`${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`, {
-        headers: authHeader(),
-      })
+      .post(
+        `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
+        {},
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
@@ -295,13 +301,14 @@ class RealizariRetineri extends React.Component {
   onSelect(e) {
     const selectedIndex = e.target.options.selectedIndex;
     const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
+    setAngajatSel({
+      numeintreg: e.target.value,
+      idpersoana: idangajat,
+    });
 
     this.setState(
       {
-        selected_angajat: {
-          nume: e.target.value,
-          id: idangajat,
-        },
+        selected_angajat: getAngajatSel(),
       },
       () => this.fillForm()
     );
@@ -316,7 +323,7 @@ class RealizariRetineri extends React.Component {
     let luna = this.state.luna.nr;
 
     // get idpersoana from select component
-    const idpersoana = this.state.selected_angajat.id;
+    const idpersoana = this.state.selected_angajat ? this.state.selected_angajat.idpersoana : null;
     if (!idpersoana) {
       this.clearForm();
       return;
@@ -348,6 +355,7 @@ class RealizariRetineri extends React.Component {
     const data = await axios
       .put(
         `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
+        {},
         { headers: authHeader() }
       )
       .then((res) => (res.status === 200 ? res.data : null))
@@ -381,7 +389,7 @@ class RealizariRetineri extends React.Component {
     let an = this.state.an;
     let luna = this.state.luna.nr;
 
-    const idpersoana = this.state.selected_angajat.id;
+    const idpersoana = this.state.selected_angajat.idpersoana;
     if (!idpersoana) {
       this.clearForm();
       return;
@@ -413,7 +421,7 @@ class RealizariRetineri extends React.Component {
     let luna = this.state.luna.nr;
     let an = this.state.an;
     let nrTichete = await axios
-      .get(`${server.address}/tichete/idc=${idc}&mo=${luna}&y=${an}`, { headers: authHeader() })
+      .get(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
@@ -676,9 +684,12 @@ class RealizariRetineri extends React.Component {
                   as="select"
                   value={this.state.an}
                   onChange={(e) =>
-                    this.setState({
-                      an: e.target.value,
-                    })
+                    this.setState(
+                      {
+                        an: e.target.value,
+                      },
+                      this.fillForm
+                    )
                   }
                 >
                   {ani}
@@ -694,7 +705,7 @@ class RealizariRetineri extends React.Component {
               <FormControl
                 aria-describedby="basic-addon2"
                 as="select"
-                value={this.state.selected_angajat.nume}
+                value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
                 onChange={(e) => this.onSelect(e)}
               >
                 <option>-</option>

@@ -144,7 +144,7 @@ class Contract extends React.Component {
         () => console.log('idangajat:', idangajat, '\tidcontract:', null)
       );
     } else {
-      for (let key in contract) if (contract[key] === null) contract[key] = '';
+      for (let key in contract) if (!contract[key]) contract[key] = '';
 
       this.setState(
         {
@@ -298,13 +298,17 @@ class Contract extends React.Component {
       if (method === 'POST') {
         // update angajat with idangajat from functon props
         await axios
-          .put(`${server.address}/angajat/${idangajat}`,{
-			idcontract: contract.id,
-			idpersoana: idangajat,
-			idsocietate: this.state.socsel.id,
-		   ,{
-            headers: authHeader(),
-          })
+          .put(
+            `${server.address}/angajat/${idangajat}`,
+            {
+              idcontract: contract.id,
+              idpersoana: idangajat,
+              idsocietate: this.state.socsel.id,
+            },
+            {
+              headers: authHeader(),
+            }
+          )
           .catch((err) => console.error(err));
       }
       console.log('idcontract:', contract.id);
