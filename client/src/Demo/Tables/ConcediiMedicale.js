@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class CMTabel extends React.Component {
   constructor(props) {
@@ -116,15 +118,10 @@ class CMTabel extends React.Component {
       return;
     }
     //? fetch must be with idcontract
-    const cm = await fetch(
-      `${server.address}/cm/idc=${this.state.angajat.idcontract}`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        // body: JSON.stringify(persoane),
-      }
-    )
-      .then((cm) => (cm.status !== 200 ? null : cm.json()))
+
+    const cm = await axios
+      .get(`${server.address}/cm/idc=${this.state.angajat.idcontarct}`, { headers: authHeader() })
+      .then((cm) => (cm.status !== 200 ? null : cm.data))
       .catch((err) => console.error('err', err));
 
     if (cm !== null) {
@@ -159,10 +156,8 @@ class CMTabel extends React.Component {
 
   //* Works
   async deleteCM(id) {
-    await fetch(`${server.address}/cm/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    await axios
+      .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
       .then(this.fillTable)
       .catch((err) => console.error(err));
   }
@@ -177,23 +172,12 @@ class CMTabel extends React.Component {
     }
     if (typeof this.state.angajat === 'undefined') return;
 
-    let {
-      angajat,
-      cm,
-      cmComponent,
-      show,
-      show_confirm,
-      modalMessage,
-      ...cm_body
-    } = this.state;
+    let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
-    let ok = await fetch(`${server.address}/cm`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cm_body),
-    })
-      .then((res) => res.ok)
+    let ok = await axios
+      .post(`${server.address}/cm`, { headers: authHeader(), body: JSON.stringify(cm_body) })
+      .then((res) => res.statusText)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -223,12 +207,12 @@ class CMTabel extends React.Component {
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
-    let ok = await fetch(`${server.address}/cm/${this.state.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cm_body),
-    })
-      .then((res) => res.ok)
+    let ok = await axios
+      .put(`${server.address}/cm/${this.state.id}`, {
+        headers: authHeader(),
+        body: JSON.stringify(cm_body),
+      })
+      .then((res) => res.statusText)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -327,9 +311,7 @@ class CMTabel extends React.Component {
                     >
                       <Box p={2}>
                         <Typography>Sigur ștergeți concediul?</Typography>
-                        <Typography variant="caption">
-                          Datele nu mai pot fi recuperate
-                        </Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
                           variant="outline-danger"
@@ -627,20 +609,14 @@ class CMTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="primary"
-              onClick={this.state.isEdit ? this.updateCM : this.addCM}
-            >
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateCM : this.addCM}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
 
         {/* CMNFIRM Modal */}
-        <Modal
-          show={this.state.show_confirm}
-          onHide={() => this.handleClose(true)}
-        >
+        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
@@ -660,9 +636,7 @@ class CMTabel extends React.Component {
                 <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
                 <Button
                   variant={
-                    typeof this.state.angajat === 'undefined'
-                      ? 'outline-dark'
-                      : 'outline-primary'
+                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   disabled={typeof this.state.angajat === 'undefined'}
                   size="sm"
@@ -675,9 +649,7 @@ class CMTabel extends React.Component {
 
                 <Button
                   variant={
-                    typeof this.state.angajat === 'undefined'
-                      ? 'outline-dark'
-                      : 'outline-primary'
+                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   className="float-right"
                   onClick={() => this.setState({ show: true })}

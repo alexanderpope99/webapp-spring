@@ -16,6 +16,8 @@ import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class EditPersoana extends React.Component {
   constructor(props) {
@@ -116,18 +118,16 @@ class EditPersoana extends React.Component {
 
   componentDidMount() {
     this.getNumeintreg();
-    if(this.state.id)
-      this.fillForm();
+    if (this.state.id) this.fillForm();
     // window.scrollTo(0, 0);
     // console.log(this.state);
   }
 
   async getNumeintreg() {
-    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(persoane),
-    }).then((persoane) => persoane.json());
+    const persoane = await axios
+      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.log('err'));
 
     this.setState({
       numeintreg: persoane.map((pers, index) => ({
@@ -225,7 +225,7 @@ class EditPersoana extends React.Component {
     this.clearFields();
 
     const id = this.state.id;
-    
+
     if (id === -1) {
       this.setState({
         selectednume: '-',
@@ -235,17 +235,15 @@ class EditPersoana extends React.Component {
       return;
     }
 
-    const persoana = await fetch(`${server.address}/persoana/${id}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    }).then((persoana) => persoana.json());
+    const persoana = await axios
+      .get(`${server.address}/persoana/${id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.log('err'));
 
     if (persoana.idadresa) {
-      await fetch(`${server.address}/adresa/${persoana.idadresa}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((adresa) => adresa.json())
+      await axios
+        .get(`${server.address}/adresa/${persoana.idadresa}`, { headers: authHeader() })
+        .then((adresa) => adresa.data)
         .then((adresa) => {
           if (adresa)
             this.setState({
@@ -257,13 +255,12 @@ class EditPersoana extends React.Component {
             });
         });
     }
-
     if (persoana.idactidentitate) {
-      await fetch(`${server.address}/actidentitate/${persoana.idactidentitate}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((actidentitate) => actidentitate.json())
+      await axios
+        .get(`${server.address}/actidentitate/${persoana.idactidentitate}`, {
+          headers: authHeader(),
+        })
+        .then((actidentitate) => actidentitate.data)
         .then((actidentitate) => {
           if (actidentitate)
             this.setState({
@@ -288,7 +285,7 @@ class EditPersoana extends React.Component {
       telefon: persoana.telefon || '',
       datanasterii: this.getDatanasteriiByCNP(persoana.cnp),
 
-      selectednume: this.getNumeintregById(id)
+      selectednume: this.getNumeintregById(id),
     });
   }
 
@@ -320,11 +317,13 @@ class EditPersoana extends React.Component {
           judet: this.state.judet,
           tara: null,
         };
-        idadresa = await fetch(`${server.address}/adresa`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(adresa_body),
-        }).then((idadresa) => idadresa.json());
+
+        idadresa = await axios
+          .post(`${server.address}/adresa`, {
+            headers: authHeader(),
+            body: JSON.stringify(adresa_body),
+          })
+          .then((idadresa) => idadresa.data);
         idadresa = idadresa.id;
         console.log('added adresa, id =', idadresa);
       }
@@ -336,9 +335,8 @@ class EditPersoana extends React.Component {
         judet: this.state.judet,
         tara: null,
       };
-      await fetch(`${server.address}/adresa/${this.state.idadresa}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      await axios.put(`${server.address}/adresa/${this.state.idadresa}`, {
+        headers: authHeader(),
         body: JSON.stringify(adresa_body),
       });
     }
@@ -358,12 +356,12 @@ class EditPersoana extends React.Component {
           loculnasterii: this.state.loculnasterii,
         };
 
-        idactidentitate = await fetch(`${server.address}/actidentitate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(buletin_body),
-        })
-          .then((idactidentitate) => idactidentitate.json())
+        idactidentitate = await axios
+          .post(`${server.address}/actidentitate`, {
+            headers: authHeader(),
+            body: JSON.stringify(buletin_body),
+          })
+          .then((idactidentitate) => idactidentitate.data)
           .catch((err) => console.error(err));
         idactidentitate = idactidentitate.id;
         console.log('idactidentitate:', idactidentitate);
@@ -381,9 +379,8 @@ class EditPersoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      await fetch(`${server.address}/actidentitate/${this.state.idactidentitate}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      await axios.put(`${server.address}/actidentitate/${this.state.actidentitate}`, {
+        headers: authHeader(),
         body: JSON.stringify(buletin_body),
       });
     }
@@ -400,9 +397,9 @@ class EditPersoana extends React.Component {
       cnp: this.state.cnp,
     };
     // update persoana
-    await fetch(`${server.address}/persoana/${this.state.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+
+    await axios.put(`${server.address}/person/${this.state.id}`, {
+      headers: authHeader(),
       body: JSON.stringify(persoana_body),
     });
 
@@ -603,13 +600,7 @@ class EditPersoana extends React.Component {
                     <Col md={6}>
                       <Form.Group id="datanasterii">
                         <Form.Label>Data nașterii</Form.Label>
-                        <Form.Control
-                          type="date"
-                          value={this.state.datanasterii}
-                          onChange={(e) => {
-                            this.setState({ datanasterii: e.target.value });
-                          }}
-                        />
+                        <Form.Control type="date" value={this.state.datanasterii} disabled />
                       </Form.Group>
                     </Col>
                     <Col md={12} />

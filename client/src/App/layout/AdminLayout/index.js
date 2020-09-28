@@ -63,11 +63,11 @@ class AdminLayout extends Component {
                     <div className="page-wrapper">
                       <Suspense fallback={<Loader />}>
                         <Switch>
-                          {menu}
-                          {/* {localStorage.getItem('logged') === 'true' ? (
-                          ) : (
+                          {localStorage.getItem('user') === null ? (
                             <Redirect to="/auth/signin-1" />
-                          )} */}
+                          ) : (
+                            menu
+                          )}
                           <Redirect from="/" to={this.props.defaultPath} />
                         </Switch>
                       </Suspense>

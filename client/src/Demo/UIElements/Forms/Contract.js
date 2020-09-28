@@ -13,6 +13,8 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
+import axios from 'axios';
+import authHeader from '../../../services/auth-header';
 
 class Contract extends React.Component {
   constructor() {
@@ -81,7 +83,7 @@ class Contract extends React.Component {
       deduceri: true,
       studiiSuperioare: false,
       functieBaza: true,
-      normăLucru: {nrOre: 8, nume: 'Normă întreagă'}, //text
+      normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
       monedăSalariu: 'RON', //text
       salariu: '',
       modPlată: 'Nespecificat', //text
@@ -112,21 +114,21 @@ class Contract extends React.Component {
   getNumeNorma(nrOre) {
     switch (nrOre) {
       case 8:
-        return 'Normă întreagă'
-        case 7:
-          return 'Normă parțială 7/8'
-          case 6:
-        return 'Normă parțială 6/8'
-        case 5:
-        return 'Normă parțială 5/8'
-        case 4:
-        return 'Normă parțială 4/8'
-        case 3:
-        return 'Normă parțială 3/8'
-        case 2:
-        return 'Normă parțială 2/8'
-        case 1:
-        return 'Normă parțială 1/8'
+        return 'Normă întreagă';
+      case 7:
+        return 'Normă parțială 7/8';
+      case 6:
+        return 'Normă parțială 6/8';
+      case 5:
+        return 'Normă parțială 5/8';
+      case 4:
+        return 'Normă parțială 4/8';
+      case 3:
+        return 'Normă parțială 3/8';
+      case 2:
+        return 'Normă parțială 2/8';
+      case 1:
+        return 'Normă parțială 1/8';
       default:
         break;
     }
@@ -160,7 +162,7 @@ class Contract extends React.Component {
           functieBaza: contract.functiedebaza,
           deduceri: contract.calculdeduceri,
           studiiSuperioare: contract.studiisuperioare,
-          normăLucru: {nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru)},
+          normăLucru: { nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru) },
           salariu: contract.salariutarifar,
           monedăSalariu: contract.monedasalariu,
           modPlată: contract.modplata,
@@ -188,8 +190,7 @@ class Contract extends React.Component {
 
   onChangeCentrucost(selected) {
     if (typeof selected[0] !== 'undefined' || selected.length !== 0) {
-      if (typeof selected[0] === 'object')
-        this.setState({ centruCost: selected[0].label });
+      if (typeof selected[0] === 'object') this.setState({ centruCost: selected[0].label });
       else this.setState({ centruCost: selected[0] });
     }
   }
@@ -259,8 +260,7 @@ class Contract extends React.Component {
       avans: this.state.avans,
       monedaavans: this.state.monedăAvans,
       zilecoan: this.state.zileCOan,
-      ultimazilucru:
-        this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
+      ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
       casasanatate: this.state.casăSănătate,
       gradinvaliditate: this.state.gradInvalid,
       functie: this.state.funcție,
@@ -269,39 +269,46 @@ class Contract extends React.Component {
       pensionar: this.state.pensionar,
       spor: this.state.spor,
     };
-    const contract = await fetch(
-      `${server.address}/contract/${idcontract}`,
-      {
-        method: method, //PUT if idcontract !== null : POST if idcontract === null
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contract_body),
-      }
-    )
-      .then(res => res.ok ? res.json() : null)
-      .catch((err) => {
-        console.error(err.message);
-      });
+    let contract;
+    if (method === 'PUT')
+      contract = await axios
+        .put(`${server.address}/contract/${idcontract}`, {
+          headers: authHeader(),
+          body: JSON.stringify(contract_body),
+        })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => {
+          console.error(err.message);
+        });
+    else if (method === 'POST')
+      contract = await axios
+        .post(`${server.address}/contract/${idcontract}`, {
+          headers: authHeader(),
+          body: JSON.stringify(contract_body),
+        })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => {
+          console.error(err.message);
+        });
 
     if (contract) {
       this.setState({
         show: true,
-        modalMessage:
-          method === 'POST'
-            ? 'Contract adăugat cu succes'
-            : 'Contract actualizat',
+        modalMessage: method === 'POST' ? 'Contract adăugat cu succes' : 'Contract actualizat',
       });
 
       if (method === 'POST') {
         // update angajat with idangajat from functon props
-        await fetch(`${server.address}/angajat/${idangajat}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            idcontract: contract.id,
-            idpersoana: idangajat,
-            idsocietate: this.state.socsel.id,
-          }),
-        }).catch((err) => console.error(err));
+        await axios
+          .put(`${server.address}/angajat/${idangajat}`, {
+            headers: authHeader(),
+            body: JSON.stringify({
+              idcontract: contract.id,
+              idpersoana: idangajat,
+              idsocietate: this.state.socsel.id,
+            }),
+          })
+          .catch((err) => console.error(err));
       }
       console.log('idcontract:', contract.id);
     }
@@ -524,7 +531,15 @@ class Contract extends React.Component {
                   as="select"
                   value={this.state.normăLucru.nume}
                   onChange={(e) => {
-                    this.setState({ normăLucru: {nrOre: 8 - e.target.options.selectedIndex, nume: e.target.value }}, () => console.log(this.state.normăLucru));
+                    this.setState(
+                      {
+                        normăLucru: {
+                          nrOre: 8 - e.target.options.selectedIndex,
+                          nume: e.target.value,
+                        },
+                      },
+                      () => console.log(this.state.normăLucru)
+                    );
                   }}
                 >
                   <option>Normă întreagă</option>
@@ -617,10 +632,7 @@ class Contract extends React.Component {
             </Col>
             <Col md={12} />
             <Col md={1}>
-              <Form.Group
-                id="sindicat"
-                style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}
-              >
+              <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
                 <Form.Check
                   custom
                   type="checkbox"
@@ -850,15 +862,11 @@ class Contract extends React.Component {
           <Row>
             <Col md={6}>
               <Button
-                variant={
-                  this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'
-                }
-                onClick={(e) =>
-                  this.onSubmit(e, this.state.id, this.state.idangajat)
-                }
+                variant={this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'}
+                onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
                 disabled={this.state.buttonDisabled}
               >
-                {this.state.id ? "Actualizează contract" : "Adaugă contract"}
+                {this.state.id ? 'Actualizează contract' : 'Adaugă contract'}
               </Button>
             </Col>
           </Row>

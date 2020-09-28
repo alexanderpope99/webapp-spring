@@ -22,6 +22,8 @@ import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
 import { Typography } from '@material-ui/core';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class RealizariRetineri extends React.Component {
   constructor() {
@@ -182,15 +184,16 @@ class RealizariRetineri extends React.Component {
 
   async setPersoane() {
     //* only people with contract <- done on backend
-    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    const persoane = await axios
+      .get(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, { headers: authHeader() })
+      // const persoane = await fetch(, {
+      //   method: 'GET',
+      //   headers: { 'Content-Type': 'application/json' },
+      // })
       .then((res) => {
-        if (res.ok) return res.json();
+        return res.data;
       })
       .catch((err) => console.error(err));
-
     //* set lista_angajati
     let lista_angajati = [];
     for (let persoana of persoane) {
@@ -213,23 +216,19 @@ class RealizariRetineri extends React.Component {
     }
 
     // get contract by idpersoana :: contract body needed for 4 fields
-    const contract = await fetch(`${server.address}/contract/idp=${idpersoana}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => (res.ok ? res.json() : null))
+
+    const contract = await axios
+      .get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
+      .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
     console.log('contract:', contract);
 
     // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calc => saves to DB
-    const data = await fetch(
-      `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
-      .then((res) => (res.ok ? res.json() : null))
+    const data = await axios
+      .post(`${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`, {
+        headers: authHeader(),
+      })
+      .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
     console.log('data:', data);
@@ -241,11 +240,9 @@ class RealizariRetineri extends React.Component {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
     }
 
-    const retineri = await fetch(`${server.address}/retineri/ids=${data.id}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    const retineri = await axios
+      .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
+      .then((res) => res.data)
       .catch((err) => console.error(err));
 
     this.setState({
@@ -326,33 +323,31 @@ class RealizariRetineri extends React.Component {
     }
 
     // save retineri to DB
-    await fetch(`${server.address}/retineri/${this.state.idretineri}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        idstat: this.state.idstat,
-        avansnet: this.state.avansnet,
-        pensiealimentara: this.state.pensiealimentara,
-        pensiefacultativa: this.state.pensiefacultativa,
-        popriri: this.state.popriri,
-        imprumuturi: this.state.imprumuturi,
-      }),
-    })
-      .then((res) => res.json())
+    await axios
+      .put(`${server.address}/retineri/${this.state.idretineri}`, {
+        headers: authHeader(),
+        body: JSON.stringify({
+          idstat: this.state.idstat,
+          avansnet: this.state.avansnet,
+          pensiealimentara: this.state.pensiealimentara,
+          pensiefacultativa: this.state.pensiefacultativa,
+          popriri: this.state.popriri,
+          imprumuturi: this.state.imprumuturi,
+        }),
+      })
+      .then((res) => res.data)
       .catch((err) => console.error(err));
 
     let pb = this.state.primabruta;
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
-    const data = await fetch(
-      `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
-      .then((res) => (res.ok ? res.json() : null))
+    const data = await axios
+      .put(
+        `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
+        { headers: authHeader() }
+      )
+      .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
     console.log(data);
@@ -414,11 +409,9 @@ class RealizariRetineri extends React.Component {
     let idc = this.state.idcontract;
     let luna = this.state.luna.nr;
     let an = this.state.an;
-    let nrTichete = await fetch(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
+    let nrTichete = await axios
+      .get(`${server.address}/tichete/idc=${idc}&mo=${luna}&y=${an}`, { headers: authHeader() })
+      .then((res) => res.data)
       .catch((err) => console.error(err));
 
     console.log(nrTichete);
@@ -428,13 +421,11 @@ class RealizariRetineri extends React.Component {
   }
 
   async getOresuplimentare(idc, luna, an) {
-    const oresuplimentare = await fetch(
-      `${server.address}/oresuplimentare/api/idc=${idc}&mo=${luna}&y=${an}`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    ).then((res) => res.json());
+    const oresuplimentare = await axios
+      .get(`${server.address}/oresuplimentare/api/idc=${idc}&mo=${luna}&y=${an}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
 
     return oresuplimentare;
   }
@@ -454,20 +445,19 @@ class RealizariRetineri extends React.Component {
       procent: p,
       total: t.toFixed(0),
     };
-    await fetch(`${server.address}/oresuplimentare`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(ore_body),
-    })
+
+    await axios
+      .post(`${server.address}/oresuplimentare`, {
+        headers: authHeader(),
+        body: JSON.stringify(ore_body),
+      })
       .then(this.renderTabelore)
       .catch((err) => console.error(err));
   }
 
   async deleteOra(id) {
-    await fetch(`${server.address}/oresuplimentare/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    await axios
+      .delete(`${server.address}/oresuplimentare/${id}`, { headers: authHeader() })
       .then(this.renderTabelore)
       .catch((err) => console.error(err));
   }

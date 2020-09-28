@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class PersoaneTabel extends React.Component {
   constructor(props) {
@@ -35,11 +37,10 @@ class PersoaneTabel extends React.Component {
   deletePersoana(id, nume, prenume) {
     // id = id.replace('"', '');
     // console.log(id);
-    fetch(`${server.address}/persoana/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => response.json())
+
+    axios
+      .delete(`${server.address}/persoana/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
       .then(() => {
         // console.log(response);
         this.onRefresh();
@@ -126,11 +127,9 @@ class PersoaneTabel extends React.Component {
   }
 
   async onRefresh() {
-    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // body: JSON.stringify(persoane),
-    }).then((persoane) => persoane.json());
+    const persoane = await axios
+      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data);
 
     this.setState({
       persoane: persoane,

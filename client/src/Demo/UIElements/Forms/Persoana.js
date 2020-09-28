@@ -4,6 +4,8 @@ import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import { judete, sectoare } from '../../Resources/judete';
 import { getSocSel } from '../../Resources/socsel';
 import { server } from '../../Resources/server-address';
+import axios from 'axios';
+import authHeader from '../../../services/auth-header';
 
 class Persoana extends React.Component {
   constructor() {
@@ -150,11 +152,12 @@ class Persoana extends React.Component {
   }
 
   async createAngajat(idpersoana) {
-    await fetch(`${server.address}/angajat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
-    }).catch((err) => console.error(err));
+    await axios
+      .post(`${server.address}/angajat`, {
+        headers: authHeader(),
+        body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
+      })
+      .catch((err) => console.error(err));
     console.log(idpersoana, this.state.socsel);
   }
 
@@ -178,11 +181,13 @@ class Persoana extends React.Component {
         judet: this.state.judet,
         tara: null,
       };
-      adresa = await fetch(`${server.address}/adresa`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(adresa_body),
-      }).then((adresa) => adresa.json());
+
+      adresa = await axios
+        .post(`${server.address}/adresa`, {
+          headers: authHeader(),
+          body: JSON.stringify(adresa_body),
+        })
+        .then((adresa) => adresa.json());
       console.log('idadresa:', adresa.id);
     }
 
@@ -199,13 +204,15 @@ class Persoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      actidentitate = await fetch(`${server.address}/actidentitate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(buletin_body),
-      }).then((res) => res.json());
-
-      console.log('idactidentitate:', actidentitate.id);
+      await axios
+        .post(`${server.address}/actidentitate`, {
+          headers: authHeader(),
+          body: JSON.stringify(buletin_body),
+        })
+        .then((res) => {
+          console.log(res.data.id);
+          return res.data;
+        });
     }
 
     const persoana_body = {
@@ -221,12 +228,12 @@ class Persoana extends React.Component {
     };
     console.log(persoana_body);
 
-    const persoana = await fetch(`${server.address}/persoana`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(persoana_body),
-    })
-      .then((res) => res.ok ? res.json() : null)
+    const persoana = await axios
+      .post(`${server.address}/persoana`, {
+        headers: authHeader(),
+        body: JSON.stringify(persoana_body),
+      })
+      .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error('error:', err.message));
 
     if (persoana) {
@@ -378,13 +385,7 @@ class Persoana extends React.Component {
             <Col md={6}>
               <Form.Group id="datanasterii">
                 <Form.Label>Data nașterii</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.datanasterii}
-                  onChange={(e) => {
-                    this.setState({ datanasterii: e.target.value });
-                  }}
-                />
+                <Form.Control type="date" value={this.state.datanasterii} disabled />
               </Form.Group>
             </Col>
             <Col md={12} />
