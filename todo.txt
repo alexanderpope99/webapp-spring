@@ -2,12 +2,7 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-salveaza angajatul selectat in session storage:
-{ nume, idpersoana, idcontract }
-
 persoane intretinere
-
-editor de parametrii salarii
 
 sarbatori
 

@@ -38,6 +38,11 @@ public class PersoanaIntretinereController {
                 .orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
 
         return ResponseEntity.ok().body(persoanaIntretinere);
+		}
+		
+		@GetMapping("ida={id}")
+    public List<PersoanaIntretinere> getPersoanaIntretinereByIdangajat(@PathVariable(value = "id") Long id) {
+        return persoanaIntretinereRepository.findByIdangajatOrderByNumeAscPrenumeAsc(id);
     }
 
     @PostMapping

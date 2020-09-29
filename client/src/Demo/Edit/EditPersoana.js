@@ -34,8 +34,8 @@ class EditPersoana extends React.Component {
     this.fillForm = this.fillForm.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
     this.handleClose = this.handleClose.bind(this);
-		
-		let angajatSel = getAngajatSel();
+
+    let angajatSel = getAngajatSel();
     var idOfSelected = null;
     if (typeof props.location !== 'undefined') {
       let search = props.location.search; // returns the URL query String
@@ -44,7 +44,7 @@ class EditPersoana extends React.Component {
     }
     // exista un angajat selectat in sessionStorage
     else if (angajatSel) {
-			idOfSelected = angajatSel.idpersoana;
+      idOfSelected = angajatSel.idpersoana;
     }
     // else: idOfSelected remains null
 
@@ -186,23 +186,15 @@ class EditPersoana extends React.Component {
 
   getDatanasteriiByCNP(cnp) {
     // console.log('getDatanasteriiByCNP called |', cnp);
-    if (cnp === null || typeof cnp === 'undefined' || cnp === 'null') return '';
+    if (!cnp) return '';
 
     if (cnp.length > 6) {
       const an = cnp.substring(1, 3);
       const luna = cnp.substring(3, 5);
       const zi = cnp.substring(5, 7);
-      if (cnp[0] <= 2)
-        // this.setState({
-        return `19${an}-${luna}-${zi}`;
-      // });
-      // this.setState({
+      if (cnp[0] <= 2) return `19${an}-${luna}-${zi}`;
       else return `20${an}-${luna}-${zi}`;
-      // });
-    } else if (cnp.length === 0)
-      // this.setState({
-      return '';
-    // })
+    } else return '';
   }
 
   onChangeCnp(e) {
@@ -313,13 +305,9 @@ class EditPersoana extends React.Component {
       idactidentitate = this.state.idactidentitate;
 
     // persoana nu are adresa asociata
-    if (this.state.idadresa === null) {
+    if (!this.state.idadresa) {
       // daca se completeaza -> adauga in DB | daca nu -> nimic
-      if (
-        this.state.adresacompleta !== null ||
-        this.state.localitate !== null ||
-        this.state.judet !== null
-      ) {
+      if (this.state.adresacompleta || this.state.localitate || this.state.judet) {
         let adresa_body = {
           adresa: this.state.adresacompleta,
           localitate: this.state.localitate,
@@ -349,9 +337,9 @@ class EditPersoana extends React.Component {
     }
 
     // persoana nu are actidentitate
-    if (this.state.idactidentitate === null) {
+    if (!this.state.idactidentitate) {
       // daca se completeaza actidentitate -> adauga in baza de date | daca nu -> nimic
-      if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
+      if (this.state.serie || this.state.numar || this.state.cnp) {
         let buletin_body = {
           cnp: this.state.cnp,
           tip: this.state.tipact,
@@ -384,10 +372,15 @@ class EditPersoana extends React.Component {
         dataeliberarii: this.state.dataeliberarii,
         loculnasterii: this.state.loculnasterii,
       };
+      console.log(buletin_body);
 
-      await axios.put(`${server.address}/actidentitate/${this.state.actidentitate}`, buletin_body, {
-        headers: authHeader(),
-      });
+      await axios.put(
+        `${server.address}/actidentitate/${this.state.idactidentitate}`,
+        buletin_body,
+        {
+          headers: authHeader(),
+        }
+      );
     }
 
     let persoana_body = {
@@ -403,7 +396,7 @@ class EditPersoana extends React.Component {
     };
     // update persoana
 
-    await axios.put(`${server.address}/person/${this.state.id}`, persoana_body, {
+    await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, {
       headers: authHeader(),
     });
 

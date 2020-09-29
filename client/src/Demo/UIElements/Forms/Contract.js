@@ -68,8 +68,6 @@ class Contract extends React.Component {
     };
   }
 
-  componentDidMount() {}
-
   clearFields() {
     this.setState({
       id: null,
@@ -760,7 +758,8 @@ class Contract extends React.Component {
               <Form.Group id="zilecoan">
                 <Form.Label>Zile CO/an</Form.Label>
                 <Form.Control
-                  placeholder="0"
+									placeholder="0"
+									type="number"
                   value={this.state.zileCOan}
                   onChange={(e) => {
                     this.setState({ zileCOan: e.target.value });

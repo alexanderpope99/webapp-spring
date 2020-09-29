@@ -7,7 +7,10 @@ import months from '../Resources/months';
 
 class Stat extends React.Component {
   constructor() {
-    super();
+		super();
+		
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+
     this.download = this.download.bind(this);
     this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
 
@@ -20,6 +23,8 @@ class Stat extends React.Component {
   }
 
   componentDidMount() {
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+
     this.setCurrentYearMonth();
   }
 
@@ -103,7 +108,7 @@ class Stat extends React.Component {
             <Row>
               {/* LUNA */}
               <Col md={4}>
-                <FormControl
+                <Form.Control
                   as="select"
                   value={this.state.luna.nume}
                   onChange={(e) =>
@@ -116,7 +121,7 @@ class Stat extends React.Component {
                   }
                 >
                   {luni}
-                </FormControl>
+                </Form.Control>
               </Col>
               {/* AN */}
               <Col md={4}>
@@ -133,9 +138,10 @@ class Stat extends React.Component {
                 </FormControl>
               </Col>
               <Col md={4}>
-                <FormControl
-                  typr="text"
-                  placeholder="Intocmid de"
+								<Form.Group controlId="intocmitde">
+                <Form.Control
+                  type="text"
+                  placeholder="Intocmit de"
                   value={this.state.intocmitDe}
                   onChange={(e) =>
                     this.setState({
@@ -143,6 +149,7 @@ class Stat extends React.Component {
                     })
                   }
                 />
+								</Form.Group>
               </Col>
             </Row>
           </Form>
