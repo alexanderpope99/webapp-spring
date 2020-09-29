@@ -2,8 +2,6 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-persoane intretinere
-
 sarbatori
 
 la concedii -> optiunea de a sorta dupa descrescator, sau doar intr-o anumita luna

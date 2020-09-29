@@ -157,7 +157,8 @@ class Angajat extends React.Component {
   }
 
   async onFocusPI() {
-    this.persoaneintretinere.current.updateAngajatSel();
+		await this.persoaneintretinere.current.updateAngajatSel();
+		this.persoaneintretinere.current.onRefresh();
     this.setState({ angajatsel: getAngajatSel() });
   }
 
