@@ -393,12 +393,12 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    const data = await axios.put(
+    await axios.put(
       `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
 			{},
 			{ headers: authHeader() }
     )
-      .then((res) => (res.status === 200 ? res.data : null))
+      .then((res) => (res.status === 200))
       .catch((err) => console.error(err));
 
     window.scrollTo({

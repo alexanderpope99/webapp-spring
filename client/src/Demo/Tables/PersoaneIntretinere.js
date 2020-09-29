@@ -5,8 +5,6 @@ import {
   Card,
   Table,
   Button,
-  OverlayTrigger,
-  Tooltip,
   Modal,
   Form,
 } from 'react-bootstrap';
