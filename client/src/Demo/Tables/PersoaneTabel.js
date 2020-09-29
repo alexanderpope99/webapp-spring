@@ -14,6 +14,7 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import { setAngajatSel } from '../Resources/angajatsel';
 
 class PersoaneTabel extends React.Component {
   constructor(props) {
@@ -35,8 +36,7 @@ class PersoaneTabel extends React.Component {
     window.scrollTo(0, 0);
   }
   deletePersoana(id, nume, prenume) {
-    // id = id.replace('"', '');
-    // console.log(id);
+    setAngajatSel(null);
 
     axios
       .delete(`${server.address}/persoana/${id}`, { headers: authHeader() })

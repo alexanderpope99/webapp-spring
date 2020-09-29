@@ -165,8 +165,8 @@ class RealizariRetineri extends React.Component {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
 		await this.setCurrentYearMonth(); // modifies state.an, state.luna
-	  this.fillForm();
     this.setPersoane(); // date personale, also fills lista_angajati
+	  this.fillForm();
   }
 
   numberWithCommas(x) {
@@ -176,7 +176,7 @@ class RealizariRetineri extends React.Component {
   async setCurrentYearMonth() {
     let today = new Date();
     let luna = months[today.getMonth()];
-    let an = today.getFullYear();
+		let an = today.getFullYear();
 
     this.setState({
       an: an,
@@ -185,17 +185,12 @@ class RealizariRetineri extends React.Component {
   }
 
   async setPersoane() {
-    //* only people with contract <- done on backend
+    //* only people with contract <- &c flag
     const persoane = await axios
       .get(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, { headers: authHeader() })
-      // const persoane = await fetch(, {
-      //   method: 'GET',
-      //   headers: { 'Content-Type': 'application/json' },
-      // })
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => console.error(err));
+      .then((res) => res.status === 200 ? res.data : null)
+			.catch((err) => console.error(err));
+		if(!persoane) return;
     //* set lista_angajati
     let lista_angajati = [];
     for (let persoana of persoane) {
@@ -223,13 +218,14 @@ class RealizariRetineri extends React.Component {
       .get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
-    console.log('contract:', contract);
+		console.log('contract:', contract);
+		if(!contract) return;
 
     // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calc => saves to DB
     const data = await axios
       .post(
         `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
-        {},
+        {body: null},
         {
           headers: authHeader(),
         }
@@ -237,19 +233,20 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-    console.log('data:', data);
+		console.log('data:', data);
+		if(!data) return;
 
     // get ore suplimentare by idcontract, luna, an
     const oresuplimentare = await this.getOresuplimentare(contract.id, luna, an);
     let totaloresuplimentare = 0;
     if (oresuplimentare.length > 0) {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
-    }
-
+		}
     const retineri = await axios
       .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+			.catch((err) => console.error(err));
+
 
     this.setState({
       //* realizari
@@ -361,7 +358,8 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-    console.log(data);
+		console.log(data);
+		if(!data) return;
     // total
     this.setState(
       {
@@ -395,12 +393,10 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    const data = await fetch(
+    const data = await axios.put(
       `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-      }
+			{},
+			{ headers: authHeader() }
     )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
@@ -1039,11 +1035,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.valoaretichete
-                              ? this.numberWithCommas(this.state.valoaretichete)
-                              : ''
-                          }
+                          value={this.numberWithCommas(this.state.valoaretichete)}
                         />
                       </Form.Group>
                     </Col>

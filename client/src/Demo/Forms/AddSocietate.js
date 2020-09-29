@@ -51,10 +51,9 @@ class AddSocietate extends React.Component {
 
   onChangeLocalitate(e) {
     if (
-      e.target.value === 'Bucuresti' ||
-      e.target.value === 'București' ||
-      e.target.value === 'BUCURESTI' ||
-      e.target.value === 'BUCUREȘTI'
+      e.target.value.toLowerCase() === 'bucuresti' ||
+			e.target.value.toLowerCase() === 'bucurești' ||
+			e.target.value.toLowerCase() === 'bucharest'
     )
       this.setState({
         capitala: 'Sector',

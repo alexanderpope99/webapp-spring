@@ -4,6 +4,7 @@ import Aux from '../../hoc/_Aux';
 
 import { getSocSel, setSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
+import { setAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -18,7 +19,6 @@ class Societati extends React.Component {
   constructor() {
     super();
     this.unselectAll = this.unselectAll.bind(this);
-    this.downloadButton = this.downloadButton.bind(this);
 
     this.state = {};
   }
@@ -54,7 +54,8 @@ class Societati extends React.Component {
   }
 
   select(nume_soc) {
-    this.unselectAll();
+		this.unselectAll();
+		setAngajatSel(null);
     if (nume_soc) {
       let id = this.state[nume_soc].id;
       this.setState({
@@ -64,27 +65,6 @@ class Societati extends React.Component {
       setSocSel({ id: id, nume: nume_soc });
       console.log(getSocSel());
     }
-  }
-
-  async downloadButton() {
-    console.log('trying to download...');
-    await fetch(
-      `${server.address}/download/Stat Salarii - Ingenio Software S.A. - Septembrie 2020.xlsx`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/octet-stream' },
-      }
-    )
-      .then((res) => res.blob())
-      .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'Stat Salarii - Ingenio Software S.A. - Septembrie 2020.xlsx';
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click();
-        a.remove(); //afterwards we remove the element again
-      });
   }
 
   render() {
@@ -100,7 +80,7 @@ class Societati extends React.Component {
               ? () => {
                   this.select(nume_soc);
                 }
-              : null
+							: null
           }
         >
           <Card.Body>
@@ -120,7 +100,7 @@ class Societati extends React.Component {
 
     return (
       <Aux>
-        <Button onClick={this.downloadButton}>download</Button>
+				<Button href="/forms/add-societate">Adaugă societate</Button>
         <Row>{societatiComponent}</Row>
       </Aux>
     );
