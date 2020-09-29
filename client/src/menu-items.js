@@ -23,6 +23,13 @@ var items = [
         url: '/dashboard/societati',
         icon: 'feather icon-home',
       },
+      {
+        id: 'parametriisalarii',
+        title: 'Parametrii Salarii',
+        type: 'item',
+        url: '/parametriisalarii',
+        icon: 'feather icon-home',
+      },
     ],
   },
   {

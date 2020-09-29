@@ -109,19 +109,19 @@ class AngatjatiTabel extends React.Component {
                 },
               }}
               editable={{
-                // onRowUpdate: (newData, oldData) =>
-                //   new Promise((resolve) => {
-                //     resolve();
-                //     if (oldData) {
-                //       this.setState((prevState) => {
-                //         const data = [...prevState.data];
-                //         data[data.indexOf(oldData)] = newData;
-                //         console.log(data);
-                //         // this.getData();
-                //         return { ...prevState, data };
-                //       });
-                //     }
-                //   }),
+                onRowUpdate: (newData, oldData) =>
+                  new Promise((resolve) => {
+                    resolve();
+                    if (oldData) {
+                      this.setState((prevState) => {
+                        const data = [...prevState.data];
+                        data[data.indexOf(oldData)] = newData;
+                        console.log(data);
+                        // this.getData();
+                        return { ...prevState, data };
+                      });
+                    }
+                  }),
                 onRowDelete: (oldData) =>
                   new Promise((resolve) => {
                     resolve();

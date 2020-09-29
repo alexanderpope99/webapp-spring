@@ -7,6 +7,7 @@ global.jQuery = $;
 
 const DashboardDefault = React.lazy(() => import('./Demo/Dashboard/Default'));
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
+const ParametriiSalarii = React.lazy(() => import('./Demo/Dashboard/ParametriiSalarii'));
 
 const UIBasicButton = React.lazy(() => import('./Demo/UIElements/Basic/Button'));
 const UIBasicBadges = React.lazy(() => import('./Demo/UIElements/Basic/Badges'));
@@ -50,6 +51,12 @@ const routes = [
 
   // CARDS
   { path: '/dashboard/societati', exact: true, name: 'Societati', component: Societati },
+  {
+    path: '/parametriisalarii',
+    exact: true,
+    name: 'Parametrii Salarii',
+    component: ParametriiSalarii,
+  },
   { path: '/dashboard/default', exact: true, name: 'Default', component: DashboardDefault },
   { path: '/basic/button', exact: true, name: 'Basic Button', component: UIBasicButton },
   { path: '/basic/badges', exact: true, name: 'Basic Badges', component: UIBasicBadges },
