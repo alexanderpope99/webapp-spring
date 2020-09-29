@@ -9,9 +9,11 @@ import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
+import PersoanaIntretinereTabel from '../Tables/PersoaneIntretinere';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import { getAngajatSel } from '../Resources/angajatsel';
+import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
 
 /*
   ? how it works now:
@@ -39,13 +41,14 @@ class Angajat extends React.Component {
     this.componentDidMount = this.componentDidMount.bind(this);
 
     this.persoana = React.createRef();
+    this.persoaneintretinere = React.createRef();
     this.contract = React.createRef();
     this.co = React.createRef();
     this.cm = React.createRef();
 
     this.state = {
-			socsel: getSocSel(),
-			angajatsel: getAngajatSel(),			
+      socsel: getSocSel(),
+      angajatsel: getAngajatSel(),
 
       angajat: null,
       idpersoana: null,
@@ -74,26 +77,26 @@ class Angajat extends React.Component {
 
   async getSelectedAngajatData() {
     // get id of selected angajat
-		const angajatsel = getAngajatSel();
-		const idpersoana = angajatsel ? angajatsel.idpersoana : -1;
+    const angajatsel = getAngajatSel();
+    const idpersoana = angajatsel ? angajatsel.idpersoana : -1;
     if (idpersoana === null || idpersoana === -1) {
-			this.contract.current.clearFields();
-			this.setState({angajatsel: null});
+      this.contract.current.clearFields();
+      this.setState({ angajatsel: null });
       return;
     } else this.contract.current.setState({ buttonDisabled: false });
 
     const angajat = await axios
       .get(`${server.address}/angajat/${idpersoana}`, { headers: authHeader() })
       .then((res) => res.data)
-		.catch((err) => console.error(err));
+      .catch((err) => console.error(err));
 
     this.setState({
-			angajatsel: angajatsel,
+      angajatsel: angajatsel,
       angajat: angajat,
       idcontract: angajat.idcontract,
       idpersoana: angajat.idpersoana,
       idsocietate: angajat.idsocietate,
-		});
+    });
 
     return angajat;
   }
@@ -113,7 +116,7 @@ class Angajat extends React.Component {
         .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
-		}
+    }
     //* FILL FORM
     this.contract.current.fillForm(contract, idpersoana);
   }
@@ -131,7 +134,7 @@ class Angajat extends React.Component {
         () => this.setState({ key: 'contract' })
       );
       return;
-		}
+    }
 
     this.co.current.setAngajat(angajat);
   }
@@ -154,6 +157,11 @@ class Angajat extends React.Component {
     this.cm.current.setAngajat(angajat);
   }
 
+  async onFocusPI() {
+    this.persoaneintretinere.current.updateAngajatSel();
+    this.setState({ angajatsel: getAngajatSel() });
+  }
+
   render() {
     return (
       <Aux>
@@ -172,8 +180,10 @@ class Angajat extends React.Component {
           <Col>
             <h5>
               {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
-              {this.state.angajatsel
+              {this.state.angajatsel && this.state.key !== 'date-personale'
                 ? ' - ' + this.state.angajatsel.numeintreg
+                : this.state.key !== 'date-personale'
+                ? ' *niciun angajat selectat'
                 : ''}
             </h5>
 
@@ -188,6 +198,7 @@ class Angajat extends React.Component {
                 if (key === 'contract') this.onFocusContract();
                 else if (key === 'co') this.onFocusCO();
                 else if (key === 'cm') this.onFocusCM();
+                else if (key === 'pi') this.onFocusPI();
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
@@ -208,6 +219,10 @@ class Angajat extends React.Component {
 
               <Tab eventKey="cm" title="C.M.">
                 <ConcediiMedicale ref={this.cm} />
+              </Tab>
+
+              <Tab eventKey="pi" title="Pers. într.">
+                <PersoaneIntretinereTabel ref={this.persoaneintretinere} />
               </Tab>
             </Tabs>
             <Button onClick={() => window.scrollTo(0, 0)} className="float-center">

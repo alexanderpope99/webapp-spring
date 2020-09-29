@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Add from '@material-ui/icons/Add';
@@ -12,10 +12,11 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
+import { getAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-class PersoaneTabel extends React.Component {
+class PersoaneIntretinereTabel extends React.Component {
   constructor(props) {
     super();
 
@@ -23,6 +24,7 @@ class PersoaneTabel extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
+      angajatsel: getAngajatSel(),
       persoane: [],
       persoaneComponent: null,
     };
@@ -33,13 +35,22 @@ class PersoaneTabel extends React.Component {
 
     this.onRefresh();
     window.scrollTo(0, 0);
+	}
+	
+	updateAngajatSel() {
+		this.setState({angajatsel: getAngajatSel()});
+	}
+
+  editPersoanaIntretinere() {
+    console.log('editing persoana');
   }
+
   deletePersoana(id, nume, prenume) {
     // id = id.replace('"', '');
     // console.log(id);
 
     axios
-      .delete(`${server.address}/persoana/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/persoanaintretinere/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(() => {
         // console.log(response);
@@ -59,11 +70,9 @@ class PersoaneTabel extends React.Component {
           <tr key={pers.id}>
             <th>{pers.nume}</th>
             <th>{pers.prenume}</th>
-            <th>{pers.email}</th>
-            <th>{pers.telefon}</th>
             <th className="d-inline-flex flex-row justify-content-around">
               <Button
-                href={`/edit/edit-persoana?id=${pers.id}`}
+                onClick={this.editPersoanaIntretinere}
                 variant="outline-secondary"
                 className="ml-2 p-1 rounded-circle border-0"
               >
@@ -127,27 +136,35 @@ class PersoaneTabel extends React.Component {
   }
 
   async onRefresh() {
-    const persoane = await axios
-      .get(`${server.address}/persoanaintretinere/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data);
+    if (this.state.angajatsel) {
+      const persoane = await axios
+        .get(`${server.address}/persoanaintretinere/ida=${this.state.angajatsel.idpersoana}`, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
+      if (persoane) {
+        this.setState({
+          persoane: persoane,
+        });
 
-    this.setState({
-      persoane: persoane,
-    });
-
-    this.renderPersoane();
+        this.renderPersoane();
+      }
+    }
   }
 
   render() {
     return (
       <Aux>
+        {/* insert modal here */}
+
         <Row>
           <Col>
             <Card>
               <Card.Header>
                 <Card.Title as="h5">
-                  Listă Persoane Înregistrate
-                  {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
+                  Persoane Întreținere
+                  {this.state.angajatsel ? ' - ' + this.state.angajatsel.numeintreg : ' *niciun angajat selectat'}
                 </Card.Title>
                 <OverlayTrigger
                   placement="bottom"
@@ -194,8 +211,6 @@ class PersoaneTabel extends React.Component {
                     <tr>
                       <th>Nume</th>
                       <th>Prenume</th>
-                      <th>email</th>
-                      <th>telefon</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -210,4 +225,4 @@ class PersoaneTabel extends React.Component {
   }
 }
 
-export default PersoaneTabel;
+export default PersoaneIntretinereTabel;
