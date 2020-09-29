@@ -2,8 +2,6 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-stat individual
-
 foaie pontaj
 
 nota contabila
@@ -24,6 +22,5 @@ contabil:
 	
 angajat:
 	doar:
-	- date personale,
-	- face cereri
-
+	+ date personale,
+	+ face cereri
