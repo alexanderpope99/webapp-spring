@@ -2,6 +2,12 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
+stat individual
+
+foaie pontaj
+
+nota contabila
+
 sarbatori
 
 la concedii -> optiunea de a sorta dupa descrescator, sau doar intr-o anumita luna

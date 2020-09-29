@@ -27,9 +27,6 @@ public class Societate {
     @Column(name = "email")
     private String email;
 
-    private Long selected;
-
-
     public Societate() { }
 
     public Societate( String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email ) {
@@ -72,9 +69,6 @@ public class Societate {
     public String getRegcom() {
         return regcom;
     }
-    public Long getSelected() {
-        return selected;
-    }
 
     // SETTERS
     public void setCapsoc(Double capsoc) {
@@ -97,9 +91,6 @@ public class Societate {
     }
     public void setRegcom(String regcom) {
         this.regcom = regcom;
-    }
-    public void setSelected(Long selected) {
-        this.selected = selected;
     }
 }
 
