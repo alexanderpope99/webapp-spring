@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Card,
-  Table,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-  Modal,
-  Form,
-} from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Add from '@material-ui/icons/Add';
@@ -61,8 +51,8 @@ class PersoaneIntretinereTabel extends React.Component {
       grad: '',
       gradinvaliditate: 'valid',
       intretinut: false,
-			coasigurat: false,
-			idangajat: null,
+      coasigurat: false,
+      idangajat: null,
     };
   }
 
@@ -117,33 +107,32 @@ class PersoaneIntretinereTabel extends React.Component {
       coasigurat: this.state.coasigurat,
       intretinut: this.state.intretinut,
       idangajat: this.state.angajatsel.idpersoana,
-		};
-		
-		const ok = await axios.put(
-			`${server.address}/persoanaintretinere/${idpers}`,
-			persoana_body,
-			{ headers: authHeader() }
-		)
-			.then(res => res.status === 200)
-			.catch(err => console.error(err));
+    };
 
-		if(ok) {
-			this.onRefresh();
-			await this.handleClose();
-			this.setState({
-				showConfirm: true,
-				modalMessage: "Persoană in intretinere actualizată"
-			})
-		}
-	}
+    const ok = await axios
+      .put(`${server.address}/persoanaintretinere/${idpers}`, persoana_body, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      this.onRefresh();
+      await this.handleClose();
+      this.setState({
+        showConfirm: true,
+        modalMessage: 'Persoană in intretinere actualizată',
+      });
+    }
+  }
 
   async editPersoanaIntretinere(pers) {
-		console.log(pers);
+    console.log(pers);
     this.setState({
       isEdit: true,
       show: true,
 
-			id: pers.id,
+      id: pers.id,
       nume: pers.nume,
       prenume: pers.prenume,
       cnp: pers.cnp,
@@ -193,6 +182,11 @@ class PersoaneIntretinereTabel extends React.Component {
           <tr key={pers.id}>
             <th>{pers.nume || '-'}</th>
             <th>{pers.prenume || '-'}</th>
+            <th>{pers.cnp}</th>
+            <th>{pers.grad}</th>
+            <th>{pers.gradinvaliditate}</th>
+            <th>{pers.intretinut ? 'DA' : 'NU'}</th>
+            <th>{pers.coasigurat ? 'DA' : 'NU'}</th>
             <th>
               <Row>
                 <Button
@@ -269,10 +263,18 @@ class PersoaneIntretinereTabel extends React.Component {
         .then((res) => res.data)
         .catch((err) => console.error(err));
       if (persoane) {
-        this.setState({
-          persoane: persoane,
-        }, this.renderPersoane);
+        this.setState(
+          {
+            persoane: persoane,
+          },
+          this.renderPersoane
+        );
       }
+    } else {
+      this.setState({
+        persoane: [],
+        persoaneComponent: null,
+      });
     }
   }
 
@@ -284,8 +286,8 @@ class PersoaneIntretinereTabel extends React.Component {
 
   async handleClose() {
     this.setState({
-			show: false,
-			id: null,
+      show: false,
+      id: null,
       nume: '',
       prenume: '',
       cnp: '',
@@ -293,8 +295,8 @@ class PersoaneIntretinereTabel extends React.Component {
       grad: '',
       gradinvaliditate: 'valid',
       intretinut: false,
-			coasigurat: false,
-			idangajat: null,
+      coasigurat: false,
+      idangajat: null,
     });
   }
 
@@ -462,6 +464,11 @@ class PersoaneIntretinereTabel extends React.Component {
                     <tr>
                       <th>Nume</th>
                       <th>Prenume</th>
+                      <th>CNP</th>
+                      <th>Grad</th>
+                      <th>Grad Invaliditate</th>
+                      <th>Coasigurat</th>
+                      <th>întreținut</th>
                       <th></th>
                     </tr>
                   </thead>

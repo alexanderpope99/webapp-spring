@@ -9,7 +9,6 @@ import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
-import PersoanaIntretinereTabel from '../Tables/PersoaneIntretinere';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import { getAngajatSel } from '../Resources/angajatsel';
@@ -158,7 +157,8 @@ class Angajat extends React.Component {
   }
 
   async onFocusPI() {
-    this.persoaneintretinere.current.updateAngajatSel();
+		await this.persoaneintretinere.current.updateAngajatSel();
+		this.persoaneintretinere.current.onRefresh();
     this.setState({ angajatsel: getAngajatSel() });
   }
 

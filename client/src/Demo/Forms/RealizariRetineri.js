@@ -40,7 +40,8 @@ class RealizariRetineri extends React.Component {
     this.addOrasuplimentara = this.addOrasuplimentara.bind(this);
     this.renderTabelore = this.renderTabelore.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.calcNrTichete = this.calcNrTichete.bind(this);
+		this.calcNrTichete = this.calcNrTichete.bind(this);
+		this.getStatIndividual = this.getStatIndividual.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -393,12 +394,12 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    const data = await axios.put(
+    await axios.put(
       `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
 			{},
 			{ headers: authHeader() }
     )
-      .then((res) => (res.status === 200 ? res.data : null))
+      .then((res) => (res.status === 200))
       .catch((err) => console.error(err));
 
     window.scrollTo({
@@ -432,7 +433,8 @@ class RealizariRetineri extends React.Component {
       .get(`${server.address}/oresuplimentare/api/idc=${idc}&mo=${luna}&y=${an}`, {
         headers: authHeader(),
       })
-      .then((res) => res.data);
+			.then((res) => res.data)
+			.catch(err => console.error(err));
 
     return oresuplimentare;
   }
@@ -490,7 +492,51 @@ class RealizariRetineri extends React.Component {
       nrore: 0,
       procent: '',
     });
-  }
+	}
+	
+	async getStatIndividual() {
+		const idangajat = this.state.selected_angajat.idpersoana;
+		const luna = this.state.luna;
+		const an = this.state.an;
+
+		const ok = await axios.get(
+			`${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}`,
+			{ headers: authHeader() }
+		)
+			.then(res => res.status === 200)
+			.catch(err => console.error(err));
+		
+		if(ok) {
+			let numeintreg = this.state.selected_angajat.numeintreg;
+			this.downloadStatIndividual(numeintreg, luna, an);
+		}
+	}
+
+	async downloadStatIndividual(numeintreg, luna, an) {
+    const user = JSON.parse(localStorage.getItem('user'));
+		console.log('trying to download...');
+    await fetch(
+      `${server.address}/download/Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'Authorization': `Bearer ${user.accessToken}`,
+        },
+      }
+    )
+      .then((res) => res.blob())
+      .then((blob) => {
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = `Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`;
+        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+        a.click();
+				a.remove(); //afterwards we remove the element again
+				console.log('downloaded');
+			});
+	}
 
   onSubmit(e) {
     e.preventDefault();
@@ -583,7 +629,7 @@ class RealizariRetineri extends React.Component {
             <Row>
               <Col md={3}>
                 <Form.Group>
-                  <Form.Label>Nr.</Form.Label>
+                  <Form.Label>Nr. ore</Form.Label>
                   <Form.Control
                     size="sm"
                     type="number"
@@ -1087,6 +1133,15 @@ class RealizariRetineri extends React.Component {
                     Recalculează
                   </Button>
                 </Col>
+
+								<Button
+                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                  disabled={!this.state.selected_angajat}
+                  onClick={this.getStatIndividual}
+                  className="mb-3 mt-3"
+                >
+                  Stat salariat individual
+                </Button>
 
                 <Button
                   variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
