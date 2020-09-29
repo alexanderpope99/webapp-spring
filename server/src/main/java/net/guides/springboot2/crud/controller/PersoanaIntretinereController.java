@@ -42,7 +42,7 @@ public class PersoanaIntretinereController {
 		
 		@GetMapping("ida={id}")
     public List<PersoanaIntretinere> getPersoanaIntretinereByIdangajat(@PathVariable(value = "id") Long id) {
-        return persoanaIntretinereRepository.findByIdangajat(id);
+        return persoanaIntretinereRepository.findByIdangajatOrderByNumeAscPrenumeAsc(id);
     }
 
     @PostMapping

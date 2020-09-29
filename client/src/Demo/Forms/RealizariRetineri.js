@@ -176,7 +176,7 @@ class RealizariRetineri extends React.Component {
   async setCurrentYearMonth() {
     let today = new Date();
     let luna = months[today.getMonth()];
-    let an = today.getFullYear();
+		let an = today.getFullYear();
 
     this.setState({
       an: an,
@@ -241,11 +241,12 @@ class RealizariRetineri extends React.Component {
     let totaloresuplimentare = 0;
     if (oresuplimentare.length > 0) {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
-    }
+		}
     const retineri = await axios
       .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+			.catch((err) => console.error(err));
+
 
     this.setState({
       //* realizari
@@ -357,7 +358,8 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-    console.log(data);
+		console.log(data);
+		if(!data) return;
     // total
     this.setState(
       {
@@ -391,12 +393,10 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    const data = await fetch(
+    const data = await axios.put(
       `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-      }
+			{},
+			{ headers: authHeader() }
     )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
@@ -1035,11 +1035,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.valoaretichete
-                              ? this.numberWithCommas(this.state.valoaretichete)
-                              : ''
-                          }
+                          value={this.numberWithCommas(this.state.valoaretichete)}
                         />
                       </Form.Group>
                     </Col>

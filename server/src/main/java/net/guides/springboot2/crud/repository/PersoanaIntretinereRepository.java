@@ -17,4 +17,6 @@ public interface PersoanaIntretinereRepository extends JpaRepository<PersoanaInt
 	public int getNrPersoaneIntretinereByIdcontract(long idcontract);
 	
 	public List<PersoanaIntretinere> findByIdangajat(long idangajat);
+
+	public List<PersoanaIntretinere> findByIdangajatOrderByNumeAscPrenumeAsc(long idangajat);
 }
