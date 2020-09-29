@@ -1,11 +1,16 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button } from 'react-bootstrap';
 import { Modal, Form } from 'react-bootstrap';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 class ParametriiSalarii extends React.Component {
   constructor() {
@@ -26,6 +31,7 @@ class ParametriiSalarii extends React.Component {
       cam: '',
       valtichet: '',
       show: false,
+      date: '',
     };
   }
 
@@ -33,22 +39,91 @@ class ParametriiSalarii extends React.Component {
     this.onRefresh();
   }
 
+  deleteParametrii(id) {
+    axios
+      .delete(`${server.address}/parametriisalariu/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
+      .then(() => {
+        // console.log(response);
+        this.onRefresh();
+      })
+      .catch((err) => console.error(err));
+  }
+
   // function to render in react
   async renderParametriiSalarii() {
     // console.log('render called');
     this.setState({
-      parametriiSalariiComponent: (
-        <tr key={this.state.parametriiSalarii.id}>
-          <th>{this.state.parametriiSalarii.salariumin || '-'}</th>
-          <th>{this.state.parametriiSalarii.salariuminstudiivechime || '-'}</th>
-          <th>{this.state.parametriiSalarii.salariumediubrut || '-'}</th>
-          <th>{this.state.parametriiSalarii.impozit || '-'}</th>
-          <th>{this.state.parametriiSalarii.cas || '-'}</th>
-          <th>{this.state.parametriiSalarii.cass || '-'}</th>
-          <th>{this.state.parametriiSalarii.cam || '-'}</th>
-          <th>{this.state.parametriiSalarii.valtichet || '-'}</th>
-        </tr>
-      ),
+      parametriiSalariiComponent: this.state.parametriiSalarii.map((par, index) => {
+        // for (let key in soc) {
+        //   if (!soc[key]) soc[key] = '-';
+        // }
+        // console.log(soc);
+        return (
+          <tr key={par.id}>
+            <th>{par.date.substring(0, 10) || '-'}</th>
+            <th>{par.salariumin || '-'}</th>
+            <th>{par.salariuminstudiivechime || '-'}</th>
+            <th>{par.salariumediubrut || '-'}</th>
+            <th>{par.impozit || '-'}</th>
+            <th>{par.cas || '-'}</th>
+            <th>{par.cass || '-'}</th>
+            <th>{par.cam || '-'}</th>
+            <th>{par.valtichet || '-'}</th>
+            <th>
+              <div className="d-inline-flex">
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Sigur ștergeți parametrii respectivi?</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteParametrii(par.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </div>
+            </th>
+          </tr>
+        );
+      }),
     });
   }
 
@@ -72,7 +147,7 @@ class ParametriiSalarii extends React.Component {
     // e.preventDefault();
 
     let parametriiSalarii = await axios
-      .get(`${server.address}/parametriisalariu/date/${this.getDate()}`, { headers: authHeader() })
+      .get(`${server.address}/parametriisalariu/`, { headers: authHeader() })
       .then((res) => res.data);
 
     console.log(parametriiSalarii);
@@ -80,14 +155,15 @@ class ParametriiSalarii extends React.Component {
     this.state.parametriiSalarii = parametriiSalarii;
 
     this.setState({
-      salariumin: parametriiSalarii.salariumin,
-      salariuminstudiivechime: parametriiSalarii.salariuminstudiivechime,
-      salariumediubrut: parametriiSalarii.salariumediubrut,
-      impozit: parametriiSalarii.impozit,
-      cas: parametriiSalarii.cas,
-      cass: parametriiSalarii.cass,
-      cam: parametriiSalarii.cam,
-      valtichet: parametriiSalarii.valtichet,
+      salariumin: parametriiSalarii[0].salariumin,
+      salariuminstudiivechime: parametriiSalarii[0].salariuminstudiivechime,
+      salariumediubrut: parametriiSalarii[0].salariumediubrut,
+      impozit: parametriiSalarii[0].impozit,
+      cas: parametriiSalarii[0].cas,
+      cass: parametriiSalarii[0].cass,
+      cam: parametriiSalarii[0].cam,
+      valtichet: parametriiSalarii[0].valtichet,
+      date: parametriiSalarii[0].date,
     });
 
     console.log('onRefresh called');
@@ -107,7 +183,7 @@ class ParametriiSalarii extends React.Component {
           cass: this.state.cass,
           cam: this.state.cam,
           valtichet: this.state.valtichet,
-          date: this.getDate(),
+          date: this.state.date,
         },
         { headers: authHeader() }
       )
@@ -125,6 +201,16 @@ class ParametriiSalarii extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
+              <Form.Group id="incepandcu">
+                <Form.Label>Începând cu</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={this.state.date}
+                  onChange={(e) => {
+                    this.setState({ date: e.target.value });
+                  }}
+                />
+              </Form.Group>
               <Form.Group id="salariumin">
                 <Form.Label>Sal. Minim (RON)</Form.Label>
                 <Form.Control
@@ -227,7 +313,7 @@ class ParametriiSalarii extends React.Component {
                   ↺
                 </Button>
                 <Button
-                  onClick={() => this.setState({ show: true })}
+                  onClick={() => this.setState({ date: this.getDate(), show: true })}
                   variant="outline-info"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
@@ -239,6 +325,7 @@ class ParametriiSalarii extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th>Începând cu</th>
                       <th>Sal. Minim (RON)</th>
                       <th>Sal. Minim - SS,V (RON)</th>
                       <th>Sal. Mediu Brut (RON)</th>

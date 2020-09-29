@@ -32,7 +32,7 @@ public class ParametriiSalariuController {
 
 	@GetMapping
 	public List<ParametriiSalariu> getAllPersoane() {
-		return parametriiSalariuRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+		return parametriiSalariuRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
 	}
 
 	@GetMapping("/date/{date}")

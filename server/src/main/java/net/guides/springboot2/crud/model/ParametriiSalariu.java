@@ -1,6 +1,6 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,13 +31,13 @@ public class ParametriiSalariu {
 	@Column(name = "valtichet")
 	private Float valtichet;
 	@Column(name = "date")
-	private Date date;
+	private LocalDate date;
 
 	public ParametriiSalariu() {
 	}
 
 	public ParametriiSalariu(Float salariumin, Float salariuminstudiivechime, Float salariumediubrut, Float impozit,
-			Float cas, Float cass, Float cam, Float valtichet, Date date) {
+			Float cas, Float cass, Float cam, Float valtichet, LocalDate date) {
 		this.salariumin = salariumin;
 		this.salariuminstudiivechime = salariuminstudiivechime;
 		this.salariumediubrut = salariumediubrut;
@@ -92,7 +92,7 @@ public class ParametriiSalariu {
 		return valtichet;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
@@ -129,7 +129,7 @@ public class ParametriiSalariu {
 		this.valtichet = valtichet;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 }
