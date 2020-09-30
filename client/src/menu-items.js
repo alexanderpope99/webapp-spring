@@ -95,6 +95,13 @@ var items = [
         url: '/tables/societati-tabel',
         icon: 'feather icon-file-text',
       },
+      {
+        id: 'cereri-concediu',
+        title: 'Cereri Concediu',
+        type: 'item',
+        url: '/tables/cereri-concediu',
+        icon: 'feather icon-file-text',
+      },
     ],
   },
   {

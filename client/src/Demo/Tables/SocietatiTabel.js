@@ -112,7 +112,9 @@ class SocietatiTabel extends React.Component {
     // e.preventDefault();
 
     let societati = await axios
-      .get(`${server.address}/societate`, { headers: authHeader() })
+      .get(`${server.address}/societate/user/${JSON.parse(localStorage.getItem('user')).id}`, {
+        headers: authHeader(),
+      })
       .then((societati) => societati.data);
 
     societati = await Promise.all(

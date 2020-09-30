@@ -24,47 +24,53 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/societate")
 public class SocietateController {
-    @Autowired
-    private SocietateRepository societateRepository;
+	@Autowired
+	private SocietateRepository societateRepository;
 
-    @GetMapping
-    public List<Societate> getAllPersoane() {
-        return societateRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Societate> getAllPersoane() {
+		return societateRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Societate> getSocietateById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Societate societate = societateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Societate> getSocietateById(@PathVariable(value = "id") Long id)
+			throws ResourceNotFoundException {
+		Societate societate = societateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(societate);
-    }
+		return ResponseEntity.ok().body(societate);
+	}
 
-    @PostMapping
-    public Societate createSocietate(@RequestBody Societate societate) {
-        return societateRepository.save(societate);
-    }
+	@GetMapping("/user/{id}")
+	public List<Societate> getSocietateByUserId(@PathVariable(value = "id") Integer id)
+			throws ResourceNotFoundException {
+		return societateRepository.findByUserId(id);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Societate> updateSocietate(@PathVariable(value = "id") Long id,
-            @RequestBody Societate newSocietate) throws ResourceNotFoundException {
-        Societate societate = societateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+	@PostMapping
+	public Societate createSocietate(@RequestBody Societate societate) {
+		return societateRepository.save(societate);
+	}
 
-        newSocietate.setId(societate.getId());
-        final Societate updatedSocietate = societateRepository.save(newSocietate);
-        return ResponseEntity.ok(updatedSocietate);
-    }
+	@PutMapping("{id}")
+	public ResponseEntity<Societate> updateSocietate(@PathVariable(value = "id") Long id,
+			@RequestBody Societate newSocietate) throws ResourceNotFoundException {
+		Societate societate = societateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteSocietate(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        Societate societate = societateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+		newSocietate.setId(societate.getId());
+		final Societate updatedSocietate = societateRepository.save(newSocietate);
+		return ResponseEntity.ok(updatedSocietate);
+	}
 
-        societateRepository.delete(societate);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteSocietate(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+		Societate societate = societateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+
+		societateRepository.delete(societate);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

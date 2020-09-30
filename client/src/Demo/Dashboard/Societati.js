@@ -29,9 +29,13 @@ class Societati extends React.Component {
 
   async getNumeSocietati() {
     const societati = await axios
-      .get(`${server.address}/societate`, { headers: authHeader() })
+      .get(`${server.address}/societate/user/${JSON.parse(localStorage.getItem('user')).id}`, {
+        headers: authHeader(),
+      })
       .then((res) => res.data)
       .catch((err) => console.log('err'));
+
+    console.log(JSON.parse(localStorage.getItem('user')).id);
 
     if (Array.isArray(societati)) {
       societati.forEach((societate) =>
@@ -54,8 +58,8 @@ class Societati extends React.Component {
   }
 
   select(nume_soc) {
-		this.unselectAll();
-		setAngajatSel(null);
+    this.unselectAll();
+    setAngajatSel(null);
     if (nume_soc) {
       let id = this.state[nume_soc].id;
       this.setState({
@@ -80,7 +84,7 @@ class Societati extends React.Component {
               ? () => {
                   this.select(nume_soc);
                 }
-							: null
+              : null
           }
         >
           <Card.Body>
@@ -100,7 +104,7 @@ class Societati extends React.Component {
 
     return (
       <Aux>
-				<Button href="/forms/add-societate">Adaugă societate</Button>
+        <Button href="/forms/add-societate">Adaugă societate</Button>
         <Row>{societatiComponent}</Row>
       </Aux>
     );
