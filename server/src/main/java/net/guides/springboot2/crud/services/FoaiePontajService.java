@@ -107,7 +107,7 @@ public class FoaiePontajService {
 
 		//* luna, an
 		// Row a = sheet.getRow(4);
-		writerCell = sheet.getRow(4).getCell(18);
+		writerCell = sheet.getRow(4).getCell(17);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("pentru luna " + lunaNume + " anul " + an);
 
@@ -184,16 +184,23 @@ public class FoaiePontajService {
 
 			//* write ore 1-15
 			for(int i = 1; i <= 15; ++i) {
-				writerCell = row.createCell(4+i);
+				writerCell = row.createCell(3+i);
 				writerCell.setCellValue(oreInZiua[i]);
 			}
 			//* Total 1-15 = formula
+			writerCell = row.createCell(19);
+			writerCell.setCellFormula("SUM($E$"+(15+nrAngajat)+":$S$"+(15+nrAngajat)+")");
+			
 
 			//* write ore 16-31
 			for(int i = 16; i <= nrZileLuna; ++i) {
-				writerCell = row.createCell(5+i);
+				writerCell = row.createCell(4+i);
 				writerCell.setCellValue(oreInZiua[i]);
 			}
+
+			//* evaluate all formulas
+			FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+			evaluator.evaluateAll();
 
 			//* set borders
 			String cellRange = "$A$"+(15+nrAngajat)+":$BF$"+(15+nrAngajat);
