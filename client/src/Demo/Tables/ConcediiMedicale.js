@@ -632,7 +632,7 @@ class CMTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
+                <Card.Title as="h5">Concedii medicale</Card.Title>
                 <Button
                   variant={
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'

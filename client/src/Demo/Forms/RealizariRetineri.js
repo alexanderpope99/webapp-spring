@@ -298,11 +298,14 @@ class RealizariRetineri extends React.Component {
 
   onSelect(e) {
     const selectedIndex = e.target.options.selectedIndex;
-    const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
-    setAngajatSel({
-      numeintreg: e.target.value,
-      idpersoana: idangajat,
-    });
+		const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
+		if(selectedIndex === 0)
+			setAngajatSel(null);
+		else
+			setAngajatSel({
+				numeintreg: e.target.value,
+				idpersoana: idangajat,
+			});
 
     this.setState(
       {
