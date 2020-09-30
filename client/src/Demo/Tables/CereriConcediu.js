@@ -1,75 +1,185 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button } from 'react-bootstrap';
-import { Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+import Add from '@material-ui/icons/Add';
+import Refresh from '@material-ui/icons/Refresh';
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { getSocSel } from '../Resources/socsel';
+import { getAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
-class CereriConcediu extends React.Component {
-  constructor() {
+class PersoaneIntretinereTabel extends React.Component {
+  constructor(props) {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
-    this.updateCereri = this.updateCereri.bind(this);
+    this.addCerereConcediu = this.addCerereConcediu.bind(this);
+    this.updateCerereConcediu = this.updateCerereConcediu.bind(this);
+    this.editCerereConcediu = this.editCerereConcediu.bind(this);
+    this.deleteCerere = this.deleteCerere.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
+      socsel: getSocSel(),
       cereriConcediu: [],
       cereriConcediuComponent: null,
-      pentru: '',
+
+      isEdit: false,
+
+      // confirm modal
+      showConfirm: false,
+      modalMessage: '',
+
+      // add/edit modal
+      id: '',
       dela: '',
       panala: '',
       tip: '',
       motiv: '',
+      status: '',
       show: false,
     };
   }
 
   componentDidMount() {
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+
     this.onRefresh();
+    window.scrollTo(0, 0);
   }
 
-  deleteCereri(id) {
-    axios
-      .delete(`${server.address}/cereriConcediu/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(() => {
-        // console.log(response);
-        this.onRefresh();
+  async addCerereConcediu() {
+    let pentruId = await axios
+      .get(`${server.address}/angajat/userid/${JSON.parse(localStorage.getItem('user')).id}`, {
+        headers: authHeader(),
       })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    const cerereConcediu_body = {
+      pentru: pentruId,
+      dela: this.state.dela,
+      panala: this.state.panala,
+      tip: this.state.tip,
+      motiv: this.state.motiv,
+      societate: getSocSel().id,
+      status: 'Propus',
+    };
+
+    let ok = await axios
+      .post(`${server.address}/cerericoncediu`, cerereConcediu_body, { headers: authHeader() })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+    if (ok) {
+      await this.handleClose();
+      this.setState(
+        {
+          showConfirm: true,
+          modalMessage: 'Cerere adăugată cu succes',
+        },
+        this.onRefresh
+      );
+    }
+  }
+
+  async updateCerereConcediu(idcerere) {
+    let pentruId = await axios
+      .get(`${server.address}/angajat/userid/${JSON.parse(localStorage.getItem('user')).id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    const cerereConcediu_body = {
+      pentru: pentruId,
+      dela: this.state.dela,
+      panala: this.state.panala,
+      tip: this.state.tip,
+      motiv: this.state.motiv,
+      societate: getSocSel().id,
+      status: 'Propus (Modificat)',
+    };
+
+    console.log(idcerere + ' ' + this.state.tip);
+
+    const ok = await axios
+      .put(`${server.address}/cerericoncediu/${idcerere}`, cerereConcediu_body, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      this.onRefresh();
+      await this.handleClose();
+      this.setState({
+        showConfirm: true,
+        modalMessage: 'Cerere Concediu actualizată',
+      });
+    }
+  }
+
+  async editCerereConcediu(cer) {
+    console.log(cer);
+    this.setState({
+      isEdit: true,
+      show: true,
+
+      id: cer.id,
+      pentru: cer.pentru,
+      tip: cer.tip,
+      motiv: cer.motiv,
+      dela: cer.dela ? cer.dela.substring(0, 10) : '',
+      panala: cer.panala ? cer.panala.substring(0, 10) : '',
+    });
+  }
+
+  async deleteCerere(id) {
+    axios
+      .delete(`${server.address}/cerericoncediu/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
+      .then(this.onRefresh)
       .catch((err) => console.error(err));
   }
 
-  // function to render in react
-  async renderCereriConcediu() {
-    // console.log('render called');
+  // function to create react component with fetched data
+  renderCereri() {
     this.setState({
       cereriConcediuComponent: this.state.cereriConcediu.map((cer, index) => {
-        // for (let key in soc) {
-        //   if (!soc[key]) soc[key] = '-';
-        // }
-        // console.log(soc);
         return (
+          // TODO
           <tr key={cer.id}>
-            <th>{cer.pentru || '-'}</th>
-            <th>{cer.dela.substring(0, 10) || '-'}</th>
-            <th>{cer.panala.substring(0, 10) || '-'}</th>
-            <th>{cer.tip || '-'}</th>
-            <th>{cer.motiv || '-'}</th>
+            <th>{cer.dela || '-'}</th>
+            <th>{cer.panala}</th>
+            <th>{cer.tip}</th>
+            <th>{cer.motiv}</th>
+            <th>{cer.status}</th>
             <th>
-              <div className="d-inline-flex">
+              <Row>
+                <Button
+                  onClick={() => this.editCerereConcediu(cer)}
+                  variant="outline-secondary"
+                  className="m-1 p-1 rounded-circle border-0"
+                >
+                  <Edit fontSize="small" />
+                </Button>
+
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
                     <div>
                       <Button
                         variant="outline-secondary"
-                        className="m-0 p-1 rounded-circle border-0"
+                        className="m-1 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
                         <DeleteIcon fontSize="small" />
@@ -86,14 +196,16 @@ class CereriConcediu extends React.Component {
                         }}
                       >
                         <Box p={2}>
-                          <Typography>Sigur ștergeți cererea respectivă?</Typography>
+                          <Typography>
+                            Sigur ștergeți cererea {cer.dela} {cer.panala}?
+                          </Typography>
                           <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                           <br />
                           <Button
                             variant="outline-danger"
                             onClick={() => {
                               popupState.close();
-                              this.deleteCereri(cer.id);
+                              this.deleteCerere(cer.id);
                             }}
                             className="mt-2 "
                           >
@@ -111,7 +223,7 @@ class CereriConcediu extends React.Component {
                     </div>
                   )}
                 </PopupState>
-              </div>
+              </Row>
             </th>
           </tr>
         );
@@ -120,133 +232,155 @@ class CereriConcediu extends React.Component {
   }
 
   async onRefresh() {
-    // e.preventDefault();
-
-    let cereriConcediu = await axios
-      .get(`${server.address}/cerericoncediu/`, { headers: authHeader() })
-      .then((res) => res.data);
-
-    console.log(cereriConcediu);
-
-    this.state.cereriConcediu = cereriConcediu;
-
-    this.setState({
-      pentru: cereriConcediu[0].pentru,
-      dela: cereriConcediu[0].dela,
-      panala: cereriConcediu[0].panala,
-      tip: cereriConcediu[0].tip,
-      motiv: cereriConcediu[0].motiv,
-    });
-
-    console.log('onRefresh called');
-    this.renderCereriConcediu();
+    const cereriConcediu = await axios
+      .get(
+        `${server.address}/cerericoncediu/usersoc/${JSON.parse(localStorage.getItem('user')).id}&${
+          getSocSel().id
+        }`,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+    if (cereriConcediu) {
+      this.setState(
+        {
+          cereriConcediu: cereriConcediu,
+        },
+        this.renderCereri
+      );
+    }
   }
 
-  async updateCereri() {
-    await axios
-      .post(
-        `${server.address}/cerericoncediu`,
-        {
-          pentru: this.state.pentru,
-          dela: this.state.dela,
-          panala: this.state.panala,
-          tip: this.state.tip,
-          motiv: this.state.motiv,
-        },
-        { headers: authHeader() }
-      )
-      .then((res) => res.data);
-    this.onRefresh();
-    this.setState({ show: false });
+  async onSubmit(e) {
+    e.preventDefault();
+    if (this.state.isEdit) this.updateCerereConcediu(this.state.id);
+    else this.addCerereConcediu();
+  }
+
+  async handleClose() {
+    this.setState({
+      show: false,
+      id: null,
+      pentru: '',
+      dela: '',
+      panala: '',
+      tip: '',
+      motiv: '',
+    });
+  }
+
+  handleCloseConfirm() {
+    this.setState({
+      modalMessage: '',
+      showConfirm: false,
+    });
   }
 
   render() {
     return (
       <Aux>
-        <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
+        {/* add/edit modal */}
+        <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Cereri Concediu</Modal.Title>
+            <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group id="incepandcu">
-                <Form.Label>Începând cu</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.dela}
-                  onChange={(e) => {
-                    this.setState({ dela: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="panala">
-                <Form.Label>Până la</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.panala}
-                  onChange={(e) => {
-                    this.setState({ panala: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="tip">
-                <Form.Label>Tip</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.tip}
-                  onChange={(e) => {
-                    this.setState({ tip: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="motiv">
-                <Form.Label>Motiv</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.motiv}
-                  onChange={(e) => {
-                    this.setState({ motiv: e.target.value });
-                  }}
-                />
-              </Form.Group>
+            <Form onSubmit={this.addCerereConcediu}>
+              <Row>
+                <Col md={12}>
+                  <Form.Group>
+                    <Form.Label>De la</Form.Label>
+                    <Form.Control
+                      type="date"
+                      value={this.state.dela}
+                      onChange={(e) => this.setState({ dela: e.target.value })}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Până la</Form.Label>
+                    <Form.Control
+                      type="date"
+                      value={this.state.panala}
+                      onChange={(e) => this.setState({ panala: e.target.value })}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Tip</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.tip}
+                      onChange={(e) => this.setState({ tip: e.target.value })}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Motiv</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.motiv}
+                      onChange={(e) => this.setState({ motiv: e.target.value })}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.updateParametrii}>
-              Confirmă
+            <Button variant="primary" onClick={this.onSubmit} type="submit">
+              {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
+
+        {/* confirm modal */}
+        <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
+          <Modal.Header closeButton>
+            <Modal.Title>Mesaj</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.modalMessage}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.handleCloseConfirm}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <Row>
           <Col>
             <Card>
-              <Card.Header>
+              <Card.Header className="border-0">
                 <Card.Title as="h5">Cereri Concediu</Card.Title>
+
                 <Button
                   variant="outline-info"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  ↺
+                  <Refresh className="m-0 p-0" />
+                  {/* ↺ */}
                 </Button>
+
                 <Button
-                  onClick={() => this.setState({ date: this.getDate(), show: true })}
+                  onClick={() => this.setState({ isEdit: false, show: true })}
                   variant="outline-info"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  Edit
+                  <Add className="m-0 p-0" />
                 </Button>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>Începând cu</th>
+                      <th>De la</th>
                       <th>Până la</th>
                       <th>Tip</th>
                       <th>Motiv</th>
+                      <th>Status</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>{this.state.cereriConcediuComponent}</tbody>
@@ -260,4 +394,4 @@ class CereriConcediu extends React.Component {
   }
 }
 
-export default CereriConcediu;
+export default PersoaneIntretinereTabel;

@@ -36,6 +36,7 @@ const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
 const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
+const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -117,6 +118,12 @@ const routes = [
     exact: true,
     name: 'Cereri Concediu',
     component: CereriConcediu,
+  },
+  {
+    path: '/tables/cereri-concediu-director',
+    exact: true,
+    name: 'Cereri Concediu',
+    component: CereriConcediuSuperior,
   },
 
   // EDIT

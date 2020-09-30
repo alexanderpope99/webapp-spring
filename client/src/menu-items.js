@@ -7,7 +7,7 @@ var items = [
     title: 'Navigation',
     type: 'group',
     icon: 'icon-navigation',
-    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN'),
+    show: user.roles.includes('ROLE_ANGAJAT') || user.roles.includes('ROLE_ADMIN'),
     children: [
       {
         id: 'dashboard',
@@ -28,6 +28,38 @@ var items = [
         title: 'Parametrii Salarii',
         type: 'item',
         url: '/parametriisalarii',
+        icon: 'feather icon-dollar-sign',
+      },
+    ],
+  },
+  {
+    id: 'cereri',
+    title: 'Cereri',
+    type: 'group',
+    icon: 'icon-group',
+    show: user.roles.includes('ROLE_DIRECTOR'),
+    children: [
+      {
+        id: 'cereriConcediu',
+        title: 'Cereri Concediu Director',
+        type: 'item',
+        url: '/tables/cereri-concediu-director',
+        icon: 'feather icon-dollar-sign',
+      },
+    ],
+  },
+  {
+    id: 'cereri',
+    title: 'Cereri',
+    type: 'group',
+    icon: 'icon-group',
+    show: user.roles.includes('ROLE_ANGAJAT'),
+    children: [
+      {
+        id: 'cereriConcediu',
+        title: 'Cereri Concediu',
+        type: 'item',
+        url: '/tables/cereri-concediu',
         icon: 'feather icon-dollar-sign',
       },
     ],
@@ -65,7 +97,7 @@ var items = [
         title: 'Tabel Persoane',
         type: 'item',
         url: '/tables/persoane-tabel',
-					icon: 'feather icon-credit-card',
+        icon: 'feather icon-credit-card',
       },
       // {
       //   id: 'edit-persoana',

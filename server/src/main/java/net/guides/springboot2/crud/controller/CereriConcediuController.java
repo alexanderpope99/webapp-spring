@@ -32,11 +32,23 @@ public class CereriConcediuController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CereriConcediu> getCentruCostById(@PathVariable(value = "id") Long cereriConcediuId)
+	public ResponseEntity<CereriConcediu> getCerereConcediuById(@PathVariable(value = "id") Long cereriConcediuId)
 			throws ResourceNotFoundException {
 		CereriConcediu cereriConcediu = cereriConcediuRepository.findById(cereriConcediuId).orElseThrow(
 				() -> new ResourceNotFoundException("CereriConcediu not found for this id :: " + cereriConcediuId));
 		return ResponseEntity.ok().body(cereriConcediu);
+	}
+
+	@GetMapping("/usersoc/{usrid}&{socid}")
+	public List<CereriConcediu> getCerereConcediuByUserIdAndSocietyId(@PathVariable(value = "usrid") long usrId,
+			@PathVariable(value = "socid") long socId) throws ResourceNotFoundException {
+		return cereriConcediuRepository.findCerereConcediuByUserIdAndSocietyId(usrId, socId);
+	}
+
+	@GetMapping("/supsoc/{supid}&{socid}")
+	public List<CereriConcediu> getCerereConcediuBySuperiorIdAndSocietyId(@PathVariable(value = "supid") long supId,
+			@PathVariable(value = "socid") long socId) throws ResourceNotFoundException {
+		return cereriConcediuRepository.findCerereConcediuBySuperiorIdAndSocietyId(supId, socId);
 	}
 
 	@PostMapping
@@ -45,14 +57,26 @@ public class CereriConcediuController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CereriConcediu> updateCereriConcediu(@PathVariable(value = "id") Long cereriConcediuId,
+	public ResponseEntity<CereriConcediu> updateCereriConcediu(@PathVariable(value = "id") long cereriConcediuId,
 			@RequestBody CereriConcediu cereriConcediuDetails) throws ResourceNotFoundException {
 		CereriConcediu cereriConcediu = cereriConcediuRepository.findById(cereriConcediuId).orElseThrow(
 				() -> new ResourceNotFoundException("CentruCost not found for this id :: " + cereriConcediuId));
 
 		cereriConcediuDetails.setId(cereriConcediu.getId());
-		final CereriConcediu updatedCereriConcediu = cereriConcediuRepository.save(cereriConcediu);
+		final CereriConcediu updatedCereriConcediu = cereriConcediuRepository.save(cereriConcediuDetails);
 		return ResponseEntity.ok(updatedCereriConcediu);
+	}
+
+	@PutMapping("/statusappr/{id}")
+	public CereriConcediu approveStatus(@PathVariable(value = "id") long cereriConcediuId)
+			throws ResourceNotFoundException {
+		return cereriConcediuRepository.approveStatus(cereriConcediuId);
+	}
+
+	@PutMapping("/statusrej/{id}")
+	public CereriConcediu rejectStatus(@PathVariable(value = "id") long cereriConcediuId)
+			throws ResourceNotFoundException {
+		return cereriConcediuRepository.rejectStatus(cereriConcediuId);
 	}
 
 	@DeleteMapping("{id}")

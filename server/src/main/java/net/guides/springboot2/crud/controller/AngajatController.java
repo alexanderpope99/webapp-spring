@@ -23,62 +23,67 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/angajat")
 public class AngajatController {
-    @Autowired
-    private AngajatRepository angajatRepository;
+	@Autowired
+	private AngajatRepository angajatRepository;
 
-    @GetMapping("/sortbyid")
-    public List<Angajat> getAllAngajats() {
-        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
-    }
+	@GetMapping("/sortbyid")
+	public List<Angajat> getAllAngajats() {
+		return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
+	}
 
-    @GetMapping
-    public List<Angajat> getAngajatsAlphabetically() {
-        return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
-    }
+	@GetMapping
+	public List<Angajat> getAngajatsAlphabetically() {
+		return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") Long angajatId)
-            throws ResourceNotFoundException {
-        Angajat angajat = angajatRepository.findById(angajatId)
-                .orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
-        return ResponseEntity.ok().body(angajat);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") Long angajatId)
+			throws ResourceNotFoundException {
+		Angajat angajat = angajatRepository.findById(angajatId)
+				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
+		return ResponseEntity.ok().body(angajat);
+	}
 
-    @GetMapping("/c")
-    public List<Angajat> getAngajatByIdWhereIdcontractNotNull() {
-        return angajatRepository.findByIdcontractNotNull();
-		}
-		
-		@GetMapping("/ids={ids}/count")
-		public int countAngajatiByIdsocietate(@PathVariable(name="ids") int idsocietate) {
-			return angajatRepository.countByIdsocietate(idsocietate);
-		}
+	@GetMapping("/c")
+	public List<Angajat> getAngajatByIdWhereIdcontractNotNull() {
+		return angajatRepository.findByIdcontractNotNull();
+	}
 
-    @PostMapping
-    public Angajat createAngajat(@RequestBody Angajat angajat) {
-        return angajatRepository.save(angajat);
-    }
+	@GetMapping("/userid/{id}")
+	public int getPersoanaIdByUserId(@PathVariable(value = "id") Long userId) {
+		return angajatRepository.findPersoanaIdByUserId(userId);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") Long angajatId,
-            @RequestBody Angajat angajatDetails) throws ResourceNotFoundException {
-        Angajat angajat = angajatRepository.findById(angajatId)
-                .orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
+	@GetMapping("/ids={ids}/count")
+	public int countAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+		return angajatRepository.countByIdsocietate(idsocietate);
+	}
 
-        angajatDetails.setIdpersoana(angajat.getIdpersoana());
-        final Angajat updatedAngajat = angajatRepository.save(angajatDetails);
-        return ResponseEntity.ok(updatedAngajat);
-    }
+	@PostMapping
+	public Angajat createAngajat(@RequestBody Angajat angajat) {
+		return angajatRepository.save(angajat);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteAngajat(@PathVariable(value = "id") Long angajatId)
-            throws ResourceNotFoundException {
-        Angajat angajat = angajatRepository.findById(angajatId)
-                .orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
+	@PutMapping("{id}")
+	public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") Long angajatId,
+			@RequestBody Angajat angajatDetails) throws ResourceNotFoundException {
+		Angajat angajat = angajatRepository.findById(angajatId)
+				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
 
-        angajatRepository.delete(angajat);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		angajatDetails.setIdpersoana(angajat.getIdpersoana());
+		final Angajat updatedAngajat = angajatRepository.save(angajatDetails);
+		return ResponseEntity.ok(updatedAngajat);
+	}
+
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteAngajat(@PathVariable(value = "id") Long angajatId)
+			throws ResourceNotFoundException {
+		Angajat angajat = angajatRepository.findById(angajatId)
+				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
+
+		angajatRepository.delete(angajat);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }
