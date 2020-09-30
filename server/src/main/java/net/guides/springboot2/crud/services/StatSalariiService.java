@@ -62,6 +62,8 @@ public class StatSalariiService {
 	@Autowired
 	private ContractRepository contractRepository;
 
+	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
+
 	private void setRegionBorder(CellRangeAddress region, Sheet sheet) {
         RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
         RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
@@ -90,12 +92,6 @@ public class StatSalariiService {
 		// List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
 		List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
 
-		// File currDir = new File(".");
-		// String path = currDir.getAbsolutePath();
-		// System.out.println(path);
-		// String homeLocation = 
-		// 	path.substring(0, path.length() - 1) + "src\\main\\java\\net\\guides\\springboot2\\crud\\downloads";
-		String homeLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\";
 		String statTemplateLocation = homeLocation + "\\templates";
 		
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatSalarii.xlsx"));
@@ -948,7 +944,6 @@ public class StatSalariiService {
 		Contract contract = contractRepository.findByIdPersoana(persoana.getId())
 			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + persoana.getId()));
 
-		String homeLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\";
 		String statTemplateLocation = homeLocation + "\\templates";
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatIndividual.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
