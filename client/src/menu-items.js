@@ -28,7 +28,7 @@ var items = [
         title: 'Parametrii Salarii',
         type: 'item',
         url: '/parametriisalarii',
-        icon: 'feather icon-home',
+        icon: 'feather icon-dollar-sign',
       },
     ],
   },
@@ -44,14 +44,14 @@ var items = [
         title: 'Angajat',
         type: 'item',
         url: '/forms/angajat',
-        icon: 'feather icon-file-text',
+        icon: 'feather icon-users',
       },
       {
         id: 'realizari-retineri',
         title: 'Realizari / Retineri',
         type: 'item',
         url: '/forms/realizari-retineri',
-        icon: 'feather icon-file-text',
+        icon: 'feather icon-briefcase',
       },
       // {
       //   id: 'add-persoana',
@@ -65,7 +65,7 @@ var items = [
         title: 'Tabel Persoane',
         type: 'item',
         url: '/tables/persoane-tabel',
-        icon: 'feather icon-file-text',
+					icon: 'feather icon-credit-card',
       },
       // {
       //   id: 'edit-persoana',
@@ -93,7 +93,7 @@ var items = [
         title: 'Tabel Societati',
         type: 'item',
         url: '/tables/societati-tabel',
-        icon: 'feather icon-file-text',
+        icon: 'feather icon-credit-card',
       },
       {
         id: 'cereri-concediu',

@@ -2,10 +2,6 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-user id in: 
-	stat individual -> frontent(uri), backend(uri + function param + path in function)
-	download path	-> frontend(uri), backend(uri + funtcion param + path in function)
-
 foaie pontaj
 
 nota contabila
