@@ -498,9 +498,10 @@ class RealizariRetineri extends React.Component {
 		const idangajat = this.state.selected_angajat.idpersoana;
 		const luna = this.state.luna;
 		const an = this.state.an;
+		const user = JSON.parse(localStorage.getItem('user'));
 
 		const ok = await axios.get(
-			`${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}`,
+			`${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
 			{ headers: authHeader() }
 		)
 			.then(res => res.status === 200)
@@ -516,7 +517,7 @@ class RealizariRetineri extends React.Component {
     const user = JSON.parse(localStorage.getItem('user'));
 		console.log('trying to download...');
     await fetch(
-      `${server.address}/download/Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`,
+      `${server.address}/download/${user.id}/Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`,
       {
         method: 'GET',
         headers: {

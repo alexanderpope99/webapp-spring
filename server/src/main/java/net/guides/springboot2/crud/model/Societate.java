@@ -25,17 +25,20 @@ public class Societate {
     @Column(name = "idadresa")
     private Long idadresa;
     @Column(name = "email")
-    private String email;
+		private String email;
+		@Column(name = "telefon")
+		private String telefon;
 
     public Societate() { }
 
-    public Societate( String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email ) {
+    public Societate( String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email, String telefon ) {
         this.nume = nume;
         this.cif = cif;
         this.capsoc = capsoc;
         this.regcom = regcom;
         this.idadresa = idadresa;
-        this.email = email;
+				this.email = email;
+				this.telefon = telefon;
     }
 
     @Id
@@ -68,7 +71,10 @@ public class Societate {
     }
     public String getRegcom() {
         return regcom;
-    }
+		}
+		public String getTelefon() {
+			return telefon;
+		}
 
     // SETTERS
     public void setCapsoc(Double capsoc) {
@@ -91,6 +97,9 @@ public class Societate {
     }
     public void setRegcom(String regcom) {
         this.regcom = regcom;
-    }
+		}
+		public void setTelefon(String telefon) {
+			this.telefon = telefon;
+		}
 }
 

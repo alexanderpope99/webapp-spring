@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -59,6 +62,8 @@ public class StatSalariiService {
 	@Autowired
 	private ContractRepository contractRepository;
 
+	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
+
 	private void setRegionBorder(CellRangeAddress region, Sheet sheet) {
         RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
         RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
@@ -77,7 +82,7 @@ public class StatSalariiService {
 		return formula.toString();
 	}
 
-	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe) throws IOException, ResourceNotFoundException {
+	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, long userID) throws IOException, ResourceNotFoundException {
 		try {
 		Societate societate = societateRepository.findById((long) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
@@ -87,13 +92,7 @@ public class StatSalariiService {
 		// List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
 		List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
 
-		// File currDir = new File(".");
-		// String path = currDir.getAbsolutePath();
-		// System.out.println(path);
-		// String downloadsLocation = 
-		// 	path.substring(0, path.length() - 1) + "src\\main\\java\\net\\guides\\springboot2\\crud\\downloads";
-		String downloadsLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\";
-		String statTemplateLocation = downloadsLocation + "\\templates";
+		String statTemplateLocation = homeLocation + "\\templates";
 		
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatSalarii.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
@@ -150,7 +149,7 @@ public class StatSalariiService {
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
 		
 		
-		//! write angajati:
+		//? write angajati:
 		int nrAngajat = 0;
 		int impozitScutit = 0;
 		for(Persoana persoana : persoane) {
@@ -918,7 +917,8 @@ public class StatSalariiService {
 		writerCell.setCellStyle(functieStyle);
 
 		//* OUTPUT THE FILE
-		String newFileLocation = downloadsLocation + "downloads\\Stat Salarii - " + societate.getNume() + " - " + lunaNume + ' ' + an + ".xlsx";
+		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
+		String newFileLocation = String.format("%s\\downloads\\%d\\Stat Salarii - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 		
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
@@ -932,7 +932,7 @@ public class StatSalariiService {
 		}
 	} //! createStatSalarii
 
-	public boolean createStatIndividual(int luna, int an, long idangajat, int idsocietate) throws ResourceNotFoundException {
+	public boolean createStatIndividual(int luna, int an, long idangajat, int idsocietate, long userID) throws ResourceNotFoundException {
 		try {
 		Societate societate = societateRepository.findById((long) idsocietate)
 			.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
@@ -944,8 +944,7 @@ public class StatSalariiService {
 		Contract contract = contractRepository.findByIdPersoana(persoana.getId())
 			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + persoana.getId()));
 
-		String downloadsLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\";
-		String statTemplateLocation = downloadsLocation + "\\templates";
+		String statTemplateLocation = homeLocation + "\\templates";
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatIndividual.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet stat = workbook.getSheetAt(0);
@@ -1204,7 +1203,8 @@ public class StatSalariiService {
 
 			
 			//* OUTPUT THE FILE
-			String newFileLocation = downloadsLocation + "downloads\\Stat Salarii - " + persoana.getNume()+' '+persoana.getPrenume() + " - " + lunaNume + ' ' + an + ".xlsx";
+			Files.createDirectories(Paths.get(homeLocation + "downloads\\"+userID));
+			String newFileLocation = String.format("%s\\downloads\\%d\\Stat Salarii - %s %s - %s %d.xlsx", homeLocation, userID, persoana.getNume(), persoana.getPrenume(), lunaNume, an);
 			
 			FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
@@ -1217,5 +1217,6 @@ public class StatSalariiService {
 			return false;
 		}
 		
-	}
+	} //! createStatIndivitual
+	
 }

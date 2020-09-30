@@ -2,7 +2,9 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-stat individual
+user id in: 
+	stat individual -> frontent(uri), backend(uri + function param + path in function)
+	download path	-> frontend(uri), backend(uri + funtcion param + path in function)
 
 foaie pontaj
 
@@ -24,6 +26,5 @@ contabil:
 	
 angajat:
 	doar:
-	- date personale,
-	- face cereri
-
+	+ date personale,
+	+ face cereri

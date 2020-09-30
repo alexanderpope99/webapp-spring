@@ -18,7 +18,8 @@ class Stat extends React.Component {
       socsel: getSocSel(),
       luna: '',
       an: '',
-      intocmitDe: '',
+			intocmitDe: '',
+			user: JSON.parse(localStorage.getItem('user'))
     };
   }
 
@@ -40,11 +41,12 @@ class Stat extends React.Component {
   }
 
   // luna is object of type { nume: string, nr: int }
-  async download(luna, an, token) {
+  async download(luna, an) {
+		const token = this.state.user.accessToken;
     console.log('trying to download...');
     let societateNume = this.state.socsel.nume;
     await fetch(
-      `${server.address}/download/Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`,
+      `${server.address}/download/${this.state.user.id}/Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`,
       {
         method: 'GET',
         headers: {
@@ -62,8 +64,8 @@ class Stat extends React.Component {
         document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
         a.click();
         a.remove(); //afterwards we remove the element again
+				console.log('downloaded');
       });
-    console.log('downloaded');
   }
 
   async creeazaStatSalarii(e) {
@@ -72,22 +74,21 @@ class Stat extends React.Component {
     let luna = this.state.luna;
     let an = this.state.an;
     let i = this.state.intocmitDe ? this.state.intocmitDe : '-';
-    const user = JSON.parse(localStorage.getItem('user'));
 
     const created = await fetch(
-      `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}`,
+      `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.accessToken}`,
+          'Authorization': `Bearer ${this.state.user.accessToken}`,
         },
       }
     )
       .then((res) => res.ok)
       .catch((err) => console.error(err));
 
-    if (created) this.download(luna, an, user.accessToken);
+    if (created) this.download(luna, an);
   }
 
   render() {
