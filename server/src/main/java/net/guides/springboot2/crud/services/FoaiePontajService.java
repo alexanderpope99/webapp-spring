@@ -203,7 +203,7 @@ public class FoaiePontajService {
 			evaluator.evaluateAll();
 
 			//* set borders
-			String cellRange = "$A$"+(15+nrAngajat)+":$BF$"+(15+nrAngajat);
+			String cellRange = "$A$"+(15+nrAngajat)+":$BE$"+(15+nrAngajat);
 			allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);
 			allCellsBordered.applyBorders(sheet);
 
