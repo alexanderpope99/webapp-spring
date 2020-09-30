@@ -648,11 +648,16 @@ class RealizariRetineri extends React.Component {
                   <Form.Label>Procent</Form.Label>
                   <Form.Control
                     size="sm"
-                    type="number"
+                    as="select"
                     min="0"
                     value={this.state.procent}
                     onChange={(e) => this.setState({ procent: e.target.value })}
-                  />
+                  >
+										<option>100</option>
+										<option>150</option>
+										<option>175</option>
+										<option>200</option>
+									</Form.Control>
                 </Form.Group>
               </Col>
               <Col md={4}>
