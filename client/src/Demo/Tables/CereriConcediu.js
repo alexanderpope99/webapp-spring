@@ -159,17 +159,27 @@ class PersoaneIntretinereTabel extends React.Component {
         return (
           // TODO
           <tr key={cer.id}>
+            <th>
+              {cer.status === 'Propus' || cer.status === 'Propus (Modificat)' ? (
+                <i className="fa fa-circle text-c-gray f-10 mr-2" />
+              ) : cer.status === 'Aprobat' ? (
+                <i className="fa fa-circle text-c-green f-10 mr-2" />
+              ) : (
+                <i className="fa fa-circle text-c-red f-10 mr-2" />
+              )}
+              {cer.status}
+            </th>
             <th>{cer.dela || '-'}</th>
             <th>{cer.panala}</th>
             <th>{cer.tip}</th>
             <th>{cer.motiv}</th>
-            <th>{cer.status}</th>
             <th>
               <Row>
                 <Button
                   onClick={() => this.editCerereConcediu(cer)}
                   variant="outline-secondary"
                   className="m-1 p-1 rounded-circle border-0"
+                  disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
                 >
                   <Edit fontSize="small" />
                 </Button>
@@ -180,6 +190,7 @@ class PersoaneIntretinereTabel extends React.Component {
                       <Button
                         variant="outline-secondary"
                         className="m-1 p-1 rounded-circle border-0"
+                        disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
                         {...bindTrigger(popupState)}
                       >
                         <DeleteIcon fontSize="small" />
@@ -375,11 +386,11 @@ class PersoaneIntretinereTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th>Status</th>
                       <th>De la</th>
                       <th>Până la</th>
                       <th>Tip</th>
                       <th>Motiv</th>
-                      <th>Status</th>
                       <th></th>
                     </tr>
                   </thead>

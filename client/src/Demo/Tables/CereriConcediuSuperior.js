@@ -52,19 +52,16 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   async approveCerereConcediu(cer) {
-    this.setState({
-      id: cer.id,
-      pentru: cer.pentru,
-      tip: cer.tip,
-      motiv: cer.motiv,
-      dela: cer.dela ? cer.dela.substring(0, 10) : '',
-      panala: cer.panala ? cer.panala.substring(0, 10) : '',
-    });
+    axios
+      .put(`${server.address}/cerericoncediu/statusappr/${cer.id}`, {}, { headers: authHeader() })
+      .then((response) => response.data)
+      .then(this.onRefresh)
+      .catch((err) => console.error(err));
   }
 
-  async rejectCerere(id) {
+  async rejectCerereConcediu(cer) {
     axios
-      .delete(`${server.address}/cerericoncediu/${id}`, { headers: authHeader() })
+      .put(`${server.address}/cerericoncediu/statusrej/${cer.id}`, {}, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.onRefresh)
       .catch((err) => console.error(err));
@@ -77,11 +74,20 @@ class PersoaneIntretinereTabel extends React.Component {
         return (
           // TODO
           <tr key={cer.id}>
+            <th>
+              {cer.status === 'Propus' || cer.status === 'Propus (Modificat)' ? (
+                <i className="fa fa-circle text-c-gray f-10 mr-2" />
+              ) : cer.status === 'Aprobat' ? (
+                <i className="fa fa-circle text-c-green f-10 mr-2" />
+              ) : (
+                <i className="fa fa-circle text-c-red f-10 mr-2" />
+              )}
+              {cer.status}
+            </th>
             <th>{cer.dela || '-'}</th>
             <th>{cer.panala}</th>
             <th>{cer.tip}</th>
             <th>{cer.motiv}</th>
-            <th>{cer.status}</th>
             <th>
               <Row>
                 <OverlayTrigger
@@ -102,65 +108,23 @@ class PersoaneIntretinereTabel extends React.Component {
                   </Button>
                 </OverlayTrigger>
 
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <OverlayTrigger
-                        placement="bottom"
-                        delay={{ show: 250, hide: 250 }}
-                        overlay={
-                          <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                            Respinge
-                          </Tooltip>
-                        }
-                      >
-                        <Button
-                          variant="outline-danger"
-                          className="m-1 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
-                        >
-                          <CloseIcon fontSize="medium" />
-                        </Button>
-                      </OverlayTrigger>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>
-                            Sigur ștergeți cererea {cer.dela} {cer.panala}?
-                          </Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.rejectCerere(cer.id);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
+                <OverlayTrigger
+                  placement="bottom"
+                  delay={{ show: 250, hide: 250 }}
+                  overlay={
+                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                      Respinge
+                    </Tooltip>
+                  }
+                >
+                  <Button
+                    onClick={() => this.rejectCerereConcediu(cer)}
+                    variant="outline-danger"
+                    className="m-1 p-1 rounded-circle border-0"
+                  >
+                    <CloseIcon fontSize="medium" />
+                  </Button>
+                </OverlayTrigger>
               </Row>
             </th>
           </tr>
@@ -248,11 +212,11 @@ class PersoaneIntretinereTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th>Status</th>
                       <th>De la</th>
                       <th>Până la</th>
                       <th>Tip</th>
                       <th>Motiv</th>
-                      <th>Status</th>
                       <th>Acțiuni</th>
                     </tr>
                   </thead>

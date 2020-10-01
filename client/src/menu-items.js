@@ -7,7 +7,10 @@ var items = [
     title: 'Navigation',
     type: 'group',
     icon: 'icon-navigation',
-    show: user.roles.includes('ROLE_ANGAJAT') || user.roles.includes('ROLE_ADMIN'),
+    show:
+      user.roles.includes('ROLE_ANGAJAT') ||
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_DIRECTOR'),
     children: [
       {
         id: 'dashboard',
