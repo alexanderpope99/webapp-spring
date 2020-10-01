@@ -5,23 +5,16 @@ import {
   Card,
   Table,
   Button,
-  Modal,
-  Form,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import Refresh from '@material-ui/icons/Refresh';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
-import { getAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 

@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
-import { getAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 

@@ -135,7 +135,7 @@ var items = [
         title: 'Cereri Concediu',
         type: 'item',
         url: '/tables/cereri-concediu',
-        icon: 'feather icon-file-text',
+        icon: 'feather icon-briefcase',
       },
     ],
   },
