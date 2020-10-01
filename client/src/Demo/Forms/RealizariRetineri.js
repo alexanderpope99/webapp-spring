@@ -922,7 +922,7 @@ class RealizariRetineri extends React.Component {
                           <Form.Control
                             type="text"
                             disabled
-                            value={this.state.totaloresuplimentare + ' RON'}
+                            value={this.numberWithCommas(this.state.totaloresuplimentare) + ' RON'}
                           />
                           <InputGroup.Append>
                             <Button

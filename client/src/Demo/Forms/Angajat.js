@@ -13,6 +13,7 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import { getAngajatSel } from '../Resources/angajatsel';
 import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
+import BazaCalcul from '../Tables/BazaCalcul';
 
 /*
   ? how it works now:
@@ -44,6 +45,7 @@ class Angajat extends React.Component {
     this.contract = React.createRef();
     this.co = React.createRef();
     this.cm = React.createRef();
+    this.bc = React.createRef();
 
     this.state = {
       socsel: getSocSel(),
@@ -154,7 +156,12 @@ class Angajat extends React.Component {
     }
 
     this.cm.current.setAngajat(angajat);
-  }
+	}
+	async onFocusBC() {
+		await this.bc.current.updateAngajatSel();
+		this.bc.current.onRefresh();
+		this.setState({ anajatsel: getAngajatSel() });
+	}
 
   async onFocusPI() {
 		await this.persoaneintretinere.current.updateAngajatSel();
@@ -199,6 +206,7 @@ class Angajat extends React.Component {
                 else if (key === 'co') this.onFocusCO();
                 else if (key === 'cm') this.onFocusCM();
                 else if (key === 'pi') this.onFocusPI();
+                else if (key === 'bc') this.onFocusBC();
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
@@ -219,6 +227,10 @@ class Angajat extends React.Component {
 
               <Tab eventKey="cm" title="C.M.">
                 <ConcediiMedicale ref={this.cm} />
+              </Tab>
+
+							<Tab eventKey="bc" title="Bază calc.">
+                <BazaCalcul ref={this.bc} />
               </Tab>
 
               <Tab eventKey="pi" title="Pers. într.">
