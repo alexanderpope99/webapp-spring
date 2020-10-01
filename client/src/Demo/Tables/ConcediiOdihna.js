@@ -302,8 +302,8 @@ class COTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header>
-                <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
+              <Card.Header className="border-0">
+                <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
                   variant={
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'

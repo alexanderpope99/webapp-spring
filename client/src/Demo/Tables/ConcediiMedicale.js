@@ -631,8 +631,8 @@ class CMTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header>
-                <Card.Title as="h5">Listă concedii de odihnă</Card.Title>
+              <Card.Header className="border-0">
+                <Card.Title as="h5">Concedii medicale</Card.Title>
                 <Button
                   variant={
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'

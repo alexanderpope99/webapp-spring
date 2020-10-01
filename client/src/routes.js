@@ -26,8 +26,9 @@ const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
 
-// DOWNLOADS
+// RAPOARTE
 const Stat = React.lazy(() => import('./Demo/Rapoarte/Stat'));
+const Pontaj = React.lazy(() => import('./Demo/Rapoarte/Pontaj'));
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
@@ -94,8 +95,9 @@ const routes = [
     component: RealizariRetineri,
   },
 
-  // DOWNLOADS
+  // RAPOARTE
   { path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
+  { path: '/pontaj', exact: true, name: 'Foaie pontaj', component: Pontaj },
 
   // TABLES
   { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
