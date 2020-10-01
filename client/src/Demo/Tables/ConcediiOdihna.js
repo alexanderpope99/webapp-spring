@@ -302,7 +302,7 @@ class COTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header>
+              <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
                   variant={

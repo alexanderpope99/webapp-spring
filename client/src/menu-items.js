@@ -110,6 +110,13 @@ var items = [
         type: 'item',
         url: '/state-salarii',
         icon: 'feather icon-file-text',
+			},
+			{
+        id: 'pontaj',
+        title: 'Foi pontaj',
+        type: 'item',
+        url: '/pontaj',
+        icon: 'feather icon-grid',
       },
     ],
   },

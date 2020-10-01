@@ -431,13 +431,8 @@ class PersoaneIntretinereTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header>
-                <Card.Title as="h5">
-                  Persoane Întreținere
-                  {this.state.angajatsel
-                    ? ' - ' + this.state.angajatsel.numeintreg
-                    : ' *niciun angajat selectat'}
-                </Card.Title>
+              <Card.Header className="border-0">
+                <Card.Title as="h5">Persoane Întreținere</Card.Title>
 
                 <Button
                   variant="outline-info"

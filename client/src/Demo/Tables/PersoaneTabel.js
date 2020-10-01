@@ -146,7 +146,7 @@ class PersoaneTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header>
+              <Card.Header className="border-0">
                 <Card.Title as="h5">
                   Persoane Înregistrate
                   {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
