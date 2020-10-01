@@ -102,7 +102,7 @@ class Stat extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume}</Typography>
+          <Typography variant="h5">{this.state.socsel.nume} - Ștat salarii</Typography>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaStatSalarii}>

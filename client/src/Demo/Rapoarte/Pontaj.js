@@ -59,7 +59,7 @@ class Pontaj extends React.Component {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = `Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`;
+        a.download = `Foaie Pontaj - ${societateNume} - ${luna.nume} ${an}.xlsx`;
         document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
         a.click();
         a.remove(); //afterwards we remove the element again
@@ -100,7 +100,7 @@ class Pontaj extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume}</Typography>
+          <Typography variant="h5">{this.state.socsel.nume} - Foaie de pontaj</Typography>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaFoaiePontaj}>

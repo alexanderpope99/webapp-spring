@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -16,41 +15,28 @@ import org.apache.poi.ss.usermodel.BorderExtent;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Color;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.PropertyTemplate;
-import org.apache.poi.ss.util.RegionUtil;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.CO;
-import net.guides.springboot2.crud.model.Contract;
-import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
-import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Societate;
-import net.guides.springboot2.crud.repository.AdresaRepository;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CMRepository;
 import net.guides.springboot2.crud.repository.CORepository;
-import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
@@ -60,22 +46,12 @@ public class FoaiePontajService {
 	@Autowired
 	private RealizariRetineriService realizariRetineriService;
 	@Autowired
-	private RetineriService retineriService;
-	@Autowired
 	private ZileService zileService;
-	@Autowired
-	private COService coService;
-	@Autowired
-	private CMService cmService; 
 
 	@Autowired
 	private PersoanaRepository persoanaRepository;
 	@Autowired
 	private SocietateRepository societateRepository;
-	@Autowired
-	private AdresaRepository adresaRepository;
-	@Autowired
-	private ContractRepository contractRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
 	@Autowired
@@ -85,14 +61,7 @@ public class FoaiePontajService {
 	@Autowired
 	private OresuplimentareRepository oresuplimentareRepository;
 
-	private String homeLocation = "D:\\code\\webapp-spring\\server\\src\\main\\java\\net\\guides\\springboot2\\crud\\";
-
-	private void setRegionBorder(CellRangeAddress region, Sheet sheet) {
-        RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
-        RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
-        RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
-        RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
-	}
+	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
 
 	public boolean createFoaiePontaj(int luna, int an, int idsocietate, long userID) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById((long) idsocietate)
