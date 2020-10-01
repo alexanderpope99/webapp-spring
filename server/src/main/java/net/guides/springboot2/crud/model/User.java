@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "username"),
-		@UniqueConstraint(columnNames = "email") })
+			@UniqueConstraint(columnNames = "email") })
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,40 +53,47 @@ public class User {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
+	// GETTERS
+	public String getEmail() {
+		return email;
+	}
+	public Angajat getId_angajat() {
+		return id_angajat;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	public Set<Societate> getSocietati() {
+		return societati;
+	}
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
+	// SETTERS
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public String getPassword() {
-		return password;
+	public void setId_angajat(Angajat id_angajat) {
+		this.id_angajat = id_angajat;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	public void setSocietati(Set<Societate> societati) {
+		this.societati = societati;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }
