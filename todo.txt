@@ -4,11 +4,15 @@ retineri (doar avans merge)
 
 baza calcul
 
+problem: in luna, anul: 
+	sterg stat salarii, baza calcul ramane 
+	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
+
 nota contabila
 
 sarbatori
 
-la concedii -> optiunea de a sorta dupa descrescator, sau doar intr-o anumita luna
+la concedii -> trebuie sortate crescator, pot fi si dupa id(by time created), sau doar intr-o anumita luna
 
 _________________________________________
 
