@@ -93,9 +93,6 @@ class Societati extends React.Component {
               <Button size="sm" className="m-1 p-1">
                 Editează
               </Button>
-              <Button size="sm" className="m-1 p-1">
-                Șterge
-              </Button>
             </div>
           </Card.Body>
         </Card>

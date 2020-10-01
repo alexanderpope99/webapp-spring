@@ -130,7 +130,7 @@ public class StatSalariiService {
 		Cell salariuWriter = stat.getRow(0).getCell(0);
 		Cell functieWriter = stat.getRow(0).getCell(0);
 		
-		//* write date societate
+		//*  date societate
 		Cell writerCell = stat.getRow(0).getCell(0);
 		writerCell.setCellValue(societate.getNume()); // nume soc
 		writerCell = stat.getRow(1).getCell(0);

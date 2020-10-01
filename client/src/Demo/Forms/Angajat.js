@@ -229,7 +229,7 @@ class Angajat extends React.Component {
                 <ConcediiMedicale ref={this.cm} />
               </Tab>
 
-							<Tab eventKey="bc" title="Bază calc.">
+							<Tab eventKey="bc" title="Bază calcul">
                 <BazaCalcul ref={this.bc} />
               </Tab>
 
