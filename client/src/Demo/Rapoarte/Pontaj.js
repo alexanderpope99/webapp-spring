@@ -5,20 +5,19 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
 
-class Stat extends React.Component {
+class Pontaj extends React.Component {
   constructor() {
 		super();
 		
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
     this.download = this.download.bind(this);
-    this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
+    this.creeazaFoaiePontaj = this.creeazaFoaiePontaj.bind(this);
 
     this.state = {
       socsel: getSocSel(),
       luna: '',
       an: '',
-			intocmitDe: '',
 			user: JSON.parse(localStorage.getItem('user'))
     };
   }
@@ -46,7 +45,7 @@ class Stat extends React.Component {
     console.log('trying to download...');
     let societateNume = this.state.socsel.nume;
     await fetch(
-      `${server.address}/download/${this.state.user.id}/Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`,
+      `${server.address}/download/${this.state.user.id}/Foaie Pontaj - ${societateNume} - ${luna.nume} ${an}.xlsx`,
       {
         method: 'GET',
         headers: {
@@ -60,7 +59,7 @@ class Stat extends React.Component {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = `Stat Salarii - ${societateNume} - ${luna.nume} ${an}.xlsx`;
+        a.download = `Foaie Pontaj - ${societateNume} - ${luna.nume} ${an}.xlsx`;
         document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
         a.click();
         a.remove(); //afterwards we remove the element again
@@ -68,15 +67,14 @@ class Stat extends React.Component {
       });
   }
 
-  async creeazaStatSalarii(e) {
+  async creeazaFoaiePontaj(e) {
 	  e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
-    let i = this.state.intocmitDe ? this.state.intocmitDe : '-';
 
     const created = await fetch(
-      `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
+      `${server.address}/pontaj/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
       {
         method: 'GET',
         headers: {
@@ -102,10 +100,10 @@ class Stat extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume} - Ștat salarii</Typography>
+          <Typography variant="h5">{this.state.socsel.nume} - Foaie de pontaj</Typography>
         </Card.Header>
         <Card.Body>
-          <Form onSubmit={this.creeazaStatSalarii}>
+          <Form onSubmit={this.creeazaFoaiePontaj}>
             <Row>
               {/* LUNA */}
               <Col md={4}>
@@ -138,24 +136,10 @@ class Stat extends React.Component {
                   {ani}
                 </FormControl>
               </Col>
-              <Col md={4}>
-								<Form.Group controlId="intocmitde">
-                <Form.Control
-                  type="text"
-                  placeholder="Intocmit de"
-                  value={this.state.intocmitDe}
-                  onChange={(e) =>
-                    this.setState({
-                      intocmitDe: e.target.value,
-                    })
-                  }
-                />
-								</Form.Group>
-              </Col>
             </Row>
           </Form>
-          <div className="mt-2">
-            <Button onClick={this.creeazaStatSalarii}>Stat salarii in Excel</Button>
+          <div className="mt-4">
+            <Button onClick={this.creeazaFoaiePontaj}>Foaie pontaj in Excel</Button>
           </div>
         </Card.Body>
       </Card>
@@ -163,4 +147,4 @@ class Stat extends React.Component {
   }
 }
 
-export default Stat;
+export default Pontaj;

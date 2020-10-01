@@ -77,7 +77,7 @@ class RealizariRetineri extends React.Component {
 
       oresuplimentare: [], // user input
       nrore: 0,
-      procent: '',
+      procent: 100,
       totaloresuplimentare: 0,
 
       // retineri
@@ -124,7 +124,7 @@ class RealizariRetineri extends React.Component {
 
       oresuplimentare: [], // user input
       nrore: 0,
-      procent: '',
+      procent: 100,
       totaloresuplimentare: 0,
 
       // retineri
@@ -298,11 +298,14 @@ class RealizariRetineri extends React.Component {
 
   onSelect(e) {
     const selectedIndex = e.target.options.selectedIndex;
-    const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
-    setAngajatSel({
-      numeintreg: e.target.value,
-      idpersoana: idangajat,
-    });
+		const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
+		if(selectedIndex === 0)
+			setAngajatSel(null);
+		else
+			setAngajatSel({
+				numeintreg: e.target.value,
+				idpersoana: idangajat,
+			});
 
     this.setState(
       {
@@ -374,12 +377,6 @@ class RealizariRetineri extends React.Component {
       },
       this.fillForm
     );
-
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
   }
 
   async reseteazaCalculul() {
@@ -490,7 +487,7 @@ class RealizariRetineri extends React.Component {
       show: false,
       modalMessage: '',
       nrore: 0,
-      procent: '',
+      procent: 100,
     });
 	}
 	
@@ -536,6 +533,11 @@ class RealizariRetineri extends React.Component {
         a.click();
 				a.remove(); //afterwards we remove the element again
 				console.log('downloaded');
+				window.scrollTo({
+					top: 0,
+					left: 0,
+					behavior: 'smooth',
+				});
 			});
 	}
 
@@ -632,7 +634,6 @@ class RealizariRetineri extends React.Component {
                 <Form.Group>
                   <Form.Label>Nr. ore</Form.Label>
                   <Form.Control
-                    size="sm"
                     type="number"
                     min="0"
                     value={this.state.nrore}
@@ -644,19 +645,21 @@ class RealizariRetineri extends React.Component {
                 <Form.Group>
                   <Form.Label>Procent</Form.Label>
                   <Form.Control
-                    size="sm"
-                    type="number"
-                    min="0"
+                    as="select"
                     value={this.state.procent}
                     onChange={(e) => this.setState({ procent: e.target.value })}
-                  />
+                  >
+										<option>100</option>
+										<option>150</option>
+										<option>175</option>
+										<option>200</option>
+									</Form.Control>
                 </Form.Group>
               </Col>
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>Suma</Form.Label>
                   <Form.Control
-                    size="sm"
                     type="number"
                     value={(
                       Number(this.state.nrore) *
@@ -670,7 +673,6 @@ class RealizariRetineri extends React.Component {
               <Col md={1}>
                 <Form.Label> </Form.Label>
                 <Button
-                  size="sm"
                   className="display-flex m-0"
                   onClick={async () =>
                     await this.addOrasuplimentara(
@@ -1144,14 +1146,14 @@ class RealizariRetineri extends React.Component {
                   Stat salariat individual
                 </Button>
 
-                <Button
+                {/* <Button
                   variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                   disabled={!this.state.selected_angajat}
                   onClick={this.reseteazaCalculul}
                   className="mb-3 mt-3"
                 >
                   Resetează Calculul
-                </Button>
+                </Button> */}
               </Row>
             </Form>
           </Card.Body>

@@ -140,7 +140,7 @@ class SocietatiTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header>
+              <Card.Header className="border-0">
                 <Card.Title as="h5">Societăți</Card.Title>
                 <Button
                   variant="outline-info"
