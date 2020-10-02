@@ -624,8 +624,8 @@ class Contract extends React.Component {
                     this.setState({ condițiiMuncă: e.target.value });
                   }}
                 >
-                  <option>Smechere</option>
-                  <option>Nașpa</option>
+                  <option>Normale</option>
+                  <option>Deosebite</option>
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -758,8 +758,8 @@ class Contract extends React.Component {
               <Form.Group id="zilecoan">
                 <Form.Label>Zile CO/an</Form.Label>
                 <Form.Control
-									placeholder="0"
-									type="number"
+                  placeholder="0"
+                  type="number"
                   value={this.state.zileCOan}
                   onChange={(e) => {
                     this.setState({ zileCOan: e.target.value });

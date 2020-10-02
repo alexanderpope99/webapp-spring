@@ -130,9 +130,9 @@ class SignUp1 extends React.Component {
                       placeholder="password"
                     />
                   </div>
-                  <div className="input-group mb-4">
+                  {/* <div className="input-group mb-4">
                     <Multiselect options={['admin', 'dir', 'cont', 'ang']} isObject={false} />
-                  </div>
+                  </div> */}
                   {/* <div className="form-group text-left">
                   <div className="checkbox checkbox-fill d-inline">
                     <input type="checkbox" name="checkbox-fill-2" id="checkbox-fill-2" />

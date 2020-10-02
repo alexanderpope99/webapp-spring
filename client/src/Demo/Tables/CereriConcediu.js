@@ -170,6 +170,7 @@ class PersoaneIntretinereTabel extends React.Component {
             </th>
             <th>{cer.dela || '-'}</th>
             <th>{cer.panala}</th>
+            <th></th>
             <th>{cer.tip}</th>
             <th>{cer.motiv}</th>
             <th>
@@ -388,6 +389,7 @@ class PersoaneIntretinereTabel extends React.Component {
                       <th>Status</th>
                       <th>De la</th>
                       <th>Până la</th>
+                      <th>Zile</th>
                       <th>Tip</th>
                       <th>Motiv</th>
                       <th></th>

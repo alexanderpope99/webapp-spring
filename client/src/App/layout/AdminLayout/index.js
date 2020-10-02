@@ -47,7 +47,7 @@ class AdminLayout extends Component {
           render={(props) => <route.component {...props} />}
         />
       ) : null;
-	});
+    });
 
     return (
       <Aux>

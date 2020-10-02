@@ -35,8 +35,6 @@ class Societati extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.log('err'));
 
-    console.log(JSON.parse(localStorage.getItem('user')).id);
-
     if (Array.isArray(societati)) {
       societati.forEach((societate) =>
         this.setState({

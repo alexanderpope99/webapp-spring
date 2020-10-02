@@ -1,8 +1,11 @@
 package net.guides.springboot2.crud.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +16,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CereriConcediu;
 import net.guides.springboot2.crud.repository.CereriConcediuRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import net.guides.springboot2.crud.services.ZileService;
 
 @RestController
 @RequestMapping("/cerericoncediu")
 public class CereriConcediuController {
 	@Autowired
 	private CereriConcediuRepository cereriConcediuRepository;
+
+	@Autowired
+	private ZileService zileService;
+
+	@GetMapping("/zilelucratoareintre/")
+	public long getZileLucratoareBetween(@RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
+			@RequestParam("date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2) {
+		return zileService.getZileLucratoareInInterval(date1, date2, Optional.empty());
+	}
 
 	@GetMapping
 	public List<CereriConcediu> getAllCereriConcediu() {

@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Card,
-  Table,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import Refresh from '@material-ui/icons/Refresh';
@@ -77,6 +69,7 @@ class PersoaneIntretinereTabel extends React.Component {
               )}
               {cer.status}
             </th>
+            <th>{cer.nume || '-'}</th>
             <th>{cer.dela || '-'}</th>
             <th>{cer.panala}</th>
             <th>{cer.tip}</th>
@@ -97,7 +90,7 @@ class PersoaneIntretinereTabel extends React.Component {
                     variant="outline-success"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <CheckIcon fontSize="medium" />
+                    <CheckIcon fontSize="default" />
                   </Button>
                 </OverlayTrigger>
 
@@ -115,7 +108,7 @@ class PersoaneIntretinereTabel extends React.Component {
                     variant="outline-danger"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <CloseIcon fontSize="medium" />
+                    <CloseIcon fontSize="default" />
                   </Button>
                 </OverlayTrigger>
               </Row>
@@ -127,7 +120,7 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   async onRefresh() {
-    const cereriConcediu = await axios
+    let cereriConcediu = await axios
       .get(
         `${server.address}/cerericoncediu/supsoc/${JSON.parse(localStorage.getItem('user')).id}&${
           getSocSel().id
@@ -138,11 +131,21 @@ class PersoaneIntretinereTabel extends React.Component {
       )
       .then((res) => res.data)
       .catch((err) => console.error(err));
-    console.log(
-      `${server.address}/cerericoncediu/supsoc/${JSON.parse(localStorage.getItem('user')).id}&${
-        getSocSel().id
-      }`
+
+    cereriConcediu = await Promise.all(
+      cereriConcediu.map(async (v) => ({
+        ...v,
+        nume: await axios
+          .get(`${server.address}/persoana/${v.pentru}`, {
+            headers: authHeader(),
+          })
+          .then((res) => res.data.nume + ' ' + res.data.prenume)
+          .catch((err) => console.error(err)),
+      }))
     );
+
+    console.log(cereriConcediu);
+
     if (cereriConcediu) {
       this.setState(
         {
@@ -206,6 +209,7 @@ class PersoaneIntretinereTabel extends React.Component {
                   <thead>
                     <tr>
                       <th>Status</th>
+                      <th>Pentru</th>
                       <th>De la</th>
                       <th>Până la</th>
                       <th>Tip</th>
