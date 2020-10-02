@@ -330,7 +330,9 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    // save retineri to DB
+		// save retineri to DB
+		console.log('################');
+		console.log(this.state);
     await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,
