@@ -183,15 +183,7 @@ class Persoana extends React.Component {
       idadresa = await axios
         .post(`${server.address}/adresa`, adresa_body, { headers: authHeader() })
         .then((adresa) => adresa.data.id)
-        .then(() => {
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth',
-          });
-        })
         .catch((err) => console.error(err));
-      return;
       // console.log('idadresa:', adresa.id);
     }
 
@@ -242,13 +234,19 @@ class Persoana extends React.Component {
     const persoana = await axios
       .post(`${server.address}/persoana`, persoana_body, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error('error:', err.message));
+			.catch((err) => console.error('error:', err.message));
+			console.log(persoana);
 
     if (persoana) {
       this.clearFields();
       this.setState({
         show: true,
         modalMessage: 'Persoana adaugată cu succes.',
+      });
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
       });
       console.log('idpersoana:', persoana.id);
 

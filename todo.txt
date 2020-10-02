@@ -2,6 +2,8 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
+case de sanatate
+
 baza calcul
 
 problem: in luna, anul: 
