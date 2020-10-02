@@ -120,7 +120,7 @@ class NavRight extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
-                  <img src={Avatar2} className="img-radius" alt="User Profile" />
+                  <img src={Avatar1} className="img-radius" alt="User Profile" />
                   <span>{JSON.parse(localStorage.getItem('user')).username}</span>
                   <a
                     href={DEMO.BLANK_LINK}
