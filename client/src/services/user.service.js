@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-import server from '../Demo/Resources/server-address';
+import { server } from '../Demo/Resources/server-address';
 
 const API_URL = `${server.address}/api/test/`;
 
