@@ -31,14 +31,14 @@ class SocietatiTabel extends React.Component {
     // id = id.replace('"', '');
     // console.log(id);
     const response = axios
-      .get(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(() => {
         console.log(response);
         // alert(`Deleted ${id}`);
         this.onRefresh();
       })
-      .catch(console.log('could not connect to db'));
+      .catch(err => console.error(err));
   }
 
   // function to render in react
