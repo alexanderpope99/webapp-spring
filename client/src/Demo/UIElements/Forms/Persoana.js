@@ -126,8 +126,13 @@ class Persoana extends React.Component {
   handleClose() {
     this.setState({
       show: false,
-      modalMessage: '',
-    });
+			modalMessage: '',
+		});
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth',
+		});
   }
 
   hasRequired() {
@@ -238,16 +243,12 @@ class Persoana extends React.Component {
 			console.log(persoana);
 
     if (persoana) {
-      this.clearFields();
+			this.clearFields();
       this.setState({
         show: true,
         modalMessage: 'Persoana adaugată cu succes.',
       });
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
+      
       console.log('idpersoana:', persoana.id);
 
       await this.createAngajat(persoana.id);
