@@ -128,20 +128,26 @@ class AddSocietate extends React.Component {
       telefon: this.state.telefon,
     };
     console.log(societate_body);
-    // ADD SOCIETATE TO DATABASE
+		// ADD SOCIETATE TO DATABASE
+		const user = JSON.parse(localStorage.getItem('user'));
     await axios
-      .post(`${server.address}/societate`, societate_body, {
+      .post(`${server.address}/societate/${user.id}`, societate_body, {
         headers: authHeader(),
       })
-      .then((societate_response) => societate_response.data)
       .then(() => {
         //alert("Societate adaugata cu succes!");
         this.setState({
           show: true,
           modalMessage: 'Societate adăugată cu succes!',
-        });
+				});
+				window.scrollTo({
+					top: 0,
+					left: 0,
+					behavior: 'smooth',
+				});
       })
-      .then(this.clearFields());
+			.then(this.clearFields())
+			.catch(err => console.error(err));
   }
 
   render() {

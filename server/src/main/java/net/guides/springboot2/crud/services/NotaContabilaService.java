@@ -6,22 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.RegionUtil;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,44 +19,20 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.dto.NotaContabilaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
-import net.guides.springboot2.crud.model.Contract;
-import net.guides.springboot2.crud.model.Persoana;
-import net.guides.springboot2.crud.model.RealizariRetineri;
-import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
-import net.guides.springboot2.crud.repository.CMRepository;
-import net.guides.springboot2.crud.repository.ContractRepository;
-import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.repository.RetineriRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
-import org.springframework.stereotype.Service;
-
 @Service
 public class NotaContabilaService {
 	@Autowired
-	private RealizariRetineriService realizariRetineriService;
-	@Autowired
-	private RetineriService retineriService;
-	@Autowired
 	private ZileService zileService;
-	@Autowired
-	private COService coService;
-	@Autowired
-	private CMService cmService; 
-
-	@Autowired
-	private PersoanaRepository persoanaRepository;
 	@Autowired
 	private SocietateRepository societateRepository;
 	@Autowired
 	private AdresaRepository adresaRepository;
-	@Autowired
-	private ContractRepository contractRepository;
-	@Autowired
-	private CMRepository cmRepository;
 	@Autowired 
 	RealizariRetineriRepository realizariRetineriRepository;
 	@Autowired

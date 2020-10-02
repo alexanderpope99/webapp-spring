@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { setSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -31,14 +32,15 @@ class SocietatiTabel extends React.Component {
     // id = id.replace('"', '');
     // console.log(id);
     const response = axios
-      .get(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(() => {
         console.log(response);
         // alert(`Deleted ${id}`);
-        this.onRefresh();
+				this.onRefresh();
+				setSocSel(null);
       })
-      .catch(console.log('could not connect to db'));
+      .catch(err => console.error(err));
   }
 
   // function to render in react

@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Societate;
+import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.SocietateRepository;
+import net.guides.springboot2.crud.repository.UserRepository;
 
 import org.springframework.data.domain.Sort;
 
@@ -26,6 +29,8 @@ import org.springframework.data.domain.Sort;
 public class SocietateController {
 	@Autowired
 	private SocietateRepository societateRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping
 	public List<Societate> getAllPersoane() {
@@ -48,8 +53,20 @@ public class SocietateController {
 	}
 
 	@PostMapping
-	public Societate createSocietate(@RequestBody Societate societate) {
+	public Societate createSocietate(@RequestBody Societate societate ) {
 		return societateRepository.save(societate);
+	}
+
+	@PostMapping("/{uid}")
+	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") long uid ) {
+		Societate newSoc = societateRepository.save(societate);
+		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error"));
+		Set<Societate> societati = user.getSocietati();
+		societati.add(newSoc);
+		user.setSocietati(societati);
+		userRepository.save(user);
+
+		return newSoc;
 	}
 
 	@PutMapping("{id}")
