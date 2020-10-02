@@ -84,77 +84,6 @@ public class StatSalariiService {
 	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, long userID)
 			throws IOException, ResourceNotFoundException {
 		try {
-<<<<<<< Updated upstream
-		Societate societate = societateRepository.findById((long) idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
-				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
-
-		// List<Angajat> angajati = angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
-		List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
-
-		String statTemplateLocation = homeLocation + "\\templates";
-		
-		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatSalarii.xlsx"));
-		Workbook workbook = new XSSFWorkbook(file);
-		Sheet stat = workbook.getSheetAt(0);
-		
-		//* create styles
-		CellStyle salariuStyle = workbook.createCellStyle();
-		CellStyle functieStyle = workbook.createCellStyle();
-		CellStyle nrContractStyle = workbook.createCellStyle();
-		CellStyle centered = workbook.createCellStyle();
-		CellStyle font10 = workbook.createCellStyle();
-		CellStyle salariu10Style = workbook.createCellStyle();
-		
-		Font font7 = workbook.createFont();
-		Font font = workbook.createFont();
-		
-		centered.setAlignment(HorizontalAlignment.CENTER);
-		
-		font7.setFontHeightInPoints((short)7);
-		font7.setFontName("Tahoma");
-		functieStyle.setFont(font7);
-		functieStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		
-		font.setFontHeightInPoints((short)10);
-		font.setFontName("Tahoma");
-		font10.setFont(font);
-		
-		DataFormat format = workbook.createDataFormat();
-		salariuStyle.setDataFormat(format.getFormat("#,##0"));
-		
-		salariu10Style.setFont(font);
-		salariu10Style.setDataFormat(format.getFormat("#,##0"));
-
-		nrContractStyle.setAlignment(HorizontalAlignment.RIGHT);
-		
-		Cell salariuWriter = stat.getRow(0).getCell(0);
-		Cell functieWriter = stat.getRow(0).getCell(0);
-		
-		//*  date societate
-		Cell writerCell = stat.getRow(0).getCell(0);
-		writerCell.setCellValue(societate.getNume()); // nume soc
-		writerCell = stat.getRow(1).getCell(0);
-		writerCell.setCellValue("CUI: " + societate.getCif()); // cif
-		writerCell = stat.getRow(2).getCell(0);
-		writerCell.setCellValue("Nr. Reg. Com.: " + societate.getRegcom()); // nr reg com
-		writerCell = stat.getRow(3).getCell(0);
-		writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
-		writerCell = stat.getRow(4).getCell(0);
-		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet + localitate
-		
-		//* write luna, an
-		writerCell = stat.getRow(4).getCell(11);
-		String lunaNume = zileService.getNumeLunaByNr(luna);
-		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
-		
-		
-		//? write angajati:
-		int nrAngajat = 0;
-		int impozitScutit = 0;
-		for(Persoana persoana : persoane) {
-=======
 			Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
 					() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
@@ -430,7 +359,6 @@ public class StatSalariiService {
 			// * tabel total
 			XSSFFormulaEvaluator formulaEvaluator = (XSSFFormulaEvaluator) workbook.getCreationHelper()
 					.createFormulaEvaluator();
->>>>>>> Stashed changes
 			int rowNr = 14 + nrAngajat * 3;
 			Row row1 = stat.createRow(rowNr);
 			Row row2 = stat.createRow(rowNr + 1);

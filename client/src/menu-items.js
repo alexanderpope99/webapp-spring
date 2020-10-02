@@ -12,13 +12,13 @@ var items = [
       user.roles.includes('ROLE_ADMIN') ||
       user.roles.includes('ROLE_DIRECTOR'),
     children: [
-      {
-        id: 'dashboard',
-        title: 'Dashboard',
-        type: 'item',
-        url: '/dashboard/default',
-        icon: 'feather icon-home',
-      },
+      // {
+      //   id: 'dashboard',
+      //   title: 'Dashboard',
+      //   type: 'item',
+      //   url: '/dashboard/default',
+      //   icon: 'feather icon-home',
+      // },
       {
         id: 'societati',
         title: 'Societăți',
