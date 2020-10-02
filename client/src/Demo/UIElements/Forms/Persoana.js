@@ -182,14 +182,29 @@ class Persoana extends React.Component {
 
       idadresa = await axios
         .post(`${server.address}/adresa`, adresa_body, { headers: authHeader() })
-				.then((adresa) => adresa.data.id)
-				.catch(err => console.error(err));
-				return;
+        .then((adresa) => adresa.data.id)
+        .then(() => {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+          });
+        })
+        .catch((err) => console.error(err));
+      return;
       // console.log('idadresa:', adresa.id);
     }
 
     // POST only if any actitentitate field is filled
-    if (this.state.serie || this.state.numar || this.state.cnp || this.state.eliberatde || this.state.dataeliberarii || this.state.datanasterii || this.state.loculnasterii) {
+    if (
+      this.state.serie ||
+      this.state.numar ||
+      this.state.cnp ||
+      this.state.eliberatde ||
+      this.state.dataeliberarii ||
+      this.state.datanasterii ||
+      this.state.loculnasterii
+    ) {
       const buletin_body = {
         cnp: this.state.cnp,
         tip: this.state.tipact,
@@ -199,14 +214,14 @@ class Persoana extends React.Component {
         eliberatde: this.state.eliberatde,
         dataeliberarii: this.state.dataeliberarii,
         loculnasterii: this.state.loculnasterii,
-			};
+      };
 
       idactidentitate = await axios
         .post(`${server.address}/actidentitate`, buletin_body, {
           headers: authHeader(),
         })
         .then((res) => {
-          console.log("idactidentitate:", res.data.id);
+          console.log('idactidentitate:', res.data.id);
           return res.data.id;
         });
     }

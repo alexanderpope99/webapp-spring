@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { setSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -36,7 +37,8 @@ class SocietatiTabel extends React.Component {
       .then(() => {
         console.log(response);
         // alert(`Deleted ${id}`);
-        this.onRefresh();
+				this.onRefresh();
+				setSocSel(null);
       })
       .catch(err => console.error(err));
   }

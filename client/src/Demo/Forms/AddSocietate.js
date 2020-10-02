@@ -139,7 +139,12 @@ class AddSocietate extends React.Component {
         this.setState({
           show: true,
           modalMessage: 'Societate adăugată cu succes!',
-        });
+				});
+				window.scrollTo({
+					top: 0,
+					left: 0,
+					behavior: 'smooth',
+				});
       })
 			.then(this.clearFields())
 			.catch(err => console.error(err));
