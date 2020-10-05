@@ -28,8 +28,13 @@ class Societati extends React.Component {
   }
 
   async getNumeSocietati() {
+		const user = JSON.parse(localStorage.getItem('user'));
+		let uri = `${server.address}/societate/user/${user.id}`;
+		if(user.roles.includes('ROLE_DIRECTOR')) {
+			uri = `${server.address}/societate/`;
+		}
     const societati = await axios
-      .get(`${server.address}/societate/user/${JSON.parse(localStorage.getItem('user')).id}`, {
+      .get(uri, {
         headers: authHeader(),
       })
       .then((res) => res.data)

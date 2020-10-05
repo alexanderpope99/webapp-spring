@@ -72,7 +72,7 @@ var items = [
     title: 'GENERAL',
     type: 'group',
     icon: 'icon-group',
-    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN'),
+    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR'),
     children: [
       {
         id: 'angajat',
@@ -144,7 +144,7 @@ var items = [
     title: 'Rapoarte',
     type: 'group',
     icon: 'icon-group',
-    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN'),
+    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR'),
     children: [
       {
         id: 'stat',

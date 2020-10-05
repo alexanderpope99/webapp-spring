@@ -112,9 +112,13 @@ class SocietatiTabel extends React.Component {
   }
   async onRefresh() {
     // e.preventDefault();
+		const user = JSON.parse(localStorage.getItem('user'));
+		let uri = `${server.address}/societate/user/${user.id}`;
+		if(user.roles.includes('ROLE_DIRECTOR'))
+			uri = `${server.address}/societate/`;
 
     let societati = await axios
-      .get(`${server.address}/societate/user/${JSON.parse(localStorage.getItem('user')).id}`, {
+      .get(uri, {
         headers: authHeader(),
       })
       .then((societati) => societati.data);
