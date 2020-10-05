@@ -42,6 +42,7 @@ const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConc
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
+const Profile = React.lazy(() => import('./Demo/Edit/Profile'));
 
 const Nvd3Chart = React.lazy(() => import('./Demo/Charts/Nvd3Chart/index'));
 
@@ -137,6 +138,7 @@ const routes = [
 
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
+  { path: '/edit/profile', exact: true, name: 'Profil', component: Profile },
 
   { path: '/charts/nvd3', exact: true, name: 'Nvd3 Chart', component: Nvd3Chart },
   { path: '/maps/google-map', exact: true, name: 'Google Map', component: GoogleMap },
