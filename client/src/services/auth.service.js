@@ -33,6 +33,15 @@ class AuthService {
     });
   }
 
+  async changePassword(uid, reqPassword, newPassword) {
+		var ok = false;
+    ok = await axios
+      .put(API_URL + `change-password/${uid}`, { password: reqPassword, newpassword: newPassword })
+			.then((res) => res.status === 200)
+			.catch(err => console.error("auth.service.js :: line: 38\n", err));
+    return ok;
+  }
+
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }

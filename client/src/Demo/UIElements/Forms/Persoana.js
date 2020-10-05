@@ -273,7 +273,7 @@ class Persoana extends React.Component {
     };
 
     return (
-      <div>
+      <React.Fragment>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -556,7 +556,7 @@ class Persoana extends React.Component {
             </Row>
           ) : null}
         </Form>
-      </div>
+      </React.Fragment>
     );
   }
 }

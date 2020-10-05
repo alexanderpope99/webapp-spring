@@ -80,7 +80,7 @@ class Societati extends React.Component {
         <Card
           style={{
             opacity: this.state[nume_soc].opacity,
-            cursor: this.state[nume_soc].opacity === '1' ? '' : 'pointer',
+						cursor: this.state[nume_soc].opacity === '1' ? '' : 'pointer',
           }}
           onClick={
             this.state[nume_soc].opacity === '.3'
@@ -91,12 +91,12 @@ class Societati extends React.Component {
           }
         >
           <Card.Body>
-            <h3 className="d-flex justify-content-around pb-5">{nume_soc}</h3>
-            <div className="d-flex flex-inline justify-content-end">
+            <h3 className="d-flex justify-content-around">{nume_soc}</h3>
+            {/* <div className="d-flex flex-inline justify-content-end">
               <Button size="sm" className="m-1 p-1">
                 Editează
               </Button>
-            </div>
+            </div> */}
           </Card.Body>
         </Card>
       </Col>

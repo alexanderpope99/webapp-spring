@@ -15,7 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.model.ERole;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.User;
+import net.guides.springboot2.crud.payload.request.ChangePasswordRequest;
 import net.guides.springboot2.crud.payload.request.LoginRequest;
 import net.guides.springboot2.crud.payload.request.SignupRequest;
 import net.guides.springboot2.crud.payload.response.JwtResponse;
@@ -123,4 +126,22 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+		@PutMapping("/change-password/{uid}")
+		public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, @PathVariable("uid") long uid) {
+
+			User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			
+			// String reqPassword = encoder.encode(changePasswordRequest.getPassword());
+			
+			if(!encoder.matches(changePasswordRequest.getPassword(), user.getPassword()))
+				return ResponseEntity.badRequest().body(new MessageResponse("Error: Parolă actuală incorectă!"));
+			
+			String newPassword = encoder.encode(changePasswordRequest.getNewpassword());
+			user.setPassword(newPassword);
+
+			userRepository.save(user);
+								
+			return ResponseEntity.ok(new MessageResponse("Password changed!"));
+		}
 }

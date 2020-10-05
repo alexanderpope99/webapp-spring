@@ -30,14 +30,15 @@ class SignUp1 extends React.Component {
         message: 'Parolele nu coincid',
       });
     else {
-      AuthService.register(this.state.username, this.state.email, this.state.password).then(
-        (response) => {
+      AuthService.register(this.state.username, this.state.email, this.state.password)
+        .then((response) => {
+					if(response.status === 200)
           this.setState({
             show: true,
             message: 'Utilizator adăugat cu succes',
           });
-        },
-        (error) => {
+        })
+        .catch((error) => {
           const resMessage =
             (error.response && error.response.data && error.response.data.message) ||
             error.message ||
@@ -47,8 +48,7 @@ class SignUp1 extends React.Component {
             show: true,
             message: this.state.username + ' ' + this.state.email + ' ' + this.state.password,
           });
-        }
-      );
+        });
     }
   }
   render() {
