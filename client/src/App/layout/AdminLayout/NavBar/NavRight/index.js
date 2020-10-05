@@ -134,19 +134,19 @@ class NavRight extends Component {
                 <ul className="pro-body">
                   <li>
                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-settings" /> Setări
-                    </a>
-                  </li>
-                  <li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
                       <i className="feather icon-user" /> Profil
                     </a>
                   </li>
                   <li>
-                    {/* <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-mail" /> Mesaje
-                    </a> */}
+                    <a href="/setari" className="dropdown-item">
+                      <i className="feather icon-settings" /> Setări
+                    </a>
                   </li>
+                  {/* <li>
+                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
+                      <i className="feather icon-mail" /> Mesaje
+                    </a>
+                  </li> */}
                 </ul>
               </Dropdown.Menu>
             </Dropdown>
