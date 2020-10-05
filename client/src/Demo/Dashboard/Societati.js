@@ -8,6 +8,8 @@ import { setAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
+import { Multiselect } from 'multiselect-react-dropdown';
+
 class Societati extends React.Component {
   /*
     TODO
@@ -28,11 +30,11 @@ class Societati extends React.Component {
   }
 
   async getNumeSocietati() {
-		const user = JSON.parse(localStorage.getItem('user'));
-		let uri = `${server.address}/societate/user/${user.id}`;
-		if(user.roles.includes('ROLE_DIRECTOR')) {
-			uri = `${server.address}/societate/`;
-		}
+    const user = JSON.parse(localStorage.getItem('user'));
+    let uri = `${server.address}/societate/user/${user.id}`;
+    if (user.roles.includes('ROLE_DIRECTOR')) {
+      uri = `${server.address}/societate/`;
+    }
     const societati = await axios
       .get(uri, {
         headers: authHeader(),
@@ -80,7 +82,7 @@ class Societati extends React.Component {
         <Card
           style={{
             opacity: this.state[nume_soc].opacity,
-						cursor: this.state[nume_soc].opacity === '1' ? '' : 'pointer',
+            cursor: this.state[nume_soc].opacity === '1' ? '' : 'pointer',
           }}
           onClick={
             this.state[nume_soc].opacity === '.3'

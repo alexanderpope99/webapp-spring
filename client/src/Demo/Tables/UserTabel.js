@@ -138,9 +138,15 @@ class UserTabel extends React.Component {
               <th>{usr.username}</th>
               <th>{usr.email}</th>
               <th>
-                <Multiselect options={['Predoana', 'Adrian']} />
+                <Multiselect
+                  selectedValues={usr.roles}
+                  options={['ROLE_ADMIN', 'ROLE_DIRECTOR', 'ROLE_CONTABIL', 'ROLE_ANGAJAT']}
+                  isObject={false}
+                />
               </th>
-              <th>{usr.societati}</th>
+              <th>
+                <Multiselect selectedValues={usr.societati} options={['1', '2']} isObject={false} />
+              </th>
               <th>{usr.numeprenume}</th>
               <th>{usr.societate}</th>
               <th>{usr.superior}</th>
@@ -240,8 +246,8 @@ class UserTabel extends React.Component {
 
         return {
           ...usr,
-          roles: roles.join(', '),
-          societati: societati.join(', '),
+          roles: roles,
+          societati: societati,
           numeprenume: numeprenume,
           societate: societate,
           superior: superior,
@@ -287,7 +293,6 @@ class UserTabel extends React.Component {
   render() {
     return (
       <Aux>
-        <Multiselect options={['Predoana', 'Adrian']} />
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
