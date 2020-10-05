@@ -133,7 +133,7 @@ class NavRight extends Component {
                 </div>
                 <ul className="pro-body">
                   <li>
-                    <a href="/edit/profil" className="dropdown-item">
+                    <a href="/edit/profile" className="dropdown-item">
                       <i className="feather icon-user" /> Profil
                     </a>
                   </li>
