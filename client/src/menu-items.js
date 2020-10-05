@@ -72,7 +72,10 @@ var items = [
     title: 'GENERAL',
     type: 'group',
     icon: 'icon-group',
-    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR'),
+    show:
+      user.roles.includes('ROLE_USER') ||
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_DIRECTOR'),
     children: [
       {
         id: 'angajat',
@@ -125,7 +128,7 @@ var items = [
       // },
       {
         id: 'societati-tabel',
-        title: 'Tabel Socieăți',
+        title: 'Tabel Societăți',
         type: 'item',
         url: '/tables/societati-tabel',
         icon: 'feather icon-credit-card',
@@ -144,7 +147,10 @@ var items = [
     title: 'Rapoarte',
     type: 'group',
     icon: 'icon-group',
-    show: user.roles.includes('ROLE_USER') || user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR'),
+    show:
+      user.roles.includes('ROLE_USER') ||
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_DIRECTOR'),
     children: [
       {
         id: 'stat',
@@ -152,13 +158,29 @@ var items = [
         type: 'item',
         url: '/state-salarii',
         icon: 'feather icon-file-text',
-			},
-			{
+      },
+      {
         id: 'pontaj',
         title: 'Foi pontaj',
         type: 'item',
         url: '/pontaj',
         icon: 'feather icon-grid',
+      },
+    ],
+  },
+  {
+    id: 'configurare',
+    title: 'CONFIGURARE',
+    type: 'group',
+    icon: 'icon-group',
+    show: user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR'),
+    children: [
+      {
+        id: 'user-tabel',
+        title: 'Tabel Useri',
+        type: 'item',
+        url: '/tables/user-tabel',
+        icon: 'feather icon-users',
       },
     ],
   },

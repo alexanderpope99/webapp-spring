@@ -39,6 +39,7 @@ const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
 const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
 const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
+const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -63,7 +64,7 @@ const routes = [
     component: ParametriiSalarii,
   },
   {
-    path: '/setari',
+    path: '/edit/setari',
     exact: true,
     name: 'Setari',
     component: Setari,
@@ -115,6 +116,12 @@ const routes = [
     exact: true,
     name: 'Tabel Societati',
     component: SocietatiTabel,
+  },
+  {
+    path: '/tables/user-tabel',
+    exact: true,
+    name: 'Tabel Useri',
+    component: UserTabel,
   },
   { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
   {
