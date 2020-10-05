@@ -144,7 +144,7 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   async deleteCerere(id) {
-    axios
+    await axios
       .delete(`${server.address}/cerericoncediu/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.onRefresh)
@@ -152,93 +152,107 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   // function to create react component with fetched data
-  renderCereri() {
+  async renderCereri() {
     this.setState({
-      cereriConcediuComponent: this.state.cereriConcediu.map((cer, index) => {
-        return (
-          // TODO
-          <tr key={cer.id}>
-            <th>
-              {cer.status === 'Propus' || cer.status === 'Propus (Modificat)' ? (
-                <i className="fa fa-circle text-c-gray f-10 mr-2" />
-              ) : cer.status === 'Aprobat' ? (
-                <i className="fa fa-circle text-c-green f-10 mr-2" />
-              ) : (
-                <i className="fa fa-circle text-c-red f-10 mr-2" />
-              )}
-              {cer.status}
-            </th>
-            <th>{cer.dela || '-'}</th>
-            <th>{cer.panala}</th>
-            <th></th>
-            <th>{cer.tip}</th>
-            <th>{cer.motiv}</th>
-            <th>
-              <Row>
-                <Button
-                  onClick={() => this.editCerereConcediu(cer)}
-                  variant="outline-secondary"
-                  className="m-1 p-1 rounded-circle border-0"
-                  disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
-                >
-                  <Edit fontSize="small" />
-                </Button>
+      cereriConcediuComponent: await Promise.all(
+        this.state.cereriConcediu.map(async (cer, index) => {
+          return (
+            // TODO
+            <tr key={cer.id}>
+              <th>
+                {cer.status === 'Propus' || cer.status === 'Propus (Modificat)' ? (
+                  <i className="fa fa-circle text-c-gray f-10 mr-2" />
+                ) : cer.status === 'Aprobat' ? (
+                  <i className="fa fa-circle text-c-green f-10 mr-2" />
+                ) : (
+                  <i className="fa fa-circle text-c-red f-10 mr-2" />
+                )}
+                {cer.status}
+              </th>
+              <th>{cer.dela || '-'}</th>
+              <th>{cer.panala}</th>
+              <th>
+                {
+                  await axios
+                    .get(
+                      `${server.address}/cerericoncediu/zilelucratoareintre?date1=${cer.dela}&date2=${cer.panala}`,
+                      { headers: authHeader() }
+                    )
+                    .then((response) => response.data)
+                    .catch((err) => console.error(err))
+                }
+              </th>
+              <th>{cer.tip}</th>
+              <th>{cer.motiv}</th>
+              <th>
+                <Row>
+                  <Button
+                    onClick={() => this.editCerereConcediu(cer)}
+                    variant="outline-secondary"
+                    className="m-1 p-1 rounded-circle border-0"
+                    disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
+                  >
+                    <Edit fontSize="small" />
+                  </Button>
 
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-1 p-1 rounded-circle border-0"
-                        disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
-                        {...bindTrigger(popupState)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>
-                            Sigur ștergeți cererea {cer.dela} {cer.panala}?
-                          </Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteCerere(cer.id);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
-              </Row>
-            </th>
-          </tr>
-        );
-      }),
+                  <PopupState variant="popover" popupId="demo-popup-popover">
+                    {(popupState) => (
+                      <div>
+                        <Button
+                          variant="outline-secondary"
+                          className="m-1 p-1 rounded-circle border-0"
+                          disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
+                          {...bindTrigger(popupState)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </Button>
+                        <Popover
+                          {...bindPopover(popupState)}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                        >
+                          <Box p={2}>
+                            <Typography>
+                              Sigur ștergeți cererea {cer.dela} {cer.panala}?
+                            </Typography>
+                            <Typography variant="caption">
+                              Datele nu mai pot fi recuperate
+                            </Typography>
+                            <br />
+                            <Button
+                              variant="outline-danger"
+                              onClick={() => {
+                                popupState.close();
+                                this.deleteCerere(cer.id);
+                              }}
+                              className="mt-2 "
+                            >
+                              Da
+                            </Button>
+                            <Button
+                              variant="outline-persondary"
+                              onClick={popupState.close}
+                              className="mt-2"
+                            >
+                              Nu
+                            </Button>
+                          </Box>
+                        </Popover>
+                      </div>
+                    )}
+                  </PopupState>
+                </Row>
+              </th>
+            </tr>
+          );
+        })
+      ),
     });
   }
 

@@ -35,8 +35,8 @@ public class ZileService {
 		return zileCM + zileCO;
 	}
 
-	public long getZileLucratoareInInterval(LocalDate startDate, LocalDate endDate,
-			Optional<List<LocalDate>> holidays) {
+	public long getZileLucratoareInInterval(LocalDate startDate, LocalDate endDate) {
+		Optional<List<LocalDate>> holidays = Optional.empty();
 		if (startDate == null || endDate == null || holidays == null) {
 			throw new IllegalArgumentException("Invalid method argument(s) to countBusinessDaysBetween(" + startDate
 					+ "," + endDate + "," + holidays + ")");
@@ -47,7 +47,7 @@ public class ZileService {
 		Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
 				|| date.getDayOfWeek() == DayOfWeek.SUNDAY;
 
-		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
 
 		long businessDays = Stream.iterate(startDate, date -> date.plusDays(1)).limit(daysBetween)
 				.filter(isHoliday.or(isWeekend).negate()).count();

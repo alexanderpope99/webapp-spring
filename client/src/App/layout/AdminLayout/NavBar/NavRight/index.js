@@ -48,17 +48,17 @@ class NavRight extends Component {
                 <div className="noti-head">
                   <h6 className="d-inline-block m-b-0">Notifications</h6>
                   <div className="float-right">
-                    <a href={DEMO.BLANK_LINK} className="m-r-10">
+                    {/* <a href={DEMO.BLANK_LINK} className="m-r-10">
                       mark as read
                     </a>
-                    <a href={DEMO.BLANK_LINK}>clear all</a>
+                    <a href={DEMO.BLANK_LINK}>clear all</a> */}
                   </div>
                 </div>
                 <ul className="noti-body">
-                  <li className="n-title">
+                  {/* <li className="n-title">
                     <p className="m-b-0">NEW</p>
-                  </li>
-                  <li className="notification">
+                  </li> */}
+                  {/* <li className="notification">
                     <div className="media">
                       <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
                       <div className="media-body">
@@ -72,11 +72,11 @@ class NavRight extends Component {
                         <p>New ticket Added</p>
                       </div>
                     </div>
-                  </li>
-                  <li className="n-title">
+                  </li> */}
+                  {/* <li className="n-title">
                     <p className="m-b-0">EARLIER</p>
-                  </li>
-                  <li className="notification">
+                  </li> */}
+                  {/* <li className="notification">
                     <div className="media">
                       <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
                       <div className="media-body">
@@ -90,8 +90,8 @@ class NavRight extends Component {
                         <p>Prchace New Theme and make payment</p>
                       </div>
                     </div>
-                  </li>
-                  <li className="notification">
+                  </li> */}
+                  {/* <li className="notification">
                     <div className="media">
                       <img className="img-radius" src={Avatar3} alt="Generic placeholder" />
                       <div className="media-body">
@@ -105,7 +105,7 @@ class NavRight extends Component {
                         <p>currently login</p>
                       </div>
                     </div>
-                  </li>
+                  </li> */}
                 </ul>
                 <div className="noti-footer">
                   <a href={DEMO.BLANK_LINK}>show all</a>
@@ -134,18 +134,18 @@ class NavRight extends Component {
                 <ul className="pro-body">
                   <li>
                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-settings" /> Settings
+                      <i className="feather icon-settings" /> Setări
                     </a>
                   </li>
                   <li>
                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-user" /> Profile
+                      <i className="feather icon-user" /> Profil
                     </a>
                   </li>
                   <li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-mail" /> My Messages
-                    </a>
+                    {/* <a href={DEMO.BLANK_LINK} className="dropdown-item">
+                      <i className="feather icon-mail" /> Mesaje
+                    </a> */}
                   </li>
                 </ul>
               </Dropdown.Menu>

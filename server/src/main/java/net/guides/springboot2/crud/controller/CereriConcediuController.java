@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +36,10 @@ public class CereriConcediuController {
 	@Autowired
 	private ZileService zileService;
 
-	@GetMapping("/zilelucratoareintre/")
+	@GetMapping("/zilelucratoareintre")
 	public long getZileLucratoareBetween(@RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
 			@RequestParam("date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2) {
-		return zileService.getZileLucratoareInInterval(date1, date2, Optional.empty());
+		return zileService.getZileLucratoareInInterval(date1, date2);
 	}
 
 	@GetMapping
