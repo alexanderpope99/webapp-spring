@@ -1,5 +1,9 @@
 import React from 'react';
+// import axios from 'axios';
 import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
+
+// import { server } from '../Resources/server-address';
+import AuthService from '../../services/auth.service';
 
 import Aux from '../../hoc/_Aux';
 
@@ -7,6 +11,11 @@ export default class Profile extends React.Component {
   4;
   /*
    *	user can change his email or password
+   * schimbare parola:
+   * 	1) verifica parola actuala
+   * 	2) verifica daca cele 2 parole se potrivesc
+   * 	3) parolaActuala != parolaNoua
+   * 	4) actualizeaza parola
    */
   constructor() {
     super();
@@ -14,6 +23,7 @@ export default class Profile extends React.Component {
     this.getUserDetails = this.getUserDetails.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.schimbaParola = this.schimbaParola.bind(this);
 
     this.state = {
       id: null,
@@ -21,6 +31,13 @@ export default class Profile extends React.Component {
       email: '',
       roles: [],
       isEdit: false,
+
+      // modal:
+      show: false,
+      parolaActuala: '',
+      parolaNoua: '',
+      parolaNouaCheck: '',
+      validated: true,
     };
   }
 
@@ -38,10 +55,11 @@ export default class Profile extends React.Component {
 
       // modal:
       show: false,
-			modalMessage: '',
-			parolaActuala: '',
-			parolaNoua: '',
-			parolaNouaCheck: ''
+      parolaActuala: '',
+      parolaNoua: '',
+      parolaNouaCheck: '',
+      validated: true,
+      errorMessage: 'Parolele nu coincid',
     });
   }
 
@@ -51,8 +69,27 @@ export default class Profile extends React.Component {
   handleClose() {
     this.setState({
       show: false,
-      modalMessage: '',
+      parolaActuala: '',
+      parolaNoua: '',
+      parolaNouaCheck: '',
+      validated: true,
+      errorMessage: 'Parolele nu coincid',
     });
+  }
+
+  passwordsMatch() {
+    const res = this.state.parolaNoua === this.state.parolaNouaCheck;
+    if (res) return res;
+
+    return false;
+  }
+
+  handleInputChange(event) {
+    var key = event.target.name;
+    var value = event.target.value;
+    var obj = {};
+    obj[key] = value;
+    this.setState(obj);
   }
 
   getRoleName(role) {
@@ -74,6 +111,33 @@ export default class Profile extends React.Component {
     }
   }
 
+  async schimbaParola(e) {
+    e.preventDefault();
+    const parolaActuala = this.state.parolaActuala;
+    const parolaNoua = this.state.parolaNoua;
+
+    if (!this.passwordsMatch() || !parolaActuala || parolaActuala === parolaNoua) {
+      return;
+    }
+
+    if (parolaNoua.length < 6 || parolaNoua.length > 40) {
+      this.setState({ errorMessage: 'Parola trebuie sa fie între 6 si 40 de caractere' });
+      return;
+    }
+
+    console.log(parolaActuala, parolaNoua);
+
+    // update password
+    const ok = await AuthService.changePassword(this.state.id, parolaActuala, parolaNoua);
+
+    if (!ok) {
+      this.setState({ validated: false });
+    } else {
+      this.handleClose();
+      alert('parola actualizata');
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -86,42 +150,69 @@ export default class Profile extends React.Component {
     return (
       <Aux>
         <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
+          <Form noValidate onSubmit={this.schimbaParola}>
+            <Modal.Header closeButton>
+              <Modal.Title>Mesaj</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
               <Form.Group>
                 <Form.Label>Parola actuală</Form.Label>
                 <Form.Control
+                  required
                   type="password"
                   value={this.state.parolaActuala}
-                  onChange={(e) => this.setState({ parolaActuala: e.target.value })}
+                  onChange={(e) =>
+                    this.setState({ parolaActuala: e.target.value, validated: true })
+                  }
+                  className={this.state.validated ? 'form-control' : 'form-control is-invalid'}
                 />
+                <Form.Control.Feedback type="invalid">Parola incorectă</Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
-                <Form.Label>Parola actuală</Form.Label>
+                <Form.Label>Parola nouă | 6 - 40 caractere</Form.Label>
                 <Form.Control
+                  required
                   type="password"
                   value={this.state.parolaNoua}
                   onChange={(e) => this.setState({ parolaNoua: e.target.value })}
+                  className={
+                    this.state.parolaNoua !== ''
+                      ? this.state.parolaNoua !== this.state.parolaActuala
+                        ? 'form-control'
+                        : 'form-control is-invalid'
+                      : 'form-control'
+                  }
                 />
+                <Form.Control.Feedback type="invalid">
+                  Parola nouă trebuie să fie diferită de cea actuală
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
-                <Form.Label>Parola actuală</Form.Label>
+                <Form.Label>Rescrie parola nouă</Form.Label>
                 <Form.Control
+                  required
                   type="password"
                   value={this.state.parolaNouaCheck}
                   onChange={(e) => this.setState({ parolaNouaCheck: e.target.value })}
+                  className={
+                    this.state.errorMessage === 'Parola trebuie sa fie între 6 si 40 de caractere'
+                      ? 'form-control is-invalid'
+                      : this.passwordsMatch()
+                      ? 'form-control'
+                      : 'form-control is-invalid'
+                  }
                 />
+                <Form.Control.Feedback type="invalid">
+                  {this.state.errorMessage}
+                </Form.Control.Feedback>
               </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.handleClose}>
-              Schimbă
-            </Button>
-          </Modal.Footer>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" type="submit">
+                Schimbă
+              </Button>
+            </Modal.Footer>
+          </Form>
         </Modal>
 
         <Row>

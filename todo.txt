@@ -2,9 +2,11 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-case de sanatate
-
-baza calcul
+schimbare parola:
+	1) verifica parola actuala
+	2) verifica daca cele 2 parole se potrivesc
+	3) parolaActuala != parolaNoua
+	4) actualizeaza parola
 
 problem: in luna, anul: 
 	sterg stat salarii, baza calcul ramane 
