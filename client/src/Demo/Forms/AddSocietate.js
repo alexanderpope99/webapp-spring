@@ -84,18 +84,18 @@ class AddSocietate extends React.Component {
     }
 
     var caen_id = null;
-    if (this.state.idcaen !== null) {
-      caen_id = await axios
-        .get(`${server.address}/caen/${this.state.idcaen}`, { headers: authHeader() })
-        .then((res) => (res.status === 200 ? res.data : -1));
+    // if (this.state.idcaen !== null) {
+    //   caen_id = await axios
+    //     .get(`${server.address}/caen/${this.state.idcaen}`, { headers: authHeader() })
+    //     .then((res) => (res.status === 200 ? res.data : -1));
 
-      if (caen_id === -1) {
-        caen_id = null;
-      } else {
-        caen_id = caen_id.id;
-        console.log('caen_id:', caen_id);
-      }
-    }
+    //   if (caen_id === -1) {
+    //     caen_id = null;
+    //   } else {
+    //     caen_id = caen_id.id;
+    //     console.log('caen_id:', caen_id);
+    //   }
+    // }
 
     var idadresa = null;
     // if aresa hass all fields null, don't add adresa or idadresa
@@ -119,7 +119,7 @@ class AddSocietate extends React.Component {
     // build societate JSON for POST with adr_id as idadresa
     const societate_body = {
       nume: this.state.nume,
-      idcaen: caen_id,
+      idcaen: this.state.idcaen,
       cif: this.state.cif,
       capsoc: this.state.capsoc,
       regcom: this.state.regcom,
