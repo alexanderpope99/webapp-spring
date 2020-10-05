@@ -13,6 +13,7 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
+import { case_de_danatete } from '../../Resources/judete';
 import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 
@@ -314,6 +315,9 @@ class Contract extends React.Component {
   }
 
   render() {
+
+		const case_de_sanatate_component = case_de_danatete.map((casa, index) => <option key={index}>{casa}</option>)
+
     return (
       <div>
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -424,7 +428,7 @@ class Contract extends React.Component {
                 <Form.Label>Centre de cost</Form.Label>
                 <Typeahead
                   id="optiune-centrucost"
-                  options={['centru 1', 'centru smecherie']}
+                  options={['centru test']}
                   allowNew
                   newSelectionPrefix="Adaugă"
                   value={this.state.centruCost}
@@ -437,7 +441,7 @@ class Contract extends React.Component {
                 <Form.Label>Echipa</Form.Label>
                 <Typeahead
                   id="optiune-echipa"
-                  options={['echipa 1', 'echipa smechera']}
+                  options={['echipa test']}
                   allowNew
                   newSelectionPrefix="Adaugă"
                   value={this.state.echipa}
@@ -452,7 +456,7 @@ class Contract extends React.Component {
                 <Form.Label>Departament</Form.Label>
                 <Typeahead
                   id="optiune-departament"
-                  options={['optiunea 1', 'smecherie']}
+                  options={['departament test']}
                   allowNew
                   newSelectionPrefix="Adaugă"
                   value={this.state.departament}
@@ -793,7 +797,8 @@ class Contract extends React.Component {
                     this.setState({ casăSănătate: e.target.value });
                   }}
                 >
-                  <option>optiuni</option>
+                  <option>-</option>
+									{case_de_sanatate_component}
                 </Form.Control>
               </Form.Group>
             </Col>
