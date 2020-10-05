@@ -18,10 +18,10 @@ la concedii -> trebuie sortate crescator, pot fi si dupa id(by time created), sa
 
 _________________________________________
 
-admin = boss suprem
+admin = boss suprem, nu vede datele
 
 director:
-	admin - configuratii
+	admin, + date
 
 contabil:
 	director - cereri de la angajati

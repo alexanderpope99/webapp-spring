@@ -130,7 +130,9 @@ class PersoaneIntretinereTabel extends React.Component {
         }
       )
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+			.catch((err) => console.error(err));
+			
+		if(!cereriConcediu) return;
 
     cereriConcediu = await Promise.all(
       cereriConcediu.map(async (v) => ({
