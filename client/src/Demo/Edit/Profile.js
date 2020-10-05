@@ -229,27 +229,49 @@ export default class Profile extends React.Component {
                     Schimbă parola
                   </Button>
                 </Card.Header>
-                <Card.Body>
-                  <Row>
-                    <Form.Group as={Col} md="6">
-                      <Form.Label>Username</Form.Label>
+                <Card.Body className="pl-5 pr-5">
+                  <Col md={2} />
+                  <Form.Group as={Row}>
+                    <Form.Label column sm="2">
+                      Username
+                    </Form.Label>
+                    <Col sm={10}>
                       <Form.Control
                         type="text"
                         value={this.state.username}
                         disabled={!this.state.isEdit}
                         onChange={(e) => this.setState({ username: e.target.value })}
                       />
-                    </Form.Group>
-                    <Form.Group as={Col} md="6">
-                      <Form.Label>e-mail</Form.Label>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column sm="2">
+                      e-mail
+                    </Form.Label>
+                    <Col sm={10}>
                       <Form.Control
                         type="text"
                         value={this.state.email}
                         disabled={!this.state.isEdit}
                         onChange={(e) => this.setState({ email: e.target.value })}
                       />
-                    </Form.Group>
-                  </Row>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label as="legend" column sm={2}>
+                      Icon
+                    </Form.Label>
+                    <Row>
+                      <Form.Check
+                        custom
+                        type="radio"
+                        label=""
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios1"
+                      />
+                    </Row>
+                  </Form.Group>
+                  <Col md={2} />
                 </Card.Body>
               </Card>
             </Form>

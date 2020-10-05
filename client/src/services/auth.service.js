@@ -25,11 +25,12 @@ class AuthService {
     sessionStorage.removeItem('angajatsel');
   }
 
-  register(username, email, password) {
+  register(username, email, password, gen) {
     return axios.post(API_URL + 'signup', {
       username,
       email,
-      password,
+			password,
+			gen,
     });
   }
 

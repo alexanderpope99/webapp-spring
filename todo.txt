@@ -2,11 +2,7 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-schimbare parola:
-	1) verifica parola actuala
-	2) verifica daca cele 2 parole se potrivesc
-	3) parolaActuala != parolaNoua
-	4) actualizeaza parola
+user -> gen
 
 problem: in luna, anul: 
 	sterg stat salarii, baza calcul ramane 

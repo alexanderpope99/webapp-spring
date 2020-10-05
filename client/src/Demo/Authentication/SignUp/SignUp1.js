@@ -16,7 +16,8 @@ class SignUp1 extends React.Component {
       username: '',
       email: '',
       password: '',
-      confirmPassword: '',
+			confirmPassword: '',
+			gen: false,
       message: '',
       show: false,
     };
@@ -30,7 +31,7 @@ class SignUp1 extends React.Component {
         message: 'Parolele nu coincid',
       });
     else {
-      AuthService.register(this.state.username, this.state.email, this.state.password)
+      AuthService.register(this.state.username, this.state.email, this.state.password, this.state.gen)
         .then((response) => {
 					if(response.status === 200)
           this.setState({

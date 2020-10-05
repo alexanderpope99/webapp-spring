@@ -56,6 +56,7 @@ class SocietatiTabel extends React.Component {
           <tr key={soc.id}>
             <th>{soc.nume || '-'}</th>
             <th>{soc.email || '-'}</th>
+						<th>{soc.telefon || '-'}</th>
             <th>{soc.idcaen || '-'}</th>
             <th>{soc.cif || '-'}</th>
             <th>{soc.regcom || '-'}</th>
@@ -171,6 +172,7 @@ class SocietatiTabel extends React.Component {
                     <tr>
                       <th>Nume</th>
                       <th>email</th>
+                      <th>telefon</th>
                       <th>CAEN</th>
                       <th>CIF</th>
                       <th>Reg. Com.</th>

@@ -41,6 +41,9 @@ public class User {
 	@JoinTable(name = "user_societati", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "societate_id"))
 	private Set<Societate> societati = new HashSet<>();
 
+	@Column(name = "gen")
+	private boolean gen;
+
 	public User() {
 	}
 
@@ -76,6 +79,9 @@ public class User {
 	public String getUsername() {
 		return username;
 	}
+	public boolean isGen() {
+		return gen;
+	}
 
 	// SETTERS
 	public void setEmail(String email) {
@@ -95,5 +101,8 @@ public class User {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public void setGen(boolean gen) {
+		this.gen = gen;
 	}
 }
