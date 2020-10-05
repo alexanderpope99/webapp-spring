@@ -197,8 +197,8 @@ class Contract extends React.Component {
   handleClose() {
     this.setState({
       show: false,
-      modalMessage: '',
-    });
+			modalMessage: '',
+		});
   }
 
   hasRequired() {
@@ -288,10 +288,12 @@ class Contract extends React.Component {
           console.error(err.message);
         });
 
+		// if recieved response from server
     if (contract) {
       this.setState({
         show: true,
-        modalMessage: method === 'POST' ? 'Contract adăugat cu succes' : 'Contract actualizat',
+				modalMessage: method === 'POST' ? 'Contract adăugat cu succes' : 'Contract actualizat',
+				id: contract.id,
       });
 
       if (method === 'POST') {
@@ -308,7 +310,8 @@ class Contract extends React.Component {
               headers: authHeader(),
             }
           )
-          .catch((err) => console.error(err));
+					.catch((err) => console.error(err));
+				method = 'PUT';
       }
       console.log('idcontract:', contract.id);
     }
