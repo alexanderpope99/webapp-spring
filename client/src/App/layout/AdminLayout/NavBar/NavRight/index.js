@@ -138,7 +138,7 @@ class NavRight extends Component {
                     </a>
                   </li>
                   <li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
+                    <a href="/edit/profile" className="dropdown-item">
                       <i className="feather icon-user" /> Profil
                     </a>
                   </li>
