@@ -12,75 +12,81 @@ import java.time.LocalDate;
 @Table(name = "co")
 public class CO {
 
-    private long id;
-    private String tip;
-    private LocalDate dela;
-    private LocalDate panala;
-    private Boolean sporuripermanente;
-    private Long idcontract;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public CO() { }
+	@Column(name = "tip")
+	private String tip;
 
-    public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Long idcontract) {
-        this.tip = tip;
-        this.dela = dela;
-        this.panala = panala;
-        this.sporuripermanente = sporuripermanente;
-        this.idcontract = idcontract;
-    }
+	@Column(name = "dela")
+	private LocalDate dela;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Column(name = "panala")
+	private LocalDate panala;
 
-    @Column(name = "tip")
-    public String getTip() {
-        return tip;
-    }
+	@Column(name = "sporuripermanente")
+	private Boolean sporuripermanente;
 
-    public void setTip(String tip) {
-        this.tip = tip;
-    }
+	@Column(name = "idcontract")
+	private Long idcontract;
 
-    @Column(name = "dela")
-    public LocalDate getDela() {
-        return dela;
-    }
+	public CO() {
+	}
 
-    public void setDela(LocalDate dela) {
-        this.dela = dela;
-    }
+	public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Long idcontract) {
+		this.tip = tip;
+		this.dela = dela;
+		this.panala = panala;
+		this.sporuripermanente = sporuripermanente;
+		this.idcontract = idcontract;
+	}
 
-    @Column(name = "panala")
-    public LocalDate getPanala() {
-        return panala;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setPanala(LocalDate panala) {
-        this.panala = panala;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    @Column(name = "sporuripermanente")
-    public Boolean isSporuripermanente() {
-        return sporuripermanente;
-    }
+	public String getTip() {
+		return tip;
+	}
 
-    public void setSporuripermanente(Boolean sporuripermanente) {
-        this.sporuripermanente = sporuripermanente;
-    }
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
 
-    @Column(name = "idcontract")
-    public Long getIdcontract() {
-        return idcontract;
-    }
+	public LocalDate getDela() {
+		return dela;
+	}
 
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
+	public void setDela(LocalDate dela) {
+		this.dela = dela;
+	}
+
+	public LocalDate getPanala() {
+		return panala;
+	}
+
+	public void setPanala(LocalDate panala) {
+		this.panala = panala;
+	}
+
+	public Boolean isSporuripermanente() {
+		return sporuripermanente;
+	}
+
+	public void setSporuripermanente(Boolean sporuripermanente) {
+		this.sporuripermanente = sporuripermanente;
+	}
+
+	public Long getIdcontract() {
+		return idcontract;
+	}
+
+	public void setIdcontract(Long idcontract) {
+		this.idcontract = idcontract;
+	}
 }
-

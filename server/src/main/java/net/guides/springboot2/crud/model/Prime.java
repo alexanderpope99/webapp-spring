@@ -11,42 +11,47 @@ import javax.persistence.Table;
 @Table(name = "prime")
 public class Prime {
 
-    private long id;
-    @Column(name = "valoare")
-    private Double valoare;
-    @Column(name = "idstat")
-    private Long idstat;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public Prime() { }
+	@Column(name = "valoare")
+	private Double valoare;
 
-    public Prime( Double valoare, Long idstat ) {
-        this.valoare = valoare;
-        this.idstat = idstat;
-    }
+	@Column(name = "idstat")
+	private Long idstat;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Prime() {
+	}
 
-    // GETTERS
-    public Long getIdstat() {
-        return idstat;
-    }
-    public Double getValoare() {
-        return valoare;
-    }
+	public Prime(Double valoare, Long idstat) {
+		this.valoare = valoare;
+		this.idstat = idstat;
+	}
 
-    // SETTERS
-    public void setIdstat(Long idstat) {
-        this.idstat = idstat;
-    }
-    public void setValoare(Double valoare) {
-        this.valoare = valoare;
-    }
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	// GETTERS
+	public Long getIdstat() {
+		return idstat;
+	}
+
+	public Double getValoare() {
+		return valoare;
+	}
+
+	// SETTERS
+	public void setIdstat(Long idstat) {
+		this.idstat = idstat;
+	}
+
+	public void setValoare(Double valoare) {
+		this.valoare = valoare;
+	}
 }
-

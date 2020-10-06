@@ -8,35 +8,36 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "contbancar")
 public class ContBancar {
+	@Id
+	@Column(name = "iban", nullable = false)
+	private String iban;
 
-    private String iban;
-    private String numebanca;
+	@Column(name = "numebanca")
+	private String numebanca;
 
-    public ContBancar() {
+	public ContBancar() {
 
-    }
+	}
 
-    public ContBancar(String iban, String numebanca) {
-        this.iban = iban;
-        this.numebanca = numebanca;
-    }
+	public ContBancar(String iban, String numebanca) {
+		this.iban = iban;
+		this.numebanca = numebanca;
+	}
 
-    @Id
-    @Column(name = "iban",nullable=false)
-    public String getIban() {
-        return iban;
-    }
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
+	public String getIban() {
+		return iban;
+	}
 
-    @Column(name = "numebanca")
-    public String getNumebanca() {
-        return numebanca;
-    }
-    public void setNumebanca(String adresa) {
-        this.numebanca = adresa;
-    }
+	public void setIban(String iban) {
+		this.iban = iban;
+	}
+
+	public String getNumebanca() {
+		return numebanca;
+	}
+
+	public void setNumebanca(String adresa) {
+		this.numebanca = adresa;
+	}
 
 }
-

@@ -12,13 +12,29 @@ import java.time.LocalDate;
 @Table(name = "cerericoncediu")
 public class CereriConcediu {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@Column(name = "pentru")
 	private int pentru;
+
+	@Column(name = "dela")
 	private LocalDate dela;
+
+	@Column(name = "panala")
 	private LocalDate panala;
+
+	@Column(name = "tip")
 	private String tip;
+
+	@Column(name = "motiv")
 	private String motiv;
+
+	@Column(name = "status")
 	private String status;
+
+	@Column(name = "societate")
 	private int societate;
 
 	public CereriConcediu() {
@@ -35,8 +51,6 @@ public class CereriConcediu {
 		this.societate = societate;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}
@@ -45,7 +59,6 @@ public class CereriConcediu {
 		this.id = id;
 	}
 
-	@Column(name = "pentru")
 	public int getPentru() {
 		return pentru;
 	}
@@ -54,7 +67,6 @@ public class CereriConcediu {
 		this.pentru = pentru;
 	}
 
-	@Column(name = "dela")
 	public LocalDate getDela() {
 		return dela;
 	}
@@ -63,7 +75,6 @@ public class CereriConcediu {
 		this.dela = dela;
 	}
 
-	@Column(name = "panala")
 	public LocalDate getPanala() {
 		return panala;
 	}
@@ -72,7 +83,6 @@ public class CereriConcediu {
 		this.panala = panala;
 	}
 
-	@Column(name = "tip")
 	public String getTip() {
 		return tip;
 	}
@@ -81,7 +91,6 @@ public class CereriConcediu {
 		this.tip = tip;
 	}
 
-	@Column(name = "motiv")
 	public String getMotiv() {
 		return motiv;
 	}
@@ -90,7 +99,6 @@ public class CereriConcediu {
 		this.motiv = motiv;
 	}
 
-	@Column(name = "status")
 	public String getStatus() {
 		return status;
 	}
@@ -99,7 +107,6 @@ public class CereriConcediu {
 		this.status = status;
 	}
 
-	@Column(name = "societate")
 	public int getSocietate() {
 		return societate;
 	}

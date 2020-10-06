@@ -11,62 +11,70 @@ import javax.persistence.Table;
 @Table(name = "adresa")
 public class Adresa {
 
-    private long id;
-    private String adresa;
-    private String localitate;
-    private String judet;
-    private String tara;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public Adresa() {
+	@Column(name = "adresa")
+	private String adresa;
 
-    }
+	@Column(name = "localitate")
+	private String localitate;
 
-    public Adresa(String adresa, String localitate, String judet, String tara) {
-        this.adresa = adresa;
-        this.localitate = localitate;
-        this.judet = judet;
-        this.tara = tara;
-    }
+	@Column(name = "judet")
+	private String judet;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Column(name = "tara")
+	private String tara;
 
-    @Column(name = "adresa")
-    public String getAdresa() {
-        return adresa;
-    }
-    public void setAdresa(String adresa) {
-        this.adresa = adresa;
-    }
+	public Adresa() {
 
-    @Column(name = "localitate")
-    public String getLocalitate() {
-        return localitate;
-    }
-    public void setLocalitate(String localitate) {
-        this.localitate = localitate;
-    }
+	}
 
-    @Column(name = "judet")
-    public String getJudet() {
-        return judet;
-    }
-    public void setJudet(String judet) {
-        this.judet = judet;
-    }
+	public Adresa(String adresa, String localitate, String judet, String tara) {
+		this.adresa = adresa;
+		this.localitate = localitate;
+		this.judet = judet;
+		this.tara = tara;
+	}
 
-    @Column(name = "tara")
-    public String getTara() {
-        return tara;
-    }
-    public void setTara(String tara) {
-        this.tara = tara;
-    }
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+
+	public String getLocalitate() {
+		return localitate;
+	}
+
+	public void setLocalitate(String localitate) {
+		this.localitate = localitate;
+	}
+
+	public String getJudet() {
+		return judet;
+	}
+
+	public void setJudet(String judet) {
+		this.judet = judet;
+	}
+
+	public String getTara() {
+		return tara;
+	}
+
+	public void setTara(String tara) {
+		this.tara = tara;
+	}
 }
-

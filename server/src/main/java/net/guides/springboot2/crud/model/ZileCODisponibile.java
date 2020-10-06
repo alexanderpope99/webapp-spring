@@ -11,42 +11,47 @@ import javax.persistence.Table;
 @Table(name = "zilecodisponibile")
 public class ZileCODisponibile {
 
-    private long id;
-    @Column(name = "nr")
-    private Long nr;
-    @Column(name = "idcontract")
-    private Long idcontract;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public ZileCODisponibile() { }
+	@Column(name = "nr")
+	private Long nr;
 
-    public ZileCODisponibile( Long nr, Long idcontract ) {
-        this.nr = nr;
-        this.idcontract = idcontract;
-    }
+	@Column(name = "idcontract")
+	private Long idcontract;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public ZileCODisponibile() {
+	}
 
-    // GETTERS
-    public Long getIdcontract() {
-        return idcontract;
-    }
-    public Long getNr() {
-        return nr;
-    }
+	public ZileCODisponibile(Long nr, Long idcontract) {
+		this.nr = nr;
+		this.idcontract = idcontract;
+	}
 
-    // SETTERS
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
-    public void setNr(Long nr) {
-        this.nr = nr;
-    }
-} 
+	public Long getId() {
+		return id;
+	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	// GETTERS
+	public Long getIdcontract() {
+		return idcontract;
+	}
+
+	public Long getNr() {
+		return nr;
+	}
+
+	// SETTERS
+	public void setIdcontract(Long idcontract) {
+		this.idcontract = idcontract;
+	}
+
+	public void setNr(Long nr) {
+		this.nr = nr;
+	}
+}

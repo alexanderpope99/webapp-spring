@@ -16,8 +16,14 @@ import javax.persistence.Table;
 @Table(name = "angajat")
 public class Angajat {
 
+	@Id
+	@Column(name = "idpersoana")
 	private Long idpersoana;
+
+	@Column(name = "idcontract")
 	private Long idcontract;
+
+	@Column(name = "idsocietate")
 	private Integer idsocietate;
 
 	@ManyToOne(cascade = { CascadeType.ALL })
@@ -25,7 +31,7 @@ public class Angajat {
 	private Angajat superior;
 
 	@OneToMany(mappedBy = "superior")
-	private Set<Angajat> subordinates = new HashSet<Angajat>();
+	private Set<Angajat> subalterni = new HashSet<Angajat>();
 
 	public Angajat() {
 
@@ -36,8 +42,6 @@ public class Angajat {
 		this.idsocietate = idsocietate;
 	}
 
-	@Id
-	@Column(name = "idpersoana")
 	public Long getIdpersoana() {
 		return idpersoana;
 	}
@@ -46,7 +50,6 @@ public class Angajat {
 		this.idpersoana = idpersoana;
 	}
 
-	@Column(name = "idcontract")
 	public Long getIdcontract() {
 		return idcontract;
 	}
@@ -55,12 +58,27 @@ public class Angajat {
 		this.idcontract = idcontract;
 	}
 
-	@Column(name = "idsocietate")
 	public Integer getIdsocietate() {
 		return idsocietate;
 	}
 
 	public void setIdsocietate(Integer idsocietate) {
 		this.idsocietate = idsocietate;
+	}
+
+	public Set<Angajat> getSubalterni() {
+		return subalterni;
+	}
+
+	public void setSubalterni(Set<Angajat> subalterni) {
+		this.subalterni = subalterni;
+	}
+
+	public Angajat getSuperior() {
+		return superior;
+	}
+
+	public void setSuperior(Angajat superior) {
+		this.superior = superior;
 	}
 }

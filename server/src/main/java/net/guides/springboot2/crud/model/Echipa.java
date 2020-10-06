@@ -11,45 +11,46 @@ import javax.persistence.Table;
 @Table(name = "echipa")
 public class Echipa {
 
-    private long id;
-    private int iddepartament;
-    private String nume;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
+	@Column(name = "iddepartament")
+	private int iddepartament;
 
-    public Echipa() {
+	@Column(name = "nume")
+	private String nume;
 
-    }
+	public Echipa() {
 
-    public Echipa(int iddepartament, String nume) {
-        this.iddepartament = iddepartament;
-        this.nume = nume;
-    }
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	public Echipa(int iddepartament, String nume) {
+		this.iddepartament = iddepartament;
+		this.nume = nume;
+	}
 
-    @Column(name = "iddepartament")
-    public int getIddepartament() {
-        return iddepartament;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setIddepartament(int iddepartament) {
-        this.iddepartament = iddepartament;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    @Column(name = "nume")
-    public String getNume() {
-        return nume;
-    }
+	public int getIddepartament() {
+		return iddepartament;
+	}
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
+	public void setIddepartament(int iddepartament) {
+		this.iddepartament = iddepartament;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
 }
-

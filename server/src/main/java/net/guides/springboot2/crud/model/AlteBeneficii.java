@@ -11,72 +11,83 @@ import javax.persistence.Table;
 @Table(name = "altebeneficii")
 public class AlteBeneficii {
 
-    private long id;
-    private String nume;
-    private Float valoare;
-    private Float procent;
-    private String aplicare;
-    private Long idcontract;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public AlteBeneficii() {
+	@Column(name = "nume")
+	private String nume;
 
-    }
+	@Column(name = "valoare")
+	private Float valoare;
 
-    public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Long idcontract) {
-        this.nume = nume;
-        this.valoare = valoare;
-        this.procent = procent;
-        this.aplicare = aplicare;
-        this.idcontract = idcontract;
-    }
+	@Column(name = "procent")
+	private Float procent;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Column(name = "aplicare")
+	private String aplicare;
 
-    @Column(name = "nume")
-    public String getNume() {
-        return nume;
-    }
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
+	@Column(name = "idcontract")
+	private Long idcontract;
 
-    @Column(name = "valoare")
-    public Float getValoare() {
-        return valoare;
-    }
-    public void setValoare(Float valoare) {
-        this.valoare = valoare;
-    }
+	public AlteBeneficii() {
 
-    @Column(name = "procent")
-    public Float getProcent() {
-        return procent;
-    }
-    public void setProcent(Float procent) {
-        this.procent = procent;
-    }
+	}
 
-    @Column(name = "aplicare")
-    public String getAplicare() {
-        return aplicare;
-    }
-    public void setAplicare(String aplicare) {
-        this.aplicare = aplicare;
-    }
+	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Long idcontract) {
+		this.nume = nume;
+		this.valoare = valoare;
+		this.procent = procent;
+		this.aplicare = aplicare;
+		this.idcontract = idcontract;
+	}
 
-    @Column(name = "idcontract")
-    public Long getIdcontract() {
-        return idcontract;
-    }
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
+
+	public Float getValoare() {
+		return valoare;
+	}
+
+	public void setValoare(Float valoare) {
+		this.valoare = valoare;
+	}
+
+	public Float getProcent() {
+		return procent;
+	}
+
+	public void setProcent(Float procent) {
+		this.procent = procent;
+	}
+
+	public String getAplicare() {
+		return aplicare;
+	}
+
+	public void setAplicare(String aplicare) {
+		this.aplicare = aplicare;
+	}
+
+	@Column(name = "idcontract")
+	public Long getIdcontract() {
+		return idcontract;
+	}
+
+	public void setIdcontract(Long idcontract) {
+		this.idcontract = idcontract;
+	}
 }
-

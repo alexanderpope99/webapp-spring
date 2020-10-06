@@ -12,66 +12,70 @@ import java.util.Date;
 @Table(name = "burseprivate")
 public class BursePrivate {
 
-    private long id;
-    private Long idcontract;
-    private Date data;
-    private Float cota;
-    private Float suma;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public BursePrivate() {
+	@Column(name = "idcontract")
+	private Long idcontract;
 
-    }
+	@Column(name = "data")
+	private Date data;
 
-    public BursePrivate(Long idcontract, Date data, Float cota, Float suma) {
-        this.idcontract = idcontract;
-        this.data = data;
-        this.cota = cota;
-        this.suma = suma;
-    }
+	@Column(name = "cota")
+	private Float cota;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Column(name = "suma")
+	private Float suma;
 
-    @Column(name = "idcontract")
-    public Long getIdcontract() {
-        return idcontract;
-    }
+	public BursePrivate() {
 
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
+	}
 
-    @Column(name = "data")
-    public Date getData() {
-        return data;
-    }
+	public BursePrivate(Long idcontract, Date data, Float cota, Float suma) {
+		this.idcontract = idcontract;
+		this.data = data;
+		this.cota = cota;
+		this.suma = suma;
+	}
 
-    public void setData(Date data) {
-        this.data = data;
-    }
+	public long getId() {
+		return id;
+	}
 
-    @Column(name = "cota")
-    public Float getCota() {
-        return cota;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setCota(Float cota) {
-        this.cota = cota;
-    }
+	public Long getIdcontract() {
+		return idcontract;
+	}
 
-    @Column(name = "suma")
-    public Float getSuma() {
-        return suma;
-    }
+	public void setIdcontract(Long idcontract) {
+		this.idcontract = idcontract;
+	}
 
-    public void setSuma(Float suma) {
-        this.suma = suma;
-    }
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Float getCota() {
+		return cota;
+	}
+
+	public void setCota(Float cota) {
+		this.cota = cota;
+	}
+
+	public Float getSuma() {
+		return suma;
+	}
+
+	public void setSuma(Float suma) {
+		this.suma = suma;
+	}
 }
-

@@ -11,42 +11,46 @@ import javax.persistence.Table;
 @Table(name = "altedrepturi")
 public class AlteDrepturi {
 
-    private long id;
-    private Float valoare;
-    private Integer idstat;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public AlteDrepturi() {
+	@Column(name = "valoare")
+	private Float valoare;
 
-    }
+	@Column(name = "idstat")
+	private Integer idstat;
 
-    public AlteDrepturi(Float valoare, Integer idstat) {
-        this.valoare = valoare;
-        this.idstat = idstat;
-    }
+	public AlteDrepturi() {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	}
 
-    @Column(name = "valoare")
-    public Float getValoare() {
-        return valoare;
-    }
-    public void setValoare(Float valoare) {
-        this.valoare = valoare;
-    }
+	public AlteDrepturi(Float valoare, Integer idstat) {
+		this.valoare = valoare;
+		this.idstat = idstat;
+	}
 
-    @Column(name = "idstat")
-    public Integer getIdstat() {
-        return idstat;
-    }
-    public void setIdstat(Integer idstat) {
-        this.idstat = idstat;
-    }
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Float getValoare() {
+		return valoare;
+	}
+
+	public void setValoare(Float valoare) {
+		this.valoare = valoare;
+	}
+
+	public Integer getIdstat() {
+		return idstat;
+	}
+
+	public void setIdstat(Integer idstat) {
+		this.idstat = idstat;
+	}
 }
-

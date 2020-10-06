@@ -9,51 +9,49 @@ import javax.persistence.*;
 @Table(name = "listacontbancar")
 public class ListaContBancar {
 
-    @Id
-    private long idsocietate;
-    @Id
-    private String iban;
+	@Id
+	@Column(name = "idsocietate")
+	private long idsocietate;
+	@Id
+	@Column(name = "iban")
+	private String iban;
 
+	public ListaContBancar() {
 
-    public ListaContBancar() {
+	}
 
-    }
+	public ListaContBancar(long idsocietate, String iban) {
+		this.idsocietate = idsocietate;
+		this.iban = iban;
+	}
 
-    public ListaContBancar(long idsocietate, String iban) {
-        this.idsocietate = idsocietate;
-        this.iban = iban;
-    }
+	public long getIdsocietate() {
+		return idsocietate;
+	}
 
-    @Column(name="idsocietate")
-    public long getIdsocietate() {
-        return idsocietate;
-    }
+	public void setIdsocietate(long idsocietate) {
+		this.idsocietate = idsocietate;
+	}
 
-    public void setIdsocietate(long idsocietate) {
-        this.idsocietate = idsocietate;
-    }
+	public String getIban() {
+		return iban;
+	}
 
-
-    @Column(name="iban")
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
+	public void setIban(String iban) {
+		this.iban = iban;
+	}
 }
 
 class ListaContBancarId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	protected long idsocietate;
-    protected String iban;
+	protected String iban;
 
-    public ListaContBancarId() {
-    }
+	public ListaContBancarId() {
+	}
 
-    public ListaContBancarId(long idsocietate, String iban) {
-        this.idsocietate = idsocietate;
-        this.iban = iban;
-    }
+	public ListaContBancarId(long idsocietate, String iban) {
+		this.idsocietate = idsocietate;
+		this.iban = iban;
+	}
 }

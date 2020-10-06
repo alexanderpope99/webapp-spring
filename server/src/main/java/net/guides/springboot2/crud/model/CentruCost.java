@@ -11,55 +11,58 @@ import javax.persistence.Table;
 @Table(name = "centrucost")
 public class CentruCost {
 
-    private long id;
-    private int idadresa;
-    private int idsocietate;
-    private String nume;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public CentruCost() {
+	@Column(name = "idadresa")
+	private int idadresa;
 
-    }
+	@Column(name = "idsocietate")
+	private int idsocietate;
 
-    public CentruCost(int idadresa, int idsocietate, String nume) {
-        this.idadresa = idadresa;
-        this.idsocietate = idsocietate;
-        this.nume = nume;
-    }
+	@Column(name = "nume")
+	private String nume;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	public CentruCost() {
 
-    @Column(name = "idadresa")
-    public int getIdadresa() {
-        return idadresa;
-    }
+	}
 
-    public void setIdadresa(int idadresa) {
-        this.idadresa = idadresa;
-    }
+	public CentruCost(int idadresa, int idsocietate, String nume) {
+		this.idadresa = idadresa;
+		this.idsocietate = idsocietate;
+		this.nume = nume;
+	}
 
-    @Column(name = "idsocietate")
-    public int getIdsocietate() {
-        return idsocietate;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public void setIdsocietate(int idsocietate) {
-        this.idsocietate = idsocietate;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    @Column(name = "nume")
-    public String getNume() {
-        return nume;
-    }
+	public int getIdadresa() {
+		return idadresa;
+	}
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
+	public void setIdadresa(int idadresa) {
+		this.idadresa = idadresa;
+	}
+
+	public int getIdsocietate() {
+		return idsocietate;
+	}
+
+	public void setIdsocietate(int idsocietate) {
+		this.idsocietate = idsocietate;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
 }
-

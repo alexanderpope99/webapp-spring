@@ -13,23 +13,33 @@ import javax.persistence.Table;
 @Table(name = "parametriisalariu")
 public class ParametriiSalariu {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
 	@Column(name = "salariumin")
 	private Float salariumin;
+
 	@Column(name = "salariuminstudiivechime")
 	private Float salariuminstudiivechime;
+
 	@Column(name = "salariumediubrut")
 	private Float salariumediubrut;
+
 	@Column(name = "impozit")
 	private Float impozit;
+
 	@Column(name = "cas")
 	private Float cas;
+
 	@Column(name = "cass")
 	private Float cass;
 	@Column(name = "cam")
 	private Float cam;
+
 	@Column(name = "valtichet")
 	private Float valtichet;
+
 	@Column(name = "date")
 	private LocalDate date;
 
@@ -49,8 +59,6 @@ public class ParametriiSalariu {
 		this.date = date;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getId() {
 		return id;
 	}

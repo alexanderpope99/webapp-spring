@@ -12,103 +12,121 @@ import java.util.Date;
 @Table(name = "actidentitate")
 public class ActIdentitate {
 
-    private long id;
-    private String cnp;
-    private String tip;
-    private String serie;
-    private String numar;
-    private Date datanasterii;
-    private String eliberatde;
-    private String dataeliberarii;
-    private String loculnasterii;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    public ActIdentitate() {
+	@Column(name = "cnp")
+	private String cnp;
 
-    }
+	@Column(name = "tip")
+	private String tip;
 
-    public ActIdentitate(String cnp, String tip, String serie, String numar, Date datanasterii, String eliberatde, String dataeliberarii, String loculnasterii) {
-        this.cnp = cnp;
-        this.tip = tip;
-        this.serie = serie;
-        this.numar = numar;
-        this.datanasterii = datanasterii;
-        this.eliberatde = eliberatde;
-        this.dataeliberarii = dataeliberarii;
-        this.loculnasterii = loculnasterii;
-    }
+	@Column(name = "serie")
+	private String serie;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Column(name = "numar")
+	private String numar;
 
-    @Column(name = "cnp")
-    public String getCnp() {
-        return cnp;
-    }
-    public void setCnp(String cnp) {
-        this.cnp = cnp;
-    }
+	@Column(name = "datanasterii")
+	private Date datanasterii;
 
-    @Column(name = "tip")
-    public String getTip() {
-        return tip;
-    }
-    public void setTip(String tip) {
-        this.tip = tip;
-    }
+	@Column(name = "eliberatde")
+	private String eliberatde;
 
-    @Column(name = "serie")
-    public String getSerie() {
-        return serie;
-    }
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
+	@Column(name = "dataeliberarii")
+	private String dataeliberarii;
 
-    @Column(name = "numar")
-    public String getNumar() {
-        return numar;
-    }
-    public void setNumar(String numar) {
-        this.numar = numar;
-    }
+	@Column(name = "loculnasterii")
+	private String loculnasterii;
 
-    @Column(name = "datanasterii")
-    public Date getDatanasterii() {
-        return datanasterii;
-    }
-    public void setDatanasterii(Date datanasterii) {
-        this.datanasterii = datanasterii;
-    }
+	public ActIdentitate() {
 
-    @Column(name = "eliberatde")
-    public String getEliberatde() {
-        return eliberatde;
-    }
-    public void setEliberatde(String eliberatde) {
-        this.eliberatde = eliberatde;
-    }
+	}
 
-    @Column(name = "dataeliberarii")
-    public String getDataeliberarii() {
-        return dataeliberarii;
-    }
-    public void setDataeliberarii(String dataeliberarii) {
-        this.dataeliberarii = dataeliberarii;
-    }
+	public ActIdentitate(String cnp, String tip, String serie, String numar, Date datanasterii, String eliberatde,
+			String dataeliberarii, String loculnasterii) {
+		this.cnp = cnp;
+		this.tip = tip;
+		this.serie = serie;
+		this.numar = numar;
+		this.datanasterii = datanasterii;
+		this.eliberatde = eliberatde;
+		this.dataeliberarii = dataeliberarii;
+		this.loculnasterii = loculnasterii;
+	}
 
-    @Column(name = "loculnasterii")
-    public String getLoculnasterii() {
-        return loculnasterii;
-    }
-    public void setLoculnasterii(String loculnasterii) {
-        this.loculnasterii = loculnasterii;
-    }
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getCnp() {
+		return cnp;
+	}
+
+	public void setCnp(String cnp) {
+		this.cnp = cnp;
+	}
+
+	public String getTip() {
+		return tip;
+	}
+
+	public void setTip(String tip) {
+		this.tip = tip;
+	}
+
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+
+	public String getNumar() {
+		return numar;
+	}
+
+	public void setNumar(String numar) {
+		this.numar = numar;
+	}
+
+	public Date getDatanasterii() {
+		return datanasterii;
+	}
+
+	public void setDatanasterii(Date datanasterii) {
+		this.datanasterii = datanasterii;
+	}
+
+	public String getEliberatde() {
+		return eliberatde;
+	}
+
+	public void setEliberatde(String eliberatde) {
+		this.eliberatde = eliberatde;
+	}
+
+	@Column(name = "dataeliberarii")
+	public String getDataeliberarii() {
+		return dataeliberarii;
+	}
+
+	public void setDataeliberarii(String dataeliberarii) {
+		this.dataeliberarii = dataeliberarii;
+	}
+
+	public String getLoculnasterii() {
+		return loculnasterii;
+	}
+
+	public void setLoculnasterii(String loculnasterii) {
+		this.loculnasterii = loculnasterii;
+	}
 
 }
-
