@@ -87,41 +87,11 @@ public class AuthController {
 				encoder.encode(signUpRequest.getPassword()));
 		user.setGen(signUpRequest.isGen());
 
-		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 
-		if (strRoles == null) {
-			Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(angajatRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-					case "admin":
-						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(adminRole);
-
-						break;
-					case "dir":
-						Role dirRole = roleRepository.findByName(ERole.ROLE_DIRECTOR)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(dirRole);
-
-						break;
-					case "cont":
-						Role contRole = roleRepository.findByName(ERole.ROLE_CONTABIL)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(contRole);
-
-						break;
-					default:
-						Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(angajatRole);
-				}
-			});
-		}
+		Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
+				.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(angajatRole);
 
 		user.setRoles(roles);
 		userRepository.save(user);

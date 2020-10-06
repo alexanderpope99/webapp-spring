@@ -2,11 +2,10 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)	
 
-user -> gen
-
 problem: in luna, anul: 
 	sterg stat salarii, baza calcul ramane 
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
+solutie: verifica daca exista baza calcul inainte de a creea una && cascade delete bazacalcul
 
 nota contabila
 
