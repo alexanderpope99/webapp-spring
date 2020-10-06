@@ -682,7 +682,7 @@ class EditPersoana extends React.Component {
                         </Col>
                         <Col md={6}>
                           <Form.Group id="judet">
-                            <Form.Label>{this.state.capitala}</Form.Label>
+                            <Form.Label>{this.state.tipJudet}</Form.Label>
                             <Form.Control
                               as="select"
                               value={this.state.judet}
@@ -749,19 +749,18 @@ class EditPersoana extends React.Component {
                     </Col>
                   </Row>
 
-                  {typeof this.props.asChild === 'undefined' ? (
-                    <Row>
-                      <Col md={12}>
-                        <Button
-                          variant="success"
-                          className="float-right m-0 pl-5 pr-5 mt-2"
-                          type="submit"
-                        >
-                          Adaugă
-                        </Button>
-                      </Col>
-                    </Row>
-                  ) : null}
+                  <Row>
+                    <Col md={6}>
+                      <Button
+												className="mt-2 ml-0"
+                        variant={this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'}
+                        onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
+                        disabled={this.state.selectednume === '-'}
+                      >
+                        Actualizează datele
+                      </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </Card.Body>
             </Card>
