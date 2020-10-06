@@ -52,7 +52,7 @@ public class Angajat {
 
 	public Long getIdcontract() {
 		return idcontract;
-	}
+	} 
 
 	public void setIdcontract(Long idcontract) {
 		this.idcontract = idcontract;
