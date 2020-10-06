@@ -749,19 +749,18 @@ class EditPersoana extends React.Component {
                     </Col>
                   </Row>
 
-                  {typeof this.props.asChild === 'undefined' ? (
-                    <Row>
-                      <Col md={12}>
-                        <Button
-                          variant="outline-primary"
-                          className="mt-2 ml-0"
-                          type="submit"
-                        >
-                          Actualizează
-                        </Button>
-                      </Col>
-                    </Row>
-                  ) : null}
+                  <Row>
+                    <Col md={6}>
+                      <Button
+												className="mt-2 ml-0"
+                        variant={this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'}
+                        onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
+                        disabled={this.state.selectednume === '-'}
+                      >
+                        Actualizează datele
+                      </Button>
+                    </Col>
+                  </Row>
                 </Form>
               </Card.Body>
             </Card>
