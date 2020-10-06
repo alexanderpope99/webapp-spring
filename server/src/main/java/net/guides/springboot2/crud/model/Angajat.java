@@ -49,7 +49,7 @@ public class Angajat {
 	@Column(name = "idcontract")
 	public Long getIdcontract() {
 		return idcontract;
-	}
+	} 
 
 	public void setIdcontract(Long idcontract) {
 		this.idcontract = idcontract;

@@ -40,11 +40,6 @@ class SignUp1 extends React.Component {
           });
         })
         .catch((error) => {
-          const resMessage =
-            (error.response && error.response.data && error.response.data.message) ||
-            error.message ||
-            error.toString();
-
           this.setState({
             show: true,
             message: this.state.username + ' ' + this.state.email + ' ' + this.state.password,
