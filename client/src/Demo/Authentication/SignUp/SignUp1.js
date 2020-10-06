@@ -1,11 +1,10 @@
 import React from 'react';
 import { NavLink, Redirect } from 'react-router-dom';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 
 import './../../../assets/scss/style.scss';
 import Aux from '../../../hoc/_Aux';
 import AuthService from '../../../services/auth.service';
-import { Multiselect } from 'multiselect-react-dropdown';
 
 class SignUp1 extends React.Component {
   constructor() {
@@ -16,10 +15,15 @@ class SignUp1 extends React.Component {
       username: '',
       email: '',
       password: '',
-			confirmPassword: '',
-			gen: false,
+      confirmPassword: '',
+      gen: false,
       message: '',
       show: false,
+      options: [
+        { name: 'Srigar', id: 1 },
+        { name: 'Sam', id: 2 },
+        { name: 'Cristi', id: 3 },
+      ],
     };
   }
   async handleRegister(e) {
@@ -31,13 +35,18 @@ class SignUp1 extends React.Component {
         message: 'Parolele nu coincid',
       });
     else {
-      AuthService.register(this.state.username, this.state.email, this.state.password, this.state.gen)
+      AuthService.register(
+        this.state.username,
+        this.state.email,
+        this.state.password,
+        this.state.gen
+      )
         .then((response) => {
-					if(response.status === 200)
-          this.setState({
-            show: true,
-            message: 'Utilizator adăugat cu succes',
-          });
+          if (response.status === 200)
+            this.setState({
+              show: true,
+              message: 'Utilizator adăugat cu succes',
+            });
         })
         .catch((error) => {
           this.setState({
@@ -130,16 +139,31 @@ class SignUp1 extends React.Component {
                       />
                     </div>
                     <div className="input-group mb-4">
-                      <Multiselect options={['admin', 'dir', 'cont', 'ang']} isObject={false} />
+                      <Row>
+                          <Col md={7}>
+                            <Form.Check
+                              custom
+                              type="radio"
+                              label="Dl."
+                              checked={!this.state.gen}
+                              onChange={() => this.setState({ gen: !this.state.gen })}
+                              name="gen"
+                              id="dl"
+                            />
+                          </Col>
+                          <Col md={3}>
+                            <Form.Check
+                              custom
+                              type="radio"
+                              label="Dna."
+                              checked={this.state.gen}
+                              onChange={() => this.setState({ gen: !this.state.gen })}
+                              name="gen"
+                              id="dna"
+                            />
+                          </Col>
+                      </Row>
                     </div>
-                    {/* <div className="form-group text-left">
-                  <div className="checkbox checkbox-fill d-inline">
-                    <input type="checkbox" name="checkbox-fill-2" id="checkbox-fill-2" />
-                    <label htmlFor="checkbox-fill-2" className="cr">
-                      Send me the <a href={DEMO.BLANK_LINK}> Newsletter</a> weekly.
-                    </label>
-                  </div>
-                </div> */}
                     <button type="submit" className="btn btn-primary shadow-2 mb-4">
                       Sign up
                     </button>
