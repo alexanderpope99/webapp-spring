@@ -130,7 +130,7 @@ class UserTabel extends React.Component {
 
   async onSelectRole(id) {
     await axios
-      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/user/roles/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.onRefresh)
       .catch((err) => console.error(err));

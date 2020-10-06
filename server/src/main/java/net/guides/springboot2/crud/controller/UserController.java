@@ -17,6 +17,7 @@ import net.guides.springboot2.crud.dto.PersoanaDTO;
 import net.guides.springboot2.crud.dto.RoleDTO;
 import net.guides.springboot2.crud.dto.SocietateDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.ERole;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.RoleRepository;
@@ -66,6 +67,17 @@ public class UserController {
 		User user = userRepository.findById(usrid).orElseThrow(() -> new RuntimeException("Error"));
 		Set<Role> roles = user.getRoles();
 		Role newRole = roleRepository.findById(roleid).orElseThrow(() -> new RuntimeException("Error"));
+		roles.add(newRole);
+		user.setRoles(roles);
+		userRepository.save(user);
+		return userRepository.getRolesByUserId(usrid);
+	}
+
+	@PostMapping("/roles/name/{usrid}&{roleid}")
+	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") long usrid, @PathVariable("roleid") ERole role) {
+		User user = userRepository.findById(usrid).orElseThrow(() -> new RuntimeException("Error"));
+		Set<Role> roles = user.getRoles();
+		Role newRole = roleRepository.findByName(role).orElseThrow(() -> new RuntimeException("Error"));
 		roles.add(newRole);
 		user.setRoles(roles);
 		userRepository.save(user);
