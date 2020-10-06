@@ -54,6 +54,11 @@ public class AngajatController {
 		return angajatRepository.findPersoanaIdByUserId(userId);
 	}
 
+	@GetMapping("/societate/{nume}")
+	public List<String> getPersoaneBySocietyName(@PathVariable(value = "nume") String nume) {
+		return angajatRepository.findPersoaneBySocietyName(nume);
+	}
+
 	@GetMapping("/ids={ids}/count")
 	public int countAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
 		return angajatRepository.countByIdsocietate(idsocietate);

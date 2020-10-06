@@ -47,6 +47,7 @@ class UserTabel extends React.Component {
       motiv: '',
       status: '',
       show: false,
+      socs: [],
     };
   }
 
@@ -127,6 +128,22 @@ class UserTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
+  async onSelectRole(id) {
+    await axios
+      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
+      .then(this.onRefresh)
+      .catch((err) => console.error(err));
+  }
+
+  async onRemoveRole(id) {
+    await axios
+      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
+      .then(this.onRefresh)
+      .catch((err) => console.error(err));
+  }
+
   // function to create react component with fetched data
   async renderUsers() {
     this.setState({
@@ -139,17 +156,51 @@ class UserTabel extends React.Component {
               <th>{usr.email}</th>
               <th>
                 <Multiselect
-                  selectedValues={usr.roles}
+                  placeholder=""
+                  selectedValues={usr.roles.map((val) => {
+                    return val['name'];
+                  })}
                   options={['ROLE_ADMIN', 'ROLE_DIRECTOR', 'ROLE_CONTABIL', 'ROLE_ANGAJAT']}
+                  onSelect={this.onSelectRole}
+                  onRemove={this.onRemoveRole}
                   isObject={false}
                 />
               </th>
               <th>
-                <Multiselect selectedValues={usr.societati} options={['1', '2']} isObject={false} />
+                <Multiselect
+                  placeholder=""
+                  selectedValues={usr.societati.map((val) => {
+                    return val['nume'];
+                  })}
+                  options={this.state.socs}
+                  isObject={false}
+                />
               </th>
-              <th>{usr.numeprenume}</th>
-              <th>{usr.societate}</th>
-              <th>{usr.superior}</th>
+              <th>
+                <Multiselect
+                  placeholder=""
+                  singleSelect="true"
+                  selectedValues={usr.societate.map((val) => {
+                    return val['nume'];
+                  })}
+                  options={this.state.socs}
+                  isObject={false}
+                />
+              </th>
+              <th>
+                <Multiselect
+                  placeholder=""
+                  singleSelect="true"
+                  selectedValues={usr.persoana.map((val) => {
+                    return val['nume'] + ' ' + val['prenume'] === 'null null'
+                      ? ''
+                      : val['nume'] + ' ' + val['prenume'];
+                  })}
+                  options={this.state.socs}
+                  isObject={false}
+                />
+              </th>
+              <th></th>
               <th>
                 <Row>
                   <Button
@@ -226,6 +277,18 @@ class UserTabel extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
+    let thesocs = await axios
+      .get(`${server.address}/societate`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+    this.setState({
+      socs: thesocs.map((val) => {
+        return val.nume;
+      }),
+    });
+
     user = await Promise.all(
       user.map(async (usr) => {
         let roles = await axios
@@ -234,8 +297,8 @@ class UserTabel extends React.Component {
         let societati = await axios
           .get(`${server.address}/user/societati/${usr.id}`, { headers: authHeader() })
           .then((res) => res.data);
-        let numeprenume = await axios
-          .get(`${server.address}/user/numeprenume/${usr.id}`, { headers: authHeader() })
+        let persoana = await axios
+          .get(`${server.address}/user/persoana/${usr.id}`, { headers: authHeader() })
           .then((res) => res.data);
         let societate = await axios
           .get(`${server.address}/user/societate/${usr.id}`, { headers: authHeader() })
@@ -248,7 +311,7 @@ class UserTabel extends React.Component {
           ...usr,
           roles: roles,
           societati: societati,
-          numeprenume: numeprenume,
+          persoana: persoana,
           societate: societate,
           superior: superior,
         };
@@ -391,8 +454,8 @@ class UserTabel extends React.Component {
                       <th>Email</th>
                       <th>Role-uri</th>
                       <th>Societăți Acces</th>
-                      <th>Persoană</th>
                       <th>Societate</th>
+                      <th>Persoană</th>
                       <th>Superior</th>
                       <th></th>
                     </tr>

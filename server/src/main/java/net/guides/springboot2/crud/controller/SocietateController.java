@@ -53,12 +53,12 @@ public class SocietateController {
 	}
 
 	@PostMapping
-	public Societate createSocietate(@RequestBody Societate societate ) {
+	public Societate createSocietate(@RequestBody Societate societate) {
 		return societateRepository.save(societate);
 	}
 
 	@PostMapping("/{uid}")
-	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") long uid ) {
+	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") long uid) {
 		Societate newSoc = societateRepository.save(societate);
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error"));
 		Set<Societate> societati = user.getSocietati();
