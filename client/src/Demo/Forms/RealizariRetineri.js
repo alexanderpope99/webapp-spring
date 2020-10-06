@@ -387,8 +387,7 @@ class RealizariRetineri extends React.Component {
     let an = this.state.an;
     let luna = this.state.luna.nr;
 
-    const idpersoana = this.state.selected_angajat.idpersoana;
-    if (!idpersoana) {
+    if (!this.state.selected_angajat.idpersoana) {
       this.clearForm();
       return;
     }
@@ -408,7 +407,18 @@ class RealizariRetineri extends React.Component {
     });
 
     this.fillForm();
-  }
+	}
+	
+	async createStatSalariiUltimele6Luni() {
+    if (!this.state.selected_angajat.idpersoana) {
+			this.clearForm();
+			return;
+		}
+
+		await axios.put(
+			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}`
+		)
+	}
 
   async calcNrTichete() {
     if (!this.state.selected_angajat) return;
@@ -1148,14 +1158,14 @@ class RealizariRetineri extends React.Component {
                   Stat salariat individual
                 </Button>
 
-                {/* <Button
+                <Button
                   variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                   disabled={!this.state.selected_angajat}
-                  onClick={this.reseteazaCalculul}
+                  onClick={this.creeazaStateUltimele6Luni}
                   className="mb-3 mt-3"
                 >
                   Resetează Calculul
-                </Button> */}
+                </Button>
               </Row>
             </Form>
           </Card.Body>

@@ -1,6 +1,8 @@
 alte retineri
 alte drepturi
-retineri (doar avans merge)	
+retineri (doar avans merge)
+
+buton pentru a face stat pe ultimele 6 luni (pt baza calcul)	
 
 problem: in luna, anul: 
 	sterg stat salarii, baza calcul ramane 
