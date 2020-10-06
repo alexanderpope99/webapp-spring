@@ -143,44 +143,43 @@ class Contract extends React.Component {
         () => console.log('idangajat:', idangajat, '\tidcontract:', null)
       );
     } else {
-      for (let key in contract) if (!contract[key]) contract[key] = '';
 
       this.setState(
         {
           idangajat: idangajat,
           id: contract.id,
           modelContract: contract.tip, //text
-          numărContract: contract.nr, //text
-          marca: contract.marca, //text
-          dataContract: contract.data.substring(0, 10),
-          dataIncepere: contract.dataincepere.substring(0, 10),
-          punctDeLucru: contract.idpunctdelucru,
-          centruCost: contract.idcentrucost,
-          echipa: contract.idechipa,
-          departament: contract.iddepartament,
-          functieBaza: contract.functiedebaza,
-          deduceri: contract.calculdeduceri,
-          studiiSuperioare: contract.studiisuperioare,
+          numărContract: contract.nr || '', //text
+          marca: contract.marca || '', //text
+          dataContract: contract.data ? contract.data.substring(0, 10) : '',
+          dataIncepere: contract.dataincepere ? contract.dataincepere.substring(0, 10) : '',
+          punctDeLucru: contract.idpunctdelucru || '',
+          centruCost: contract.idcentrucost || '',
+          echipa: contract.idechipa || '',
+          departament: contract.iddepartament || '',
+          functieBaza: contract.functiedebaza || false,
+          deduceri: contract.calculdeduceri || false,
+          studiiSuperioare: contract.studiisuperioare || false,
           normăLucru: { nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru) },
           salariu: contract.salariutarifar,
           monedăSalariu: contract.monedasalariu,
           modPlată: contract.modplata,
           condițiiMuncă: contract.conditiimunca,
-          sindicat: contract.sindicat,
-          cotizațieSindicat: contract.cotizatiesindicat,
-          pensiePrivată: contract.pensieprivata,
-          cotizațiePensie: contract.cotizatiepensieprivata,
-          avans: contract.avans,
+          sindicat: contract.sindicat || false,
+          cotizațieSindicat: contract.cotizatiesindicat || '',
+          pensiePrivată: contract.pensieprivata || false,
+          cotizațiePensie: contract.cotizatiepensieprivata || '',
+          avans: contract.avans || 0,
           monedăAvans: contract.monedaavans,
-          zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
-          ultimaZiLucru: contract.ultimazilucru.substring(0, 10),
-          casăSănătate: contract.casasanatate, //text
-          gradInvalid: contract.gradinvaliditate, //text
-          funcție: contract.functie, //text
-          nivelStudii: contract.nivelstudii, //text
-          cor: contract.cor,
-          pensionar: contract.pensionar,
-          spor: contract.spor,
+          zileCOan: contract.zilecoan || 0,
+          ultimaZiLucru: contract.ultimaZiLucru ? contract.ultimazilucru.substring(0, 10) : '',
+          casăSănătate: contract.casasanatate || '', //text
+          gradInvalid: contract.gradinvaliditate || '', //text
+          funcție: contract.functie || '', //text
+          nivelStudii: contract.nivelstudii || '', //text
+          cor: contract.cor || '',
+          pensionar: contract.pensionar || '',
+          spor: contract.spor || '',
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', contract.id)
       );
@@ -216,6 +215,14 @@ class Contract extends React.Component {
         modalMessage: 'Contractul trebuie să aibă o marcă.',
       });
       return false;
+		}
+		
+		if (this.state.salariu === '') {
+      this.setState({
+        show: true,
+        modalMessage: 'Contractul trebuie să aibă un salariu.',
+      });
+      return false;
     }
 
     return true;
@@ -232,7 +239,7 @@ class Contract extends React.Component {
     if (idcontract === null) {
       method = 'POST';
       idcontract = '';
-    }
+		}
 
     const contract_body = {
       tip: this.state.modelContract,
