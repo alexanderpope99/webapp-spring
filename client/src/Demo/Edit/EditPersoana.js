@@ -753,11 +753,11 @@ class EditPersoana extends React.Component {
                     <Row>
                       <Col md={12}>
                         <Button
-                          variant="success"
-                          className="float-right m-0 pl-5 pr-5 mt-2"
+                          variant="outline-primary"
+                          className="mt-2 ml-0"
                           type="submit"
                         >
-                          Adaugă
+                          Actualizează
                         </Button>
                       </Col>
                     </Row>
