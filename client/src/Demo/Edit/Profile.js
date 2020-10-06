@@ -4,6 +4,8 @@ import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 
 // import { server } from '../Resources/server-address';
 import AuthService from '../../services/auth.service';
+import Avatar1 from '../../assets/images/user/avatar-1.jpg';
+import Avatar2 from '../../assets/images/user/avatar-2.jpg';
 
 import Aux from '../../hoc/_Aux';
 
@@ -229,27 +231,56 @@ export default class Profile extends React.Component {
                     Schimbă parola
                   </Button>
                 </Card.Header>
-                <Card.Body>
-                  <Row>
-                    <Form.Group as={Col} md="6">
-                      <Form.Label>Username</Form.Label>
+                <Card.Body className="pl-5 pr-5">
+                  <Col md={9}>
+                  <Form.Group as={Row}>
+                    <Form.Label column sm="2">
+                      Username
+                    </Form.Label>
+                    <Col sm={10}>
                       <Form.Control
                         type="text"
                         value={this.state.username}
                         disabled={!this.state.isEdit}
                         onChange={(e) => this.setState({ username: e.target.value })}
                       />
-                    </Form.Group>
-                    <Form.Group as={Col} md="6">
-                      <Form.Label>e-mail</Form.Label>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column sm="2">
+                      e-mail
+                    </Form.Label>
+                    <Col sm={10}>
                       <Form.Control
                         type="text"
                         value={this.state.email}
                         disabled={!this.state.isEdit}
                         onChange={(e) => this.setState({ email: e.target.value })}
                       />
-                    </Form.Group>
-                  </Row>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label as="legend" column sm={3}>
+                      Icon<br/>NEFUNCTIONAL
+                    </Form.Label>
+                    <Row>
+                      <Form.Check
+                        custom
+                        type="radio"
+                        label={<img className="img-radius" src={Avatar1} alt="Generic placeholder" />}
+                        name="icons"
+                        id="icon1"	
+                      />
+											<Form.Check
+                        custom
+                        type="radio"
+                        label={<img className="img-radius" src={Avatar2} alt="Generic placeholder" />}
+                        name="icons" 
+                        id="icon2"
+                      />
+                    </Row>
+                  </Form.Group>
+                  </Col>
                 </Card.Body>
               </Card>
             </Form>

@@ -7,7 +7,9 @@ import javax.validation.constraints.*;
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 20)
-    private String username;
+		private String username;
+		
+		private boolean gen; // true = barbat, false = femeie
 
     @NotBlank
     @Size(max = 50)
@@ -50,5 +52,12 @@ public class SignupRequest {
 
     public void setRole(Set<String> role) {
         this.role = role;
-    }
+		}
+		
+		public boolean isGen() {
+			return gen;
+		}
+		public void setGen(boolean gen) {
+			this.gen = gen;
+		}
 }
