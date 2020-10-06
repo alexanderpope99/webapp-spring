@@ -55,7 +55,8 @@ export default class Profile extends React.Component {
       id: user.id,
       username: user.username,
       email: user.email,
-			roles: user.roles,
+      roles: user.roles,
+      gen: user.gen,
 
       // modal:
       show: false,

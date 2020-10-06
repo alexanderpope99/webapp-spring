@@ -35,7 +35,13 @@ class NavRight extends Component {
     window.location.href = '/auth/signin-1';
   }
 
+  getAvatarIcon() {
+    return this.state.currentUser ? (this.state.currentUser.gen ? Avatar2 : Avatar1) : Avatar1;
+  }
+
   render() {
+    const AvatarProp = this.getAvatarIcon();
+
     return (
       <Aux>
         <ul className="navbar-nav ml-auto">
@@ -120,7 +126,7 @@ class NavRight extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
-                  <img src={Avatar1} className="img-radius" alt="User Profile" />
+                  <img src={AvatarProp} className="img-radius" alt="User Profile" />
                   <span>{JSON.parse(localStorage.getItem('user')).username}</span>
                   <a
                     href={DEMO.BLANK_LINK}

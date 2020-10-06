@@ -43,9 +43,16 @@ class AuthService {
     var ok = false;
     ok = await axios
       .put(API_URL + `update-profile/${uid}`, { email: email, gen: gen })
-      .then((res) => res === 200)
-			.catch((err) => console.error('auth.service.js :: line: 44\n', err));
-		if(ok) console.log("Updated profile!");
+      .then((res) => res.status === 200)
+      .catch((err) => console.error('auth.service.js :: line: 44\n', err));
+    if (ok) {
+      console.log('Updated profile!');
+      let user = JSON.parse(localStorage.getItem('user'));
+      user.gen = gen;
+      user.email = email;
+      localStorage.setItem('user', JSON.stringify(user));
+      window.location.reload();
+    }
 		return ok;
   }
 
