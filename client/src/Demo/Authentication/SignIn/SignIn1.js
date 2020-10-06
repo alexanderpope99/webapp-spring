@@ -97,7 +97,7 @@ class SignUp1 extends React.Component {
                         placeholder="password"
                       />
                     </div>
-                    <div className="form-group text-left">
+                    {/* <div className="form-group text-left">
                       <div className="checkbox checkbox-fill d-inline">
                         <input
                           onChange={() => {
@@ -116,7 +116,7 @@ class SignUp1 extends React.Component {
                           Save credentials
                         </label>
                       </div>
-                    </div>
+                    </div> */}
                     <button type="submit" className="btn btn-primary shadow-2 mb-4">
                       Login
                     </button>
