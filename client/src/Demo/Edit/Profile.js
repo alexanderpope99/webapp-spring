@@ -4,6 +4,8 @@ import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 
 // import { server } from '../Resources/server-address';
 import AuthService from '../../services/auth.service';
+import Avatar1 from '../../assets/images/user/avatar-1.jpg';
+import Avatar2 from '../../assets/images/user/avatar-2.jpg';
 
 import Aux from '../../hoc/_Aux';
 
@@ -230,7 +232,7 @@ export default class Profile extends React.Component {
                   </Button>
                 </Card.Header>
                 <Card.Body className="pl-5 pr-5">
-                  <Col md={2} />
+                  <Col md={9}>
                   <Form.Group as={Row}>
                     <Form.Label column sm="2">
                       Username
@@ -258,20 +260,27 @@ export default class Profile extends React.Component {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label as="legend" column sm={2}>
-                      Icon
+                    <Form.Label as="legend" column sm={3}>
+                      Icon<br/>NEFUNCTIONAL
                     </Form.Label>
                     <Row>
                       <Form.Check
                         custom
                         type="radio"
-                        label=""
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
+                        label={<img className="img-radius" src={Avatar1} alt="Generic placeholder" />}
+                        name="icons"
+                        id="icon1"	
+                      />
+											<Form.Check
+                        custom
+                        type="radio"
+                        label={<img className="img-radius" src={Avatar2} alt="Generic placeholder" />}
+                        name="icons" 
+                        id="icon2"
                       />
                     </Row>
                   </Form.Group>
-                  <Col md={2} />
+                  </Col>
                 </Card.Body>
               </Card>
             </Form>

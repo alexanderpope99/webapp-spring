@@ -4,19 +4,16 @@ import { server } from '../Demo/Resources/server-address';
 const API_URL = `${server.address}/api/auth/`;
 
 class AuthService {
-  login(username, password) {
-    return axios
-      .post(API_URL + 'signin', {
-        username,
-        password,
-      })
-      .then((response) => {
-        if (response.data.accessToken) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-        }
-
-        return response.data;
-      });
+  async login(username, password) {
+    const response = await axios
+			.post(API_URL + 'signin', {
+				username,
+				password,
+			});
+		if (response.data.accessToken) {
+			localStorage.setItem('user', JSON.stringify(response.data));
+		}
+		return response.data;
   }
 
   logout() {
