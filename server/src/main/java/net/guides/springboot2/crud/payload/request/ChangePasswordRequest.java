@@ -3,19 +3,19 @@ package net.guides.springboot2.crud.payload.request;
 import javax.validation.constraints.*;
 
 public class ChangePasswordRequest {
-    @NotBlank
-    @Size(min = 6, max = 40)
-		private String password;
-		
-		@NotBlank
-		@Size(min = 6, max = 40)
-		private String newpassword;
+	@NotBlank
+	@Size(min = 6, max = 40)
+	private String password;
+	
+	@NotBlank
+	@Size(min = 6, max = 40)
+	private String newpassword;
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 	

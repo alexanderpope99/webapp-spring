@@ -28,6 +28,7 @@ import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.payload.request.ChangePasswordRequest;
 import net.guides.springboot2.crud.payload.request.LoginRequest;
 import net.guides.springboot2.crud.payload.request.SignupRequest;
+import net.guides.springboot2.crud.payload.request.UpdateProfileRequest;
 import net.guides.springboot2.crud.payload.response.JwtResponse;
 import net.guides.springboot2.crud.payload.response.MessageResponse;
 import net.guides.springboot2.crud.repository.RoleRepository;
@@ -144,5 +145,16 @@ public class AuthController {
 			userRepository.save(user);
 								
 			return ResponseEntity.ok(new MessageResponse("Password changed!"));
+		}
+
+		@PutMapping("update-profile/{uid}")
+		public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileReq, @PathVariable("uid") long uid) {
+			User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			user.setEmail(updateProfileReq.getEmail());
+			user.setGen(updateProfileReq.isGen());
+
+			userRepository.save(user);
+
+			return ResponseEntity.ok(new MessageResponse("Updated profile!"));
 		}
 }

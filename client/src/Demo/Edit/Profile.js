@@ -26,12 +26,14 @@ export default class Profile extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.schimbaParola = this.schimbaParola.bind(this);
+    this.updateProfile = this.updateProfile.bind(this);
 
     this.state = {
       id: null,
       username: '',
       email: '',
-      roles: [],
+			roles: [],
+			gen: false,
       isEdit: false,
 
       // modal:
@@ -53,7 +55,7 @@ export default class Profile extends React.Component {
       id: user.id,
       username: user.username,
       email: user.email,
-      roles: user.roles,
+			roles: user.roles,
 
       // modal:
       show: false,
@@ -66,8 +68,16 @@ export default class Profile extends React.Component {
   }
 
   changeEdit() {
+		if(this.state.isEdit) {
+			this.updateProfile();
+		}
     this.setState({ isEdit: !this.state.isEdit });
-  }
+	}
+	
+	async updateProfile() {
+		AuthService.updateProfile(this.state.id, this.state.email, this.state.gen);
+	}
+
   handleClose() {
     this.setState({
       show: false,
@@ -84,14 +94,6 @@ export default class Profile extends React.Component {
     if (res) return res;
 
     return false;
-  }
-
-  handleInputChange(event) {
-    var key = event.target.name;
-    var value = event.target.value;
-    var obj = {};
-    obj[key] = value;
-    this.setState(obj);
   }
 
   getRoleName(role) {
@@ -223,63 +225,78 @@ export default class Profile extends React.Component {
               <Card>
                 <Card.Header>
                   <Card.Title as="h5">Profil</Card.Title>
-                  <Button
-                    type="submit"
-                    variant={this.state.isEdit ? 'primary' : 'link'}
-                    className="float float-right m-0 p-1"
-                  >
+                  <Button type="submit" variant="link" className="float float-right m-0 p-1">
                     Schimbă parola
                   </Button>
                 </Card.Header>
                 <Card.Body className="pl-5 pr-5">
                   <Col md={9}>
-                  <Form.Group as={Row}>
-                    <Form.Label column sm="2">
-                      Username
-                    </Form.Label>
-                    <Col sm={10}>
-                      <Form.Control
-                        type="text"
-                        value={this.state.username}
-                        disabled={!this.state.isEdit}
-                        onChange={(e) => this.setState({ username: e.target.value })}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row}>
-                    <Form.Label column sm="2">
-                      e-mail
-                    </Form.Label>
-                    <Col sm={10}>
-                      <Form.Control
-                        type="text"
-                        value={this.state.email}
-                        disabled={!this.state.isEdit}
-                        onChange={(e) => this.setState({ email: e.target.value })}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row}>
-                    <Form.Label as="legend" column sm={3}>
-                      Icon<br/>NEFUNCTIONAL
-                    </Form.Label>
-                    <Row>
-                      <Form.Check
-                        custom
-                        type="radio"
-                        label={<img className="img-radius" src={Avatar1} alt="Generic placeholder" />}
-                        name="icons"
-                        id="icon1"	
-                      />
-											<Form.Check
-                        custom
-                        type="radio"
-                        label={<img className="img-radius" src={Avatar2} alt="Generic placeholder" />}
-                        name="icons" 
-                        id="icon2"
-                      />
-                    </Row>
-                  </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column sm="2">
+                        Username
+                      </Form.Label>
+                      <Col sm={8}>
+                        <Form.Control
+                          type="text"
+                          value={this.state.username}
+                          disabled
+                          onChange={(e) => this.setState({ username: e.target.value })}
+                        />
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column sm="2">
+                        e-mail
+                      </Form.Label>
+                      <Col sm={8}>
+                        <Form.Control
+                          type="text"
+                          value={this.state.email}
+                          disabled={!this.state.isEdit}
+                          onChange={(e) => this.setState({ email: e.target.value })}
+                        />
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label as="legend" column sm={3}>
+                        Icon
+                        <br />
+                        NEFUNCTIONAL
+                      </Form.Label>
+                      <Row>
+                        <Form.Check
+                          custom
+													type="radio"
+													disabled={!this.state.isEdit}
+													checked={!this.state.gen}
+													onChange={() => this.setState({gen: !this.state.gen})}
+                          label={
+                            <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
+                          }
+                          name="icons"
+                          id="icon1"
+                        />
+                        <Form.Check
+                          custom
+													type="radio"
+													disabled={!this.state.isEdit}
+													checked={this.state.gen}
+													onChange={() => this.setState({gen: !this.state.gen})}
+                          label={
+                            <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
+                          }
+                          name="icons"
+                          id="icon2"
+                        />
+                      </Row>
+                    </Form.Group>
+                    <Button
+											variant={this.state.isEdit ? 'success' : 'link'}
+											className="p-2 pl-3 pr-3"
+                      onClick={this.changeEdit}
+                    >
+                      {this.state.isEdit ? 'Salvează' : 'Editează'}
+                    </Button>
                   </Col>
                 </Card.Body>
               </Card>

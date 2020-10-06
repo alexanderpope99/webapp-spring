@@ -5,15 +5,14 @@ const API_URL = `${server.address}/api/auth/`;
 
 class AuthService {
   async login(username, password) {
-    const response = await axios
-			.post(API_URL + 'signin', {
-				username,
-				password,
-			});
-		if (response.data.accessToken) {
-			localStorage.setItem('user', JSON.stringify(response.data));
-		}
-		return response.data;
+    const response = await axios.post(API_URL + 'signin', {
+      username,
+      password,
+    });
+    if (response.data.accessToken) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+    }
+    return response.data;
   }
 
   logout() {
@@ -26,18 +25,28 @@ class AuthService {
     return axios.post(API_URL + 'signup', {
       username,
       email,
-			password,
-			gen,
+      password,
+      gen,
     });
   }
 
   async changePassword(uid, reqPassword, newPassword) {
-		var ok = false;
+    var ok = false;
     ok = await axios
       .put(API_URL + `change-password/${uid}`, { password: reqPassword, newpassword: newPassword })
-			.then((res) => res.status === 200)
-			.catch(err => console.error("auth.service.js :: line: 38\n", err));
+      .then((res) => res.status === 200)
+      .catch((err) => console.error('auth.service.js :: line: 38\n', err));
     return ok;
+  }
+
+  async updateProfile(uid, email, gen) {
+    var ok = false;
+    ok = await axios
+      .put(API_URL + `update-profile/${uid}`, { email: email, gen: gen })
+      .then((res) => res === 200)
+			.catch((err) => console.error('auth.service.js :: line: 44\n', err));
+		if(ok) console.log("Updated profile!");
+		return ok;
   }
 
   getCurrentUser() {
