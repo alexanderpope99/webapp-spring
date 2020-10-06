@@ -87,11 +87,9 @@ public class RealizariRetineriService {
 		int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
 		float impozit = parametriiSalariu.getImpozit() / 100;
 
+		this.deducere = 0;
 		if (totalDrepturi < 3600)
-			this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere)
-					* areFunctieDebaza;
-		else
-			this.deducere = 0;
+			this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere) * areFunctieDebaza;
 
 		float restPlata = totalDrepturi - casSalariu - cassSalariu;
 		this.venitNet = restPlata;
