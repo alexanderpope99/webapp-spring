@@ -682,7 +682,7 @@ class EditPersoana extends React.Component {
                         </Col>
                         <Col md={6}>
                           <Form.Group id="judet">
-                            <Form.Label>{this.state.capitala}</Form.Label>
+                            <Form.Label>{this.state.tipJudet}</Form.Label>
                             <Form.Control
                               as="select"
                               value={this.state.judet}
