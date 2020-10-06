@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.UserRepository;
 

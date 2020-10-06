@@ -299,7 +299,7 @@ class Contract extends React.Component {
     if (contract) {
       this.setState({
         show: true,
-				modalMessage: method === 'POST' ? 'Contract adăugat cu succes' : 'Contract actualizat',
+				modalMessage: method === 'POST' ? 'Contract adăugat cu succes 📄' : 'Contract actualizat 💾',
 				id: contract.id,
       });
 

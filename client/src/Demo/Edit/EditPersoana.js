@@ -406,7 +406,7 @@ class EditPersoana extends React.Component {
     console.log('persoana actualizata');
     this.setState({
       show: true,
-      modalMessage: 'Persoană actualizată cu succes.',
+      modalMessage: 'Persoană actualizată cu succes 💾',
     });
 
     return this.state.id;
