@@ -42,6 +42,7 @@ class RealizariRetineri extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
 		this.calcNrTichete = this.calcNrTichete.bind(this);
 		this.getStatIndividual = this.getStatIndividual.bind(this);
+		this.creeazaStateUltimele6Luni = this.creeazaStateUltimele6Luni.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -409,15 +410,31 @@ class RealizariRetineri extends React.Component {
     this.fillForm();
 	}
 	
-	async createStatSalariiUltimele6Luni() {
+	async creeazaStateUltimele6Luni() {
     if (!this.state.selected_angajat.idpersoana) {
 			this.clearForm();
 			return;
 		}
 
-		await axios.put(
-			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}`
+		let luna = this.state.luna.nr;
+		let an = this.state.an;
+
+		const ok = await axios.put(
+			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
+			{},
+			{ headers: authHeader() }
 		)
+		.then(res => res.status === 200)
+		.catch(err => console.error('RealizariRetineri.js :: line: 422\n', err));
+
+		if(ok) {
+			alert('Statul de salarii calculat pe ultimele 6 luni. Deasemenea, bazele de calcul au fost adaugate.');
+			window.scrollTo({
+				top: 0,
+				left: 0,
+				behavior: 'smooth',
+			});
+		}
 	}
 
   async calcNrTichete() {
@@ -1164,7 +1181,7 @@ class RealizariRetineri extends React.Component {
                   onClick={this.creeazaStateUltimele6Luni}
                   className="mb-3 mt-3"
                 >
-                  Resetează Calculul
+                  Creează ștate pe ultimele 6 luni
                 </Button>
               </Row>
             </Form>

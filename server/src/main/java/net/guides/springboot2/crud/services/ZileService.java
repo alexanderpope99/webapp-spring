@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.model.Contract;
+
 @Service
 public class ZileService {
 	ZileService() {
@@ -64,6 +66,29 @@ public class ZileService {
 				workingDays++;
 		}
 		return workingDays;
+	}
+
+	public int getNrZileLucratoareContract(int luna, int an, Contract contract) {
+		LocalDate dataincepere = contract.getDataincepere();
+
+		if(dataincepere == null)
+			return 0;
+		LocalDate primaZiLunaAn = LocalDate.of(an, luna, 1);
+
+		// contractul cuprinde intreaga luna
+		if(dataincepere.compareTo(primaZiLunaAn) < 0)
+			return getZileLucratoareInLunaAnul(luna, an);
+		else {
+			LocalDate ultimaZiLunaAn = LocalDate.of(an, luna, YearMonth.of(an, luna).lengthOfMonth());
+
+			// contractul incepe in luna urmatoare
+			if(dataincepere.compareTo(ultimaZiLunaAn) > 0)
+				return 0;
+			
+			// contractul incepe in luna, an
+			else
+				return (int)getZileLucratoareInInterval(dataincepere, ultimaZiLunaAn);
+		}
 	}
 
 	public String getNumeLunaByNr(int nrLuna) {

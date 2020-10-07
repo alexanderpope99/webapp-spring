@@ -76,7 +76,7 @@ public class BazacalculService {
 			}
 		} // daca cele 6 luni sunt in anul selectat
 		else {
-			for(int i = luna6; i <= luna - 1; ++i) {
+			for(int i = luna6; i < luna; ++i) {
 				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndIdangajat(i, an, idangajat);
 				if(!areBazacalcul) return 0;
 				
@@ -94,10 +94,15 @@ public class BazacalculService {
 	}
 
 	public Bazacalcul saveBazacalcul(RealizariRetineri realizariRetineri) {
+		// contractul inca nu a inceput, deci o baza de calcul nu are sens => trebuie adaugata manual
+		if(realizariRetineri.getZilecontract() == 0)
+			return null;
+
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 
 		long idangajat = angajatRepository.findIdpersoanaByIdcontract(realizariRetineri.getIdcontract());
+
 
 		Bazacalcul bazaCalcul = new Bazacalcul(
 				luna, an, 
