@@ -1,9 +1,11 @@
 import React from 'react';
+import axios from 'axios';
 import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 
 import { server } from '../Resources/server-address';
+import { authHeader } from '../../services/auth-header';
 
 class AddUser extends React.Component {
   constructor(props) {

@@ -68,7 +68,7 @@ public class Angajat {
 
 	public Contract getIdcontract() {
 		return idcontract;
-	}
+	} 
 
 	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
