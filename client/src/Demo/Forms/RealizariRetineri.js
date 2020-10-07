@@ -914,7 +914,7 @@ class RealizariRetineri extends React.Component {
                           {this.state.zileco ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                Sumă brută: {this.state.valcm.toFixed(0)} RON
+                                {this.state.valcm.toFixed(0)} RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}

@@ -12,6 +12,7 @@ import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
+import net.guides.springboot2.crud.repository.SarbatoriRepository;
 
 @Service
 public class RealizariRetineriService {
@@ -50,8 +51,9 @@ public class RealizariRetineriService {
 	private AngajatRepository angajatRepository;
 	@Autowired
 	private BazacalculRepository bazacalculRepository;
-
-	private float salariuContract = 0;
+	@Autowired
+	private SarbatoriService sarbatoriService;
+	
 	private float impozitSalariu = 0;
 	private float deducere = 0;
 	private float venitNet = 0;
@@ -133,7 +135,7 @@ public class RealizariRetineriService {
 		int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
 
 		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
-
+		
 		int zileCO = coService.getZileCOTotal(luna, an, idcontract);
 		int zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
 		int zileCONeplatit = coService.getZileCFP(luna, an, idcontract);
