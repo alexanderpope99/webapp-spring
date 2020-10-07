@@ -1,10 +1,13 @@
 package net.guides.springboot2.crud.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,11 +27,13 @@ public class Persoana {
 	@Column(name = "prenume")
 	private String prenume;
 
-	@Column(name = "idactidentitate")
-	private Long idactidentitate;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idactidentitate", referencedColumnName = "id")
+	private ActIdentitate idactidentitate;
 
-	@Column(name = "idadresa")
-	private Long idadresa;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa idadresa;
 
 	@Column(name = "starecivila")
 	private String starecivila;
@@ -42,11 +47,14 @@ public class Persoana {
 	@Column(name = "cnp")
 	private String cnp;
 
+	@OneToOne(mappedBy = "persoana", cascade = CascadeType.ALL)
+	private Angajat angajat;
+
 	public Persoana() {
 	}
 
-	public Persoana(String gen, String nume, String prenume, Long idactidentitate, Long idadresa, String starecivila,
-			String email, String telefon, String cnp) {
+	public Persoana(String gen, String nume, String prenume, ActIdentitate idactidentitate, Adresa idadresa,
+			String starecivila, String email, String telefon, String cnp) {
 		this.gen = gen;
 		this.nume = nume;
 		this.prenume = prenume;
@@ -80,11 +88,11 @@ public class Persoana {
 		return gen;
 	}
 
-	public Long getIdactidentitate() {
+	public ActIdentitate getIdactidentitate() {
 		return idactidentitate;
 	}
 
-	public Long getIdadresa() {
+	public Adresa getIdadresa() {
 		return idadresa;
 	}
 
@@ -117,11 +125,11 @@ public class Persoana {
 		this.gen = gen;
 	}
 
-	public void setIdactidentitate(Long idactidentitate) {
+	public void setIdactidentitate(ActIdentitate idactidentitate) {
 		this.idactidentitate = idactidentitate;
 	}
 
-	public void setIdadresa(Long idadresa) {
+	public void setIdadresa(Adresa idadresa) {
 		this.idadresa = idadresa;
 	}
 
@@ -139,6 +147,14 @@ public class Persoana {
 
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
+	}
+
+	public Angajat getAngajat() {
+		return angajat;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
 
 }

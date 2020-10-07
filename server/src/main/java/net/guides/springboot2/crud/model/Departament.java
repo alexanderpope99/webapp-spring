@@ -1,10 +1,17 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,20 +22,25 @@ public class Departament {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "adresa")
-	private Integer idadresa;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa idadresa;
 
-	@Column(name = "idsocietate")
-	private Integer idsocietate;
+	@ManyToOne
+	@JoinColumn(name = "idsocietate")
+	private Societate idsocietate;
 
 	@Column(name = "nume")
 	private String nume;
+
+	@OneToMany(mappedBy = "iddepartament")
+	private Set<Echipa> echipe;
 
 	public Departament() {
 
 	}
 
-	public Departament(Integer idadresa, Integer idsocietate, String nume) {
+	public Departament(Adresa idadresa, Societate idsocietate, String nume) {
 		this.idadresa = idadresa;
 		this.idsocietate = idsocietate;
 		this.nume = nume;
@@ -42,19 +54,19 @@ public class Departament {
 		this.id = id;
 	}
 
-	public Integer getIdadresa() {
+	public Adresa getIdadresa() {
 		return idadresa;
 	}
 
-	public void setIdadresa(Integer idadresa) {
+	public void setIdadresa(Adresa idadresa) {
 		this.idadresa = idadresa;
 	}
 
-	public Integer getIdsocietate() {
+	public Societate getIdsocietate() {
 		return idsocietate;
 	}
 
-	public void setIdsocietate(Integer idsocietate) {
+	public void setIdsocietate(Societate idsocietate) {
 		this.idsocietate = idsocietate;
 	}
 
@@ -64,5 +76,13 @@ public class Departament {
 
 	public void setNume(String nume) {
 		this.nume = nume;
+	}
+
+	public Set<Echipa> getEchipe() {
+		return echipe;
+	}
+
+	public void setEchipe(Set<Echipa> echipe) {
+		this.echipe = echipe;
 	}
 }

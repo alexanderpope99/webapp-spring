@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,13 +29,14 @@ public class Spor {
 	@Column(name = "aplicare")
 	private String aplicare;
 
-	@Column(name = "idstat")
-	private Long idstat;
+	@ManyToOne
+	@JoinColumn(name = "idstat")
+	private RealizariRetineri idstat;
 
 	public Spor() {
 	}
 
-	public Spor(String nume, Double valoare, Double procent, String aplicare, Long idstat) {
+	public Spor(String nume, Double valoare, Double procent, String aplicare, RealizariRetineri idstat) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
@@ -54,7 +57,7 @@ public class Spor {
 		return aplicare;
 	}
 
-	public Long getIdstat() {
+	public RealizariRetineri getIdstat() {
 		return idstat;
 	}
 
@@ -75,7 +78,7 @@ public class Spor {
 		this.aplicare = aplicare;
 	}
 
-	public void setIdstat(Long idstat) {
+	public void setIdstat(RealizariRetineri idstat) {
 		this.idstat = idstat;
 	}
 

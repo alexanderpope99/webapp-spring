@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -81,8 +83,9 @@ public class CM {
 	@Column(name = "conditii")
 	private String conditii;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public CM() {
 	}
@@ -91,7 +94,7 @@ public class CM {
 			String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul,
 			Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma,
 			Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere,
-			String nravizmedic, String codboala, Boolean urgenta, String conditii, Long idcontract) {
+			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract idcontract) {
 		this.dela = dela;
 		this.panala = panala;
 		this.continuare = continuare;
@@ -301,11 +304,11 @@ public class CM {
 		this.conditii = conditii;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 }

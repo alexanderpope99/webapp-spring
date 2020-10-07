@@ -5,7 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import java.time.LocalDate;
 
 @Entity
@@ -28,13 +31,14 @@ public class CO {
 	@Column(name = "sporuripermanente")
 	private Boolean sporuripermanente;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public CO() {
 	}
 
-	public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Long idcontract) {
+	public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Contract idcontract) {
 		this.tip = tip;
 		this.dela = dela;
 		this.panala = panala;
@@ -82,11 +86,11 @@ public class CO {
 		this.sporuripermanente = sporuripermanente;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 }

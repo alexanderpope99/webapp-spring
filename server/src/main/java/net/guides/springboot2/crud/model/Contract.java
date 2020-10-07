@@ -5,8 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "contract")
@@ -31,17 +36,21 @@ public class Contract {
 	@Column(name = "dataincepere")
 	private Date dataincepere;
 
-	@Column(name = "idpunctlucru")
-	private Integer idpunctlucru;
+	@ManyToOne
+	@JoinColumn(name = "idpunctlucru")
+	private PunctDeLucru idpunctlucru;
 
-	@Column(name = "idcentrucost")
-	private Integer idcentrucost;
+	@ManyToOne
+	@JoinColumn(name = "idcentrucost")
+	private CentruCost idcentrucost;
 
-	@Column(name = "echipa")
-	private Integer idechipa;
+	@ManyToOne
+	@JoinColumn(name = "idechipa")
+	private Echipa idechipa;
 
-	@Column(name = "iddepartament")
-	private Integer iddepartament;
+	@ManyToOne
+	@JoinColumn(name = "iddepartament")
+	private Departament iddepartament;
 
 	@Column(name = "functiedebaza")
 	private Boolean functiedebaza;
@@ -112,17 +121,50 @@ public class Contract {
 	@Column(name = "pensionar")
 	private Boolean pensionar;
 
+	@OneToMany(mappedBy = "idcontract")
+	private Set<AlteBeneficii> alteBeneficii;
+
+	@OneToOne(mappedBy = "idcontract")
+	private Angajat angajat;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<BursePrivate> bursePrivate;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<CM> concediiMedicale;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<CO> concediiDeOdihna;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<Condica> condici;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<Prime> prime;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<RealizariRetineri> realizariRetineri;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<Sponsorizari> sponsorizari;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<SporPermanent> sporPermanente;
+
+	@OneToMany(mappedBy = "idcontract")
+	private Set<ZileCODisponibile> zileCODisponibile;
+
 	public Contract() {
 
 	}
 
-	public Contract(String tip, String nr, String marca, Date data, Date dataincepere, Integer idpunctlucru,
-			Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza,
-			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar,
-			String monedasalariu, String modplata, String conditiimunca, Boolean pensieprivata,
-			Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, Date ultimazilucru,
-			String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor,
-			Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
+	public Contract(String tip, String nr, String marca, Date data, Date dataincepere, PunctDeLucru idpunctlucru,
+			CentruCost idcentrucost, Departament iddepartament, Boolean functiedebaza, Boolean calculdeduceri,
+			Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu, String modplata,
+			String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans,
+			String monedaavans, Integer zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate,
+			String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor,
+			Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
@@ -130,7 +172,7 @@ public class Contract {
 		this.dataincepere = dataincepere;
 		this.idpunctlucru = idpunctlucru;
 		this.idcentrucost = idcentrucost;
-		this.idechipa = idechipa;
+		// this.idechipa = idechipa;
 		this.iddepartament = iddepartament;
 		this.functiedebaza = functiedebaza;
 		this.calculdeduceri = calculdeduceri;
@@ -205,35 +247,35 @@ public class Contract {
 		this.dataincepere = dataincepere;
 	}
 
-	public Integer getIdpunctlucru() {
+	public PunctDeLucru getIdpunctlucru() {
 		return idpunctlucru;
 	}
 
-	public void setIdpunctlucru(Integer idpunctlucru) {
+	public void setIdpunctlucru(PunctDeLucru idpunctlucru) {
 		this.idpunctlucru = idpunctlucru;
 	}
 
-	public Integer getIdcentrucost() {
+	public CentruCost getIdcentrucost() {
 		return idcentrucost;
 	}
 
-	public void setIdcentrucost(Integer idcentrucost) {
+	public void setIdcentrucost(CentruCost idcentrucost) {
 		this.idcentrucost = idcentrucost;
 	}
 
-	public Integer getIdechipa() {
+	public Echipa getIdechipa() {
 		return idechipa;
 	}
 
-	public void setIdechipa(Integer idechipa) {
+	public void setIdechipa(Echipa idechipa) {
 		this.idechipa = idechipa;
 	}
 
-	public Integer getIddepartament() {
+	public Departament getIddepartament() {
 		return iddepartament;
 	}
 
-	public void setIddepartament(Integer iddepartament) {
+	public void setIddepartament(Departament iddepartament) {
 		this.iddepartament = iddepartament;
 	}
 
@@ -419,5 +461,117 @@ public class Contract {
 
 	public void setPensionar(Boolean pensionar) {
 		this.pensionar = pensionar;
+	}
+
+	public Set<AlteBeneficii> getAlteBeneficii() {
+		return alteBeneficii;
+	}
+
+	public void setAlteBeneficii(Set<AlteBeneficii> alteBeneficii) {
+		this.alteBeneficii = alteBeneficii;
+	}
+
+	public Angajat getAngajat() {
+		return angajat;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
+	}
+
+	public Set<BursePrivate> getBursePrivate() {
+		return bursePrivate;
+	}
+
+	public Boolean getCalculdeduceri() {
+		return calculdeduceri;
+	}
+
+	public Boolean getFunctiedebaza() {
+		return functiedebaza;
+	}
+
+	public Boolean getPensieprivata() {
+		return pensieprivata;
+	}
+
+	public Boolean getPensionar() {
+		return pensionar;
+	}
+
+	public Boolean getSindicat() {
+		return sindicat;
+	}
+
+	public Boolean getStudiisuperioare() {
+		return studiisuperioare;
+	}
+
+	public Set<CM> getConcediiMedicale() {
+		return concediiMedicale;
+	}
+
+	public void setBursePrivate(Set<BursePrivate> bursePrivate) {
+		this.bursePrivate = bursePrivate;
+	}
+
+	public void setConcediiMedicale(Set<CM> concediiMedicale) {
+		this.concediiMedicale = concediiMedicale;
+	}
+
+	public Set<CO> getConcediiDeOdihna() {
+		return concediiDeOdihna;
+	}
+
+	public void setConcediiDeOdihna(Set<CO> concediiDeOdihna) {
+		this.concediiDeOdihna = concediiDeOdihna;
+	}
+
+	public Set<Condica> getCondici() {
+		return condici;
+	}
+
+	public void setCondici(Set<Condica> condici) {
+		this.condici = condici;
+	}
+
+	public Set<Prime> getPrime() {
+		return prime;
+	}
+
+	public void setPrime(Set<Prime> prime) {
+		this.prime = prime;
+	}
+
+	public Set<RealizariRetineri> getRealizariRetineri() {
+		return realizariRetineri;
+	}
+
+	public void setRealizariRetineri(Set<RealizariRetineri> realizariRetineri) {
+		this.realizariRetineri = realizariRetineri;
+	}
+
+	public Set<Sponsorizari> getSponsorizari() {
+		return sponsorizari;
+	}
+
+	public void setSponsorizari(Set<Sponsorizari> sponsorizari) {
+		this.sponsorizari = sponsorizari;
+	}
+
+	public Set<SporPermanent> getSporPermanente() {
+		return sporPermanente;
+	}
+
+	public void setSporPermanente(Set<SporPermanent> sporPermanente) {
+		this.sporPermanente = sporPermanente;
+	}
+
+	public Set<ZileCODisponibile> getZileCODisponibile() {
+		return zileCODisponibile;
+	}
+
+	public void setZileCODisponibile(Set<ZileCODisponibile> zileCODisponibile) {
+		this.zileCODisponibile = zileCODisponibile;
 	}
 }

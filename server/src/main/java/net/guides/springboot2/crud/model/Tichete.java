@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,13 +32,14 @@ public class Tichete {
 	@Column(name = "impozabil")
 	private Boolean impozabil;
 
-	@Column(name = "idstat")
-	private Long idstat;
+	@ManyToOne
+	@JoinColumn(name = "idstat")
+	private RealizariRetineri idstat;
 
 	public Tichete() {
 	}
 
-	public Tichete(String tip, Long nr, Long restituite, Double valoare, Boolean impozabil, Long idstat) {
+	public Tichete(String tip, Long nr, Long restituite, Double valoare, Boolean impozabil, RealizariRetineri idstat) {
 		this.tip = tip;
 		this.nr = nr;
 		this.restituite = restituite;
@@ -54,7 +57,7 @@ public class Tichete {
 	}
 
 	// GETTERS
-	public Long getIdstat() {
+	public RealizariRetineri getIdstat() {
 		return idstat;
 	}
 
@@ -79,7 +82,7 @@ public class Tichete {
 	}
 
 	// SETTERS
-	public void setIdstat(Long idstat) {
+	public void setIdstat(RealizariRetineri idstat) {
 		this.idstat = idstat;
 	}
 

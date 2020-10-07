@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,6 +27,21 @@ public class Adresa {
 
 	@Column(name = "tara")
 	private String tara;
+
+	@OneToOne(mappedBy = "idadresa")
+	private Persoana persoane;
+
+	@OneToOne(mappedBy = "idadresa")
+	private PunctDeLucru punctDeLucru;
+
+	@OneToOne(mappedBy = "idadresa")
+	private Societate societate;
+
+	@OneToOne(mappedBy = "idadresa")
+	private Departament departamente;
+
+	@OneToOne(mappedBy = "idadresa")
+	private CentruCost centruCost;
 
 	public Adresa() {
 
@@ -76,5 +92,45 @@ public class Adresa {
 
 	public void setTara(String tara) {
 		this.tara = tara;
+	}
+
+	public Persoana getPersoane() {
+		return persoane;
+	}
+
+	public void setPersoane(Persoana persoane) {
+		this.persoane = persoane;
+	}
+
+	public PunctDeLucru getPunctDeLucru() {
+		return punctDeLucru;
+	}
+
+	public void setPunctDeLucru(PunctDeLucru punctDeLucru) {
+		this.punctDeLucru = punctDeLucru;
+	}
+
+	public Societate getSocietate() {
+		return societate;
+	}
+
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
+	}
+
+	public Departament getDepartamente() {
+		return departamente;
+	}
+
+	public void setDepartamente(Departament departamente) {
+		this.departamente = departamente;
+	}
+
+	public CentruCost getCentruCost() {
+		return centruCost;
+	}
+
+	public void setCentruCost(CentruCost centruCost) {
+		this.centruCost = centruCost;
 	}
 }

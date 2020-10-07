@@ -86,7 +86,7 @@ public class StatSalariiService {
 		try {
 			Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
 					() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
+			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId())
 					.orElseThrow(() -> new ResourceNotFoundException(
 							"Adresa not found for this societate :: " + societate.getNume()));
 
@@ -144,7 +144,7 @@ public class StatSalariiService {
 			writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 			writerCell = stat.getRow(4).getCell(0);
 			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																											// localitate
+			// localitate
 
 			// * write luna, an
 			writerCell = stat.getRow(4).getCell(11);
@@ -168,7 +168,7 @@ public class StatSalariiService {
 				long idcontract = contract.getId();
 
 				RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an,
-						idcontract);
+						contract);
 				Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 
 				impozitScutit += realizariRetineri.getImpozitscutit();
@@ -632,7 +632,7 @@ public class StatSalariiService {
 			Row row8 = stat.createRow(rowNr + 7);
 			Row row9 = stat.createRow(rowNr + 8);
 
-			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 0, 3)); // obligatii angajator
+			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 0, 3)); // obligatiiangajator
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 2, rowNr + 2, 0, 3)); // cas cond. speciale.
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 3, rowNr + 3, 0, 3)); // contributie cam 2.25%
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 4, rowNr + 4, 0, 3)); // contributie cam 0.3375%
@@ -640,7 +640,7 @@ public class StatSalariiService {
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 7, rowNr + 7, 0, 3)); // recapitulare salariati
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 0, 3)); // total retineri salariati
 
-			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 4, 7)); // baza de calcul
+			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 4, 7)); // baza decalcul
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 2, rowNr + 2, 4, 7));
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 3, rowNr + 3, 4, 7));
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 4, rowNr + 4, 4, 7));
@@ -662,7 +662,7 @@ public class StatSalariiService {
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 2, rowNr + 2, 12, 15)); // cas cond speciale 8%
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 3, rowNr + 3, 12, 15)); // cas cond speciale 4%
 
-			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 16, 18)); // baza de calcul
+			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 16, 18)); // baza decalcul
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 2, rowNr + 2, 16, 18));
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 3, rowNr + 3, 16, 18));
 
@@ -675,11 +675,11 @@ public class StatSalariiService {
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 11, 13));
 
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 7, rowNr + 7, 14, 16)); // Impozit scutit cf. art. 60 din
-																						// CF
+			// CF
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 14, 16));
 
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 7, rowNr + 7, 17, 19)); // impozit scutit cf. art 60 din
-																						// CF
+			// CF
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 17, 19));
 
 			// * OBLIGATII ANGAJATOR
@@ -943,7 +943,7 @@ public class StatSalariiService {
 		try {
 			Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
 					() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
+			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId())
 					.orElseThrow(() -> new ResourceNotFoundException(
 							"Adresa not found for this societate :: " + societate.getNume()));
 			Persoana persoana = persoanaRepository.findById(idangajat)
@@ -996,12 +996,12 @@ public class StatSalariiService {
 			writerCell = stat.getRow(1).getCell(0);
 			writerCell.setCellValue("CUI: " + societate.getCif()); // cif
 			writerCell = stat.getRow(2).getCell(0);
-			writerCell.setCellValue("Nr. Reg. Com.: " + societate.getRegcom()); // nr reg com
+			writerCell.setCellValue("Nr. Reg. Com.: " + societate.getRegcom()); // nr regcom
 			writerCell = stat.getRow(3).getCell(0);
 			writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 			writerCell = stat.getRow(4).getCell(0);
 			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																											// localitate
+			// localitate
 
 			// * write luna, an
 			writerCell = stat.getRow(4).getCell(11);
@@ -1013,7 +1013,7 @@ public class StatSalariiService {
 			// rowNr = 14;
 			long idcontract = contract.getId();
 
-			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
+			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, contract);
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 
 			impozitScutit += realizariRetineri.getImpozitscutit();

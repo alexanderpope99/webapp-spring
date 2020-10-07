@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -41,14 +43,15 @@ public class PersoanaIntretinere {
 	@Column(name = "coasigurat")
 	private Boolean coasigurat;
 
-	@Column(name = "idangajat")
-	private Long idangajat;
+	@ManyToOne
+	@JoinColumn(name = "idangajat")
+	private Angajat idangajat;
 
 	public PersoanaIntretinere() {
 	}
 
 	public PersoanaIntretinere(String nume, String prenume, String cnp, Date datanasterii, String grad,
-			String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Long idangajat) {
+			String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Angajat idangajat) {
 		this.nume = nume;
 		this.prenume = prenume;
 		this.cnp = cnp;
@@ -88,7 +91,7 @@ public class PersoanaIntretinere {
 		return gradinvaliditate;
 	}
 
-	public Long getIdangajat() {
+	public Angajat getIdangajat() {
 		return idangajat;
 	}
 
@@ -124,7 +127,7 @@ public class PersoanaIntretinere {
 		this.gradinvaliditate = gradinvaliditate;
 	}
 
-	public void setIdangajat(Long idangajat) {
+	public void setIdangajat(Angajat idangajat) {
 		this.idangajat = idangajat;
 	}
 

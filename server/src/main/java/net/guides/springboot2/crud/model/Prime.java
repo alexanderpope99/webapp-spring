@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,13 +20,24 @@ public class Prime {
 	@Column(name = "valoare")
 	private Double valoare;
 
-	@Column(name = "idstat")
-	private Long idstat;
+	@Column(name = "luna")
+	private int luna;
+
+	@Column(name = "an")
+	private int an;
+
+	@ManyToOne
+	@JoinColumn(name = "idstat")
+	private RealizariRetineri idstat;
+
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public Prime() {
 	}
 
-	public Prime(Double valoare, Long idstat) {
+	public Prime(Double valoare, RealizariRetineri idstat) {
 		this.valoare = valoare;
 		this.idstat = idstat;
 	}
@@ -38,7 +51,7 @@ public class Prime {
 	}
 
 	// GETTERS
-	public Long getIdstat() {
+	public RealizariRetineri getIdstat() {
 		return idstat;
 	}
 
@@ -47,11 +60,35 @@ public class Prime {
 	}
 
 	// SETTERS
-	public void setIdstat(Long idstat) {
+	public void setIdstat(RealizariRetineri idstat) {
 		this.idstat = idstat;
 	}
 
 	public void setValoare(Double valoare) {
 		this.valoare = valoare;
+	}
+
+	public int getAn() {
+		return an;
+	}
+
+	public Contract getIdcontract() {
+		return idcontract;
+	}
+
+	public int getLuna() {
+		return luna;
+	}
+
+	public void setAn(int an) {
+		this.an = an;
+	}
+
+	public void setIdcontract(Contract idcontract) {
+		this.idcontract = idcontract;
+	}
+
+	public void setLuna(int luna) {
+		this.luna = luna;
 	}
 }

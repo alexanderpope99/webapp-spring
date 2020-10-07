@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +16,7 @@ public class Retineri {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
 	@Column(name = "avansnet")
 	private Integer avansnet;
 
@@ -29,14 +32,15 @@ public class Retineri {
 	@Column(name = "imprumuturi")
 	private Integer imprumuturi;
 
-	@Column(name = "idstat")
-	private Long idstat;
+	@ManyToOne
+	@JoinColumn(name = "idstat")
+	private RealizariRetineri idstat;
 
 	public Retineri() {
 	}
 
 	public Retineri(Integer avansnet, Integer pensiefacultativa, Integer pensiealimentara, Integer popriri,
-			Integer imprumuturi, Long idstat) {
+			Integer imprumuturi, RealizariRetineri idstat) {
 		this.avansnet = avansnet;
 		this.pensiefacultativa = pensiefacultativa;
 		this.pensiealimentara = pensiealimentara;
@@ -54,7 +58,7 @@ public class Retineri {
 	}
 
 	// GETTERS
-	public Long getIdstat() {
+	public RealizariRetineri getIdstat() {
 		return idstat;
 	}
 
@@ -79,7 +83,7 @@ public class Retineri {
 	}
 
 	// SETTERS
-	public void setIdstat(Long idstat) {
+	public void setIdstat(RealizariRetineri idstat) {
 		this.idstat = idstat;
 	}
 

@@ -1,10 +1,15 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,17 +20,21 @@ public class Echipa {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "iddepartament")
-	private int iddepartament;
+	@ManyToOne
+	@JoinColumn(name = "iddepartament")
+	private Departament iddepartament;
 
 	@Column(name = "nume")
 	private String nume;
+
+	@OneToMany(mappedBy = "idechipa")
+	private Set<Contract> contracte;
 
 	public Echipa() {
 
 	}
 
-	public Echipa(int iddepartament, String nume) {
+	public Echipa(Departament iddepartament, String nume) {
 		this.iddepartament = iddepartament;
 		this.nume = nume;
 	}
@@ -38,11 +47,11 @@ public class Echipa {
 		this.id = id;
 	}
 
-	public int getIddepartament() {
+	public Departament getIddepartament() {
 		return iddepartament;
 	}
 
-	public void setIddepartament(int iddepartament) {
+	public void setIddepartament(Departament iddepartament) {
 		this.iddepartament = iddepartament;
 	}
 
@@ -53,4 +62,13 @@ public class Echipa {
 	public void setNume(String nume) {
 		this.nume = nume;
 	}
+
+	public Set<Contract> getContracte() {
+		return contracte;
+	}
+
+	public void setContracte(Set<Contract> contracte) {
+		this.contracte = contracte;
+	}
+
 }

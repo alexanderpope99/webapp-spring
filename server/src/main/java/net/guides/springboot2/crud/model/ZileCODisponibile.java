@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,13 +20,14 @@ public class ZileCODisponibile {
 	@Column(name = "nr")
 	private Long nr;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public ZileCODisponibile() {
 	}
 
-	public ZileCODisponibile(Long nr, Long idcontract) {
+	public ZileCODisponibile(Long nr, Contract idcontract) {
 		this.nr = nr;
 		this.idcontract = idcontract;
 	}
@@ -38,7 +41,7 @@ public class ZileCODisponibile {
 	}
 
 	// GETTERS
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
@@ -47,7 +50,7 @@ public class ZileCODisponibile {
 	}
 
 	// SETTERS
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 

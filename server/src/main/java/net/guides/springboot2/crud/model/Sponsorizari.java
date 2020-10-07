@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,8 +17,9 @@ public class Sponsorizari {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	@Column(name = "denumire")
 	private String denumire;
@@ -33,7 +36,7 @@ public class Sponsorizari {
 	public Sponsorizari() {
 	}
 
-	public Sponsorizari(Long idcontract, String denumire, String cui, Double cota, Double suma) {
+	public Sponsorizari(Contract idcontract, String denumire, String cui, Double cota, Double suma) {
 		this.idcontract = idcontract;
 		this.denumire = denumire;
 		this.cui = cui;
@@ -62,7 +65,7 @@ public class Sponsorizari {
 		return denumire;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
@@ -83,7 +86,7 @@ public class Sponsorizari {
 		this.denumire = denumire;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 

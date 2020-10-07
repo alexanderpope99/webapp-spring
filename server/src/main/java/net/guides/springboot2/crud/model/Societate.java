@@ -1,10 +1,20 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,8 +28,9 @@ public class Societate {
 	@Column(name = "nume")
 	private String nume;
 
-	@Column(name = "idcaen")
-	private Long idcaen;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idcaen", referencedColumnName = "id")
+	private Caen idcaen;
 
 	@Column(name = "cif")
 	private String cif;
@@ -30,8 +41,9 @@ public class Societate {
 	@Column(name = "regcom")
 	private String regcom;
 
-	@Column(name = "idadresa")
-	private Long idadresa;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa idadresa;
 
 	@Column(name = "email")
 	private String email;
@@ -39,10 +51,29 @@ public class Societate {
 	@Column(name = "telefon")
 	private String telefon;
 
+	@OneToOne(mappedBy = "idsocietate")
+	private Angajat angajat;
+
+	@OneToMany(mappedBy = "idsocietate")
+	private Set<CentruCost> centruCost;
+
+	@OneToMany(mappedBy = "societate")
+	private Set<CereriConcediu> cereriConcediu;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "listacontbancar", joinColumns = @JoinColumn(name = "idsocietate"), inverseJoinColumns = @JoinColumn(name = "iban"))
+	private Set<ContBancar> iban = new HashSet<>();
+
+	@OneToMany(mappedBy = "idsocietate")
+	private Set<Departament> departamente;
+
+	@OneToOne(mappedBy = "idsocietate")
+	private PunctDeLucru punctDeLucru;
+
 	public Societate() {
 	}
 
-	public Societate(String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email,
+	public Societate(String nume, Caen idcaen, String cif, Double capsoc, String regcom, Adresa idadresa, String email,
 			String telefon) {
 		this.nume = nume;
 		this.cif = cif;
@@ -74,11 +105,11 @@ public class Societate {
 		return email;
 	}
 
-	public Long getIdadresa() {
+	public Adresa getIdadresa() {
 		return idadresa;
 	}
 
-	public Long getIdcaen() {
+	public Caen getIdcaen() {
 		return idcaen;
 	}
 
@@ -107,11 +138,11 @@ public class Societate {
 		this.email = email;
 	}
 
-	public void setIdadresa(Long idadresa) {
+	public void setIdadresa(Adresa idadresa) {
 		this.idadresa = idadresa;
 	}
 
-	public void setIdcaen(Long idcaen) {
+	public void setIdcaen(Caen idcaen) {
 		this.idcaen = idcaen;
 	}
 
@@ -125,5 +156,53 @@ public class Societate {
 
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
+	}
+
+	public Angajat getAngajat() {
+		return angajat;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
+	}
+
+	public Set<CentruCost> getCentruCost() {
+		return centruCost;
+	}
+
+	public void setCentruCost(Set<CentruCost> centruCost) {
+		this.centruCost = centruCost;
+	}
+
+	public Set<CereriConcediu> getCereriConcediu() {
+		return cereriConcediu;
+	}
+
+	public void setCereriConcediu(Set<CereriConcediu> cereriConcediu) {
+		this.cereriConcediu = cereriConcediu;
+	}
+
+	public Set<ContBancar> getIban() {
+		return iban;
+	}
+
+	public void setIban(Set<ContBancar> iban) {
+		this.iban = iban;
+	}
+
+	public Set<Departament> getDepartamente() {
+		return departamente;
+	}
+
+	public void setDepartamente(Set<Departament> departamente) {
+		this.departamente = departamente;
+	}
+
+	public PunctDeLucru getPunctDeLucru() {
+		return punctDeLucru;
+	}
+
+	public void setPunctDeLucru(PunctDeLucru punctDeLucru) {
+		this.punctDeLucru = punctDeLucru;
 	}
 }

@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.CO;
+import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
@@ -106,14 +107,14 @@ public class FoaiePontajService {
 			// set border
 			PropertyTemplate allCellsBordered = new PropertyTemplate();
 
-			long idcontract = angajatRepository.findIdcontractByIdpersoana(persoana.getId());
+			Contract idcontract = angajatRepository.findContractByIdpersoana(persoana.getId());
 
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
 
 			// get concediu odihna
-			List<CO> co = coRepository.findByIdcontract(idcontract);
+			List<CO> co = coRepository.findByIdcontract(idcontract.getId());
 			// get concediu medical
-			List<CM> cm = cmRepository.findByIdcontract(idcontract);
+			List<CM> cm = cmRepository.findByIdcontract(idcontract.getId());
 			// get oresuplimentare
 			int oresuplimentare200 = oresuplimentareRepository
 					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);

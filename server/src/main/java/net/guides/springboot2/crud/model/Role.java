@@ -1,5 +1,8 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +15,9 @@ public class Role {
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	private ERole name;
+
+	@ManyToMany(mappedBy = "roles")
+	private Set<User> useri = new HashSet<>();
 
 	public Role() {
 
@@ -35,5 +41,13 @@ public class Role {
 
 	public void setName(ERole name) {
 		this.name = name;
+	}
+
+	public Set<User> getUseri() {
+		return useri;
+	}
+
+	public void setUseri(Set<User> useri) {
+		this.useri = useri;
 	}
 }

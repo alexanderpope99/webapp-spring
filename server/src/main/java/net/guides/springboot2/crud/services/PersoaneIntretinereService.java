@@ -7,32 +7,32 @@ import net.guides.springboot2.crud.repository.PersoanaIntretinereRepository;
 
 @Service
 public class PersoaneIntretinereService {
-    @Autowired
-    PersoanaIntretinereRepository persoanaIntretinereRepository;
+	@Autowired
+	PersoanaIntretinereRepository persoanaIntretinereRepository;
 
-    public String nrPersoaneIntretinereToString(int nr) {
-      switch (nr) {
-        case 0:
-          return "zero";
-        case 1:
-          return "una";
-        case 2:
-          return "doua";
-        case 3:
-          return "trei";
-        case 4:
-          return "patru";
-        default:
-          return "patru";
-      }
-    }
+	public String nrPersoaneIntretinereToString(int nr) {
+		switch (nr) {
+			case 0:
+				return "zero";
+			case 1:
+				return "una";
+			case 2:
+				return "doua";
+			case 3:
+				return "trei";
+			case 4:
+				return "patru";
+			default:
+				return "patru";
+		}
+	}
 
-    public int getNrPerosaneIntretinere(long idcontract) {
-      return persoanaIntretinereRepository.getNrPersoaneIntretinereByIdcontract(idcontract);
-    }
+	public int getNrPerosaneIntretinere(long idcontract) {
+		return persoanaIntretinereRepository.getNrPersoaneIntretinereByIdcontract(idcontract);
+	}
 
-    public String getStrPersoaneIntretinere(long idcontract) {
-      int nr = getNrPerosaneIntretinere(idcontract);
-      return nrPersoaneIntretinereToString(nr);
-    }
+	public String getStrPersoaneIntretinere(long idcontract) {
+		int nr = getNrPerosaneIntretinere(idcontract);
+		return nrPersoaneIntretinereToString(nr);
+	}
 }

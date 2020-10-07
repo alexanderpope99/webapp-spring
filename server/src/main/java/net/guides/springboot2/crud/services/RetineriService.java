@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.repository.RetineriRepository;
 
@@ -11,7 +12,7 @@ public class RetineriService {
 	@Autowired
 	private RetineriRepository retineriRepository;
 
-	public Retineri saveRetinere(long idstat) {
+	public Retineri saveRetinere(RealizariRetineri idstat) {
 		Retineri emptyRetinere = new Retineri(0, 0, 0, 0, 0, idstat);
 		return retineriRepository.save(emptyRetinere);
 	}
@@ -20,7 +21,8 @@ public class RetineriService {
 		return retineriRepository.save(retinere);
 	}
 
-	public Retineri updateRetinere(Retineri oldRetinere, long idstat) {
+	public Retineri updateRetinere(Retineri oldRetinere, RealizariRetineri idstat) {
+
 		Retineri newEmptyRetinere = new Retineri(0, 0, 0, 0, 0, idstat);
 		newEmptyRetinere.setId(oldRetinere.getId());
 		return retineriRepository.save(newEmptyRetinere);

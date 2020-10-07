@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,13 +29,15 @@ public class Oresuplimentare {
 	@Column(name = "total")
 	private Double total;
 
-	@Column(name = "idstatsalariat")
-	private Long idstatsalariat;
+	@ManyToOne
+	@JoinColumn(name = "idstatsalariat")
+	private RealizariRetineri idstatsalariat;
 
 	public Oresuplimentare() {
 	}
 
-	public Oresuplimentare(Long nr, Double procent, Boolean includenormale, Double total, Long idstatsalariat) {
+	public Oresuplimentare(Long nr, Double procent, Boolean includenormale, Double total,
+			RealizariRetineri idstatsalariat) {
 		this.nr = nr;
 		this.procent = procent;
 		this.includenormale = includenormale;
@@ -49,11 +53,11 @@ public class Oresuplimentare {
 		this.id = id;
 	}
 
-	public void setIdstatsalariat(Long idstatsalariat) {
+	public void setIdstatsalariat(RealizariRetineri idstatsalariat) {
 		this.idstatsalariat = idstatsalariat;
 	}
 
-	public Long getIdstatsalariat() {
+	public RealizariRetineri getIdstatsalariat() {
 		return idstatsalariat;
 	}
 

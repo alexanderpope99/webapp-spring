@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -16,8 +18,9 @@ public class BursePrivate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	@Column(name = "data")
 	private Date data;
@@ -32,7 +35,7 @@ public class BursePrivate {
 
 	}
 
-	public BursePrivate(Long idcontract, Date data, Float cota, Float suma) {
+	public BursePrivate(Contract idcontract, Date data, Float cota, Float suma) {
 		this.idcontract = idcontract;
 		this.data = data;
 		this.cota = cota;
@@ -47,11 +50,11 @@ public class BursePrivate {
 		this.id = id;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 

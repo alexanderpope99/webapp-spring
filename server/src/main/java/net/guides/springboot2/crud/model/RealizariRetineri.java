@@ -1,10 +1,15 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,8 +20,9 @@ public class RealizariRetineri {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	@Column(name = "luna")
 	private Integer luna;
@@ -120,10 +126,25 @@ public class RealizariRetineri {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
+	@OneToMany(mappedBy = "idstat")
+	private Set<AlteDrepturi> alteDrepturi;
+
+	@OneToMany(mappedBy = "idstatsalariat")
+	private Set<Oresuplimentare> oreSuplimentare;
+
+	@OneToMany(mappedBy = "idstat")
+	private Set<Prime> prime;
+
+	@OneToMany(mappedBy = "idstat")
+	private Set<Retineri> retineri;
+
+	@OneToMany(mappedBy = "idstat")
+	private Set<Tichete> tichete;
+
 	public RealizariRetineri() {
 	}
 
-	public RealizariRetineri(long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco,
+	public RealizariRetineri(Contract idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco,
 			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zileconeplatit,
 			Integer zileconeplatitlucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate,
 			Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass,
@@ -276,7 +297,7 @@ public class RealizariRetineri {
 		return an;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
@@ -417,7 +438,7 @@ public class RealizariRetineri {
 		this.an = an;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 
@@ -455,5 +476,45 @@ public class RealizariRetineri {
 
 	public void setVenitnet(Integer venitnet) {
 		this.venitnet = venitnet;
+	}
+
+	public Set<AlteDrepturi> getAlteDrepturi() {
+		return alteDrepturi;
+	}
+
+	public void setAlteDrepturi(Set<AlteDrepturi> alteDrepturi) {
+		this.alteDrepturi = alteDrepturi;
+	}
+
+	public Set<Oresuplimentare> getOreSuplimentare() {
+		return oreSuplimentare;
+	}
+
+	public void setOreSuplimentare(Set<Oresuplimentare> oreSuplimentare) {
+		this.oreSuplimentare = oreSuplimentare;
+	}
+
+	public Set<Prime> getPrime() {
+		return prime;
+	}
+
+	public void setPrime(Set<Prime> prime) {
+		this.prime = prime;
+	}
+
+	public Set<Retineri> getRetineri() {
+		return retineri;
+	}
+
+	public void setRetineri(Set<Retineri> retineri) {
+		this.retineri = retineri;
+	}
+
+	public Set<Tichete> getTichete() {
+		return tichete;
+	}
+
+	public void setTichete(Set<Tichete> tichete) {
+		this.tichete = tichete;
 	}
 }

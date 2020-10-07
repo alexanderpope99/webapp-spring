@@ -4,12 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,14 +18,15 @@ import javax.persistence.Table;
 public class Angajat {
 
 	@Id
-	@Column(name = "idpersoana")
-	private Long idpersoana;
+	private long idpersoana;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idcontract", referencedColumnName = "id")
+	private Contract idcontract;
 
-	@Column(name = "idsocietate")
-	private Integer idsocietate;
+	@ManyToOne
+	@JoinColumn(name = "idsocietate")
+	private Societate idsocietate;
 
 	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "idsuperior")
@@ -33,36 +35,50 @@ public class Angajat {
 	@OneToMany(mappedBy = "superior")
 	private Set<Angajat> subalterni = new HashSet<Angajat>();
 
+	@OneToMany(mappedBy = "pentru")
+	private Set<CereriConcediu> cereriConcediu;
+
+	@OneToMany(mappedBy = "idangajat")
+	private Set<PersoanaIntretinere> persoaneIntretinere;
+
+	@OneToOne
+	@JoinColumn(name = "idpersoana")
+	@MapsId
+	private Persoana persoana;
+
+	@OneToMany(mappedBy = "idangajat")
+	private Set<Bazacalcul> bazaCalcul;
+
 	public Angajat() {
 
 	}
 
-	public Angajat(Long idcontract, Integer idsocietate) {
+	public Angajat(Contract idcontract, Societate idsocietate) {
 		this.idcontract = idcontract;
 		this.idsocietate = idsocietate;
 	}
 
-	public Long getIdpersoana() {
+	public long getIdpersoana() {
 		return idpersoana;
 	}
 
-	public void setIdpersoana(Long idpersoana) {
+	public void setIdpersoana(long idpersoana) {
 		this.idpersoana = idpersoana;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 
-	public Integer getIdsocietate() {
+	public Societate getIdsocietate() {
 		return idsocietate;
 	}
 
-	public void setIdsocietate(Integer idsocietate) {
+	public void setIdsocietate(Societate idsocietate) {
 		this.idsocietate = idsocietate;
 	}
 
@@ -81,4 +97,37 @@ public class Angajat {
 	public void setSuperior(Angajat superior) {
 		this.superior = superior;
 	}
+
+	public Persoana getPersoana() {
+		return persoana;
+	}
+
+	public void setPersoana(Persoana persoana) {
+		this.persoana = persoana;
+	}
+
+	public Set<CereriConcediu> getCereriConcediu() {
+		return cereriConcediu;
+	}
+
+	public void setCereriConcediu(Set<CereriConcediu> cereriConcediu) {
+		this.cereriConcediu = cereriConcediu;
+	}
+
+	public Set<PersoanaIntretinere> getPersoaneIntretinere() {
+		return persoaneIntretinere;
+	}
+
+	public void setPersoaneIntretinere(Set<PersoanaIntretinere> persoaneIntretinere) {
+		this.persoaneIntretinere = persoaneIntretinere;
+	}
+
+	public Set<Bazacalcul> getBazaCalcul() {
+		return bazaCalcul;
+	}
+
+	public void setBazaCalcul(Set<Bazacalcul> bazaCalcul) {
+		this.bazaCalcul = bazaCalcul;
+	}
+
 }

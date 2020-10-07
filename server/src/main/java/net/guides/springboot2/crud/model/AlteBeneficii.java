@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,14 +29,15 @@ public class AlteBeneficii {
 	@Column(name = "aplicare")
 	private String aplicare;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public AlteBeneficii() {
 
 	}
 
-	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Long idcontract) {
+	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Contract idcontract) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
@@ -82,12 +85,11 @@ public class AlteBeneficii {
 		this.aplicare = aplicare;
 	}
 
-	@Column(name = "idcontract")
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 }

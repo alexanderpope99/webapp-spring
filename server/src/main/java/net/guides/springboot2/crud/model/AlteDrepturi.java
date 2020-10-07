@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,14 +20,15 @@ public class AlteDrepturi {
 	@Column(name = "valoare")
 	private Float valoare;
 
-	@Column(name = "idstat")
-	private Integer idstat;
+	@ManyToOne
+	@JoinColumn(name = "idstat")
+	private RealizariRetineri idstat;
 
 	public AlteDrepturi() {
 
 	}
 
-	public AlteDrepturi(Float valoare, Integer idstat) {
+	public AlteDrepturi(Float valoare, RealizariRetineri idstat) {
 		this.valoare = valoare;
 		this.idstat = idstat;
 	}
@@ -46,11 +49,11 @@ public class AlteDrepturi {
 		this.valoare = valoare;
 	}
 
-	public Integer getIdstat() {
+	public RealizariRetineri getIdstat() {
 		return idstat;
 	}
 
-	public void setIdstat(Integer idstat) {
+	public void setIdstat(RealizariRetineri idstat) {
 		this.idstat = idstat;
 	}
 }

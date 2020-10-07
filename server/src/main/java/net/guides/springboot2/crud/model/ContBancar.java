@@ -1,8 +1,12 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +18,9 @@ public class ContBancar {
 
 	@Column(name = "numebanca")
 	private String numebanca;
+
+	@ManyToMany(mappedBy = "iban")
+	private Set<Societate> societati = new HashSet<>();
 
 	public ContBancar() {
 
@@ -38,6 +45,14 @@ public class ContBancar {
 
 	public void setNumebanca(String adresa) {
 		this.numebanca = adresa;
+	}
+
+	public Set<Societate> getSocietati() {
+		return societati;
+	}
+
+	public void setSocietati(Set<Societate> societati) {
+		this.societati = societati;
 	}
 
 }

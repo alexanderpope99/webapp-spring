@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -16,8 +18,9 @@ public class CereriConcediu {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "pentru")
-	private int pentru;
+	@ManyToOne
+	@JoinColumn(name = "pentru")
+	private Angajat pentru;
 
 	@Column(name = "dela")
 	private LocalDate dela;
@@ -34,14 +37,15 @@ public class CereriConcediu {
 	@Column(name = "status")
 	private String status;
 
-	@Column(name = "societate")
-	private int societate;
+	@ManyToOne
+	@JoinColumn(name = "societate")
+	private Societate societate;
 
 	public CereriConcediu() {
 	}
 
-	public CereriConcediu(int pentru, LocalDate dela, LocalDate panala, String tip, String motiv, String status,
-			int societate) {
+	public CereriConcediu(Angajat pentru, LocalDate dela, LocalDate panala, String tip, String motiv, String status,
+			Societate societate) {
 		this.pentru = pentru;
 		this.dela = dela;
 		this.panala = panala;
@@ -59,11 +63,11 @@ public class CereriConcediu {
 		this.id = id;
 	}
 
-	public int getPentru() {
+	public Angajat getPentru() {
 		return pentru;
 	}
 
-	public void setPentru(int pentru) {
+	public void setPentru(Angajat pentru) {
 		this.pentru = pentru;
 	}
 
@@ -107,11 +111,11 @@ public class CereriConcediu {
 		this.status = status;
 	}
 
-	public int getSocietate() {
+	public Societate getSocietate() {
 		return societate;
 	}
 
-	public void setSocietate(int societate) {
+	public void setSocietate(Societate societate) {
 		this.societate = societate;
 	}
 

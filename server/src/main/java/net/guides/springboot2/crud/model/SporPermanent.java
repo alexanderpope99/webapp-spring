@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,13 +29,14 @@ public class SporPermanent {
 	@Column(name = "aplicare")
 	private String aplicare;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public SporPermanent() {
 	}
 
-	public SporPermanent(String nume, Double valoare, Double procent, String aplicare, Long idcontract) {
+	public SporPermanent(String nume, Double valoare, Double procent, String aplicare, Contract idcontract) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
@@ -54,7 +57,7 @@ public class SporPermanent {
 		return aplicare;
 	}
 
-	public Long getIdstat() {
+	public Contract getIdstat() {
 		return idcontract;
 	}
 
@@ -75,7 +78,7 @@ public class SporPermanent {
 		this.aplicare = aplicare;
 	}
 
-	public void setIdstat(Long idcontract) {
+	public void setIdstat(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 
@@ -89,5 +92,13 @@ public class SporPermanent {
 
 	public void setValoare(Double valoare) {
 		this.valoare = valoare;
+	}
+
+	public Contract getIdcontract() {
+		return idcontract;
+	}
+
+	public void setIdcontract(Contract idcontract) {
+		this.idcontract = idcontract;
 	}
 }

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,10 +31,11 @@ public class Bazacalcul {
 	@Column(name = "salariurealizat")
 	private int salariurealizat;
 
-	@Column(name = "idangajat")
-	private long idangajat;
+	@ManyToOne
+	@JoinColumn(name = "idangajat")
+	private Angajat idangajat;
 
-	public Bazacalcul(int luna, int an, int zilelucrate, int salariurealizat, long idangajat) {
+	public Bazacalcul(int luna, int an, int zilelucrate, int salariurealizat, Angajat idangajat) {
 		this.luna = luna;
 		this.an = an;
 		this.zilelucrate = zilelucrate;
@@ -52,7 +55,7 @@ public class Bazacalcul {
 		return an;
 	}
 
-	public long getIdangajat() {
+	public Angajat getIdangajat() {
 		return idangajat;
 	}
 
@@ -86,7 +89,7 @@ public class Bazacalcul {
 		this.an = an;
 	}
 
-	public void setIdangajat(long idangajat) {
+	public void setIdangajat(Angajat idangajat) {
 		this.idangajat = idangajat;
 	}
 }

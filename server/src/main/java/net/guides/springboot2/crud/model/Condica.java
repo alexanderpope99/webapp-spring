@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,14 +25,15 @@ public class Condica {
 	@Column(name = "pauzamasa")
 	private String pauzamasa;
 
-	@Column(name = "idcontract")
-	private Long idcontract;
+	@ManyToOne
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public Condica() {
 
 	}
 
-	public Condica(String inceput, String sfarsit, String pauzamasa, Long idcontract) {
+	public Condica(String inceput, String sfarsit, String pauzamasa, Contract idcontract) {
 		this.inceput = inceput;
 		this.sfarsit = sfarsit;
 		this.pauzamasa = pauzamasa;
@@ -69,11 +72,11 @@ public class Condica {
 		this.pauzamasa = pauzamasa;
 	}
 
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 }

@@ -33,27 +33,28 @@ public class NotaContabilaService {
 	private SocietateRepository societateRepository;
 	@Autowired
 	private AdresaRepository adresaRepository;
-	@Autowired 
+	@Autowired
 	RealizariRetineriRepository realizariRetineriRepository;
 	@Autowired
 	RetineriRepository retineriRepository;
 
 	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
 
-	public boolean createNotaContabila(int luna, int an, int idsocietate, long userID) throws IOException, ResourceNotFoundException {
+	public boolean createNotaContabila(int luna, int an, int idsocietate, long userID)
+			throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById((long) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
-				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
+		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId()).orElseThrow(
+				() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
 
-				String statTemplateLocation = homeLocation + "\\templates";
-		
+		String statTemplateLocation = homeLocation + "\\templates";
+
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "NotaContabila.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet stat = workbook.getSheetAt(0);
 
-		//* date societate
+		// * date societate
 		Cell writerCell = stat.getRow(0).getCell(0);
 		writerCell.setCellValue(societate.getNume()); // nume soc
 		writerCell = stat.getRow(1).getCell(0);
@@ -63,67 +64,75 @@ public class NotaContabilaService {
 		writerCell = stat.getRow(3).getCell(0);
 		writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 		writerCell = stat.getRow(4).getCell(0);
-		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet + localitate
+		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
+																										// localitate
 
-		//* - LUNA AN -
+		// * - LUNA AN -
 		writerCell = stat.getRow(7).getCell(2);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
 
 		long idSocietate = societate.getId();
 
-		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an, idSocietate);
+		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an,
+				idSocietate);
 
-
-		//* Concedii medicale din fonduri
+		// * Concedii medicale din fonduri
 		writerCell = stat.getRow(14).getCell(5);
-		// long valcm = realizariRetineriRepository.getValCMByLunaAndAn(luna, an, idSocietate);
+		// long valcm = realizariRetineriRepository.getValCMByLunaAndAn(luna, an,
+		// idSocietate);
 		long valcm = notaContabila.getValCM();
 		writerCell.setCellValue(valcm);
 
-		//* Salarii datorate personalului
+		// * Salarii datorate personalului
 		writerCell = stat.getRow(15).getCell(5);
-		// long salDatorat = realizariRetineriRepository.getSalDatoratByLunaAndAn(luna, an, idSocietate);
+		// long salDatorat = realizariRetineriRepository.getSalDatoratByLunaAndAn(luna,
+		// an, idSocietate);
 		long salDatorat = notaContabila.getSalariuDatorat();
 		writerCell.setCellValue(salDatorat);
 
-		//* Avans
+		// * Avans
 		writerCell = stat.getRow(21).getCell(5);
 		long avans = retineriRepository.getAvansByLunaAndAn(luna, an, idSocietate);
 		writerCell.setCellValue(avans);
 
-		//* CAS 25% angajat
+		// * CAS 25% angajat
 		writerCell = stat.getRow(22).getCell(5);
-		// long cas25 = realizariRetineriRepository.getCAS25ByLunaAndAn(luna, an, idSocietate);
+		// long cas25 = realizariRetineriRepository.getCAS25ByLunaAndAn(luna, an,
+		// idSocietate);
 		long cas25 = notaContabila.getCas25();
 		writerCell.setCellValue(cas25);
 
-		//* CASS 10% angajat
+		// * CASS 10% angajat
 		writerCell = stat.getRow(24).getCell(5);
-		// long cass10 = realizariRetineriRepository.getCASS10ByLunaAndAn(luna, an, idSocietate);
+		// long cass10 = realizariRetineriRepository.getCASS10ByLunaAndAn(luna, an,
+		// idSocietate);
 		long cass10 = notaContabila.getCass10();
 		writerCell.setCellValue(cass10);
 
-		//* Impozit
+		// * Impozit
 		writerCell = stat.getRow(25).getCell(5);
-		// long impozit = realizariRetineriRepository.getImpozitByLunaAndAn(luna, an, idsocietate);
+		// long impozit = realizariRetineriRepository.getImpozitByLunaAndAn(luna, an,
+		// idsocietate);
 		long impozit = notaContabila.getImpozit();
 		System.out.println(impozit);
 		writerCell.setCellValue(impozit);
 
-		//* CAM
+		// * CAM
 		writerCell = stat.getRow(32).getCell(5);
-		// long cam = realizariRetineriRepository.getCAMByLunaAndAn(luna, an, idsocietate);
+		// long cam = realizariRetineriRepository.getCAMByLunaAndAn(luna, an,
+		// idsocietate);
 		long cam = notaContabila.getCam();
 		writerCell.setCellValue(cam);
 
-		/* ------ ENDING ------ **/ 
+		/* ------ ENDING ------ **/
 		FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		evaluator.evaluateAll();
-		//* OUTPUT THE FILE
-		Files.createDirectories(Paths.get(homeLocation + "downloads\\"+userID));
-		String newFileLocation = String.format("%s\\downloads\\%d\\Nota Contabila - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
-		
+		// * OUTPUT THE FILE
+		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
+		String newFileLocation = String.format("%s\\downloads\\%d\\Nota Contabila - %s - %s %d.xlsx", homeLocation,
+				userID, societate.getNume(), lunaNume, an);
+
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
 		workbook.close();

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -39,6 +40,9 @@ public class ActIdentitate {
 
 	@Column(name = "loculnasterii")
 	private String loculnasterii;
+
+	@OneToOne(mappedBy = "idactidentitate")
+	private Persoana persoane;
 
 	public ActIdentitate() {
 
@@ -112,7 +116,6 @@ public class ActIdentitate {
 		this.eliberatde = eliberatde;
 	}
 
-	@Column(name = "dataeliberarii")
 	public String getDataeliberarii() {
 		return dataeliberarii;
 	}
@@ -127,6 +130,14 @@ public class ActIdentitate {
 
 	public void setLoculnasterii(String loculnasterii) {
 		this.loculnasterii = loculnasterii;
+	}
+
+	public Persoana getPersoane() {
+		return persoane;
+	}
+
+	public void setPersoane(Persoana persoane) {
+		this.persoane = persoane;
 	}
 
 }
