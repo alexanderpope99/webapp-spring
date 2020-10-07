@@ -3,24 +3,14 @@ alte drepturi
 retineri (doar avans merge)
 
 buton pentru a face stat pe ultimele 6 luni (pt baza calcul)
-	
-calcRealizariRetineri:
-		-> calcNrZileLucrate = zileService.getNrZileLucrate(luna, an, contract)
 
-zileService.getNrZileLucrate(luna, an, contract):
-	1) datainceput == null => return 0;
-	2) datainceput <  LocalDate.of(luna, an, 1) => zileService.getZileLucratoareInLunaAnul(luna, an);
-	3) datainceput >= LocalDate.of(luna, an, 1)
-		3.1) datainceput.luna == luna -> false => return 0;
-					      -> true  => getZileLucratoareInInterval(datainceput, ultimaZiDinLuna(luna))
+buton pentru calculul pe 6 luni pentru toata societatea
 		
 
 problem: in luna, anul: 
 	sterg stat salarii, baza calcul ramane 
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
-solutie: verifica daca exista baza calcul inainte de a creea una && cascade delete bazacalcul
-
-nota contabila
+solutie: verifica daca exista baza calcul inainte de a creea una && cascade delete bazacalcul <- bazacalcul needs idstatsalariat
 
 sarbatori
 

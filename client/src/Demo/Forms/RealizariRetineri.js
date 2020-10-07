@@ -416,11 +416,11 @@ class RealizariRetineri extends React.Component {
 			return;
 		}
 
-		let luna = this.state.luna.nr;
+		let luna = this.state.luna;
 		let an = this.state.an;
 
 		const ok = await axios.put(
-			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
+			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
 			{},
 			{ headers: authHeader() }
 		)
@@ -428,7 +428,7 @@ class RealizariRetineri extends React.Component {
 		.catch(err => console.error('RealizariRetineri.js :: line: 422\n', err));
 
 		if(ok) {
-			alert('Statul de salarii calculat pe ultimele 6 luni. Deasemenea, bazele de calcul au fost adaugate.');
+			alert(`Statul de salarii calculat pe ultimele 6 luni incepand cu ${luna.nume}. Deasemenea, bazele de calcul au fost adaugate.`);
 			window.scrollTo({
 				top: 0,
 				left: 0,

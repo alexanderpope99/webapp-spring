@@ -51,6 +51,7 @@ public class RealizariRetineriService {
 	@Autowired
 	private BazacalculRepository bazacalculRepository;
 
+	private float salariuContract = 0;
 	private float impozitSalariu = 0;
 	private float deducere = 0;
 	private float venitNet = 0;
@@ -89,7 +90,8 @@ public class RealizariRetineriService {
 
 		this.deducere = 0;
 		if (totalDrepturi < 3600)
-			this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere) * areFunctieDebaza;
+			this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere) * areFunctieDebaza
+					* platesteImpozit;
 
 		float restPlata = totalDrepturi - casSalariu - cassSalariu;
 		this.venitNet = restPlata;
@@ -116,16 +118,16 @@ public class RealizariRetineriService {
 		Contract contract = contractService.getContractById(idcontract);
 
 		int zileContract = zileService.getNrZileLucratoareContract(luna, an, contract);
-		if(zileContract == 0) {
-				// reset class to original state
-				impozitSalariu = 0;
-				deducere = 0;
-				venitNet = 0;
-				salariuRealizat = 0;
-				bazaImpozit = 0;
-				impozitScutit = 0;
-				// return retineri wtih 0 values
-				return new RealizariRetineri(luna, an, idcontract);
+		if (zileContract == 0) {
+			// reset class to original state
+			impozitSalariu = 0;
+			deducere = 0;
+			venitNet = 0;
+			salariuRealizat = 0;
+			bazaImpozit = 0;
+			impozitScutit = 0;
+			// return retineri wtih 0 values
+			return new RealizariRetineri(luna, an, idcontract);
 		}
 
 		int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
@@ -164,7 +166,7 @@ public class RealizariRetineriService {
 		int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
 
 		int restPlata = 0;
-		if(zileLucrate > 0)
+		if (zileLucrate > 0)
 			restPlata = calcRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere); // rv is rounded
 
 		float impozit = Math.round(this.impozitSalariu);
@@ -214,29 +216,28 @@ public class RealizariRetineriService {
 
 	public void saveRealizariRetineriUltimele6Luni(int luna, int an, long idcontract) throws ResourceNotFoundException {
 		int luna6 = 0, an6 = an;
-		if(luna <= 6) {
+		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);
 			an6--;
-		}
-		else luna6 = luna - 6;
+		} else
+			luna6 = luna - 6;
 
-		if(luna6 > luna && an6 < an) {
-			for(int i = luna6; i<= 12; ++i) {
+		if (luna6 > luna && an6 < an) {
+			for (int i = luna6; i <= 12; ++i) {
 				this.saveRealizariRetineri(i, an6, idcontract);
 			}
 
-			for(int i = 1; i < luna; ++i) {
+			for (int i = 1; i < luna; ++i) {
 				this.saveRealizariRetineri(i, an, idcontract);
 			}
-		}
-		else {
-			for(int i = luna6; i < luna - 1; ++i) {
+		} else {
+			for (int i = luna6; i < luna - 1; ++i) {
 				this.saveRealizariRetineri(i, an, idcontract);
 			}
 		}
 	}
-	public RealizariRetineri resetRealizariRetineri(int luna, int an, long idcontract)
-			throws ResourceNotFoundException {
+
+	public RealizariRetineri resetRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
 				idcontract);
