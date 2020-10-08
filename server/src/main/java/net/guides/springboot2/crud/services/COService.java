@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.model.CO;
-import net.guides.springboot2.crud.model.Sarbatori;
 import net.guides.springboot2.crud.repository.CORepository;
 
 @Service
