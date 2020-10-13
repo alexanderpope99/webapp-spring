@@ -22,6 +22,7 @@ class SarbatoriTabel extends React.Component {
     this.addSarbatoare = this.addSarbatoare.bind(this);
     this.deleteSarbatoare = this.deleteSarbatoare.bind(this);
     this.setCurrentYear = this.setCurrentYear.bind(this);
+    this.formatDate = this.formatDate.bind(this);
 
     this.state = {
       isEdit: false,
@@ -46,6 +47,7 @@ class SarbatoriTabel extends React.Component {
   componentDidMount() {
     this.setCurrentYear();
     this.fillTable();
+    console.log(this.formatDate('2020-01-01'));
   }
 
   setCurrentYear() {
@@ -143,19 +145,18 @@ class SarbatoriTabel extends React.Component {
   }
 
   onChangeAn(an) {
-		this.setState({an: an}, this.renderSarbatori);
-	}
+    this.setState({ an: an }, this.renderSarbatori);
+  }
   // function to create react component with fetched data
   renderSarbatori() {
     this.setState({
       sarbatoriComponent: this.state.sarbatori.map((sarbatoare, index) => {
         if (sarbatoare.dela.includes(this.state.an)) {
           for (let key in sarbatoare) if (!sarbatoare[key]) sarbatoare[key] = '-';
-
           return (
             <tr key={sarbatoare.id}>
-              <th>{sarbatoare.dela.substring(0, 10)}</th>
-              <th>{sarbatoare.panala.substring(0, 10)}</th>
+              <th>{this.formatDate(sarbatoare.dela.substring(0, 10))}</th>
+              <th>{this.formatDate(sarbatoare.panala.substring(0, 10))}</th>
               <th>{sarbatoare.nume}</th>
               <th className="d-inline-flex flex-row justify-content-around">
                 <PopupState variant="popover" popupId="demo-popup-popover">
@@ -208,9 +209,58 @@ class SarbatoriTabel extends React.Component {
               </th>
             </tr>
           );
-        }
+				}
       }),
     });
+  }
+
+  formatDate(date) {
+    let luna = date.substring(5, 7);
+    let ziua = date.substring(8, 10).match('[1-9]{1,2}');
+
+    switch (luna) {
+      case '01':
+        luna = 'Ianuarie';
+        break;
+      case '02':
+        luna = 'Februarie';
+        break;
+      case '03':
+        luna = 'Martie';
+        break;
+      case '04':
+        luna = 'Aprilie';
+        break;
+      case '05':
+        luna = 'Mai';
+        break;
+      case '06':
+        luna = 'Iunie';
+        break;
+      case '07':
+        luna = 'Iulie';
+        break;
+      case '08':
+        luna = 'August';
+        break;
+      case '09':
+        luna = 'Septembrie';
+        break;
+      case '10':
+        luna = 'Octombrie';
+        break;
+      case '11':
+        luna = 'Noiembrie';
+        break;
+      case '12':
+        luna = 'Decembrie';
+        break;
+
+      default:
+        break;
+    }
+
+    return ziua + ' ' + luna;
   }
 
   render() {
@@ -303,7 +353,11 @@ class SarbatoriTabel extends React.Component {
               </Card.Header>
               <Card.Body>
                 <Form.Group as={Col} sm="3">
-                  <Form.Control as="select" value={this.state.an} onChange={(e) => this.onChangeAn(e.target.value)}>
+                  <Form.Control
+                    as="select"
+                    value={this.state.an}
+                    onChange={(e) => this.onChangeAn(e.target.value)}
+                  >
                     <option>2019</option>
                     <option>2020</option>
                     <option>2021</option>
@@ -312,7 +366,7 @@ class SarbatoriTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th>Începând cu (inclusiv)</th>
+                      <th>Începând cu (inclusiv) ↓</th>
                       <th>Până la (inclusiv)</th>
                       <th>Nume</th>
                       <th></th>

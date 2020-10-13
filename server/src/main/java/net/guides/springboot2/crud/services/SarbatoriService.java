@@ -46,7 +46,7 @@ public class SarbatoriService {
 
 		List<Sarbatori> sarbatori = sarbatoriRepository.findByDelaBetween(dela, panala);
 		if(sarbatori == null || sarbatori.size() == 0)
-			return null;
+			return sarbatoriDates;
 
 		for(Sarbatori sarbatoare : sarbatori) {
 			if(sarbatoare.getDela().compareTo(sarbatoare.getPanala()) == 0)
