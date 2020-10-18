@@ -5,59 +5,60 @@ import java.util.Set;
 import javax.validation.constraints.*;
 
 public class SignupRequest {
-    @NotBlank
-    @Size(min = 3, max = 20)
-		private String username;
-		
-		private boolean gen; // true = barbat, false = femeie
+	@NotBlank
+	@Size(min = 3, max = 20)
+	private String username;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    private String email;
+	private boolean gen; // true = barbat, false = femeie
 
-    private Set<String> role;
+	@NotBlank
+	@Size(max = 50)
+	@Email
+	private String email;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
-    private String password;
+	private Set<String> role;
 
-    public String getUsername() {
-        return username;
-    }
+	@NotBlank
+	@Size(min = 6, max = 40)
+	private String password;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public Set<String> getRole() {
-        return this.role;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setRole(Set<String> role) {
-        this.role = role;
-		}
-		
-		public boolean isGen() {
-			return gen;
-		}
-		public void setGen(boolean gen) {
-			this.gen = gen;
-		}
+	public Set<String> getRole() {
+		return this.role;
+	}
+
+	public void setRole(Set<String> role) {
+		this.role = role;
+	}
+
+	public boolean isGen() {
+		return gen;
+	}
+
+	public void setGen(boolean gen) {
+		this.gen = gen;
+	}
 }
