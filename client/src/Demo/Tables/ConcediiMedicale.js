@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -23,9 +24,16 @@ class CMTabel extends React.Component {
     this.editCM = this.editCM.bind(this);
     this.updateCM = this.updateCM.bind(this);
     this.deleteCM = this.deleteCM.bind(this);
+    this.onChangeAn = this.onChangeAn.bind(this);
+    this.onChangeMonth = this.onChangeMonth.bind(this);
 
     this.state = {
       angajat: props.angajat,
+
+      an: '',
+      luna: { nume: '-', nr: '-' },
+      ultimul_an: '',
+      ani_cu_concediu: [],
 
       cm: [],
       cmComponent: null,
@@ -107,7 +115,28 @@ class CMTabel extends React.Component {
   }
 
   componentDidMount() {
+    this.setCurrentYear();
     this.fillTable();
+  }
+
+  setCurrentYear() {
+    let today = new Date();
+    let an = today.getFullYear();
+
+    this.setState({
+      an: an,
+    });
+  }
+
+  onChangeAn(an) {
+    this.setState({ an: an }, this.renderCM);
+  }
+
+  onChangeMonth(e) {
+    this.setState({ luna: { nume: e.target.value, nr: e.target.options.selectedIndex } }, () => {
+      this.renderCM();
+      console.log(this.state.luna);
+    });
   }
 
   async fillTable() {
@@ -117,24 +146,31 @@ class CMTabel extends React.Component {
 
       return;
     }
-    //? fetch must be with idcontract
 
+		//? fetch must be with idcontract
     const cm = await axios
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       .then((cm) => (cm.status !== 200 ? null : cm.data))
       .catch((err) => console.error('err', err));
 
-    if (cm !== null) {
+    if (cm) {
+			const ani_cu_concediu = new Set();
+			for (let c of cm) {
+        if (c.dela) ani_cu_concediu.add(c.dela.substring(0, 4));
+        if (c.panala) ani_cu_concediu.add(c.panala.substring(0, 4));
+      }
       this.setState(
         {
           cm: cm,
+          ani_cu_concediu: [...ani_cu_concediu],
         },
         this.renderCM
       );
     } else {
       this.setState(
         {
-          cm: [],
+					cm: [],
+					ani_cu_concediu: [],
         },
         this.renderCM
       );
@@ -152,9 +188,8 @@ class CMTabel extends React.Component {
         show: false,
         isEdit: false,
       });
-  }
-
-  //* Works
+	}
+	
   async deleteCM(id) {
     await axios
       .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
@@ -177,7 +212,7 @@ class CMTabel extends React.Component {
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
-      .then((res) => res.statusText)
+      .then((res) => res.status === 200)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -274,96 +309,111 @@ class CMTabel extends React.Component {
   renderCM() {
     this.setState({
       cmComponent: this.state.cm.map((cm, index) => {
-        for (let key in cm) {
-          if (cm[key] === '' || cm[key] === null) cm[key] = '-';
+        if ( cm.dela ? 
+          cm.dela.includes(this.state.an) &&
+          (this.state.luna.nume !== '-'
+            ? // eslint-disable-next-line eqeqeq
+              cm.dela.substring(5, 7) == this.state.luna.nr
+						: true)
+					: true
+        ) {
+          for (let key in cm) {
+            if (cm[key] === '' || cm[key] === null) cm[key] = '-';
+          }
+          return (
+            <tr key={cm.id}>
+              <th className="d-inline-flex flex-row justify-content-around">
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  onClick={() => this.editCM(cm)}
+                >
+                  <Edit fontSize="small" />
+                </Button>
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Sigur ștergeți concediul?</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteCM(cm.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </th>
+              <th>{cm.dela.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{cm.panala.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{cm.continuare ? 'Da' : 'Nu'}</th>
+              <th>{cm.datainceput.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{cm.serienrcertificat}</th>
+              <th>{cm.dataeliberare.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{cm.codurgenta}</th>
+              <th>{cm.procent}%</th>
+              <th>{cm.codboalainfcont}</th>
+              <th>{cm.bazacalcul}</th>
+              <th>{cm.bazacalculplafonata}</th>
+              <th>{cm.zilebazacalcul}</th>
+              <th>{cm.mediezilnica}</th>
+              <th>{cm.zilefirma}</th>
+              <th>{cm.indemnizatiefirma}</th>
+              <th>{cm.zilefnuass}</th>
+              <th>{cm.indemnizatiefnuass}</th>
+              <th>{cm.locprescriere}</th>
+              <th>{cm.nravizmedic}</th>
+              <th>{cm.codboala}</th>
+              <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
+              <th>{cm.conditii}</th>
+            </tr>
+          );
         }
-        return (
-          <tr key={cm.id}>
-            <th className="d-inline-flex flex-row justify-content-around">
-              <Button
-                variant="outline-secondary"
-                className="ml-2 p-1 rounded-circle border-0"
-                onClick={() => this.editCM(cm)}
-              >
-                <Edit fontSize="small" />
-              </Button>
-              <PopupState variant="popover" popupId="demo-popup-popover">
-                {(popupState) => (
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      className="m-0 p-1 rounded-circle border-0"
-                      {...bindTrigger(popupState)}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </Button>
-                    <Popover
-                      {...bindPopover(popupState)}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                      }}
-                    >
-                      <Box p={2}>
-                        <Typography>Sigur ștergeți concediul?</Typography>
-                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                        <br />
-                        <Button
-                          variant="outline-danger"
-                          onClick={() => {
-                            popupState.close();
-                            this.deleteCM(cm.id);
-                          }}
-                          className="mt-2 "
-                        >
-                          Da
-                        </Button>
-                        <Button
-                          variant="outline-persondary"
-                          onClick={popupState.close}
-                          className="mt-2"
-                        >
-                          Nu
-                        </Button>
-                      </Box>
-                    </Popover>
-                  </div>
-                )}
-              </PopupState>
-            </th>
-            <th>{cm.dela.substring(0, 10)}</th>
-            <th>{cm.panala.substring(0, 10)}</th>
-            <th>{cm.continuare ? 'Da' : 'Nu'}</th>
-            <th>{cm.datainceput.substring(0, 10)}</th>
-            <th>{cm.serienrcertificat}</th>
-            <th>{cm.dataeliberare.substring(0, 10)}</th>
-            <th>{cm.codurgenta}</th>
-            <th>{cm.procent}%</th>
-            <th>{cm.codboalainfcont}</th>
-            <th>{cm.bazacalcul}</th>
-            <th>{cm.bazacalculplafonata}</th>
-            <th>{cm.zilebazacalcul}</th>
-            <th>{cm.mediezilnica}</th>
-            <th>{cm.zilefirma}</th>
-            <th>{cm.indemnizatiefirma}</th>
-            <th>{cm.zilefnuass}</th>
-            <th>{cm.indemnizatiefnuass}</th>
-            <th>{cm.locprescriere}</th>
-            <th>{cm.nravizmedic}</th>
-            <th>{cm.codboala}</th>
-            <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
-            <th>{cm.conditii}</th>
-          </tr>
-        );
       }),
     });
   }
 
   render() {
+    const monthsComponent = months.map((month, index) => <option key={index}>{month}</option>);
+
+    const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
+      <option key={index}>{an}</option>
+    ));
+
     return (
       <Aux>
         {/* // C.M. MODAL */}
@@ -637,6 +687,17 @@ class CMTabel extends React.Component {
                   variant={
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
+                  className="float-right"
+                  onClick={() => this.setState({ show: true })}
+                  disabled={typeof this.state.angajat === 'undefined'}
+                >
+                  Adaugă concediu
+                </Button>
+
+                <Button
+                  variant={
+                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
+                  }
                   disabled={typeof this.state.angajat === 'undefined'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
@@ -646,16 +707,30 @@ class CMTabel extends React.Component {
                   {/* ↺ */}
                 </Button>
 
-                <Button
-                  variant={
-                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                  }
-                  className="float-right"
-                  onClick={() => this.setState({ show: true })}
-                  disabled={typeof this.state.angajat === 'undefined'}
-                >
-                  Adaugă concediu
-                </Button>
+                <Row>
+                  <Form.Group as={Col} sm="3" className="mt-3">
+                    <Form.Label>An</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.an}
+                      onChange={(e) => this.onChangeAn(e.target.value)}
+                    >
+                      <option>-</option>
+                      {yearsComponent}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group as={Col} sm="3" className="mt-3">
+                    <Form.Label>Luna</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.luna.nume}
+                      onChange={(e) => this.onChangeMonth(e)}
+                    >
+                      <option>-</option>
+                      {monthsComponent}
+                    </Form.Control>
+                  </Form.Group>
+                </Row>
               </Card.Header>
 
               <Card.Body>
