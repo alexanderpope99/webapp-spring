@@ -35,6 +35,7 @@ class COTabel extends React.Component {
 
       ultimul_an: '',
       ani_cu_concediu: [],
+      luni_cu_concediu: { '': [] }, // map months to years -> {an_cu_concediu: [...luni_cu_concediu]}
       nr_zile: 0,
 
       co: [],
@@ -76,14 +77,23 @@ class COTabel extends React.Component {
   }
 
   onChangeAn(an) {
-    this.setState({ an: an }, this.renderCO);
+		this.setState({an: an, luna: { nume: '-', nr: '-' }}, this.renderCO);
   }
 
   onChangeMonth(e) {
-    this.setState({ luna: { nume: e.target.value, nr: e.target.options.selectedIndex } }, () => {
-      this.renderCO();
-      console.log(this.state.luna);
-    });
+    const selectedIndex = e.target.options.selectedIndex;
+    this.setState(
+      {
+        luna: {
+          nume: e.target.value,
+          nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
+        },
+      },
+      () => {
+        this.renderCO();
+        console.log(this.state.luna);
+      }
+    );
   }
 
   onChangePanala(panala) {
@@ -106,7 +116,6 @@ class COTabel extends React.Component {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
       this.setState({ co: [] }, this.renderCO);
-
       return;
     }
 
@@ -118,16 +127,42 @@ class COTabel extends React.Component {
       .catch((err) => console.error('err', err));
 
     if (co) {
-      const ani_cu_concediu = new Set();
+      var ani_cu_concediu = new Set();
+      var luni_cu_concediu = {};
+      var an;
+      // add ani_cu_concediu
       for (let c of co) {
-        if (c.dela) ani_cu_concediu.add(c.dela.substring(0, 4));
-        if (c.panala) ani_cu_concediu.add(c.panala.substring(0, 4));
+        if (c.dela) {
+          // an = c.dela.substring(0, 4);
+          ani_cu_concediu.add(Number(c.dela.substring(0, 4)));
+        }
+        if (c.panala) {
+          ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
+        }
       }
+      // add ani in luni_cu_concediu
+      for (let an of ani_cu_concediu) {
+        luni_cu_concediu[an] = new Set();
+      }
+      // add luni in luni_cu_concediu
+      for (let c of co) {
+        if (c.dela) {
+          an = c.dela.substring(0, 4);
+          luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
+        }
+      }
+      // convert to array from set
+      for (let an of ani_cu_concediu) {
+        luni_cu_concediu[an] = [...luni_cu_concediu[an]];
+      }
+
+      console.log(luni_cu_concediu);
 
       this.setState(
         {
           co: co,
           ani_cu_concediu: [...ani_cu_concediu],
+          luni_cu_concediu: luni_cu_concediu,
         },
         this.renderCO
       );
@@ -136,6 +171,7 @@ class COTabel extends React.Component {
         {
           co: [],
           ani_cu_concediu: [],
+          luni_cu_concediu: { '': [] },
         },
         this.renderCO
       );
@@ -225,8 +261,7 @@ class COTabel extends React.Component {
           co.dela
             ? co.dela.includes(this.state.an) &&
               (this.state.luna.nume !== '-'
-                ? // eslint-disable-next-line eqeqeq
-                  co.dela.substring(5, 7) == this.state.luna.nr // "==" compares str to number
+                ? Number(co.dela.substring(5, 7)) === this.state.luna.nr
                 : true)
             : true
         ) {
@@ -296,7 +331,12 @@ class COTabel extends React.Component {
   }
 
   render() {
-    const monthsComponent = months.map((month, index) => <option key={index}>{month}</option>);
+    var monthsComponent = [];
+    if (this.state.luni_cu_concediu[this.state.an]) {
+      monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
+        <option key={index} data-key={Number(luna)}>{months[luna - 1]}</option>
+      ));
+    }
 
     const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
       <option key={index}>{an}</option>
