@@ -96,7 +96,8 @@ public class RealizariRetineri {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare = 0;
 
-	public RealizariRetineri() {}
+	public RealizariRetineri() {
+	}
 
 	public RealizariRetineri(int luna, int an, long idcontract) {
 		this.luna = luna;
@@ -148,7 +149,6 @@ public class RealizariRetineri {
 		this.totaloresuplimentare = totaloresuplimentare;
 	}
 
-	
 	public Long getId() {
 		return id;
 	}

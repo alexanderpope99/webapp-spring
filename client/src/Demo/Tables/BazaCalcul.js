@@ -275,7 +275,7 @@ class BazaCalcul extends React.Component {
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Bază calcul</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addBazaCalcul}>
@@ -327,7 +327,7 @@ class BazaCalcul extends React.Component {
         {/* confirm modal */}
         <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Bază calcul</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>

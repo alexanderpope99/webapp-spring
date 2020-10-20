@@ -9,9 +9,8 @@ problem: in luna, anul:
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
 solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
-sarbatori
-
-la concedii -> trebuie sortate crescator, pot fi si dupa id(by time created), sau doar intr-o anumita luna
+la concedii -> trebuie sortate crescator, pot fi si dupa id(by time created)
+	    -> arata nr de zile intre cele 2 dati
 
 _________________________________________
 

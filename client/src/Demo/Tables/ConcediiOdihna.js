@@ -24,6 +24,8 @@ class COTabel extends React.Component {
     this.deleteCO = this.deleteCO.bind(this);
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
+    this.onChangePanala = this.onChangePanala.bind(this);
+    this.setNrZile = this.setNrZile.bind(this);
 
     this.state = {
       angajat: props.angajat,
@@ -33,6 +35,7 @@ class COTabel extends React.Component {
 
       ultimul_an: '',
       ani_cu_concediu: [],
+      nr_zile: 0,
 
       co: [],
       coComponent: null,
@@ -83,6 +86,25 @@ class COTabel extends React.Component {
     });
   }
 
+  onChangePanala(panala) {
+    this.setState({ panala: panala }, this.setNrZile);
+    // calculate number of days between dates
+  }
+
+  setNrZile() {
+    const panala = this.state.panala;
+    var nr_zile = 0;
+    if (this.state.dela && this.state.panala) {
+      let date1 = new Date(this.state.dela);
+      let date2 = new Date(this.state.panala);
+      nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+      console.log(date1);
+      console.log(date2);
+      console.log(nr_zile);
+    }
+    this.setState({ panala: panala, nr_zile: nr_zile });
+  }
+
   async fillTable() {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
@@ -90,8 +112,8 @@ class COTabel extends React.Component {
 
       return;
     }
-	 
-		//? fetch must be with idcontract
+
+    //? fetch must be with idcontract
     const co = await axios
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
@@ -129,6 +151,7 @@ class COTabel extends React.Component {
       show: false,
       dela: '',
       panala: '',
+      nr_zile: 0,
       tip: 'Concediu de odihnă',
 
       // succes modal:
@@ -201,13 +224,14 @@ class COTabel extends React.Component {
   renderCO() {
     this.setState({
       coComponent: this.state.co.map((co, index) => {
-        if ( co.dela ?
-          co.dela.includes(this.state.an) &&
-          (this.state.luna.nume !== '-'
-            ? // eslint-disable-next-line eqeqeq
-              co.dela.substring(5, 7) == this.state.luna.nr // == compares str to number
-						: true)
-					: true
+        if (
+          co.dela
+            ? co.dela.includes(this.state.an) &&
+              (this.state.luna.nume !== '-'
+                ? // eslint-disable-next-line eqeqeq
+                  co.dela.substring(5, 7) == this.state.luna.nr // "==" compares str to number
+                : true)
+            : true
         ) {
           for (let key in co) {
             if (!co[key]) co[key] = '-';
@@ -297,21 +321,22 @@ class COTabel extends React.Component {
                   type="date"
                   value={this.state.dela}
                   onChange={(e) => {
-                    this.setState({ dela: e.target.value });
+                    this.setState({ dela: e.target.value, panala: e.target.value }, this.setNrZile);
                   }}
                 />
               </Form.Group>
+
               <Form.Group id="panala">
                 <Form.Label>Până la (inclusiv)</Form.Label>
                 <Form.Control
                   required
                   type="date"
+                  min={this.state.dela}
                   value={this.state.panala}
-                  onChange={(e) => {
-                    this.setState({ panala: e.target.value });
-                  }}
+                  onChange={(e) => this.onChangePanala(e.target.value)}
                 />
               </Form.Group>
+
               <Form.Group id="tip">
                 <Form.Label>Tip</Form.Label>
                 <Form.Control
@@ -327,6 +352,17 @@ class COTabel extends React.Component {
                   <option>Concediu pentru situații speciale</option>
                   <option>Concediu pentru studii</option>
                 </Form.Control>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>
+                  {this.state.nr_zile === 0
+                    ? ''
+                    : this.state.nr_zile +
+                      (this.state.nr_zile > 1
+                        ? ' zile concediu (include weekend-uri și sărbători)'
+                        : ' zi concediu (include weekend și sărbători)')}
+                </Form.Label>
               </Form.Group>
             </Form>
           </Modal.Body>

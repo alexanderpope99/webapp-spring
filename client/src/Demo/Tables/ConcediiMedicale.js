@@ -147,15 +147,15 @@ class CMTabel extends React.Component {
       return;
     }
 
-		//? fetch must be with idcontract
+    //? fetch must be with idcontract
     const cm = await axios
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       .then((cm) => (cm.status !== 200 ? null : cm.data))
       .catch((err) => console.error('err', err));
 
     if (cm) {
-			const ani_cu_concediu = new Set();
-			for (let c of cm) {
+      const ani_cu_concediu = new Set();
+      for (let c of cm) {
         if (c.dela) ani_cu_concediu.add(c.dela.substring(0, 4));
         if (c.panala) ani_cu_concediu.add(c.panala.substring(0, 4));
       }
@@ -169,8 +169,8 @@ class CMTabel extends React.Component {
     } else {
       this.setState(
         {
-					cm: [],
-					ani_cu_concediu: [],
+          cm: [],
+          ani_cu_concediu: [],
         },
         this.renderCM
       );
@@ -188,8 +188,8 @@ class CMTabel extends React.Component {
         show: false,
         isEdit: false,
       });
-	}
-	
+  }
+
   async deleteCM(id) {
     await axios
       .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
@@ -309,13 +309,14 @@ class CMTabel extends React.Component {
   renderCM() {
     this.setState({
       cmComponent: this.state.cm.map((cm, index) => {
-        if ( cm.dela ? 
-          cm.dela.includes(this.state.an) &&
-          (this.state.luna.nume !== '-'
-            ? // eslint-disable-next-line eqeqeq
-              cm.dela.substring(5, 7) == this.state.luna.nr
-						: true)
-					: true
+        if (
+          cm.dela
+            ? cm.dela.includes(this.state.an) &&
+              (this.state.luna.nume !== '-'
+                ? // eslint-disable-next-line eqeqeq
+                  cm.dela.substring(5, 7) == this.state.luna.nr
+                : true)
+            : true
         ) {
           for (let key in cm) {
             if (cm[key] === '' || cm[key] === null) cm[key] = '-';
