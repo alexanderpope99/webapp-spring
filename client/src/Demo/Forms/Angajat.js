@@ -156,16 +156,16 @@ class Angajat extends React.Component {
     }
 
     this.cm.current.setAngajat(angajat);
-	}
-	async onFocusBC() {
-		await this.bc.current.updateAngajatSel();
-		this.bc.current.onRefresh();
-		this.setState({ anajatsel: getAngajatSel() });
-	}
+  }
+  async onFocusBC() {
+    await this.bc.current.updateAngajatSel();
+    this.bc.current.onRefresh();
+    this.setState({ anajatsel: getAngajatSel() });
+  }
 
   async onFocusPI() {
-		await this.persoaneintretinere.current.updateAngajatSel();
-		this.persoaneintretinere.current.onRefresh();
+    await this.persoaneintretinere.current.updateAngajatSel();
+    this.persoaneintretinere.current.onRefresh();
     this.setState({ angajatsel: getAngajatSel() });
   }
 
@@ -229,7 +229,7 @@ class Angajat extends React.Component {
                 <ConcediiMedicale ref={this.cm} />
               </Tab>
 
-							<Tab eventKey="bc" title="Bază calcul">
+              <Tab eventKey="bc" title="Bază calcul">
                 <BazaCalcul ref={this.bc} />
               </Tab>
 
@@ -237,7 +237,16 @@ class Angajat extends React.Component {
                 <PersoaneIntretinereTabel ref={this.persoaneintretinere} />
               </Tab>
             </Tabs>
-            <Button onClick={() => window.scrollTo(0, 0)} className="float-center">
+            <Button
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: 'smooth',
+                })
+              }
+              className="float-center"
+            >
               TO TOP
             </Button>
           </Col>

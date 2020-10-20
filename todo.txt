@@ -10,7 +10,6 @@ problem: in luna, anul:
 solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 la concedii -> trebuie sortate crescator, pot fi si dupa id(by time created)
-	    -> arata nr de zile intre cele 2 dati
 
 _________________________________________
 
