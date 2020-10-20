@@ -44,7 +44,8 @@ class CMTabel extends React.Component {
       id: '',
       // cm modal fields
       dela: '',
-      panala: '',
+			panala: '',
+			nr_zile: 0,
       continuare: false,
       datainceput: '',
       serienrcertificat: '',
@@ -80,7 +81,8 @@ class CMTabel extends React.Component {
       id: '',
 
       dela: '',
-      panala: '',
+			panala: '',
+			nr_zile: 0,
       continuare: false,
       datainceput: '',
       serienrcertificat: '',
@@ -137,6 +139,22 @@ class CMTabel extends React.Component {
       this.renderCM();
       console.log(this.state.luna);
     });
+	}
+	
+	onChangePanala(panala) {
+    this.setState({ panala: panala }, this.setNrZile);
+    // calculate number of days between dates
+  }
+
+  setNrZile() {
+    const panala = this.state.panala;
+    var nr_zile = 0;
+    if (this.state.dela && this.state.panala) {
+      let date1 = new Date(this.state.dela);
+      let date2 = new Date(this.state.panala);
+      nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+    }
+    this.setState({ panala: panala, nr_zile: nr_zile });
   }
 
   async fillTable() {
@@ -430,7 +448,7 @@ class CMTabel extends React.Component {
                   type="date"
                   value={this.state.dela}
                   onChange={(e) => {
-                    this.setState({ dela: e.target.value });
+                    this.setState({ dela: e.target.value, panala: e.target.value }, this.setNrZile);
                   }}
                 />
               </Form.Group>
@@ -439,10 +457,18 @@ class CMTabel extends React.Component {
                 <Form.Control
                   type="date"
                   value={this.state.panala}
-                  onChange={(e) => {
-                    this.setState({ panala: e.target.value });
-                  }}
+                  onChange={(e) => this.onChangePanala(e.target.value)}
                 />
+              </Form.Group>
+							<Form.Group>
+                <Form.Label>
+                  {this.state.nr_zile === 0
+                    ? ''
+                    : this.state.nr_zile +
+                      (this.state.nr_zile > 1
+                        ? ' zile concediu (include weekend-uri și sărbători)'
+                        : ' zi concediu (include weekend și sărbători)')}
+                </Form.Label>
               </Form.Group>
               <Row>
                 <Col md={6}>

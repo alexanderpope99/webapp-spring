@@ -98,9 +98,6 @@ class COTabel extends React.Component {
       let date1 = new Date(this.state.dela);
       let date2 = new Date(this.state.panala);
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
-      console.log(date1);
-      console.log(date2);
-      console.log(nr_zile);
     }
     this.setState({ panala: panala, nr_zile: nr_zile });
   }
