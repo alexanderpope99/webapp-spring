@@ -420,7 +420,7 @@ class RealizariRetineri extends React.Component {
 		let an = this.state.an;
 
 		const ok = await axios.put(
-			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr+1}&y=${an}`,
+			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
 			{},
 			{ headers: authHeader() }
 		)

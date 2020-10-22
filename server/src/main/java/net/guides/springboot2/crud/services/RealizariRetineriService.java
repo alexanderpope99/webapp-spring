@@ -230,7 +230,7 @@ public class RealizariRetineriService {
 				this.saveRealizariRetineri(i, an, idcontract);
 			}
 		} else {
-			for (int i = luna6; i < luna - 1; ++i) {
+			for (int i = luna6; i < luna; ++i) {
 				this.saveRealizariRetineri(i, an, idcontract);
 			}
 		}
