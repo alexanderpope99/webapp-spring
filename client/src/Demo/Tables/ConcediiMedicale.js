@@ -120,6 +120,7 @@ class CMTabel extends React.Component {
   }
 
   numberWithCommas(x) {
+		if(!x) return 0;
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
@@ -635,7 +636,7 @@ class CMTabel extends React.Component {
                   <Form.Control
                     type="text"
                     value={
-                      this.state.bazacalcul ? this.numberWithCommas(this.state.bazacalcul) : ''
+                      this.numberWithCommas(this.state.bazacalcul)
                     }
                     onChange={(e) => {
                       this.setState({ bazacalcul: e.target.value });
