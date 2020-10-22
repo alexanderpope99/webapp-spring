@@ -34,6 +34,7 @@ class CMTabel extends React.Component {
       luna: { nume: '-', nr: '-' },
       ultimul_an: '',
       ani_cu_concediu: [],
+      luni_cu_concediu: { '': [] },
 
       cm: [],
       cmComponent: null,
@@ -44,8 +45,8 @@ class CMTabel extends React.Component {
       id: '',
       // cm modal fields
       dela: '',
-			panala: '',
-			nr_zile: 0,
+      panala: '',
+      nr_zile: 0,
       continuare: false,
       datainceput: '',
       serienrcertificat: '',
@@ -81,8 +82,8 @@ class CMTabel extends React.Component {
       id: '',
 
       dela: '',
-			panala: '',
-			nr_zile: 0,
+      panala: '',
+      nr_zile: 0,
       continuare: false,
       datainceput: '',
       serienrcertificat: '',
@@ -131,17 +132,26 @@ class CMTabel extends React.Component {
   }
 
   onChangeAn(an) {
-    this.setState({ an: an }, this.renderCM);
+		this.setState({an: an, luna: { nume: '-', nr: '-' }}, this.renderCM);
   }
 
   onChangeMonth(e) {
-    this.setState({ luna: { nume: e.target.value, nr: e.target.options.selectedIndex } }, () => {
-      this.renderCM();
-      console.log(this.state.luna);
-    });
-	}
-	
-	onChangePanala(panala) {
+    const selectedIndex = e.target.options.selectedIndex;
+    this.setState(
+      {
+        luna: {
+          nume: e.target.value,
+          nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
+        },
+      },
+      () => {
+        this.renderCM();
+        console.log(this.state.luna);
+      }
+    );
+  }
+
+  onChangePanala(panala) {
     this.setState({ panala: panala }, this.setNrZile);
     // calculate number of days between dates
   }
@@ -161,26 +171,53 @@ class CMTabel extends React.Component {
     if (typeof this.state.angajat === 'undefined') return;
     if (this.state.angajat.idcontract === null) {
       this.setState({ cm: [] }, this.renderCM);
-
       return;
     }
 
     //? fetch must be with idcontract
     const cm = await axios
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
-      .then((cm) => (cm.status !== 200 ? null : cm.data))
+      // eslint-disable-next-line eqeqeq
+      .then((cm) => (cm.status == 200 ? cm.data : null))
       .catch((err) => console.error('err', err));
 
     if (cm) {
-      const ani_cu_concediu = new Set();
+      var ani_cu_concediu = new Set();
+      var luni_cu_concediu = {};
+      var an;
+      // add ani_cu_concediu
       for (let c of cm) {
-        if (c.dela) ani_cu_concediu.add(c.dela.substring(0, 4));
-        if (c.panala) ani_cu_concediu.add(c.panala.substring(0, 4));
+        if (c.dela) {
+          // an = c.dela.substring(0, 4);
+          ani_cu_concediu.add(Number(c.dela.substring(0, 4)));
+        }
+        if (c.panala) {
+          ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
+        }
       }
+      // add ani in luni_cu_concediu
+      for (let an of ani_cu_concediu) {
+        luni_cu_concediu[an] = new Set();
+      }
+      // add luni in luni_cu_concediu
+      for (let c of cm) {
+        if (c.dela) {
+          an = c.dela.substring(0, 4);
+          luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
+        }
+      }
+      // convert to array from set
+      for (let an of ani_cu_concediu) {
+        luni_cu_concediu[an] = [...luni_cu_concediu[an]];
+      }
+
+      console.log(luni_cu_concediu);
+
       this.setState(
         {
           cm: cm,
           ani_cu_concediu: [...ani_cu_concediu],
+          luni_cu_concediu: luni_cu_concediu,
         },
         this.renderCM
       );
@@ -189,6 +226,7 @@ class CMTabel extends React.Component {
         {
           cm: [],
           ani_cu_concediu: [],
+          luni_cu_concediu: { '': [] },
         },
         this.renderCM
       );
@@ -427,7 +465,12 @@ class CMTabel extends React.Component {
   }
 
   render() {
-    const monthsComponent = months.map((month, index) => <option key={index}>{month}</option>);
+    var monthsComponent = [];
+    if (this.state.luni_cu_concediu[this.state.an]) {
+      monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
+        <option key={index} data-key={Number(luna)}>{months[luna - 1]}</option>
+      ));
+    }
 
     const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
       <option key={index}>{an}</option>
@@ -460,7 +503,7 @@ class CMTabel extends React.Component {
                   onChange={(e) => this.onChangePanala(e.target.value)}
                 />
               </Form.Group>
-							<Form.Group>
+              <Form.Group>
                 <Form.Label>
                   {this.state.nr_zile === 0
                     ? ''
@@ -529,16 +572,6 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-              <Form.Group id="procent">
-                <Form.Label>Procent %</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.procent}
-                  onChange={(e) => {
-                    this.setState({ procent: e.target.value });
-                  }}
-                />
-              </Form.Group>
               <Form.Group id="codboalainfcont">
                 <Form.Label>Cod boală infecțioasă/contagioasă</Form.Label>
                 <Form.Control
@@ -546,6 +579,16 @@ class CMTabel extends React.Component {
                   value={this.state.codboalainfcont}
                   onChange={(e) => {
                     this.setState({ codboalainfcont: e.target.value });
+                  }}
+                />
+              </Form.Group>
+							<Form.Group id="procent">
+                <Form.Label>Procent %</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.procent}
+                  onChange={(e) => {
+                    this.setState({ procent: e.target.value });
                   }}
                 />
               </Form.Group>
