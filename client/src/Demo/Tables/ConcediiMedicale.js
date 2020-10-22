@@ -34,7 +34,6 @@ class CMTabel extends React.Component {
 
       an: '',
       luna: { nume: '-', nr: '-' },
-      ultimul_an: '',
       ani_cu_concediu: [],
       luni_cu_concediu: { '': [] },
 
@@ -176,8 +175,9 @@ class CMTabel extends React.Component {
   }
 
   async fillTable() {
-    if (typeof this.state.angajat === 'undefined') return;
-    if (this.state.angajat.idcontract === null) {
+		if (!this.state.angajat) return;
+		
+    if (!this.state.angajat.idcontract) {
       this.setState({ cm: [] }, this.renderCM);
       return;
     }
@@ -662,7 +662,7 @@ class CMTabel extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group id="mediezilnica">
-                  <Form.Label>Medie zilnică</Form.Label>
+                  <Form.Label>Medie zilnică (RON)</Form.Label>
                   <Form.Control
                     type="text"
                     value={this.state.mediezilnica}

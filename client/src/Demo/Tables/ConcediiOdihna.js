@@ -154,10 +154,8 @@ class COTabel extends React.Component {
       // convert to array from set
       for (let an of ani_cu_concediu) {
         luni_cu_concediu[an] = [...luni_cu_concediu[an]];
-      }
-
-      console.log(luni_cu_concediu);
-
+			}
+			
       this.setState(
         {
           co: co,
