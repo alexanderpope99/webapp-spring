@@ -8,9 +8,6 @@ problem: in luna, anul:
 	sterg stat salarii, baza calcul ramane pentru ca bazacalcul nu are idstatsalariat
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
 solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
-
-baza calcul:
-	add modal -> afiseaza doar lunile care nu au baza calcul <- avoid duplications
 	
 _________________________________________
 

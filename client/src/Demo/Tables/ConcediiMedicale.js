@@ -370,6 +370,7 @@ class CMTabel extends React.Component {
   // function to create react component with fetched data
   renderCM() {
     this.setState({
+      // eslint-disable-next-line array-callback-return
       cmComponent: this.state.cm.map((cm, index) => {
         if (
           cm.dela
