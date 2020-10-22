@@ -26,6 +26,8 @@ class CMTabel extends React.Component {
     this.deleteCM = this.deleteCM.bind(this);
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
+    this.getBazaCalculCM = this.getBazaCalculCM.bind(this);
+    this.numberWithCommas = this.numberWithCommas.bind(this);
 
     this.state = {
       angajat: props.angajat,
@@ -43,7 +45,8 @@ class CMTabel extends React.Component {
       show: false,
       isEdit: false,
       id: '',
-      // cm modal fields
+			// cm modal fields
+			today: '',
       dela: '',
       panala: '',
       nr_zile: 0,
@@ -117,6 +120,10 @@ class CMTabel extends React.Component {
     );
   }
 
+  numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   componentDidMount() {
     this.setCurrentYear();
     this.fillTable();
@@ -124,15 +131,16 @@ class CMTabel extends React.Component {
 
   setCurrentYear() {
     let today = new Date();
-    let an = today.getFullYear();
+		let an = today.getFullYear();
 
     this.setState({
-      an: an,
+			an: an,
+			today: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
     });
   }
 
   onChangeAn(an) {
-		this.setState({an: an, luna: { nume: '-', nr: '-' }}, this.renderCM);
+    this.setState({ an: an, luna: { nume: '-', nr: '-' } }, this.renderCM);
   }
 
   onChangeMonth(e) {
@@ -184,7 +192,6 @@ class CMTabel extends React.Component {
     if (cm) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
-      var an;
       // add ani_cu_concediu
       for (let c of cm) {
         if (c.dela) {
@@ -200,6 +207,7 @@ class CMTabel extends React.Component {
         luni_cu_concediu[an] = new Set();
       }
       // add luni in luni_cu_concediu
+      let an;
       for (let c of cm) {
         if (c.dela) {
           an = c.dela.substring(0, 4);
@@ -210,8 +218,6 @@ class CMTabel extends React.Component {
       for (let an of ani_cu_concediu) {
         luni_cu_concediu[an] = [...luni_cu_concediu[an]];
       }
-
-      console.log(luni_cu_concediu);
 
       this.setState(
         {
@@ -464,11 +470,41 @@ class CMTabel extends React.Component {
     });
   }
 
+  // uses [this.state.an, this.state.luna]
+  async getBazaCalculCM() {
+    if (typeof this.state.angajat === 'undefined' || !this.state.dela || !this.state.panala) {
+      console.log('dela/panala neselectat');
+      return;
+    }
+    // 2020-10
+
+    let luna = this.state.dela.substring(5, 7);
+
+    // get baza calcul + zile baza calcul + medie zilnica
+    const baza_calcul = await axios
+      .get(
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}`,
+        { headers: authHeader() }
+      )
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    if (baza_calcul) {
+      this.setState({
+        bazacalcul: baza_calcul.bazacalcul,
+        zilebazacalcul: baza_calcul.zilebazacalcul,
+        mediezilnica: baza_calcul.mediezilnica,
+      });
+    }
+  }
+
   render() {
     var monthsComponent = [];
     if (this.state.luni_cu_concediu[this.state.an]) {
       monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
-        <option key={index} data-key={Number(luna)}>{months[luna - 1]}</option>
+        <option key={index} data-key={Number(luna)}>
+          {months[luna - 1]}
+        </option>
       ));
     }
 
@@ -582,7 +618,7 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-							<Form.Group id="procent">
+              <Form.Group id="procent">
                 <Form.Label>Procent %</Form.Label>
                 <Form.Control
                   type="text"
@@ -592,46 +628,53 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-              <Form.Group id="bazacalcul">
-                <Form.Label>Bază calcul</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.bazacalcul}
-                  onChange={(e) => {
-                    this.setState({ bazacalcul: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="bazacalculplafonata">
-                <Form.Label>Bază calcul plafonată</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.bazacalculplafonata}
-                  onChange={(e) => {
-                    this.setState({ bazacalculplafonata: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="zilebazacalcul">
-                <Form.Label>Zile bază calcul</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.zilebazacalcul}
-                  onChange={(e) => {
-                    this.setState({ zilebazacalcul: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="mediezilnica">
-                <Form.Label>Medie zilnică</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.mediezilnica}
-                  onChange={(e) => {
-                    this.setState({ mediezilnica: e.target.value });
-                  }}
-                />
-              </Form.Group>
+              <div className="border rounded p-3 pb-0 mb-1">
+                <Form.Group id="bazacalcul">
+                  <Form.Label>Bază calcul (RON)</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={
+                      this.state.bazacalcul ? this.numberWithCommas(this.state.bazacalcul) : ''
+                    }
+                    onChange={(e) => {
+                      this.setState({ bazacalcul: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="bazacalculplafonata">
+                  <Form.Label>Bază calcul plafonată (RON)</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.bazacalculplafonata}
+                    onChange={(e) => {
+                      this.setState({ bazacalculplafonata: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="zilebazacalcul">
+                  <Form.Label>Zile bază calcul</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.zilebazacalcul}
+                    onChange={(e) => {
+                      this.setState({ zilebazacalcul: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="mediezilnica">
+                  <Form.Label>Medie zilnică</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.mediezilnica}
+                    onChange={(e) => {
+                      this.setState({ mediezilnica: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-0">
+                  <Button onClick={this.getBazaCalculCM}>Calculează automat</Button>
+                </Form.Group>
+              </div>
               <Form.Group id="zilefirma">
                 <Form.Label>Zile suportate de firmă</Form.Label>
                 <Form.Control
@@ -734,7 +777,7 @@ class CMTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* CMNFIRM Modal */}
+        {/* CONFIRM Modal */}
         <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -758,7 +801,7 @@ class CMTabel extends React.Component {
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   className="float-right"
-                  onClick={() => this.setState({ show: true })}
+                  onClick={() => this.setState({ show: true, dela: this.state.today, panala: this.state.today })}
                   disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu

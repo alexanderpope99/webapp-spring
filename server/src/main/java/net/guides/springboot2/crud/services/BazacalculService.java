@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.repository.AngajatRepository;
@@ -31,17 +32,27 @@ public class BazacalculService {
 		List<Bazacalcul> rv = new ArrayList<>();
 
 		// daca bazacalcul include anul trecut
+		Bazacalcul bc;
 		if(luna6 > luna && an6 < an) {
 			for(int i = luna6; i <= 12; ++i) {
-				rv.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an6, idangajat));
+				bc = bazacalculRepository.findByLunaAndAnAndIdangajat(i, an6, idangajat);
+				if(bc == null)
+					return rv;
+				rv.add(bc);
 			}
 			for(int i = 1; i < luna; ++i) {
-				rv.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat));
+				bc = bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat);
+				if(bc == null)
+					return rv;
+				rv.add(bc);
 			}
 		} // daca cele 6 luni sunt in anul selectat
 		else {
 			for(int i = luna6; i <= luna; ++i) {
-				rv.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat));
+				bc = bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat);
+				if(bc == null)
+					return rv;
+				rv.add(bc);
 			}
 		}
 
@@ -125,5 +136,21 @@ public class BazacalculService {
 				idangajat); 
 		bazaCalcul.setId(oldBazacalcul.getId());
 		return bazacalculRepository.save(bazaCalcul);
+	}
+
+	public BazaCalculCMDTO getBazaCalculCM(int luna, int an, long idangajat) {
+		List<Bazacalcul> bazeUltimele6Luni = this.getBazaCalculUltimele6Luni(luna, an, idangajat);
+		if(bazeUltimele6Luni.size() < 6) 
+			return new BazaCalculCMDTO(0, 0, 0);
+
+		int bazaCalcul = 0;
+		int zilebazacalcul = 0;
+		for(Bazacalcul bc : bazeUltimele6Luni) {
+			bazaCalcul += bc.getSalariurealizat();
+			zilebazacalcul += bc.getZilelucrate();
+		}
+		
+		float medieZilnica = this.getMediaZilnicaUltimele6Luni(luna, an, idangajat);
+		return new BazaCalculCMDTO(bazaCalcul, zilebazacalcul, medieZilnica);
 	}
 }
