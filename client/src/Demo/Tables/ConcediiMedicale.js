@@ -44,8 +44,8 @@ class CMTabel extends React.Component {
       show: false,
       isEdit: false,
       id: '',
-			// cm modal fields
-			today: '',
+      // cm modal fields
+      today: '',
       dela: '',
       panala: '',
       nr_zile: 0,
@@ -130,11 +130,11 @@ class CMTabel extends React.Component {
 
   setCurrentYear() {
     let today = new Date();
-		let an = today.getFullYear();
+    let an = today.getFullYear();
 
     this.setState({
-			an: an,
-			today: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+      an: an,
+      today: today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
     });
   }
 
@@ -175,8 +175,8 @@ class CMTabel extends React.Component {
   }
 
   async fillTable() {
-		if (!this.state.angajat) return;
-		
+    if (!this.state.angajat) return;
+
     if (!this.state.angajat.idcontract) {
       this.setState({ cm: [] }, this.renderCM);
       return;
@@ -449,8 +449,8 @@ class CMTabel extends React.Component {
               <th>{cm.serienrcertificat}</th>
               <th>{cm.dataeliberare.substring(0, 10).split('-').reverse().join('.')}</th>
               <th>{cm.codurgenta}</th>
-              <th>{cm.procent}%</th>
               <th>{cm.codboalainfcont}</th>
+              <th>{cm.procent}%</th>
               <th>{cm.bazacalcul}</th>
               <th>{cm.bazacalculplafonata}</th>
               <th>{cm.zilebazacalcul}</th>
@@ -802,7 +802,12 @@ class CMTabel extends React.Component {
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   className="float-right"
-                  onClick={() => this.setState({ show: true, dela: this.state.today, panala: this.state.today })}
+                  onClick={() =>
+                    this.setState(
+                      { show: true, dela: this.state.today, panala: this.state.today },
+                      this.setNrZile
+                    )
+                  }
                   disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu
@@ -859,9 +864,10 @@ class CMTabel extends React.Component {
                       <th>Serie si nr. certificat</th>
                       <th>Data eliberare</th>
                       <th>Cod urgență</th>
+											<th>Cod boală infecțioasă</th>
                       <th>Procent</th>
                       <th>Bază calcul</th>
-                      <th>Bază calcul fără plată</th>
+                      <th>Bază calcul plafonată</th>
                       <th>Zile bază calul</th>
                       <th>Medie zilnică</th>
                       <th>Zile firmă</th>
