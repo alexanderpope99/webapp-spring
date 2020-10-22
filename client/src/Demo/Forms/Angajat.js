@@ -4,7 +4,6 @@ import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
-// import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
@@ -17,17 +16,20 @@ import BazaCalcul from '../Tables/BazaCalcul';
 
 /*
   ? how it works now:
-  * fetch date contract when focusint tab 'contract'
-  *
+	*	Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
+	* * * * *
+  * fetch date contract when focusing tab 'contract'
+  * * * * *
   * when focusing 'contract' check if person has contract:
   *   |> has contract: 1. method = 'PUT'
   *                    2. populate form with contract data
+	* 											\ if persoana has adresa -> preselect casa_sanatate
   *
   *   |>  no contract: 1. method = 'POST'
   *                    2. clearFields()
-	? adding:
-	*	  |> in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
-	*		|> Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
+	* * * * *
+	* in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
+	* * * * *
 */
 
 class Angajat extends React.Component {
@@ -119,7 +121,7 @@ class Angajat extends React.Component {
         .catch((err) => console.error(err));
     }
     //* FILL FORM
-    this.contract.current.fillForm(contract, idpersoana);
+    this.contract.current.fillForm(contract, idpersoana, );
   }
 
   async onFocusCO() {

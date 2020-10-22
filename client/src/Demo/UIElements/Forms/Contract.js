@@ -13,7 +13,7 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
-import { case_de_danatete } from '../../Resources/judete';
+import { case_de_sanatate } from '../../Resources/judete';
 import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 
@@ -133,7 +133,7 @@ class Contract extends React.Component {
     }
   }
 
-  fillForm(contract, idangajat) {
+  fillForm(contract, idangajat, casaSanatateIndex) {
     if (contract === null) {
       this.clearFields();
       this.setState(
@@ -143,7 +143,6 @@ class Contract extends React.Component {
         () => console.log('idangajat:', idangajat, '\tidcontract:', null)
       );
     } else {
-
       this.setState(
         {
           idangajat: idangajat,
@@ -173,7 +172,12 @@ class Contract extends React.Component {
           monedăAvans: contract.monedaavans,
           zileCOan: contract.zilecoan || 0,
           ultimaZiLucru: contract.ultimaZiLucru ? contract.ultimazilucru.substring(0, 10) : '',
-          casăSănătate: contract.casasanatate || '', //text
+          casăSănătate: contract.casasanatate
+            ? contract.casasanatate
+            : casaSanatateIndex
+            ? case_de_sanatate[casaSanatateIndex]
+            : '',
+          // casăSănătate: contract.casasanatate || '', //text
           gradInvalid: contract.gradinvaliditate || '', //text
           funcție: contract.functie || '', //text
           nivelStudii: contract.nivelstudii || '', //text
@@ -196,8 +200,8 @@ class Contract extends React.Component {
   handleClose() {
     this.setState({
       show: false,
-			modalMessage: '',
-		});
+      modalMessage: '',
+    });
   }
 
   hasRequired() {
@@ -215,9 +219,9 @@ class Contract extends React.Component {
         modalMessage: 'Contractul trebuie să aibă o marcă.',
       });
       return false;
-		}
-		
-		if (this.state.salariu === '') {
+    }
+
+    if (this.state.salariu === '') {
       this.setState({
         show: true,
         modalMessage: 'Contractul trebuie să aibă un salariu.',
@@ -239,7 +243,7 @@ class Contract extends React.Component {
     if (idcontract === null) {
       method = 'POST';
       idcontract = '';
-		}
+    }
 
     const contract_body = {
       tip: this.state.modelContract,
@@ -295,12 +299,13 @@ class Contract extends React.Component {
           console.error(err.message);
         });
 
-		// if recieved response from server
+    // if recieved response from server
     if (contract) {
       this.setState({
         show: true,
-				modalMessage: method === 'POST' ? 'Contract adăugat cu succes 📄' : 'Contract actualizat 💾',
-				id: contract.id,
+        modalMessage:
+          method === 'POST' ? 'Contract adăugat cu succes 📄' : 'Contract actualizat 💾',
+        id: contract.id,
       });
 
       if (method === 'POST') {
@@ -317,16 +322,17 @@ class Contract extends React.Component {
               headers: authHeader(),
             }
           )
-					.catch((err) => console.error(err));
-				method = 'PUT';
+          .catch((err) => console.error(err));
+        method = 'PUT';
       }
       console.log('idcontract:', contract.id);
     }
   }
 
   render() {
-
-		const case_de_sanatate_component = case_de_danatete.map((casa, index) => <option key={index}>{casa}</option>)
+    const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
+      <option key={index}>{casa}</option>
+    ));
 
     return (
       <div>
@@ -808,7 +814,7 @@ class Contract extends React.Component {
                   }}
                 >
                   <option>-</option>
-									{case_de_sanatate_component}
+                  {case_de_sanatate_component}
                 </Form.Control>
               </Form.Group>
             </Col>

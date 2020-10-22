@@ -797,7 +797,7 @@ class RealizariRetineri extends React.Component {
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
                 onChange={(e) => this.onSelect(e)}
               >
-                <option>-</option>
+                <option> - </option>
                 {/* lista_angajati mapped as <option> */}
                 {nume_persoane_opt}
               </FormControl>
