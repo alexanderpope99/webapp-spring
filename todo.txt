@@ -8,6 +8,16 @@ problem: in luna, anul:
 	sterg stat salarii, baza calcul ramane pentru ca bazacalcul nu are idstatsalariat
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
 solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
+
+
+
+persoana nu are contract:
+	are adresa.judet -> in Contract.js se autoselecteaza casa_de_sanatate care corespunde cu adresa.judet
+	nu are adresa.judet -> selecteaza '-' ca si casa_de_sanatate
+
+
+
+
 	
 _________________________________________
 

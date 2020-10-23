@@ -44,7 +44,7 @@ const judete = [
 
 const sectoare = ['SECTOR 1', 'SECTOR 2', 'SECTOR 3', 'SECTOR 4', 'SECTOR 5', 'SECTOR 6'];
 
-const case_de_sanatete = [
+const case_de_sanatate = [
   'BUCUREȘTI - CAS_B',
   'ALBA - CASAB',
   'ARAD - CASAR',
@@ -90,4 +90,4 @@ const case_de_sanatete = [
 	'TRANSPORTURI - CAS_T',
 ];
 
-export { judete, sectoare, case_de_sanatete };
+export { judete, sectoare, case_de_sanatate };

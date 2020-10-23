@@ -13,7 +13,7 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
-import { case_de_sanatate } from '../../Resources/judete';
+import { case_de_sanatate, judete } from '../../Resources/judete';
 import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 
@@ -25,7 +25,6 @@ class Contract extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
-    // this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -133,16 +132,28 @@ class Contract extends React.Component {
     }
   }
 
-  fillForm(contract, idangajat, casaSanatateIndex) {
+  async fillForm(contract, idangajat) {
     if (contract === null) {
       this.clearFields();
+      // get adresa
+      const adresa = await axios
+        .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
+      console.log(adresa);
+      // find judet_index in judete[]
+      var index_judet;
+      if (adresa.judet) index_judet = judete.indexOf(adresa.judet);
+      // use casa_de_sanatate[judet_index]
       this.setState(
         {
           idangajat: idangajat,
+          casăSănătate: index_judet ? case_de_sanatate[index_judet] : '-',
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', null)
       );
     } else {
+      // are casa sanatete in contract -> selecteaza
       this.setState(
         {
           idangajat: idangajat,
@@ -172,12 +183,7 @@ class Contract extends React.Component {
           monedăAvans: contract.monedaavans,
           zileCOan: contract.zilecoan || 0,
           ultimaZiLucru: contract.ultimaZiLucru ? contract.ultimazilucru.substring(0, 10) : '',
-          casăSănătate: contract.casasanatate
-            ? contract.casasanatate
-            : casaSanatateIndex
-            ? case_de_sanatate[casaSanatateIndex]
-            : '',
-          // casăSănătate: contract.casasanatate || '', //text
+          casăSănătate: contract.casasanatate || '-',
           gradInvalid: contract.gradinvaliditate || '', //text
           funcție: contract.functie || '', //text
           nivelStudii: contract.nivelstudii || '', //text
@@ -335,7 +341,7 @@ class Contract extends React.Component {
     ));
 
     return (
-      <div>
+      <React.Fragment>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -347,6 +353,7 @@ class Contract extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <Form onSubmit={(e) => e.preventDefault()}>
           <Row>
             <Col md={6}>
@@ -892,7 +899,7 @@ class Contract extends React.Component {
             </Col>
           </Row>
         </Form>
-      </div>
+      </React.Fragment>
     );
   }
 }

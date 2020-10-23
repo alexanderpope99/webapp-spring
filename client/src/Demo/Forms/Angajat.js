@@ -23,7 +23,7 @@ import BazaCalcul from '../Tables/BazaCalcul';
   * when focusing 'contract' check if person has contract:
   *   |> has contract: 1. method = 'PUT'
   *                    2. populate form with contract data
-	* 											\ if persoana has adresa -> preselect casa_sanatate
+	* 											\ if persoana has adresa.judet != SECTOR -> preselect casa_sanatate
   *
   *   |>  no contract: 1. method = 'POST'
   *                    2. clearFields()
@@ -81,8 +81,8 @@ class Angajat extends React.Component {
   async getSelectedAngajatData() {
     // get id of selected angajat
     const angajatsel = getAngajatSel();
-    const idpersoana = angajatsel ? angajatsel.idpersoana : -1;
-    if (idpersoana === null || idpersoana === -1) {
+    const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
+    if (!idpersoana) {
       this.contract.current.clearFields();
       this.setState({ angajatsel: null });
       return;
@@ -121,7 +121,7 @@ class Angajat extends React.Component {
         .catch((err) => console.error(err));
     }
     //* FILL FORM
-    this.contract.current.fillForm(contract, idpersoana, );
+    this.contract.current.fillForm(contract, idpersoana);
   }
 
   async onFocusCO() {
