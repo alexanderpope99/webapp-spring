@@ -9,13 +9,15 @@ problem: in luna, anul:
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
 solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
+SARBATORI.js ARATA GRESIT
+
+cont bancar
+
+repara erori realizari/retineri
 
 
-persoana nu are contract:
-	are adresa.judet -> in Contract.js se autoselecteaza casa_de_sanatate care corespunde cu adresa.judet
-	nu are adresa.judet -> selecteaza '-' ca si casa_de_sanatate
-
-
+CONCEDIU DE ODIHNA:
+	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
 
 
 	

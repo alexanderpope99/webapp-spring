@@ -50,7 +50,7 @@ public class RealizariRetineriService {
 	private AngajatRepository angajatRepository;
 	@Autowired
 	private BazacalculRepository bazacalculRepository;
-	
+
 	private float impozitSalariu = 0;
 	private float deducere = 0;
 	private float venitNet = 0;
@@ -115,16 +115,17 @@ public class RealizariRetineriService {
 	public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, int primaBruta, int nrTichete,
 			float totalOreSuplimentare) throws ResourceNotFoundException {
 		Contract contract = contractService.getContractById(idcontract);
+		impozitSalariu = 0;
+		deducere = 0;
+		venitNet = 0;
+		salariuRealizat = 0;
+		bazaImpozit = 0;
+		impozitScutit = 0;
 
 		int zileContract = zileService.getNrZileLucratoareContract(luna, an, contract);
 		if (zileContract == 0) {
 			// reset class to original state
-			impozitSalariu = 0;
-			deducere = 0;
-			venitNet = 0;
-			salariuRealizat = 0;
-			bazaImpozit = 0;
-			impozitScutit = 0;
+
 			// return retineri wtih 0 values
 			return new RealizariRetineri(luna, an, idcontract);
 		}
@@ -132,14 +133,18 @@ public class RealizariRetineriService {
 		int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
 
 		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
-		
+
 		int zileCO = coService.getZileCOTotal(luna, an, idcontract);
+		// zileCOLucratoare include zileCONeplatitLucratoare
 		int zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
 		int zileCONeplatit = coService.getZileCFP(luna, an, idcontract);
 		int zileCONeplatitLucratoare = coService.getZileCFPLucratoare(luna, an, idcontract);
-		int zileCM = cmService.getZileCM(luna, an, idcontract);
-		int valCM = cmService.getValCM(luna, an, idcontract);
-		int zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
+		int zileCM = cmService.getZileCM(luna, an, idcontract); 
+		int valCM = 0, zileCMLucratoare = 0;
+		if(zileCM != 0) {
+			cmService.getValCM(luna, an, idcontract);
+		 	zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
+		}
 
 		int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
 		int duratazilucru = contract.getNormalucru();
@@ -153,11 +158,12 @@ public class RealizariRetineriService {
 		float salariuPeOra = totalDrepturi / norma / duratazilucru;
 
 		this.salariuRealizat = Math.round(salariuPeZi * zileLucrate + primaBruta + totalOreSuplimentare);
-		float valCO = (zileCOLucratoare - zileCONeplatitLucratoare) * salariuPeZi;
+		// zileCOLucratoare include zileCONeplatitLucratoare
+		float valCO = (zileCOLucratoare - zileCONeplatitLucratoare) * salariuPeZi; 
 		totalDrepturi = Math.round(salariuRealizat + valCM + valCO);
 
 		float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
-		float cass = Math.round(salariuRealizat * parametriiSalariu.getCass() / 100);
+		float cass = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100); // probleme
 		float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
 
 		float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;

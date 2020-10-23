@@ -591,12 +591,16 @@ class RealizariRetineri extends React.Component {
       ani.push(<option key={i}>{i}</option>);
     }
 
-		var luni = months.map((luna_nume, index) => <option key={index} data-key={index}>{luna_nume}</option>);
-		// eslint-disable-next-line eqeqeq
-		if(this.state.an == this.state.an_inceput_contract){
-			luni = luni.slice(Number(this.state.luna_inceput_contract));
-			console.log('sliced to', Number(this.state.luna_inceput_contract));
-		}
+    var luni = months.map((luna_nume, index) => (
+      <option key={index} data-key={index + 1}>
+        {luna_nume}
+      </option>
+    ));
+    // eslint-disable-next-line eqeqeq
+    if (this.state.an == this.state.an_inceput_contract) {
+      luni = luni.slice(Number(this.state.luna_inceput_contract) - 1);
+      console.log('sliced to', Number(this.state.luna_inceput_contract));
+    }
 
     const tabel_ore = this.state.oresuplimentare.map((ora, index) => {
       for (let key in ora) if (!ora[key]) ora[key] = '-';
@@ -756,12 +760,15 @@ class RealizariRetineri extends React.Component {
                   value={this.state.luna.nume}
                   onChange={(e) => {
                     let selectedIndex = e.target.options.selectedIndex;
-                    this.setState({
-                      luna: {
-                        nume: e.target.value,
-                        nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
+                    this.setState(
+                      {
+                        luna: {
+                          nume: e.target.value,
+                          nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
+                        },
                       },
-                    });
+                      this.fillForm
+                    );
                   }}
                 >
                   {luni}
@@ -929,7 +936,12 @@ class RealizariRetineri extends React.Component {
                           {this.state.zileco ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                {this.state.valcm.toFixed(0)} RON
+                                {(
+                                  (this.state.zilecolucratoare -
+                                    this.state.zileconeplatitlucratoare) *
+                                  this.state.salariupezi
+                                ).toFixed(0)}{' '}
+                                RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}

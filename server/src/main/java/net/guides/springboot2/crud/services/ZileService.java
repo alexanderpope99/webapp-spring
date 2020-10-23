@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.Sarbatori;
 
 @Service
 public class ZileService {
@@ -59,17 +60,19 @@ public class ZileService {
 	}
 
 	public int getZileLucratoareInLunaAnul(int month, int year) {
-		int zileSarbatoare = sarbatoriService.getNrZileSarbatoareInLunaAnul(month, year);
+		List<LocalDate> sarbatori = sarbatoriService.getZileSarbatoareInLunaAnul(month, year);
 
 		int weekdayNr;
+		LocalDate day;
 		int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
 		int workingDays = 0;
 		for (int i = 1; i <= daysInMonth; ++i) {
-			weekdayNr = LocalDate.of(year, month, i).getDayOfWeek().getValue();
-			if (weekdayNr != 6 && weekdayNr != 7)
+				day = LocalDate.of(year, month, i);
+				weekdayNr = day.getDayOfWeek().getValue();
+			if (weekdayNr != 6 && weekdayNr != 7 && !sarbatori.contains(day))
 				workingDays++;
 		}
-		return workingDays - zileSarbatoare;
+		return workingDays;
 	}
 
 	// include sarbatori

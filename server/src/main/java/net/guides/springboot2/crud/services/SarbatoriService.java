@@ -41,6 +41,13 @@ public class SarbatoriService {
 		return nrZileSarbatoare;
 	}
 
+	public List<LocalDate> getZileSarbatoareInLunaAnul(int luna, int an) {
+		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
+		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
+		LocalDate sfarsitLuna = LocalDate.of(an, luna, nrZileLuna);
+		return this.getZileSarbatoareInIntervalul(inceputLuna, sfarsitLuna);
+	}
+
 	public List<LocalDate> getZileSarbatoareInIntervalul(LocalDate dela, LocalDate panala) {
 		List<LocalDate> sarbatoriDates = new ArrayList<>();
 
@@ -72,7 +79,7 @@ public class SarbatoriService {
 
 		sarbatoriRepository.save(new Sarbatori(an+"-08-15", an+"-08-15", "Adormirea Maicii Domnului"));
 
-		sarbatoriRepository.save(new Sarbatori(an+"-09-30", an+"-09-30", "Sfântul Andrei"));
+		sarbatoriRepository.save(new Sarbatori(an+"-11-30", an+"-11-30", "Sfântul Andrei"));
 
 		sarbatoriRepository.save(new Sarbatori(an+"-12-01", an+"-12-01", "Ziua Națională a României"));
 

@@ -13,7 +13,7 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
-import { case_de_sanatate, judete } from '../../Resources/judete';
+import { case_de_sanatate, judete, sectoare } from '../../Resources/judete';
 import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 
@@ -140,20 +140,23 @@ class Contract extends React.Component {
         .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
-      console.log(adresa);
-      // find judet_index in judete[]
-      var index_judet;
-      if (adresa.judet) index_judet = judete.indexOf(adresa.judet);
+
+			// get casa_de_sanatate
+      var cs = '-';
+      if (adresa.judet) {
+        if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
+        else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
+      }
+
       // use casa_de_sanatate[judet_index]
       this.setState(
         {
           idangajat: idangajat,
-          casăSănătate: index_judet ? case_de_sanatate[index_judet] : '-',
+          casăSănătate: cs,
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', null)
       );
     } else {
-      // are casa sanatete in contract -> selecteaza
       this.setState(
         {
           idangajat: idangajat,
@@ -227,7 +230,7 @@ class Contract extends React.Component {
       return false;
     }
 
-    if (this.state.salariu === '') {
+    if (!this.state.salariu) {
       this.setState({
         show: true,
         modalMessage: 'Contractul trebuie să aibă un salariu.',
