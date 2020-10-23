@@ -1,12 +1,9 @@
 import React from 'react';
 import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
-import Typography from '@material-ui/core/Typography/Typography';
 
 import { judete, sectoare } from '../../Resources/judete';
 import { getSocSel } from '../../Resources/socsel';
 import { server } from '../../Resources/server-address';
-import axios from 'axios';
-import authHeader from '../../../services/auth-header';
 
 class Persoana extends React.Component {
   constructor() {
@@ -105,7 +102,7 @@ class Persoana extends React.Component {
   }
 
   getDatanasteriiByCNP(cnp) {
-    if (!cnp) return '';
+    if (cnp === null || typeof cnp === 'undefined' || cnp === 'null') return '';
 
     if (cnp.length > 6) {
       const an = cnp.substring(1, 3);
@@ -113,7 +110,7 @@ class Persoana extends React.Component {
       const zi = cnp.substring(5, 7);
       if (cnp[0] <= 2) return `19${an}-${luna}-${zi}`;
       else return `20${an}-${luna}-${zi}`;
-    } else return '';
+    } else if (cnp.length === 0) return '';
   }
 
   onChangeCnp(e) {
@@ -126,13 +123,8 @@ class Persoana extends React.Component {
   handleClose() {
     this.setState({
       show: false,
-			modalMessage: '',
-		});
-		window.scrollTo({
-			top: 0,
-			left: 0,
-			behavior: 'smooth',
-		});
+      modalMessage: '',
+    });
   }
 
   hasRequired() {
@@ -158,13 +150,11 @@ class Persoana extends React.Component {
   }
 
   async createAngajat(idpersoana) {
-    await axios
-      .post(
-        `${server.address}/angajat`,
-        { idpersoana: idpersoana, idsocietate: this.state.socsel.id },
-        { headers: authHeader() }
-      )
-      .catch((err) => console.error(err));
+    await fetch(`${server.address}/angajat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idpersoana: idpersoana, idsocietate: this.state.socsel.id }),
+    }).catch((err) => console.error(err));
     console.log(idpersoana, this.state.socsel);
   }
 
@@ -173,35 +163,31 @@ class Persoana extends React.Component {
 
     if (!this.hasRequired()) return;
 
-    var idactidentitate = null,
-      idadresa = null;
+    var actidentitate = null,
+      adresa = null;
 
     // POST only if any adrese fields is filled
-    if (this.state.adresacompleta || this.state.localitate || this.state.judet) {
+    if (
+      this.state.adresacompleta !== null ||
+      this.state.localitate !== null ||
+      this.state.judet !== null
+    ) {
       const adresa_body = {
         adresa: this.state.adresacompleta,
         localitate: this.state.localitate,
         judet: this.state.judet,
         tara: null,
       };
-
-      idadresa = await axios
-        .post(`${server.address}/adresa`, adresa_body, { headers: authHeader() })
-        .then((adresa) => adresa.data.id)
-        .catch((err) => console.error(err));
-      // console.log('idadresa:', adresa.id);
+      adresa = await fetch(`${server.address}/adresa`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(adresa_body),
+      }).then((adresa) => adresa.json());
+      console.log('idadresa:', adresa.id);
     }
 
     // POST only if any actitentitate field is filled
-    if (
-      this.state.serie ||
-      this.state.numar ||
-      this.state.cnp ||
-      this.state.eliberatde ||
-      this.state.dataeliberarii ||
-      this.state.datanasterii ||
-      this.state.loculnasterii
-    ) {
+    if (this.state.serie !== null || this.state.numar !== null || this.state.cnp !== null) {
       const buletin_body = {
         cnp: this.state.cnp,
         tip: this.state.tipact,
@@ -213,22 +199,21 @@ class Persoana extends React.Component {
         loculnasterii: this.state.loculnasterii,
       };
 
-      idactidentitate = await axios
-        .post(`${server.address}/actidentitate`, buletin_body, {
-          headers: authHeader(),
-        })
-        .then((res) => {
-          console.log('idactidentitate:', res.data.id);
-          return res.data.id;
-        });
+      actidentitate = await fetch(`${server.address}/actidentitate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buletin_body),
+      }).then((res) => res.json());
+
+      console.log('idactidentitate:', actidentitate.id);
     }
 
     const persoana_body = {
       gen: this.state.gen,
       nume: this.state.nume,
       prenume: this.state.prenume,
-      idactidentitate: idactidentitate,
-      idadresa: idadresa,
+      idactidentitate: actidentitate === null ? null : actidentitate.id,
+      idadresa: adresa === null ? null : adresa.id,
       starecivila: this.state.starecivila,
       email: this.state.email,
       telefon: this.state.telefon,
@@ -236,19 +221,20 @@ class Persoana extends React.Component {
     };
     console.log(persoana_body);
 
-    const persoana = await axios
-      .post(`${server.address}/persoana`, persoana_body, { headers: authHeader() })
-      .then((res) => (res.status === 200 ? res.data : null))
-			.catch((err) => console.error('error:', err.message));
-			console.log(persoana);
+    const persoana = await fetch(`${server.address}/persoana`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(persoana_body),
+    })
+      .then((res) => res.ok ? res.json() : null)
+      .catch((err) => console.error('error:', err.message));
 
     if (persoana) {
-			this.clearFields();
+      this.clearFields();
       this.setState({
         show: true,
-        modalMessage: 'Persoana adaugată cu succes 💾',
+        modalMessage: 'Persoana adaugată cu succes.',
       });
-      
       console.log('idpersoana:', persoana.id);
 
       await this.createAngajat(persoana.id);
@@ -273,7 +259,7 @@ class Persoana extends React.Component {
     };
 
     return (
-      <React.Fragment>
+      <div>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -288,275 +274,265 @@ class Persoana extends React.Component {
 
         <Form onSubmit={this.onSubmit}>
           <Row>
-            {/* dl/dna, nume, prenume */}
-            <Col md={12} className="border rounded pt-3">
-              <Row>
-                <Col md={3}>
-                  <Form.Group id="gen">
-                    <Form.Control
-                      as="select"
-                      value={this.state.gen}
-                      onChange={(e) => {
-                        this.setState({ gen: e.target.value });
-                      }}
-                    >
-                      <option>Dl.</option>
-                      <option>Dna.</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col md={9} />
-                <Col md={6}>
-                  <Form.Group controlId="nume">
-                    <Form.Label>Nume</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="eg. Popescu"
-                      value={this.state.nume}
-                      onChange={(e) => {
-                        this.setState({ nume: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="prenume">
-                    <Form.Label>Prenume</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="eg. Ion"
-                      value={this.state.prenume}
-                      onChange={(e) => {
-                        this.setState({ prenume: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+            <Col md={3}>
+              <Form.Group id="gen">
+                <Form.Control
+                  as="select"
+                  value={this.state.gen}
+                  onChange={(e) => {
+                    this.setState({ gen: e.target.value });
+                  }}
+                >
+                  <option>Dl.</option>
+                  <option>Dna.</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+            <Col md={9} />
+            <Col md={6}>
+              <Form.Group controlId="nume">
+                <Form.Label>Nume</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="eg. Popescu"
+                  value={this.state.nume}
+                  onChange={(e) => {
+                    this.setState({ nume: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            {/* <Col md={12} /> */}
+            <Col md={6}>
+              <Form.Group controlId="prenume">
+                <Form.Label>Prenume</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="eg. Ion"
+                  value={this.state.prenume}
+                  onChange={(e) => {
+                    this.setState({ prenume: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            {/* <Col md={12} /> */}
+            <Col md={6}>
+              <Form.Group id="tipact">
+                <Form.Label>Tip act</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.tipact}
+                  onChange={(e) => {
+                    this.setState({ tipact: e.target.value });
+                  }}
+                >
+                  <option>Carte de identitate</option>
+                  <option>Pașaport</option>
+                  <option>Buletin de identitate</option>
+                  <option>Carte de rezidență</option>
+                  <option>Alt tip</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+            <Col md={3}>
+              <Form.Group controlId="serie">
+                <Form.Label>Serie</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Serie CI"
+                  value={this.state.serie}
+                  onChange={(e) => {
+                    this.setState({ serie: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={3}>
+              <Form.Group controlId="numar">
+                <Form.Label>Număr</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Număr"
+                  value={this.state.numar}
+                  onChange={(e) => {
+                    this.setState({ numar: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            {/* <Col md={12} /> */}
+            <Col md={6}>
+              <Form.Group controlId="cnp">
+                <Form.Label>CNP</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="CNP"
+                  value={this.state.cnp}
+                  onChange={this.onChangeCnp}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group id="datanasterii">
+                <Form.Label>Data nașterii</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={this.state.datanasterii}
+                  onChange={(e) => {
+                    this.setState({ datanasterii: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={12} />
+
+            <Col md={6}>
+              <Form.Group controlId="eliberatde">
+                <Form.Label>Eliberat de</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Eliberat de"
+                  value={this.state.eliberatde}
+                  onChange={(e) => {
+                    this.setState({ eliberatde: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group id="dataeliberarii">
+                <Form.Label>Data eliberării</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={this.state.dataeliberarii}
+                  onChange={(e) => {
+                    this.setState({ dataeliberarii: e.target.value });
+                  }}
+                />
+              </Form.Group>
             </Col>
 
-            {/* act identitate */}
-            <Col md={12} className="border rounded pt-3">
-              <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
-                Act identitate
-              </Typography>
-              <Row>
-                <Col md={6}>
-                  <Form.Group id="tipact">
-                    <Form.Label>Tip act</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={this.state.tipact}
-                      onChange={(e) => {
-                        this.setState({ tipact: e.target.value });
-                      }}
-                    >
-                      <option>Carte de identitate</option>
-                      <option>Pașaport</option>
-                      <option>Buletin de identitate</option>
-                      <option>Carte de rezidență</option>
-                      <option>Alt tip</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col md={3}>
-                  <Form.Group controlId="serie">
-                    <Form.Label>Serie</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Serie CI"
-                      value={this.state.serie}
-                      onChange={(e) => {
-                        this.setState({ serie: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={3}>
-                  <Form.Group controlId="numar">
-                    <Form.Label>Număr</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Număr"
-                      value={this.state.numar}
-                      onChange={(e) => {
-                        this.setState({ numar: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="cnp">
-                    <Form.Label>CNP</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="CNP"
-                      value={this.state.cnp}
-                      onChange={(e) => this.onChangeCnp(e)}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group id="datanasterii">
-                    <Form.Label>Data nașterii</Form.Label>
-                    <Form.Control type="date" value={this.state.datanasterii} disabled />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="eliberatde">
-                    <Form.Label>Eliberat de</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Eliberat de"
-                      value={this.state.eliberatde}
-                      onChange={(e) => {
-                        this.setState({ eliberatde: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group id="dataeliberarii">
-                    <Form.Label>Data eliberării</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.dataeliberarii}
-                      onChange={(e) => {
-                        this.setState({ dataeliberarii: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={12} />
-                <Col md={6}>
-                  <Form.Group controlId="loculnasterii">
-                    <Form.Label>Locul nașterii</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Locul nașterii"
-                      value={this.state.loculnasterii}
-                      onChange={(e) => {
-                        this.setState({ loculnasterii: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group id="starecivila">
-                    <Form.Label>Stare civilă</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={this.state.starecivila}
-                      onChange={(e) => {
-                        this.setState({ starecivila: e.target.value });
-                      }}
-                    >
-                      <option>Necăsătorit</option>
-                      <option>Căsătorit</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-              </Row>
+            <Col md={12} />
+            <Col md={6}>
+              <Form.Group controlId="loculnasterii">
+                <Form.Label>Locul nașterii</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Locul nașterii"
+                  value={this.state.loculnasterii}
+                  onChange={(e) => {
+                    this.setState({ loculnasterii: e.target.value });
+                  }}
+                />
+              </Form.Group>
             </Col>
-            {/* adresa */}
-            <Col md={12} className="border rounded pt-3">
-              <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
-                Adresă
-              </Typography>
-              <Row>
-                <Col md={6}>
-                  <Form.Group controlId="localitate">
-                    <Form.Label>Localitate</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Localitate"
-                      value={this.state.localitate}
-                      onChange={this.onChangeLocalitate}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group id="judet">
-                    <Form.Label>{this.state.capitala}</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={this.state.judet}
-                      onChange={(e) => {
-                        this.setState({ judet: e.target.value });
-                      }}
-                    >
-                      <option>-</option>
-                      {listaJudete()}
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col md={12}>
-                  <Form.Group controlId="adresacompleta">
-                    <Form.Label>Adresa Completă</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="eg. Str. nr., bl. sc. ap. etc."
-                      value={this.state.adresacompleta}
-                      onChange={(e) =>
-                        this.setState({
-                          adresacompleta: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+            {/* <Col md={12} /> */}
+            <Col md={6}>
+              <Form.Group id="starecivila">
+                <Form.Label>Stare civilă</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.starecivila}
+                  onChange={(e) => {
+                    this.setState({ starecivila: e.target.value });
+                  }}
+                >
+                  <option>Necăsătorit</option>
+                  <option>Căsătorit</option>
+                </Form.Control>
+              </Form.Group>
             </Col>
-            {/* nr. tel, email */}
-            <Col md={12} className="border rounded pt-3">
-              <Row>
-                <Col md={6}>
-                  <Form.Group controlId="telefon">
-                    <Form.Label>Număr telefon</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.telefon}
-                      onChange={(e) =>
-                        this.setState({
-                          telefon: e.target.value,
-                        })
-                      }
-                      placeholder="eg. 0712345678"
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="email">
-                    <Form.Label>E-mail</Form.Label>
-                    <Form.Control
-                      type="email"
-                      value={this.state.email}
-                      onChange={(e) =>
-                        this.setState({
-                          email: e.target.value,
-                        })
-                      }
-                      placeholder="email@email.dom"
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+            {/* <Col md={12} /> */}
+            <Col md={6}>
+              <Form.Group controlId="localitate">
+                <Form.Label>Localitate</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Localitate"
+                  value={this.state.localitate}
+                  onChange={this.onChangeLocalitate}
+                />
+              </Form.Group>
             </Col>
+            {/* <Col md={12} /> */}
+            <Col md={6}>
+              <Form.Group id="judet">
+                <Form.Label>{this.state.capitala}</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.judet}
+                  onChange={(e) => {
+                    this.setState({ judet: e.target.value });
+                  }}
+                >
+                  <option>-</option>
+                  {listaJudete()}
+                </Form.Control>
+              </Form.Group>
+            </Col>
+
+            <Col md={12}>
+              <Form.Group controlId="adresacompleta">
+                <Form.Label>Adresa Completă</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="eg. Str. nr., bl. sc. ap. etc."
+                  value={this.state.adresacompleta}
+                  onChange={(e) =>
+                    this.setState({
+                      adresacompleta: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group controlId="telefon">
+                <Form.Label>Număr telefon</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.telefon}
+                  onChange={(e) =>
+                    this.setState({
+                      telefon: e.target.value,
+                    })
+                  }
+                  placeholder="eg. 0712345678"
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group controlId="email">
+                <Form.Label>E-mail</Form.Label>
+                <Form.Control
+                  type="email"
+                  value={this.state.email}
+                  onChange={(e) =>
+                    this.setState({
+                      email: e.target.value,
+                    })
+                  }
+                  placeholder="email@email.dom"
+                />
+              </Form.Group>
+            </Col>
+            {/* <Col md={12} /> */}
           </Row>
 
           {typeof this.props.asChild === 'undefined' ? (
             <Row>
               <Col md={12}>
-                <Button variant="success" className="float-right m-0 pl-5 pr-5 mt-2" type="submit">
+                <Button variant="success" className="float-right m-0 pl-5 pr-5" type="submit">
                   Adaugă
                 </Button>
               </Col>
             </Row>
           ) : null}
         </Form>
-      </React.Fragment>
+      </div>
     );
   }
 }

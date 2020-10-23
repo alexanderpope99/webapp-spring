@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.controller;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,55 +21,47 @@ import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.repository.ParametriiSalariuRepository;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequestMapping("/parametriisalariu")
 public class ParametriiSalariuController {
-	@Autowired
-	private ParametriiSalariuRepository parametriiSalariuRepository;
+    @Autowired
+    private ParametriiSalariuRepository parametriiSalariuRepository;
 
-	@GetMapping
-	public List<ParametriiSalariu> getAllPersoane() {
-		return parametriiSalariuRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
-	}
+    @GetMapping
+    public List<ParametriiSalariu> getAllPersoane() {
+        return parametriiSalariuRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
 
-	@GetMapping("/date/{date}")
-	public ParametriiSalariu getParametriiSalariuByDate(
-			@PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-		return parametriiSalariuRepository.findByDate(date);
-	}
+    @GetMapping("{id}")
+    public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") Long id) {
+        return parametriiSalariuRepository.findById(id);
+    }
 
-	@GetMapping("{id}")
-	public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") Long id) {
-		return parametriiSalariuRepository.findById(id);
-	}
+    @PostMapping
+    public ParametriiSalariu createParametriiSalariu(@RequestBody ParametriiSalariu parametriiSalariu) {
+        return parametriiSalariuRepository.save(parametriiSalariu);
+    }
 
-	@PostMapping
-	public ParametriiSalariu createParametriiSalariu(@RequestBody ParametriiSalariu parametriiSalariu) {
-		return parametriiSalariuRepository.save(parametriiSalariu);
-	}
+    @PutMapping("{id}")
+    public ResponseEntity<ParametriiSalariu> updateParametriiSalariu(@PathVariable(value = "id") Long id, @RequestBody ParametriiSalariu newParametriiSalariu)
+            throws ResourceNotFoundException {
+        ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
 
-	@PutMapping("{id}")
-	public ResponseEntity<ParametriiSalariu> updateParametriiSalariu(@PathVariable(value = "id") Long id,
-			@RequestBody ParametriiSalariu newParametriiSalariu) throws ResourceNotFoundException {
-		ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
+        newParametriiSalariu.setId(parametriiSalariu.getId());
+        final ParametriiSalariu updatedParametriiSalariu = parametriiSalariuRepository.save(newParametriiSalariu);
+        return ResponseEntity.ok(updatedParametriiSalariu);
+    }
 
-		newParametriiSalariu.setId(parametriiSalariu.getId());
-		final ParametriiSalariu updatedParametriiSalariu = parametriiSalariuRepository.save(newParametriiSalariu);
-		return ResponseEntity.ok(updatedParametriiSalariu);
-	}
+    @DeleteMapping("{id}")
+    public Map<String, Boolean> deleteParametriiSalariu(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+        ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
 
-	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteParametriiSalariu(@PathVariable(value = "id") Long id)
-			throws ResourceNotFoundException {
-		ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
-
-		parametriiSalariuRepository.delete(parametriiSalariu);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
-	}
+        parametriiSalariuRepository.delete(parametriiSalariu);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
 }

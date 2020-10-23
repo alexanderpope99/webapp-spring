@@ -20,12 +20,6 @@ public class RetineriService {
 		return retineriRepository.save(retinere);
 	}
 
-	public Retineri updateRetinere(Retineri oldRetinere, long idstat) {
-		Retineri newEmptyRetinere = new Retineri(0, 0, 0, 0, 0, idstat);
-		newEmptyRetinere.setId(oldRetinere.getId());
-		return retineriRepository.save(newEmptyRetinere);
-	}
-
 	public Retineri getRetinereByIdstat(long idstat) {
 		return retineriRepository.findByIdstat(idstat);
 	}

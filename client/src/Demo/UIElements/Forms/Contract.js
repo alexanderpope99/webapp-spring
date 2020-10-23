@@ -13,9 +13,6 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
-import { case_de_sanatate, judete, sectoare } from '../../Resources/judete';
-import axios from 'axios';
-import authHeader from '../../../services/auth-header';
 
 class Contract extends React.Component {
   constructor() {
@@ -25,6 +22,7 @@ class Contract extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
+    // this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -68,6 +66,8 @@ class Contract extends React.Component {
     };
   }
 
+  componentDidMount() {}
+
   clearFields() {
     this.setState({
       id: null,
@@ -81,7 +81,7 @@ class Contract extends React.Component {
       deduceri: true,
       studiiSuperioare: false,
       functieBaza: true,
-      normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
+      normăLucru: {nrOre: 8, nume: 'Normă întreagă'}, //text
       monedăSalariu: 'RON', //text
       salariu: '',
       modPlată: 'Nespecificat', //text
@@ -112,87 +112,74 @@ class Contract extends React.Component {
   getNumeNorma(nrOre) {
     switch (nrOre) {
       case 8:
-        return 'Normă întreagă';
-      case 7:
-        return 'Normă parțială 7/8';
-      case 6:
-        return 'Normă parțială 6/8';
-      case 5:
-        return 'Normă parțială 5/8';
-      case 4:
-        return 'Normă parțială 4/8';
-      case 3:
-        return 'Normă parțială 3/8';
-      case 2:
-        return 'Normă parțială 2/8';
-      case 1:
-        return 'Normă parțială 1/8';
+        return 'Normă întreagă'
+        case 7:
+          return 'Normă parțială 7/8'
+          case 6:
+        return 'Normă parțială 6/8'
+        case 5:
+        return 'Normă parțială 5/8'
+        case 4:
+        return 'Normă parțială 4/8'
+        case 3:
+        return 'Normă parțială 3/8'
+        case 2:
+        return 'Normă parțială 2/8'
+        case 1:
+        return 'Normă parțială 1/8'
       default:
         break;
     }
   }
 
-  async fillForm(contract, idangajat) {
+  fillForm(contract, idangajat) {
     if (contract === null) {
       this.clearFields();
-      // get adresa
-      const adresa = await axios
-        .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
-        .then((res) => res.data)
-        .catch((err) => console.error(err));
-
-			// get casa_de_sanatate
-      var cs = '-';
-      if (adresa.judet) {
-        if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
-        else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
-      }
-
-      // use casa_de_sanatate[judet_index]
       this.setState(
         {
           idangajat: idangajat,
-          casăSănătate: cs,
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', null)
       );
     } else {
+      for (let key in contract) if (contract[key] === null) contract[key] = '';
+
       this.setState(
         {
           idangajat: idangajat,
           id: contract.id,
           modelContract: contract.tip, //text
-          numărContract: contract.nr || '', //text
-          marca: contract.marca || '', //text
-          dataContract: contract.data ? contract.data.substring(0, 10) : '',
-          dataIncepere: contract.dataincepere ? contract.dataincepere.substring(0, 10) : '',
-          punctDeLucru: contract.idpunctdelucru || '',
-          centruCost: contract.idcentrucost || '',
-          echipa: contract.idechipa || '',
-          departament: contract.iddepartament || '',
-          functieBaza: contract.functiedebaza || false,
-          deduceri: contract.calculdeduceri || false,
-          studiiSuperioare: contract.studiisuperioare || false,
-          normăLucru: { nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru) },
+          numărContract: contract.nr, //text
+          marca: contract.marca, //text
+          dataContract: contract.data.substring(0, 10),
+          dataIncepere: contract.dataincepere.substring(0, 10),
+          punctDeLucru: contract.idpunctdelucru,
+          centruCost: contract.idcentrucost,
+          echipa: contract.idechipa,
+          departament: contract.iddepartament,
+          functieBaza: contract.functiedebaza,
+          deduceri: contract.calculdeduceri,
+          studiiSuperioare: contract.studiisuperioare,
+          normăLucru: {nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru)},
           salariu: contract.salariutarifar,
           monedăSalariu: contract.monedasalariu,
           modPlată: contract.modplata,
           condițiiMuncă: contract.conditiimunca,
-          sindicat: contract.sindicat || false,
-          cotizațieSindicat: contract.cotizatiesindicat || '',
-          pensiePrivată: contract.pensieprivata || false,
-          cotizațiePensie: contract.cotizatiepensieprivata || '',
-          avans: contract.avans || 0,
+          sindicat: contract.sindicat,
+          cotizațieSindicat: contract.cotizatiesindicat,
+          pensiePrivată: contract.pensieprivata,
+          cotizațiePensie: contract.cotizatiepensieprivata,
+          avans: contract.avans,
           monedăAvans: contract.monedaavans,
-          zileCOan: contract.zilecoan || 0,
-          ultimaZiLucru: contract.ultimaZiLucru ? contract.ultimazilucru.substring(0, 10) : '',
-          casăSănătate: contract.casasanatate || '-',
-          gradInvalid: contract.gradinvaliditate || '', //text
-          funcție: contract.functie || '', //text
-          nivelStudii: contract.nivelstudii || '', //text
-          cor: contract.cor || '',
-          pensionar: contract.pensionar || '',
-          spor: contract.spor || '',
+          zileCOan: (contract.zilecoan = null ? '' : contract.zilecoan),
+          ultimaZiLucru: contract.ultimazilucru.substring(0, 10),
+          casăSănătate: contract.casasanatate, //text
+          gradInvalid: contract.gradinvaliditate, //text
+          funcție: contract.functie, //text
+          nivelStudii: contract.nivelstudii, //text
+          cor: contract.cor,
+          pensionar: contract.pensionar,
+          spor: contract.spor,
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', contract.id)
       );
@@ -201,7 +188,8 @@ class Contract extends React.Component {
 
   onChangeCentrucost(selected) {
     if (typeof selected[0] !== 'undefined' || selected.length !== 0) {
-      if (typeof selected[0] === 'object') this.setState({ centruCost: selected[0].label });
+      if (typeof selected[0] === 'object')
+        this.setState({ centruCost: selected[0].label });
       else this.setState({ centruCost: selected[0] });
     }
   }
@@ -226,14 +214,6 @@ class Contract extends React.Component {
       this.setState({
         show: true,
         modalMessage: 'Contractul trebuie să aibă o marcă.',
-      });
-      return false;
-    }
-
-    if (!this.state.salariu) {
-      this.setState({
-        show: true,
-        modalMessage: 'Contractul trebuie să aibă un salariu.',
       });
       return false;
     }
@@ -279,7 +259,8 @@ class Contract extends React.Component {
       avans: this.state.avans,
       monedaavans: this.state.monedăAvans,
       zilecoan: this.state.zileCOan,
-      ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
+      ultimazilucru:
+        this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
       casasanatate: this.state.casăSănătate,
       gradinvaliditate: this.state.gradInvalid,
       functie: this.state.funcție,
@@ -288,63 +269,47 @@ class Contract extends React.Component {
       pensionar: this.state.pensionar,
       spor: this.state.spor,
     };
-    let contract;
-    if (method === 'PUT')
-      contract = await axios
-        .put(`${server.address}/contract/${idcontract}`, contract_body, {
-          headers: authHeader(),
-        })
-        .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => {
-          console.error(err.message);
-        });
-    else if (method === 'POST')
-      contract = await axios
-        .post(`${server.address}/contract/${idcontract}`, contract_body, {
-          headers: authHeader(),
-        })
-        .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => {
-          console.error(err.message);
-        });
+    const contract = await fetch(
+      `${server.address}/contract/${idcontract}`,
+      {
+        method: method, //PUT if idcontract !== null : POST if idcontract === null
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contract_body),
+      }
+    )
+      .then(res => res.ok ? res.json() : null)
+      .catch((err) => {
+        console.error(err.message);
+      });
 
-    // if recieved response from server
     if (contract) {
       this.setState({
         show: true,
         modalMessage:
-          method === 'POST' ? 'Contract adăugat cu succes 📄' : 'Contract actualizat 💾',
-        id: contract.id,
+          method === 'POST'
+            ? 'Contract adăugat cu succes'
+            : 'Contract actualizat',
       });
 
       if (method === 'POST') {
         // update angajat with idangajat from functon props
-        await axios
-          .put(
-            `${server.address}/angajat/${idangajat}`,
-            {
-              idcontract: contract.id,
-              idpersoana: idangajat,
-              idsocietate: this.state.socsel.id,
-            },
-            {
-              headers: authHeader(),
-            }
-          )
-          .catch((err) => console.error(err));
-        method = 'PUT';
+        await fetch(`${server.address}/angajat/${idangajat}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idcontract: contract.id,
+            idpersoana: idangajat,
+            idsocietate: this.state.socsel.id,
+          }),
+        }).catch((err) => console.error(err));
       }
       console.log('idcontract:', contract.id);
     }
   }
 
   render() {
-    const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
-      <option key={index}>{casa}</option>
-    ));
-
     return (
-      <React.Fragment>
+      <div>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -356,7 +321,6 @@ class Contract extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
         <Form onSubmit={(e) => e.preventDefault()}>
           <Row>
             <Col md={6}>
@@ -454,7 +418,7 @@ class Contract extends React.Component {
                 <Form.Label>Centre de cost</Form.Label>
                 <Typeahead
                   id="optiune-centrucost"
-                  options={['centru test']}
+                  options={['centru 1', 'centru smecherie']}
                   allowNew
                   newSelectionPrefix="Adaugă"
                   value={this.state.centruCost}
@@ -467,7 +431,7 @@ class Contract extends React.Component {
                 <Form.Label>Echipa</Form.Label>
                 <Typeahead
                   id="optiune-echipa"
-                  options={['echipa test']}
+                  options={['echipa 1', 'echipa smechera']}
                   allowNew
                   newSelectionPrefix="Adaugă"
                   value={this.state.echipa}
@@ -482,7 +446,7 @@ class Contract extends React.Component {
                 <Form.Label>Departament</Form.Label>
                 <Typeahead
                   id="optiune-departament"
-                  options={['departament test']}
+                  options={['optiunea 1', 'smecherie']}
                   allowNew
                   newSelectionPrefix="Adaugă"
                   value={this.state.departament}
@@ -560,15 +524,7 @@ class Contract extends React.Component {
                   as="select"
                   value={this.state.normăLucru.nume}
                   onChange={(e) => {
-                    this.setState(
-                      {
-                        normăLucru: {
-                          nrOre: 8 - e.target.options.selectedIndex,
-                          nume: e.target.value,
-                        },
-                      },
-                      () => console.log(this.state.normăLucru)
-                    );
+                    this.setState({ normăLucru: {nrOre: 8 - e.target.options.selectedIndex, nume: e.target.value }}, () => console.log(this.state.normăLucru));
                   }}
                 >
                   <option>Normă întreagă</option>
@@ -654,14 +610,17 @@ class Contract extends React.Component {
                     this.setState({ condițiiMuncă: e.target.value });
                   }}
                 >
-                  <option>Normale</option>
-                  <option>Deosebite</option>
+                  <option>Smechere</option>
+                  <option>Nașpa</option>
                 </Form.Control>
               </Form.Group>
             </Col>
             <Col md={12} />
             <Col md={1}>
-              <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
+              <Form.Group
+                id="sindicat"
+                style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}
+              >
                 <Form.Check
                   custom
                   type="checkbox"
@@ -789,7 +748,6 @@ class Contract extends React.Component {
                 <Form.Label>Zile CO/an</Form.Label>
                 <Form.Control
                   placeholder="0"
-                  type="number"
                   value={this.state.zileCOan}
                   onChange={(e) => {
                     this.setState({ zileCOan: e.target.value });
@@ -823,8 +781,7 @@ class Contract extends React.Component {
                     this.setState({ casăSănătate: e.target.value });
                   }}
                 >
-                  <option>-</option>
-                  {case_de_sanatate_component}
+                  <option>optiuni</option>
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -893,16 +850,20 @@ class Contract extends React.Component {
           <Row>
             <Col md={6}>
               <Button
-                variant={this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'}
-                onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
+                variant={
+                  this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'
+                }
+                onClick={(e) =>
+                  this.onSubmit(e, this.state.id, this.state.idangajat)
+                }
                 disabled={this.state.buttonDisabled}
               >
-                {this.state.id ? 'Actualizează contract' : 'Adaugă contract'}
+                {this.state.id ? "Actualizează contract" : "Adaugă contract"}
               </Button>
             </Col>
           </Row>
         </Form>
-      </React.Fragment>
+      </div>
     );
   }
 }

@@ -37,12 +37,7 @@ public class AdresaController {
                 .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 
         return ResponseEntity.ok().body(adresa);
-		}
-		
-		@GetMapping("idp={idp}")
-		public Adresa getAdresaByIdpersoana(@PathVariable("idp") long idp) {
-			return adresaRepository.findByIdpersoana(idp);
-		}
+    }
 
     @PostMapping
     public Adresa createAdresa(@RequestBody Adresa adresa) {

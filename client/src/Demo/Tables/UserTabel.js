@@ -1,449 +1,392 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Add from '@material-ui/icons/Add';
 import Refresh from '@material-ui/icons/Refresh';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
+import Edit from '@material-ui/icons/Edit';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
-import { getSocSel } from '../Resources/socsel';
-import axios from 'axios';
-import authHeader from '../../services/auth-header';
-import { Multiselect } from 'multiselect-react-dropdown';
 
 class UserTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
-    this.onRefresh = this.onRefresh.bind(this);
-    this.addUser = this.addUser.bind(this);
-    this.updateUser = this.updateUser.bind(this);
-    this.editUser = this.editUser.bind(this);
-    this.deleteUser = this.deleteUser.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.fillTable = this.fillTable.bind(this);
+    this.resetModals = this.resetModals.bind(this);
+    this.addUser = this.addUser.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
+    this.editUser = this.editUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
 
     this.state = {
-      user: [],
+      users: [],
       userComponent: null,
 
-      isEdit: false,
-
-      // confirm modal
-      showConfirm: false,
-      modalMessage: '',
-
-      // add/edit modal
+      // add modal:
       id: '',
-      dela: '',
-      panala: '',
-      tip: '',
-      motiv: '',
-      status: '',
       show: false,
-      socs: [],
+      username: '',
+      password: '',
+      passwordConfirm: '',
+      nume: '',
+      prenume: '',
+
+      // succes modal:
+      show_confirm: false,
+      modalMessage: '',
+      isEdit: false,
     };
   }
 
   componentDidMount() {
-    this.onRefresh();
-    window.scrollTo(0, 0);
+    this.fillTable();
   }
 
-  async addUser() {
-    const user_body = {};
+  async fillTable() {
+    if (typeof this.state.users === 'undefined') return;
+    //? fetch
+    const users = await fetch(`${server.address}/user/`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      // body: JSON.stringify(persoane),
+    })
+      .then((res) => (res.status !== 200 ? null : res.json()))
+      .catch((err) => console.error('err', err));
 
-    let ok = await axios
-      .post(`${server.address}/user`, user_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-    if (ok) {
-      await this.handleClose();
+    if (users !== null) {
       this.setState(
         {
-          showConfirm: true,
-          modalMessage: 'Cerere adăugată cu succes',
+          users: users,
         },
-        this.onRefresh
+        this.renderUser
+      );
+    } else {
+      this.setState(
+        {
+          users: [],
+        },
+        this.renderUser
       );
     }
   }
 
-  async updateUser(iduser) {
-    let pentruId = await axios
-      .get(`${server.address}/user/${JSON.parse(localStorage.getItem('user')).id}`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
+  resetModals() {
+    this.setState({
+      // add modal:
+      id: '',
+      show: false,
+      username: '',
+      password: '',
+      passwordConfirm: '',
+      nume: '',
+      prenume: '',
 
-    const user_body = {
-      pentru: pentruId,
-      dela: this.state.dela,
-      panala: this.state.panala,
-      tip: this.state.tip,
-      motiv: this.state.motiv,
-      societate: getSocSel().id,
-      status: 'Propus (Modificat)',
-    };
-
-    const ok = await axios
-      .put(`${server.address}/user/${iduser}`, user_body, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-
-    if (ok) {
-      this.onRefresh();
-      await this.handleClose();
-      this.setState({
-        showConfirm: true,
-        modalMessage: 'User actualizat',
-      });
-    }
+      // succes modal:
+      show_confirm: false,
+      modalMessage: '',
+    });
   }
 
-  async editUser(usr) {
-    console.log(usr);
-    this.setState({
-      isEdit: true,
-      show: true,
-
-      id: usr.id,
-    });
+  handleClose(confirmWindow) {
+    if (confirmWindow)
+      this.setState({
+        show_confirm: false,
+        modalMessage: '',
+      });
+    else
+      this.setState({
+        show: false,
+        // reset data
+        id: '',
+        username: '',
+        password: '',
+        passwordConfirm: '',
+        nume: '',
+        prenume: '',
+        isEdit: false,
+      });
   }
 
   async deleteUser(id) {
-    await axios
-      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(this.onRefresh)
+    await fetch(`${server.address}/user/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(this.fillTable)
       .catch((err) => console.error(err));
   }
 
-  async onSelectRole(id) {
-    await axios
-      .delete(`${server.address}/user/roles/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(this.onRefresh)
-      .catch((err) => console.error(err));
-  }
+  async editUser(user) {
+    if (typeof this.state.users === 'undefined') return;
 
-  async onRemoveRole(id) {
-    await axios
-      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(this.onRefresh)
-      .catch((err) => console.error(err));
-  }
-
-  // function to create react component with fetched data
-  async renderUsers() {
     this.setState({
-      userComponent: await Promise.all(
-        this.state.user.map(async (usr, index) => {
-          return (
-            // TODO
-            <tr key={usr.id}>
-              <th>{usr.username}</th>
-              <th>{usr.email}</th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  selectedValues={usr.roles.map((val) => {
-                    return val['name'];
-                  })}
-                  options={['ROLE_ADMIN', 'ROLE_DIRECTOR', 'ROLE_CONTABIL', 'ROLE_ANGAJAT']}
-                  onSelect={this.onSelectRole}
-                  onRemove={this.onRemoveRole}
-                  isObject={false}
-                />
-              </th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  selectedValues={usr.societati.map((val) => {
-                    return val['nume'];
-                  })}
-                  options={this.state.socs}
-                  isObject={false}
-                />
-              </th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  singleSelect="true"
-                  selectedValues={usr.societate.map((val) => {
-                    return val['nume'];
-                  })}
-                  options={this.state.socs}
-                  isObject={false}
-                />
-              </th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  singleSelect="true"
-                  selectedValues={usr.persoana.map((val) => {
-                    return val['nume'] + ' ' + val['prenume'] === 'null null'
-                      ? ''
-                      : val['nume'] + ' ' + val['prenume'];
-                  })}
-                  options={this.state.socs}
-                  isObject={false}
-                />
-              </th>
-              <th></th>
-              <th>
-                <Row>
-                  <Button
-                    onClick={() => this.editUser(usr)}
-                    variant="outline-secondary"
-                    className="m-1 p-1 rounded-circle border-0"
-                  >
-                    <Edit fontSize="small" />
-                  </Button>
-
-                  <PopupState variant="popover" popupId="demo-popup-popover">
-                    {(popupState) => (
-                      <div>
-                        <Button
-                          variant="outline-secondary"
-                          className="m-1 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </Button>
-                        <Popover
-                          {...bindPopover(popupState)}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                          }}
-                        >
-                          <Box p={2}>
-                            <Typography>Sigur ștergeți userul?</Typography>
-                            <Typography variant="caption">
-                              Datele nu mai pot fi recuperate
-                            </Typography>
-                            <br />
-                            <Button
-                              variant="outline-danger"
-                              onClick={() => {
-                                popupState.close();
-                                this.deleteUser(usr.id);
-                              }}
-                              className="mt-2 "
-                            >
-                              Da
-                            </Button>
-                            <Button
-                              variant="outline-persondary"
-                              onClick={popupState.close}
-                              className="mt-2"
-                            >
-                              Nu
-                            </Button>
-                          </Box>
-                        </Popover>
-                      </div>
-                    )}
-                  </PopupState>
-                </Row>
-              </th>
-            </tr>
-          );
-        })
-      ),
+      id: user.id,
+      username: user.username,
+      password: user.password,
+      passwordConfirm: user.password,
+      nume: user.nume,
+      prenume: user.prenume,
+      show: true,
+      isEdit: true,
     });
   }
 
-  async onRefresh() {
-    let user = await axios
-      .get(`${server.address}/user`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
+  async addUser() {
+    if (typeof this.state.users === 'undefined') return;
+    if (this.state.password !== this.state.passwordConfirm) {
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'Parolele nu corespund',
+      });
+      return;
+    }
+    const user_body = {
+      username: this.state.username,
+      password: this.state.password,
+      nume: this.state.nume,
+      prenume: this.state.prenume,
+      societateselectată: this.state.societateselectată,
+    };
 
-    let thesocs = await axios
-      .get(`${server.address}/societate`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-    this.setState({
-      socs: thesocs.map((val) => {
-        return val.nume;
-      }),
-    });
+    let ok = await fetch(`${server.address}/user`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user_body),
+    })
+      .then((res) => res.ok)
+      .catch((err) => console.error('err:', err));
 
-    user = await Promise.all(
-      user.map(async (usr) => {
-        let roles = await axios
-          .get(`${server.address}/user/roles/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let societati = await axios
-          .get(`${server.address}/user/societati/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let persoana = await axios
-          .get(`${server.address}/user/persoana/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let societate = await axios
-          .get(`${server.address}/user/societate/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let superior = await axios
-          .get(`${server.address}/user/superior/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-
-        return {
-          ...usr,
-          roles: roles,
-          societati: societati,
-          persoana: persoana,
-          societate: societate,
-          superior: superior,
-        };
-      })
-    );
-
-    if (user) {
-      this.setState(
-        {
-          user: user,
-        },
-        this.renderUsers
-      );
+    if (ok) {
+      // close add modal
+      this.handleClose();
+      // open confirm modal <- closes on OK button
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'User adăugat cu succes 💾',
+      });
+      this.fillTable();
     }
   }
 
-  async onSubmit(e) {
-    e.preventDefault();
-    if (this.state.isEdit) this.updateUser(this.state.id);
-    else this.addUser();
+  async updateUser() {
+    const user_body = {
+      id: this.state.id,
+      username: this.state.username,
+      password: this.state.password,
+      nume: this.state.nume,
+      prenume: this.state.prenume,
+      societateselectată: this.state.societateselectată,
+    };
+
+    let ok = await fetch(`${server.address}/user/${this.state.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user_body),
+    })
+      .then((res) => res.ok)
+      .catch((err) => console.error('err:', err));
+
+    if (ok) {
+      // close add modal
+      this.handleClose();
+      // open confirm modal <- closes on OK button
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'User actualizat ✔',
+      });
+      this.fillTable();
+    }
   }
 
-  async handleClose() {
+  // function to create react component with fetched data
+  renderUser() {
     this.setState({
-      show: false,
-      id: null,
-      pentru: '',
-      dela: '',
-      panala: '',
-      tip: '',
-      motiv: '',
-    });
-  }
-
-  handleCloseConfirm() {
-    this.setState({
-      modalMessage: '',
-      showConfirm: false,
+      userComponent: this.state.users.map((user, index) => {
+        for (let key in user) {
+          if (user[key] === 'null' || user[key] === null) user[key] = '-';
+        }
+        return (
+          <tr key={user.id}>
+            <th>{user.id}</th>
+            <th>{user.username}</th>
+            <th>{user.nume}</th>
+            <th>{user.prenume}</th>
+            <th className="d-inline-flex flex-row justify-content-around">
+              <PopupState variant="popover" popupId="demo-popup-popover">
+                {(popupState) => (
+                  <div>
+                    <Button
+                      onClick={() => this.editUser(user)}
+                      variant="outline-secondary"
+                      className="ml-2 p-1 rounded-circle border-0"
+                    >
+                      <Edit fontSize="small" />
+                    </Button>
+                    <Button
+                      variant="outline-secondary"
+                      className="m-0 p-1 rounded-circle border-0"
+                      {...bindTrigger(popupState)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </Button>
+                    <Popover
+                      {...bindPopover(popupState)}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                    >
+                      <Box p={2}>
+                        <Typography>Sigur ștergeți userul?</Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                        <br />
+                        <Button
+                          variant="outline-danger"
+                          onClick={() => {
+                            popupState.close();
+                            this.deleteUser(user.id);
+                          }}
+                          className="mt-2 "
+                        >
+                          Da
+                        </Button>
+                        <Button
+                          variant="outline-persondary"
+                          onClick={popupState.close}
+                          className="mt-2"
+                        >
+                          Nu
+                        </Button>
+                      </Box>
+                    </Popover>
+                  </div>
+                )}
+              </PopupState>
+            </th>
+          </tr>
+        );
+      }),
     });
   }
 
   render() {
     return (
       <Aux>
-        {/* add/edit modal */}
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        {/* // ADD MODAL */}
+        <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>User</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={this.addCerereConcediu}>
-              <Row>
-                <Col md={12}>
-                  <Form.Group>
-                    <Form.Label>De la</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.dela}
-                      onChange={(e) => this.setState({ dela: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Până la</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.panala}
-                      onChange={(e) => this.setState({ panala: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Tip</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.tip}
-                      onChange={(e) => this.setState({ tip: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Motiv</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.motiv}
-                      onChange={(e) => this.setState({ motiv: e.target.value })}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
+            <Form>
+              <Form.Group id="username">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={this.state.username}
+                  onChange={(e) => {
+                    this.setState({ username: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="password">
+                <Form.Label>Parolă</Form.Label>
+                <Form.Control
+                  required
+                  type="password"
+                  value={this.state.password}
+                  onChange={(e) => {
+                    this.setState({ password: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="passwordConfirm">
+                <Form.Label>Confirmare Parolă</Form.Label>
+                <Form.Control
+                  required
+                  type="password"
+                  value={this.state.passwordConfirm}
+                  onChange={(e) => {
+                    this.setState({ passwordConfirm: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="nume">
+                <Form.Label>Nume</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={this.state.nume}
+                  onChange={(e) => {
+                    this.setState({ nume: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="prenume">
+                <Form.Label>Preume</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={this.state.prenume}
+                  onChange={(e) => {
+                    this.setState({ prenume: e.target.value });
+                  }}
+                />
+              </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.onSubmit} type="submit">
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateUser : this.addUser}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
 
-        {/* confirm modal */}
-        <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
+        {/* CONFIRM Modal */}
+        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handleCloseConfirm}>
+            <Button variant="primary" onClick={this.handleClose}>
               OK
             </Button>
           </Modal.Footer>
         </Modal>
 
+        {/* PAGE CONTENTS */}
         <Row>
           <Col>
             <Card>
-              <Card.Header className="border-0">
-                <Card.Title as="h5">Useri</Card.Title>
-
+              <Card.Header>
+                <Card.Title as="h5">Listă useri</Card.Title>
                 <Button
-                  variant="outline-info"
+                  variant="outline-primary"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  onClick={this.onRefresh}
+                  onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
                 <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
-                  variant="outline-info"
-                  size="sm"
-                  style={{ fontSize: '1.25rem', float: 'right' }}
+                  variant="outline-primary"
+                  className="float-right"
+                  onClick={() => this.setState({ show: true })}
                 >
-                  <Add className="m-0 p-0" />
+                  +
                 </Button>
               </Card.Header>
               <Card.Body>
@@ -451,12 +394,8 @@ class UserTabel extends React.Component {
                   <thead>
                     <tr>
                       <th>Username</th>
-                      <th>Email</th>
-                      <th>Role-uri</th>
-                      <th>Societăți Acces</th>
-                      <th>Societate</th>
-                      <th>Persoană</th>
-                      <th>Superior</th>
+                      <th>Nume</th>
+                      <th>Prenume</th>
                       <th></th>
                     </tr>
                   </thead>

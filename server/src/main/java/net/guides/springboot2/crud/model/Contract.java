@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "contract")
@@ -16,8 +16,8 @@ public class Contract {
     private String tip;
     private String nr;
     private String marca;
-    private LocalDate data;
-    private LocalDate dataincepere;
+    private Date data;
+    private Date dataincepere;
     private Integer idpunctlucru;
     private Integer idcentrucost;
     private Integer idechipa;
@@ -35,7 +35,7 @@ public class Contract {
     private Double avans;
     private String monedaavans;
     private Integer zilecoan;
-    private LocalDate ultimazilucru;
+    private Date ultimazilucru;
     private String casasanatate;
     private String gradinvaliditate;
     private String functie;
@@ -52,7 +52,7 @@ public class Contract {
 
     }
 
-    public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere, Integer idpunctlucru, Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu, String modplata, String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
+    public Contract(String tip, String nr, String marca, Date data, Date dataincepere, Integer idpunctlucru, Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu, String modplata, String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
         this.tip = tip;
         this.nr = nr;
         this.marca = marca;
@@ -124,20 +124,20 @@ public class Contract {
     }
 
     @Column(name="data")
-    public LocalDate getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(LocalDate data) {
+    public void setData(Date data) {
         this.data = data;
     }
 
     @Column(name="dataincepere")
-    public LocalDate getDataincepere() {
+    public Date getDataincepere() {
         return dataincepere;
     }
 
-    public void setDataincepere(LocalDate dataincepere) {
+    public void setDataincepere(Date dataincepere) {
         this.dataincepere = dataincepere;
     }
 
@@ -295,11 +295,11 @@ public class Contract {
     }
 
     @Column(name="ultimazilucru")
-    public LocalDate getUltimazilucru() {
+    public Date getUltimazilucru() {
         return ultimazilucru;
     }
 
-    public void setUltimazilucru(LocalDate ultimazilucru) {
+    public void setUltimazilucru(Date ultimazilucru) {
         this.ultimazilucru = ultimazilucru;
     }
 

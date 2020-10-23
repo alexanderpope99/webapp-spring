@@ -12,9 +12,6 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
-import axios from 'axios';
-import authHeader from '../../services/auth-header';
-import { setAngajatSel } from '../Resources/angajatsel';
 
 class PersoaneTabel extends React.Component {
   constructor(props) {
@@ -36,11 +33,13 @@ class PersoaneTabel extends React.Component {
     window.scrollTo(0, 0);
   }
   deletePersoana(id, nume, prenume) {
-    setAngajatSel(null);
-
-    axios
-      .delete(`${server.address}/persoana/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
+    // id = id.replace('"', '');
+    // console.log(id);
+    fetch(`${server.address}/persoana/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((response) => response.json())
       .then(() => {
         // console.log(response);
         this.onRefresh();
@@ -52,75 +51,73 @@ class PersoaneTabel extends React.Component {
     this.setState({
       persoaneComponent: this.state.persoane.map((pers, index) => {
         for (let key in pers) {
-          if (!pers[key]) pers[key] = '-';
+          if (pers[key] === 'null' || pers[key] === null) pers[key] = '-';
         }
         return (
+          // TODO
           <tr key={pers.id}>
             <th>{pers.nume}</th>
             <th>{pers.prenume}</th>
             <th>{pers.email}</th>
             <th>{pers.telefon}</th>
-            {/* <th className="d-inline-flex"> */}
-            <th>
-              <div className="d-inline-flex">
-                <Button
-                  href={`/edit/edit-persoana?id=${pers.id}`}
-                  variant="outline-secondary"
-                  className="ml-2 p-1 rounded-circle border-0"
-                >
-                  <Edit fontSize="small" />
-                </Button>
+            <th className="d-inline-flex flex-row justify-content-around">
+              <Button
+                href={`/edit/edit-persoana?id=${pers.id}`}
+                variant="outline-secondary"
+                className="ml-2 p-1 rounded-circle border-0"
+              >
+                <Edit fontSize="small" />
+              </Button>
 
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-0 p-1 rounded-circle border-0"
-                        {...bindTrigger(popupState)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>
-                            Sigur ștergeți persoana {pers.nume} {pers.prenume}?
-                          </Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deletePersoana(pers.id, pers.nume, pers.prenume);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
-								</div>
+              <PopupState variant="popover" popupId="demo-popup-popover">
+                {(popupState) => (
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      className="m-0 p-1 rounded-circle border-0"
+                      {...bindTrigger(popupState)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </Button>
+                    <Popover
+                      {...bindPopover(popupState)}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                    >
+                      <Box p={2}>
+                        <Typography>
+                          Sigur ștergeți persoana {pers.nume} {pers.prenume}?
+                        </Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                        <br />
+                        <Button
+                          variant="outline-danger"
+                          onClick={() => {
+                            popupState.close();
+                            this.deletePersoana(pers.id, pers.nume, pers.prenume);
+                          }}
+                          className="mt-2 "
+                        >
+                          Da
+                        </Button>
+                        <Button
+                          variant="outline-persondary"
+                          onClick={popupState.close}
+                          className="mt-2"
+                        >
+                          Nu
+                        </Button>
+                      </Box>
+                    </Popover>
+                  </div>
+                )}
+              </PopupState>
             </th>
           </tr>
         );
@@ -129,9 +126,11 @@ class PersoaneTabel extends React.Component {
   }
 
   async onRefresh() {
-    const persoane = await axios
-      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data);
+    const persoane = await fetch(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      // body: JSON.stringify(persoane),
+    }).then((persoane) => persoane.json());
 
     this.setState({
       persoane: persoane,
@@ -146,9 +145,9 @@ class PersoaneTabel extends React.Component {
         <Row>
           <Col>
             <Card>
-              <Card.Header className="border-0">
+              <Card.Header>
                 <Card.Title as="h5">
-                  Persoane Înregistrate
+                  Listă Persoane Înregistrate
                   {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
                 </Card.Title>
                 <OverlayTrigger

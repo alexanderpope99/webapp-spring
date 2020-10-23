@@ -26,21 +26,19 @@ public class Societate {
     private Long idadresa;
     @Column(name = "email")
     private String email;
-    @Column(name = "telefon")
-    private String telefon;
 
-    public Societate() {
-    }
+    private Long selected;
 
-    public Societate(String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email,
-            String telefon) {
+
+    public Societate() { }
+
+    public Societate( String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email ) {
         this.nume = nume;
         this.cif = cif;
         this.capsoc = capsoc;
         this.regcom = regcom;
         this.idadresa = idadresa;
         this.email = email;
-        this.telefon = telefon;
     }
 
     @Id
@@ -48,7 +46,6 @@ public class Societate {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -57,65 +54,52 @@ public class Societate {
     public Double getCapsoc() {
         return capsoc;
     }
-
     public String getCif() {
         return cif;
     }
-
     public String getEmail() {
         return email;
     }
-
     public Long getIdadresa() {
         return idadresa;
     }
-
     public Long getIdcaen() {
         return idcaen;
     }
-
     public String getNume() {
         return nume;
     }
-
     public String getRegcom() {
         return regcom;
     }
-
-    public String getTelefon() {
-        return telefon;
+    public Long getSelected() {
+        return selected;
     }
 
     // SETTERS
     public void setCapsoc(Double capsoc) {
         this.capsoc = capsoc;
     }
-
     public void setCif(String cif) {
         this.cif = cif;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
     public void setIdadresa(Long idadresa) {
         this.idadresa = idadresa;
     }
-
     public void setIdcaen(Long idcaen) {
         this.idcaen = idcaen;
     }
-
     public void setNume(String nume) {
         this.nume = nume;
     }
-
     public void setRegcom(String regcom) {
         this.regcom = regcom;
     }
-
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
+    public void setSelected(Long selected) {
+        this.selected = selected;
     }
 }
+

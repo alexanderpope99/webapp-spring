@@ -1,121 +1,79 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "username"),
-		@UniqueConstraint(columnNames = "email") })
+@Table(name = "user", schema = "public")
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
 
-	@NotBlank
-	@Size(max = 20)
-	private String username;
+    private long id;
+    @Column(name = "username")
+    private String username;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "nume")
+    private String nume;
+    @Column(name = "prenume")
+    private String prenume;
+    @Column(name = "societateselectata")
+    private Long societateselectata;
+    
+    public User() { }
 
-	@NotBlank
-	@Size(max = 50)
-	@Email
-	private String email;
+    public User( String username, String password, String nume, String prenume, Long societateselecteta ) {
+        this.username = username;
+        this.password = password;
+        this.nume = nume;
+        this.prenume = prenume;
+        this.societateselectata = societateselecteta;
+    }
 
-	@NotBlank
-	@Size(max = 120)
-	private String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_angajat", referencedColumnName = "idpersoana")
-	private Angajat id_angajat;
+    // GETTERS
+    public String getNume() {
+        return nume;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getPrenume() {
+        return prenume;
+    }
+    public Long getSocietateselectata() {
+        return societateselectata;
+    }
+    public String getUsername() {
+        return username;
+    }
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+    // SETTERS
+    public void setNume(String nume) {
+        this.nume = nume;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setPrenume(String prenume) {
+        this.prenume = prenume;
+    }
+    public void setSocietateselectata(Long societateselectata) {
+        this.societateselectata = societateselectata;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+} 
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_societati", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "societate_id"))
-	private Set<Societate> societati = new HashSet<>();
-
-	@Column(name = "gen")
-	private boolean gen;
-
-	public User() {
-	}
-
-	public User(String username, String email, String password) {
-		this.username = username;
-		this.email = email;
-		this.password = password;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	// GETTERS
-	public String getEmail() {
-		return email;
-	}
-
-	public Angajat getId_angajat() {
-		return id_angajat;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public Set<Societate> getSocietati() {
-		return societati;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public boolean isGen() {
-		return gen;
-	}
-
-	// SETTERS
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setId_angajat(Angajat id_angajat) {
-		this.id_angajat = id_angajat;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	public void setSocietati(Set<Societate> societati) {
-		this.societati = societati;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public void setGen(boolean gen) {
-		this.gen = gen;
-	}
-}

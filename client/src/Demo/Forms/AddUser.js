@@ -1,11 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 
 import { server } from '../Resources/server-address';
-import { authHeader } from '../../services/auth-header';
 
 class AddUser extends React.Component {
   constructor(props) {
@@ -58,9 +56,12 @@ class AddUser extends React.Component {
       societateselectată: this.state.societateselectată,
     };
     // ADD User TO DATABASE
-    await axios
-      .post(`${server.address}/user`, user_body, { headers: authHeader() })
-      .then((user) => user.data)
+    await fetch(`${server.address}/user`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user_body),
+    })
+      .then((user) => user.json())
       .then(() => {
         this.setState({
           show: true,
