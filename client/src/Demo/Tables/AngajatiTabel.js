@@ -5,6 +5,8 @@ import MaterialTable from 'material-table';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class AngatjatiTabel extends React.Component {
   constructor() {
@@ -23,34 +25,23 @@ class AngatjatiTabel extends React.Component {
   }
 
   componentDidMount() {
-    if(!getSocSel())
-      window.location.href = "/dashboard/societati";
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
   }
 
   async deletePersoana(state) {
-    await fetch(`${server.address}/persoana/${state.id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    await axios.delete(`${server.address}/persoana/${state.id}`, { headers: authHeader() });
   }
 
   async getData() {
-    const persoane = await fetch(`${server.address}/persoana`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    }).then((persoane) => persoane.json());
+    const persoane = await axios
+      .get(`${server.address}/persoana`, { headers: authHeader() })
+      .then((persoane) => persoane.data);
 
     //for loop to keep only the display-able data in state.data
     for (let pers in persoane) {
-      let {
-        gen,
-        idactidentitate,
-        idadresa,
-        starecivila,
-        cnp,
-        idsocietate,
-        ...newpers
-      } = persoane[pers];
+      let { gen, idactidentitate, idadresa, starecivila, cnp, idsocietate, ...newpers } = persoane[
+        pers
+      ];
       persoane[pers] = newpers;
     }
 
@@ -82,8 +73,7 @@ class AngatjatiTabel extends React.Component {
                   icon: 'add',
                   tooltip: 'Adaugă Persoană',
                   isFreeAction: true,
-                  onClick: (e) =>
-                    (window.location.href = '/forms/add-persoana'),
+                  onClick: (e) => (window.location.href = '/forms/add-persoana'),
                 },
                 {
                   icon: 'refresh',
@@ -119,19 +109,19 @@ class AngatjatiTabel extends React.Component {
                 },
               }}
               editable={{
-                // onRowUpdate: (newData, oldData) =>
-                //   new Promise((resolve) => {
-                //     resolve();
-                //     if (oldData) {
-                //       this.setState((prevState) => {
-                //         const data = [...prevState.data];
-                //         data[data.indexOf(oldData)] = newData;
-                //         console.log(data);
-                //         // this.getData();
-                //         return { ...prevState, data };
-                //       });
-                //     }
-                //   }),
+                onRowUpdate: (newData, oldData) =>
+                  new Promise((resolve) => {
+                    resolve();
+                    if (oldData) {
+                      this.setState((prevState) => {
+                        const data = [...prevState.data];
+                        data[data.indexOf(oldData)] = newData;
+                        console.log(data);
+                        // this.getData();
+                        return { ...prevState, data };
+                      });
+                    }
+                  }),
                 onRowDelete: (oldData) =>
                   new Promise((resolve) => {
                     resolve();

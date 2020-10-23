@@ -35,19 +35,59 @@ const judete = [
   'SIBIU',
   'SUCEAVA',
   'TELEORMAN',
+  'TIMIȘ',
   'TULCEA',
   'VASLUI',
   'VÂLCEA',
-  'VRANCEA'
-]
+  'VRANCEA',
+];
 
-const sectoare = [
-  'SECTOR 1',
-  'SECTOR 2',
-  'SECTOR 3',
-  'SECTOR 4',
-  'SECTOR 5',
-  'SECTOR 6'
-]
+const sectoare = ['SECTOR 1', 'SECTOR 2', 'SECTOR 3', 'SECTOR 4', 'SECTOR 5', 'SECTOR 6'];
 
-export {judete, sectoare}
+const case_de_sanatate = [
+  'BUCUREȘTI - CAS_B',
+  'ALBA - CASAB',
+  'ARAD - CASAR',
+  'ARGEȘ - CASAG',
+  'BACĂU - CASBC',
+  'BIHOR - CASBH',
+  'BISTRIȚA-NĂSĂUD - CASBN',
+  'BOTOȘANI - CASBT',
+  'BRAȘOV - CASBV',
+  'BRĂILA - CASBR',
+  'BUZĂU - CASBZ',
+  'CARAȘ-SEVERIN - CASCS',
+  'CĂLĂRAȘI - CASCL',
+  'CLUJ - CASCJ',
+  'CONSTANȚA - CASCT',
+  'COVASNA - CASCV',
+  'DÂMBOVIȚA - CASDB',
+  'DOLJ - CASDJ',
+  'GALAȚI - CASGL',
+  'GIURGIU - CASGR',
+  'GORJ - CASGJ',
+  'HUNEDOARA - CASHD',
+  'IALOMIȚA - CASIL',
+  'IAȘI - CASIS',
+  'ILFOV - CASIF',
+  'MARAMUREȘ - CASMM',
+  'MEHEDINȚI - CASMH',
+  'MUREȘ - CASMS',
+  'NEAMȚ - CASNT',
+	'OLT - CASOT',
+  'PRAHOVA - CASPH',
+  'SATU MARE - CASSM',
+  'SĂLAJ - CASSJ',
+  'SIBIU - CASSB',
+  'SUCEAVA - CASSV',
+  'TELEORMAN - CASTR',
+	'TIMIȘ - CASTM',
+  'TULCEA - CASTL',
+  'VASLUI - CASVS',
+  'VÂLCEA - CASVL',
+  'VRANCEA - CASVN',
+	'OPSNAJ - CAS_A',
+	'TRANSPORTURI - CAS_T',
+];
+
+export { judete, sectoare, case_de_sanatate };

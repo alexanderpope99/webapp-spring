@@ -17,12 +17,25 @@ public class StatSalariiController {
 	@Autowired
 	private StatSalariiService statSalariiService;
 
-	@GetMapping("/test/mo={luna}&y={an}&ids={ids}")
-	public void test(
+	@GetMapping("/{ids}/mo={luna}&y={an}&i={i}/{uid}")
+	public boolean createStatSalarii(
+		@PathVariable("ids") int ids,
 		@PathVariable("luna") int luna,
 		@PathVariable("an") int an,
-		@PathVariable("ids") int ids
+		@PathVariable("i") String i, // intocmit de
+		@PathVariable("uid") long uid
 	) throws IOException, ResourceNotFoundException {
-		statSalariiService.createStatSalarii(luna, an, ids);
+		return statSalariiService.createStatSalarii(luna, an, ids, i, uid);
+	}
+
+	@GetMapping("/{ids}/individual/ida={ida}&mo={luna}&y={an}/{uid}")
+	public boolean createStatIndividual(
+		@PathVariable("ids") int ids,
+		@PathVariable("ida") long ida,
+		@PathVariable("luna") int luna,
+		@PathVariable("an") int an,
+		@PathVariable("uid") long uid
+	) throws IOException, ResourceNotFoundException {
+		return statSalariiService.createStatIndividual(luna, an, ida, ids, uid);
 	}
 }

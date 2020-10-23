@@ -10,6 +10,10 @@ import net.guides.springboot2.crud.model.CO;
 @Repository
 public interface CORepository extends JpaRepository<CO, Long>{
   List<CO> findByIdcontract(Long idcontract);
+  List<CO> findByIdcontractOrderByDelaDesc(Long idcontract);
 
 	List<CO> findByIdcontractAndTip(Long idcontract, String tip);
+	List<CO> findByIdcontractAndTipOrderByDelaDesc(Long idcontract, String tip);
+
+	List<CO> findAllByOrderByDelaAsc();
 }

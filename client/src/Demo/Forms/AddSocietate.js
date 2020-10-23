@@ -4,7 +4,8 @@ import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
-
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class AddSocietate extends React.Component {
   constructor(props) {
@@ -50,10 +51,9 @@ class AddSocietate extends React.Component {
 
   onChangeLocalitate(e) {
     if (
-      e.target.value === 'Bucuresti' ||
-      e.target.value === 'București' ||
-      e.target.value === 'BUCURESTI' ||
-      e.target.value === 'BUCUREȘTI'
+      e.target.value.toLowerCase() === 'bucuresti' ||
+			e.target.value.toLowerCase() === 'bucurești' ||
+			e.target.value.toLowerCase() === 'bucharest'
     )
       this.setState({
         capitala: 'Sector',
@@ -80,27 +80,22 @@ class AddSocietate extends React.Component {
     }
 
     for (const key in this.state) {
-      if (this.state[key] === '' || this.state[key] === "''")
-        this.state[key] = null;
+      if (this.state[key] === '' || this.state[key] === "''") this.state[key] = null;
     }
 
     var caen_id = null;
-    if (this.state.idcaen !== null) {
-      caen_id = await fetch(
-        `${server.address}/caen/${this.state.idcaen}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        }
-      ).then((res) => (res.status === 200 ? res.json() : -1));
+    // if (this.state.idcaen !== null) {
+    //   caen_id = await axios
+    //     .get(`${server.address}/caen/${this.state.idcaen}`, { headers: authHeader() })
+    //     .then((res) => (res.status === 200 ? res.data : -1));
 
-      if (caen_id === -1) {
-        caen_id = null;
-      } else {
-        caen_id = caen_id.id;
-        console.log('caen_id:', caen_id);
-      }
-    }
+    //   if (caen_id === -1) {
+    //     caen_id = null;
+    //   } else {
+    //     caen_id = caen_id.id;
+    //     console.log('caen_id:', caen_id);
+    //   }
+    // }
 
     var idadresa = null;
     // if aresa hass all fields null, don't add adresa or idadresa
@@ -113,41 +108,46 @@ class AddSocietate extends React.Component {
         tara: null,
       };
       // console.log(JSON.stringify(adresa_body));
-      let adresa = await fetch(`${server.address}/adresa`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(adresa_body),
-      }).then((res) => res.json());
+      let adresa = await axios
+        .post(`${server.address}/adresa`, adresa_body, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data);
       idadresa = adresa.id;
       console.log('idadresa:', adresa);
     }
     // build societate JSON for POST with adr_id as idadresa
     const societate_body = {
       nume: this.state.nume,
-      idcaen: caen_id,
+      idcaen: this.state.idcaen,
       cif: this.state.cif,
       capsoc: this.state.capsoc,
       regcom: this.state.regcom,
       idadresa: idadresa,
       email: this.state.email,
-      telefon: this.state.telefon
+      telefon: this.state.telefon,
     };
     console.log(societate_body);
-    // ADD SOCIETATE TO DATABASE
-    await fetch(`${server.address}/societate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(societate_body),
-    })
-      .then((societate_response) => societate_response.json())
+		// ADD SOCIETATE TO DATABASE
+		const user = JSON.parse(localStorage.getItem('user'));
+    await axios
+      .post(`${server.address}/societate/${user.id}`, societate_body, {
+        headers: authHeader(),
+      })
       .then(() => {
         //alert("Societate adaugata cu succes!");
         this.setState({
           show: true,
           modalMessage: 'Societate adăugată cu succes!',
-        });
+				});
+				window.scrollTo({
+					top: 0,
+					left: 0,
+					behavior: 'smooth',
+				});
       })
-      .then(this.clearFields());
+			.then(this.clearFields())
+			.catch(err => console.error(err));
   }
 
   render() {

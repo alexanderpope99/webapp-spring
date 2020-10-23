@@ -1,0 +1,37 @@
+alte retineri
+alte drepturi
+retineri (doar avans merge)
+
+buton pentru calculul pe 6 luni pentru toata societatea
+
+problem: in luna, anul: 
+	sterg stat salarii, baza calcul ramane pentru ca bazacalcul nu are idstatsalariat
+	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
+solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
+
+SARBATORI.js ARATA GRESIT
+
+cont bancar
+
+repara erori realizari/retineri
+
+
+CONCEDIU DE ODIHNA:
+	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
+
+
+	
+_________________________________________
+
+admin = nu vede datele
+
+director:
+	admin, + date
+
+contabil:
+	director - cereri de la angajati
+	
+angajat:
+	doar:
+	+ date personale,
+	+ face cereri

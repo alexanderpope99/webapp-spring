@@ -26,9 +26,14 @@ public class COController {
     @Autowired
     private CORepository coRepository;
 
-    @GetMapping
+    @GetMapping("latest")
+    public List<CO> getAllCOsLatest() {
+        return coRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+		}
+		
+		@GetMapping
     public List<CO> getAllCOs() {
-        return coRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return coRepository.findAllByOrderByDelaAsc();
     }
 
     @GetMapping("{id}")
@@ -40,13 +45,13 @@ public class COController {
 
     @GetMapping("idc={id}")
     public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
-        List<CO> co = coRepository.findByIdcontract(idcontract);
+        List<CO> co = coRepository.findByIdcontractOrderByDelaDesc(idcontract);
         return ResponseEntity.ok().body(co);
     }
 
     @GetMapping("fp&idc={id}")
     public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
-        List<CO> co = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
+        List<CO> co = coRepository.findByIdcontractAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
         return ResponseEntity.ok().body(co);
     }
 

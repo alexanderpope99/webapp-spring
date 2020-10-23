@@ -4,42 +4,54 @@ import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
-// import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
+import { getAngajatSel } from '../Resources/angajatsel';
+import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
+import BazaCalcul from '../Tables/BazaCalcul';
 
 /*
   ? how it works now:
-  * fetch date contract when focusint tab 'contract'
-  *
+	*	Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
+	* * * * *
+  * fetch date contract when focusing tab 'contract'
+  * * * * *
   * when focusing 'contract' check if person has contract:
   *   |> has contract: 1. method = 'PUT'
   *                    2. populate form with contract data
+	* 											\ if persoana has adresa.judet != SECTOR -> preselect casa_sanatate
   *
   *   |>  no contract: 1. method = 'POST'
   *                    2. clearFields()
+	* * * * *
+	* in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
+	* * * * *
 */
 
 class Angajat extends React.Component {
   constructor() {
     super();
 
-    if(!getSocSel())
-      window.location.href = "/dashboard/societati";
-      
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+
     // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
 
     this.persoana = React.createRef();
+    this.persoaneintretinere = React.createRef();
     this.contract = React.createRef();
     this.co = React.createRef();
     this.cm = React.createRef();
+    this.bc = React.createRef();
 
     this.state = {
       socsel: getSocSel(),
+      angajatsel: getAngajatSel(),
 
       angajat: null,
       idpersoana: null,
@@ -56,8 +68,6 @@ class Angajat extends React.Component {
   }
 
   componentDidMount() {
-    
-
     window.scrollTo(0, 0);
   }
 
@@ -70,24 +80,21 @@ class Angajat extends React.Component {
 
   async getSelectedAngajatData() {
     // get id of selected angajat
-    const idpersoana = this.persoana.current.getIdOfSelected();
-    if (idpersoana === null || idpersoana === -1) {
+    const angajatsel = getAngajatSel();
+    const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
+    if (!idpersoana) {
       this.contract.current.clearFields();
+      this.setState({ angajatsel: null });
       return;
     } else this.contract.current.setState({ buttonDisabled: false });
 
-    // get angajat with selected id
-    const angajat = await fetch(
-      `${server.address}/angajat/${idpersoana}`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
-      .then((res) => res.json())
+    const angajat = await axios
+      .get(`${server.address}/angajat/${idpersoana}`, { headers: authHeader() })
+      .then((res) => res.data)
       .catch((err) => console.error(err));
 
     this.setState({
+      angajatsel: angajatsel,
       angajat: angajat,
       idcontract: angajat.idcontract,
       idpersoana: angajat.idpersoana,
@@ -98,10 +105,9 @@ class Angajat extends React.Component {
   }
 
   async onFocusContract() {
-    // can also work with state.angajat
     const angajat = await this.getSelectedAngajatData();
-    if (typeof angajat === 'undefined') return;
-    // declared just for typing convenience
+    if (!angajat) return;
+    // declared for typing convenience
     let idcontract = angajat.idcontract;
     let idpersoana = angajat.idpersoana;
 
@@ -109,11 +115,9 @@ class Angajat extends React.Component {
     // if angajat has contract
     if (idcontract !== null) {
       // fetch data from contract
-      contract = await fetch(`${server.address}/contract/${idcontract}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((res) => res.json())
+      contract = await axios
+        .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
+        .then((res) => res.data)
         .catch((err) => console.error(err));
     }
     //* FILL FORM
@@ -128,8 +132,7 @@ class Angajat extends React.Component {
       this.setState(
         {
           show: true,
-          modalMessage:
-            'Pentru concedii, angajatul are nevoie de un contract de muncă.',
+          modalMessage: 'Pentru concedii, angajatul are nevoie de un contract de muncă.',
         },
         () => this.setState({ key: 'contract' })
       );
@@ -148,14 +151,24 @@ class Angajat extends React.Component {
     if (angajat.idcontract === null) {
       this.setState({
         show: true,
-        modalMessage:
-          'Pentru concedii, angajatul are nevoie de un contract de muncă.',
+        modalMessage: 'Pentru concedii, angajatul are nevoie de un contract de muncă.',
         key: 'contract',
       });
       return;
     }
 
     this.cm.current.setAngajat(angajat);
+  }
+  async onFocusBC() {
+    await this.bc.current.updateAngajatSel();
+    this.bc.current.onRefresh();
+    this.setState({ anajatsel: getAngajatSel() });
+  }
+
+  async onFocusPI() {
+    await this.persoaneintretinere.current.updateAngajatSel();
+    this.persoaneintretinere.current.onRefresh();
+    this.setState({ angajatsel: getAngajatSel() });
   }
 
   render() {
@@ -175,7 +188,12 @@ class Angajat extends React.Component {
         <Row>
           <Col>
             <h5>
-              Date angajat {this.state.socsel.nume ? "- " + this.state.socsel.nume : ""}
+              {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
+              {this.state.angajatsel && this.state.key !== 'date-personale'
+                ? ' - ' + this.state.angajatsel.numeintreg
+                : this.state.key !== 'date-personale'
+                ? ' *niciun angajat selectat'
+                : ''}
             </h5>
 
             <hr />
@@ -189,6 +207,8 @@ class Angajat extends React.Component {
                 if (key === 'contract') this.onFocusContract();
                 else if (key === 'co') this.onFocusCO();
                 else if (key === 'cm') this.onFocusCM();
+                else if (key === 'pi') this.onFocusPI();
+                else if (key === 'bc') this.onFocusBC();
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
@@ -210,9 +230,23 @@ class Angajat extends React.Component {
               <Tab eventKey="cm" title="C.M.">
                 <ConcediiMedicale ref={this.cm} />
               </Tab>
+
+              <Tab eventKey="bc" title="Bază calcul">
+                <BazaCalcul ref={this.bc} />
+              </Tab>
+
+              <Tab eventKey="pi" title="Pers. într.">
+                <PersoaneIntretinereTabel ref={this.persoaneintretinere} />
+              </Tab>
             </Tabs>
             <Button
-              onClick={() => window.scrollTo(0, 0)}
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: 'smooth',
+                })
+              }
               className="float-center"
             >
               TO TOP

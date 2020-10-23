@@ -4,6 +4,11 @@ import Aux from '../../hoc/_Aux';
 
 import { getSocSel, setSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
+import { setAngajatSel } from '../Resources/angajatsel';
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
+
+import { Multiselect } from 'multiselect-react-dropdown';
 
 class Societati extends React.Component {
   /*
@@ -16,7 +21,6 @@ class Societati extends React.Component {
   constructor() {
     super();
     this.unselectAll = this.unselectAll.bind(this);
-    this.downloadButton = this.downloadButton.bind(this);
 
     this.state = {};
   }
@@ -26,10 +30,18 @@ class Societati extends React.Component {
   }
 
   async getNumeSocietati() {
-    let societati = await fetch(`${server.address}/societate`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    }).then((response) => response.json());
+    const user = JSON.parse(localStorage.getItem('user'));
+    let uri = `${server.address}/societate/user/${user.id}`;
+    if (user.roles.includes('ROLE_DIRECTOR')) {
+      uri = `${server.address}/societate/`;
+    }
+    const societati = await axios
+      .get(uri, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.log('err'));
+
     if (Array.isArray(societati)) {
       societati.forEach((societate) =>
         this.setState({
@@ -52,6 +64,7 @@ class Societati extends React.Component {
 
   select(nume_soc) {
     this.unselectAll();
+    setAngajatSel(null);
     if (nume_soc) {
       let id = this.state[nume_soc].id;
       this.setState({
@@ -61,24 +74,6 @@ class Societati extends React.Component {
       setSocSel({ id: id, nume: nume_soc });
       console.log(getSocSel());
     }
-  }
-
-  async downloadButton() {
-    console.log('trying to download...');
-    await fetch(`${server.address}/download/Stat Salarii - Ingenio Software S.A. - Septembrie 2020.xlsx`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/octet-stream' },
-    })
-      .then((res) => res.blob())
-      .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = "Stat Salarii - Ingenio Software S.A. - Septembrie 2020.xlsx";
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click();
-        a.remove();  //afterwards we remove the element again
-      });
   }
 
   render() {
@@ -98,15 +93,12 @@ class Societati extends React.Component {
           }
         >
           <Card.Body>
-            <h3 className="d-flex justify-content-around pb-5">{nume_soc}</h3>
-            <div className="d-flex flex-inline justify-content-end">
+            <h3 className="d-flex justify-content-around">{nume_soc}</h3>
+            {/* <div className="d-flex flex-inline justify-content-end">
               <Button size="sm" className="m-1 p-1">
                 Editează
               </Button>
-              <Button size="sm" className="m-1 p-1">
-                Șterge
-              </Button>
-            </div>
+            </div> */}
           </Card.Body>
         </Card>
       </Col>
@@ -114,7 +106,7 @@ class Societati extends React.Component {
 
     return (
       <Aux>
-        <Button onClick={this.downloadButton}>download</Button>
+        <Button href="/forms/add-societate">Adaugă societate</Button>
         <Row>{societatiComponent}</Row>
       </Aux>
     );

@@ -7,6 +7,8 @@ global.jQuery = $;
 
 const DashboardDefault = React.lazy(() => import('./Demo/Dashboard/Default'));
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
+const ParametriiSalarii = React.lazy(() => import('./Demo/Dashboard/ParametriiSalarii'));
+const Setari = React.lazy(() => import('./Demo/Edit/Setari'));
 
 const UIBasicButton = React.lazy(() => import('./Demo/UIElements/Basic/Button'));
 const UIBasicBadges = React.lazy(() => import('./Demo/UIElements/Basic/Badges'));
@@ -25,8 +27,9 @@ const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
 
-// DOWNLOADS
-const Stat = React.lazy(() => import('./Demo/Generators/Stat'));
+// RAPOARTE
+const Stat = React.lazy(() => import('./Demo/Rapoarte/Stat'));
+const Pontaj = React.lazy(() => import('./Demo/Rapoarte/Pontaj'));
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
@@ -34,15 +37,14 @@ const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
+const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
+const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
 const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
-const RoleTabel = React.lazy(() => import('./Demo/Tables/RoleTabel'));
-const PermissionTabel = React.lazy(() => import('./Demo/Tables/PermissionTabel'));
-
-const RoleToPermissionTabel = React.lazy(() => import('./Demo/Tables/RoleToPermissionTabel'));
-const UserToRoleTabel = React.lazy(() => import('./Demo/Tables/UserToRoleTabel'));
+const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
+const Profile = React.lazy(() => import('./Demo/Edit/Profile'));
 
 const Nvd3Chart = React.lazy(() => import('./Demo/Charts/Nvd3Chart/index'));
 
@@ -56,6 +58,18 @@ const routes = [
 
   // CARDS
   { path: '/dashboard/societati', exact: true, name: 'Societati', component: Societati },
+  {
+    path: '/parametriisalarii',
+    exact: true,
+    name: 'Parametrii Salarii',
+    component: ParametriiSalarii,
+  },
+  {
+    path: '/edit/setari',
+    exact: true,
+    name: 'Setari',
+    component: Setari,
+  },
   { path: '/dashboard/default', exact: true, name: 'Default', component: DashboardDefault },
   { path: '/basic/button', exact: true, name: 'Basic Button', component: UIBasicButton },
   { path: '/basic/badges', exact: true, name: 'Basic Badges', component: UIBasicBadges },
@@ -89,10 +103,11 @@ const routes = [
     exact: true,
     name: 'Realizari / Retineri',
     component: RealizariRetineri,
-	},
-	
-	// DOWNLOADS
-	{ path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
+  },
+
+  // RAPOARTE
+  { path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
+  { path: '/pontaj', exact: true, name: 'Foaie pontaj', component: Pontaj },
 
   // TABLES
   { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
@@ -103,6 +118,12 @@ const routes = [
     name: 'Tabel Societati',
     component: SocietatiTabel,
   },
+  {
+    path: '/tables/user-tabel',
+    exact: true,
+    name: 'Tabel Useri',
+    component: UserTabel,
+  },
   { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
   {
     path: '/tables/concedii-odihna',
@@ -110,25 +131,27 @@ const routes = [
     name: 'Concedii Odihna',
     component: ConcediiOdihna,
   },
-  { path: '/tables/user-tabel', exact: true, name: 'User Tabel', component: UserTabel },
-  { path: '/tables/role-tabel', exact: true, name: 'Role Tabel', component: RoleTabel },
-  { path: '/tables/permission-tabel', exact: true, name: 'Role Tabel', component: PermissionTabel },
-
   {
-    path: '/tables/role-to-permission-tabel',
+    path: '/tables/cereri-concediu',
     exact: true,
-    name: 'Role-to-Permission Tabel',
-    component: RoleToPermissionTabel,
+    name: 'Cereri Concediu',
+    component: CereriConcediu,
   },
   {
-    path: '/tables/user-to-role-tabel',
+    path: '/tables/cereri-concediu-director',
     exact: true,
-    name: 'User-to-Role Tabel',
-    component: UserToRoleTabel,
+    name: 'Cereri Concediu',
+    component: CereriConcediuSuperior,
   },
-
+	{
+    path: '/sarbatori',
+    exact: true,
+    name: 'Sărbători',
+    component: SarbatoriTabel,
+  },
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
+  { path: '/edit/profile', exact: true, name: 'Profil', component: Profile },
 
   { path: '/charts/nvd3', exact: true, name: 'Nvd3 Chart', component: Nvd3Chart },
   { path: '/maps/google-map', exact: true, name: 'Google Map', component: GoogleMap },
