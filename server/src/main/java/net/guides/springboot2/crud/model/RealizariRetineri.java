@@ -26,10 +26,10 @@ public class RealizariRetineri {
 	private Integer zileco = 0;
 	@Column(name = "zilecolucratoare")
 	private Integer zilecolucratoare = 0;
-	@Column(name = "zileconeplatit")
-	private Integer zileconeplatit = 0;
-	@Column(name = "zileconeplatitlucratoare")
-	private Integer zileconeplatitlucratoare;
+	@Column(name = "zilecfp")
+	private Integer zilecfp = 0;
+	@Column(name = "zilecfplucratoare")
+	private Integer zilecfplucratoare;
 	@Column(name = "zilecm")
 	private Integer zilecm = 0;
 	@Column(name = "zilecmlucratoare")
@@ -44,7 +44,9 @@ public class RealizariRetineri {
 
 	@Column(name = "valcm")
 	private Integer valcm = 0;
-
+    @Column(name = "valco")
+    private Integer valco = 0;
+    
 	@Column(name = "norma")
 	private Integer norma = 0; // nr zile lucratoare in luna
 	@Column(name = "duratazilucru")
@@ -94,7 +96,7 @@ public class RealizariRetineri {
 	@Column(name = "totaloresuplimentare")
 	private Float totaloresuplimentare = 0f;
 	@Column(name = "nroresuplimentare")
-	private Integer nroresuplimentare = 0;
+    private Integer nroresuplimentare = 0;
 
 	public RealizariRetineri() {
 	}
@@ -106,8 +108,8 @@ public class RealizariRetineri {
 	}
 
 	public RealizariRetineri(long idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco,
-			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zileconeplatit,
-			Integer zileconeplatitlucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate,
+			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zilecfp,
+			Integer zilecfplucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate,
 			Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit,
 			Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta,
 			Float totaloresuplimentare) {
@@ -118,8 +120,8 @@ public class RealizariRetineri {
 		this.nrtichete = nrtichete;
 		this.zileco = zileco;
 		this.zilecolucratoare = zilecolucratoare;
-		this.zileconeplatit = zileconeplatit;
-		this.zileconeplatitlucratoare = zileconeplatitlucratoare;
+		this.zilecfp = zilecfp;
+		this.zilecfplucratoare = zilecfplucratoare;
 		this.zilecm = zilecm;
 		this.zilecmlucratoare = zilecmlucratoare;
 		this.zilec = zileco + zilecm;
@@ -178,8 +180,8 @@ public class RealizariRetineri {
 		return zilec;
 	}
 
-	public Integer getZileconeplatit() {
-		return zileconeplatit;
+	public Integer getZilecfp() {
+		return zilecfp;
 	}
 
 	public Integer getZileplatite() {
@@ -282,8 +284,8 @@ public class RealizariRetineri {
 		return zilecolucratoare;
 	}
 
-	public Integer getZileconeplatitlucratoare() {
-		return zileconeplatitlucratoare;
+	public Integer getZilecfplucratoare() {
+		return zilecfplucratoare;
 	}
 
 	public Integer getNroresuplimentare() {
@@ -300,7 +302,11 @@ public class RealizariRetineri {
 
 	public Integer getZilecontract() {
 		return zilecontract;
-	}
+    }
+    
+    public Integer getValco() {
+        return valco;
+    }
 
 	// ! SETTERS
 	public void setNrtichete(Integer nrtichete) {
@@ -327,8 +333,8 @@ public class RealizariRetineri {
 		this.zileplatite = zileplatite;
 	}
 
-	public void setZileconeplatit(Integer zileconeplatit) {
-		this.zileconeplatit = zileconeplatit;
+	public void setZilecfp(Integer zilecfp) {
+		this.zilecfp = zilecfp;
 	}
 
 	public void setDuratazilucru(Integer duratazilucru) {
@@ -349,7 +355,11 @@ public class RealizariRetineri {
 
 	public void setCas(Float cas) {
 		this.cas = cas;
-	}
+    }
+    
+    public void setValco(Integer valco) {
+        this.valco = valco;
+    }
 
 	public void setCass(Float cass) {
 		this.cass = cass;
@@ -427,8 +437,8 @@ public class RealizariRetineri {
 		this.zilecolucratoare = zilecolucratoare;
 	}
 
-	public void setZileconeplatitlucratoare(Integer zileconeplatitlucratoare) {
-		this.zileconeplatitlucratoare = zileconeplatitlucratoare;
+	public void setZilecfplucratoare(Integer zilecfplucratoare) {
+		this.zilecfplucratoare = zilecfplucratoare;
 	}
 
 	public void setNroresuplimentare(Integer nroresuplimentare) {
