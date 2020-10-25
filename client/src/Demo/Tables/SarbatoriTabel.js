@@ -216,7 +216,7 @@ class SarbatoriTabel extends React.Component {
 
   formatDate(date) {
     let luna = date.substring(5, 7);
-    let ziua = date.substring(8, 10).match('[1-9]{1,2}');
+    let ziua = date.substring(8, 10).match('[1-9][0-9]*');
 
     switch (luna) {
       case '01':

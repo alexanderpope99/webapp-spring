@@ -262,7 +262,7 @@ public class StatSalariiService {
                 writerCell = row2.createCell(11); // valoare CO
                 writerCell.setCellStyle(salariuStyle);
                 writerCell.setCellValue(
-                        (realizariRetineri.getZilecolucratoare() - realizariRetineri.getZileconeplatitlucratoare())
+                        (realizariRetineri.getZilecolucratoare() - realizariRetineri.getZilecfplucratoare())
                                 * realizariRetineri.getSalariupezi());
                 writerCell = row3.createCell(11); // CO neefect.
                 writerCell.setCellValue(0);
