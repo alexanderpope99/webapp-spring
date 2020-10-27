@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
 import Refresh from '@material-ui/icons/Refresh';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -32,8 +33,9 @@ class SarbatoriTabel extends React.Component {
 
       an: '',
 
-      // add modal:
+      // edit modal:
       show: false,
+      id: '',
       dela: '',
       panala: '',
       nume: '',
@@ -105,6 +107,7 @@ class SarbatoriTabel extends React.Component {
       this.setState({
         show: false,
         // reset data
+        id: '',
         dela: '',
         panala: '',
         nume: '',
@@ -119,17 +122,27 @@ class SarbatoriTabel extends React.Component {
   }
 
   async addSarbatoare() {
-    const co_body = {
+    const sarbatoare_body = {
       dela: this.state.dela,
       panala: this.state.panala,
       nume: this.state.nume,
       // in DB also has sporuripermanente
     };
 
-    let ok = await axios
-      .post(`${server.address}/sarbatori`, co_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error('err:', err));
+    let ok = false;
+    if (this.state.isEdit) {
+      ok = await axios
+        .put(`${server.address}/sarbatori/${this.state.id}`, sarbatoare_body, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error('err:', err));
+    } else {
+      ok = await axios
+        .post(`${server.address}/sarbatori`, sarbatoare_body, { headers: authHeader() })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error('err:', err));
+    }
 
     if (ok) {
       // close add modal
@@ -137,11 +150,26 @@ class SarbatoriTabel extends React.Component {
       // open confirm modal
       this.setState({
         show_confirm: true,
-        modalMessage: 'Sărbătoarea ' + this.state.nume + ' adăugată cu succes 💾',
+        modalMessage:
+          'Sărbătoarea ' +
+          this.state.nume +
+          (this.state.isEdit ? ' actualizată' : ' adăugată') +
+          ' cu succes 💾',
       });
 
       this.fillTable();
     }
+  }
+
+  editSarbatoare(sarbatoare) {
+    this.setState({
+      isEdit: true,
+      show: true,
+      id: sarbatoare.id,
+      dela: sarbatoare.dela,
+      panala: sarbatoare.panala,
+      nume: sarbatoare.nume,
+    });
   }
 
   onChangeAn(an) {
@@ -159,6 +187,13 @@ class SarbatoriTabel extends React.Component {
               <th>{this.formatDate(sarbatoare.panala.substring(0, 10))}</th>
               <th>{sarbatoare.nume}</th>
               <th className="d-inline-flex flex-row justify-content-around">
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  onClick={() => this.editSarbatoare(sarbatoare)}
+                >
+                  <Edit fontSize="small" />
+                </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
                     <div>
@@ -209,7 +244,7 @@ class SarbatoriTabel extends React.Component {
               </th>
             </tr>
           );
-				}
+        }
       }),
     });
   }
@@ -266,7 +301,7 @@ class SarbatoriTabel extends React.Component {
   render() {
     return (
       <Aux>
-        {/* // ADD MODAL */}
+        {/* ADD/EDIT MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Sărbătoare nouă</Modal.Title>
@@ -309,7 +344,7 @@ class SarbatoriTabel extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.addSarbatoare}>
-              Adaugă
+              {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>

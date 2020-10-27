@@ -11,7 +11,7 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 buton de 'show password' la schimba prola
 
-SARBATORI.js ARATA GRESIT
+buton edit pentru:  [concediu medical, sarbatori]
 
 cont bancar
 

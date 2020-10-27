@@ -309,7 +309,7 @@ class CMTabel extends React.Component {
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
         headers: authHeader(),
       })
-      .then((res) => res.statusText)
+      .then((res) => res.status === 200)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -516,7 +516,7 @@ class CMTabel extends React.Component {
 
     return (
       <Aux>
-        {/* // C.M. MODAL */}
+        {/* C.M. MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Concediu medical</Modal.Title>
