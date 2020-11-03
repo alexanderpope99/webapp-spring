@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,7 +21,7 @@ public class Contract implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 	@Column(name = "tip")
 	private String tip;
 	@Column(name = "nr")
@@ -31,14 +32,6 @@ public class Contract implements Serializable {
 	private LocalDate data;
 	@Column(name = "dataincepere")
 	private LocalDate dataincepere;
-	@Column(name = "idpunctlucru")
-	private Integer idpunctlucru;
-	@Column(name = "idcentrucost")
-	private Integer idcentrucost;
-	@Column(name = "idechipa")
-	private Integer idechipa;
-	@Column(name = "iddepartament")
-	private Integer iddepartament;
 	@Column(name = "functiedebaza")
 	private Boolean functiedebaza;
 	@Column(name = "calculdeduceri")
@@ -84,29 +77,47 @@ public class Contract implements Serializable {
 	@Column(name = "pensionar")
 	private Boolean pensionar;
 
+	@ManyToOne
+	@JoinColumn(name = "idcentrucost")
+	private CentruCost centrucost;
+
+	@ManyToOne
+	@JoinColumn(name = "idpunctlucru")
+	private PunctDeLucru punctdelucru;
+
+	@ManyToOne
+	@JoinColumn(name = "idechipa")
+	private Echipa echipa;
+
+	@ManyToOne
+	@JoinColumn(name = "iddepartapent")
+	private Departament departament;
+
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idcontcancar", referencedColumnName = "iban")
+	@JoinColumn(name = "idcontbancar", referencedColumnName = "iban")
 	private ContBancar contbancar;
+
+	// @OneToMany(mappedBy = "contract")
+	// private Set<RealizariRetineri> realizariRetineri;
 
 	public Contract() {
 	}
 
-	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere, Integer idpunctlucru,
-			Integer idcentrucost, Integer idechipa, Integer iddepartament, Boolean functiedebaza,
-			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar,
-			String monedasalariu, String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata,
-			Double avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate,
-			String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat,
-			Double cotizatiesindicat, String spor, Boolean pensionar) {
+	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
+			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
+			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu,
+			String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans,
+			Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate, String functie,
+			String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
 		this.data = data;
 		this.dataincepere = dataincepere;
-		this.idpunctlucru = idpunctlucru;
-		this.idcentrucost = idcentrucost;
-		this.idechipa = idechipa;
-		this.iddepartament = iddepartament;
+		this.punctdelucru = punctdelucru;
+		this.centrucost = centrucost;
+		this.echipa = echipa;
+		this.departament = departament;
 		this.functiedebaza = functiedebaza;
 		this.calculdeduceri = calculdeduceri;
 		this.studiisuperioare = studiisuperioare;
@@ -131,11 +142,11 @@ public class Contract implements Serializable {
 		this.pensionar = pensionar;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -179,36 +190,36 @@ public class Contract implements Serializable {
 		this.dataincepere = dataincepere;
 	}
 
-	public Integer getIdpunctlucru() {
-		return idpunctlucru;
+	public CentruCost getCentrucost() {
+		return centrucost;
 	}
 
-	public void setIdpunctlucru(Integer idpunctlucru) {
-		this.idpunctlucru = idpunctlucru;
+	public Departament getDepartament() {
+		return departament;
 	}
 
-	public Integer getIdcentrucost() {
-		return idcentrucost;
+	public Echipa getEchipa() {
+		return echipa;
 	}
 
-	public void setIdcentrucost(Integer idcentrucost) {
-		this.idcentrucost = idcentrucost;
+	public PunctDeLucru getPunctdelucru() {
+		return punctdelucru;
 	}
 
-	public Integer getIdechipa() {
-		return idechipa;
+	public void setCentrucost(CentruCost centrucost) {
+		this.centrucost = centrucost;
 	}
 
-	public void setIdechipa(Integer idechipa) {
-		this.idechipa = idechipa;
+	public void setDepartament(Departament departament) {
+		this.departament = departament;
 	}
 
-	public Integer getIddepartament() {
-		return iddepartament;
+	public void setEchipa(Echipa echipa) {
+		this.echipa = echipa;
 	}
 
-	public void setIddepartament(Integer iddepartament) {
-		this.iddepartament = iddepartament;
+	public void setPunctdelucru(PunctDeLucru punctdelucru) {
+		this.punctdelucru = punctdelucru;
 	}
 
 	public Boolean isFunctiedebaza() {

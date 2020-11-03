@@ -11,48 +11,50 @@ import java.io.Serializable;
 @Entity
 @IdClass(UserToRoleId.class)
 @Table(name = "usertorole")
-public class UserToRole {
+public class UserToRole implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "userid", nullable = false)
-    private long userid;
+    private int userid;
     @Id
     @Column(name = "roleid", nullable = false)
-    private long roleid;
+    private int roleid;
 
     public UserToRole() { }
 
-    public UserToRole( Long roleid, Long userid ) {
+    public UserToRole( int roleid, int userid ) {
         this.roleid = roleid;
         this.userid = userid;
     }
 
     // GETTERS
-    public long getUserid() {
+    public int getUserid() {
         return userid;
     }
-    public Long getRoleid() {
+    public int getRoleid() {
         return roleid;
     }
 
     // SETTERS
-    public void setUserid(long userid) {
+    public void setUserid(int userid) {
         this.userid = userid;
     }
-    public void setRoleid(Long roleid) {
+    public void setRoleid(int roleid) {
         this.roleid = roleid;
     }
 }
 
 class UserToRoleId implements Serializable {
-    protected static final long serialVersionUID = 1L;
-    protected long userid;
-    protected long roleid;
+		protected static final long serialVersionUID = 1L;
+		
+    protected int userid;
+    protected int roleid;
 
     public UserToRoleId() {
     }
 
-    public UserToRoleId(long userid, long roleid) {
+    public UserToRoleId(int userid, int roleid) {
         this.userid = userid;
         this.roleid = roleid;
     }

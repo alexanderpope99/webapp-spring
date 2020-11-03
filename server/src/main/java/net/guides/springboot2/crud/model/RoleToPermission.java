@@ -6,55 +6,59 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-// import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @IdClass(RoleToPermissionId.class)
 @Table(name = "roletopermission")
-public class RoleToPermission {
+public class RoleToPermission implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "roleid", nullable = false)
-    private long roleid;
-    @Id
-    @Column(name = "permissionid", nullable = false)
-    private long permissionid;
+	@Id
+	@Column(name = "roleid", nullable = false)
+	private int roleid;
+	@Id
+	@Column(name = "permissionid", nullable = false)
+	private int permissionid;
 
-    public RoleToPermission() { }
+	public RoleToPermission() {
+	}
 
-    public RoleToPermission( Long roleid, Long permissionid ) {
-        this.roleid = roleid;
-        this.permissionid = permissionid;
-    }
+	public RoleToPermission(int roleid, int permissionid) {
+		this.roleid = roleid;
+		this.permissionid = permissionid;
+	}
 
-    // GETTERS
-    public Long getPermissionid() {
-        return permissionid;
-    }
-    public Long getRoleid() {
-        return roleid;
-    }
+	// GETTERS
+	public int getPermissionid() {
+		return permissionid;
+	}
 
-    // SETTERS
-    public void setPermissionid(Long permissionid) {
-        this.permissionid = permissionid;
-    }
-    public void setRoleid(Long roleid) {
-        this.roleid = roleid;
-    }
+	public int getRoleid() {
+		return roleid;
+	}
+
+	// SETTERS
+	public void setPermissionid(int permissionid) {
+		this.permissionid = permissionid;
+	}
+
+	public void setRoleid(int roleid) {
+		this.roleid = roleid;
+	}
 }
 
 class RoleToPermissionId implements Serializable {
 	private static final long serialVersionUID = 1L;
-	protected long roleid;
-    protected long permissionid;
 
-    public RoleToPermissionId() {
-    }
+	protected int roleid;
+	protected int permissionid;
 
-    public RoleToPermissionId(long roleid, long permissionid) {
-        this.roleid = roleid;
-        this.permissionid = permissionid;
-    }
+	public RoleToPermissionId() {
+	}
+
+	public RoleToPermissionId(int roleid, int permissionid) {
+		this.roleid = roleid;
+		this.permissionid = permissionid;
+	}
 }

@@ -20,7 +20,7 @@ public class Persoana implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private int id;
 	@Column(name = "gen")
 	private String gen;
 	@Column(name = "nume")
@@ -63,11 +63,11 @@ public class Persoana implements Serializable {
 	}
 
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

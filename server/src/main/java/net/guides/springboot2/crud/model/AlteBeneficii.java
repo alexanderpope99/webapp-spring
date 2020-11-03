@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,8 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "altebeneficii")
-public class AlteBeneficii {
-
+public class AlteBeneficii implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -32,18 +34,18 @@ public class AlteBeneficii {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
+	private Contract contract;
 
 	public AlteBeneficii() {
 
 	}
 
-	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Contract idcontract) {
+	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Contract contract) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
 		this.aplicare = aplicare;
-		this.idcontract = idcontract;
+		this.contract = contract;
 	}
 
 	public int getId() {
@@ -86,11 +88,11 @@ public class AlteBeneficii {
 		this.aplicare = aplicare;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 }

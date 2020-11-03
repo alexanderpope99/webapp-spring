@@ -1,6 +1,6 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.Set;
+import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,13 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "departament")
-public class Departament {
+public class Departament implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,25 +25,25 @@ public class Departament {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idadresa", referencedColumnName = "id")
-	private Adresa idadresa;
+	private Adresa adresa;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsocietate")
-	private Societate idsocietate;
+	private Societate societate;
 
 	@Column(name = "nume")
 	private String nume;
 
-	@OneToMany(mappedBy = "iddepartament")
-	private Set<Echipa> echipe;
+	// @OneToMany(mappedBy = "departament")
+	// private Set<Echipa> echipe;
 
 	public Departament() {
 
 	}
 
-	public Departament(Adresa idadresa, Societate idsocietate, String nume) {
-		this.idadresa = idadresa;
-		this.idsocietate = idsocietate;
+	public Departament(Adresa adresa, Societate societate, String nume) {
+		this.adresa = adresa;
+		this.societate = societate;
 		this.nume = nume;
 	}
 
@@ -55,20 +55,20 @@ public class Departament {
 		this.id = id;
 	}
 
-	public Adresa getIdadresa() {
-		return idadresa;
+	public Adresa getAdresa() {
+		return adresa;
 	}
 
-	public void setIdadresa(Adresa idadresa) {
-		this.idadresa = idadresa;
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
 	}
 
-	public Societate getIdsocietate() {
-		return idsocietate;
+	public Societate getSocietate() {
+		return societate;
 	}
 
-	public void setIdsocietate(Societate idsocietate) {
-		this.idsocietate = idsocietate;
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
 	}
 
 	public String getNume() {
@@ -77,13 +77,5 @@ public class Departament {
 
 	public void setNume(String nume) {
 		this.nume = nume;
-	}
-
-	public Set<Echipa> getEchipe() {
-		return echipe;
-	}
-
-	public void setEchipe(Set<Echipa> echipe) {
-		this.echipe = echipe;
 	}
 }

@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "spor")
-public class Spor {
+public class Spor implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +35,17 @@ public class Spor {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstat")
-	private RealizariRetineri idstat;
+	private RealizariRetineri stat;
 
 	public Spor() {
 	}
 
-	public Spor(String nume, Double valoare, Double procent, String aplicare, RealizariRetineri idstat) {
+	public Spor(String nume, Double valoare, Double procent, String aplicare, RealizariRetineri stat) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
 		this.aplicare = aplicare;
-		this.idstat = idstat;
+		this.stat = stat;
 	}
 
 	public int getId() {
@@ -58,8 +61,8 @@ public class Spor {
 		return aplicare;
 	}
 
-	public RealizariRetineri getIdstat() {
-		return idstat;
+	public RealizariRetineri getStat() {
+		return stat;
 	}
 
 	public String getNume() {
@@ -79,8 +82,8 @@ public class Spor {
 		this.aplicare = aplicare;
 	}
 
-	public void setIdstat(RealizariRetineri idstat) {
-		this.idstat = idstat;
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
 	}
 
 	public void setNume(String nume) {

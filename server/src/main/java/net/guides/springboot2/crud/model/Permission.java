@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "permission")
-public class Permission {
+public class Permission implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     private long id;
     @Column(name = "name")

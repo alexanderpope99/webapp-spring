@@ -1,22 +1,21 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.Set;
+import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "realizariretineri")
-public class RealizariRetineri {
+public class RealizariRetineri implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +48,9 @@ public class RealizariRetineri {
 
 	@Column(name = "valcm")
 	private Integer valcm = 0;
-    @Column(name = "valco")
-    private Integer valco = 0;
-    
+	@Column(name = "valco")
+	private Integer valco = 0;
+
 	@Column(name = "norma")
 	private Integer norma = 0; // nr zile lucratoare in luna
 	@Column(name = "duratazilucru")
@@ -112,30 +111,36 @@ public class RealizariRetineri {
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<AlteDrepturi> alteDrepturi;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<AlteDrepturi> altedrepturi;
 
-	@OneToMany(mappedBy = "idstatsalariat")
-	private Set<Oresuplimentare> oreSuplimentare;
+	// @OneToMany(mappedBy = "statsalariat")
+	// private Set<Oresuplimentare> oresuplimentare;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<Prime> prime;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<Prime> prime;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<Retineri> retineri;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<Retineri> retineri;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<Tichete> tichete;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<Tichete> tichete;
 
 	public RealizariRetineri() {
 	}
 
+	public RealizariRetineri(int luna, int an, Contract contract) {
+		this.luna = luna;
+		this.an = an;
+		this.contract = contract;
+	}
+
 	public RealizariRetineri(Contract contract, Integer luna, Integer an, Integer nrtichete, Integer zileco,
-			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zilecfp,
-			Integer zilecfplucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate,
-			Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass,
-			Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere,
-			Integer deducere, Integer primabruta, Float totaloresuplimentare) {
+			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zilecfp, Integer zilecfplucratoare,
+			Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi,
+			Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete,
+			Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta,
+			Float totaloresuplimentare) {
 		this.contract = contract;
 		this.luna = luna;
 		this.an = an;
@@ -323,6 +328,14 @@ public class RealizariRetineri {
 		return venitnet;
 	}
 
+	public Integer getValco() {
+		return valco;
+	}
+
+	public Integer getZilecontract() {
+		return zilecontract;
+	}
+
 	// ! SETTERS
 	public void setNrtichete(Integer nrtichete) {
 		this.nrtichete = nrtichete;
@@ -464,55 +477,10 @@ public class RealizariRetineri {
 		this.venitnet = venitnet;
 	}
 
-	public Set<AlteDrepturi> getAlteDrepturi() {
-		return alteDrepturi;
-	}
-
-	public void setAlteDrepturi(Set<AlteDrepturi> alteDrepturi) {
-		this.alteDrepturi = alteDrepturi;
-	}
-
-	public Set<Oresuplimentare> getOreSuplimentare() {
-		return oreSuplimentare;
-	}
-
-	public void setOreSuplimentare(Set<Oresuplimentare> oreSuplimentare) {
-		this.oreSuplimentare = oreSuplimentare;
-	}
-
-	public Set<Prime> getPrime() {
-		return prime;
-	}
-
-	public void setPrime(Set<Prime> prime) {
-		this.prime = prime;
-	}
-
-	public Set<Retineri> getRetineri() {
-		return retineri;
-	}
-
-	public void setRetineri(Set<Retineri> retineri) {
-		this.retineri = retineri;
-	}
-
-	public Set<Tichete> getTichete() {
-		return tichete;
-	}
-
-	public void setTichete(Set<Tichete> tichete) {
-		this.tichete = tichete;
-	}
-
-	public Integer getValco() {
-		return valco;
-	}
-	public Integer getZilecontract() {
-		return zilecontract;
-	}
 	public void setValco(Integer valco) {
 		this.valco = valco;
 	}
+
 	public void setZilecontract(Integer zilecontract) {
 		this.zilecontract = zilecontract;
 	}

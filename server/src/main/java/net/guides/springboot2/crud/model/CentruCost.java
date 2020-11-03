@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.Set;
+import java.io.Serializable;
+// import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,13 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+// import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "centrucost")
-public class CentruCost {
+public class CentruCost implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,25 +27,25 @@ public class CentruCost {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idadresa", referencedColumnName = "id")
-	private Adresa idadresa;
+	private Adresa adresa;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsocietate")
-	private Societate idsocietate;
+	private Societate societate;
 
 	@Column(name = "nume")
 	private String nume;
 
-	@OneToMany(mappedBy = "idcentrucost")
-	private Set<Contract> contracte;
+	// @OneToMany(mappedBy = "centrucost")
+	// private Set<Contract> contracte;
 
 	public CentruCost() {
 
 	}
 
-	public CentruCost(Adresa idadresa, Societate idsocietate, String nume) {
-		this.idadresa = idadresa;
-		this.idsocietate = idsocietate;
+	public CentruCost(Adresa adresa, Societate societate, String nume) {
+		this.adresa = adresa;
+		this.societate = societate;
 		this.nume = nume;
 	}
 
@@ -56,19 +58,19 @@ public class CentruCost {
 	}
 
 	public Adresa getIdadresa() {
-		return idadresa;
+		return adresa;
 	}
 
-	public void setIdadresa(Adresa idadresa) {
-		this.idadresa = idadresa;
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
 	}
 
-	public Societate getIdsocietate() {
-		return idsocietate;
+	public Societate getSocietate() {
+		return societate;
 	}
 
-	public void setIdsocietate(Societate idsocietate) {
-		this.idsocietate = idsocietate;
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
 	}
 
 	public String getNume() {

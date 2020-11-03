@@ -1,8 +1,9 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,12 +13,14 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "bazacalcul")
-public class Bazacalcul {
+public class Bazacalcul implements Serializable {
+	private static final long serialVersionUID = 1L;
 	public Bazacalcul() {
 	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 
 	@Column(name = "luna")
@@ -32,16 +35,16 @@ public class Bazacalcul {
 	@Column(name = "salariurealizat")
 	private int salariurealizat;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "idangajat")
-	private Angajat idangajat;
+	private Angajat angajat;
 
-	public Bazacalcul(int luna, int an, int zilelucrate, int salariurealizat, Angajat idangajat) {
+	public Bazacalcul(int luna, int an, int zilelucrate, int salariurealizat, Angajat angajat) {
 		this.luna = luna;
 		this.an = an;
 		this.zilelucrate = zilelucrate;
 		this.salariurealizat = salariurealizat;
-		this.idangajat = idangajat;
+		this.angajat = angajat;
 	}
 
 	public int getId() {
@@ -56,8 +59,8 @@ public class Bazacalcul {
 		return an;
 	}
 
-	public Angajat getIdangajat() {
-		return idangajat;
+	public Angajat getAngajat() {
+		return angajat;
 	}
 
 	// ! GETTERS
@@ -90,7 +93,7 @@ public class Bazacalcul {
 		this.an = an;
 	}
 
-	public void setIdangajat(Angajat idangajat) {
-		this.idangajat = idangajat;
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
 }

@@ -129,18 +129,17 @@ public class BazacalculService {
 	public Bazacalcul updateBazacalcul(RealizariRetineri realizariRetineri) {
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
-		
+
 		Angajat angajat = angajatRepository.findPersoanaByIdcontract(realizariRetineri.getContract().getId());
-		
-		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, angajat.getIdpersoana());
-		
-		if(oldBazacalcul == null)
+
+		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an,
+				angajat.getPersoana().getId());
+
+		if (oldBazacalcul == null)
 			return this.saveBazacalcul(realizariRetineri);
-		
-		Bazacalcul bazaCalcul = new Bazacalcul(
-				luna, an, 
-				realizariRetineri.getZilelucrate(), realizariRetineri.getSalariurealizat(),
-				angajat); 
+
+		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, realizariRetineri.getZilelucrate(),
+				realizariRetineri.getSalariurealizat(), angajat);
 		bazaCalcul.setId(oldBazacalcul.getId());
 		return bazacalculRepository.save(bazaCalcul);
 	}

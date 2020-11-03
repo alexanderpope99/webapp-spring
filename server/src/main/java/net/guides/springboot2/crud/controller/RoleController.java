@@ -33,7 +33,7 @@ public class RoleController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Role> getRoleById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+    public ResponseEntity<Role> getRoleById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
 
@@ -46,7 +46,7 @@ public class RoleController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable(value = "id") Long id, @RequestBody Role newRole)
+    public ResponseEntity<Role> updateRole(@PathVariable(value = "id") int id, @RequestBody Role newRole)
             throws ResourceNotFoundException {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
@@ -57,7 +57,7 @@ public class RoleController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteRole(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteRole(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + id));
 

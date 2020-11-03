@@ -1,12 +1,14 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "sarbatori")
-public class Sarbatori {
+public class Sarbatori implements Serializable {
+	private static final long serialVersionUID = 1L;
 	Sarbatori() {}
 
 	@Id

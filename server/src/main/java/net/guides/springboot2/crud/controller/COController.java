@@ -44,13 +44,13 @@ public class COController {
 	}
 
     @GetMapping("idc={id}")
-    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
+    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract) throws ResourceNotFoundException {
         List<CO> co = coRepository.findByIdcontractOrderByDelaDesc(idcontract);
         return ResponseEntity.ok().body(co);
     }
 
     @GetMapping("fp&idc={id}")
-    public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
+    public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract) throws ResourceNotFoundException {
         List<CO> co = coRepository.findByIdcontractAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
         return ResponseEntity.ok().body(co);
     }

@@ -1,13 +1,13 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -16,8 +16,8 @@ public class Role {
 	@Column(length = 20)
 	private ERole name;
 
-	@ManyToMany(mappedBy = "roles")
-	private Set<User> useri = new HashSet<>();
+	// @ManyToMany(mappedBy = "roles")
+	// private Set<User> useri = new HashSet<>();
 
 	public Role() {
 
@@ -41,13 +41,5 @@ public class Role {
 
 	public void setName(ERole name) {
 		this.name = name;
-	}
-
-	public Set<User> getUseri() {
-		return useri;
-	}
-
-	public void setUseri(Set<User> useri) {
-		this.useri = useri;
 	}
 }

@@ -9,11 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cerericoncediu")
-public class CereriConcediu {
+public class CereriConcediu implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +42,7 @@ public class CereriConcediu {
 	private String status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "societate")
+	@JoinColumn(name = "idsocietate")
 	private Societate societate;
 
 	public CereriConcediu() {

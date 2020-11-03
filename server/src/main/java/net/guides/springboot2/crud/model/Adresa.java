@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +17,7 @@ public class Adresa implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private int id;
 	@Column(name = "adresa")
 	private String adresa;
 	@Column(name = "localitate")
@@ -27,9 +26,6 @@ public class Adresa implements Serializable {
 	private String judet;
 	@Column(name = "tara")
 	private String tara;
-
-	@OneToOne(mappedBy = "adresa")
-	private Persoana persoana;
 
 	public Adresa() {
 
@@ -42,11 +38,11 @@ public class Adresa implements Serializable {
 		this.tara = tara;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

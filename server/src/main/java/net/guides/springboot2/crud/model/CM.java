@@ -9,11 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cm")
-public class CM {
+public class CM  implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -86,7 +89,7 @@ public class CM {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
+	private Contract contract;
 
 	public CM() {
 	}
@@ -95,7 +98,7 @@ public class CM {
 			String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul,
 			Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma,
 			Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere,
-			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract idcontract) {
+			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract) {
 		this.dela = dela;
 		this.panala = panala;
 		this.continuare = continuare;
@@ -118,7 +121,7 @@ public class CM {
 		this.codboala = codboala;
 		this.urgenta = urgenta;
 		this.conditii = conditii;
-		this.idcontract = idcontract;
+		this.contract = contract;
 	}
 
 	public int getId() {
@@ -305,11 +308,11 @@ public class CM {
 		this.conditii = conditii;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 }
