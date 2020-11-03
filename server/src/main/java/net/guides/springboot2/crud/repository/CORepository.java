@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.CO;
 
 @Repository
-public interface CORepository extends JpaRepository<CO, Long>{
-  List<CO> findByIdcontract(Long idcontract);
+public interface CORepository extends JpaRepository<CO, Integer> {
+	List<CO> findByIdcontract(int idcontract);
 
-	List<CO> findByIdcontractAndTip(Long idcontract, String tip);
+	List<CO> findByIdcontractAndTip(int idcontract, String tip);
 }

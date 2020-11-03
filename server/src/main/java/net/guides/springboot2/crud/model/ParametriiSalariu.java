@@ -15,7 +15,7 @@ public class ParametriiSalariu {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "salariumin")
 	private Float salariumin;
@@ -34,6 +34,7 @@ public class ParametriiSalariu {
 
 	@Column(name = "cass")
 	private Float cass;
+
 	@Column(name = "cam")
 	private Float cam;
 
@@ -59,11 +60,11 @@ public class ParametriiSalariu {
 		this.date = date;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

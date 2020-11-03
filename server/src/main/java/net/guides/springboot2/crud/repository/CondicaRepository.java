@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Condica;
 
 @Repository
-public interface CondicaRepository extends JpaRepository<Condica, Long>{
+public interface CondicaRepository extends JpaRepository<Condica, Integer> {
 
 }

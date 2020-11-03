@@ -28,7 +28,7 @@ public class RetineriService {
 		return retineriRepository.save(newEmptyRetinere);
 	}
 
-	public Retineri getRetinereByIdstat(long idstat) {
+	public Retineri getRetinereByIdstat(int idstat) {
 		return retineriRepository.findByIdstat(idstat);
 	}
 }

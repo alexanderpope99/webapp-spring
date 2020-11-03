@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Spor;
 
 @Repository
-public interface SporRepository extends JpaRepository<Spor, Long>{ }
+public interface SporRepository extends JpaRepository<Spor, Integer> {
+}

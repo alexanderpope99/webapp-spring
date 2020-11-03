@@ -12,12 +12,12 @@ public class ContractService {
 	@Autowired
 	ContractRepository contractRepository;
 
-	public Contract getContractById(long idcontract) throws ResourceNotFoundException {
+	public Contract getContractById(int idcontract) throws ResourceNotFoundException {
 		return contractRepository.findById(idcontract)
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + idcontract));
 	}
 
-	public Contract getContractByIdpersoana(long idpersoana) throws ResourceNotFoundException {
+	public Contract getContractByIdpersoana(int idpersoana) throws ResourceNotFoundException {
 		return contractRepository.findByIdPersoana(idpersoana).orElseThrow(
 				() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
 	}

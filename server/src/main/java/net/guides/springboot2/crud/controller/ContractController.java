@@ -18,60 +18,61 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.repository.ContractRepository;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/contract")
 public class ContractController {
-    @Autowired
-    private ContractRepository contractRepository;
+	@Autowired
+	private ContractRepository contractRepository;
 
-    @GetMapping
-    public List<Contract> getAllContracts() {
-        return contractRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Contract> getAllContracts() {
+		return contractRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Contract> getContractById(@PathVariable(value = "id") Long contractId)
-            throws ResourceNotFoundException {
-        Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
-        return ResponseEntity.ok().body(contract);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Contract> getContractById(@PathVariable(value = "id") int contractId)
+			throws ResourceNotFoundException {
+		Contract contract = contractRepository.findById(contractId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
+		return ResponseEntity.ok().body(contract);
+	}
 
-    @GetMapping("idp={id}")
-    public ResponseEntity<Contract> getContractByIdPersoana(@PathVariable(value = "id") Long idpersoana)
-            throws ResourceNotFoundException {
-        Contract contract = contractRepository.findByIdPersoana(idpersoana).orElseThrow(
-                () -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
-        return ResponseEntity.ok().body(contract);
-    }
+	@GetMapping("idp={id}")
+	public ResponseEntity<Contract> getContractByIdPersoana(@PathVariable(value = "id") int idpersoana)
+			throws ResourceNotFoundException {
+		Contract contract = contractRepository.findByIdPersoana(idpersoana).orElseThrow(
+				() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
+		return ResponseEntity.ok().body(contract);
+	}
 
-    @PostMapping
-    public Contract createContract(@RequestBody Contract contract) {
-        return contractRepository.save(contract);
-    }
+	@PostMapping
+	public Contract createContract(@RequestBody Contract contract) {
+		return contractRepository.save(contract);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Contract> updateContract(@PathVariable(value = "id") Long contractId,
-            @RequestBody Contract contractDetails) throws ResourceNotFoundException {
-        Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
+	@PutMapping("{id}")
+	public ResponseEntity<Contract> updateContract(@PathVariable(value = "id") int contractId,
+			@RequestBody Contract contractDetails) throws ResourceNotFoundException {
+		Contract contract = contractRepository.findById(contractId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
 
-        contractDetails.setId(contract.getId());
-        final Contract updatedContract = contractRepository.save(contractDetails);
-        return ResponseEntity.ok(updatedContract);
-    }
+		contractDetails.setId(contract.getId());
+		final Contract updatedContract = contractRepository.save(contractDetails);
+		return ResponseEntity.ok(updatedContract);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteContract(@PathVariable(value = "id") Long contractId)
-            throws ResourceNotFoundException {
-        Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteContract(@PathVariable(value = "id") int contractId)
+			throws ResourceNotFoundException {
+		Contract contract = contractRepository.findById(contractId)
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
 
-        contractRepository.delete(contract);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		contractRepository.delete(contract);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

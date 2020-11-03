@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.PersoanaIntretinere;
 
 @Repository
-public interface PersoanaIntretinereRepository extends JpaRepository<PersoanaIntretinere, Long>{ 
-    @Query(value = "select count(id) from persoanaintretinere where idangajat = ?1", nativeQuery = true)
-    public int getNrPersoaneIntretinereByIdangajat(long idangajat);
-    
-    @Query(value = "select count(*) from persoanaintretinere where idangajat = (select idpersoana from angajat where idcontract = ?1)", nativeQuery = true)
-	public int getNrPersoaneIntretinereByIdcontract(long idcontract);
-	
-	public List<PersoanaIntretinere> findByIdangajat(long idangajat);
+public interface PersoanaIntretinereRepository extends JpaRepository<PersoanaIntretinere, Integer> {
+	@Query(value = "select count(id) from persoanaintretinere where idangajat = ?1", nativeQuery = true)
+	public int getNrPersoaneIntretinereByIdangajat(int idangajat);
 
-	public List<PersoanaIntretinere> findByIdangajatOrderByNumeAscPrenumeAsc(long idangajat);
+	@Query(value = "select count(*) from persoanaintretinere where idangajat = (select idpersoana from angajat where idcontract = ?1)", nativeQuery = true)
+	public int getNrPersoaneIntretinereByIdcontract(int idcontract);
+
+	public List<PersoanaIntretinere> findByIdangajat(int idangajat);
+
+	public List<PersoanaIntretinere> findByIdangajatOrderByNumeAscPrenumeAsc(int idangajat);
 }

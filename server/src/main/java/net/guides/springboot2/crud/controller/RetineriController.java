@@ -24,52 +24,52 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/retineri")
 public class RetineriController {
-    @Autowired
-    private RetineriRepository retineriRepository;
+	@Autowired
+	private RetineriRepository retineriRepository;
 
-    @GetMapping
-    public List<Retineri> getAllPersoane() {
-        return retineriRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Retineri> getAllPersoane() {
+		return retineriRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("ids={ids}")
-    public Retineri getRetineriByIdstat(@PathVariable(value="ids") Long id) {
-        return retineriRepository.findByIdstat(id);
-    }
+	@GetMapping("ids={ids}")
+	public Retineri getRetineriByIdstat(@PathVariable(value = "ids") int id) {
+		return retineriRepository.findByIdstat(id);
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Retineri> getRetineriById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Retineri retineri = retineriRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Retineri> getRetineriById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Retineri retineri = retineriRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(retineri);
-    }
+		return ResponseEntity.ok().body(retineri);
+	}
 
-    @PostMapping
-    public Retineri createRetineri(@RequestBody Retineri retineri) {
-        return retineriRepository.save(retineri);
-    }
+	@PostMapping
+	public Retineri createRetineri(@RequestBody Retineri retineri) {
+		return retineriRepository.save(retineri);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Retineri> updateRetineri(@PathVariable(value = "id") Long id,
-            @RequestBody Retineri newRetineri) throws ResourceNotFoundException {
-        Retineri retineri = retineriRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<Retineri> updateRetineri(@PathVariable(value = "id") int id,
+			@RequestBody Retineri newRetineri) throws ResourceNotFoundException {
+		Retineri retineri = retineriRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
 
-        newRetineri.setId(retineri.getId());
-        final Retineri updatedRetineri = retineriRepository.save(newRetineri);
-        return ResponseEntity.ok(updatedRetineri);
-    }
+		newRetineri.setId(retineri.getId());
+		final Retineri updatedRetineri = retineriRepository.save(newRetineri);
+		return ResponseEntity.ok(updatedRetineri);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteRetineri(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        Retineri retineri = retineriRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteRetineri(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Retineri retineri = retineriRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
 
-        retineriRepository.delete(retineri);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		retineriRepository.delete(retineri);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

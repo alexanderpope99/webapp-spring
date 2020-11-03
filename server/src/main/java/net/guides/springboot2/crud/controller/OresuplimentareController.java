@@ -24,65 +24,65 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/oresuplimentare")
 public class OresuplimentareController {
-    @Autowired
-    private OresuplimentareRepository oresuplimentareRepository;
+	@Autowired
+	private OresuplimentareRepository oresuplimentareRepository;
 
-    @GetMapping
-    public List<Oresuplimentare> getAllPersoane() {
-        return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Oresuplimentare> getAllPersoane() {
+		return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(oresuplimentare);
-    }
+		return ResponseEntity.ok().body(oresuplimentare);
+	}
 
-    @GetMapping("/api/idc={id}&mo={luna}&y={an}")
-    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByLunaAnIdcontract(
-        @PathVariable(value = "id") Long idcontract, 
-        @PathVariable(value = "luna") Integer luna, 
-        @PathVariable(value = "an") Integer an) {
-        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
+	@GetMapping("/api/idc={id}&mo={luna}&y={an}")
+	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByLunaAnIdcontract(
+			@PathVariable(value = "id") int idcontract, @PathVariable(value = "luna") Integer luna,
+			@PathVariable(value = "an") Integer an) {
+		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an,
+				idcontract);
 
-        return ResponseEntity.ok().body(oresuplimentare);
-    }
+		return ResponseEntity.ok().body(oresuplimentare);
+	}
 
-    @GetMapping("idss={id}")
-    public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable(value = "id") Long idstat) {
-        List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat);
+	@GetMapping("idss={id}")
+	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable(value = "id") int idstat) {
+		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat);
 
-        return ResponseEntity.ok().body(oresuplimentare);
-    }
+		return ResponseEntity.ok().body(oresuplimentare);
+	}
 
-    @PostMapping
-    public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
-        return oresuplimentareRepository.save(oresuplimentare);
-    }
+	@PostMapping
+	public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
+		return oresuplimentareRepository.save(oresuplimentare);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") Long id,
-            @RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
-        Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") int id,
+			@RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
+		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
-        newOresuplimentare.setId(oresuplimentare.getId());
-        final Oresuplimentare updatedOresuplimentare = oresuplimentareRepository.save(newOresuplimentare);
-        return ResponseEntity.ok(updatedOresuplimentare);
-    }
+		newOresuplimentare.setId(oresuplimentare.getId());
+		final Oresuplimentare updatedOresuplimentare = oresuplimentareRepository.save(newOresuplimentare);
+		return ResponseEntity.ok(updatedOresuplimentare);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteOresuplimentare(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteOresuplimentare(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
-        oresuplimentareRepository.delete(oresuplimentare);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		oresuplimentareRepository.delete(oresuplimentare);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

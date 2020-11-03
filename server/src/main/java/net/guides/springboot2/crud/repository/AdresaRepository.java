@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Adresa;
 
 @Repository
-public interface AdresaRepository extends JpaRepository<Adresa, Long>{
+public interface AdresaRepository extends JpaRepository<Adresa, Integer> {
 
 }

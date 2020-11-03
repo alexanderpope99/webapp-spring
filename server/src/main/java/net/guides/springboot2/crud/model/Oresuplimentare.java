@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ public class Oresuplimentare {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "nr")
 	private Long nr;
@@ -29,7 +30,7 @@ public class Oresuplimentare {
 	@Column(name = "total")
 	private Double total;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstatsalariat")
 	private RealizariRetineri idstatsalariat;
 
@@ -45,11 +46,11 @@ public class Oresuplimentare {
 		this.idstatsalariat = idstatsalariat;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

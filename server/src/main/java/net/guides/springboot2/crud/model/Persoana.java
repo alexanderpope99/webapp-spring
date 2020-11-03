@@ -16,7 +16,7 @@ public class Persoana {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "gen")
 	private String gen;
@@ -67,11 +67,11 @@ public class Persoana {
 		this.cnp = cnp;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.AlteBeneficii;
 
 @Repository
-public interface AlteBeneficiiRepository extends JpaRepository<AlteBeneficii, Long>{
+public interface AlteBeneficiiRepository extends JpaRepository<AlteBeneficii, Integer> {
 
 }

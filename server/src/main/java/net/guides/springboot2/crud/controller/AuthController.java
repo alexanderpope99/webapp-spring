@@ -58,8 +58,8 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -101,7 +101,7 @@ public class AuthController {
 
 	@PutMapping("/change-password/{uid}")
 	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
-			@PathVariable("uid") long uid) {
+			@PathVariable("uid") Long uid) {
 
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
@@ -120,7 +120,7 @@ public class AuthController {
 
 	@PutMapping("update-profile/{uid}")
 	public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileReq,
-			@PathVariable("uid") long uid) {
+			@PathVariable("uid") Long uid) {
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 		user.setEmail(updateProfileReq.getEmail());
 		user.setGen(updateProfileReq.isGen());

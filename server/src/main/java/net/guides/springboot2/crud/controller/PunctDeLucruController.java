@@ -24,48 +24,48 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/punctdelucru")
 public class PunctDeLucruController {
-    @Autowired
-    private PunctDeLucruRepository punctDeLucruRepository;
+	@Autowired
+	private PunctDeLucruRepository punctDeLucruRepository;
 
-    @GetMapping
-    public List<PunctDeLucru> getAllPersoane() {
-        return punctDeLucruRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<PunctDeLucru> getAllPersoane() {
+		return punctDeLucruRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<PunctDeLucru> getPunctDeLucruById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<PunctDeLucru> getPunctDeLucruById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(punctDeLucru);
-    }
+		return ResponseEntity.ok().body(punctDeLucru);
+	}
 
-    @PostMapping
-    public PunctDeLucru createPunctDeLucru(@RequestBody PunctDeLucru punctDeLucru) {
-        return punctDeLucruRepository.save(punctDeLucru);
-    }
+	@PostMapping
+	public PunctDeLucru createPunctDeLucru(@RequestBody PunctDeLucru punctDeLucru) {
+		return punctDeLucruRepository.save(punctDeLucru);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<PunctDeLucru> updatePunctDeLucru(@PathVariable(value = "id") Long id,
-            @RequestBody PunctDeLucru newPunctDeLucru) throws ResourceNotFoundException {
-        PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<PunctDeLucru> updatePunctDeLucru(@PathVariable(value = "id") int id,
+			@RequestBody PunctDeLucru newPunctDeLucru) throws ResourceNotFoundException {
+		PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
 
-        newPunctDeLucru.setId(punctDeLucru.getId());
-        final PunctDeLucru updatedPunctDeLucru = punctDeLucruRepository.save(newPunctDeLucru);
-        return ResponseEntity.ok(updatedPunctDeLucru);
-    }
+		newPunctDeLucru.setId(punctDeLucru.getId());
+		final PunctDeLucru updatedPunctDeLucru = punctDeLucruRepository.save(newPunctDeLucru);
+		return ResponseEntity.ok(updatedPunctDeLucru);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deletePunctDeLucru(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deletePunctDeLucru(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
 
-        punctDeLucruRepository.delete(punctDeLucru);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		punctDeLucruRepository.delete(punctDeLucru);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

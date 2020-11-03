@@ -64,9 +64,9 @@ public class FoaiePontajService {
 
 	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
 
-	public boolean createFoaiePontaj(int luna, int an, int idsocietate, long userID)
+	public boolean createFoaiePontaj(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
-		Societate societate = societateRepository.findById((long) idsocietate)
+		Societate societate = societateRepository.findById((int) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
 		List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);

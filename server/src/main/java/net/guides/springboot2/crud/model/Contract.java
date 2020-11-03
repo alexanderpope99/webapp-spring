@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class Contract {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "tip")
 	private String tip;
@@ -36,7 +37,7 @@ public class Contract {
 	@Column(name = "dataincepere")
 	private Date dataincepere;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idpunctlucru")
 	private PunctDeLucru idpunctlucru;
 
@@ -44,11 +45,11 @@ public class Contract {
 	@JoinColumn(name = "idcentrucost")
 	private CentruCost idcentrucost;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idechipa")
 	private Echipa idechipa;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "iddepartament")
 	private Departament iddepartament;
 
@@ -124,7 +125,7 @@ public class Contract {
 	@OneToMany(mappedBy = "idcontract")
 	private Set<AlteBeneficii> alteBeneficii;
 
-	@OneToOne(mappedBy = "idcontract")
+	@OneToOne(mappedBy = "idcontract", fetch = FetchType.LAZY)
 	private Angajat angajat;
 
 	@OneToMany(mappedBy = "idcontract")
@@ -199,11 +200,11 @@ public class Contract {
 		this.pensionar = pensionar;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

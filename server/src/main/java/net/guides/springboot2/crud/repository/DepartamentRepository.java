@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Departament;
 
 @Repository
-public interface DepartamentRepository extends JpaRepository<Departament, Long>{
+public interface DepartamentRepository extends JpaRepository<Departament, Integer> {
 
 }

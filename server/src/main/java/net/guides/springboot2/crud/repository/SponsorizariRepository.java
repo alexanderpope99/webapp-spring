@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Sponsorizari;
 
 @Repository
-public interface SponsorizariRepository extends JpaRepository<Sponsorizari, Long>{ }
+public interface SponsorizariRepository extends JpaRepository<Sponsorizari, Integer> {
+}

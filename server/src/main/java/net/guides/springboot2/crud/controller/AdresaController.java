@@ -1,9 +1,11 @@
 package net.guides.springboot2.crud.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.AdresaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.repository.AdresaRepository;
@@ -23,46 +26,54 @@ import net.guides.springboot2.crud.repository.AdresaRepository;
 @RestController
 @RequestMapping("/adresa")
 public class AdresaController {
-    @Autowired
-    private AdresaRepository adresaRepository;
+	@Autowired
+	private AdresaRepository adresaRepository;
 
-    @GetMapping
-    public List<Adresa> getAllPersoane() {
-        return adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@Autowired
+	private ModelMapper modelMapper;
 
-    @GetMapping("{id}")
-    public ResponseEntity<Adresa> getAdresaById(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        Adresa adresa = adresaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
+	@GetMapping
+	public List<AdresaDTO> getAllPersoane() {
+		List<Adresa> adrese = adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+		List<AdresaDTO> adreseDTO = new ArrayList<>();
+		for (Adresa adr : adrese) {
+			adreseDTO.add(modelMapper.map(adr, AdresaDTO.class));
+		}
+		return adreseDTO;
+	}
 
-        return ResponseEntity.ok().body(adresa);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Adresa> getAdresaById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Adresa adresa = adresaRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 
-    @PostMapping
-    public Adresa createAdresa(@RequestBody Adresa adresa) {
-        return adresaRepository.save(adresa);
-    }
+		return ResponseEntity.ok().body(adresa);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Adresa> updateAdresa(@PathVariable(value = "id") Long id, @RequestBody Adresa newAdresa)
-            throws ResourceNotFoundException {
-        Adresa adresa = adresaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
+	@PostMapping
+	public Adresa createAdresa(@RequestBody Adresa adresa) {
+		return adresaRepository.save(adresa);
+	}
 
-        newAdresa.setId(adresa.getId());
-        final Adresa updatedAdresa = adresaRepository.save(newAdresa);
-        return ResponseEntity.ok(updatedAdresa);
-    }
+	@PutMapping("{id}")
+	public ResponseEntity<Adresa> updateAdresa(@PathVariable(value = "id") int id, @RequestBody Adresa newAdresa)
+			throws ResourceNotFoundException {
+		Adresa adresa = adresaRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteAdresa(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        Adresa adresa = adresaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
+		newAdresa.setId(adresa.getId());
+		final Adresa updatedAdresa = adresaRepository.save(newAdresa);
+		return ResponseEntity.ok(updatedAdresa);
+	}
 
-        adresaRepository.delete(adresa);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteAdresa(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Adresa adresa = adresaRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
+
+		adresaRepository.delete(adresa);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

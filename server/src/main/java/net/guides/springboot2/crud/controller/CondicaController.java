@@ -23,47 +23,47 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/condica")
 public class CondicaController {
-    @Autowired
-    private CondicaRepository condicaRepository;
+	@Autowired
+	private CondicaRepository condicaRepository;
 
-    @GetMapping
-    public List<Condica> getAllCondicas() {
-        return condicaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Condica> getAllCondicas() {
+		return condicaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Condica> getCondicaById(@PathVariable(value = "id") Long condicaId)
-            throws ResourceNotFoundException {
-        Condica condica = condicaRepository.findById(condicaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
-        return ResponseEntity.ok().body(condica);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Condica> getCondicaById(@PathVariable(value = "id") int condicaId)
+			throws ResourceNotFoundException {
+		Condica condica = condicaRepository.findById(condicaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
+		return ResponseEntity.ok().body(condica);
+	}
 
-    @PostMapping
-    public Condica createCondica(@RequestBody Condica condica) {
-        return condicaRepository.save(condica);
-    }
+	@PostMapping
+	public Condica createCondica(@RequestBody Condica condica) {
+		return condicaRepository.save(condica);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Condica> updateCondica(@PathVariable(value = "id") Long condicaId,
-            @RequestBody Condica condicaDetails) throws ResourceNotFoundException {
-        Condica condica = condicaRepository.findById(condicaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
+	@PutMapping("{id}")
+	public ResponseEntity<Condica> updateCondica(@PathVariable(value = "id") int condicaId,
+			@RequestBody Condica condicaDetails) throws ResourceNotFoundException {
+		Condica condica = condicaRepository.findById(condicaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
 
-        condicaDetails.setId(condica.getId());
-        final Condica updatedCondica = condicaRepository.save(condica);
-        return ResponseEntity.ok(updatedCondica);
-    }
+		condicaDetails.setId(condica.getId());
+		final Condica updatedCondica = condicaRepository.save(condica);
+		return ResponseEntity.ok(updatedCondica);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCondica(@PathVariable(value = "id") Long condicaId)
-            throws ResourceNotFoundException {
-        Condica condica = condicaRepository.findById(condicaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteCondica(@PathVariable(value = "id") int condicaId)
+			throws ResourceNotFoundException {
+		Condica condica = condicaRepository.findById(condicaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
 
-        condicaRepository.delete(condica);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		condicaRepository.delete(condica);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

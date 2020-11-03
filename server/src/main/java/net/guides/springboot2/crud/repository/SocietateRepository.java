@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Societate;
 
 @Repository
-public interface SocietateRepository extends JpaRepository<Societate, Long> {
+public interface SocietateRepository extends JpaRepository<Societate, Integer> {
 	@Query(value = "SELECT * FROM societate INNER JOIN user_societati on user_societati.societate_id=societate.id where user_societati.user_id=?1", nativeQuery = true)
-	List<Societate> findByUserId(Integer id);
+	List<Societate> findByUserId(int id);
 }

@@ -22,7 +22,7 @@ public class ZileService {
 	@Autowired
 	private COService coService;
 
-	public int getZileLibereInLunaAnul(int luna, int an, long idcontract) {
+	public int getZileLibereInLunaAnul(int luna, int an, int idcontract) {
 		// get zile cm in luna, anul
 		int zileCM = cmService.getZileCM(luna, an, idcontract);
 

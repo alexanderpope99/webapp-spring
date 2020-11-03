@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Bazacalcul;
 
 @Repository
-public interface BazacalculRepository extends JpaRepository<Bazacalcul, Long> {
-	public List<Bazacalcul> findByIdangajatOrderByAnDescLunaDesc(long idangajat);
+public interface BazacalculRepository extends JpaRepository<Bazacalcul, Integer> {
+	public List<Bazacalcul> findByIdangajatOrderByAnDescLunaDesc(int idangajat);
 
-	public Bazacalcul findByLunaAndAnAndIdangajat(int luna, int an, long idangajat);
+	public Bazacalcul findByLunaAndAnAndIdangajat(int luna, int an, int idangajat);
 
-	public boolean existsByLunaAndAnAndIdangajat(int luna, int an, long idangajat);
+	public boolean existsByLunaAndAnAndIdangajat(int luna, int an, int idangajat);
 }

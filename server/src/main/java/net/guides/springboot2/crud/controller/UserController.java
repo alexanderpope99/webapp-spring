@@ -38,32 +38,32 @@ public class UserController {
 	}
 
 	@GetMapping("/roles/{usrid}")
-	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") long usrid) {
+	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") Long usrid) {
 		return userRepository.getRolesByUserId(usrid);
 	}
 
 	@GetMapping("/societati/{usrid}")
-	public List<SocietateDTO> getSocietiesByUserId(@PathVariable("usrid") long usrid) {
+	public List<SocietateDTO> getSocietiesByUserId(@PathVariable("usrid") Long usrid) {
 		return userRepository.getSocietiesByUserId(usrid);
 	}
 
 	@GetMapping("/persoana/{usrid}")
-	public List<PersoanaDTO> getPersoanaByUserId(@PathVariable("usrid") long usrid) {
+	public List<PersoanaDTO> getPersoanaByUserId(@PathVariable("usrid") Long usrid) {
 		return userRepository.getPersoanaByUserId(usrid);
 	}
 
 	@GetMapping("/societate/{usrid}")
-	public List<SocietateDTO> getSocietateByUserId(@PathVariable("usrid") long usrid) {
+	public List<SocietateDTO> getSocietateByUserId(@PathVariable("usrid") Long usrid) {
 		return userRepository.getSocietateByUserId(usrid);
 	}
 
 	@GetMapping("/superior/{usrid}")
-	public List<PersoanaDTO> getSuperiorByUserId(@PathVariable("usrid") long usrid) {
+	public List<PersoanaDTO> getSuperiorByUserId(@PathVariable("usrid") Long usrid) {
 		return userRepository.getSuperiorByUserId(usrid);
 	}
 
 	@PostMapping("/roles/{usrid}&{roleid}")
-	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") long usrid, @PathVariable("roleid") long roleid) {
+	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") Long usrid, @PathVariable("roleid") int roleid) {
 		User user = userRepository.findById(usrid).orElseThrow(() -> new RuntimeException("Error"));
 		Set<Role> roles = user.getRoles();
 		Role newRole = roleRepository.findById(roleid).orElseThrow(() -> new RuntimeException("Error"));
@@ -74,7 +74,7 @@ public class UserController {
 	}
 
 	@PostMapping("/roles/name/{usrid}&{roleid}")
-	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") long usrid, @PathVariable("roleid") ERole role) {
+	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") Long usrid, @PathVariable("roleid") ERole role) {
 		User user = userRepository.findById(usrid).orElseThrow(() -> new RuntimeException("Error"));
 		Set<Role> roles = user.getRoles();
 		Role newRole = roleRepository.findByName(role).orElseThrow(() -> new RuntimeException("Error"));

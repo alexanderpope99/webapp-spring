@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Caen;
 
 @Repository
-public interface CaenRepository extends JpaRepository<Caen, Long>{
+public interface CaenRepository extends JpaRepository<Caen, Integer> {
 
 }

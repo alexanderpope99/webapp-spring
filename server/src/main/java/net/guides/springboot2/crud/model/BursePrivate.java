@@ -2,13 +2,15 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "burseprivate")
@@ -16,14 +18,14 @@ public class BursePrivate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
 	private Contract idcontract;
 
 	@Column(name = "data")
-	private Date data;
+	private LocalDate data;
 
 	@Column(name = "cota")
 	private Float cota;
@@ -35,18 +37,18 @@ public class BursePrivate {
 
 	}
 
-	public BursePrivate(Contract idcontract, Date data, Float cota, Float suma) {
+	public BursePrivate(Contract idcontract, LocalDate data, Float cota, Float suma) {
 		this.idcontract = idcontract;
 		this.data = data;
 		this.cota = cota;
 		this.suma = suma;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -58,11 +60,11 @@ public class BursePrivate {
 		this.idcontract = idcontract;
 	}
 
-	public Date getData() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 

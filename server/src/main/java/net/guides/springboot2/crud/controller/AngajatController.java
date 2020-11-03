@@ -37,7 +37,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") Long angajatId)
+	public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") int angajatId)
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
@@ -50,7 +50,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("/userid/{id}")
-	public int getPersoanaIdByUserId(@PathVariable(value = "id") Long userId) {
+	public int getPersoanaIdByUserId(@PathVariable(value = "id") int userId) {
 		return angajatRepository.findPersoanaIdByUserId(userId);
 	}
 
@@ -70,7 +70,7 @@ public class AngajatController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") Long angajatId,
+	public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") int angajatId,
 			@RequestBody Angajat angajatDetails) throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
@@ -81,7 +81,7 @@ public class AngajatController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteAngajat(@PathVariable(value = "id") Long angajatId)
+	public Map<String, Boolean> deleteAngajat(@PathVariable(value = "id") int angajatId)
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));

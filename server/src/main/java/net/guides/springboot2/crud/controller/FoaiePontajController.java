@@ -19,7 +19,7 @@ public class FoaiePontajController {
 
 	@GetMapping("/{ids}/mo={luna}&y={an}/{uid}")
 	public boolean createFoaiePontaj(@PathVariable("ids") int ids, @PathVariable("luna") int luna,
-			@PathVariable("an") int an, @PathVariable("uid") long uid) throws IOException, ResourceNotFoundException {
+			@PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
 		return foaiePontajService.createFoaiePontaj(luna, an, ids, uid);
 	}
 }

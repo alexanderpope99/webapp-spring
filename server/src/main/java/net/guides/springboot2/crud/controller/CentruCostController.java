@@ -23,47 +23,47 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/centrucost")
 public class CentruCostController {
-    @Autowired
-    private CentruCostRepository centruCostRepository;
+	@Autowired
+	private CentruCostRepository centruCostRepository;
 
-    @GetMapping
-    public List<CentruCost> getAllCentruCosts() {
-        return centruCostRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<CentruCost> getAllCentruCosts() {
+		return centruCostRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<CentruCost> getCentruCostById(@PathVariable(value = "id") Long centruCostId)
-            throws ResourceNotFoundException {
-        CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
-                () -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
-        return ResponseEntity.ok().body(centruCost);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<CentruCost> getCentruCostById(@PathVariable(value = "id") int centruCostId)
+			throws ResourceNotFoundException {
+		CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
+				() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
+		return ResponseEntity.ok().body(centruCost);
+	}
 
-    @PostMapping
-    public CentruCost createCentruCost(@RequestBody CentruCost centruCost) {
-        return centruCostRepository.save(centruCost);
-    }
+	@PostMapping
+	public CentruCost createCentruCost(@RequestBody CentruCost centruCost) {
+		return centruCostRepository.save(centruCost);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<CentruCost> updateCentruCost(@PathVariable(value = "id") Long centruCostId,
-            @RequestBody CentruCost centruCostDetails) throws ResourceNotFoundException {
-        CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
-                () -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
+	@PutMapping("{id}")
+	public ResponseEntity<CentruCost> updateCentruCost(@PathVariable(value = "id") int centruCostId,
+			@RequestBody CentruCost centruCostDetails) throws ResourceNotFoundException {
+		CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
+				() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
 
-        centruCostDetails.setId(centruCost.getId());
-        final CentruCost updatedCentruCost = centruCostRepository.save(centruCost);
-        return ResponseEntity.ok(updatedCentruCost);
-    }
+		centruCostDetails.setId(centruCost.getId());
+		final CentruCost updatedCentruCost = centruCostRepository.save(centruCost);
+		return ResponseEntity.ok(updatedCentruCost);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCentruCost(@PathVariable(value = "id") Long centruCostId)
-            throws ResourceNotFoundException {
-        CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
-                () -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteCentruCost(@PathVariable(value = "id") int centruCostId)
+			throws ResourceNotFoundException {
+		CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
+				() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
 
-        centruCostRepository.delete(centruCost);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		centruCostRepository.delete(centruCost);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

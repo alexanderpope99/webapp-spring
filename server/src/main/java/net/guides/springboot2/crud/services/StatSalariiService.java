@@ -84,7 +84,7 @@ public class StatSalariiService {
 	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, long userID)
 			throws IOException, ResourceNotFoundException {
 		try {
-			Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
+			Societate societate = societateRepository.findById((int) idsocietate).orElseThrow(
 					() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId())
 					.orElseThrow(() -> new ResourceNotFoundException(
@@ -165,7 +165,7 @@ public class StatSalariiService {
 						.orElseThrow(() -> new ResourceNotFoundException(
 								"Contract not found for this idpersoana :: " + persoana.getId()));
 
-				long idcontract = contract.getId();
+				int idcontract = contract.getId();
 
 				RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an,
 						contract);
@@ -938,10 +938,10 @@ public class StatSalariiService {
 		}
 	} // ! createStatSalarii
 
-	public boolean createStatIndividual(int luna, int an, long idangajat, int idsocietate, long userID)
+	public boolean createStatIndividual(int luna, int an, int idangajat, int idsocietate, long userID)
 			throws ResourceNotFoundException {
 		try {
-			Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
+			Societate societate = societateRepository.findById((int) idsocietate).orElseThrow(
 					() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 			Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId())
 					.orElseThrow(() -> new ResourceNotFoundException(
@@ -1011,7 +1011,7 @@ public class StatSalariiService {
 			// * write date angajat
 			int impozitScutit = 0;
 			// rowNr = 14;
-			long idcontract = contract.getId();
+			int idcontract = contract.getId();
 
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, contract);
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());

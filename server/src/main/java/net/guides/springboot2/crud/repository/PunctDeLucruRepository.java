@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.PunctDeLucru;
 
 @Repository
-public interface PunctDeLucruRepository extends JpaRepository<PunctDeLucru, Long>{ }
+public interface PunctDeLucruRepository extends JpaRepository<PunctDeLucru, Integer> {
+}

@@ -40,10 +40,10 @@ public class NotaContabilaService {
 
 	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
 
-	public boolean createNotaContabila(int luna, int an, int idsocietate, long userID)
+	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
 
-		Societate societate = societateRepository.findById((long) idsocietate)
+		Societate societate = societateRepository.findById((int) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId()).orElseThrow(
 				() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
@@ -72,7 +72,7 @@ public class NotaContabilaService {
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("- " + lunaNume + " " + an + " -");
 
-		long idSocietate = societate.getId();
+		int idSocietate = societate.getId();
 
 		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an,
 				idSocietate);

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.CM;
 
 @Repository
-public interface CMRepository extends JpaRepository<CM, Long>{
-  List<CM> findByIdcontract(Long idcontract);
+public interface CMRepository extends JpaRepository<CM, Integer> {
+	List<CM> findByIdcontract(int idcontract);
 
-	List<CM> findByIdcontractAndDelaBetween(long idcontract, LocalDate inceputLuna, LocalDate sfarsitLuna);
+	List<CM> findByIdcontractAndDelaBetween(int idcontract, LocalDate inceputLuna, LocalDate sfarsitLuna);
 }

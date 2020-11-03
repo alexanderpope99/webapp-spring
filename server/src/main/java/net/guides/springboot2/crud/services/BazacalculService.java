@@ -19,7 +19,7 @@ public class BazacalculService {
 	@Autowired
 	private AngajatRepository angajatRepository;
 
-	public List<Bazacalcul> getBazaCalculUltimele6Luni(int luna, int an, long idangajat) {
+	public List<Bazacalcul> getBazaCalculUltimele6Luni(int luna, int an, int idangajat) {
 		int luna6, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);
@@ -50,7 +50,7 @@ public class BazacalculService {
 		return rv;
 	}
 
-	public float getMediaZilnicaUltimele6Luni(int luna, int an, long idangajat) {
+	public float getMediaZilnicaUltimele6Luni(int luna, int an, int idangajat) {
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);

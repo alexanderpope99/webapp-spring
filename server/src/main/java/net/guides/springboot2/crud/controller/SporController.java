@@ -19,51 +19,49 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Spor;
 import net.guides.springboot2.crud.repository.SporRepository;
 
-
 @RestController
 @RequestMapping("/spor")
 public class SporController {
-    @Autowired
-    private SporRepository sporRepository;
+	@Autowired
+	private SporRepository sporRepository;
 
-    @GetMapping
-    public List<Spor> getAllPersoane() {
-        return sporRepository.findAll();
-    }
+	@GetMapping
+	public List<Spor> getAllPersoane() {
+		return sporRepository.findAll();
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Spor> getSporById(@PathVariable(value="id") Long id) throws ResourceNotFoundException
-    {
-        Spor spor = sporRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Spor> getSporById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Spor spor = sporRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(spor);
-    }
+		return ResponseEntity.ok().body(spor);
+	}
 
-    @PostMapping
-        public Spor createSpor(@RequestBody Spor spor) {
-        return sporRepository.save(spor);
-    }
+	@PostMapping
+	public Spor createSpor(@RequestBody Spor spor) {
+		return sporRepository.save(spor);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Spor> updateSpor(@PathVariable(value = "id") Long id,  @RequestBody Spor newSpor) throws ResourceNotFoundException {
-        Spor spor = sporRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<Spor> updateSpor(@PathVariable(value = "id") int id, @RequestBody Spor newSpor)
+			throws ResourceNotFoundException {
+		Spor spor = sporRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
 
-        newSpor.setId(spor.getId());
-        final Spor updatedSpor = sporRepository.save(newSpor);
-        return ResponseEntity.ok(updatedSpor);
-    }
+		newSpor.setId(spor.getId());
+		final Spor updatedSpor = sporRepository.save(newSpor);
+		return ResponseEntity.ok(updatedSpor);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteSpor(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Spor spor = sporRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteSpor(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Spor spor = sporRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
 
-        sporRepository.delete(spor);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		sporRepository.delete(spor);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

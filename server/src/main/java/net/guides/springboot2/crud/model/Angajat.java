@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,17 +19,17 @@ import javax.persistence.Table;
 public class Angajat {
 
 	@Id
-	private long idpersoana;
+	private int idpersoana;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract idcontract;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsocietate")
 	private Societate idsocietate;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsuperior")
 	private Angajat superior;
 
@@ -41,7 +42,7 @@ public class Angajat {
 	@OneToMany(mappedBy = "idangajat")
 	private Set<PersoanaIntretinere> persoaneIntretinere;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idpersoana")
 	@MapsId
 	private Persoana persoana;
@@ -58,17 +59,17 @@ public class Angajat {
 		this.idsocietate = idsocietate;
 	}
 
-	public long getIdpersoana() {
+	public int getIdpersoana() {
 		return idpersoana;
 	}
 
-	public void setIdpersoana(long idpersoana) {
+	public void setIdpersoana(int idpersoana) {
 		this.idpersoana = idpersoana;
 	}
 
 	public Contract getIdcontract() {
 		return idcontract;
-	} 
+	}
 
 	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;

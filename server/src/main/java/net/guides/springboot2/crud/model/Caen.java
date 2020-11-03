@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,13 +13,10 @@ public class Caen {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "nume")
 	private String nume;
-
-	@OneToOne(mappedBy = "idcaen")
-	private Societate societate;
 
 	public Caen() {
 
@@ -30,11 +26,11 @@ public class Caen {
 		this.nume = nume;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -46,11 +42,4 @@ public class Caen {
 		this.nume = nume;
 	}
 
-	public Societate getSocietate() {
-		return societate;
-	}
-
-	public void setSocietate(Societate societate) {
-		this.societate = societate;
-	}
 }

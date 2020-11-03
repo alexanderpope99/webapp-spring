@@ -1,87 +1,78 @@
-// package net.guides.springboot2.crud.controller;
+package net.guides.springboot2.crud.controller;
 
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.DeleteMapping;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PathVariable;
-// import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.PutMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-// import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-// import net.guides.springboot2.crud.model.Tichete;
-// import net.guides.springboot2.crud.repository.TicheteRepository;
-// import net.guides.springboot2.crud.services.TicheteService;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Tichete;
+import net.guides.springboot2.crud.repository.TicheteRepository;
+import net.guides.springboot2.crud.services.TicheteService;
 
-// import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort;
 
-// @RestController
-// @RequestMapping("/tichete")
-// public class TicheteController {
-// @Autowired
-// private TicheteRepository ticheteRepository;
-// @Autowired
-// private TicheteService ticheteService;
+@RestController
+@RequestMapping("/tichete")
+public class TicheteController {
+	@Autowired
+	private TicheteRepository ticheteRepository;
+	@Autowired
+	private TicheteService ticheteService;
 
-// @GetMapping
-// public List<Tichete> getAllTichete() {
-// return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-// }
+	@GetMapping
+	public List<Tichete> getAllTichete() {
+		return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-// @GetMapping("{id}")
-// public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id")
-// Long id)
-// throws ResourceNotFoundException {
-// Tichete tichete = ticheteRepository.findById(id)
-// .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this
-// id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
-// return ResponseEntity.ok().body(tichete);
-// }
+		return ResponseEntity.ok().body(tichete);
+	}
 
-// @GetMapping("nr/idc={idc}&mo={luna}&y={an}")
-// public int getNrTicheteByLunaAnIdcontract(
-// @PathVariable(value = "idc") long idcontract,
-// @PathVariable(value = "luna") int luna,
-// @PathVariable(value = "an") int an) {
-// return ticheteService.getNrTichete(luna, an, idcontract);
-// }
+	@GetMapping("nr/idc={idc}&mo={luna}&y={an}")
+	public int getNrTicheteByLunaAnIdcontract(@PathVariable(value = "idc") int idcontract,
+			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) {
+		return ticheteService.getNrTichete(luna, an, idcontract);
+	}
 
-// @PostMapping
-// public Tichete createTichete(@RequestBody Tichete tichete) {
-// return ticheteRepository.save(tichete);
-// }
+	@PostMapping
+	public Tichete createTichete(@RequestBody Tichete tichete) {
+		return ticheteRepository.save(tichete);
+	}
 
-// @PutMapping("{id}")
-// public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") Long
-// id, @RequestBody Tichete newTichete)
-// throws ResourceNotFoundException {
-// Tichete tichete = ticheteRepository.findById(id)
-// .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this
-// id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") int id, @RequestBody Tichete newTichete)
+			throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
-// newTichete.setId(tichete.getId());
-// final Tichete updatedTichete = ticheteRepository.save(newTichete);
-// return ResponseEntity.ok(updatedTichete);
-// }
+		newTichete.setId(tichete.getId());
+		final Tichete updatedTichete = ticheteRepository.save(newTichete);
+		return ResponseEntity.ok(updatedTichete);
+	}
 
-// @DeleteMapping("{id}")
-// public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") Long
-// id) throws ResourceNotFoundException {
-// Tichete tichete = ticheteRepository.findById(id)
-// .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this
-// id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
-// ticheteRepository.delete(tichete);
-// Map<String, Boolean> response = new HashMap<>();
-// response.put("deleted", Boolean.TRUE);
-// return response;
-// }
-// }
+		ticheteRepository.delete(tichete);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+}

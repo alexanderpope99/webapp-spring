@@ -17,7 +17,7 @@ public class TicheteService {
 	@Autowired
 	private COService coService;
 
-	public int getNrTichete(int luna, int an, long idcontract) {
+	public int getNrTichete(int luna, int an, int idcontract) {
 		int zileSarbatori = 0;
 		int zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
 		int zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);

@@ -42,7 +42,7 @@ public class ParametriiSalariuController {
 	}
 
 	@GetMapping("{id}")
-	public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") Long id) {
+	public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") int id) {
 		return parametriiSalariuRepository.findById(id);
 	}
 
@@ -52,7 +52,7 @@ public class ParametriiSalariuController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<ParametriiSalariu> updateParametriiSalariu(@PathVariable(value = "id") Long id,
+	public ResponseEntity<ParametriiSalariu> updateParametriiSalariu(@PathVariable(value = "id") int id,
 			@RequestBody ParametriiSalariu newParametriiSalariu) throws ResourceNotFoundException {
 		ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
@@ -63,7 +63,7 @@ public class ParametriiSalariuController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteParametriiSalariu(@PathVariable(value = "id") Long id)
+	public Map<String, Boolean> deleteParametriiSalariu(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.BursePrivate;
 
 @Repository
-public interface BursePrivateRepository extends JpaRepository<BursePrivate, Long>{
+public interface BursePrivateRepository extends JpaRepository<BursePrivate, Integer> {
 
 }

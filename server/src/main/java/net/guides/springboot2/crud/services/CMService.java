@@ -22,7 +22,7 @@ public class CMService {
 	@Autowired
 	private AngajatRepository angajatRepository;
 
-	public int getZileCMLucratoare(int luna, int an, long idcontract) {
+	public int getZileCMLucratoare(int luna, int an, int idcontract) {
 		// find all by idcontract
 		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
 		if (concediiMedicale.size() == 0)
@@ -31,7 +31,7 @@ public class CMService {
 		return zileCLucratoare(luna, an, concediiMedicale);
 	}
 
-	public int getZileCM(int luna, int an, long idcontract) {
+	public int getZileCM(int luna, int an, int idcontract) {
 		// find all by idcontract
 		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
 		if (concediiMedicale.size() == 0)
@@ -40,7 +40,7 @@ public class CMService {
 		return zileC(luna, an, concediiMedicale);
 	}
 
-	public List<CM> getCMInLunaAnul(int luna, int an, long idcontract) {
+	public List<CM> getCMInLunaAnul(int luna, int an, int idcontract) {
 		// select * from cm where '2020-09-01' <= dela and '2020-09-30' >= panala
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
@@ -49,9 +49,9 @@ public class CMService {
 		return cmRepository.findByIdcontractAndDelaBetween(idcontract, inceputLuna, sfarsitLuna);
 	}
 
-	public int getValCM(int luna, int an, long idcontract) {
+	public int getValCM(int luna, int an, int idcontract) {
 		// get idangajat of idcontract
-		long idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
+		int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
 		// get cm
 		List<CM> cms = this.getCMInLunaAnul(luna, an, idcontract);
 		float valCM = 0;

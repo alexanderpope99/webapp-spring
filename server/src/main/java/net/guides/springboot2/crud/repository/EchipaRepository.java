@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Echipa;
 
 @Repository
-public interface EchipaRepository extends JpaRepository<Echipa, Long>{
+public interface EchipaRepository extends JpaRepository<Echipa, Integer> {
 
 }

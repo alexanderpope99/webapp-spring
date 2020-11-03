@@ -23,14 +23,13 @@ public class Societate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "nume")
 	private String nume;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idcaen", referencedColumnName = "id")
-	private Caen idcaen;
+	@Column(name = "idcaen")
+	private Long idcaen;
 
 	@Column(name = "cif")
 	private String cif;
@@ -41,7 +40,7 @@ public class Societate {
 	@Column(name = "regcom")
 	private String regcom;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idadresa", referencedColumnName = "id")
 	private Adresa idadresa;
 
@@ -51,8 +50,8 @@ public class Societate {
 	@Column(name = "telefon")
 	private String telefon;
 
-	@OneToOne(mappedBy = "idsocietate")
-	private Angajat angajat;
+	@OneToMany(mappedBy = "idsocietate")
+	private Set<Angajat> angajat;
 
 	@OneToMany(mappedBy = "idsocietate")
 	private Set<CentruCost> centruCost;
@@ -67,13 +66,13 @@ public class Societate {
 	@OneToMany(mappedBy = "idsocietate")
 	private Set<Departament> departamente;
 
-	@OneToOne(mappedBy = "idsocietate")
+	@OneToOne(mappedBy = "idsocietate", fetch = FetchType.LAZY)
 	private PunctDeLucru punctDeLucru;
 
 	public Societate() {
 	}
 
-	public Societate(String nume, Caen idcaen, String cif, Double capsoc, String regcom, Adresa idadresa, String email,
+	public Societate(String nume, Long idcaen, String cif, Double capsoc, String regcom, Adresa idadresa, String email,
 			String telefon) {
 		this.nume = nume;
 		this.cif = cif;
@@ -84,11 +83,11 @@ public class Societate {
 		this.telefon = telefon;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -109,7 +108,7 @@ public class Societate {
 		return idadresa;
 	}
 
-	public Caen getIdcaen() {
+	public Long getIdcaen() {
 		return idcaen;
 	}
 
@@ -142,7 +141,7 @@ public class Societate {
 		this.idadresa = idadresa;
 	}
 
-	public void setIdcaen(Caen idcaen) {
+	public void setIdcaen(Long idcaen) {
 		this.idcaen = idcaen;
 	}
 
@@ -158,11 +157,11 @@ public class Societate {
 		this.telefon = telefon;
 	}
 
-	public Angajat getAngajat() {
+	public Set<Angajat> getAngajat() {
 		return angajat;
 	}
 
-	public void setAngajat(Angajat angajat) {
+	public void setAngajat(Set<Angajat> angajat) {
 		this.angajat = angajat;
 	}
 

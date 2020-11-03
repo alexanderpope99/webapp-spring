@@ -27,11 +27,11 @@ public class PersoaneIntretinereService {
 		}
 	}
 
-	public int getNrPerosaneIntretinere(long idcontract) {
+	public int getNrPerosaneIntretinere(int idcontract) {
 		return persoanaIntretinereRepository.getNrPersoaneIntretinereByIdcontract(idcontract);
 	}
 
-	public String getStrPersoaneIntretinere(long idcontract) {
+	public String getStrPersoaneIntretinere(int idcontract) {
 		int nr = getNrPerosaneIntretinere(idcontract);
 		return nrPersoaneIntretinereToString(nr);
 	}
