@@ -1,42 +1,49 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "contbancar")
-public class ContBancar {
+public class ContBancar implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    private String iban;
-    private String numebanca;
+	@Id
+	@Column(name = "iban", nullable = false)
+	private String iban;
 
-    public ContBancar() {
+	@Column(name = "numebanca")
+	private String numebanca;
 
-    }
+	@OneToOne(mappedBy = "contbancar")
+	private Contract contract;
 
-    public ContBancar(String iban, String numebanca) {
-        this.iban = iban;
-        this.numebanca = numebanca;
-    }
+	public ContBancar() {}
 
-    @Id
-    @Column(name = "iban",nullable=false)
-    public String getIban() {
-        return iban;
-    }
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
+	public ContBancar(String iban, String numebanca) {
+		this.iban = iban;
+		this.numebanca = numebanca;
+	}
 
-    @Column(name = "numebanca")
-    public String getNumebanca() {
-        return numebanca;
-    }
-    public void setNumebanca(String adresa) {
-        this.numebanca = adresa;
-    }
+	public String getIban() {
+		return iban;
+	}
+
+	public void setIban(String iban) {
+		this.iban = iban;
+	}
+
+	public String getNumebanca() {
+		return numebanca;
+	}
+
+	public void setNumebanca(String adresa) {
+		this.numebanca = adresa;
+	}
 
 }
-

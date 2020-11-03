@@ -54,7 +54,7 @@ public class BazacalculController {
 		@PathVariable("luna") int luna,
 		@PathVariable("an") int an) {
 			return bazaCalculService.getBazaCalculCM(luna, an, ida);
-		}
+	}
 
 	@GetMapping("ida={ida}/mo={luna}&y={an}")
 	public Bazacalcul getBazacalculByIdAndLunaAndAn(

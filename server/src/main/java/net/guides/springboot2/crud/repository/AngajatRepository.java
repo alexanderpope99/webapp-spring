@@ -26,9 +26,6 @@ public interface AngajatRepository extends JpaRepository<Angajat, Long> {
 	@Query(value = "select idpersoana from angajat where idcontract = ?1", nativeQuery = true)
 	long findIdpersoanaByIdcontract(long idcontract);
 
-	@Query(value = "SELECT id_angajat from users where users.id=?1", nativeQuery = true)
+	@Query(value = "SELECT id_angajat from users where users.id = ?1", nativeQuery = true)
 	int findPersoanaIdByUserId(long userid);
-
-	@Query(value = "SELECT persoana.nume || ' ' ||persoana.prenume from persoana inner join angajat on angajat.idpersoana=persoana.id inner join societate on angajat.idsocietate=societate.id where societate.nume=?1", nativeQuery = true)
-	List<String> findPersoaneBySocietyName(String nume);
 }

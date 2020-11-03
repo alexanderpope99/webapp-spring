@@ -25,15 +25,6 @@ public class CMService {
 	@Autowired
 	private SarbatoriService sarbatoriService;
 
-	public int getZileCMLucratoare(int luna, int an, long idcontract) {
-		// find all by idcontract
-		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
-		if (concediiMedicale.size() == 0)
-			return 0;
-
-		return zileCLucratoare(luna, an, concediiMedicale);
-	}
-
 	public int getZileCM(int luna, int an, long idcontract) {
 		// find all by idcontract
 		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
@@ -41,6 +32,15 @@ public class CMService {
 			return 0;
 
 		return zileC(luna, an, concediiMedicale);
+	}
+
+	public int getZileCMLucratoare(int luna, int an, long idcontract) {
+		// find all by idcontract
+		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
+		if (concediiMedicale.size() == 0)
+			return 0;
+
+		return zileCLucratoare(luna, an, concediiMedicale);
 	}
 
 	public List<CM> getCMInLunaAnul(int luna, int an, long idcontract) {

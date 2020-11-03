@@ -31,11 +31,6 @@ public class AngajatController {
 		return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
 	}
 
-	@GetMapping
-	public List<Angajat> getAngajatsAlphabetically() {
-		return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
-	}
-
 	@GetMapping("{id}")
 	public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") Long angajatId)
 			throws ResourceNotFoundException {
@@ -52,11 +47,6 @@ public class AngajatController {
 	@GetMapping("/userid/{id}")
 	public int getPersoanaIdByUserId(@PathVariable(value = "id") Long userId) {
 		return angajatRepository.findPersoanaIdByUserId(userId);
-	}
-
-	@GetMapping("/societate/{nume}")
-	public List<String> getPersoaneBySocietyName(@PathVariable(value = "nume") String nume) {
-		return angajatRepository.findPersoaneBySocietyName(nume);
 	}
 
 	@GetMapping("/ids={ids}/count")
