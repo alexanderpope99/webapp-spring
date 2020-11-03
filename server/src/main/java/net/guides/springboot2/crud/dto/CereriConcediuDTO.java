@@ -58,7 +58,7 @@ public class CereriConcediuDTO {
 		if (pentru == null)
 			return null;
 		else
-			return pentru.getIdpersoana();
+			return pentru.getPersoana().getId();
 	}
 
 	public void setPentru(Angajat pentru) {

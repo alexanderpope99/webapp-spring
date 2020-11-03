@@ -43,11 +43,11 @@ public class AngajatDTO {
 		this.societate = idsocietate;
 	}
 
-	public Integer getSuperior() {
+	public Integer getIduperior() {
 		if (superior == null)
 			return null;
 		else
-			return superior.getIdpersoana();
+			return superior.getPersoana().getId();
 	}
 
 	public void setSuperior(Angajat superior) {
