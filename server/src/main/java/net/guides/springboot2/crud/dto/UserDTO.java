@@ -36,7 +36,7 @@ public class UserDTO {
 		if (angajat == null)
 			return null;
 		else
-			return angajat.getIdpersoana();
+			return angajat.getPersoana().getId();
 	}
 
 	public String getPassword() {

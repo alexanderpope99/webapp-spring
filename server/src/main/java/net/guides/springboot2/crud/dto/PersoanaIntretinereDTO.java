@@ -53,7 +53,7 @@ public class PersoanaIntretinereDTO {
 		if (angajat == null)
 			return null;
 		else
-			return angajat.getIdpersoana();
+			return angajat.getPersoana().getId();
 	}
 
 	public Boolean getIntretinut() {
