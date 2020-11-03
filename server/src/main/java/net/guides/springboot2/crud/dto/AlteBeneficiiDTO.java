@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.dto;
 
+import net.guides.springboot2.crud.model.Contract;
+
 public class AlteBeneficiiDTO {
 	private int id;
 
@@ -11,7 +13,7 @@ public class AlteBeneficiiDTO {
 
 	private String aplicare;
 
-	private int idcontract;
+	private Contract contract;
 
 	public int getId() {
 		return id;
@@ -53,11 +55,14 @@ public class AlteBeneficiiDTO {
 		this.procent = procent;
 	}
 
-	public int getIdcontract() {
-		return idcontract;
+	public Integer getIdcontract() {
+		if (contract == null)
+			return null;
+		else
+			return contract.getId();
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract idcontract) {
+		this.contract = idcontract;
 	}
 }

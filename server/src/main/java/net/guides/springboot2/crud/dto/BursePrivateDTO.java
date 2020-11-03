@@ -2,10 +2,12 @@ package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
 
+import net.guides.springboot2.crud.model.Contract;
+
 public class BursePrivateDTO {
 	private int id;
 
-	private int idcontract;
+	private Contract contract;
 
 	private LocalDate data;
 
@@ -25,8 +27,11 @@ public class BursePrivateDTO {
 		return id;
 	}
 
-	public int getIdcontract() {
-		return idcontract;
+	public Integer getIdcontract() {
+		if (contract == null)
+			return null;
+		else
+			return contract.getId();
 	}
 
 	public Float getSuma() {
@@ -45,8 +50,8 @@ public class BursePrivateDTO {
 		this.id = id;
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 
 	public void setSuma(Float suma) {

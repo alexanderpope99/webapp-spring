@@ -143,5 +143,4 @@ public class Persoana implements Serializable {
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
-
 }

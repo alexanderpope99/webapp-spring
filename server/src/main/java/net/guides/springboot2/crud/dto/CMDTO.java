@@ -2,6 +2,8 @@ package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
 
+import net.guides.springboot2.crud.model.Contract;
+
 public class CMDTO {
 	private int id;
 
@@ -49,7 +51,7 @@ public class CMDTO {
 
 	private String conditii;
 
-	private int idcontract;
+	private Contract contract;
 
 	public Double getBazacalcul() {
 		return bazacalcul;
@@ -95,8 +97,11 @@ public class CMDTO {
 		return id;
 	}
 
-	public int getIdcontract() {
-		return idcontract;
+	public Integer getIdcontract() {
+		if (contract == null)
+			return null;
+		else
+			return contract.getId();
 	}
 
 	public Double getIndemnizatiefirma() {
@@ -191,8 +196,8 @@ public class CMDTO {
 		this.id = id;
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract idcontract) {
+		this.contract = idcontract;
 	}
 
 	public void setIndemnizatiefirma(Double indemnizatiefirma) {

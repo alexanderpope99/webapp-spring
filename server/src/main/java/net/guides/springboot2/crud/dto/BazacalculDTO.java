@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.dto;
 
+import net.guides.springboot2.crud.model.Angajat;
+
 public class BazacalculDTO {
 	private int id;
 
@@ -11,7 +13,7 @@ public class BazacalculDTO {
 
 	private int salariurealizat;
 
-	private int idangajat;
+	private Angajat angajat;
 
 	public int getAn() {
 		return an;
@@ -29,12 +31,15 @@ public class BazacalculDTO {
 		this.id = id;
 	}
 
-	public int getIdangajat() {
-		return idangajat;
+	public Integer getIdangajat() {
+		if (angajat == null)
+			return null;
+		else
+			return angajat.getIdpersoana();
 	}
 
-	public void setIdangajat(int idangajat) {
-		this.idangajat = idangajat;
+	public void setAngajat(Angajat idangajat) {
+		this.angajat = idangajat;
 	}
 
 	public int getLuna() {

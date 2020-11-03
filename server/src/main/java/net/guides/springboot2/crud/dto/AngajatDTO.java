@@ -1,20 +1,27 @@
 package net.guides.springboot2.crud.dto;
 
+import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.Societate;
+
 public class AngajatDTO {
 	private int idpersoana;
 
-	private int idcontract;
+	private Contract contract;
 
-	private int idsocietate;
+	private Societate societate;
 
-	private int superior;
+	private Angajat superior;
 
-	public int getIdcontract() {
-		return idcontract;
+	public Integer getIdcontract() {
+		if (contract == null)
+			return null;
+		else
+			return contract.getId();
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract idcontract) {
+		this.contract = idcontract;
 	}
 
 	public int getIdpersoana() {
@@ -25,19 +32,25 @@ public class AngajatDTO {
 		this.idpersoana = idpersoana;
 	}
 
-	public int getIdsocietate() {
-		return idsocietate;
+	public Integer getIdsocietate() {
+		if (societate == null)
+			return null;
+		else
+			return societate.getId();
 	}
 
-	public void setIdsocietate(int idsocietate) {
-		this.idsocietate = idsocietate;
+	public void setSocietate(Societate idsocietate) {
+		this.societate = idsocietate;
 	}
 
-	public int getSuperior() {
-		return superior;
+	public Integer getSuperior() {
+		if (superior == null)
+			return null;
+		else
+			return superior.getIdpersoana();
 	}
 
-	public void setSuperior(int superior) {
+	public void setSuperior(Angajat superior) {
 		this.superior = superior;
 	}
 }

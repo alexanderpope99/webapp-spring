@@ -2,6 +2,11 @@ package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
 
+import net.guides.springboot2.crud.model.CentruCost;
+import net.guides.springboot2.crud.model.Departament;
+import net.guides.springboot2.crud.model.Echipa;
+import net.guides.springboot2.crud.model.PunctDeLucru;
+
 public class ContractDTO {
 	private int id;
 
@@ -15,13 +20,13 @@ public class ContractDTO {
 
 	private LocalDate dataincepere;
 
-	private int idpunctlucru;
+	private PunctDeLucru punctlucru;
 
-	private int idcentrucost;
+	private CentruCost centrucost;
 
-	private int idechipa;
+	private Echipa echipa;
 
-	private int iddepartament;
+	private Departament departament;
 
 	private Boolean functiedebaza;
 
@@ -121,20 +126,32 @@ public class ContractDTO {
 		return id;
 	}
 
-	public int getIdcentrucost() {
-		return idcentrucost;
+	public Integer getIdcentrucost() {
+		if (centrucost == null)
+			return null;
+		else
+			return centrucost.getId();
 	}
 
-	public int getIddepartament() {
-		return iddepartament;
+	public Integer getIddepartament() {
+		if (departament == null)
+			return null;
+		else
+			return departament.getId();
 	}
 
-	public int getIdechipa() {
-		return idechipa;
+	public Integer getIdechipa() {
+		if (echipa == null)
+			return null;
+		else
+			return echipa.getId();
 	}
 
-	public int getIdpunctlucru() {
-		return idpunctlucru;
+	public Integer getIdpunctlucru() {
+		if (punctlucru == null)
+			return null;
+		else
+			return punctlucru.getId();
 	}
 
 	public String getMarca() {
@@ -253,20 +270,20 @@ public class ContractDTO {
 		this.id = id;
 	}
 
-	public void setIdcentrucost(int idcentrucost) {
-		this.idcentrucost = idcentrucost;
+	public void setCentrucost(CentruCost idcentrucost) {
+		this.centrucost = idcentrucost;
 	}
 
-	public void setIddepartament(int iddepartament) {
-		this.iddepartament = iddepartament;
+	public void setDepartament(Departament iddepartament) {
+		this.departament = iddepartament;
 	}
 
-	public void setIdechipa(int idechipa) {
-		this.idechipa = idechipa;
+	public void setEchipa(Echipa idechipa) {
+		this.echipa = idechipa;
 	}
 
-	public void setIdpunctlucru(int idpunctlucru) {
-		this.idpunctlucru = idpunctlucru;
+	public void setPunctlucru(PunctDeLucru idpunctlucru) {
+		this.punctlucru = idpunctlucru;
 	}
 
 	public void setMarca(String marca) {

@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.dto;
 
+import net.guides.springboot2.crud.model.Contract;
+
 public class CondicaDTO {
 	private int id;
 
@@ -9,14 +11,17 @@ public class CondicaDTO {
 
 	private String pauzamasa;
 
-	private int idcontract;
+	private Contract contract;
 
 	public int getId() {
 		return id;
 	}
 
-	public int getIdcontract() {
-		return idcontract;
+	public Integer getIdcontract() {
+		if (contract == null)
+			return null;
+		else
+			return contract.getId();
 	}
 
 	public String getInceput() {
@@ -35,8 +40,8 @@ public class CondicaDTO {
 		this.id = id;
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract idcontract) {
+		this.contract = idcontract;
 	}
 
 	public void setInceput(String inceput) {
