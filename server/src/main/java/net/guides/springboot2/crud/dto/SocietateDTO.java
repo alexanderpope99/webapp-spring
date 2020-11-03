@@ -8,7 +8,7 @@ public class SocietateDTO {
 
 	private String nume;
 
-	private Long idcaen;
+	private Long caen;
 
 	private String cif;
 
@@ -16,7 +16,7 @@ public class SocietateDTO {
 
 	private String regcom;
 
-	private Integer idadresa;
+	private Adresa adresa;
 
 	private String email;
 
@@ -38,8 +38,8 @@ public class SocietateDTO {
 		return id;
 	}
 
-	public Long getIdcaen() {
-		return idcaen;
+	public Long getCaen() {
+		return caen;
 	}
 
 	public String getNume() {
@@ -70,8 +70,8 @@ public class SocietateDTO {
 		this.id = id;
 	}
 
-	public void setIdcaen(Long idcaen) {
-		this.idcaen = idcaen;
+	public void setCaen(Long idcaen) {
+		this.caen = idcaen;
 	}
 
 	public void setNume(String nume) {
@@ -87,14 +87,14 @@ public class SocietateDTO {
 	}
 
 	public Integer getIdadresa() {
-		return idadresa;
+		if (adresa == null)
+			return null;
+		else
+			return adresa.getId();
 	}
 
-	public void setIdadresa(Adresa idadresa) {
-		if (idadresa != null)
-			this.idadresa = idadresa.getId();
-		else
-			this.idadresa = null;
+	public void setAdresa(Adresa idadresa) {
+		this.adresa = idadresa;
 	}
 
 }

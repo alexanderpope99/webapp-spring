@@ -2,6 +2,8 @@ package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
 
+import net.guides.springboot2.crud.model.Contract;
+
 public class CODTO {
 	private int id;
 
@@ -13,7 +15,7 @@ public class CODTO {
 
 	private Boolean sporuripermanente;
 
-	private int idcontract;
+	private Contract contract;
 
 	public LocalDate getDela() {
 		return dela;
@@ -23,8 +25,11 @@ public class CODTO {
 		return id;
 	}
 
-	public int getIdcontract() {
-		return idcontract;
+	public Integer getIdcontract() {
+		if (contract == null)
+			return null;
+		else
+			return contract.getId();
 	}
 
 	public LocalDate getPanala() {
@@ -47,8 +52,8 @@ public class CODTO {
 		this.id = id;
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract idcontract) {
+		this.contract = idcontract;
 	}
 
 	public void setPanala(LocalDate panala) {

@@ -126,7 +126,7 @@ public class Contract {
 	private Set<AlteBeneficii> alteBeneficii;
 
 	@OneToOne(mappedBy = "idcontract", fetch = FetchType.LAZY)
-	private Angajat angajat;
+	private Angajat angajati;
 
 	@OneToMany(mappedBy = "idcontract")
 	private Set<BursePrivate> bursePrivate;
@@ -472,12 +472,12 @@ public class Contract {
 		this.alteBeneficii = alteBeneficii;
 	}
 
-	public Angajat getAngajat() {
-		return angajat;
+	public Angajat getAngajati() {
+		return angajati;
 	}
 
-	public void setAngajat(Angajat angajat) {
-		this.angajat = angajat;
+	public void setAngajati(Angajat angajat) {
+		this.angajati = angajat;
 	}
 
 	public Set<BursePrivate> getBursePrivate() {

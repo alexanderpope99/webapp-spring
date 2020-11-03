@@ -48,7 +48,7 @@ public class Persoana {
 	private String cnp;
 
 	@OneToOne(mappedBy = "persoana", cascade = CascadeType.ALL)
-	private Angajat angajat;
+	private Angajat angajati;
 
 	public Persoana() {
 	}
@@ -149,12 +149,12 @@ public class Persoana {
 		this.telefon = telefon;
 	}
 
-	public Angajat getAngajat() {
-		return angajat;
+	public Angajat getAngajati() {
+		return angajati;
 	}
 
-	public void setAngajat(Angajat angajat) {
-		this.angajat = angajat;
+	public void setAngajati(Angajat angajat) {
+		this.angajati = angajat;
 	}
 
 }

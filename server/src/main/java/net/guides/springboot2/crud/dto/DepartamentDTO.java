@@ -3,7 +3,7 @@ package net.guides.springboot2.crud.dto;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Societate;
 
-public class CentruCostDTO {
+public class DepartamentDTO {
 	private int id;
 
 	private Adresa adresa;
@@ -16,16 +16,11 @@ public class CentruCostDTO {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getIdadresa() {
-		return adresa.getId();
-	}
-
-	public void setAdresa(Adresa idadresa) {
-		this.adresa = idadresa;
+	public Integer getIdadresa() {
+		if (adresa == null)
+			return null;
+		else
+			return adresa.getId();
 	}
 
 	public Integer getIdsocietate() {
@@ -35,12 +30,20 @@ public class CentruCostDTO {
 			return societate.getId();
 	}
 
-	public void setSocietate(Societate idsocietate) {
-		this.societate = idsocietate;
-	}
-
 	public String getNume() {
 		return nume;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setAdresa(Adresa idadresa) {
+		this.adresa = idadresa;
+	}
+
+	public void setSocietate(Societate idsocietate) {
+		this.societate = idsocietate;
 	}
 
 	public void setNume(String nume) {

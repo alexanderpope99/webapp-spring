@@ -1,7 +1,25 @@
 package net.guides.springboot2.crud.dto;
 
-public interface RoleDTO {
-	int getId();
+import net.guides.springboot2.crud.model.ERole;
 
-	String getName();
+public class RoleDTO {
+	private int id;
+
+	private ERole name;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name.name();
+	}
+
+	public void setName(ERole name) {
+		this.name = name;
+	}
 }

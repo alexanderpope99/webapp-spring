@@ -33,16 +33,16 @@ public class Adresa {
 	private Persoana persoane;
 
 	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private PunctDeLucru punctDeLucru;
+	private PunctDeLucru puncteDeLucru;
 
 	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private Societate societate;
+	private Societate societati;
 
 	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
 	private Departament departamente;
 
 	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private CentruCost centruCost;
+	private CentruCost centreCost;
 
 	public Adresa() {
 
@@ -104,19 +104,19 @@ public class Adresa {
 	}
 
 	public PunctDeLucru getPunctDeLucru() {
-		return punctDeLucru;
+		return puncteDeLucru;
 	}
 
 	public void setPunctDeLucru(PunctDeLucru punctDeLucru) {
-		this.punctDeLucru = punctDeLucru;
+		this.puncteDeLucru = punctDeLucru;
 	}
 
-	public Societate getSocietate() {
-		return societate;
+	public Societate getSocietati() {
+		return societati;
 	}
 
-	public void setSocietate(Societate societate) {
-		this.societate = societate;
+	public void setSocietati(Societate societate) {
+		this.societati = societate;
 	}
 
 	public Departament getDepartamente() {
@@ -128,10 +128,10 @@ public class Adresa {
 	}
 
 	public CentruCost getCentruCost() {
-		return centruCost;
+		return centreCost;
 	}
 
 	public void setCentruCost(CentruCost centruCost) {
-		this.centruCost = centruCost;
+		this.centreCost = centruCost;
 	}
 }
