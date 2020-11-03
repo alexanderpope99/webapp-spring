@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.CO;
 
 @Repository
-public interface CORepository extends JpaRepository<CO, Long>{
+public interface CORepository extends JpaRepository<CO, Integer>{
   List<CO> findByIdcontract(Long idcontract);
   List<CO> findByIdcontractOrderByDelaDesc(Long idcontract);
 

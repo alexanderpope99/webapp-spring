@@ -23,8 +23,8 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/co")
 public class COController {
-    @Autowired
-    private CORepository coRepository;
+	@Autowired
+	private CORepository coRepository;
 
     @GetMapping("latest")
     public List<CO> getAllCOsLatest() {
@@ -36,12 +36,12 @@ public class COController {
         return coRepository.findAllByOrderByDelaAsc();
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<CO> getCOById(@PathVariable(value = "id") Long coId) throws ResourceNotFoundException {
-        CO co = coRepository.findById(coId)
-                .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
-        return ResponseEntity.ok().body(co);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<CO> getCOById(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
+		CO co = coRepository.findById(coId)
+				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
+		return ResponseEntity.ok().body(co);
+	}
 
     @GetMapping("idc={id}")
     public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
@@ -55,30 +55,30 @@ public class COController {
         return ResponseEntity.ok().body(co);
     }
 
-    @PostMapping
-    public CO createCO(@RequestBody CO co) {
-        return coRepository.save(co);
-    }
+	@PostMapping
+	public CO createCO(@RequestBody CO co) {
+		return coRepository.save(co);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<CO> updateCO(@PathVariable(value = "id") Long coId, @RequestBody CO coDetails)
-            throws ResourceNotFoundException {
-        CO co = coRepository.findById(coId)
-                .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
+	@PutMapping("{id}")
+	public ResponseEntity<CO> updateCO(@PathVariable(value = "id") int coId, @RequestBody CO coDetails)
+			throws ResourceNotFoundException {
+		CO co = coRepository.findById(coId)
+				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
 
-        coDetails.setId(co.getId());
-        final CO updatedCO = coRepository.save(coDetails);
-        return ResponseEntity.ok(updatedCO);
-    }
+		coDetails.setId(co.getId());
+		final CO updatedCO = coRepository.save(coDetails);
+		return ResponseEntity.ok(updatedCO);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCO(@PathVariable(value = "id") Long coId) throws ResourceNotFoundException {
-        CO co = coRepository.findById(coId)
-                .orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteCO(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
+		CO co = coRepository.findById(coId)
+				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
 
-        coRepository.delete(co);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		coRepository.delete(co);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

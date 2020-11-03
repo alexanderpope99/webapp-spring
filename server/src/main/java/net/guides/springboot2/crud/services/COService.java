@@ -19,7 +19,7 @@ public class COService {
 	@Autowired
 	private CORepository coRepository;
 
-	public int getZileCFP(int luna, int an, long idcontract) {
+	public int getZileCFP(int luna, int an, int idcontract) {
 		List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
 		if (concediiOdihnaNeplatite.size() == 0)
 			return 0;
@@ -27,7 +27,7 @@ public class COService {
 		return zileC(luna, an, concediiOdihnaNeplatite);
 	}
 
-	public int getZileCFPLucratoare(int luna, int an, long idcontract) {
+	public int getZileCFPLucratoare(int luna, int an, int idcontract) {
 		List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
 		if (concediiOdihnaNeplatite.size() == 0)
 			return 0;
@@ -35,7 +35,7 @@ public class COService {
 		return zileCLucratoare(luna, an, concediiOdihnaNeplatite);
 	}
 
-	public int getZileCOTotal(int luna, int an, long idcontract) {
+	public int getZileCOTotal(int luna, int an, int idcontract) {
 		List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
 		if (concediiOdihna.size() == 0)
 			return 0;
@@ -43,7 +43,7 @@ public class COService {
 		return zileC(luna, an, concediiOdihna);
 	}
 
-	public int getZileCOLucratoare(int luna, int an, long idcontract) {
+	public int getZileCOLucratoare(int luna, int an, int idcontract) {
 		List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
 		if (concediiOdihna.size() == 0)
 			return 0;
@@ -51,7 +51,7 @@ public class COService {
 		return zileCLucratoare(luna, an, concediiOdihna);
 	}
 
-	public int getZileCS(int luna, int an, long idcontract) {
+	public int getZileCS(int luna, int an, int idcontract) {
 		List<CO> cs = coRepository.findByIdcontractAndTip(idcontract, "Concediu pentru studii");
 		if (cs.size() == 0)
 			return 0;
@@ -59,7 +59,7 @@ public class COService {
 		return zileC(luna, an, cs);
 	}
 
-	public int getZileST(int luna, int an, long idcontract) {
+	public int getZileST(int luna, int an, int idcontract) {
 		List<CO> st = coRepository.findByIdcontractAndTip(idcontract, "Concediu pentru situații speciale");
 		if (st.size() == 0)
 			return 0;
@@ -67,7 +67,7 @@ public class COService {
 		return zileC(luna, an, st);
 	}
 
-	public int getZileCO(int luna, int an, long idcontract) {
+	public int getZileCO(int luna, int an, int idcontract) {
 		List<CO> st = coRepository.findByIdcontractAndTip(idcontract, "Concediu de odihnă");
 		if (st.size() == 0)
 			return 0;

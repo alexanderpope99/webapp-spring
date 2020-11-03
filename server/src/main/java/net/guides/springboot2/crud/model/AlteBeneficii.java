@@ -2,27 +2,43 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "altebeneficii")
 public class AlteBeneficii {
 
-	private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column(name = "nume")
 	private String nume;
+
+	@Column(name = "valoare")
 	private Float valoare;
+
+	@Column(name = "procent")
 	private Float procent;
+
+	@Column(name = "aplicare")
 	private String aplicare;
-	private Long idcontract;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
 	public AlteBeneficii() {
 
 	}
 
-	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Long idcontract) {
+	public AlteBeneficii(String nume, Float valoare, Float procent, String aplicare, Contract idcontract) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
@@ -30,17 +46,14 @@ public class AlteBeneficii {
 		this.idcontract = idcontract;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	@Column(name = "nume")
 	public String getNume() {
 		return nume;
 	}
@@ -49,7 +62,6 @@ public class AlteBeneficii {
 		this.nume = nume;
 	}
 
-	@Column(name = "valoare")
 	public Float getValoare() {
 		return valoare;
 	}
@@ -58,7 +70,6 @@ public class AlteBeneficii {
 		this.valoare = valoare;
 	}
 
-	@Column(name = "procent")
 	public Float getProcent() {
 		return procent;
 	}
@@ -67,7 +78,6 @@ public class AlteBeneficii {
 		this.procent = procent;
 	}
 
-	@Column(name = "aplicare")
 	public String getAplicare() {
 		return aplicare;
 	}
@@ -76,12 +86,11 @@ public class AlteBeneficii {
 		this.aplicare = aplicare;
 	}
 
-	@Column(name = "idcontract")
-	public Long getIdcontract() {
+	public Contract getIdcontract() {
 		return idcontract;
 	}
 
-	public void setIdcontract(Long idcontract) {
+	public void setIdcontract(Contract idcontract) {
 		this.idcontract = idcontract;
 	}
 }

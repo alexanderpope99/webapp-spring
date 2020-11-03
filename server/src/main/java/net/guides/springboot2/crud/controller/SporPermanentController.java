@@ -24,48 +24,48 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/sporpermanent")
 public class SporPermanentController {
-    @Autowired
-    private SporPermanentRepository sporPermanentRepository;
+	@Autowired
+	private SporPermanentRepository sporPermanentRepository;
 
-    @GetMapping
-    public List<SporPermanent> getAllPersoane() {
-        return sporPermanentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<SporPermanent> getAllPersoane() {
+		return sporPermanentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<SporPermanent> getSporPermanentById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        SporPermanent sporPermanent = sporPermanentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<SporPermanent> getSporPermanentById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		SporPermanent sporPermanent = sporPermanentRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(sporPermanent);
-    }
+		return ResponseEntity.ok().body(sporPermanent);
+	}
 
-    @PostMapping
-    public SporPermanent createSporPermanent(@RequestBody SporPermanent sporPermanent) {
-        return sporPermanentRepository.save(sporPermanent);
-    }
+	@PostMapping
+	public SporPermanent createSporPermanent(@RequestBody SporPermanent sporPermanent) {
+		return sporPermanentRepository.save(sporPermanent);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<SporPermanent> updateSporPermanent(@PathVariable(value = "id") Long id,
-            @RequestBody SporPermanent newSporPermanent) throws ResourceNotFoundException {
-        SporPermanent sporPermanent = sporPermanentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<SporPermanent> updateSporPermanent(@PathVariable(value = "id") int id,
+			@RequestBody SporPermanent newSporPermanent) throws ResourceNotFoundException {
+		SporPermanent sporPermanent = sporPermanentRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
 
-        newSporPermanent.setId(sporPermanent.getId());
-        final SporPermanent updatedSporPermanent = sporPermanentRepository.save(newSporPermanent);
-        return ResponseEntity.ok(updatedSporPermanent);
-    }
+		newSporPermanent.setId(sporPermanent.getId());
+		final SporPermanent updatedSporPermanent = sporPermanentRepository.save(newSporPermanent);
+		return ResponseEntity.ok(updatedSporPermanent);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteSporPermanent(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        SporPermanent sporPermanent = sporPermanentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteSporPermanent(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		SporPermanent sporPermanent = sporPermanentRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("SporPermanent not found for this id :: " + id));
 
-        sporPermanentRepository.delete(sporPermanent);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		sporPermanentRepository.delete(sporPermanent);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

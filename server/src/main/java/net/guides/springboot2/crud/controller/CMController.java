@@ -23,51 +23,52 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/cm")
 public class CMController {
-    @Autowired
-    private CMRepository cmRepository;
+	@Autowired
+	private CMRepository cmRepository;
 
-    @GetMapping
-    public List<CM> getAllCMs() {
-        return cmRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<CM> getAllCMs() {
+		return cmRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<CM> getCMById(@PathVariable(value = "id") Long cmId) throws ResourceNotFoundException {
-        CM cm = cmRepository.findById(cmId)
-                .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
-        return ResponseEntity.ok().body(cm);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<CM> getCMById(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
+		CM cm = cmRepository.findById(cmId)
+				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
+		return ResponseEntity.ok().body(cm);
+	}
 
-    @GetMapping("idc={id}")
-    public ResponseEntity<List<CM>> getCMByIdcontract(@PathVariable(value = "id") Long idcontract) throws ResourceNotFoundException {
-        List<CM> cm = cmRepository.findByIdcontract(idcontract);
-        return ResponseEntity.ok().body(cm);
-    }
+	@GetMapping("idc={id}")
+	public ResponseEntity<List<CM>> getCMByIdcontract(@PathVariable(value = "id") int idcontract)
+			throws ResourceNotFoundException {
+		List<CM> cm = cmRepository.findByIdcontract(idcontract);
+		return ResponseEntity.ok().body(cm);
+	}
 
-    @PostMapping
-    public CM createCM(@RequestBody CM cm) {
-        return cmRepository.save(cm);
-    }
+	@PostMapping
+	public CM createCM(@RequestBody CM cm) {
+		return cmRepository.save(cm);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<CM> updateCM(@PathVariable(value = "id") Long cmId, @RequestBody CM cmDetails)
-            throws ResourceNotFoundException {
-        CM cm = cmRepository.findById(cmId)
-                .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
+	@PutMapping("{id}")
+	public ResponseEntity<CM> updateCM(@PathVariable(value = "id") int cmId, @RequestBody CM cmDetails)
+			throws ResourceNotFoundException {
+		CM cm = cmRepository.findById(cmId)
+				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
 
-        cmDetails.setId(cm.getId());
-        final CM updatedCM = cmRepository.save(cmDetails);
-        return ResponseEntity.ok(updatedCM);
-    }
+		cmDetails.setId(cm.getId());
+		final CM updatedCM = cmRepository.save(cmDetails);
+		return ResponseEntity.ok(updatedCM);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCM(@PathVariable(value = "id") Long cmId) throws ResourceNotFoundException {
-        CM cm = cmRepository.findById(cmId)
-                .orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteCM(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
+		CM cm = cmRepository.findById(cmId)
+				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
 
-        cmRepository.delete(cm);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		cmRepository.delete(cm);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

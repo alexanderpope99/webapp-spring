@@ -9,6 +9,6 @@ import net.guides.springboot2.crud.model.ERole;
 import net.guides.springboot2.crud.model.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, Integer> {
 	Optional<Role> findByName(ERole name);
 }

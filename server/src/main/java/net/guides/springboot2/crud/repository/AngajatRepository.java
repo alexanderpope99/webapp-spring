@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.Contract;
 
 @Repository
-public interface AngajatRepository extends JpaRepository<Angajat, Long> {
+public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 	List<Angajat> findByIdcontractNotNull();
 
 	List<Angajat> findByIdsocietate(int idsocietate);
@@ -18,14 +19,23 @@ public interface AngajatRepository extends JpaRepository<Angajat, Long> {
 
 	int countByIdsocietate(int idsocietate);
 
-	Angajat findByIdcontract(long idcontract);
+	Angajat findByIdcontract(int idcontract);
 
 	@Query(value = "select idcontract from angajat where idpersoana = ?1", nativeQuery = true)
-	long findIdcontractByIdpersoana(long idangajat);
+	int findIdcontractByIdpersoana(int idangajat);
+
+	@Query(value = "select * from angajat where idpersoana = ?1", nativeQuery = true)
+	Contract findContractByIdpersoana(int idangajat);
 
 	@Query(value = "select idpersoana from angajat where idcontract = ?1", nativeQuery = true)
-	long findIdpersoanaByIdcontract(long idcontract);
+	int findIdpersoanaByIdcontract(int idcontract);
+
+	@Query(value = "select * from angajat where idcontract = ?1", nativeQuery = true)
+	Angajat findPersoanaByIdcontract(int idcontract);
 
 	@Query(value = "SELECT id_angajat from users where users.id = ?1", nativeQuery = true)
 	int findPersoanaIdByUserId(long userid);
+
+	@Query(value = "SELECT persoana.nume || ' ' ||persoana.prenume from persoana inner join angajat on angajat.idpersoana=persoana.id inner join societate on angajat.idsocietate=societate.id where societate.nume=?1", nativeQuery = true)
+	List<String> findPersoaneBySocietyName(String nume);
 }

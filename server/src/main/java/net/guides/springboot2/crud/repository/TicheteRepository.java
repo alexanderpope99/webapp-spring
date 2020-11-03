@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Tichete;
 
 @Repository
-public interface TicheteRepository extends JpaRepository<Tichete, Long>{ }
+public interface TicheteRepository extends JpaRepository<Tichete, Integer> {
+}

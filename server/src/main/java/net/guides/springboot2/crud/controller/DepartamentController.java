@@ -23,47 +23,47 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/departament")
 public class DepartamentController {
-    @Autowired
-    private DepartamentRepository departamentRepository;
+	@Autowired
+	private DepartamentRepository departamentRepository;
 
-    @GetMapping
-    public List<Departament> getAllDepartaments() {
-        return departamentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Departament> getAllDepartaments() {
+		return departamentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Departament> getDepartamentById(@PathVariable(value = "id") Long departamentId)
-            throws ResourceNotFoundException {
-        Departament departament = departamentRepository.findById(departamentId).orElseThrow(
-                () -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
-        return ResponseEntity.ok().body(departament);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Departament> getDepartamentById(@PathVariable(value = "id") int departamentId)
+			throws ResourceNotFoundException {
+		Departament departament = departamentRepository.findById(departamentId).orElseThrow(
+				() -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
+		return ResponseEntity.ok().body(departament);
+	}
 
-    @PostMapping
-    public Departament createDepartament(@RequestBody Departament departament) {
-        return departamentRepository.save(departament);
-    }
+	@PostMapping
+	public Departament createDepartament(@RequestBody Departament departament) {
+		return departamentRepository.save(departament);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Departament> updateDepartament(@PathVariable(value = "id") Long departamentId,
-            @RequestBody Departament departamentDetails) throws ResourceNotFoundException {
-        Departament departament = departamentRepository.findById(departamentId).orElseThrow(
-                () -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
+	@PutMapping("{id}")
+	public ResponseEntity<Departament> updateDepartament(@PathVariable(value = "id") int departamentId,
+			@RequestBody Departament departamentDetails) throws ResourceNotFoundException {
+		Departament departament = departamentRepository.findById(departamentId).orElseThrow(
+				() -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
 
-        departamentDetails.setId(departament.getId());
-        final Departament updatedDepartament = departamentRepository.save(departament);
-        return ResponseEntity.ok(updatedDepartament);
-    }
+		departamentDetails.setId(departament.getId());
+		final Departament updatedDepartament = departamentRepository.save(departament);
+		return ResponseEntity.ok(updatedDepartament);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteDepartament(@PathVariable(value = "id") Long departamentId)
-            throws ResourceNotFoundException {
-        Departament departament = departamentRepository.findById(departamentId).orElseThrow(
-                () -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteDepartament(@PathVariable(value = "id") int departamentId)
+			throws ResourceNotFoundException {
+		Departament departament = departamentRepository.findById(departamentId).orElseThrow(
+				() -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
 
-        departamentRepository.delete(departament);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		departamentRepository.delete(departament);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.payload.response.MessageResponse;
 import net.guides.springboot2.crud.repository.AngajatRepository;
+import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.services.BazacalculService;
 import net.guides.springboot2.crud.services.RealizariRetineriService;
@@ -27,46 +29,50 @@ public class RealizariRetineriController {
 	private RealizariRetineriRepository realizariRetineriRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
+	@Autowired
+	private ContractRepository contractRepository;
 
 	@Autowired
 	private BazacalculService bazacalculService;
 
 	@GetMapping("idc={id}&mo={luna}&y={an}")
-	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") Long idcontract,
+	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
 			throws ResourceNotFoundException {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
 	@GetMapping("idp={id}&mo={luna}&y={an}")
-	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value = "id") Long idpersoana,
+	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value = "id") int idpersoana,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
 			throws ResourceNotFoundException {
 		// get contract of persoana
-		long idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
+		int idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
 	// just a calculator
 	@GetMapping("calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
-	public RealizariRetineri calcRealizariRetineri(@PathVariable(value = "id") Long idcontract,
+	public RealizariRetineri calcRealizariRetineri(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an,
 			@PathVariable(value = "pb") Integer primabruta, @PathVariable(value = "nrt") Integer nrTichete,
 			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
-		return realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primabruta, nrTichete,
+		Contract contract = (contractRepository.findById(idcontract)).get();
+		return realizariRetineriService.calcRealizariRetineri(contract, luna, an, primabruta, nrTichete,
 				totalOreSuplimentare);
 	}
 
 	@PostMapping("save/idc={id}&mo={luna}&y={an}")
-	public RealizariRetineri saveRealizariRetineri(@PathVariable(value = "id") Long idcontract,
+	public RealizariRetineri saveRealizariRetineri(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
 			throws ResourceNotFoundException {
-		return realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
+		Contract contract = (contractRepository.findById(idcontract)).get();
+		return realizariRetineriService.saveRealizariRetineri(luna, an, contract);
 	}
 
 	@PutMapping("update/idc={idc}&mo={luna}&y={an}")
 	public RealizariRetineri updateRealizariRetineri(@PathVariable(name = "luna") int luna,
-			@PathVariable(name = "an") int an, @PathVariable(name = "idc") long idcontract,
+			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract,
 			@RequestBody RealizariRetineri newRealizariRetineri) throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
@@ -82,12 +88,15 @@ public class RealizariRetineriController {
 
 	@PutMapping("update/reset/idc={idc}&mo={luna}&y={an}")
 	public RealizariRetineri recalcRealizariRetineri(@PathVariable(name = "luna") int luna,
-			@PathVariable(name = "an") int an, @PathVariable(name = "idc") long idcontract) throws ResourceNotFoundException {
+			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract)
+			throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
 				idcontract);
 
-		RealizariRetineri newRealizariRetineri = realizariRetineriService.resetRealizariRetineri(luna, an, idcontract);
+		Contract contract = (contractRepository.findById(idcontract)).get();
+
+		RealizariRetineri newRealizariRetineri = realizariRetineriService.resetRealizariRetineri(luna, an, contract);
 
 		newRealizariRetineri.setId(oldRealizariRetineri.getId());
 
@@ -99,16 +108,18 @@ public class RealizariRetineriController {
 	}
 
 	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
-	public RealizariRetineri calcThenUpdateRealizariRetineri(@PathVariable(value = "id") Long idcontract,
+	public RealizariRetineri calcThenUpdateRealizariRetineri(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an,
 			@PathVariable(value = "pb") Integer primaBruta, @PathVariable(value = "nrt") Integer nrTichete,
 			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
 				idcontract);
-		long idstat = oldRealizariRetineri.getId();
+		int idstat = oldRealizariRetineri.getId();
 
-		RealizariRetineri newRealizariRetineri = realizariRetineriService.calcRealizariRetineri(idcontract, luna, an,
+		Contract contract = (contractRepository.findById(idcontract)).get();
+
+		RealizariRetineri newRealizariRetineri = realizariRetineriService.calcRealizariRetineri(contract, luna, an,
 				primaBruta, nrTichete, totalOreSuplimentare);
 		newRealizariRetineri.setId(idstat);
 
@@ -116,16 +127,5 @@ public class RealizariRetineriController {
 
 		final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
 		return updatedRR;
-	}
-
-	@PutMapping("calc/ultimele6/idc={idc}&mo={luna}&y={an}")
-	public ResponseEntity<?> calcUltimele6Luni(
-		@PathVariable("idc") long idcontract, 
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an) throws ResourceNotFoundException {
-
-		realizariRetineriService.saveRealizariRetineriUltimele6Luni(luna, an, idcontract);
-
-		return ResponseEntity.ok(new MessageResponse("Ultimele 6 luni calculate!"));
 	}
 }

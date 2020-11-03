@@ -1,65 +1,89 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "departament")
 public class Departament {
 
-    private long id;
-    private Integer idadresa;
-    private Integer idsocietate;
-    private String nume;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa idadresa;
 
-    public Departament() {
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idsocietate")
+	private Societate idsocietate;
 
-    }
+	@Column(name = "nume")
+	private String nume;
 
-    public Departament(Integer idadresa, Integer idsocietate, String nume) {
-        this.idadresa = idadresa;
-        this.idsocietate = idsocietate;
-        this.nume = nume;
-    }
+	@OneToMany(mappedBy = "iddepartament")
+	private Set<Echipa> echipe;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	public Departament() {
 
-    @Column(name = "adresa")
-    public Integer getIdadresa() {
-        return idadresa;
-    }
-    public void setIdadresa(Integer idadresa) {
-        this.idadresa = idadresa;
-    }
+	}
 
-    @Column(name = "idsocietate")
-    public Integer getIdsocietate() {
-        return idsocietate;
-    }
+	public Departament(Adresa idadresa, Societate idsocietate, String nume) {
+		this.idadresa = idadresa;
+		this.idsocietate = idsocietate;
+		this.nume = nume;
+	}
 
-    public void setIdsocietate(Integer idsocietate) {
-        this.idsocietate = idsocietate;
-    }
+	public int getId() {
+		return id;
+	}
 
-    @Column(name = "nume")
-    public String getNume() {
-        return nume;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
+	public Adresa getIdadresa() {
+		return idadresa;
+	}
+
+	public void setIdadresa(Adresa idadresa) {
+		this.idadresa = idadresa;
+	}
+
+	public Societate getIdsocietate() {
+		return idsocietate;
+	}
+
+	public void setIdsocietate(Societate idsocietate) {
+		this.idsocietate = idsocietate;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
+
+	public Set<Echipa> getEchipe() {
+		return echipe;
+	}
+
+	public void setEchipe(Set<Echipa> echipe) {
+		this.echipe = echipe;
+	}
 }
-

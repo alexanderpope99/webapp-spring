@@ -22,21 +22,14 @@ public class NotaContabilaController {
 	private RealizariRetineriRepository realizariRetineriRepository;
 
 	@GetMapping("/{ids}/mo={luna}&y={an}/{uid}")
-	public boolean createNotaContabila(
-		@PathVariable("ids") int ids,
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an,
-		@PathVariable("uid") long uid
-	) throws IOException, ResourceNotFoundException {
+	public boolean createNotaContabila(@PathVariable("ids") int ids, @PathVariable("luna") int luna,
+			@PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
 		return notaContabilaService.createNotaContabila(luna, an, ids, uid);
 	}
 
 	@GetMapping("/test/{ids}/mo={luna}&y={an}")
-	public NotaContabilaDTO createNotaContabilaWhole(
-		@PathVariable("ids") int ids,
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an
-	) throws IOException, ResourceNotFoundException {
+	public NotaContabilaDTO createNotaContabilaWhole(@PathVariable("ids") int ids, @PathVariable("luna") int luna,
+			@PathVariable("an") int an) throws IOException, ResourceNotFoundException {
 		return realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an, ids);
 	}
 }

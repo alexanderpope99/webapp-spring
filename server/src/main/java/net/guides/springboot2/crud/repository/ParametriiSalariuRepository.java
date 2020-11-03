@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 
 @Repository
-public interface ParametriiSalariuRepository extends JpaRepository<ParametriiSalariu, Long> {
+public interface ParametriiSalariuRepository extends JpaRepository<ParametriiSalariu, Integer> {
 	@Query(value = "select * from parametriisalariu where parametriisalariu.date<=?1 ORDER BY date desc LIMIT 1", nativeQuery = true)
 	ParametriiSalariu findByDate(LocalDate localDate);
 }

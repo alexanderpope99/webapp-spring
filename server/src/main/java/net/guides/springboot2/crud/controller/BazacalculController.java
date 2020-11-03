@@ -36,15 +36,15 @@ public class BazacalculController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Bazacalcul> getBazacalculById(@PathVariable(value = "id") Long bazacalculId)
+	public ResponseEntity<Bazacalcul> getBazacalculById(@PathVariable(value = "id") int bazacalculId)
 			throws ResourceNotFoundException {
-		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId)
-				.orElseThrow(() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
+		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
+				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
 		return ResponseEntity.ok().body(bazacalcul);
 	}
 
 	@GetMapping("ida={ida}")
-	public List<Bazacalcul> getBazacalculByIdAndLunaAndAn(@PathVariable("ida") Long ida) {
+	public List<Bazacalcul> getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida) {
 		return bazacalculRepository.findByIdangajatOrderByAnDescLunaDesc(ida);
 	}
 
@@ -57,10 +57,8 @@ public class BazacalculController {
 	}
 
 	@GetMapping("ida={ida}/mo={luna}&y={an}")
-	public Bazacalcul getBazacalculByIdAndLunaAndAn(
-		@PathVariable("ida") Long ida,
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an) {
+	public Bazacalcul getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida, @PathVariable("luna") int luna,
+			@PathVariable("an") int an) {
 		return bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, ida);
 	}
 
@@ -70,10 +68,10 @@ public class BazacalculController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Bazacalcul> updateBazacalcul(@PathVariable(value = "id") Long bazacalculId,
+	public ResponseEntity<Bazacalcul> updateBazacalcul(@PathVariable(value = "id") int bazacalculId,
 			@RequestBody Bazacalcul bazacalculDetails) throws ResourceNotFoundException {
-		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId)
-				.orElseThrow(() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
+		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
+				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
 
 		bazacalculDetails.setId(bazacalcul.getId());
 		final Bazacalcul updatedBazacalcul = bazacalculRepository.save(bazacalculDetails);
@@ -81,10 +79,10 @@ public class BazacalculController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteBazacalcul(@PathVariable(value = "id") Long bazacalculId)
+	public Map<String, Boolean> deleteBazacalcul(@PathVariable(value = "id") int bazacalculId)
 			throws ResourceNotFoundException {
-		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId)
-				.orElseThrow(() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
+		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
+				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
 
 		bazacalculRepository.delete(bazacalcul);
 		Map<String, Boolean> response = new HashMap<>();

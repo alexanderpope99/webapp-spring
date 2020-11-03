@@ -2,51 +2,60 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "zilecodisponibile")
 public class ZileCODisponibile {
 
-    private long id;
-    @Column(name = "nr")
-    private Long nr;
-    @Column(name = "idcontract")
-    private Long idcontract;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    public ZileCODisponibile() { }
+	@Column(name = "nr")
+	private Long nr;
 
-    public ZileCODisponibile( Long nr, Long idcontract ) {
-        this.nr = nr;
-        this.idcontract = idcontract;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public ZileCODisponibile() {
+	}
 
-    // GETTERS
-    public Long getIdcontract() {
-        return idcontract;
-    }
-    public Long getNr() {
-        return nr;
-    }
+	public ZileCODisponibile(Long nr, Contract idcontract) {
+		this.nr = nr;
+		this.idcontract = idcontract;
+	}
 
-    // SETTERS
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
-    public void setNr(Long nr) {
-        this.nr = nr;
-    }
-} 
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	// GETTERS
+	public Contract getIdcontract() {
+		return idcontract;
+	}
+
+	public Long getNr() {
+		return nr;
+	}
+
+	// SETTERS
+	public void setIdcontract(Contract idcontract) {
+		this.idcontract = idcontract;
+	}
+
+	public void setNr(Long nr) {
+		this.nr = nr;
+	}
+}

@@ -2,75 +2,82 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "condica")
 public class Condica {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    private long id;
-    private String inceput;
-    private String sfarsit;
-    private String pauzamasa;
-    private Long idcontract;
+	@Column(name = "inceput")
+	private String inceput;
 
-    public Condica() {
+	@Column(name = "sfarsit")
+	private String sfarsit;
 
-    }
+	@Column(name = "pauzamasa")
+	private String pauzamasa;
 
-    public Condica(String inceput, String sfarsit, String pauzamasa, Long idcontract) {
-        this.inceput = inceput;
-        this.sfarsit = sfarsit;
-        this.pauzamasa = pauzamasa;
-        this.idcontract = idcontract;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	public Condica() {
 
-    @Column(name = "inceput")
-    public String getInceput() {
-        return inceput;
-    }
+	}
 
-    public void setInceput(String inceput) {
-        this.inceput = inceput;
-    }
+	public Condica(String inceput, String sfarsit, String pauzamasa, Contract idcontract) {
+		this.inceput = inceput;
+		this.sfarsit = sfarsit;
+		this.pauzamasa = pauzamasa;
+		this.idcontract = idcontract;
+	}
 
-    @Column(name = "sfarsit")
-    public String getSfarsit() {
-        return sfarsit;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setSfarsit(String sfarsit) {
-        this.sfarsit = sfarsit;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    @Column(name = "pauzamasa")
-    public String getPauzamasa() {
-        return pauzamasa;
-    }
+	public String getInceput() {
+		return inceput;
+	}
 
-    public void setPauzamasa(String pauzamasa) {
-        this.pauzamasa = pauzamasa;
-    }
+	public void setInceput(String inceput) {
+		this.inceput = inceput;
+	}
 
-    @Column(name = "idcontract")
-    public Long getIdcontract() {
-        return idcontract;
-    }
+	public String getSfarsit() {
+		return sfarsit;
+	}
 
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
+	public void setSfarsit(String sfarsit) {
+		this.sfarsit = sfarsit;
+	}
+
+	public String getPauzamasa() {
+		return pauzamasa;
+	}
+
+	public void setPauzamasa(String pauzamasa) {
+		this.pauzamasa = pauzamasa;
+	}
+
+	public Contract getIdcontract() {
+		return idcontract;
+	}
+
+	public void setIdcontract(Contract idcontract) {
+		this.idcontract = idcontract;
+	}
 }
-

@@ -23,47 +23,47 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/burseprivate")
 public class BursePrivateController {
-    @Autowired
-    private BursePrivateRepository bursePrivateRepository;
+	@Autowired
+	private BursePrivateRepository bursePrivateRepository;
 
-    @GetMapping
-    public List<BursePrivate> getAllBursePrivates() {
-        return bursePrivateRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<BursePrivate> getAllBursePrivates() {
+		return bursePrivateRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<BursePrivate> getBursePrivateById(@PathVariable(value = "id") Long bursePrivateId)
-            throws ResourceNotFoundException {
-        BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
-                () -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
-        return ResponseEntity.ok().body(bursePrivate);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<BursePrivate> getBursePrivateById(@PathVariable(value = "id") int bursePrivateId)
+			throws ResourceNotFoundException {
+		BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
+				() -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
+		return ResponseEntity.ok().body(bursePrivate);
+	}
 
-    @PostMapping
-    public BursePrivate createBursePrivate(@RequestBody BursePrivate bursePrivate) {
-        return bursePrivateRepository.save(bursePrivate);
-    }
+	@PostMapping
+	public BursePrivate createBursePrivate(@RequestBody BursePrivate bursePrivate) {
+		return bursePrivateRepository.save(bursePrivate);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<BursePrivate> updateBursePrivate(@PathVariable(value = "id") Long bursePrivateId,
-            @RequestBody BursePrivate bursePrivateDetails) throws ResourceNotFoundException {
-        BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
-                () -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
+	@PutMapping("{id}")
+	public ResponseEntity<BursePrivate> updateBursePrivate(@PathVariable(value = "id") int bursePrivateId,
+			@RequestBody BursePrivate bursePrivateDetails) throws ResourceNotFoundException {
+		BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
+				() -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
 
-        bursePrivateDetails.setId(bursePrivate.getId());
-        final BursePrivate updatedBursePrivate = bursePrivateRepository.save(bursePrivate);
-        return ResponseEntity.ok(updatedBursePrivate);
-    }
+		bursePrivateDetails.setId(bursePrivate.getId());
+		final BursePrivate updatedBursePrivate = bursePrivateRepository.save(bursePrivate);
+		return ResponseEntity.ok(updatedBursePrivate);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteBursePrivate(@PathVariable(value = "id") Long bursePrivateId)
-            throws ResourceNotFoundException {
-        BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
-                () -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteBursePrivate(@PathVariable(value = "id") int bursePrivateId)
+			throws ResourceNotFoundException {
+		BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
+				() -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
 
-        bursePrivateRepository.delete(bursePrivate);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		bursePrivateRepository.delete(bursePrivate);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

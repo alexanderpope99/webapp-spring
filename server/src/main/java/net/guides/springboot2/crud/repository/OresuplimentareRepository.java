@@ -9,16 +9,15 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Oresuplimentare;
 
 @Repository
-public interface OresuplimentareRepository extends JpaRepository<Oresuplimentare, Long>{
-    List<Oresuplimentare> findByIdstatsalariat(long idstat);
+public interface OresuplimentareRepository extends JpaRepository<Oresuplimentare, Integer> {
+	List<Oresuplimentare> findByIdstatsalariat(int idstat);
 
-    @Query(value = "select * from oresuplimentare where idstatsalariat = (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract = ?3)", 
-	nativeQuery = true)
-	List<Oresuplimentare> findByLunaAndAnAndIdcontract(int luna, int an, long idcontract);
-	
+	@Query(value = "select * from oresuplimentare where idstatsalariat = (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract = ?3)", nativeQuery = true)
+	List<Oresuplimentare> findByLunaAndAnAndIdcontract(int luna, int an, int idcontract);
+
 	@Query(value = "SELECT COALESCE( (select sum(nr) from oresuplimentare where idstatsalariat = ?1), 0)", nativeQuery = true)
-	Integer countNrOreSuplimentareByIdstat(long idstat);
+	Integer countNrOreSuplimentareByIdstat(int idstat);
 
 	@Query(value = "SELECT COALESCE( (select sum(nr) from oresuplimentare where idstatsalariat = ?1 and procent = ?2), 0)", nativeQuery = true)
-	int countByIdstatsalariatAndProcent(long idstat, double procent);
+	int countByIdstatsalariatAndProcent(int idstat, double procent);
 }

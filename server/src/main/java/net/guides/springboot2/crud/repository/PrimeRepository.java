@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.Prime;
 
 @Repository
-public interface PrimeRepository extends JpaRepository<Prime, Long>{ }
+public interface PrimeRepository extends JpaRepository<Prime, Integer> {
+}

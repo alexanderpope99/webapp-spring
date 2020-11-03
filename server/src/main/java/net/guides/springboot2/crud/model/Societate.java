@@ -1,121 +1,207 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "societate")
 public class Societate {
 
-    private long id;
-    @Column(name = "nume")
-    private String nume;
-    @Column(name = "idcaen")
-    private Long idcaen;
-    @Column(name = "cif")
-    private String cif;
-    @Column(name = "capsoc")
-    private Double capsoc;
-    @Column(name = "regcom")
-    private String regcom;
-    @Column(name = "idadresa")
-    private Long idadresa;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "telefon")
-    private String telefon;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    public Societate() {
-    }
+	@Column(name = "nume")
+	private String nume;
 
-    public Societate(String nume, Long idcaen, String cif, Double capsoc, String regcom, Long idadresa, String email,
-            String telefon) {
-        this.nume = nume;
-        this.cif = cif;
-        this.capsoc = capsoc;
-        this.regcom = regcom;
-        this.idadresa = idadresa;
-        this.email = email;
-        this.telefon = telefon;
-    }
+	@Column(name = "idcaen")
+	private Long idcaen;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
+	@Column(name = "cif")
+	private String cif;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Column(name = "capsoc")
+	private Double capsoc;
 
-    // GETTERS
-    public Double getCapsoc() {
-        return capsoc;
-    }
+	@Column(name = "regcom")
+	private String regcom;
 
-    public String getCif() {
-        return cif;
-    }
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa idadresa;
 
-    public String getEmail() {
-        return email;
-    }
+	@Column(name = "email")
+	private String email;
 
-    public Long getIdadresa() {
-        return idadresa;
-    }
+	@Column(name = "telefon")
+	private String telefon;
 
-    public Long getIdcaen() {
-        return idcaen;
-    }
+	@OneToMany(mappedBy = "idsocietate")
+	private Set<Angajat> angajat;
 
-    public String getNume() {
-        return nume;
-    }
+	@OneToMany(mappedBy = "idsocietate")
+	private Set<CentruCost> centruCost;
 
-    public String getRegcom() {
-        return regcom;
-    }
+	@OneToMany(mappedBy = "societate")
+	private Set<CereriConcediu> cereriConcediu;
 
-    public String getTelefon() {
-        return telefon;
-    }
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "listacontbancar", joinColumns = @JoinColumn(name = "idsocietate"), inverseJoinColumns = @JoinColumn(name = "iban"))
+	private Set<ContBancar> iban = new HashSet<>();
 
-    // SETTERS
-    public void setCapsoc(Double capsoc) {
-        this.capsoc = capsoc;
-    }
+	@OneToMany(mappedBy = "idsocietate")
+	private Set<Departament> departamente;
 
-    public void setCif(String cif) {
-        this.cif = cif;
-    }
+	@OneToOne(mappedBy = "idsocietate", fetch = FetchType.LAZY)
+	private PunctDeLucru punctDeLucru;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public Societate() {
+	}
 
-    public void setIdadresa(Long idadresa) {
-        this.idadresa = idadresa;
-    }
+	public Societate(String nume, Long idcaen, String cif, Double capsoc, String regcom, Adresa idadresa, String email,
+			String telefon) {
+		this.nume = nume;
+		this.cif = cif;
+		this.capsoc = capsoc;
+		this.regcom = regcom;
+		this.idadresa = idadresa;
+		this.email = email;
+		this.telefon = telefon;
+	}
 
-    public void setIdcaen(Long idcaen) {
-        this.idcaen = idcaen;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setRegcom(String regcom) {
-        this.regcom = regcom;
-    }
+	// GETTERS
+	public Double getCapsoc() {
+		return capsoc;
+	}
 
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
-    }
+	public String getCif() {
+		return cif;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public Adresa getIdadresa() {
+		return idadresa;
+	}
+
+	public Long getIdcaen() {
+		return idcaen;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public String getRegcom() {
+		return regcom;
+	}
+
+	public String getTelefon() {
+		return telefon;
+	}
+
+	// SETTERS
+	public void setCapsoc(Double capsoc) {
+		this.capsoc = capsoc;
+	}
+
+	public void setCif(String cif) {
+		this.cif = cif;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setIdadresa(Adresa idadresa) {
+		this.idadresa = idadresa;
+	}
+
+	public void setIdcaen(Long idcaen) {
+		this.idcaen = idcaen;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
+
+	public void setRegcom(String regcom) {
+		this.regcom = regcom;
+	}
+
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
+	}
+
+	public Set<Angajat> getAngajat() {
+		return angajat;
+	}
+
+	public void setAngajat(Set<Angajat> angajat) {
+		this.angajat = angajat;
+	}
+
+	public Set<CentruCost> getCentruCost() {
+		return centruCost;
+	}
+
+	public void setCentruCost(Set<CentruCost> centruCost) {
+		this.centruCost = centruCost;
+	}
+
+	public Set<CereriConcediu> getCereriConcediu() {
+		return cereriConcediu;
+	}
+
+	public void setCereriConcediu(Set<CereriConcediu> cereriConcediu) {
+		this.cereriConcediu = cereriConcediu;
+	}
+
+	public Set<ContBancar> getIban() {
+		return iban;
+	}
+
+	public void setIban(Set<ContBancar> iban) {
+		this.iban = iban;
+	}
+
+	public Set<Departament> getDepartamente() {
+		return departamente;
+	}
+
+	public void setDepartamente(Set<Departament> departamente) {
+		this.departamente = departamente;
+	}
+
+	public PunctDeLucru getPunctDeLucru() {
+		return punctDeLucru;
+	}
+
+	public void setPunctDeLucru(PunctDeLucru punctDeLucru) {
+		this.punctDeLucru = punctDeLucru;
+	}
 }

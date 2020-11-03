@@ -81,17 +81,16 @@ public class StatSalariiService {
         return formula.toString();
     }
 
-    public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, long userID)
+    public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, int userID)
             throws IOException, ResourceNotFoundException {
         try {
-            Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
+            Societate societate = societateRepository.findById(idsocietate).orElseThrow(
                     () -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-            Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
+            Adresa adresaSocietate = adresaRepository.findById(idsocietate)
                     .orElseThrow(() -> new ResourceNotFoundException(
-                            "Adresa not found for this societate :: " + societate.getNume()));
+														"Adresa not found for this societate :: " + societate.getNume()));
+														
 
-            // List<Angajat> angajati =
-            // angajatRepository.findByIdsocietateAndIdcontractNotNull(idsocietate);
             List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
 
             String statTemplateLocation = homeLocation + "/templates";
@@ -165,7 +164,7 @@ public class StatSalariiService {
                         .orElseThrow(() -> new ResourceNotFoundException(
                                 "Contract not found for this idpersoana :: " + persoana.getId()));
 
-                long idcontract = contract.getId();
+                int idcontract = contract.getId();
 
                 RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an,
                         idcontract);
@@ -941,12 +940,12 @@ public class StatSalariiService {
         }
     } // ! createStatSalarii
 
-    public boolean createStatIndividual(int luna, int an, long idangajat, int idsocietate, long userID)
+    public boolean createStatIndividual(int luna, int an, int idangajat, int idsocietate, int userID)
             throws ResourceNotFoundException {
         try {
-            Societate societate = societateRepository.findById((long) idsocietate).orElseThrow(
+            Societate societate = societateRepository.findById(idsocietate).orElseThrow(
                     () -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-            Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa())
+            Adresa adresaSocietate = adresaRepository.findById(idsocietate)
                     .orElseThrow(() -> new ResourceNotFoundException(
                             "Adresa not found for this societate :: " + societate.getNume()));
             Persoana persoana = persoanaRepository.findById(idangajat)
@@ -1014,7 +1013,7 @@ public class StatSalariiService {
             // * write date angajat
             int impozitScutit = 0;
             // rowNr = 14;
-            long idcontract = contract.getId();
+            int idcontract = contract.getId();
 
             RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
             Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.AlteDrepturi;
 
 @Repository
-public interface AlteDrepturiRepository extends JpaRepository<AlteDrepturi, Long>{
+public interface AlteDrepturiRepository extends JpaRepository<AlteDrepturi, Integer> {
 
 }

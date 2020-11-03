@@ -25,57 +25,54 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/tichete")
 public class TicheteController {
-    @Autowired
+	@Autowired
 	private TicheteRepository ticheteRepository;
 	@Autowired
 	private TicheteService ticheteService;
 
-    @GetMapping
-    public List<Tichete> getAllTichete() {
-        return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Tichete> getAllTichete() {
+		return ticheteRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Tichete tichete = ticheteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(tichete);
-    }
+		return ResponseEntity.ok().body(tichete);
+	}
 
-    @GetMapping("nr/idc={idc}&mo={luna}&y={an}")
-    public int getNrTicheteByLunaAnIdcontract(
-        @PathVariable(value = "idc") long idcontract,
-        @PathVariable(value = "luna") int luna,
-        @PathVariable(value = "an") int an) {
-			return ticheteService.getNrTichete(luna, an, idcontract);
-    }
+	@GetMapping("nr/idc={idc}&mo={luna}&y={an}")
+	public int getNrTicheteByLunaAnIdcontract(@PathVariable(value = "idc") int idcontract,
+			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) {
+		return ticheteService.getNrTichete(luna, an, idcontract);
+	}
 
-    @PostMapping
-    public Tichete createTichete(@RequestBody Tichete tichete) {
-        return ticheteRepository.save(tichete);
-    }
+	@PostMapping
+	public Tichete createTichete(@RequestBody Tichete tichete) {
+		return ticheteRepository.save(tichete);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") Long id, @RequestBody Tichete newTichete)
-            throws ResourceNotFoundException {
-        Tichete tichete = ticheteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") int id, @RequestBody Tichete newTichete)
+			throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
-        newTichete.setId(tichete.getId());
-        final Tichete updatedTichete = ticheteRepository.save(newTichete);
-        return ResponseEntity.ok(updatedTichete);
-    }
+		newTichete.setId(tichete.getId());
+		final Tichete updatedTichete = ticheteRepository.save(newTichete);
+		return ResponseEntity.ok(updatedTichete);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        Tichete tichete = ticheteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
-        ticheteRepository.delete(tichete);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		ticheteRepository.delete(tichete);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

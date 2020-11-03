@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import net.guides.springboot2.crud.model.ZileCODisponibile;
 
 @Repository
-public interface ZileCODisponibileRepository extends JpaRepository<ZileCODisponibile, Long>{ }
+public interface ZileCODisponibileRepository extends JpaRepository<ZileCODisponibile, Integer> {
+}

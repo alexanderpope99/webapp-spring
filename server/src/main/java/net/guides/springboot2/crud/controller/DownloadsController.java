@@ -18,13 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DownloadsController {
 
 	@GetMapping("{uid}/{filename}")
-	public void getFile(
-		@PathVariable("filename") String fileName,
-		@PathVariable("uid") long uid,
-		HttpServletResponse response)
-	{
-		try{
-			File myFile = new File("src/main/java/net/guides/springboot2/crud/downloads/"+uid+'/'+fileName);
+	public void getFile(@PathVariable("filename") String fileName, @PathVariable("uid") int uid,
+			HttpServletResponse response) {
+		try {
+			File myFile = new File("src/main/java/net/guides/springboot2/crud/downloads/" + uid + '/' + fileName);
 			InputStream fileAsIS = new FileInputStream(myFile);
 
 			response.setContentType("application/octet-stream");

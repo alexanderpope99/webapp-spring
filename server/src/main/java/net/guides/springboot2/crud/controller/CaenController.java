@@ -23,45 +23,45 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/caen")
 public class CaenController {
-    @Autowired
-    private CaenRepository caenRepository;
+	@Autowired
+	private CaenRepository caenRepository;
 
-    @GetMapping
-    public List<Caen> getAllCaens() {
-        return caenRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Caen> getAllCaens() {
+		return caenRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Caen> getCaenById(@PathVariable(value = "id") Long caenId) throws ResourceNotFoundException {
-        Caen caen = caenRepository.findById(caenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
-        return ResponseEntity.ok().body(caen);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Caen> getCaenById(@PathVariable(value = "id") int caenId) throws ResourceNotFoundException {
+		Caen caen = caenRepository.findById(caenId)
+				.orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
+		return ResponseEntity.ok().body(caen);
+	}
 
-    @PostMapping
-    public Caen createCaen(@RequestBody Caen caen) {
-        return caenRepository.save(caen);
-    }
+	@PostMapping
+	public Caen createCaen(@RequestBody Caen caen) {
+		return caenRepository.save(caen);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Caen> updateCaen(@PathVariable(value = "id") Long caenId, @RequestBody Caen caenDetails)
-            throws ResourceNotFoundException {
-        Caen caen = caenRepository.findById(caenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
+	@PutMapping("{id}")
+	public ResponseEntity<Caen> updateCaen(@PathVariable(value = "id") int caenId, @RequestBody Caen caenDetails)
+			throws ResourceNotFoundException {
+		Caen caen = caenRepository.findById(caenId)
+				.orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
 
-        caenDetails.setId(caen.getId());
-        final Caen updatedCaen = caenRepository.save(caen);
-        return ResponseEntity.ok(updatedCaen);
-    }
+		caenDetails.setId(caen.getId());
+		final Caen updatedCaen = caenRepository.save(caen);
+		return ResponseEntity.ok(updatedCaen);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteCaen(@PathVariable(value = "id") Long caenId) throws ResourceNotFoundException {
-        Caen caen = caenRepository.findById(caenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteCaen(@PathVariable(value = "id") int caenId) throws ResourceNotFoundException {
+		Caen caen = caenRepository.findById(caenId)
+				.orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
 
-        caenRepository.delete(caen);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		caenRepository.delete(caen);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

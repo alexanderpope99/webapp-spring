@@ -23,47 +23,47 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/echipa")
 public class EchipaController {
-    @Autowired
-    private EchipaRepository echipaRepository;
+	@Autowired
+	private EchipaRepository echipaRepository;
 
-    @GetMapping
-    public List<Echipa> getAllEchipas() {
-        return echipaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Echipa> getAllEchipas() {
+		return echipaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Echipa> getEchipaById(@PathVariable(value = "id") Long echipaId)
-            throws ResourceNotFoundException {
-        Echipa echipa = echipaRepository.findById(echipaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
-        return ResponseEntity.ok().body(echipa);
-    }
+	@GetMapping("{id}")
+	public ResponseEntity<Echipa> getEchipaById(@PathVariable(value = "id") int echipaId)
+			throws ResourceNotFoundException {
+		Echipa echipa = echipaRepository.findById(echipaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
+		return ResponseEntity.ok().body(echipa);
+	}
 
-    @PostMapping
-    public Echipa createEchipa(@RequestBody Echipa echipa) {
-        return echipaRepository.save(echipa);
-    }
+	@PostMapping
+	public Echipa createEchipa(@RequestBody Echipa echipa) {
+		return echipaRepository.save(echipa);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Echipa> updateEchipa(@PathVariable(value = "id") Long echipaId,
-            @RequestBody Echipa echipaDetails) throws ResourceNotFoundException {
-        Echipa echipa = echipaRepository.findById(echipaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
+	@PutMapping("{id}")
+	public ResponseEntity<Echipa> updateEchipa(@PathVariable(value = "id") int echipaId,
+			@RequestBody Echipa echipaDetails) throws ResourceNotFoundException {
+		Echipa echipa = echipaRepository.findById(echipaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
 
-        echipaDetails.setId(echipa.getId());
-        final Echipa updatedEchipa = echipaRepository.save(echipa);
-        return ResponseEntity.ok(updatedEchipa);
-    }
+		echipaDetails.setId(echipa.getId());
+		final Echipa updatedEchipa = echipaRepository.save(echipa);
+		return ResponseEntity.ok(updatedEchipa);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteEchipa(@PathVariable(value = "id") Long echipaId)
-            throws ResourceNotFoundException {
-        Echipa echipa = echipaRepository.findById(echipaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteEchipa(@PathVariable(value = "id") int echipaId)
+			throws ResourceNotFoundException {
+		Echipa echipa = echipaRepository.findById(echipaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
 
-        echipaRepository.delete(echipa);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		echipaRepository.delete(echipa);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

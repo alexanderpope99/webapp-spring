@@ -2,282 +2,314 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cm")
 public class CM {
-    private long id;
-    private LocalDate dela;
-    private LocalDate panala;
-    private Boolean continuare;
-    private LocalDate datainceput;
-    private String serienrcertificat;
-    private String dataeliberare;
-    private String codurgenta;
-    private Double procent;
-    private String codboalainfcont;
-    private Double bazacalcul;
-    private Double bazacalculplafonata;
-    private Integer zilebazacalcul;
-    private Double mediezilnica;
-    private Integer zilefirma;
-    private Double indemnizatiefirma;
-    private Integer zilefnuass;
-    private Double indemnizatiefnuass;
-    private String locprescriere;
-    private String nravizmedic;
-    private String codboala;
-    private Boolean urgenta;
-    private String conditii;
-    private Long idcontract;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    public CM() { }
+	@Column(name = "dela")
+	private LocalDate dela;
 
-    public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat, String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul, Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma, Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere, String nravizmedic, String codboala, Boolean urgenta, String conditii, Long idcontract) {
-        this.dela = dela;
-        this.panala = panala;
-        this.continuare = continuare;
-        this.datainceput = datainceput;
-        this.serienrcertificat = serienrcertificat;
-        this.dataeliberare = dataeliberare;
-        this.codurgenta = codurgenta;
-        this.procent = procent;
-        this.codboalainfcont = codboalainfcont;
-        this.bazacalcul = bazacalcul;
-        this.bazacalculplafonata = bazacalculplafonata;
-        this.zilebazacalcul = zilebazacalcul;
-        this.mediezilnica = mediezilnica;
-        this.zilefirma = zilefirma;
-        this.indemnizatiefirma = indemnizatiefirma;
-        this.zilefnuass = zilefnuass;
-        this.indemnizatiefnuass = indemnizatiefnuass;
-        this.locprescriere = locprescriere;
-        this.nravizmedic = nravizmedic;
-        this.codboala = codboala;
-        this.urgenta = urgenta;
-        this.conditii = conditii;
-        this.idcontract = idcontract;
-    }
+	@Column(name = "panala")
+	private LocalDate panala;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Column(name = "continuare")
+	private Boolean continuare;
 
-    @Column(name = "dela")
-    public LocalDate getDela() {
-        return dela;
-    }
+	@Column(name = "datainceput")
+	private LocalDate datainceput;
 
-    public void setDela(LocalDate dela) {
-        this.dela = dela;
-    }
+	@Column(name = "serienrcertificat")
+	private String serienrcertificat;
 
-    @Column(name = "panala")
-    public LocalDate getPanala() {
-        return panala;
-    }
+	@Column(name = "dataeliberare")
+	private String dataeliberare;
 
-    public void setPanala(LocalDate panala) {
-        this.panala = panala;
-    }
+	@Column(name = "codurgenta")
+	private String codurgenta;
 
-    @Column(name = "continuare")
-    public Boolean isContinuare() {
-        return continuare;
-    }
+	@Column(name = "procent")
+	private Double procent;
 
-    public void setContinuare(Boolean continuare) {
-        this.continuare = continuare;
-    }
+	@Column(name = "codboalainfcont")
+	private String codboalainfcont;
 
-    @Column(name = "datainceput")
-    public LocalDate getDatainceput() {
-        return datainceput;
-    }
+	@Column(name = "bazacalcul")
+	private Double bazacalcul;
 
-    public void setDatainceput(LocalDate datainceput) {
-        this.datainceput = datainceput;
-    }
+	@Column(name = "bazacalculplafonata")
+	private Double bazacalculplafonata;
 
-    @Column(name = "serienrcertificat")
-    public String getSerienrcertificat() {
-        return serienrcertificat;
-    }
+	@Column(name = "zilebazacalcul")
+	private Integer zilebazacalcul;
 
-    public void setSerienrcertificat(String serienrcertificat) {
-        this.serienrcertificat = serienrcertificat;
-    }
+	@Column(name = "mediezilnica")
+	private Double mediezilnica;
 
-    @Column(name = "dataeliberare")
-    public String getDataeliberare() {
-        return dataeliberare;
-    }
+	@Column(name = "zilefirma")
+	private Integer zilefirma;
 
-    public void setDataeliberare(String dataeliberare) {
-        this.dataeliberare = dataeliberare;
-    }
+	@Column(name = "indemnizatiefirma")
+	private Double indemnizatiefirma;
 
-    @Column(name = "codurgenta")
-    public String getCodurgenta() {
-        return codurgenta;
-    }
+	@Column(name = "zilefnuass")
+	private Integer zilefnuass;
 
-    public void setCodurgenta(String codurgenta) {
-        this.codurgenta = codurgenta;
-    }
+	@Column(name = "indemnizatiefnuass")
+	private Double indemnizatiefnuass;
 
-    @Column(name = "procent")
-    public Double getProcent() {
-        return procent;
-    }
+	@Column(name = "locprescriere")
+	private String locprescriere;
 
-    public void setProcent(Double procent) {
-        this.procent = procent;
-    }
+	@Column(name = "nravizmedic")
+	private String nravizmedic;
 
-    @Column(name = "codboalainfcont")
-    public String getCodboalainfcont() {
-        return codboalainfcont;
-    }
+	@Column(name = "codboala")
+	private String codboala;
 
-    public void setCodboalainfcont(String codboalainfcont) {
-        this.codboalainfcont = codboalainfcont;
-    }
+	@Column(name = "urgenta")
+	private Boolean urgenta;
 
-    @Column(name = "bazacalcul")
-    public Double getBazacalcul() {
-        return bazacalcul;
-    }
+	@Column(name = "conditii")
+	private String conditii;
 
-    public void setBazacalcul(Double bazacalcul) {
-        this.bazacalcul = bazacalcul;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idcontract")
+	private Contract idcontract;
 
-    @Column(name = "bazacalculplafonata")
-    public Double getBazacalculplafonata() {
-        return bazacalculplafonata;
-    }
+	public CM() {
+	}
 
-    public void setBazacalculplafonata(Double bazacalculplafonata) {
-        this.bazacalculplafonata = bazacalculplafonata;
-    }
+	public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat,
+			String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul,
+			Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma,
+			Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere,
+			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract idcontract) {
+		this.dela = dela;
+		this.panala = panala;
+		this.continuare = continuare;
+		this.datainceput = datainceput;
+		this.serienrcertificat = serienrcertificat;
+		this.dataeliberare = dataeliberare;
+		this.codurgenta = codurgenta;
+		this.procent = procent;
+		this.codboalainfcont = codboalainfcont;
+		this.bazacalcul = bazacalcul;
+		this.bazacalculplafonata = bazacalculplafonata;
+		this.zilebazacalcul = zilebazacalcul;
+		this.mediezilnica = mediezilnica;
+		this.zilefirma = zilefirma;
+		this.indemnizatiefirma = indemnizatiefirma;
+		this.zilefnuass = zilefnuass;
+		this.indemnizatiefnuass = indemnizatiefnuass;
+		this.locprescriere = locprescriere;
+		this.nravizmedic = nravizmedic;
+		this.codboala = codboala;
+		this.urgenta = urgenta;
+		this.conditii = conditii;
+		this.idcontract = idcontract;
+	}
 
-    @Column(name = "zilebazacalcul")
-    public Integer getZilebazacalcul() {
-        return zilebazacalcul;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setZilebazacalcul(Integer zilebazacalcul) {
-        this.zilebazacalcul = zilebazacalcul;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    @Column(name = "mediezilnica")
-    public Double getMediezilnica() {
-        return mediezilnica;
-    }
+	public LocalDate getDela() {
+		return dela;
+	}
 
-    public void setMediezilnica(Double mediezilnica) {
-        this.mediezilnica = mediezilnica;
-    }
+	public void setDela(LocalDate dela) {
+		this.dela = dela;
+	}
 
-    @Column(name = "zilefirma")
-    public Integer getZilefirma() {
-        return zilefirma;
-    }
+	public LocalDate getPanala() {
+		return panala;
+	}
 
-    public void setZilefirma(Integer zilefirma) {
-        this.zilefirma = zilefirma;
-    }
+	public void setPanala(LocalDate panala) {
+		this.panala = panala;
+	}
 
-    @Column(name = "indemnizatiefirma")
-    public Double getIndemnizatiefirma() {
-        return indemnizatiefirma;
-    }
+	public Boolean isContinuare() {
+		return continuare;
+	}
 
-    public void setIndemnizatiefirma(Double indemnizatiefirma) {
-        this.indemnizatiefirma = indemnizatiefirma;
-    }
+	public void setContinuare(Boolean continuare) {
+		this.continuare = continuare;
+	}
 
-    @Column(name = "zilefnuass")
-    public Integer getZilefnuass() {
-        return zilefnuass;
-    }
+	public LocalDate getDatainceput() {
+		return datainceput;
+	}
 
-    public void setZilefnuass(Integer zilefnuass) {
-        this.zilefnuass = zilefnuass;
-    }
+	public void setDatainceput(LocalDate datainceput) {
+		this.datainceput = datainceput;
+	}
 
-    @Column(name = "indemnizatiefnuass")
-    public Double getIndemnizatiefnuass() {
-        return indemnizatiefnuass;
-    }
+	public String getSerienrcertificat() {
+		return serienrcertificat;
+	}
 
-    public void setIndemnizatiefnuass(Double indemnizatiefnuass) {
-        this.indemnizatiefnuass = indemnizatiefnuass;
-    }
+	public void setSerienrcertificat(String serienrcertificat) {
+		this.serienrcertificat = serienrcertificat;
+	}
 
-    @Column(name = "locprescriere")
-    public String getLocprescriere() {
-        return locprescriere;
-    }
+	public String getDataeliberare() {
+		return dataeliberare;
+	}
 
-    public void setLocprescriere(String locprescriere) {
-        this.locprescriere = locprescriere;
-    }
+	public void setDataeliberare(String dataeliberare) {
+		this.dataeliberare = dataeliberare;
+	}
 
-    @Column(name = "nravizmedic")
-    public String getNravizmedic() {
-        return nravizmedic;
-    }
+	public String getCodurgenta() {
+		return codurgenta;
+	}
 
-    public void setNravizmedic(String nravizmedic) {
-        this.nravizmedic = nravizmedic;
-    }
+	public void setCodurgenta(String codurgenta) {
+		this.codurgenta = codurgenta;
+	}
 
-    @Column(name = "codboala")
-    public String getCodboala() {
-        return codboala;
-    }
+	public Double getProcent() {
+		return procent;
+	}
 
-    public void setCodboala(String codboala) {
-        this.codboala = codboala;
-    }
+	public void setProcent(Double procent) {
+		this.procent = procent;
+	}
 
-    @Column(name = "urgenta")
-    public Boolean isUrgenta() {
-        return urgenta;
-    }
+	public String getCodboalainfcont() {
+		return codboalainfcont;
+	}
 
-    public void setUrgenta(Boolean urgenta) {
-        this.urgenta = urgenta;
-    }
+	public void setCodboalainfcont(String codboalainfcont) {
+		this.codboalainfcont = codboalainfcont;
+	}
 
-    @Column(name = "conditii")
-    public String getConditii() {
-        return conditii;
-    }
+	public Double getBazacalcul() {
+		return bazacalcul;
+	}
 
-    public void setConditii(String conditii) {
-        this.conditii = conditii;
-    }
+	public void setBazacalcul(Double bazacalcul) {
+		this.bazacalcul = bazacalcul;
+	}
 
-    @Column(name = "idcontract")
-    public Long getIdcontract() {
-        return idcontract;
-    }
+	public Double getBazacalculplafonata() {
+		return bazacalculplafonata;
+	}
 
-    public void setIdcontract(Long idcontract) {
-        this.idcontract = idcontract;
-    }
+	public void setBazacalculplafonata(Double bazacalculplafonata) {
+		this.bazacalculplafonata = bazacalculplafonata;
+	}
+
+	public Integer getZilebazacalcul() {
+		return zilebazacalcul;
+	}
+
+	public void setZilebazacalcul(Integer zilebazacalcul) {
+		this.zilebazacalcul = zilebazacalcul;
+	}
+
+	public Double getMediezilnica() {
+		return mediezilnica;
+	}
+
+	public void setMediezilnica(Double mediezilnica) {
+		this.mediezilnica = mediezilnica;
+	}
+
+	public Integer getZilefirma() {
+		return zilefirma;
+	}
+
+	public void setZilefirma(Integer zilefirma) {
+		this.zilefirma = zilefirma;
+	}
+
+	public Double getIndemnizatiefirma() {
+		return indemnizatiefirma;
+	}
+
+	public void setIndemnizatiefirma(Double indemnizatiefirma) {
+		this.indemnizatiefirma = indemnizatiefirma;
+	}
+
+	public Integer getZilefnuass() {
+		return zilefnuass;
+	}
+
+	public void setZilefnuass(Integer zilefnuass) {
+		this.zilefnuass = zilefnuass;
+	}
+
+	public Double getIndemnizatiefnuass() {
+		return indemnizatiefnuass;
+	}
+
+	public void setIndemnizatiefnuass(Double indemnizatiefnuass) {
+		this.indemnizatiefnuass = indemnizatiefnuass;
+	}
+
+	public String getLocprescriere() {
+		return locprescriere;
+	}
+
+	public void setLocprescriere(String locprescriere) {
+		this.locprescriere = locprescriere;
+	}
+
+	public String getNravizmedic() {
+		return nravizmedic;
+	}
+
+	public void setNravizmedic(String nravizmedic) {
+		this.nravizmedic = nravizmedic;
+	}
+
+	public String getCodboala() {
+		return codboala;
+	}
+
+	public void setCodboala(String codboala) {
+		this.codboala = codboala;
+	}
+
+	public Boolean isUrgenta() {
+		return urgenta;
+	}
+
+	public void setUrgenta(Boolean urgenta) {
+		this.urgenta = urgenta;
+	}
+
+	public String getConditii() {
+		return conditii;
+	}
+
+	public void setConditii(String conditii) {
+		this.conditii = conditii;
+	}
+
+	public Contract getIdcontract() {
+		return idcontract;
+	}
+
+	public void setIdcontract(Contract idcontract) {
+		this.idcontract = idcontract;
+	}
 }
-

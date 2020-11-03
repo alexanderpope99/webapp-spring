@@ -2,9 +2,12 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -12,20 +15,38 @@ import java.time.LocalDate;
 @Table(name = "cerericoncediu")
 public class CereriConcediu {
 
-	private long id;
-	private int pentru;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "pentru")
+	private Angajat pentru;
+
+	@Column(name = "dela")
 	private LocalDate dela;
+
+	@Column(name = "panala")
 	private LocalDate panala;
+
+	@Column(name = "tip")
 	private String tip;
+
+	@Column(name = "motiv")
 	private String motiv;
+
+	@Column(name = "status")
 	private String status;
-	private int societate;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "societate")
+	private Societate societate;
 
 	public CereriConcediu() {
 	}
 
-	public CereriConcediu(int pentru, LocalDate dela, LocalDate panala, String tip, String motiv, String status,
-			int societate) {
+	public CereriConcediu(Angajat pentru, LocalDate dela, LocalDate panala, String tip, String motiv, String status,
+			Societate societate) {
 		this.pentru = pentru;
 		this.dela = dela;
 		this.panala = panala;
@@ -35,26 +56,22 @@ public class CereriConcediu {
 		this.societate = societate;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	@Column(name = "pentru")
-	public int getPentru() {
+	public Angajat getPentru() {
 		return pentru;
 	}
 
-	public void setPentru(int pentru) {
+	public void setPentru(Angajat pentru) {
 		this.pentru = pentru;
 	}
 
-	@Column(name = "dela")
 	public LocalDate getDela() {
 		return dela;
 	}
@@ -63,7 +80,6 @@ public class CereriConcediu {
 		this.dela = dela;
 	}
 
-	@Column(name = "panala")
 	public LocalDate getPanala() {
 		return panala;
 	}
@@ -72,7 +88,6 @@ public class CereriConcediu {
 		this.panala = panala;
 	}
 
-	@Column(name = "tip")
 	public String getTip() {
 		return tip;
 	}
@@ -81,7 +96,6 @@ public class CereriConcediu {
 		this.tip = tip;
 	}
 
-	@Column(name = "motiv")
 	public String getMotiv() {
 		return motiv;
 	}
@@ -90,7 +104,6 @@ public class CereriConcediu {
 		this.motiv = motiv;
 	}
 
-	@Column(name = "status")
 	public String getStatus() {
 		return status;
 	}
@@ -99,12 +112,11 @@ public class CereriConcediu {
 		this.status = status;
 	}
 
-	@Column(name = "societate")
-	public int getSocietate() {
+	public Societate getSocietate() {
 		return societate;
 	}
 
-	public void setSocietate(int societate) {
+	public void setSocietate(Societate societate) {
 		this.societate = societate;
 	}
 

@@ -24,48 +24,48 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/sponsorizari")
 public class SponsorizariController {
-    @Autowired
-    private SponsorizariRepository sponsorizariRepository;
+	@Autowired
+	private SponsorizariRepository sponsorizariRepository;
 
-    @GetMapping
-    public List<Sponsorizari> getAllPersoane() {
-        return sponsorizariRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
+	@GetMapping
+	public List<Sponsorizari> getAllPersoane() {
+		return sponsorizariRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
 
-    @GetMapping("{id}")
-    public ResponseEntity<Sponsorizari> getSponsorizariById(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
+	@GetMapping("{id}")
+	public ResponseEntity<Sponsorizari> getSponsorizariById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
 
-        return ResponseEntity.ok().body(sponsorizari);
-    }
+		return ResponseEntity.ok().body(sponsorizari);
+	}
 
-    @PostMapping
-    public Sponsorizari createSponsorizari(@RequestBody Sponsorizari sponsorizari) {
-        return sponsorizariRepository.save(sponsorizari);
-    }
+	@PostMapping
+	public Sponsorizari createSponsorizari(@RequestBody Sponsorizari sponsorizari) {
+		return sponsorizariRepository.save(sponsorizari);
+	}
 
-    @PutMapping("{id}")
-    public ResponseEntity<Sponsorizari> updateSponsorizari(@PathVariable(value = "id") Long id,
-            @RequestBody Sponsorizari newSponsorizari) throws ResourceNotFoundException {
-        Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
+	@PutMapping("{id}")
+	public ResponseEntity<Sponsorizari> updateSponsorizari(@PathVariable(value = "id") int id,
+			@RequestBody Sponsorizari newSponsorizari) throws ResourceNotFoundException {
+		Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
 
-        newSponsorizari.setId(sponsorizari.getId());
-        final Sponsorizari updatedSponsorizari = sponsorizariRepository.save(newSponsorizari);
-        return ResponseEntity.ok(updatedSponsorizari);
-    }
+		newSponsorizari.setId(sponsorizari.getId());
+		final Sponsorizari updatedSponsorizari = sponsorizariRepository.save(newSponsorizari);
+		return ResponseEntity.ok(updatedSponsorizari);
+	}
 
-    @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteSponsorizari(@PathVariable(value = "id") Long id)
-            throws ResourceNotFoundException {
-        Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
+	@DeleteMapping("{id}")
+	public Map<String, Boolean> deleteSponsorizari(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
+		Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
 
-        sponsorizariRepository.delete(sponsorizari);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+		sponsorizariRepository.delete(sponsorizari);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
 }

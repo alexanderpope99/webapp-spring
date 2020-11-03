@@ -60,10 +60,10 @@ public class RealizariRetineriService {
 
     // gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu
     // datele existente
-    public RealizariRetineri getRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
+    public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
         RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 
-        long idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
+        int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
         boolean areBC = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna, an, idangajat);
         if (!areBC) {
             bazacalculService.saveBazacalcul(rv);
@@ -72,7 +72,7 @@ public class RealizariRetineriService {
         return rv;
     } // getRealizariRetineri
 
-    public int calcRestplata(long idcontract, int luna, int an, float totalDrepturi, float nrTichete,
+    public int calcRestplata(int idcontract, int luna, int an, float totalDrepturi, float nrTichete,
             int nrPersoaneIntretinere) throws ResourceNotFoundException {
 
         Contract contract = contractService.getContractById(idcontract);
@@ -112,7 +112,7 @@ public class RealizariRetineriService {
     } // calcRestPlata
 
     // just calc, doesnt affect DB
-    public RealizariRetineri calcRealizariRetineri(long idcontract, int luna, int an, int primaBruta, int nrTichete,
+    public RealizariRetineri calcRealizariRetineri(int idcontract, int luna, int an, int primaBruta, int nrTichete,
             float totalOreSuplimentare) throws ResourceNotFoundException {
         Contract contract = contractService.getContractById(idcontract);
         impozitSalariu = 0;
@@ -125,7 +125,7 @@ public class RealizariRetineriService {
         int zileContract = zileService.getNrZileLucratoareContract(luna, an, contract);
         if (zileContract == 0) {
             // return retineri wtih 0 values
-            return new RealizariRetineri(luna, an, idcontract);
+            return new RealizariRetineri(luna, an, contract);
         }
 
         int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
@@ -177,7 +177,7 @@ public class RealizariRetineriService {
 
         float impozit = Math.round(this.impozitSalariu);
 
-        RealizariRetineri rr = new RealizariRetineri(idcontract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM,
+        RealizariRetineri rr = new RealizariRetineri(contract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM,
                 zileCMLucratoare, zileCFP, zileCFP, duratazilucru, norma, zileLucrate, oreLucrate,
                 (int) totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata,
                 nrPersoaneIntretinere, (int) this.deducere, primaBruta, totalOreSuplimentare);
@@ -203,7 +203,7 @@ public class RealizariRetineriService {
         return rr;
     } // calcRealizariRetineri
 
-    public RealizariRetineri saveRealizariRetineri(int luna, int an, long idcontract) throws ResourceNotFoundException {
+    public RealizariRetineri saveRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
         if (realizariRetineriRepository.existsByLunaAndAnAndIdcontract(luna, an, idcontract))
             return getRealizariRetineri(luna, an, idcontract);
 
@@ -216,12 +216,12 @@ public class RealizariRetineriService {
 
         // create empty retinere
         realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
-        retineriService.saveRetinere(realizariRetineri.getId());
+        retineriService.saveRetinere(realizariRetineri);
 
         return realizariRetineri;
     } // saveRealizariRetineri
 
-    public void saveRealizariRetineriUltimele6Luni(int luna, int an, long idcontract) throws ResourceNotFoundException {
+    public void saveRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
         int luna6 = 0, an6 = an;
         if (luna <= 6) {
             luna6 = 12 - (6 - luna);
@@ -244,7 +244,7 @@ public class RealizariRetineriService {
         }
     }
 
-    public RealizariRetineri resetRealizariRetineri(int luna, int an, long idcontract)
+    public RealizariRetineri resetRealizariRetineri(int luna, int an, int idcontract)
             throws ResourceNotFoundException {
 
         RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
@@ -262,7 +262,7 @@ public class RealizariRetineriService {
 
         // empty retinere
         Retineri oldRetinere = retineriService.getRetinereByIdstat(realizariRetineri.getId());
-        retineriService.updateRetinere(oldRetinere, realizariRetineri.getId());
+        retineriService.updateRetinere(oldRetinere, realizariRetineri);
 
         return realizariRetineri;
     } // resetRealizariRetineri

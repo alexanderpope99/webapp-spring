@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
+import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.repository.AngajatRepository;
@@ -19,7 +20,7 @@ public class BazacalculService {
 	@Autowired
 	private AngajatRepository angajatRepository;
 
-	public List<Bazacalcul> getBazaCalculUltimele6Luni(int luna, int an, long idangajat) {
+	public List<Bazacalcul> getBazaCalculUltimele6Luni(int luna, int an, int idangajat) {
 		int luna6, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);
@@ -60,7 +61,7 @@ public class BazacalculService {
 		return rv;
 	}
 
-	public float getMediaZilnicaUltimele6Luni(int luna, int an, long idangajat) {
+	public float getMediaZilnicaUltimele6Luni(int luna, int an, int idangajat) {
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);
@@ -118,7 +119,7 @@ public class BazacalculService {
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 
-		long idangajat = angajatRepository.findIdpersoanaByIdcontract(realizariRetineri.getIdcontract());
+		Angajat idangajat = angajatRepository.findPersoanaByIdcontract(realizariRetineri.getContract().getId());
 
 		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, (int) realizariRetineri.getZilelucrate(),
 				(int) realizariRetineri.getSalariurealizat(), idangajat);
@@ -129,22 +130,22 @@ public class BazacalculService {
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 		
-		long idangajat = angajatRepository.findIdpersoanaByIdcontract(realizariRetineri.getIdcontract());
+		Angajat angajat = angajatRepository.findPersoanaByIdcontract(realizariRetineri.getContract().getId());
 		
-		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, idangajat);
+		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, angajat.getIdpersoana());
 		
 		if(oldBazacalcul == null)
 			return this.saveBazacalcul(realizariRetineri);
 		
 		Bazacalcul bazaCalcul = new Bazacalcul(
 				luna, an, 
-				(int)realizariRetineri.getZilelucrate(), (int)realizariRetineri.getSalariurealizat(),
-				idangajat); 
+				realizariRetineri.getZilelucrate(), realizariRetineri.getSalariurealizat(),
+				angajat); 
 		bazaCalcul.setId(oldBazacalcul.getId());
 		return bazacalculRepository.save(bazaCalcul);
 	}
 
-	public BazaCalculCMDTO getBazaCalculCM(int luna, int an, long idangajat) {
+	public BazaCalculCMDTO getBazaCalculCM(int luna, int an, int idangajat) {
 		List<Bazacalcul> bazeUltimele6Luni = this.getBazaCalculUltimele6Luni(luna, an, idangajat);
 		if (bazeUltimele6Luni.size() < 6)
 			return new BazaCalculCMDTO(0, 0, 0);

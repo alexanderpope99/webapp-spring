@@ -1,65 +1,81 @@
 package net.guides.springboot2.crud.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "centrucost")
 public class CentruCost {
 
-    private long id;
-    private int idadresa;
-    private int idsocietate;
-    private String nume;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    public CentruCost() {
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa idadresa;
 
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idsocietate")
+	private Societate idsocietate;
 
-    public CentruCost(int idadresa, int idsocietate, String nume) {
-        this.idadresa = idadresa;
-        this.idsocietate = idsocietate;
-        this.nume = nume;
-    }
+	@Column(name = "nume")
+	private String nume;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+	@OneToMany(mappedBy = "idcentrucost")
+	private Set<Contract> contracte;
 
-    @Column(name = "idadresa")
-    public int getIdadresa() {
-        return idadresa;
-    }
+	public CentruCost() {
 
-    public void setIdadresa(int idadresa) {
-        this.idadresa = idadresa;
-    }
+	}
 
-    @Column(name = "idsocietate")
-    public int getIdsocietate() {
-        return idsocietate;
-    }
+	public CentruCost(Adresa idadresa, Societate idsocietate, String nume) {
+		this.idadresa = idadresa;
+		this.idsocietate = idsocietate;
+		this.nume = nume;
+	}
 
-    public void setIdsocietate(int idsocietate) {
-        this.idsocietate = idsocietate;
-    }
+	public int getId() {
+		return id;
+	}
 
-    @Column(name = "nume")
-    public String getNume() {
-        return nume;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
+	public Adresa getIdadresa() {
+		return idadresa;
+	}
+
+	public void setIdadresa(Adresa idadresa) {
+		this.idadresa = idadresa;
+	}
+
+	public Societate getIdsocietate() {
+		return idsocietate;
+	}
+
+	public void setIdsocietate(Societate idsocietate) {
+		this.idsocietate = idsocietate;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
 }
-

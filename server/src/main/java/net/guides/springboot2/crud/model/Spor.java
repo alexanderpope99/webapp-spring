@@ -2,79 +2,96 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "spor")
 public class Spor {
 
-    private long id;
-    @Column(name = "nume")
-    private String nume;
-    @Column(name = "valoare")
-    private Double valoare;
-    @Column(name = "procent")
-    private Double procent;
-    @Column(name = "aplicare")
-    private String aplicare;
-    @Column(name = "idstat")
-    private Long idstat;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    public Spor() { }
+	@Column(name = "nume")
+	private String nume;
 
-    public Spor( String nume, Double valoare, Double procent, String aplicare, Long idstat ) {
-        this.nume = nume;
-        this.valoare = valoare;
-        this.procent = procent;
-        this.aplicare = aplicare;
-        this.idstat = idstat;
-    }
+	@Column(name = "valoare")
+	private Double valoare;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Column(name = "procent")
+	private Double procent;
 
-    // GETTERS
-    public String getAplicare() {
-        return aplicare;
-    }
-    public Long getIdstat() {
-        return idstat;
-    }
-    public String getNume() {
-        return nume;
-    }
-    public Double getProcent() {
-        return procent;
-    }
-    public Double getValoare() {
-        return valoare;
-    }
-    
+	@Column(name = "aplicare")
+	private String aplicare;
 
-    // SETTERS
-    public void setAplicare(String aplicare) {
-        this.aplicare = aplicare;
-    }
-    public void setIdstat(Long idstat) {
-        this.idstat = idstat;
-    }
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-    public void setProcent(Double procent) {
-        this.procent = procent;
-    }
-    public void setValoare(Double valoare) {
-        this.valoare = valoare;
-    }
-} 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idstat")
+	private RealizariRetineri idstat;
 
+	public Spor() {
+	}
+
+	public Spor(String nume, Double valoare, Double procent, String aplicare, RealizariRetineri idstat) {
+		this.nume = nume;
+		this.valoare = valoare;
+		this.procent = procent;
+		this.aplicare = aplicare;
+		this.idstat = idstat;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	// GETTERS
+	public String getAplicare() {
+		return aplicare;
+	}
+
+	public RealizariRetineri getIdstat() {
+		return idstat;
+	}
+
+	public String getNume() {
+		return nume;
+	}
+
+	public Double getProcent() {
+		return procent;
+	}
+
+	public Double getValoare() {
+		return valoare;
+	}
+
+	// SETTERS
+	public void setAplicare(String aplicare) {
+		this.aplicare = aplicare;
+	}
+
+	public void setIdstat(RealizariRetineri idstat) {
+		this.idstat = idstat;
+	}
+
+	public void setNume(String nume) {
+		this.nume = nume;
+	}
+
+	public void setProcent(Double procent) {
+		this.procent = procent;
+	}
+
+	public void setValoare(Double valoare) {
+		this.valoare = valoare;
+	}
+}

@@ -2,77 +2,95 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "oresuplimentare")
 public class Oresuplimentare {
 
-    private long id;
-    @Column(name = "nr")
-    private Long nr;
-    @Column(name = "procent")
-    private Double procent;
-    @Column(name = "includenormale")
-    private Boolean includenormale;
-    @Column(name = "total")
-    private Double total;
-    @Column(name = "idstatsalariat")
-    private Long idstatsalariat;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
+	@Column(name = "nr")
+	private Long nr;
 
-    public Oresuplimentare() { }
+	@Column(name = "procent")
+	private Double procent;
 
-    public Oresuplimentare( Long nr, Double procent, Boolean includenormale, Double total, Long idstatsalariat ) {
-        this.nr = nr;
-        this.procent = procent;
-        this.includenormale = includenormale;
-        this.total = total;
-        this.idstatsalariat = idstatsalariat;
-    }
+	@Column(name = "includenormale")
+	private Boolean includenormale;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Column(name = "total")
+	private Double total;
 
-    public void setIdstatsalariat(Long idstatsalariat) {
-        this.idstatsalariat = idstatsalariat;
-    }
-    public Long getIdstatsalariat() {
-        return idstatsalariat;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idstatsalariat")
+	private RealizariRetineri idstatsalariat;
 
-    public void setProcent(Double procent) {
-        this.procent = procent;
-    }
-    public Double getProcent() {
-        return procent;
-    }
-    public void setNr(Long nr) {
-        this.nr = nr;
-    }
-    public Long getNr() {
-        return nr;
-    }
-    public Boolean getIncludenormale() {
-        return includenormale;
-    }
-    public void setIncludenormale(Boolean includenormale) {
-        this.includenormale = includenormale;
-    }
-    public Double getTotal() {
-        return total;
-    }
-    public void setTotal(Double total) {
-        this.total = total;
-    }
+	public Oresuplimentare() {
+	}
+
+	public Oresuplimentare(Long nr, Double procent, Boolean includenormale, Double total,
+			RealizariRetineri idstatsalariat) {
+		this.nr = nr;
+		this.procent = procent;
+		this.includenormale = includenormale;
+		this.total = total;
+		this.idstatsalariat = idstatsalariat;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setIdstatsalariat(RealizariRetineri idstatsalariat) {
+		this.idstatsalariat = idstatsalariat;
+	}
+
+	public RealizariRetineri getIdstatsalariat() {
+		return idstatsalariat;
+	}
+
+	public void setProcent(Double procent) {
+		this.procent = procent;
+	}
+
+	public Double getProcent() {
+		return procent;
+	}
+
+	public void setNr(Long nr) {
+		this.nr = nr;
+	}
+
+	public Long getNr() {
+		return nr;
+	}
+
+	public Boolean getIncludenormale() {
+		return includenormale;
+	}
+
+	public void setIncludenormale(Boolean includenormale) {
+		this.includenormale = includenormale;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
 }
-

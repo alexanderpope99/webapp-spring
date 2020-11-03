@@ -18,24 +18,16 @@ public class StatSalariiController {
 	private StatSalariiService statSalariiService;
 
 	@GetMapping("/{ids}/mo={luna}&y={an}&i={i}/{uid}")
-	public boolean createStatSalarii(
-		@PathVariable("ids") int ids,
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an,
-		@PathVariable("i") String i, // intocmit de
-		@PathVariable("uid") long uid
-	) throws IOException, ResourceNotFoundException {
+	public boolean createStatSalarii(@PathVariable("ids") int ids, @PathVariable("luna") int luna,
+			@PathVariable("an") int an, @PathVariable("i") String i, // intocmit de
+			@PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
 		return statSalariiService.createStatSalarii(luna, an, ids, i, uid);
 	}
 
 	@GetMapping("/{ids}/individual/ida={ida}&mo={luna}&y={an}/{uid}")
-	public boolean createStatIndividual(
-		@PathVariable("ids") int ids,
-		@PathVariable("ida") long ida,
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an,
-		@PathVariable("uid") long uid
-	) throws IOException, ResourceNotFoundException {
+	public boolean createStatIndividual(@PathVariable("ids") int ids, @PathVariable("ida") int ida,
+			@PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid)
+			throws IOException, ResourceNotFoundException {
 		return statSalariiService.createStatIndividual(luna, an, ida, ids, uid);
 	}
 }
