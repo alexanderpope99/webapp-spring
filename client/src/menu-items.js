@@ -4,7 +4,7 @@ const user = AuthService.getCurrentUser();
 var items = [
   {
     id: 'navigation',
-    title: 'Navigation',
+    title: 'Meniu principal',
     type: 'group',
     icon: 'icon-navigation',
     show:
@@ -32,6 +32,13 @@ var items = [
         type: 'item',
         url: '/parametriisalarii',
         icon: 'feather icon-dollar-sign',
+			},
+			{
+        id: 'sarbatori',
+        title: 'Sărbători',
+        type: 'item',
+        url: '/sarbatori',
+        icon: 'feather icon-calendar',
       },
     ],
   },

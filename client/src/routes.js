@@ -40,14 +40,13 @@ const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
 const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
 const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
 const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
+const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
 const Profile = React.lazy(() => import('./Demo/Edit/Profile'));
 
 const Nvd3Chart = React.lazy(() => import('./Demo/Charts/Nvd3Chart/index'));
-
-const GoogleMap = React.lazy(() => import('./Demo/Maps/GoogleMap/index'));
 
 const OtherSamplePage = React.lazy(() => import('./Demo/Other/SamplePage'));
 const OtherDocs = React.lazy(() => import('./Demo/Other/Docs'));
@@ -142,13 +141,17 @@ const routes = [
     name: 'Cereri Concediu',
     component: CereriConcediuSuperior,
   },
-
+	{
+    path: '/sarbatori',
+    exact: true,
+    name: 'Sărbători',
+    component: SarbatoriTabel,
+  },
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
   { path: '/edit/profile', exact: true, name: 'Profil', component: Profile },
 
   { path: '/charts/nvd3', exact: true, name: 'Nvd3 Chart', component: Nvd3Chart },
-  { path: '/maps/google-map', exact: true, name: 'Google Map', component: GoogleMap },
   { path: '/sample-page', exact: true, name: 'Sample Page', component: OtherSamplePage },
   { path: '/docs', exact: true, name: 'Documentation', component: OtherDocs },
 

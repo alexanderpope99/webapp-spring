@@ -1,187 +1,129 @@
 package net.guides.springboot2.crud.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Date;
-import java.util.Set;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "contract")
-public class Contract {
+public class Contract implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	@Column(name = "tip")
 	private String tip;
-
 	@Column(name = "nr")
 	private String nr;
-
 	@Column(name = "marca")
 	private String marca;
-
 	@Column(name = "data")
-	private Date data;
-
+	private LocalDate data;
 	@Column(name = "dataincepere")
-	private Date dataincepere;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idpunctlucru")
-	private PunctDeLucru idpunctlucru;
-
-	@ManyToOne
-	@JoinColumn(name = "idcentrucost")
-	private CentruCost idcentrucost;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idechipa")
-	private Echipa idechipa;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "iddepartament")
-	private Departament iddepartament;
-
+	private LocalDate dataincepere;
 	@Column(name = "functiedebaza")
 	private Boolean functiedebaza;
-
 	@Column(name = "calculdeduceri")
 	private Boolean calculdeduceri;
-
 	@Column(name = "studiisuperioare")
 	private Boolean studiisuperioare;
-
 	@Column(name = "normalucru")
 	private Integer normalucru;
-
 	@Column(name = "salariutarifar")
 	private Float salariutarifar;
-
 	@Column(name = "monedasalariu")
 	private String monedasalariu;
-
-	@Column(name = "modplata")
-	private String modplata;
-
 	@Column(name = "conditiimunca")
 	private String conditiimunca;
-
 	@Column(name = "pensieprivata")
 	private Boolean pensieprivata;
-
 	@Column(name = "cotizatiepensieprivata")
 	private Double cotizatiepensieprivata;
-
 	@Column(name = "avans")
 	private Double avans;
-
 	@Column(name = "monedaavans")
 	private String monedaavans;
-
 	@Column(name = "zilecoan")
 	private Integer zilecoan;
-
 	@Column(name = "ultimazilucru")
-	private Date ultimazilucru;
-
+	private LocalDate ultimazilucru;
 	@Column(name = "casasanatate")
 	private String casasanatate;
-
 	@Column(name = "gradinvaliditate")
 	private String gradinvaliditate;
-
 	@Column(name = "functie")
 	private String functie;
-
 	@Column(name = "nivelstudii")
 	private String nivelstudii;
-
 	@Column(name = "cor")
 	private String cor;
-
 	@Column(name = "sindicat")
 	private Boolean sindicat;
-
 	@Column(name = "cotizatiesindicat")
 	private Double cotizatiesindicat;
-
 	@Column(name = "spor")
 	private String spor;
-
 	@Column(name = "pensionar")
 	private Boolean pensionar;
 
-	@OneToMany(mappedBy = "idcontract")
-	private Set<AlteBeneficii> alteBeneficii;
+	@ManyToOne
+	@JoinColumn(name = "idcentrucost")
+	private CentruCost centrucost;
 
-	@OneToOne(mappedBy = "idcontract", fetch = FetchType.LAZY)
-	private Angajat angajati;
+	@ManyToOne
+	@JoinColumn(name = "idpunctlucru")
+	private PunctDeLucru punctdelucru;
 
-	@OneToMany(mappedBy = "idcontract")
-	private Set<BursePrivate> bursePrivate;
+	@ManyToOne
+	@JoinColumn(name = "idechipa")
+	private Echipa echipa;
 
-	@OneToMany(mappedBy = "idcontract")
-	private Set<CM> concediiMedicale;
+	@ManyToOne
+	@JoinColumn(name = "iddepartapent")
+	private Departament departament;
 
-	@OneToMany(mappedBy = "idcontract")
-	private Set<CO> concediiDeOdihna;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idcontbancar", referencedColumnName = "iban")
+	private ContBancar contbancar;
 
-	@OneToMany(mappedBy = "idcontract")
-	private Set<Condica> condici;
-
-	@OneToMany(mappedBy = "idcontract")
-	private Set<Prime> prime;
-
-	@OneToMany(mappedBy = "idcontract")
-	private Set<RealizariRetineri> realizariRetineri;
-
-	@OneToMany(mappedBy = "idcontract")
-	private Set<Sponsorizari> sponsorizari;
-
-	@OneToMany(mappedBy = "idcontract")
-	private Set<SporPermanent> sporPermanente;
-
-	@OneToMany(mappedBy = "idcontract")
-	private Set<ZileCODisponibile> zileCODisponibile;
+	// @OneToMany(mappedBy = "contract")
+	// private Set<RealizariRetineri> realizariRetineri;
 
 	public Contract() {
-
 	}
 
-	public Contract(String tip, String nr, String marca, Date data, Date dataincepere, PunctDeLucru idpunctlucru,
-			CentruCost idcentrucost, Departament iddepartament, Boolean functiedebaza, Boolean calculdeduceri,
-			Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu, String modplata,
-			String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans,
-			String monedaavans, Integer zilecoan, Date ultimazilucru, String casasanatate, String gradinvaliditate,
-			String functie, String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor,
-			Boolean pensionar) {
+	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
+			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
+			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu,
+			String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans,
+			Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate, String functie,
+			String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
 		this.data = data;
 		this.dataincepere = dataincepere;
-		this.idpunctlucru = idpunctlucru;
-		this.idcentrucost = idcentrucost;
-		// this.idechipa = idechipa;
-		this.iddepartament = iddepartament;
+		this.punctdelucru = punctdelucru;
+		this.centrucost = centrucost;
+		this.echipa = echipa;
+		this.departament = departament;
 		this.functiedebaza = functiedebaza;
 		this.calculdeduceri = calculdeduceri;
 		this.studiisuperioare = studiisuperioare;
 		this.normalucru = normalucru;
 		this.salariutarifar = salariutarifar;
 		this.monedasalariu = monedasalariu;
-		this.modplata = modplata;
 		this.conditiimunca = conditiimunca;
 		this.pensieprivata = pensieprivata;
 		this.cotizatiepensieprivata = cotizatiepensieprivata;
@@ -232,52 +174,52 @@ public class Contract {
 		this.marca = marca;
 	}
 
-	public Date getData() {
+	public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 
-	public Date getDataincepere() {
+	public LocalDate getDataincepere() {
 		return dataincepere;
 	}
 
-	public void setDataincepere(Date dataincepere) {
+	public void setDataincepere(LocalDate dataincepere) {
 		this.dataincepere = dataincepere;
 	}
 
-	public PunctDeLucru getIdpunctlucru() {
-		return idpunctlucru;
+	public CentruCost getCentrucost() {
+		return centrucost;
 	}
 
-	public void setIdpunctlucru(PunctDeLucru idpunctlucru) {
-		this.idpunctlucru = idpunctlucru;
+	public Departament getDepartament() {
+		return departament;
 	}
 
-	public CentruCost getIdcentrucost() {
-		return idcentrucost;
+	public Echipa getEchipa() {
+		return echipa;
 	}
 
-	public void setIdcentrucost(CentruCost idcentrucost) {
-		this.idcentrucost = idcentrucost;
+	public PunctDeLucru getPunctdelucru() {
+		return punctdelucru;
 	}
 
-	public Echipa getIdechipa() {
-		return idechipa;
+	public void setCentrucost(CentruCost centrucost) {
+		this.centrucost = centrucost;
 	}
 
-	public void setIdechipa(Echipa idechipa) {
-		this.idechipa = idechipa;
+	public void setDepartament(Departament departament) {
+		this.departament = departament;
 	}
 
-	public Departament getIddepartament() {
-		return iddepartament;
+	public void setEchipa(Echipa echipa) {
+		this.echipa = echipa;
 	}
 
-	public void setIddepartament(Departament iddepartament) {
-		this.iddepartament = iddepartament;
+	public void setPunctdelucru(PunctDeLucru punctdelucru) {
+		this.punctdelucru = punctdelucru;
 	}
 
 	public Boolean isFunctiedebaza() {
@@ -328,14 +270,6 @@ public class Contract {
 		this.monedasalariu = monedasalariu;
 	}
 
-	public String getModplata() {
-		return modplata;
-	}
-
-	public void setModplata(String modplata) {
-		this.modplata = modplata;
-	}
-
 	public String getConditiimunca() {
 		return conditiimunca;
 	}
@@ -384,11 +318,11 @@ public class Contract {
 		this.zilecoan = zilecoan;
 	}
 
-	public Date getUltimazilucru() {
+	public LocalDate getUltimazilucru() {
 		return ultimazilucru;
 	}
 
-	public void setUltimazilucru(Date ultimazilucru) {
+	public void setUltimazilucru(LocalDate ultimazilucru) {
 		this.ultimazilucru = ultimazilucru;
 	}
 
@@ -464,115 +398,11 @@ public class Contract {
 		this.pensionar = pensionar;
 	}
 
-	public Set<AlteBeneficii> getAlteBeneficii() {
-		return alteBeneficii;
+	public ContBancar getContbancar() {
+		return contbancar;
 	}
 
-	public void setAlteBeneficii(Set<AlteBeneficii> alteBeneficii) {
-		this.alteBeneficii = alteBeneficii;
-	}
-
-	public Angajat getAngajati() {
-		return angajati;
-	}
-
-	public void setAngajati(Angajat angajat) {
-		this.angajati = angajat;
-	}
-
-	public Set<BursePrivate> getBursePrivate() {
-		return bursePrivate;
-	}
-
-	public Boolean getCalculdeduceri() {
-		return calculdeduceri;
-	}
-
-	public Boolean getFunctiedebaza() {
-		return functiedebaza;
-	}
-
-	public Boolean getPensieprivata() {
-		return pensieprivata;
-	}
-
-	public Boolean getPensionar() {
-		return pensionar;
-	}
-
-	public Boolean getSindicat() {
-		return sindicat;
-	}
-
-	public Boolean getStudiisuperioare() {
-		return studiisuperioare;
-	}
-
-	public Set<CM> getConcediiMedicale() {
-		return concediiMedicale;
-	}
-
-	public void setBursePrivate(Set<BursePrivate> bursePrivate) {
-		this.bursePrivate = bursePrivate;
-	}
-
-	public void setConcediiMedicale(Set<CM> concediiMedicale) {
-		this.concediiMedicale = concediiMedicale;
-	}
-
-	public Set<CO> getConcediiDeOdihna() {
-		return concediiDeOdihna;
-	}
-
-	public void setConcediiDeOdihna(Set<CO> concediiDeOdihna) {
-		this.concediiDeOdihna = concediiDeOdihna;
-	}
-
-	public Set<Condica> getCondici() {
-		return condici;
-	}
-
-	public void setCondici(Set<Condica> condici) {
-		this.condici = condici;
-	}
-
-	public Set<Prime> getPrime() {
-		return prime;
-	}
-
-	public void setPrime(Set<Prime> prime) {
-		this.prime = prime;
-	}
-
-	public Set<RealizariRetineri> getRealizariRetineri() {
-		return realizariRetineri;
-	}
-
-	public void setRealizariRetineri(Set<RealizariRetineri> realizariRetineri) {
-		this.realizariRetineri = realizariRetineri;
-	}
-
-	public Set<Sponsorizari> getSponsorizari() {
-		return sponsorizari;
-	}
-
-	public void setSponsorizari(Set<Sponsorizari> sponsorizari) {
-		this.sponsorizari = sponsorizari;
-	}
-
-	public Set<SporPermanent> getSporPermanente() {
-		return sporPermanente;
-	}
-
-	public void setSporPermanente(Set<SporPermanent> sporPermanente) {
-		this.sporPermanente = sporPermanente;
-	}
-
-	public Set<ZileCODisponibile> getZileCODisponibile() {
-		return zileCODisponibile;
-	}
-
-	public void setZileCODisponibile(Set<ZileCODisponibile> zileCODisponibile) {
-		this.zileCODisponibile = zileCODisponibile;
+	public void setContbancar(ContBancar contbancar) {
+		this.contbancar = contbancar;
 	}
 }

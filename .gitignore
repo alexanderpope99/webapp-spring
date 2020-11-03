@@ -1,4 +1,4 @@
 .vscode/launch.json
-server/src/main/java/net/guides/springboot2/crud/downloads
 server/pom.xml
-client/src/Demo/Resources/server-address.js
+# server/src/main/java/net/guides/springboot2/crud/security
+server/src/main/java/net/guides/springboot2/crud/downloads

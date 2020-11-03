@@ -22,14 +22,8 @@ public class CMService {
 	@Autowired
 	private AngajatRepository angajatRepository;
 
-	public int getZileCMLucratoare(int luna, int an, int idcontract) {
-		// find all by idcontract
-		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
-		if (concediiMedicale.size() == 0)
-			return 0;
-
-		return zileCLucratoare(luna, an, concediiMedicale);
-	}
+	@Autowired
+	private SarbatoriService sarbatoriService;
 
 	public int getZileCM(int luna, int an, int idcontract) {
 		// find all by idcontract
@@ -38,6 +32,15 @@ public class CMService {
 			return 0;
 
 		return zileC(luna, an, concediiMedicale);
+	}
+
+	public int getZileCMLucratoare(int luna, int an, int idcontract) {
+		// find all by idcontract
+		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
+		if (concediiMedicale.size() == 0)
+			return 0;
+
+		return zileCLucratoare(luna, an, concediiMedicale);
 	}
 
 	public List<CM> getCMInLunaAnul(int luna, int an, int idcontract) {
@@ -65,28 +68,7 @@ public class CMService {
 		return Math.round(valCM);
 	}
 
-	// public int getZileFNUASS(int luna, int an, long idcontract) {
-	// List<CM> cm = cmRepository.findByIdcontractInLunaAnul(idcontract)
-	// }
-
-	private int zileCLucratoare(CM cm) {
-		LocalDate dela = cm.getDela();
-		LocalDate panala = cm.getPanala();
-
-		int an = dela.getYear();
-		int luna = dela.getMonthValue();
-		int ziDela = dela.getDayOfMonth();
-		int zileC = panala.getDayOfMonth() - ziDela + 1;
-
-		LocalDate day;
-		for (int i = ziDela; i < zileC; ++i) {
-			day = LocalDate.of(an, luna, i);
-			if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
-				zileC++;
-		}
-
-		return zileC;
-	}
+	
 
 	private int zileC(int luna, int an, List<CM> concedii) {
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
@@ -111,6 +93,9 @@ public class CMService {
 	private int zileCLucratoare(int luna, int an, List<CM> concedii) {
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
+		LocalDate sfarsitLuna = LocalDate.of(an, luna, nrZileLuna);
+
+		List<LocalDate> sarbatori = sarbatoriService.getZileSarbatoareInIntervalul(inceputLuna, sfarsitLuna);
 
 		LocalDate dela, panala;
 		LocalDate day;
@@ -122,10 +107,30 @@ public class CMService {
 			for (int i = 1; i <= nrZileLuna; ++i) {
 				day = LocalDate.of(an, luna, i);
 				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
-					if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
+					if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
 						zileC++;
 			}
 		}
+		return zileC;
+	}
+
+	private int zileCLucratoare(CM cm) {
+		LocalDate dela = cm.getDela();
+		LocalDate panala = cm.getPanala();
+		List<LocalDate> sarbatori = sarbatoriService.getZileSarbatoareInIntervalul(dela, panala);
+
+		int an = dela.getYear();
+		int luna = dela.getMonthValue();
+		int ziDela = dela.getDayOfMonth();
+		int zileC = panala.getDayOfMonth() - ziDela + 1;
+
+		LocalDate day;
+		for (int i = ziDela; i < zileC; ++i) {
+			day = LocalDate.of(an, luna, i);
+			if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
+				zileC++;
+		}
+
 		return zileC;
 	}
 

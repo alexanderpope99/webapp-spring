@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,60 +14,54 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "persoana")
-public class Persoana {
+public class Persoana implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
-
 	@Column(name = "gen")
 	private String gen;
-
 	@Column(name = "nume")
 	private String nume;
-
 	@Column(name = "prenume")
 	private String prenume;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idactidentitate", referencedColumnName = "id")
-	private ActIdentitate idactidentitate;
+	@JoinColumn(name = "idadresa", referencedColumnName = "id")
+	private Adresa adresa;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idadresa", referencedColumnName = "id")
-	private Adresa idadresa;
+	@JoinColumn(name = "idactidentitate", referencedColumnName = "id")
+	private ActIdentitate actidentitate;
 
 	@Column(name = "starecivila")
 	private String starecivila;
-
 	@Column(name = "email")
 	private String email;
-
 	@Column(name = "telefon")
 	private String telefon;
-
 	@Column(name = "cnp")
 	private String cnp;
-
-	@OneToOne(mappedBy = "persoana", cascade = CascadeType.ALL)
-	private Angajat angajati;
 
 	public Persoana() {
 	}
 
-	public Persoana(String gen, String nume, String prenume, ActIdentitate idactidentitate, Adresa idadresa,
-			String starecivila, String email, String telefon, String cnp) {
+	public Persoana(String gen, String nume, String prenume, ActIdentitate idactidentitate, Adresa idadresa, String starecivila,
+			String email, String telefon, String cnp) {
 		this.gen = gen;
 		this.nume = nume;
 		this.prenume = prenume;
-		this.idactidentitate = idactidentitate;
-		this.idadresa = idadresa;
+		this.actidentitate = idactidentitate;
+		this.adresa = idadresa;
 		this.starecivila = starecivila;
 		this.email = email;
 		this.email = email;
 		this.telefon = telefon;
 		this.cnp = cnp;
 	}
+
 
 	public int getId() {
 		return id;
@@ -88,12 +84,12 @@ public class Persoana {
 		return gen;
 	}
 
-	public ActIdentitate getIdactidentitate() {
-		return idactidentitate;
+	public ActIdentitate getActidentitate() {
+		return actidentitate;
 	}
 
-	public Adresa getIdadresa() {
-		return idadresa;
+	public Adresa getAdresa() {
+		return adresa;
 	}
 
 	public String getNume() {
@@ -125,12 +121,11 @@ public class Persoana {
 		this.gen = gen;
 	}
 
-	public void setIdactidentitate(ActIdentitate idactidentitate) {
-		this.idactidentitate = idactidentitate;
+	public void setActidentitate(ActIdentitate actidentitate) {
+		this.actidentitate = actidentitate;
 	}
-
-	public void setIdadresa(Adresa idadresa) {
-		this.idadresa = idadresa;
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
 	}
 
 	public void setNume(String nume) {
@@ -148,13 +143,4 @@ public class Persoana {
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
-
-	public Angajat getAngajati() {
-		return angajati;
-	}
-
-	public void setAngajati(Angajat angajat) {
-		this.angajati = angajat;
-	}
-
 }

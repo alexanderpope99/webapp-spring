@@ -68,7 +68,7 @@ class EditPersoana extends React.Component {
       nume: '',
       prenume: '',
 
-      idactidentitate: null, // separate fetch
+      idactidentitate: null,
       tipact: 'Carte de identitate',
       serie: '',
       numar: '',
@@ -79,7 +79,7 @@ class EditPersoana extends React.Component {
       dataeliberarii: '',
       starecivila: 'Necăsătorit',
 
-      idadresa: null, // separate fetch
+      idadresa: null,
       localitate: '',
       judet: '',
       adresacompleta: '',
@@ -105,7 +105,7 @@ class EditPersoana extends React.Component {
       nume: '',
       prenume: '',
 
-      idactidentitate: null, // separate fetch
+      idactidentitate: null,
       tipact: 'Carte de identitate',
       serie: '',
       numar: '',
@@ -116,7 +116,7 @@ class EditPersoana extends React.Component {
       dataeliberarii: '',
       starecivila: 'Necăsătorit',
 
-      idadresa: null, // separate fetch
+      idadresa: null,
       localitate: '',
       judet: '',
       adresacompleta: '',
@@ -134,7 +134,9 @@ class EditPersoana extends React.Component {
 
   async getNumeintreg() {
     const persoane = await axios
-      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
+        headers: authHeader(),
+      })
       .then((res) => res.data)
       .catch((err) => console.log('err'));
 
@@ -178,10 +180,10 @@ class EditPersoana extends React.Component {
     else return 'Județ';
   }
 
-  onChangeLocalitate(e) {
+  onChangeLocalitate(localitate) {
     this.setState({
-      tipJudet: this.getTipJudet(e.target.value),
-      localitate: e.target.value,
+      tipJudet: this.getTipJudet(localitate),
+      localitate: localitate,
     });
   }
 
@@ -240,52 +242,44 @@ class EditPersoana extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.log('err'));
 
-    setAngajatSel({ idpersoana: persoana.id, numeintreg: persoana.nume + ' ' + persoana.prenume });
+    setAngajatSel({
+      idpersoana: persoana.id,
+      numeintreg: persoana.nume + ' ' + persoana.prenume,
+    });
 
-    if (persoana.idadresa) {
-      await axios
-        .get(`${server.address}/adresa/${persoana.idadresa}`, { headers: authHeader() })
-        .then((adresa) => adresa.data)
-        .then((adresa) => {
-          if (adresa)
-            this.setState({
-              idadresa: adresa.id,
-              localitate: adresa.localitate || '',
-              judet: adresa.judet || '',
-              adresacompleta: adresa.adresa || '',
-              tipJudet: this.getTipJudet(adresa.localitate),
-            });
-        });
+    if (persoana.adresa) {
+      this.setState(
+        {
+          idadresa: persoana.adresa.id,
+					judet: persoana.adresa.judet,
+          adresacompleta: persoana.adresa.adresa || '',
+        },
+        () => this.onChangeLocalitate(persoana.adresa.localitate)
+      );
     }
-    if (persoana.idactidentitate) {
-      await axios
-        .get(`${server.address}/actidentitate/${persoana.idactidentitate}`, {
-          headers: authHeader(),
-        })
-        .then((actidentitate) => actidentitate.data)
-        .then((actidentitate) => {
-          if (actidentitate)
-            this.setState({
-              idactidentitate: actidentitate.id,
-              tipact: actidentitate.tip || '',
-              serie: actidentitate.serie || '',
-              numar: actidentitate.numar || '',
-              loculnasterii: actidentitate.loculnasterii || '',
-              eliberatde: actidentitate.eliberatde || '',
-              dataeliberarii: actidentitate.dataeliberarii || '',
-            });
-        });
+    if (persoana.actidentitate) {
+      this.setState({
+        idactidentitate: persoana.actidentitate,
+        tipact: persoana.actidentitate.tipact || '',
+        serie: persoana.actidentitate.serie || '',
+        numar: persoana.actidentitate.numar || '',
+        cnp: persoana.actidentitate.cnp || '',
+        datanasterii: persoana.actidentitate.datanasterii
+          ? persoana.actidentitate.datanasterii.substring(0, 10)
+          : '',
+        loculnasterii: persoana.actidentitate.loculnasterii || '',
+        eliberatde: persoana.actidentitate.eliberatde || '',
+        dataeliberarii: persoana.actidentitate.dataeliberarii || '',
+        starecivila: persoana.actidentitate.starecivila || '',
+      });
     }
 
     this.setState({
-      cnp: persoana.cnp || '',
       email: persoana.email || '',
       gen: persoana.gen || '',
       nume: persoana.nume || '',
       prenume: persoana.prenume || '',
-      starecivila: persoana.starecivila || '',
       telefon: persoana.telefon || '',
-      datanasterii: this.getDatanasteriiByCNP(persoana.cnp),
 
       selectednume: this.getNumeintregById(id),
     });
@@ -302,101 +296,37 @@ class EditPersoana extends React.Component {
 
     if (!this.hasRequired()) return -1;
 
-    var idadresa = this.state.idadresa,
-      idactidentitate = this.state.idactidentitate;
+    var adresa_body = {
+      adresa: this.state.adresacompleta,
+      localitate: this.state.localitate,
+      judet: this.state.judet,
+      tara: null,
+    };
 
-    // persoana nu are adresa asociata
-    if (!this.state.idadresa) {
-      // daca se completeaza -> adauga in DB | daca nu -> nimic
-      if (this.state.adresacompleta || this.state.localitate || this.state.judet) {
-        let adresa_body = {
-          adresa: this.state.adresacompleta,
-          localitate: this.state.localitate,
-          judet: this.state.judet,
-          tara: null,
-        };
-
-        idadresa = await axios
-          .post(`${server.address}/adresa`, adresa_body, {
-            headers: authHeader(),
-          })
-          .then((idadresa) => idadresa.data);
-        idadresa = idadresa.id;
-        console.log('added adresa, id =', idadresa);
-      }
-    } else {
-      // persoana are adresa => se actualizeaza
-      let adresa_body = {
-        adresa: this.state.adresacompleta,
-        localitate: this.state.localitate,
-        judet: this.state.judet,
-        tara: null,
-      };
-      await axios.put(`${server.address}/adresa/${this.state.idadresa}`, adresa_body, {
-        headers: authHeader(),
-      });
-    }
-
-    // persoana nu are actidentitate
-    if (!this.state.idactidentitate) {
-      // daca se completeaza actidentitate -> adauga in baza de date | daca nu -> nimic
-      if (this.state.serie || this.state.numar || this.state.cnp) {
-        let buletin_body = {
-          cnp: this.state.cnp,
-          tip: this.state.tipact,
-          serie: this.state.serie,
-          numar: this.state.numar,
-          datanasterii: this.state.datanasterii,
-          eliberatde: this.state.eliberatde,
-          dataeliberarii: this.state.dataeliberarii,
-          loculnasterii: this.state.loculnasterii,
-        };
-
-        idactidentitate = await axios
-          .post(`${server.address}/actidentitate`, buletin_body, {
-            headers: authHeader(),
-          })
-          .then((idactidentitate) => idactidentitate.data)
-          .catch((err) => console.error(err));
-        idactidentitate = idactidentitate.id;
-        console.log('idactidentitate:', idactidentitate);
-      }
-    } else {
-      // are act identitate => se actualizeaza
-      let buletin_body = {
-        cnp: this.state.cnp,
-        tip: this.state.tipact,
-        serie: this.state.serie,
-        numar: this.state.numar,
-        datanasterii: this.state.datanasterii,
-        eliberatde: this.state.eliberatde,
-        dataeliberarii: this.state.dataeliberarii,
-        loculnasterii: this.state.loculnasterii,
-      };
-      console.log(buletin_body);
-
-      await axios.put(
-        `${server.address}/actidentitate/${this.state.idactidentitate}`,
-        buletin_body,
-        {
-          headers: authHeader(),
-        }
-      );
-    }
+    var buletin_body = {
+      cnp: this.state.cnp,
+      tip: this.state.tipact,
+      serie: this.state.serie,
+      numar: this.state.numar,
+      datanasterii: this.state.datanasterii,
+      eliberatde: this.state.eliberatde,
+      dataeliberarii: this.state.dataeliberarii,
+      loculnasterii: this.state.loculnasterii,
+    };
 
     let persoana_body = {
       gen: this.state.gen,
       nume: this.state.nume,
       prenume: this.state.prenume,
-      idactidentitate: idactidentitate,
-      idadresa: idadresa,
+      actidentitate: buletin_body,
+      adresa: adresa_body,
       starecivila: this.state.starecivila,
       email: this.state.email,
       telefon: this.state.telefon,
       cnp: this.state.cnp,
     };
-    // update persoana
 
+    // update persoana
     await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, {
       headers: authHeader(),
     });
@@ -500,7 +430,9 @@ class EditPersoana extends React.Component {
                               as="select"
                               value={this.state.gen}
                               onChange={(e) => {
-                                this.setState({ gen: e.target.value });
+                                this.setState({
+                                  gen: e.target.value,
+                                });
                               }}
                             >
                               <option>Dl.</option>
@@ -518,7 +450,9 @@ class EditPersoana extends React.Component {
                               placeholder="eg. Popescu"
                               value={this.state.nume}
                               onChange={(e) => {
-                                this.setState({ nume: e.target.value });
+                                this.setState({
+                                  nume: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -532,7 +466,9 @@ class EditPersoana extends React.Component {
                               placeholder="eg. Ion"
                               value={this.state.prenume}
                               onChange={(e) => {
-                                this.setState({ prenume: e.target.value });
+                                this.setState({
+                                  prenume: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -553,7 +489,9 @@ class EditPersoana extends React.Component {
                               as="select"
                               value={this.state.tipact}
                               onChange={(e) => {
-                                this.setState({ tipact: e.target.value });
+                                this.setState({
+                                  tipact: e.target.value,
+                                });
                               }}
                             >
                               <option>Carte de identitate</option>
@@ -572,7 +510,9 @@ class EditPersoana extends React.Component {
                               placeholder="Serie CI"
                               value={this.state.serie}
                               onChange={(e) => {
-                                this.setState({ serie: e.target.value });
+                                this.setState({
+                                  serie: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -585,7 +525,9 @@ class EditPersoana extends React.Component {
                               placeholder="Număr"
                               value={this.state.numar}
                               onChange={(e) => {
-                                this.setState({ numar: e.target.value });
+                                this.setState({
+                                  numar: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -615,7 +557,9 @@ class EditPersoana extends React.Component {
                               placeholder="Eliberat de"
                               value={this.state.eliberatde}
                               onChange={(e) => {
-                                this.setState({ eliberatde: e.target.value });
+                                this.setState({
+                                  eliberatde: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -627,7 +571,9 @@ class EditPersoana extends React.Component {
                               type="date"
                               value={this.state.dataeliberarii}
                               onChange={(e) => {
-                                this.setState({ dataeliberarii: e.target.value });
+                                this.setState({
+                                  dataeliberarii: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -641,7 +587,9 @@ class EditPersoana extends React.Component {
                               placeholder="Locul nașterii"
                               value={this.state.loculnasterii}
                               onChange={(e) => {
-                                this.setState({ loculnasterii: e.target.value });
+                                this.setState({
+                                  loculnasterii: e.target.value,
+                                });
                               }}
                             />
                           </Form.Group>
@@ -653,7 +601,9 @@ class EditPersoana extends React.Component {
                               as="select"
                               value={this.state.starecivila}
                               onChange={(e) => {
-                                this.setState({ starecivila: e.target.value });
+                                this.setState({
+                                  starecivila: e.target.value,
+                                });
                               }}
                             >
                               <option>Necăsătorit</option>
@@ -676,7 +626,7 @@ class EditPersoana extends React.Component {
                               type="text"
                               placeholder="Localitate"
                               value={this.state.localitate}
-                              onChange={this.onChangeLocalitate}
+                              onChange={(e) => this.onChangeLocalitate(e.target.value)}
                             />
                           </Form.Group>
                         </Col>
@@ -687,7 +637,9 @@ class EditPersoana extends React.Component {
                               as="select"
                               value={this.state.judet}
                               onChange={(e) => {
-                                this.setState({ judet: e.target.value });
+                                this.setState({
+                                  judet: e.target.value,
+                                });
                               }}
                             >
                               <option>-</option>
@@ -752,8 +704,10 @@ class EditPersoana extends React.Component {
                   <Row>
                     <Col md={6}>
                       <Button
-												className="mt-2 ml-0"
-                        variant={this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'}
+                        className="mt-2 ml-0"
+                        variant={
+                          this.state.selectednume === '-' ? 'outline-dark' : 'outline-primary'
+                        }
                         onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
                         disabled={this.state.selectednume === '-'}
                       >

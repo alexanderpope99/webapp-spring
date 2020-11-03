@@ -40,8 +40,9 @@ class RealizariRetineri extends React.Component {
     this.addOrasuplimentara = this.addOrasuplimentara.bind(this);
     this.renderTabelore = this.renderTabelore.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-		this.calcNrTichete = this.calcNrTichete.bind(this);
-		this.getStatIndividual = this.getStatIndividual.bind(this);
+    this.calcNrTichete = this.calcNrTichete.bind(this);
+    this.getStatIndividual = this.getStatIndividual.bind(this);
+    this.creeazaStateUltimele6Luni = this.creeazaStateUltimele6Luni.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -58,6 +59,8 @@ class RealizariRetineri extends React.Component {
       idstat: '',
 
       // realizari
+      an_inceput_contract: '',
+      luna_inceput_contract: '',
       functie: '',
       duratazilucru: '',
       normalucru: '',
@@ -165,9 +168,9 @@ class RealizariRetineri extends React.Component {
   async componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-		await this.setCurrentYearMonth(); // modifies state.an, state.luna
+    await this.setCurrentYearMonth(); // modifies state.an, state.luna
     this.setPersoane(); // date personale, also fills lista_angajati
-	  this.fillForm();
+    this.fillForm();
   }
 
   numberWithCommas(x) {
@@ -177,7 +180,7 @@ class RealizariRetineri extends React.Component {
   async setCurrentYearMonth() {
     let today = new Date();
     let luna = months[today.getMonth()];
-		let an = today.getFullYear();
+    let an = today.getFullYear();
 
     this.setState({
       an: an,
@@ -189,9 +192,9 @@ class RealizariRetineri extends React.Component {
     //* only people with contract <- &c flag
     const persoane = await axios
       .get(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, { headers: authHeader() })
-      .then((res) => res.status === 200 ? res.data : null)
-			.catch((err) => console.error(err));
-		if(!persoane) return;
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+    if (!persoane) return;
     //* set lista_angajati
     let lista_angajati = [];
     for (let persoana of persoane) {
@@ -219,14 +222,14 @@ class RealizariRetineri extends React.Component {
       .get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
-		console.log('contract:', contract);
-		if(!contract) return;
+    console.log('contract:', contract);
+    if (!contract) return;
 
     // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calc => saves to DB
     const data = await axios
       .post(
         `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
-        {body: null},
+        { body: null },
         {
           headers: authHeader(),
         }
@@ -234,23 +237,24 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-		console.log('data:', data);
-		if(!data) return;
+    console.log('data:', data);
+    if (!data) return;
 
     // get ore suplimentare by idcontract, luna, an
     const oresuplimentare = await this.getOresuplimentare(contract.id, luna, an);
     let totaloresuplimentare = 0;
     if (oresuplimentare.length > 0) {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
-		}
+    }
     const retineri = await axios
       .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
       .then((res) => res.data)
-			.catch((err) => console.error(err));
-
+      .catch((err) => console.error(err));
 
     this.setState({
       //* realizari
+      an_inceput_contract: contract.dataincepere.substring(0, 4),
+      luna_inceput_contract: contract.dataincepere.substring(5, 7),
       functie: contract.functie,
       duratazilucru: contract.normalucru,
       normalucru: data.norma, // zile lucratoare in luna respectiva
@@ -298,14 +302,13 @@ class RealizariRetineri extends React.Component {
 
   onSelect(e) {
     const selectedIndex = e.target.options.selectedIndex;
-		const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
-		if(selectedIndex === 0)
-			setAngajatSel(null);
-		else
-			setAngajatSel({
-				numeintreg: e.target.value,
-				idpersoana: idangajat,
-			});
+    const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
+    if (selectedIndex === 0) setAngajatSel(null);
+    else
+      setAngajatSel({
+        numeintreg: e.target.value,
+        idpersoana: idangajat,
+      });
 
     this.setState(
       {
@@ -330,9 +333,9 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-		// save retineri to DB
-		console.log('################');
-		console.log(this.state);
+    // save retineri to DB
+    console.log('################');
+    console.log(this.state);
     await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,
@@ -364,8 +367,8 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-		console.log(data);
-		if(!data) return;
+    console.log(data);
+    if (!data) return;
     // total
     this.setState(
       {
@@ -392,12 +395,13 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    await axios.put(
-      `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
-			{},
-			{ headers: authHeader() }
-    )
-      .then((res) => (res.status === 200))
+    await axios
+      .put(
+        `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
     window.scrollTo({
@@ -407,18 +411,37 @@ class RealizariRetineri extends React.Component {
     });
 
     this.fillForm();
-	}
-	
-	async createStatSalariiUltimele6Luni() {
-    if (!this.state.selected_angajat.idpersoana) {
-			this.clearForm();
-			return;
-		}
+  }
 
-		await axios.put(
-			`${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}`
-		)
-	}
+  async creeazaStateUltimele6Luni() {
+    if (!this.state.selected_angajat.idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    let luna = this.state.luna;
+    let an = this.state.an;
+
+    const ok = await axios
+      .put(
+        `${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error('RealizariRetineri.js :: line: 422\n', err));
+
+    if (ok) {
+      alert(
+        `Statul de salarii calculat pe ultimele 6 luni incepand cu ${luna.nume}. Deasemenea, bazele de calcul au fost adaugate.`
+      );
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  }
 
   async calcNrTichete() {
     if (!this.state.selected_angajat) return;
@@ -442,8 +465,8 @@ class RealizariRetineri extends React.Component {
       .get(`${server.address}/oresuplimentare/api/idc=${idc}&mo=${luna}&y=${an}`, {
         headers: authHeader(),
       })
-			.then((res) => res.data)
-			.catch(err => console.error(err));
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
 
     return oresuplimentare;
   }
@@ -501,37 +524,38 @@ class RealizariRetineri extends React.Component {
       nrore: 0,
       procent: 100,
     });
-	}
-	
-	async getStatIndividual() {
-		const idangajat = this.state.selected_angajat.idpersoana;
-		const luna = this.state.luna;
-		const an = this.state.an;
-		const user = JSON.parse(localStorage.getItem('user'));
+  }
 
-		const ok = await axios.get(
-			`${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
-			{ headers: authHeader() }
-		)
-			.then(res => res.status === 200)
-			.catch(err => console.error(err));
-		
-		if(ok) {
-			let numeintreg = this.state.selected_angajat.numeintreg;
-			this.downloadStatIndividual(numeintreg, luna, an);
-		}
-	}
-
-	async downloadStatIndividual(numeintreg, luna, an) {
+  async getStatIndividual() {
+    const idangajat = this.state.selected_angajat.idpersoana;
+    const luna = this.state.luna;
+    const an = this.state.an;
     const user = JSON.parse(localStorage.getItem('user'));
-		console.log('trying to download...');
+
+    const ok = await axios
+      .get(
+        `${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      let numeintreg = this.state.selected_angajat.numeintreg;
+      this.downloadStatIndividual(numeintreg, luna, an);
+    }
+  }
+
+  async downloadStatIndividual(numeintreg, luna, an) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('trying to download...');
     await fetch(
       `${server.address}/download/${user.id}/Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/octet-stream',
-          'Authorization': `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
       }
     )
@@ -543,15 +567,15 @@ class RealizariRetineri extends React.Component {
         a.download = `Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`;
         document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
         a.click();
-				a.remove(); //afterwards we remove the element again
-				console.log('downloaded');
-				window.scrollTo({
-					top: 0,
-					left: 0,
-					behavior: 'smooth',
-				});
-			});
-	}
+        a.remove(); //afterwards we remove the element again
+        console.log('downloaded');
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
+      });
+  }
 
   onSubmit(e) {
     e.preventDefault();
@@ -560,12 +584,23 @@ class RealizariRetineri extends React.Component {
   }
 
   render() {
-    const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
-
     const this_year = new Date().getFullYear();
-    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
-      <option key={year}>{year}</option>
+
+    var ani = [];
+    for (let i = this.state.an_inceput_contract; i <= this_year + 1; ++i) {
+      ani.push(<option key={i}>{i}</option>);
+    }
+
+    var luni = months.map((luna_nume, index) => (
+      <option key={index} data-key={index + 1}>
+        {luna_nume}
+      </option>
     ));
+    // eslint-disable-next-line eqeqeq
+    if (this.state.an == this.state.an_inceput_contract) {
+      luni = luni.slice(Number(this.state.luna_inceput_contract) - 1);
+      console.log('sliced to', Number(this.state.luna_inceput_contract));
+    }
 
     const tabel_ore = this.state.oresuplimentare.map((ora, index) => {
       for (let key in ora) if (!ora[key]) ora[key] = '-';
@@ -661,11 +696,11 @@ class RealizariRetineri extends React.Component {
                     value={this.state.procent}
                     onChange={(e) => this.setState({ procent: e.target.value })}
                   >
-										<option>100</option>
-										<option>150</option>
-										<option>175</option>
-										<option>200</option>
-									</Form.Control>
+                    <option>100</option>
+                    <option>150</option>
+                    <option>175</option>
+                    <option>200</option>
+                  </Form.Control>
                 </Form.Group>
               </Col>
               <Col md={4}>
@@ -723,14 +758,18 @@ class RealizariRetineri extends React.Component {
                 <FormControl
                   as="select"
                   value={this.state.luna.nume}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    let selectedIndex = e.target.options.selectedIndex;
                     this.setState(
                       {
-                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                        luna: {
+                          nume: e.target.value,
+                          nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
+                        },
                       },
                       this.fillForm
-                    )
-                  }
+                    );
+                  }}
                 >
                   {luni}
                 </FormControl>
@@ -765,7 +804,7 @@ class RealizariRetineri extends React.Component {
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
                 onChange={(e) => this.onSelect(e)}
               >
-                <option>-</option>
+                <option> - </option>
                 {/* lista_angajati mapped as <option> */}
                 {nume_persoane_opt}
               </FormControl>
@@ -897,7 +936,12 @@ class RealizariRetineri extends React.Component {
                           {this.state.zileco ? (
                             <InputGroup.Append>
                               <InputGroup.Text style={{ fontSize: '0.75rem' }}>
-                                Sumă brută: {this.state.valcm.toFixed(0)} RON
+                                {(
+                                  (this.state.zilecolucratoare -
+                                    this.state.zileconeplatitlucratoare) *
+                                  this.state.salariupezi
+                                ).toFixed(0)}{' '}
+                                RON
                               </InputGroup.Text>
                             </InputGroup.Append>
                           ) : null}
@@ -1149,7 +1193,7 @@ class RealizariRetineri extends React.Component {
                   </Button>
                 </Col>
 
-								<Button
+                <Button
                   variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                   disabled={!this.state.selected_angajat}
                   onClick={this.getStatIndividual}
@@ -1164,7 +1208,7 @@ class RealizariRetineri extends React.Component {
                   onClick={this.creeazaStateUltimele6Luni}
                   className="mb-3 mt-3"
                 >
-                  Resetează Calculul
+                  Creează ștate pe ultimele 6 luni
                 </Button>
               </Row>
             </Form>

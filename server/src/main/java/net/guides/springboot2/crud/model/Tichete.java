@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tichete")
-public class Tichete {
+public class Tichete implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,18 +38,18 @@ public class Tichete {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstat")
-	private RealizariRetineri idstat;
+	private RealizariRetineri stat;
 
 	public Tichete() {
 	}
 
-	public Tichete(String tip, Long nr, Long restituite, Double valoare, Boolean impozabil, RealizariRetineri idstat) {
+	public Tichete(String tip, Long nr, Long restituite, Double valoare, Boolean impozabil, RealizariRetineri stat) {
 		this.tip = tip;
 		this.nr = nr;
 		this.restituite = restituite;
 		this.valoare = valoare;
 		this.impozabil = impozabil;
-		this.idstat = idstat;
+		this.stat = stat;
 	}
 
 	public int getId() {
@@ -58,8 +61,8 @@ public class Tichete {
 	}
 
 	// GETTERS
-	public RealizariRetineri getIdstat() {
-		return idstat;
+	public RealizariRetineri getStat() {
+		return stat;
 	}
 
 	public Boolean getImpozabil() {
@@ -83,8 +86,8 @@ public class Tichete {
 	}
 
 	// SETTERS
-	public void setIdstat(RealizariRetineri idstat) {
-		this.idstat = idstat;
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
 	}
 
 	public void setImpozabil(Boolean impozabil) {

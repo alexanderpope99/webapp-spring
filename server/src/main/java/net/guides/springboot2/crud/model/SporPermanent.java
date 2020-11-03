@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "sporpermanent")
-public class SporPermanent {
+public class SporPermanent implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,17 +35,17 @@ public class SporPermanent {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
+	private Contract contract;
 
 	public SporPermanent() {
 	}
 
-	public SporPermanent(String nume, Double valoare, Double procent, String aplicare, Contract idcontract) {
+	public SporPermanent(String nume, Double valoare, Double procent, String aplicare, Contract contract) {
 		this.nume = nume;
 		this.valoare = valoare;
 		this.procent = procent;
 		this.aplicare = aplicare;
-		this.idcontract = idcontract;
+		this.contract = contract;
 	}
 
 	public int getId() {
@@ -59,7 +62,7 @@ public class SporPermanent {
 	}
 
 	public Contract getIdstat() {
-		return idcontract;
+		return contract;
 	}
 
 	public String getNume() {
@@ -79,8 +82,8 @@ public class SporPermanent {
 		this.aplicare = aplicare;
 	}
 
-	public void setIdstat(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setIdstat(Contract contract) {
+		this.contract = contract;
 	}
 
 	public void setNume(String nume) {
@@ -95,11 +98,11 @@ public class SporPermanent {
 		this.valoare = valoare;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 }

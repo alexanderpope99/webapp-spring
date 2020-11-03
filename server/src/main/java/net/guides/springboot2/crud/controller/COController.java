@@ -26,10 +26,15 @@ public class COController {
 	@Autowired
 	private CORepository coRepository;
 
-	@GetMapping
-	public List<CO> getAllCOs() {
-		return coRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-	}
+    @GetMapping("latest")
+    public List<CO> getAllCOsLatest() {
+        return coRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+		}
+		
+		@GetMapping
+    public List<CO> getAllCOs() {
+        return coRepository.findAllByOrderByDelaAsc();
+    }
 
 	@GetMapping("{id}")
 	public ResponseEntity<CO> getCOById(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
@@ -38,19 +43,17 @@ public class COController {
 		return ResponseEntity.ok().body(co);
 	}
 
-	@GetMapping("idc={id}")
-	public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract)
-			throws ResourceNotFoundException {
-		List<CO> co = coRepository.findByIdcontract(idcontract);
-		return ResponseEntity.ok().body(co);
-	}
+    @GetMapping("idc={id}")
+    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract) throws ResourceNotFoundException {
+        List<CO> co = coRepository.findByIdcontractOrderByDelaDesc(idcontract);
+        return ResponseEntity.ok().body(co);
+    }
 
-	@GetMapping("fp&idc={id}")
-	public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract)
-			throws ResourceNotFoundException {
-		List<CO> co = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
-		return ResponseEntity.ok().body(co);
-	}
+    @GetMapping("fp&idc={id}")
+    public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract) throws ResourceNotFoundException {
+        List<CO> co = coRepository.findByIdcontractAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
+        return ResponseEntity.ok().body(co);
+    }
 
 	@PostMapping
 	public CO createCO(@RequestBody CO co) {

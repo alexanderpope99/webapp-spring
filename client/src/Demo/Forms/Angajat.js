@@ -4,7 +4,6 @@ import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import { server } from '../Resources/server-address';
-// import Persoana from '../UIElements/Forms/Persoana';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
@@ -17,17 +16,20 @@ import BazaCalcul from '../Tables/BazaCalcul';
 
 /*
   ? how it works now:
-  * fetch date contract when focusint tab 'contract'
-  *
+	*	Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
+	* * * * *
+  * fetch date contract when focusing tab 'contract'
+  * * * * *
   * when focusing 'contract' check if person has contract:
   *   |> has contract: 1. method = 'PUT'
   *                    2. populate form with contract data
+	* 											\ if persoana has adresa.judet != SECTOR -> preselect casa_sanatate
   *
   *   |>  no contract: 1. method = 'POST'
   *                    2. clearFields()
-	? adding:
-	*	  |> in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
-	*		|> Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
+	* * * * *
+	* in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
+	* * * * *
 */
 
 class Angajat extends React.Component {
@@ -79,8 +81,8 @@ class Angajat extends React.Component {
   async getSelectedAngajatData() {
     // get id of selected angajat
     const angajatsel = getAngajatSel();
-    const idpersoana = angajatsel ? angajatsel.idpersoana : -1;
-    if (idpersoana === null || idpersoana === -1) {
+    const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
+    if (!idpersoana) {
       this.contract.current.clearFields();
       this.setState({ angajatsel: null });
       return;
@@ -156,16 +158,16 @@ class Angajat extends React.Component {
     }
 
     this.cm.current.setAngajat(angajat);
-	}
-	async onFocusBC() {
-		await this.bc.current.updateAngajatSel();
-		this.bc.current.onRefresh();
-		this.setState({ anajatsel: getAngajatSel() });
-	}
+  }
+  async onFocusBC() {
+    await this.bc.current.updateAngajatSel();
+    this.bc.current.onRefresh();
+    this.setState({ anajatsel: getAngajatSel() });
+  }
 
   async onFocusPI() {
-		await this.persoaneintretinere.current.updateAngajatSel();
-		this.persoaneintretinere.current.onRefresh();
+    await this.persoaneintretinere.current.updateAngajatSel();
+    this.persoaneintretinere.current.onRefresh();
     this.setState({ angajatsel: getAngajatSel() });
   }
 
@@ -229,7 +231,7 @@ class Angajat extends React.Component {
                 <ConcediiMedicale ref={this.cm} />
               </Tab>
 
-							<Tab eventKey="bc" title="Bază calcul">
+              <Tab eventKey="bc" title="Bază calcul">
                 <BazaCalcul ref={this.bc} />
               </Tab>
 
@@ -237,7 +239,16 @@ class Angajat extends React.Component {
                 <PersoaneIntretinereTabel ref={this.persoaneintretinere} />
               </Tab>
             </Tabs>
-            <Button onClick={() => window.scrollTo(0, 0)} className="float-center">
+            <Button
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: 'smooth',
+                })
+              }
+              className="float-center"
+            >
               TO TOP
             </Button>
           </Col>

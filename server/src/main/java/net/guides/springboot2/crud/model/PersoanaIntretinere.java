@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,7 +15,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "persoanaintretinere")
-public class PersoanaIntretinere {
+public class PersoanaIntretinere implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +48,13 @@ public class PersoanaIntretinere {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idangajat")
-	private Angajat idangajat;
+	private Angajat angajat;
 
 	public PersoanaIntretinere() {
 	}
 
 	public PersoanaIntretinere(String nume, String prenume, String cnp, Date datanasterii, String grad,
-			String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Angajat idangajat) {
+			String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Angajat angajat) {
 		this.nume = nume;
 		this.prenume = prenume;
 		this.cnp = cnp;
@@ -61,7 +63,7 @@ public class PersoanaIntretinere {
 		this.gradinvaliditate = gradinvaliditate;
 		this.intretinut = intretinut;
 		this.coasigurat = coasigurat;
-		this.idangajat = idangajat;
+		this.angajat = angajat;
 	}
 
 	public int getId() {
@@ -92,8 +94,8 @@ public class PersoanaIntretinere {
 		return gradinvaliditate;
 	}
 
-	public Angajat getIdangajat() {
-		return idangajat;
+	public Angajat getAngajat() {
+		return angajat;
 	}
 
 	public Boolean getIntretinut() {
@@ -128,8 +130,8 @@ public class PersoanaIntretinere {
 		this.gradinvaliditate = gradinvaliditate;
 	}
 
-	public void setIdangajat(Angajat idangajat) {
-		this.idangajat = idangajat;
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
 
 	public void setIntretinut(Boolean intretinut) {

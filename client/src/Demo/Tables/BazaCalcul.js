@@ -13,6 +13,7 @@ import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel } from '../Resources/angajatsel';
+import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -26,8 +27,10 @@ class BazaCalcul extends React.Component {
     this.editBazaCalcul = this.editBazaCalcul.bind(this);
     this.deleteBazaCalcul = this.deleteBazaCalcul.bind(this);
     this.handleClose = this.handleClose.bind(this);
-		this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
-		this.renderBazaCalcul = this.renderBazaCalcul.bind(this);
+    this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
+    this.renderBazaCalcul = this.renderBazaCalcul.bind(this);
+    this.openModalAdd = this.openModalAdd.bind(this);
+    this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
@@ -35,6 +38,11 @@ class BazaCalcul extends React.Component {
       angajatsel: getAngajatSel(),
       bazacalcul: [],
       bazacalculComponent: null,
+
+      an_sel: '-',
+      ani_cu_baza: [],
+      luni_cu_baza: { '-': [] }, // {an: [...luni]}
+      luni_fara_baza: { '-': [] }, // {an: [...luni]}
 
       isEdit: false,
 
@@ -44,18 +52,18 @@ class BazaCalcul extends React.Component {
 
       // add/edit modal
       show: false,
-			id: null,
-			idangajat: null,
-			an: '',
-			luna: '',
-			salariurealizat: '',
-			zilelucrate: ''
+      id: null,
+      idangajat: null,
+      an: '',
+      luna: { nume: '-', nr: '-' },
+      salariurealizat: '',
+      zilelucrate: '',
     };
   }
 
   componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
-
+    this.setState({ an_sel: new Date().getFullYear() });
     this.onRefresh();
     window.scrollTo(0, 0);
   }
@@ -66,18 +74,18 @@ class BazaCalcul extends React.Component {
 
   async addBazaCalcul() {
     const bazacalcul_body = {
-			idangajat: this.state.angajatsel.idpersoana,
-			an: this.state.an,
-			luna: this.state.luna,
-			salariurealizat: this.state.salariurealizat,
-			zilelucrate: this.state.zilelucrate
+      idangajat: this.state.angajatsel.idpersoana,
+      an: this.state.an,
+      luna: this.state.luna.nr,
+      salariurealizat: this.state.salariurealizat,
+      zilelucrate: this.state.zilelucrate,
     };
 
     let ok = await axios
       .post(`${server.address}/bazacalcul`, bazacalcul_body, { headers: authHeader() })
       .then((res) => res.status === 200)
-			.catch((err) => console.error(err));
-			
+      .catch((err) => console.error(err));
+
     if (ok) {
       await this.handleClose();
       this.setState(
@@ -92,11 +100,11 @@ class BazaCalcul extends React.Component {
 
   async updateBazaCalcul(idbazacalcul) {
     const bazacalcul_body = {
-			idangajat: this.state.angajatsel.idpersoana,
-			an: this.state.an,
-			luna: this.state.luna,
-			salariurealizat: this.state.salariurealizat,
-			zilelucrate: this.state.zilelucrate
+      idangajat: this.state.angajatsel.idpersoana,
+      an: this.state.an,
+      luna: this.state.luna.nr,
+      salariurealizat: this.state.salariurealizat,
+      zilelucrate: this.state.zilelucrate,
     };
 
     const ok = await axios
@@ -122,11 +130,11 @@ class BazaCalcul extends React.Component {
       show: true,
 
       id: bc.id,
-			idangajat: bc.idangajat,
-			an: bc.an,
-			luna: bc.luna,
-			salariurealizat: bc.salariurealizat,
-			zilelucrate: bc.zilelucrate
+      idangajat: bc.idangajat,
+      an: bc.an,
+      luna: { nume: months[bc.luna - 1], nr: bc.luna },
+      salariurealizat: bc.salariurealizat,
+      zilelucrate: bc.zilelucrate,
     });
   }
 
@@ -142,75 +150,77 @@ class BazaCalcul extends React.Component {
   renderBazaCalcul() {
     this.setState({
       bazacalculComponent: this.state.bazacalcul.map((bc, index) => {
-        return (
-          <tr key={bc.id}>
-						<th>{bc.an}</th>
-						<th>{bc.luna}</th>
-						<th>{bc.zilelucrate}</th>
-						<th>{bc.salariurealizat}</th>
-            <th>
-              <Row>
-                <Button
-                  onClick={() => this.editBazaCalcul(bc)}
-                  variant="outline-secondary"
-                  className="m-1 p-1 rounded-circle border-0"
-                >
-                  <Edit fontSize="small" />
-                </Button>
+        // eslint-disable-next-line eqeqeq
+        if (bc.an == this.state.an_sel || this.state.an_sel === '-')
+          return (
+            <tr key={bc.id}>
+              <th>{bc.an}</th>
+              <th>{months[bc.luna - 1]}</th>
+              <th>{bc.zilelucrate}</th>
+              <th>{bc.salariurealizat}</th>
+              <th>
+                <Row>
+                  <Button
+                    onClick={() => this.editBazaCalcul(bc)}
+                    variant="outline-secondary"
+                    className="m-1 p-1 rounded-circle border-0"
+                  >
+                    <Edit fontSize="small" />
+                  </Button>
 
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-1 p-1 rounded-circle border-0"
-                        {...bindTrigger(popupState)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>
-                            Confirmare ștergere
-                          </Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteBazaCalcul(bc.id);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
-              </Row>
-            </th>
-          </tr>
-        );
+                  <PopupState variant="popover" popupId="demo-popup-popover">
+                    {(popupState) => (
+                      <div>
+                        <Button
+                          variant="outline-secondary"
+                          className="m-1 p-1 rounded-circle border-0"
+                          {...bindTrigger(popupState)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </Button>
+                        <Popover
+                          {...bindPopover(popupState)}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                        >
+                          <Box p={2}>
+                            <Typography>Confirmare ștergere</Typography>
+                            <Typography variant="caption">
+                              Datele nu mai pot fi recuperate
+                            </Typography>
+                            <br />
+                            <Button
+                              variant="outline-danger"
+                              onClick={() => {
+                                popupState.close();
+                                this.deleteBazaCalcul(bc.id);
+                              }}
+                              className="mt-2 "
+                            >
+                              Da
+                            </Button>
+                            <Button
+                              variant="outline-persondary"
+                              onClick={popupState.close}
+                              className="mt-2"
+                            >
+                              Nu
+                            </Button>
+                          </Box>
+                        </Popover>
+                      </div>
+                    )}
+                  </PopupState>
+                </Row>
+              </th>
+            </tr>
+          );
       }),
     });
   }
@@ -222,11 +232,30 @@ class BazaCalcul extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-				.catch((err) => console.error(err));
+        .catch((err) => console.error(err));
       if (bazacalcul) {
+        const luni_nr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var ani_cu_baza = new Set();
+        var luni_cu_baza = { '-': luni_nr };
+        var luni_fara_baza = { '-': luni_nr };
+        for (let b of bazacalcul) {
+          ani_cu_baza.add(Number(b.an));
+          luni_cu_baza[b.an] = [];
+          luni_fara_baza[b.an] = [];
+        }
+        for (let b of bazacalcul) {
+          luni_cu_baza[b.an].push(b.luna);
+        }
+        for (let an of ani_cu_baza) {
+          luni_fara_baza[an] = luni_nr.filter((month) => luni_cu_baza[an].indexOf(month) < 0);
+        }
+
         this.setState(
           {
             bazacalcul: bazacalcul,
+            ani_cu_baza: [...ani_cu_baza],
+            luni_cu_baza: luni_cu_baza,
+            luni_fara_baza: luni_fara_baza,
           },
           this.renderBazaCalcul
         );
@@ -235,6 +264,8 @@ class BazaCalcul extends React.Component {
       this.setState({
         bazacalcul: [],
         bazacalculComponent: null,
+        ani_cu_baza: [],
+        luni_cu_baza: { '-': [] },
       });
     }
   }
@@ -243,6 +274,14 @@ class BazaCalcul extends React.Component {
     e.preventDefault();
     if (this.state.isEdit) this.updateBazaCalcul(this.state.id);
     else this.addBazaCalcul();
+  }
+
+  openModalAdd() {
+    this.setState({
+      isEdit: false,
+      show: true,
+      an: this.state.an_sel,
+    });
   }
 
   async handleClose() {
@@ -265,16 +304,42 @@ class BazaCalcul extends React.Component {
     this.setState({
       modalMessage: '',
       showConfirm: false,
+      an: '-',
+      luna: { nume: '-', nr: '-' },
+      salariurealizat: '',
+      zilelucrate: '',
+    });
+  }
+
+  onChangeMonth(e) {
+    const selectedIndex = e.target.options.selectedIndex;
+    this.setState({
+      luna: {
+        nume: e.target.value,
+        nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
+      },
     });
   }
 
   render() {
+    const yearsComponent = this.state.ani_cu_baza.map((an, index) => (
+      <option key={index}>{an}</option>
+    ));
+
+    var luniFaraBazaComponent = null;
+    if (this.state.luni_fara_baza && this.state.luni_fara_baza[this.state.an_sel])
+      luniFaraBazaComponent = this.state.luni_fara_baza[this.state.an_sel].map((luna) => (
+        <option key={luna} data-key={luna}>
+          {months[luna - 1]}
+        </option>
+      ));
+
     return (
       <Aux>
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Bază calcul</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addBazaCalcul}>
@@ -283,7 +348,7 @@ class BazaCalcul extends React.Component {
                   <Form.Group>
                     <Form.Label>An</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="number"
                       value={this.state.an}
                       onChange={(e) => this.setState({ an: e.target.value })}
                     />
@@ -291,10 +356,14 @@ class BazaCalcul extends React.Component {
                   <Form.Group>
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
-                      type="text"
-                      value={this.state.luna}
-                      onChange={(e) => this.setState({ luna: e.target.value })}
-                    />
+                      as="select"
+                      // type="number"
+                      value={this.state.luna.nume}
+                      onChange={(e) => this.onChangeMonth(e)}
+                    >
+                      <option>-</option>
+                      {luniFaraBazaComponent}
+                    </Form.Control>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Zile Lucrate</Form.Label>
@@ -312,7 +381,7 @@ class BazaCalcul extends React.Component {
                       onChange={(e) => this.setState({ salariurealizat: e.target.value })}
                     />
                   </Form.Group>
-                  </Col>
+                </Col>
               </Row>
             </Form>
           </Modal.Body>
@@ -326,7 +395,7 @@ class BazaCalcul extends React.Component {
         {/* confirm modal */}
         <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Bază calcul</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
@@ -353,13 +422,28 @@ class BazaCalcul extends React.Component {
                 </Button>
 
                 <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
+                  onClick={this.openModalAdd}
                   variant="outline-info"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
                   <Add className="m-0 p-0" />
                 </Button>
+                <Row>
+                  <Form.Group as={Col} sm="3" className="mt-3">
+                    <Form.Label>An</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.an_sel}
+                      onChange={(e) =>
+                        this.setState({ an_sel: e.target.value }, this.renderBazaCalcul)
+                      }
+                    >
+                      <option>-</option>
+                      {yearsComponent}
+                    </Form.Control>
+                  </Form.Group>
+                </Row>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>

@@ -10,19 +10,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "burseprivate")
-public class BursePrivate {
+public class BursePrivate  implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
+	private Contract contract;
 
 	@Column(name = "data")
 	private LocalDate data;
@@ -37,8 +40,8 @@ public class BursePrivate {
 
 	}
 
-	public BursePrivate(Contract idcontract, LocalDate data, Float cota, Float suma) {
-		this.idcontract = idcontract;
+	public BursePrivate(Contract contract, LocalDate data, Float cota, Float suma) {
+		this.contract = contract;
 		this.data = data;
 		this.cota = cota;
 		this.suma = suma;
@@ -52,12 +55,12 @@ public class BursePrivate {
 		this.id = id;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 
 	public LocalDate getData() {

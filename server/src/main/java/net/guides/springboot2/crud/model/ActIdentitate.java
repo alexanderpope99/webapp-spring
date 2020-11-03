@@ -2,55 +2,45 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "actidentitate")
-public class ActIdentitate {
+public class ActIdentitate implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
+	@Column(name = "id")
+	private long id;
 	@Column(name = "cnp")
 	private String cnp;
-
 	@Column(name = "tip")
 	private String tip;
-
 	@Column(name = "serie")
 	private String serie;
-
 	@Column(name = "numar")
 	private String numar;
-
 	@Column(name = "datanasterii")
-	private LocalDate datanasterii;
-
+	private Date datanasterii;
 	@Column(name = "eliberatde")
 	private String eliberatde;
-
 	@Column(name = "dataeliberarii")
 	private String dataeliberarii;
-
 	@Column(name = "loculnasterii")
 	private String loculnasterii;
-
-	@OneToOne(mappedBy = "idactidentitate", fetch = FetchType.LAZY)
-	private Persoana persoane;
 
 	public ActIdentitate() {
 
 	}
 
-	public ActIdentitate(String cnp, String tip, String serie, String numar, LocalDate datanasterii, String eliberatde,
+	public ActIdentitate(String cnp, String tip, String serie, String numar, Date datanasterii, String eliberatde,
 			String dataeliberarii, String loculnasterii) {
 		this.cnp = cnp;
 		this.tip = tip;
@@ -62,11 +52,11 @@ public class ActIdentitate {
 		this.loculnasterii = loculnasterii;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -102,11 +92,11 @@ public class ActIdentitate {
 		this.numar = numar;
 	}
 
-	public LocalDate getDatanasterii() {
+	public Date getDatanasterii() {
 		return datanasterii;
 	}
 
-	public void setDatanasterii(LocalDate datanasterii) {
+	public void setDatanasterii(Date datanasterii) {
 		this.datanasterii = datanasterii;
 	}
 
@@ -133,13 +123,4 @@ public class ActIdentitate {
 	public void setLoculnasterii(String loculnasterii) {
 		this.loculnasterii = loculnasterii;
 	}
-
-	public Persoana getPersoane() {
-		return persoane;
-	}
-
-	public void setPersoane(Persoana persoane) {
-		this.persoane = persoane;
-	}
-
 }

@@ -1,48 +1,31 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "adresa")
-public class Adresa {
+public class Adresa implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
-
 	@Column(name = "adresa")
 	private String adresa;
-
 	@Column(name = "localitate")
 	private String localitate;
-
 	@Column(name = "judet")
 	private String judet;
-
 	@Column(name = "tara")
 	private String tara;
-
-	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private Persoana persoane;
-
-	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private PunctDeLucru puncteDeLucru;
-
-	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private Societate societati;
-
-	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private Departament departamente;
-
-	@OneToOne(mappedBy = "idadresa", fetch = FetchType.LAZY)
-	private CentruCost centreCost;
 
 	public Adresa() {
 
@@ -93,45 +76,5 @@ public class Adresa {
 
 	public void setTara(String tara) {
 		this.tara = tara;
-	}
-
-	public Persoana getPersoane() {
-		return persoane;
-	}
-
-	public void setPersoane(Persoana persoane) {
-		this.persoane = persoane;
-	}
-
-	public PunctDeLucru getPunctDeLucru() {
-		return puncteDeLucru;
-	}
-
-	public void setPunctDeLucru(PunctDeLucru punctDeLucru) {
-		this.puncteDeLucru = punctDeLucru;
-	}
-
-	public Societate getSocietati() {
-		return societati;
-	}
-
-	public void setSocietati(Societate societate) {
-		this.societati = societate;
-	}
-
-	public Departament getDepartamente() {
-		return departamente;
-	}
-
-	public void setDepartamente(Departament departamente) {
-		this.departamente = departamente;
-	}
-
-	public CentruCost getCentruCost() {
-		return centreCost;
-	}
-
-	public void setCentruCost(CentruCost centruCost) {
-		this.centreCost = centruCost;
 	}
 }

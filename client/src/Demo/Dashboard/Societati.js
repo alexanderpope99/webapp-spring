@@ -8,8 +8,6 @@ import { setAngajatSel } from '../Resources/angajatsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-import { Multiselect } from 'multiselect-react-dropdown';
-
 class Societati extends React.Component {
   /*
     TODO
@@ -40,7 +38,7 @@ class Societati extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.log('err'));
+      .catch((err) => console.log(err));
 
     if (Array.isArray(societati)) {
       societati.forEach((societate) =>
@@ -94,11 +92,6 @@ class Societati extends React.Component {
         >
           <Card.Body>
             <h3 className="d-flex justify-content-around">{nume_soc}</h3>
-            {/* <div className="d-flex flex-inline justify-content-end">
-              <Button size="sm" className="m-1 p-1">
-                Editează
-              </Button>
-            </div> */}
           </Card.Body>
         </Card>
       </Col>

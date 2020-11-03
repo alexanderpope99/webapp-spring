@@ -34,7 +34,7 @@ public class RetineriController {
 
 	@GetMapping("ids={ids}")
 	public Retineri getRetineriByIdstat(@PathVariable(value = "ids") int id) {
-		return retineriRepository.findByIdstat(id);
+		return retineriRepository.findByStat(id);
 	}
 
 	@GetMapping("{id}")

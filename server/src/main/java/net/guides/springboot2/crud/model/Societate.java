@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,13 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "societate")
-public class Societate {
+public class Societate implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,24 +51,26 @@ public class Societate {
 	@Column(name = "telefon")
 	private String telefon;
 
-	@OneToMany(mappedBy = "idsocietate")
-	private Set<Angajat> angajat;
 
-	@OneToMany(mappedBy = "idsocietate")
-	private Set<CentruCost> centruCost;
-
-	@OneToMany(mappedBy = "societate")
-	private Set<CereriConcediu> cereriConcediu;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "listacontbancar", joinColumns = @JoinColumn(name = "idsocietate"), inverseJoinColumns = @JoinColumn(name = "iban"))
 	private Set<ContBancar> iban = new HashSet<>();
 
-	@OneToMany(mappedBy = "idsocietate")
-	private Set<Departament> departamente;
+	// @OneToMany(mappedBy = "societate")
+	// private Set<Angajat> angajat;
 
-	@OneToOne(mappedBy = "idsocietate", fetch = FetchType.LAZY)
-	private PunctDeLucru punctDeLucru;
+	// @OneToMany(mappedBy = "societate")
+	// private Set<CentruCost> centruCost;
+
+	// @OneToMany(mappedBy = "societate")
+	// private Set<CereriConcediu> cereriConcediu;
+
+	// @OneToMany(mappedBy = "societate")
+	// private Set<Departament> departamente;
+
+	// @OneToOne(mappedBy = "societate")
+	// private PunctDeLucru punctDeLucru;
 
 	public Societate() {
 	}
@@ -157,51 +160,11 @@ public class Societate {
 		this.telefon = telefon;
 	}
 
-	public Set<Angajat> getAngajat() {
-		return angajat;
-	}
-
-	public void setAngajat(Set<Angajat> angajat) {
-		this.angajat = angajat;
-	}
-
-	public Set<CentruCost> getCentruCost() {
-		return centruCost;
-	}
-
-	public void setCentruCost(Set<CentruCost> centruCost) {
-		this.centruCost = centruCost;
-	}
-
-	public Set<CereriConcediu> getCereriConcediu() {
-		return cereriConcediu;
-	}
-
-	public void setCereriConcediu(Set<CereriConcediu> cereriConcediu) {
-		this.cereriConcediu = cereriConcediu;
-	}
-
 	public Set<ContBancar> getIban() {
 		return iban;
 	}
 
 	public void setIban(Set<ContBancar> iban) {
 		this.iban = iban;
-	}
-
-	public Set<Departament> getDepartamente() {
-		return departamente;
-	}
-
-	public void setDepartamente(Set<Departament> departamente) {
-		this.departamente = departamente;
-	}
-
-	public PunctDeLucru getPunctDeLucru() {
-		return punctDeLucru;
-	}
-
-	public void setPunctDeLucru(PunctDeLucru punctDeLucru) {
-		this.punctDeLucru = punctDeLucru;
 	}
 }

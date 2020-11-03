@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "retineri")
-public class Retineri {
+public class Retineri implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,19 +38,19 @@ public class Retineri {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstat")
-	private RealizariRetineri idstat;
+	private RealizariRetineri stat;
 
 	public Retineri() {
 	}
 
 	public Retineri(Integer avansnet, Integer pensiefacultativa, Integer pensiealimentara, Integer popriri,
-			Integer imprumuturi, RealizariRetineri idstat) {
+			Integer imprumuturi, RealizariRetineri stat) {
 		this.avansnet = avansnet;
 		this.pensiefacultativa = pensiefacultativa;
 		this.pensiealimentara = pensiealimentara;
 		this.popriri = popriri;
 		this.imprumuturi = imprumuturi;
-		this.idstat = idstat;
+		this.stat = stat;
 	}
 
 	public int getId() {
@@ -59,8 +62,8 @@ public class Retineri {
 	}
 
 	// GETTERS
-	public RealizariRetineri getIdstat() {
-		return idstat;
+	public RealizariRetineri getStat() {
+		return stat;
 	}
 
 	public Integer getAvansnet() {
@@ -84,8 +87,8 @@ public class Retineri {
 	}
 
 	// SETTERS
-	public void setIdstat(RealizariRetineri idstat) {
-		this.idstat = idstat;
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
 	}
 
 	public void setAvansnet(Integer avansnet) {

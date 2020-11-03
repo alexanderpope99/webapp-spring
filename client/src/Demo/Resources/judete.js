@@ -44,7 +44,7 @@ const judete = [
 
 const sectoare = ['SECTOR 1', 'SECTOR 2', 'SECTOR 3', 'SECTOR 4', 'SECTOR 5', 'SECTOR 6'];
 
-const case_de_danatete = [
+const case_de_sanatate = [
   'BUCUREȘTI - CAS_B',
   'ALBA - CASAB',
   'ARAD - CASAR',
@@ -75,7 +75,6 @@ const case_de_danatete = [
   'MUREȘ - CASMS',
   'NEAMȚ - CASNT',
 	'OLT - CASOT',
-	'OPSNAJ - CAS_A',
   'PRAHOVA - CASPH',
   'SATU MARE - CASSM',
   'SĂLAJ - CASSJ',
@@ -83,11 +82,12 @@ const case_de_danatete = [
   'SUCEAVA - CASSV',
   'TELEORMAN - CASTR',
 	'TIMIȘ - CASTM',
-	'TRANSPORTURI - CAS_T',
   'TULCEA - CASTL',
   'VASLUI - CASVS',
   'VÂLCEA - CASVL',
   'VRANCEA - CASVN',
+	'OPSNAJ - CAS_A',
+	'TRANSPORTURI - CAS_T',
 ];
 
-export { judete, sectoare, case_de_danatete };
+export { judete, sectoare, case_de_sanatate };

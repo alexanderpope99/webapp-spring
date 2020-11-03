@@ -10,11 +10,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "co")
-public class CO {
+public class CO implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,17 +36,17 @@ public class CO {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
+	private Contract contract;
 
 	public CO() {
 	}
 
-	public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Contract idcontract) {
+	public CO(String tip, LocalDate dela, LocalDate panala, Boolean sporuripermanente, Contract contract) {
 		this.tip = tip;
 		this.dela = dela;
 		this.panala = panala;
 		this.sporuripermanente = sporuripermanente;
-		this.idcontract = idcontract;
+		this.contract = contract;
 	}
 
 	public int getId() {
@@ -87,11 +89,11 @@ public class CO {
 		this.sporuripermanente = sporuripermanente;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 }

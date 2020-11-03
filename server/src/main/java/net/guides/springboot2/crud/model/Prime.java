@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "prime")
-public class Prime {
+public class Prime implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,18 +32,18 @@ public class Prime {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstat")
-	private RealizariRetineri idstat;
+	private RealizariRetineri stat;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
+	private Contract contract;
 
 	public Prime() {
 	}
 
-	public Prime(Double valoare, RealizariRetineri idstat) {
+	public Prime(Double valoare, RealizariRetineri stat) {
 		this.valoare = valoare;
-		this.idstat = idstat;
+		this.stat = stat;
 	}
 
 	public int getId() {
@@ -52,8 +55,8 @@ public class Prime {
 	}
 
 	// GETTERS
-	public RealizariRetineri getIdstat() {
-		return idstat;
+	public RealizariRetineri getStat() {
+		return stat;
 	}
 
 	public Double getValoare() {
@@ -61,8 +64,8 @@ public class Prime {
 	}
 
 	// SETTERS
-	public void setIdstat(RealizariRetineri idstat) {
-		this.idstat = idstat;
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
 	}
 
 	public void setValoare(Double valoare) {
@@ -73,8 +76,8 @@ public class Prime {
 		return an;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
 	public int getLuna() {
@@ -85,8 +88,8 @@ public class Prime {
 		this.an = an;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 
 	public void setLuna(int luna) {

@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +14,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "altedrepturi")
-public class AlteDrepturi {
+public class AlteDrepturi implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +26,15 @@ public class AlteDrepturi {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstat")
-	private RealizariRetineri idstat;
+	private RealizariRetineri stat;
 
 	public AlteDrepturi() {
 
 	}
 
-	public AlteDrepturi(Float valoare, RealizariRetineri idstat) {
+	public AlteDrepturi(Float valoare, RealizariRetineri stat) {
 		this.valoare = valoare;
-		this.idstat = idstat;
+		this.stat = stat;
 	}
 
 	public int getId() {
@@ -50,11 +53,11 @@ public class AlteDrepturi {
 		this.valoare = valoare;
 	}
 
-	public RealizariRetineri getIdstat() {
-		return idstat;
+	public RealizariRetineri getStat() {
+		return stat;
 	}
 
-	public void setIdstat(RealizariRetineri idstat) {
-		this.idstat = idstat;
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
 	}
 }

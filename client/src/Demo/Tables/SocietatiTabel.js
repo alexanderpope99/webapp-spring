@@ -48,10 +48,6 @@ class SocietatiTabel extends React.Component {
     // console.log('render called');
     this.setState({
       societatiComponent: this.state.societati.map((soc, index) => {
-        // for (let key in soc) {
-        //   if (!soc[key]) soc[key] = '-';
-        // }
-        // console.log(soc);
         return (
           <tr key={soc.id}>
             <th>{soc.nume || '-'}</th>

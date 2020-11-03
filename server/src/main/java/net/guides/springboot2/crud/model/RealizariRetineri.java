@@ -1,78 +1,64 @@
 package net.guides.springboot2.crud.model;
 
-import java.util.Set;
+import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "realizariretineri")
-public class RealizariRetineri {
+public class RealizariRetineri implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idcontract")
-	private Contract idcontract;
-
 	@Column(name = "luna")
 	private Integer luna;
-
 	@Column(name = "an")
 	private Integer an;
-
 	@Column(name = "nrtichete")
 	private Integer nrtichete = 0;
-
 	@Column(name = "zileco")
 	private Integer zileco = 0;
-
 	@Column(name = "zilecolucratoare")
-	private Integer zilecolucratoare;
-
-	@Column(name = "zileconeplatit")
-	private Integer zileconeplatit = 0;
-
-	@Column(name = "zileconeplatitlucratoare")
-	private Integer zileconeplatitlucratoare;
-
+	private Integer zilecolucratoare = 0;
+	@Column(name = "zilecfp")
+	private Integer zilecfp = 0;
+	@Column(name = "zilecfplucratoare")
+	private Integer zilecfplucratoare;
 	@Column(name = "zilecm")
 	private Integer zilecm = 0;
-
 	@Column(name = "zilecmlucratoare")
 	private Integer zilecmlucratoare = 0;
-
 	@Column(name = "zilec")
 	private Integer zilec = 0;
-
 	@Column(name = "zileplatite")
 	private Integer zileplatite = 0;
 
 	@Column(name = "impozitscutit")
-	private Integer impozitscutit;
+	private Integer impozitscutit = 0;
 
 	@Column(name = "valcm")
-	private Integer valcm;
+	private Integer valcm = 0;
+	@Column(name = "valco")
+	private Integer valco = 0;
 
 	@Column(name = "norma")
 	private Integer norma = 0; // nr zile lucratoare in luna
-
 	@Column(name = "duratazilucru")
 	private Integer duratazilucru = 0; // contract.normalucru
-
+	@Column(name = "zilecontract")
+	private Integer zilecontract = 0;
 	@Column(name = "zilelucrate")
 	private Integer zilelucrate = 0;
-
 	@Column(name = "orelucrate")
 	private Integer orelucrate = 0;
 
@@ -90,22 +76,17 @@ public class RealizariRetineri {
 
 	@Column(name = "salariupezi")
 	private Float salariupezi = 0f;
-
 	@Column(name = "salariupeora")
 	private Float salariupeora = 0f;
 
 	@Column(name = "cas")
 	private Float cas = 0f;
-
 	@Column(name = "cass")
 	private Float cass = 0f;
-
 	@Column(name = "cam")
 	private Float cam = 0f;
-
 	@Column(name = "impozit")
 	private Float impozit = 0f;
-
 	@Column(name = "valoaretichete")
 	private Float valoaretichete = 0f;
 
@@ -114,7 +95,6 @@ public class RealizariRetineri {
 
 	@Column(name = "nrpersoaneintretinere")
 	private Integer nrpersoaneintretinere = 0;
-
 	@Column(name = "deducere")
 	private Integer deducere = 0;
 
@@ -127,39 +107,49 @@ public class RealizariRetineri {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<AlteDrepturi> alteDrepturi;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idcontract", referencedColumnName = "id")
+	private Contract contract;
 
-	@OneToMany(mappedBy = "idstatsalariat")
-	private Set<Oresuplimentare> oreSuplimentare;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<AlteDrepturi> altedrepturi;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<Prime> prime;
+	// @OneToMany(mappedBy = "statsalariat")
+	// private Set<Oresuplimentare> oresuplimentare;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<Retineri> retineri;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<Prime> prime;
 
-	@OneToMany(mappedBy = "idstat")
-	private Set<Tichete> tichete;
+	// @OneToMany(mappedBy = "stat")
+	// private Set<Retineri> retineri;
+
+	// @OneToMany(mappedBy = "stat")
+	// private Set<Tichete> tichete;
 
 	public RealizariRetineri() {
 	}
 
-	public RealizariRetineri(Contract idcontract, Integer luna, Integer an, Integer nrtichete, Integer zileco,
-			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zileconeplatit,
-			Integer zileconeplatitlucratoare, Integer duratazilucru, Integer norma, Integer zilelucrate,
-			Integer orelucrate, Integer totaldrepturi, Float salariupezi, Float salariupeora, Float cas, Float cass,
-			Float cam, Float impozit, Float valoareTichete, Integer restplata, Integer nrpersoaneintretinere,
-			Integer deducere, Integer primabruta, Float totaloresuplimentare) {
-		this.idcontract = idcontract;
+	public RealizariRetineri(int luna, int an, Contract contract) {
+		this.luna = luna;
+		this.an = an;
+		this.contract = contract;
+	}
+
+	public RealizariRetineri(Contract contract, Integer luna, Integer an, Integer nrtichete, Integer zileco,
+			Integer zilecolucratoare, Integer zilecm, Integer zilecmlucratoare, Integer zilecfp, Integer zilecfplucratoare,
+			Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi,
+			Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete,
+			Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta,
+			Float totaloresuplimentare) {
+		this.contract = contract;
 		this.luna = luna;
 		this.an = an;
 
 		this.nrtichete = nrtichete;
 		this.zileco = zileco;
 		this.zilecolucratoare = zilecolucratoare;
-		this.zileconeplatit = zileconeplatit;
-		this.zileconeplatitlucratoare = zileconeplatitlucratoare;
+		this.zilecfp = zilecfp;
+		this.zilecfplucratoare = zilecfplucratoare;
 		this.zilecm = zilecm;
 		this.zilecmlucratoare = zilecmlucratoare;
 		this.zilec = zileco + zilecm;
@@ -218,8 +208,8 @@ public class RealizariRetineri {
 		return zilec;
 	}
 
-	public Integer getZileconeplatit() {
-		return zileconeplatit;
+	public Integer getZilecfp() {
+		return zilecfp;
 	}
 
 	public Integer getZileplatite() {
@@ -298,8 +288,8 @@ public class RealizariRetineri {
 		return an;
 	}
 
-	public Contract getIdcontract() {
-		return idcontract;
+	public Contract getContract() {
+		return contract;
 	}
 
 	public Integer getLuna() {
@@ -322,8 +312,8 @@ public class RealizariRetineri {
 		return zilecolucratoare;
 	}
 
-	public Integer getZileconeplatitlucratoare() {
-		return zileconeplatitlucratoare;
+	public Integer getZilecfplucratoare() {
+		return zilecfplucratoare;
 	}
 
 	public Integer getNroresuplimentare() {
@@ -336,6 +326,14 @@ public class RealizariRetineri {
 
 	public Integer getVenitnet() {
 		return venitnet;
+	}
+
+	public Integer getValco() {
+		return valco;
+	}
+
+	public Integer getZilecontract() {
+		return zilecontract;
 	}
 
 	// ! SETTERS
@@ -363,8 +361,8 @@ public class RealizariRetineri {
 		this.zileplatite = zileplatite;
 	}
 
-	public void setZileconeplatit(Integer zileconeplatit) {
-		this.zileconeplatit = zileconeplatit;
+	public void setZilecfp(Integer zilecfp) {
+		this.zilecfp = zilecfp;
 	}
 
 	public void setDuratazilucru(Integer duratazilucru) {
@@ -439,8 +437,8 @@ public class RealizariRetineri {
 		this.an = an;
 	}
 
-	public void setIdcontract(Contract idcontract) {
-		this.idcontract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
 	}
 
 	public void setLuna(Integer luna) {
@@ -463,8 +461,8 @@ public class RealizariRetineri {
 		this.zilecolucratoare = zilecolucratoare;
 	}
 
-	public void setZileconeplatitlucratoare(Integer zileconeplatitlucratoare) {
-		this.zileconeplatitlucratoare = zileconeplatitlucratoare;
+	public void setZilecfplucratoare(Integer zilecfplucratoare) {
+		this.zilecfplucratoare = zilecfplucratoare;
 	}
 
 	public void setNroresuplimentare(Integer nroresuplimentare) {
@@ -479,43 +477,11 @@ public class RealizariRetineri {
 		this.venitnet = venitnet;
 	}
 
-	public Set<AlteDrepturi> getAlteDrepturi() {
-		return alteDrepturi;
+	public void setValco(Integer valco) {
+		this.valco = valco;
 	}
 
-	public void setAlteDrepturi(Set<AlteDrepturi> alteDrepturi) {
-		this.alteDrepturi = alteDrepturi;
-	}
-
-	public Set<Oresuplimentare> getOreSuplimentare() {
-		return oreSuplimentare;
-	}
-
-	public void setOreSuplimentare(Set<Oresuplimentare> oreSuplimentare) {
-		this.oreSuplimentare = oreSuplimentare;
-	}
-
-	public Set<Prime> getPrime() {
-		return prime;
-	}
-
-	public void setPrime(Set<Prime> prime) {
-		this.prime = prime;
-	}
-
-	public Set<Retineri> getRetineri() {
-		return retineri;
-	}
-
-	public void setRetineri(Set<Retineri> retineri) {
-		this.retineri = retineri;
-	}
-
-	public Set<Tichete> getTichete() {
-		return tichete;
-	}
-
-	public void setTichete(Set<Tichete> tichete) {
-		this.tichete = tichete;
+	public void setZilecontract(Integer zilecontract) {
+		this.zilecontract = zilecontract;
 	}
 }

@@ -15,6 +15,8 @@ public class COService {
 	}
 
 	@Autowired
+	private SarbatoriService sarbatoriService;
+	@Autowired
 	private CORepository coRepository;
 
 	public int getZileCFP(int luna, int an, int idcontract) {
@@ -96,6 +98,8 @@ public class COService {
 	private int zileCLucratoare(int luna, int an, List<CO> concedii) {
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
+		LocalDate sfarsitLuna = LocalDate.of(an, luna, nrZileLuna);
+		List<LocalDate> sarbatori = sarbatoriService.getZileSarbatoareInIntervalul(inceputLuna, sfarsitLuna);
 
 		LocalDate dela, panala;
 		LocalDate day;
@@ -107,7 +111,7 @@ public class COService {
 			for (int i = 1; i <= nrZileLuna; ++i) {
 				day = LocalDate.of(an, luna, i);
 				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
-					if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7)
+					if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
 						zileC++;
 			}
 		}

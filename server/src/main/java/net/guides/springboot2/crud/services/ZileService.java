@@ -5,18 +5,20 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.model.Contract;
 @Service
 public class ZileService {
 	ZileService() {
 	}
 
+	@Autowired
+	private SarbatoriService sarbatoriService;
 	@Autowired
 	private CMService cmService;
 	@Autowired
@@ -36,13 +38,14 @@ public class ZileService {
 	}
 
 	public long getZileLucratoareInInterval(LocalDate startDate, LocalDate endDate) {
-		Optional<List<LocalDate>> holidays = Optional.empty();
+		List<LocalDate> holidays = sarbatoriService.getZileSarbatoareInIntervalul(startDate, endDate);
+
 		if (startDate == null || endDate == null || holidays == null) {
-			throw new IllegalArgumentException("Invalid method argument(s) to countBusinessDaysBetween(" + startDate
-					+ "," + endDate + "," + holidays + ")");
+			throw new IllegalArgumentException(
+					"Invalid method argument(s) to countBusinessDaysBetween(" + startDate + "," + endDate + "," + holidays + ")");
 		}
 
-		Predicate<LocalDate> isHoliday = date -> holidays.isPresent() ? holidays.get().contains(date) : false;
+		Predicate<LocalDate> isHoliday = date -> holidays.contains(date);
 
 		Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
 				|| date.getDayOfWeek() == DayOfWeek.SUNDAY;
@@ -54,16 +57,61 @@ public class ZileService {
 		return businessDays;
 	}
 
+	public long getZileLucratoareInIntervalNoHolidays(LocalDate startDate, LocalDate endDate) {
+
+		if (startDate == null || endDate == null) {
+			throw new IllegalArgumentException(
+					"Invalid method argument(s) to countBusinessDaysBetween(" + startDate + "," + endDate + ")");
+		}
+
+		Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
+				|| date.getDayOfWeek() == DayOfWeek.SUNDAY;
+
+		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+
+		long businessDays = Stream.iterate(startDate, date -> date.plusDays(1)).limit(daysBetween + 1)
+				.filter(isWeekend.negate()).count();
+		return businessDays;
+	}
+
 	public int getZileLucratoareInLunaAnul(int month, int year) {
+		List<LocalDate> sarbatori = sarbatoriService.getZileSarbatoareInLunaAnul(month, year);
+
 		int weekdayNr;
+		LocalDate day;
 		int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
 		int workingDays = 0;
 		for (int i = 1; i <= daysInMonth; ++i) {
-			weekdayNr = LocalDate.of(year, month, i).getDayOfWeek().getValue();
-			if (weekdayNr != 6 && weekdayNr != 7)
+				day = LocalDate.of(year, month, i);
+				weekdayNr = day.getDayOfWeek().getValue();
+			if (weekdayNr != 6 && weekdayNr != 7 && !sarbatori.contains(day))
 				workingDays++;
 		}
 		return workingDays;
+	}
+
+	// include sarbatori
+	public int getNrZileLucratoareContract(int luna, int an, Contract contract) {
+		LocalDate dataincepere = contract.getDataincepere();
+
+		if (dataincepere == null)
+			return 0;
+		LocalDate primaZiLunaAn = LocalDate.of(an, luna, 1);
+
+		// contractul cuprinde intreaga luna
+		if (dataincepere.compareTo(primaZiLunaAn) < 0)
+			return getZileLucratoareInLunaAnul(luna, an);
+		else {
+			LocalDate ultimaZiLunaAn = LocalDate.of(an, luna, YearMonth.of(an, luna).lengthOfMonth());
+
+			// contractul incepe in luna urmatoare
+			if (dataincepere.compareTo(ultimaZiLunaAn) > 0)
+				return 0;
+
+			// contractul incepe in luna, an
+			else
+				return (int)getZileLucratoareInInterval(dataincepere, ultimaZiLunaAn);
+		}
 	}
 
 	public String getNumeLunaByNr(int nrLuna) {

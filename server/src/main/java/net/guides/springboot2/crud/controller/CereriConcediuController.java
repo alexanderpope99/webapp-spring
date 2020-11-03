@@ -34,7 +34,7 @@ public class CereriConcediuController {
 	@Autowired
 	private ZileService zileService;
 
-	@GetMapping("/zilelucratoareintre")
+	@PutMapping("/zilelucratoareintre")
 	public long getZileLucratoareBetween(@RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
 			@RequestParam("date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2) {
 		return zileService.getZileLucratoareInInterval(date1, date2);

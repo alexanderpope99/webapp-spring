@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -11,7 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "parametriisalariu")
-public class ParametriiSalariu {
+public class ParametriiSalariu implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

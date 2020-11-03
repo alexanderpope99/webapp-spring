@@ -2,22 +2,27 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)
 
-buton pentru a face stat pe ultimele 6 luni (pt baza calcul)	
+buton pentru calculul pe 6 luni pentru toata societatea
 
 problem: in luna, anul: 
-	sterg stat salarii, baza calcul ramane 
+	sterg stat salarii, baza calcul ramane pentru ca bazacalcul nu are idstatsalariat
 	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
-solutie: verifica daca exista baza calcul inainte de a creea una && cascade delete bazacalcul
+	** stat_salarii se poate sterge doar in baza de date
+solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
-nota contabila
+buton de 'show password' la schimba prola
 
-sarbatori
+buton edit pentru:  [concediu medical, sarbatori]
 
-la concedii -> trebuie sortate crescator, pot fi si dupa id(by time created), sau doar intr-o anumita luna
+cont bancar
+
+*** INTREBARE: ***
+CONCEDIU DE ODIHNA:
+	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
 
 _________________________________________
 
-admin = boss suprem, nu vede datele
+admin = nu vede datele
 
 director:
 	admin, + date

@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "username"),
 		@UniqueConstraint(columnNames = "email") })
-public class User {
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,7 +33,7 @@ public class User {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_angajat", referencedColumnName = "idpersoana")
-	private Angajat id_angajat;
+	private Angajat angajat;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -66,8 +68,8 @@ public class User {
 		return email;
 	}
 
-	public Angajat getId_angajat() {
-		return id_angajat;
+	public Angajat getAngajat() {
+		return angajat;
 	}
 
 	public String getPassword() {
@@ -95,8 +97,8 @@ public class User {
 		this.email = email;
 	}
 
-	public void setId_angajat(Angajat id_angajat) {
-		this.id_angajat = id_angajat;
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
 
 	public void setPassword(String password) {

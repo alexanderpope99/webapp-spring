@@ -15,15 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
+import net.guides.springboot2.crud.services.BazacalculService;
 
 @RestController
 @RequestMapping("/bazacalcul")
 public class BazacalculController {
 	@Autowired
 	private BazacalculRepository bazacalculRepository;
+
+	@Autowired
+	private BazacalculService bazaCalculService;
 
 	@GetMapping
 	public List<Bazacalcul> getBazacalculsAlphabetically() {
@@ -41,6 +46,14 @@ public class BazacalculController {
 	@GetMapping("ida={ida}")
 	public List<Bazacalcul> getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida) {
 		return bazacalculRepository.findByIdangajatOrderByAnDescLunaDesc(ida);
+	}
+
+	@GetMapping("cm/{ida}/mo={luna}&y={an}")
+	public BazaCalculCMDTO getBazaCalculCM(
+		@PathVariable("ida") int ida,
+		@PathVariable("luna") int luna,
+		@PathVariable("an") int an) {
+			return bazaCalculService.getBazaCalculCM(luna, an, ida);
 	}
 
 	@GetMapping("ida={ida}/mo={luna}&y={an}")
