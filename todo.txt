@@ -12,9 +12,10 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 buton de 'show password' la schimba prola
 
-buton edit pentru:  [concediu medical, sarbatori]
+buton edit pentru:  [concediu odihna]
 
-cont bancar
+Problem: nu se autoselecteaza angajat_sel in Angajati.js
+
 
 *** INTREBARE: ***
 CONCEDIU DE ODIHNA:

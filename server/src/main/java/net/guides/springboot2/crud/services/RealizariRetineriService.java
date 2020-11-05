@@ -262,7 +262,7 @@ public class RealizariRetineriService {
 
         // empty retinere
         Retineri oldRetinere = retineriService.getRetinereByIdstat(realizariRetineri.getId());
-        retineriService.updateRetinere(oldRetinere, realizariRetineri);
+        retineriService.emptyRetinere(oldRetinere, realizariRetineri);
 
         return realizariRetineri;
     } // resetRealizariRetineri

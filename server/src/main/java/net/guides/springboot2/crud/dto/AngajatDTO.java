@@ -13,23 +13,15 @@ public class AngajatDTO {
 
 	private Angajat superior;
 
+	public int getIdpersoana() {
+		return idpersoana;
+	}
+
 	public Integer getIdcontract() {
 		if (contract == null)
 			return null;
 		else
 			return contract.getId();
-	}
-
-	public void setContract(Contract idcontract) {
-		this.contract = idcontract;
-	}
-
-	public int getIdpersoana() {
-		return idpersoana;
-	}
-
-	public void setIdpersoana(int idpersoana) {
-		this.idpersoana = idpersoana;
 	}
 
 	public Integer getIdsocietate() {
@@ -39,15 +31,23 @@ public class AngajatDTO {
 			return societate.getId();
 	}
 
-	public void setSocietate(Societate idsocietate) {
-		this.societate = idsocietate;
-	}
-
 	public Integer getIduperior() {
 		if (superior == null)
 			return null;
 		else
 			return superior.getPersoana().getId();
+	}
+
+	public void setContract(Contract contract) {
+		this.contract = contract;
+	}
+
+	public void setIdpersoana(int idpersoana) {
+		this.idpersoana = idpersoana;
+	}
+
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
 	}
 
 	public void setSuperior(Angajat superior) {

@@ -39,22 +39,18 @@ public class SocietateController {
 	private ModelMapper modelMapper;
 
 	@GetMapping
-	public List<SocietateDTO> getAllSocietati() {
-		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-		List<SocietateDTO> societatiDTO = new ArrayList<>();
-		for (Societate soc : societati) {
-			societatiDTO.add(modelMapper.map(soc, SocietateDTO.class));
-		}
-		return societatiDTO;
+	public List<Societate> getAll() {
+		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
+		return societati;
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<SocietateDTO> getSocietateById(@PathVariable(value = "id") int id)
+	public ResponseEntity<Societate> getSocietateById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		Societate societate = societateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 
-		return ResponseEntity.ok().body(modelMapper.map(societate, SocietateDTO.class));
+		return ResponseEntity.ok().body(societate);
 	}
 
 	@GetMapping("/user/{id}")

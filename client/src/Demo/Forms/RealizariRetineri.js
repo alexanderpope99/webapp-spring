@@ -217,7 +217,6 @@ class RealizariRetineri extends React.Component {
     }
 
     // get contract by idpersoana :: contract body needed for 4 fields
-
     const contract = await axios
       .get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
@@ -334,8 +333,7 @@ class RealizariRetineri extends React.Component {
     }
 
     // save retineri to DB
-    console.log('################');
-    console.log(this.state);
+		console.log('################');
     await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,

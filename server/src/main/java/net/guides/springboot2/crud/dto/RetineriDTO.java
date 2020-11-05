@@ -5,6 +5,8 @@ import net.guides.springboot2.crud.model.RealizariRetineri;
 public class RetineriDTO {
 	private int id;
 
+	private int idstat;
+	
 	private Integer avansnet;
 
 	private Integer pensiefacultativa;
@@ -27,7 +29,7 @@ public class RetineriDTO {
 
 	public Integer getIdstat() {
 		if (stat == null)
-			return null;
+			return idstat;
 		else
 			return stat.getId();
 	}
@@ -56,8 +58,8 @@ public class RetineriDTO {
 		this.id = id;
 	}
 
-	public void setStat(RealizariRetineri idstat) {
-		this.stat = idstat;
+	public void setIdtat(int idstat) {
+		this.idstat = idstat;
 	}
 
 	public void setImprumuturi(Integer imprumuturi) {

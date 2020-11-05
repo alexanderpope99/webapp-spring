@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "retineri")
 public class Retineri implements Serializable {
@@ -36,7 +38,8 @@ public class Retineri implements Serializable {
 	@Column(name = "imprumuturi")
 	private Integer imprumuturi;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonManagedReference(value = "retineri-realizariretineri")
+	@ManyToOne
 	@JoinColumn(name = "idstat")
 	private RealizariRetineri stat;
 

@@ -188,7 +188,6 @@ class EditPersoana extends React.Component {
   }
 
   getDatanasteriiByCNP(cnp) {
-    // console.log('getDatanasteriiByCNP called |', cnp);
     if (!cnp) return '';
 
     if (cnp.length > 6) {

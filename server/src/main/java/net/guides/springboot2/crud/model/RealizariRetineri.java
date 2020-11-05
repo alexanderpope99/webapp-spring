@@ -1,16 +1,22 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "realizariretineri")
@@ -107,21 +113,25 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
+	@JsonManagedReference(value = "realizariretineri-contract")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
 
-	// @OneToMany(mappedBy = "stat")
-	// private Set<AlteDrepturi> altedrepturi;
+	// @JsonBackReference
+	// @OneToMany(mappedBy = "stat", fetch = FetchType.LAZY)
+	// private List<AlteDrepturi> altedrepturi;
 
-	// @OneToMany(mappedBy = "statsalariat")
-	// private Set<Oresuplimentare> oresuplimentare;
+	@JsonBackReference(value = "oresuplimentare-realizariretineri")
+	@OneToMany(mappedBy = "statsalariat", fetch = FetchType.LAZY)
+	private List<Oresuplimentare> oresuplimentare;
 
 	// @OneToMany(mappedBy = "stat")
 	// private Set<Prime> prime;
 
-	// @OneToMany(mappedBy = "stat")
-	// private Set<Retineri> retineri;
+	@JsonBackReference(value = "retineri-realizariretineri")
+	@OneToMany(mappedBy = "stat", fetch = FetchType.LAZY)
+	private List<Retineri> retineri;
 
 	// @OneToMany(mappedBy = "stat")
 	// private Set<Tichete> tichete;
