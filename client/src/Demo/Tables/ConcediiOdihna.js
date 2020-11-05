@@ -216,14 +216,14 @@ class COTabel extends React.Component {
 
   // TODO: adds, but modal doesnt change
   async addCO() {
-    if (this.state.angajat.idcontract === null) {
+		if (!this.state.angajat) return;
+    if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
         modalMessage: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
     }
-    if (typeof this.state.angajat === 'undefined') return;
 
     const co_body = {
       dela: this.state.dela,

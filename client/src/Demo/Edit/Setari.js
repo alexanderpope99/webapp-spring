@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Tabs, Tab } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 

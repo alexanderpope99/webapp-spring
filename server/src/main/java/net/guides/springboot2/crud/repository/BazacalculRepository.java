@@ -14,7 +14,7 @@ public interface BazacalculRepository extends JpaRepository<Bazacalcul, Integer>
 	@Query(value = "select * from bazacalcul where idangajat = ?1 order by an desc, luna desc", nativeQuery = true)
 	public List<Bazacalcul> findByIdangajatOrderByAnDescLunaDesc(int idangajat);
 
-	@Query(value = "select * from bazacalcul where and luna = ?1 and an = ?2 and idangajat = ?3", nativeQuery = true)
+	@Query(value = "select * from bazacalcul where luna = ?1 and an = ?2 and idangajat = ?3", nativeQuery = true)
 	public Bazacalcul findByLunaAndAnAndIdangajat(int luna, int an, int idangajat);
 
 	@Query(value = "select exists(select * from bazacalcul where luna = ?1 and an = ?2 and idangajat = ?3)", nativeQuery = true)

@@ -61,7 +61,10 @@ public class RealizariRetineriService {
     // gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu
     // datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
-        RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
+				RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
+				// RealizariRetineri rv = realizariRetineriRepository.findAll().stream()
+				// 	.filter(r ->{return (r.getLuna() == luna && r.getAn() == an && r.getContract().getId() == idcontract);})
+				// 	.collect(Collectors.toList()).get(0);
 
         int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
         boolean areBC = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna, an, idangajat);

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,8 +32,8 @@ public class RetineriController {
 	@Autowired
 	private RetineriService retineriService;
 
-	@Autowired
-	private ModelMapper modelMapper;
+	// @Autowired
+	// private ModelMapper modelMapper;
 
 	@GetMapping
 	public List<Retineri> getAllPersoane() {

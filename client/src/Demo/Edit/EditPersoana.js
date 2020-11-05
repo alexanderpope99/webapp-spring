@@ -129,7 +129,8 @@ class EditPersoana extends React.Component {
   componentDidMount() {
     this.getNumeintreg();
     // daca este selectat un angajat
-    if (this.state.id) this.fillForm();
+		if (this.state.id) 
+			this.fillForm();
   }
 
   async getNumeintreg() {
@@ -138,7 +139,7 @@ class EditPersoana extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.log('err'));
+      .catch((err) => console.log(err));
 
     this.setState({
       numeintreg: persoane.map((pers, index) => ({
@@ -146,7 +147,6 @@ class EditPersoana extends React.Component {
         nume: pers.nume + ' ' + pers.prenume,
       })),
     });
-    // console.log('nume intregi:', this.state.numeintreg);
   }
 
   getIdByNumeintreg(value) {
@@ -224,11 +224,16 @@ class EditPersoana extends React.Component {
   }
 
   async fillForm() {
-    this.clearFields();
+		this.clearFields();
+		// daca inca nu exista lista cu numele persoanelor
+		if(this.state.numeintreg.length === 0) {
+			await this.getNumeintreg();
+		}
 
     const id = this.state.id;
 
     if (id === -1) {
+			console.log("id was -1");
       this.setState({
         selectednume: '-',
       });
@@ -250,7 +255,7 @@ class EditPersoana extends React.Component {
       this.setState(
         {
           idadresa: persoana.adresa.id,
-					judet: persoana.adresa.judet,
+          judet: persoana.adresa.judet,
           adresacompleta: persoana.adresa.adresa || '',
         },
         () => this.onChangeLocalitate(persoana.adresa.localitate)
@@ -281,7 +286,7 @@ class EditPersoana extends React.Component {
       telefon: persoana.telefon || '',
 
       selectednume: this.getNumeintregById(id),
-    });
+		});
   }
 
   handleClose() {
@@ -330,6 +335,7 @@ class EditPersoana extends React.Component {
       headers: authHeader(),
     });
 
+		// refresh numele angajatilor
     this.getNumeintreg();
     this.fillForm();
     console.log('persoana actualizata');
