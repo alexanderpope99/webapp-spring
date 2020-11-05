@@ -13,5 +13,6 @@ public interface SocietateRepository extends JpaRepository<Societate, Integer> {
 	@Query(value = "SELECT * FROM societate INNER JOIN user_societati on user_societati.societate_id=societate.id where user_societati.user_id=?1 ORDER BY nume ASC", nativeQuery = true)
 	List<Societate> findByUserId(Integer id);
 
+	@Query(value = "select * from societate order by nume", nativeQuery = true)
 	List<Societate> findAllByOrderByNumeAsc();
 }

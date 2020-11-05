@@ -10,6 +10,7 @@ import net.guides.springboot2.crud.model.Oresuplimentare;
 
 @Repository
 public interface OresuplimentareRepository extends JpaRepository<Oresuplimentare, Integer> {
+	@Query(value = "select * from oresuplimentare where idstatsalariat = ?1", nativeQuery = true)
 	List<Oresuplimentare> findByIdstatsalariat(int idstat);
 
 	@Query(value = "select * from oresuplimentare where idstatsalariat = (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract = ?3)", nativeQuery = true)

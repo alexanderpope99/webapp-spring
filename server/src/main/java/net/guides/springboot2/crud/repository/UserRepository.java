@@ -30,9 +30,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT persoana.id as \"id\",persoana.nume as \"nume\",persoana.prenume as \"prenume\" FROM users LEFT JOIN angajat ON angajat.idpersoana=users.id_angajat LEFT JOIN persoana on angajat.idsuperior=persoana.id where users.id=?1", nativeQuery = true)
 	List<PersoanaDTO> getSuperiorByUserId(Long id);
 
+	@Query(value = "select * from users where username = ?1", nativeQuery = true)
 	Optional<User> findByUsername(String username);
 
+	@Query(value = "select exists(select * from users where username = ?1)", nativeQuery = true)
 	Boolean existsByUsername(String username);
 
+	@Query(value = "select exists(select * from users where email = ?1)", nativeQuery = true)
 	Boolean existsByEmail(String email);
 }

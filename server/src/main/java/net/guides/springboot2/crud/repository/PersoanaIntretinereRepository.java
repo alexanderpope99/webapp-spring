@@ -16,7 +16,9 @@ public interface PersoanaIntretinereRepository extends JpaRepository<PersoanaInt
 	@Query(value = "select count(*) from persoanaintretinere where idangajat = (select idpersoana from angajat where idcontract = ?1)", nativeQuery = true)
 	public int getNrPersoaneIntretinereByIdcontract(int idcontract);
 
+	@Query(value = "select * from persoanaintretinere where idangajat = ?1", nativeQuery = true)
 	public List<PersoanaIntretinere> findByIdangajat(int idangajat);
 
+	@Query(value = "select * from persoanaintretinere where idangajat = ?1 order by nume asc, prenume asc", nativeQuery = true)
 	public List<PersoanaIntretinere> findByIdangajatOrderByNumeAscPrenumeAsc(int idangajat);
 }
