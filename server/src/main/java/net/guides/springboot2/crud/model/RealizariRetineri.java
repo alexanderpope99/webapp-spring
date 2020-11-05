@@ -113,7 +113,7 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
-	@JsonManagedReference(value = "realizariretineri-contract")
+	// @JsonManagedReference(value = "realizariretineri-contract")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;

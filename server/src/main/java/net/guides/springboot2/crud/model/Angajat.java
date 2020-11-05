@@ -30,22 +30,22 @@ public class Angajat implements Serializable {
 	@Column(name = "idpersoana")
 	private int idpersoana;
 
-	@JsonManagedReference(value = "angajat-persoana")
+	// @JsonManagedReference(value = "angajat-persoana")
 	@OneToOne
 	@PrimaryKeyJoinColumn(name = "idpersoana", referencedColumnName = "id")
 	private Persoana persoana;
 
-	@JsonManagedReference(value = "angajat-contract")
+	// @JsonManagedReference(value = "angajat-contract")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
 
-	@JsonManagedReference(value = "angajat-societate")
+	// @JsonManagedReference(value = "angajat-societate")
 	@ManyToOne
 	@JoinColumn(name = "idsocietate")
 	private Societate societate;
 
-	@JsonManagedReference(value = "angajat-angajat")
+	// @JsonManagedReference(value = "angajat-angajat")
 	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "idsuperior")
 	private Angajat superior;

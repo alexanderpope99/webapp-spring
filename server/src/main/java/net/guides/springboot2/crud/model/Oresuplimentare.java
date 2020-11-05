@@ -35,7 +35,7 @@ public class Oresuplimentare implements Serializable {
 	@Column(name = "total")
 	private Double total;
 
-	@JsonManagedReference(value = "oresuplimentare-realizariretineri")
+	// @JsonManagedReference(value = "oresuplimentare-realizariretineri")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statsalariat")
 	private RealizariRetineri statsalariat;
