@@ -127,7 +127,7 @@ class EditPersoana extends React.Component {
   }
 
   componentDidMount() {
-    // await this.getNumeintreg();
+    this.getNumeintreg();
     // daca este selectat un angajat
 		if (this.state.id) 
 			this.fillForm();
