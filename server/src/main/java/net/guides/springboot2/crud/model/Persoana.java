@@ -5,12 +5,15 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "persoana")
@@ -44,6 +47,10 @@ public class Persoana implements Serializable {
 	private String telefon;
 	@Column(name = "cnp")
 	private String cnp;
+
+	@JsonBackReference(value = "angajat-persoana")
+	@OneToOne(mappedBy = "persoana", fetch = FetchType.LAZY)
+	private Angajat angajat;
 
 	public Persoana() {
 	}
@@ -108,6 +115,10 @@ public class Persoana implements Serializable {
 		return telefon;
 	}
 
+	public Angajat getAngajat() {
+		return angajat;
+	}
+
 	// ! SETTERS
 	public void setCnp(String cnp) {
 		this.cnp = cnp;
@@ -142,5 +153,9 @@ public class Persoana implements Serializable {
 
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
 }

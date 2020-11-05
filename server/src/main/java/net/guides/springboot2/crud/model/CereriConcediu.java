@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -22,6 +24,7 @@ public class CereriConcediu implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@JsonManagedReference(value = "cerereconcediu-angajat")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "pentru")
 	private Angajat pentru;
@@ -41,6 +44,7 @@ public class CereriConcediu implements Serializable {
 	@Column(name = "status")
 	private String status;
 
+	@JsonManagedReference(value = "cerericoncediu-societate")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsocietate")
 	private Societate societate;

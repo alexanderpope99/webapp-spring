@@ -33,13 +33,13 @@ public class AdresaController {
 	private ModelMapper modelMapper;
 
 	@GetMapping
-	public List<AdresaDTO> getAllPersoane() {
+	public List<Adresa> getAll() {
 		List<Adresa> adrese = adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-		List<AdresaDTO> adreseDTO = new ArrayList<>();
-		for (Adresa adr : adrese) {
-			adreseDTO.add(modelMapper.map(adr, AdresaDTO.class));
-		}
-		return adreseDTO;
+		// List<AdresaDTO> adreseDTO = new ArrayList<>();
+		// for (Adresa adr : adrese) {
+		// 	adreseDTO.add(modelMapper.map(adr, AdresaDTO.class));
+		// }
+		return adrese;
 	}
 
 	@GetMapping("{id}")

@@ -1,9 +1,11 @@
 package net.guides.springboot2.crud.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.CODTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.repository.CORepository;
@@ -26,15 +29,18 @@ public class COController {
 	@Autowired
 	private CORepository coRepository;
 
-    @GetMapping("latest")
-    public List<CO> getAllCOsLatest() {
-        return coRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-		}
-		
-		@GetMapping
-    public List<CO> getAllCOs() {
-        return coRepository.findAllByOrderByDelaAsc();
-    }
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@GetMapping("latest")
+	public List<CO> getAllCOsLatest() {
+		return coRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+	}
+
+	@GetMapping
+	public List<CO> getAllCOs() {
+		return coRepository.findAllByOrderByDelaAsc();
+	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<CO> getCOById(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
@@ -43,17 +49,23 @@ public class COController {
 		return ResponseEntity.ok().body(co);
 	}
 
-    @GetMapping("idc={id}")
-    public ResponseEntity<List<CO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract) throws ResourceNotFoundException {
-        List<CO> co = coRepository.findByIdcontractOrderByDelaDesc(idcontract);
-        return ResponseEntity.ok().body(co);
-    }
+	@GetMapping("idc={id}")
+	public ResponseEntity<List<CODTO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract)
+			throws ResourceNotFoundException {
+		List<CO> co = coRepository.findByIdcontractOrderByDelaDesc(idcontract);
 
-    @GetMapping("fp&idc={id}")
-    public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract) throws ResourceNotFoundException {
-        List<CO> co = coRepository.findByIdcontractAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
-        return ResponseEntity.ok().body(co);
-    }
+		List<CODTO> coDTO = new ArrayList<>();
+		co.forEach(c -> coDTO.add(modelMapper.map(c, CODTO.class)));
+
+		return ResponseEntity.ok().body(coDTO);
+	}
+
+	@GetMapping("fp&idc={id}")
+	public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract)
+			throws ResourceNotFoundException {
+		List<CO> co = coRepository.findByIdcontractAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
+		return ResponseEntity.ok().body(co);
+	}
 
 	@PostMapping
 	public CO createCO(@RequestBody CO co) {

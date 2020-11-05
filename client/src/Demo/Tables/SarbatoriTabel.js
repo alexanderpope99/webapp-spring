@@ -178,9 +178,10 @@ class SarbatoriTabel extends React.Component {
   // function to create react component with fetched data
   renderSarbatori() {
     this.setState({
+      // eslint-disable-next-line array-callback-return
       sarbatoriComponent: this.state.sarbatori.map((sarbatoare, index) => {
+        for (let key in sarbatoare) if (!sarbatoare[key]) sarbatoare[key] = '-';
         if (sarbatoare.dela.includes(this.state.an)) {
-          for (let key in sarbatoare) if (!sarbatoare[key]) sarbatoare[key] = '-';
           return (
             <tr key={sarbatoare.id}>
               <th>{this.formatDate(sarbatoare.dela.substring(0, 10))}</th>

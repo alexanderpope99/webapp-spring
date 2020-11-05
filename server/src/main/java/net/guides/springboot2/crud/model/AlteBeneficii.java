@@ -32,7 +32,7 @@ public class AlteBeneficii implements Serializable {
 	@Column(name = "aplicare")
 	private String aplicare;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "idcontract")
 	private Contract contract;
 

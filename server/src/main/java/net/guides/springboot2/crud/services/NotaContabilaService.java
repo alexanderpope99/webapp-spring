@@ -45,7 +45,7 @@ public class NotaContabilaService {
 
 		Societate societate = societateRepository.findById((int) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-		Adresa adresaSocietate = adresaRepository.findById(societate.getIdadresa().getId()).orElseThrow(
+		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(
 				() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
 
 		String statTemplateLocation = homeLocation + "\\templates";

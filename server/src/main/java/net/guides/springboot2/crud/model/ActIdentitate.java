@@ -2,9 +2,11 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import java.io.Serializable;
@@ -35,6 +37,9 @@ public class ActIdentitate implements Serializable {
 	private String dataeliberarii;
 	@Column(name = "loculnasterii")
 	private String loculnasterii;
+
+	@OneToOne(mappedBy = "actidentitate", fetch = FetchType.LAZY)
+	private Persoana persoana;
 
 	public ActIdentitate() {
 

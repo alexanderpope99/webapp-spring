@@ -3,16 +3,21 @@ package net.guides.springboot2.crud.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "contract")
@@ -77,19 +82,19 @@ public class Contract implements Serializable {
 	@Column(name = "pensionar")
 	private Boolean pensionar;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "idcentrucost")
 	private CentruCost centrucost;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "idpunctlucru")
 	private PunctDeLucru punctdelucru;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "idechipa")
 	private Echipa echipa;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "iddepartapent")
 	private Departament departament;
 
@@ -97,8 +102,13 @@ public class Contract implements Serializable {
 	@JoinColumn(name = "idcontbancar", referencedColumnName = "iban")
 	private ContBancar contbancar;
 
-	// @OneToMany(mappedBy = "contract")
-	// private Set<RealizariRetineri> realizariRetineri;
+	@JsonBackReference(value = "angajat-contract")
+	@OneToOne(mappedBy = "contract", fetch = FetchType.LAZY)
+	private Angajat angajat;
+
+	@JsonBackReference(value = "retineri-contract")
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	private List<RealizariRetineri> realizariRetineri;
 
 	public Contract() {
 	}
@@ -404,5 +414,13 @@ public class Contract implements Serializable {
 
 	public void setContbancar(ContBancar contbancar) {
 		this.contbancar = contbancar;
+	}
+
+	public Angajat getAngajat() {
+		return angajat;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
 }
