@@ -335,6 +335,7 @@ class EditPersoana extends React.Component {
       headers: authHeader(),
     });
 
+		// refresh numele angajatilor
     this.getNumeintreg();
     this.fillForm();
     console.log('persoana actualizata');

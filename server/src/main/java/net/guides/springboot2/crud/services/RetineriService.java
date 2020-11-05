@@ -3,7 +3,6 @@ package net.guides.springboot2.crud.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.controller.RealizariRetineriController;
 import net.guides.springboot2.crud.dto.RetineriDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
