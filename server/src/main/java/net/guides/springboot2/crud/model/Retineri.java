@@ -38,7 +38,7 @@ public class Retineri implements Serializable {
 	@Column(name = "imprumuturi")
 	private Integer imprumuturi;
 
-	@JsonManagedReference(value = "retineri-realizariretineri")
+	// @JsonManagedReference(value = "retineri-realizariretineri")
 	@ManyToOne
 	@JoinColumn(name = "idstat")
 	private RealizariRetineri stat;
