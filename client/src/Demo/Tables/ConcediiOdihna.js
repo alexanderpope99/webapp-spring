@@ -30,6 +30,7 @@ class COTabel extends React.Component {
     this.state = {
       angajat: props.angajat,
 
+      today: '',
       an: '',
       luna: { nume: '-', nr: '-' },
 
@@ -69,15 +70,15 @@ class COTabel extends React.Component {
 
   setCurrentYear() {
     let today = new Date();
-    let an = today.getFullYear();
 
     this.setState({
-      an: an,
+      an: today.getFullYear(),
+      today: today.toISOString().substring(0, 10),
     });
   }
 
   onChangeAn(an) {
-		this.setState({an: an, luna: { nume: '-', nr: '-' }}, this.renderCO);
+    this.setState({ an: an, luna: { nume: '-', nr: '-' } }, this.renderCO);
   }
 
   onChangeMonth(e) {
@@ -154,8 +155,8 @@ class COTabel extends React.Component {
       // convert to array from set
       for (let an of ani_cu_concediu) {
         luni_cu_concediu[an] = [...luni_cu_concediu[an]];
-			}
-			
+      }
+
       this.setState(
         {
           co: co,
@@ -216,7 +217,7 @@ class COTabel extends React.Component {
 
   // TODO: adds, but modal doesnt change
   async addCO() {
-		if (!this.state.angajat) return;
+    if (!this.state.angajat) return;
     if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
@@ -332,7 +333,9 @@ class COTabel extends React.Component {
     var monthsComponent = [];
     if (this.state.luni_cu_concediu[this.state.an]) {
       monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
-        <option key={index} data-key={Number(luna)}>{months[luna - 1]}</option>
+        <option key={index} data-key={Number(luna)}>
+          {months[luna - 1]}
+        </option>
       ));
     }
 
@@ -432,7 +435,9 @@ class COTabel extends React.Component {
                     typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
                   }
                   className="float-right"
-                  onClick={() => this.setState({ show: true })}
+                  onClick={() =>
+                    this.setState({ show: true, dela: this.state.today, panala: this.state.today })
+                  }
                   disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu
