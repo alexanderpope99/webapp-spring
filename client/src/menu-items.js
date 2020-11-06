@@ -32,8 +32,8 @@ var items = [
         type: 'item',
         url: '/parametriisalarii',
         icon: 'feather icon-dollar-sign',
-			},
-			{
+      },
+      {
         id: 'sarbatori',
         title: 'Sărbători',
         type: 'item',
@@ -171,6 +171,13 @@ var items = [
         title: 'Foi pontaj',
         type: 'item',
         url: '/pontaj',
+        icon: 'feather icon-grid',
+      },
+      {
+        id: 'dec112',
+        title: 'Declarația 112',
+        type: 'item',
+        url: '/dec112',
         icon: 'feather icon-grid',
       },
     ],

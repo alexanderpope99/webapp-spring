@@ -21,6 +21,8 @@ import net.guides.springboot2.crud.dto.CODTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.repository.CORepository;
+import net.guides.springboot2.crud.repository.ContractRepository;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
@@ -31,6 +33,9 @@ public class COController {
 
 	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private ContractRepository contractRepository;
 
 	@GetMapping("latest")
 	public List<CO> getAllCOsLatest() {
@@ -69,6 +74,7 @@ public class COController {
 
 	@PostMapping
 	public CO createCO(@RequestBody CO co) {
+		contractRepository.findById(co.getContract().getId());
 		return coRepository.save(co);
 	}
 
