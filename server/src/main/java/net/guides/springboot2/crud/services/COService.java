@@ -39,6 +39,18 @@ public class COService {
 		return coRepository.save(co);
 	}
 
+	public CODTO update(int coID, CODTO newCoDTO) throws ResourceNotFoundException {
+		newCoDTO.setId(coID);
+		CO newCO = modelMapper.map(newCoDTO, CO.class);
+		Contract contract = contractRepository.findById(newCoDTO.getIdcontract())
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
+		newCO.setContract(contract);
+
+		coRepository.save(newCO);
+
+		return newCoDTO;
+	}
+
 	public int getZileCFP(int luna, int an, int idcontract) {
 		List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
 		if (concediiOdihnaNeplatite.size() == 0)

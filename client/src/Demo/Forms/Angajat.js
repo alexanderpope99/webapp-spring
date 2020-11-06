@@ -80,8 +80,8 @@ class Angajat extends React.Component {
 
   async getSelectedAngajatData() {
     // get id of selected angajat
-    const angajatsel = getAngajatSel();
-    const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
+		const angajatsel = getAngajatSel();
+		const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
     if (!idpersoana) {
       this.contract.current.clearFields();
       this.setState({ angajatsel: null });

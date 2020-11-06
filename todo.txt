@@ -14,7 +14,12 @@ buton de 'show password' la schimba prola
 
 buton edit pentru:  [concediu odihna]
 
-Problem: nu se autoselecteaza angajat_sel in Angajati.js
+adauga Părinte in optiune persoanaIntretinere.grad in frontend
+
+API FOR:
+	SOCIETATE,
+	BAZA CALCUL,
+	PERSOANA,
 
 *** INTREBARE: ***
 CONCEDIU DE ODIHNA:

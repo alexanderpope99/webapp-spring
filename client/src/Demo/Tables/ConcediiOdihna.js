@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import Edit from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Refresh from '@material-ui/icons/Refresh';
 import Popover from '@material-ui/core/Popover';
@@ -19,9 +20,11 @@ class COTabel extends React.Component {
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
-    this.resetModals = this.resetModals.bind(this);
-    this.addCO = this.addCO.bind(this);
+    this.clearCO = this.clearCO.bind(this);
     this.deleteCO = this.deleteCO.bind(this);
+    this.addCO = this.addCO.bind(this);
+    this.updateCO = this.updateCO.bind(this);
+    this.editCO = this.editCO.bind(this);
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
@@ -30,6 +33,7 @@ class COTabel extends React.Component {
     this.state = {
       angajat: props.angajat,
 
+      id: 0,
       today: '',
       an: '',
       luna: { nume: '-', nr: '-' },
@@ -44,6 +48,8 @@ class COTabel extends React.Component {
 
       // add modal:
       show: false,
+      isEdit: false,
+      // detalii co
       dela: '',
       panala: '',
       tip: 'Concediu de odihnă',
@@ -52,6 +58,22 @@ class COTabel extends React.Component {
       show_confirm: false,
       modalMessage: '',
     };
+  }
+  clearCO() {
+    this.setState({
+      isEdit: false,
+      // add modal:
+      show: false,
+      id: 0,
+      dela: '',
+      panala: '',
+      nr_zile: 0,
+      tip: 'Concediu de odihnă',
+
+      // succes modal:
+      show_confirm: false,
+      modalMessage: '',
+    });
   }
 
   setAngajat(angajat) {
@@ -97,20 +119,24 @@ class COTabel extends React.Component {
     );
   }
 
+  onChangeDela(dela) {
+    if (!this.state.dela || dela > this.state.panala)
+      this.setState({ dela: dela, panala: dela }, this.setNrZile);
+    else this.setState({ dela: dela }, this.setNrZile);
+  }
   onChangePanala(panala) {
     this.setState({ panala: panala }, this.setNrZile);
     // calculate number of days between dates
   }
 
   setNrZile() {
-    const panala = this.state.panala;
     var nr_zile = 0;
     if (this.state.dela && this.state.panala) {
       let date1 = new Date(this.state.dela);
       let date2 = new Date(this.state.panala);
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
     }
-    this.setState({ panala: panala, nr_zile: nr_zile });
+    this.setState({ nr_zile: nr_zile });
   }
 
   async fillTable() {
@@ -177,21 +203,6 @@ class COTabel extends React.Component {
     }
   }
 
-  resetModals() {
-    this.setState({
-      // add modal:
-      show: false,
-      dela: '',
-      panala: '',
-      nr_zile: 0,
-      tip: 'Concediu de odihnă',
-
-      // succes modal:
-      show_confirm: false,
-      modalMessage: '',
-    });
-  }
-
   handleClose(confirmWindow) {
     if (confirmWindow)
       this.setState({
@@ -201,6 +212,7 @@ class COTabel extends React.Component {
     else
       this.setState({
         show: false,
+        isEdit: false,
         // reset data
         dela: '',
         panala: '',
@@ -231,7 +243,6 @@ class COTabel extends React.Component {
       panala: this.state.panala,
       tip: this.state.tip,
       idcontract: this.state.angajat.idcontract,
-      // in DB also has sporuripermanente
     };
 
     let ok = await axios
@@ -250,6 +261,57 @@ class COTabel extends React.Component {
       });
       this.fillTable();
     }
+  }
+
+  async updateCO() {
+    var co_body = {
+			id: this.state.id,
+			dela: this.state.dela,
+			panala: this.state.panala,
+			tip: this.state.tip,
+			idcontract: this.state.angajat.idcontract
+    };
+
+    let ok = await axios
+      .put(`${server.address}/co/${this.state.id}`, co_body, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error('err:', err));
+
+    if (ok) {
+      // close add modal
+      this.handleClose();
+      // open confirm modal <- closes on OK button
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'Concediu medical actualizat ✔',
+      });
+      this.fillTable();
+      this.clearCO();
+    }
+  }
+
+  editCO(co) {
+    if (this.state.angajat.idcontract === null) {
+      this.setState({
+        show_confirm: true,
+        modalMessage: 'Angajatul are nevoide de un contract de muncă',
+      });
+      return;
+    }
+
+    for (let key in co) if (co[key] === '-') co[key] = '';
+
+    this.setState({
+      id: co.id,
+      dela: co.dela.substring(0, 10),
+      panala: co.panala.substring(0, 10),
+      tip: co.tip,
+
+      isEdit: true,
+      show: true,
+    }, this.setNrZile);
   }
 
   // function to create react table rows with fetched data
@@ -274,6 +336,13 @@ class COTabel extends React.Component {
               <th>{co.panala.substring(0, 10).split('-').reverse().join('.')}</th>
               <th>{co.tip}</th>
               <th className="d-inline-flex flex-row justify-content-around">
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  onClick={() => this.editCO(co)}
+                >
+                  <Edit fontSize="small" />
+                </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
                     <div>
@@ -345,7 +414,7 @@ class COTabel extends React.Component {
 
     return (
       <Aux>
-        {/* // ADD MODAL */}
+        {/* // CO MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Concediu de odihnă</Modal.Title>
@@ -358,9 +427,8 @@ class COTabel extends React.Component {
                   required
                   type="date"
                   value={this.state.dela}
-                  onChange={(e) => {
-                    this.setState({ dela: e.target.value, panala: e.target.value }, this.setNrZile);
-                  }}
+                  max={this.state.panala}
+                  onChange={(e) => this.onChangeDela(e.target.value)}
                 />
               </Form.Group>
 
@@ -405,8 +473,8 @@ class COTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.addCO}>
-              Adaugă
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO}>
+              {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -436,7 +504,10 @@ class COTabel extends React.Component {
                   }
                   className="float-right"
                   onClick={() =>
-                    this.setState({ show: true, dela: this.state.today, panala: this.state.today })
+                    this.setState(
+                      { show: true, dela: this.state.today, panala: this.state.today },
+                      this.setNrZile
+                    )
                   }
                   disabled={typeof this.state.angajat === 'undefined'}
                 >
@@ -456,7 +527,7 @@ class COTabel extends React.Component {
                   {/* ↺ */}
                 </Button>
                 <Row>
-                  <Form.Group as={Col} sm="3" className="mt-3">
+                  <Form.Group as={Col} sm="auto" className="mt-3">
                     <Form.Label>An</Form.Label>
                     <Form.Control
                       as="select"
@@ -467,7 +538,7 @@ class COTabel extends React.Component {
                       {yearsComponent}
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group as={Col} sm="3" className="mt-3">
+                  <Form.Group as={Col} sm="auto" className="mt-3">
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
                       as="select"

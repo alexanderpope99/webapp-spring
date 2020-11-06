@@ -59,6 +59,10 @@ public class CODTO {
 		this.contract = contract;
 	}
 
+	public void setIdcontract(Contract contract) {
+		this.idcontract = contract.getId();
+	}
+
 	public void setIdcontract(int idcontract) {
 		this.idcontract = idcontract;
 	}

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +44,6 @@ public class AngajatController {
 		return angajatiDTO;
 	}
 
-	@Transactional
 	@GetMapping("/expand")
 	public List<Angajat> getAll() {
 		List<Angajat> angajati = angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
@@ -54,7 +51,6 @@ public class AngajatController {
 		return angajati;
 	}
 
-	@Transactional
 	@GetMapping("{id}")
 	public ResponseEntity<AngajatDTO> getAngajatById(@PathVariable(value = "id") int angajatId)
 			throws ResourceNotFoundException {
@@ -64,7 +60,6 @@ public class AngajatController {
 		return ResponseEntity.ok().body(modelMapper.map(angajat, AngajatDTO.class));
 	}
 
-	@Transactional
 	@GetMapping("/expand/{id}")
 	public ResponseEntity<Angajat> getAngajatByIdExpand(@PathVariable(value = "id") int angajatId)
 			throws ResourceNotFoundException {
