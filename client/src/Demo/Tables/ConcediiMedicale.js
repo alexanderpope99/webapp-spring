@@ -131,11 +131,10 @@ class CMTabel extends React.Component {
 
   setCurrentYear() {
     let today = new Date();
-    let an = today.getFullYear();
 
     this.setState({
-      an: an,
-      today: today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
+      an: today.getFullYear(),
+      today: today.toISOString().substring(0,10),
     });
   }
 
