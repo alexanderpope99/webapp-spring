@@ -30,6 +30,7 @@ const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetiner
 // RAPOARTE
 const Stat = React.lazy(() => import('./Demo/Rapoarte/Stat'));
 const Pontaj = React.lazy(() => import('./Demo/Rapoarte/Pontaj'));
+const Dec112 = React.lazy(() => import('./Demo/Rapoarte/Dec112'));
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
@@ -106,6 +107,7 @@ const routes = [
   // RAPOARTE
   { path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
   { path: '/pontaj', exact: true, name: 'Foaie pontaj', component: Pontaj },
+  { path: '/dec112', exact: true, name: 'Declarația 112', component: Dec112 },
 
   // TABLES
   { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
@@ -141,7 +143,7 @@ const routes = [
     name: 'Cereri Concediu',
     component: CereriConcediuSuperior,
   },
-	{
+  {
     path: '/sarbatori',
     exact: true,
     name: 'Sărbători',

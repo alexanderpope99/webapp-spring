@@ -49,11 +49,9 @@ public class BazacalculController {
 	}
 
 	@GetMapping("cm/{ida}/mo={luna}&y={an}")
-	public BazaCalculCMDTO getBazaCalculCM(
-		@PathVariable("ida") int ida,
-		@PathVariable("luna") int luna,
-		@PathVariable("an") int an) {
-			return bazaCalculService.getBazaCalculCM(luna, an, ida);
+	public BazaCalculCMDTO getBazaCalculCM(@PathVariable("ida") int ida, @PathVariable("luna") int luna,
+			@PathVariable("an") int an) {
+		return bazaCalculService.getBazaCalculCM(luna, an, ida);
 	}
 
 	@GetMapping("ida={ida}/mo={luna}&y={an}")

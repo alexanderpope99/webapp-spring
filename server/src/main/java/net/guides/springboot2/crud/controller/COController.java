@@ -37,6 +37,9 @@ public class COController {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private ContractRepository contractRepository;
+
 	@GetMapping("latest")
 	public List<CO> getAllCOsLatest() {
 		return coRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
