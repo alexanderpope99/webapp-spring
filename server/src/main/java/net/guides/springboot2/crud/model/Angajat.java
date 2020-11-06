@@ -63,7 +63,7 @@ public class Angajat implements Serializable {
 	@JsonBackReference(value = "bazacalcul-angajat")
 	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY)
 	private List<Bazacalcul> bazaCalcul;
-	
+
 	public Angajat() {
 
 	}
@@ -95,5 +95,9 @@ public class Angajat implements Serializable {
 
 	public void setPersoana(Persoana persoana) {
 		this.persoana = persoana;
+	}
+
+	public List<PersoanaIntretinere> getPersoaneIntretinere() {
+		return persoaneIntretinere;
 	}
 }
