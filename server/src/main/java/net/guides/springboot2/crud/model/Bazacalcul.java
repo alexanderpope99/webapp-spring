@@ -59,9 +59,9 @@ public class Bazacalcul implements Serializable {
 		return an;
 	}
 
-	public Angajat getAngajat() {
-		return angajat;
-	}
+	// public Angajat getAngajat() {
+	// 	return angajat;
+	// }
 
 	// ! GETTERS
 	public int getLuna() {
@@ -93,7 +93,7 @@ public class Bazacalcul implements Serializable {
 		this.an = an;
 	}
 
-	public void setAngajat(Angajat angajat) {
-		this.angajat = angajat;
-	}
+	// public void setAngajat(Angajat angajat) {
+	// 	this.angajat = angajat;
+	// }
 }

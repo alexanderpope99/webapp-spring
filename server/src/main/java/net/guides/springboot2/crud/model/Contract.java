@@ -416,11 +416,11 @@ public class Contract implements Serializable {
 		this.contbancar = contbancar;
 	}
 
-	public Angajat getAngajat() {
-		return angajat;
-	}
+	// public Angajat getAngajat() {
+	// 	return angajat;
+	// }
 
-	public void setAngajat(Angajat angajat) {
-		this.angajat = angajat;
-	}
+	// public void setAngajat(Angajat angajat) {
+	// 	this.angajat = angajat;
+	// }
 }

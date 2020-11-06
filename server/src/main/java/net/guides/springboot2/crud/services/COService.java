@@ -3,21 +3,41 @@ package net.guides.springboot2.crud.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.dto.CODTO;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CO;
+import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.repository.CORepository;
+import net.guides.springboot2.crud.repository.ContractRepository;
 
 @Service
 public class COService {
 	COService() {
 	}
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Autowired
 	private SarbatoriService sarbatoriService;
 	@Autowired
 	private CORepository coRepository;
+	@Autowired
+	private ContractRepository contractRepository;
+
+	public CO save(CODTO coDTO) throws ResourceNotFoundException {
+		CO co = modelMapper.map(coDTO, CO.class);
+		
+		Contract contract = contractRepository.findById(coDTO.getIdcontract())
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
+
+		co.setContract(contract);
+		return coRepository.save(co);
+	}
 
 	public int getZileCFP(int luna, int an, int idcontract) {
 		List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");

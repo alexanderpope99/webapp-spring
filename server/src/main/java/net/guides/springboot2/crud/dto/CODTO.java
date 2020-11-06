@@ -5,7 +5,10 @@ import java.time.LocalDate;
 import net.guides.springboot2.crud.model.Contract;
 
 public class CODTO {
+
 	private int id;
+
+	private int idcontract;
 
 	private String tip;
 
@@ -27,7 +30,7 @@ public class CODTO {
 
 	public Integer getIdcontract() {
 		if (contract == null)
-			return null;
+			return idcontract;
 		else
 			return contract.getId();
 	}
@@ -52,8 +55,12 @@ public class CODTO {
 		this.id = id;
 	}
 
-	public void setContract(Contract idcontract) {
-		this.contract = idcontract;
+	public void setContract(Contract contract) {
+		this.contract = contract;
+	}
+
+	public void setIdcontract(int idcontract) {
+		this.idcontract = idcontract;
 	}
 
 	public void setPanala(LocalDate panala) {

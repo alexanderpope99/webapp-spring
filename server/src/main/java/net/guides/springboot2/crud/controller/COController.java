@@ -21,6 +21,8 @@ import net.guides.springboot2.crud.dto.CODTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.repository.CORepository;
+import net.guides.springboot2.crud.services.COService;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
@@ -28,6 +30,9 @@ import org.springframework.data.domain.Sort;
 public class COController {
 	@Autowired
 	private CORepository coRepository;
+
+	@Autowired
+	private COService coService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -68,8 +73,8 @@ public class COController {
 	}
 
 	@PostMapping
-	public CO createCO(@RequestBody CO co) {
-		return coRepository.save(co);
+	public CO createCO(@RequestBody CODTO co) throws ResourceNotFoundException {
+		return coService.save(co);
 	}
 
 	@PutMapping("{id}")
