@@ -105,7 +105,7 @@ class Angajat extends React.Component {
   }
 
   async onFocusContract() {
-    const angajat = await this.getSelectedAngajatData();
+		const angajat = await this.getSelectedAngajatData();
     if (!angajat) return;
     // declared for typing convenience
     let idcontract = angajat.idcontract;
@@ -120,7 +120,7 @@ class Angajat extends React.Component {
         .then((res) => res.data)
         .catch((err) => console.error(err));
     }
-    //* FILL FORM
+		//* FILL CONTRACT
     this.contract.current.fillForm(contract, idpersoana);
   }
 

@@ -279,6 +279,7 @@ class EditPersoana extends React.Component {
     }
 
     this.setState({
+			id: persoana.id,
       email: persoana.email || '',
       gen: persoana.gen || '',
       nume: persoana.nume || '',

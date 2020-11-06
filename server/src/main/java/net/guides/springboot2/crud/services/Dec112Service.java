@@ -37,7 +37,7 @@ public class Dec112Service {
 
 	public boolean createDec112(int luna, int an, int idsocietate, int userID, int drec, String numeDeclarant,
 			String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
-		Societate societate = societateRepository.findById((int) idsocietate)
+		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		try {

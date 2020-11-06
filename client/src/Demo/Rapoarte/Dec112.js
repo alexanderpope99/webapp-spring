@@ -115,34 +115,38 @@ class Dec112 extends React.Component {
             <Row>
               {/* LUNA */}
               <Col md={4}>
-                <Form.Control
-                  as="select"
-                  value={this.state.luna.nume}
-                  onChange={(e) =>
-                    this.setState(
-                      {
-                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                      },
-                      this.fillForm
-                    )
-                  }
-                >
-                  {luni}
-                </Form.Control>
+                <Form.Group>
+                  <Form.Control
+                    as="select"
+                    value={this.state.luna.nume}
+                    onChange={(e) =>
+                      this.setState(
+                        {
+                          luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                        },
+                        this.fillForm
+                      )
+                    }
+                  >
+                    {luni}
+                  </Form.Control>
+                </Form.Group>
               </Col>
               {/* AN */}
               <Col md={4}>
-                <FormControl
-                  as="select"
-                  value={this.state.an}
-                  onChange={(e) =>
-                    this.setState({
-                      an: e.target.value,
-                    })
-                  }
-                >
-                  {ani}
-                </FormControl>
+                <Form.Group>
+                  <FormControl
+                    as="select"
+                    value={this.state.an}
+                    onChange={(e) =>
+                      this.setState({
+                        an: e.target.value,
+                      })
+                    }
+                  >
+                    {ani}
+                  </FormControl>
+                </Form.Group>
               </Col>
             </Row>
             <Row>
@@ -168,7 +172,7 @@ class Dec112 extends React.Component {
                     value={this.state.prenumeDeclarant}
                     onChange={(e) =>
                       this.setState({
-                        prennumeDeclarant: e.target.value,
+                        prenumeDeclarant: e.target.value,
                       })
                     }
                   />
