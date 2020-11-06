@@ -120,7 +120,7 @@ class CMTabel extends React.Component {
   }
 
   numberWithCommas(x) {
-		if(!x) return 0;
+    if (!x) return 0;
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
@@ -134,7 +134,7 @@ class CMTabel extends React.Component {
 
     this.setState({
       an: today.getFullYear(),
-      today: today.toISOString().substring(0,10),
+      today: today.toISOString().substring(0, 10),
     });
   }
 
@@ -153,14 +153,17 @@ class CMTabel extends React.Component {
       },
       () => {
         this.renderCM();
-        console.log(this.state.luna);
       }
     );
   }
 
+  onChangeDela(dela) {
+		if (!this.state.dela || dela > this.state.panala) 
+			this.setState({ dela: dela, panala: dela }, this.setNrZile);
+		else this.setState({ dela: dela }, this.setNrZile);
+  }
   onChangePanala(panala) {
     this.setState({ panala: panala }, this.setNrZile);
-    // calculate number of days between dates
   }
 
   setNrZile() {
@@ -274,7 +277,10 @@ class CMTabel extends React.Component {
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
+      .then((res) => {
+        console.log(res.data);
+        return res.status === 200;
+      })
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -325,6 +331,7 @@ class CMTabel extends React.Component {
   }
 
   async editCM(cm) {
+		if (!this.state.angajat) return;
     if (this.state.angajat.idcontract === null) {
       this.setState({
         show_confirm: true,
@@ -332,7 +339,6 @@ class CMTabel extends React.Component {
       });
       return;
     }
-    if (typeof this.state.angajat === 'undefined') return;
 
     for (let key in cm) if (cm[key] === '-') cm[key] = '';
 
@@ -382,7 +388,7 @@ class CMTabel extends React.Component {
             : true
         ) {
           for (let key in cm) {
-            if (cm[key] === '' || cm[key] === null) cm[key] = '-';
+            if (!cm[key]) cm[key] = '-';
           }
           return (
             <tr key={cm.id}>
@@ -526,10 +532,9 @@ class CMTabel extends React.Component {
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
                   type="date"
-                  value={this.state.dela}
-                  onChange={(e) => {
-                    this.setState({ dela: e.target.value, panala: e.target.value }, this.setNrZile);
-                  }}
+									value={this.state.dela}
+									max={this.state.panala}
+                  onChange={(e) => this.onChangeDela(e.target.value)}
                 />
               </Form.Group>
               <Form.Group id="panala">
@@ -537,6 +542,7 @@ class CMTabel extends React.Component {
                 <Form.Control
                   type="date"
                   value={this.state.panala}
+                  min={this.state.dela}
                   onChange={(e) => this.onChangePanala(e.target.value)}
                 />
               </Form.Group>
@@ -572,6 +578,7 @@ class CMTabel extends React.Component {
                     <Form.Control
                       type="date"
                       value={this.state.datainceput}
+                      disabled={!this.state.continuare}
                       onChange={(e) => {
                         this.setState({ datainceput: e.target.value });
                       }}
@@ -634,9 +641,7 @@ class CMTabel extends React.Component {
                   <Form.Label>Bază calcul (RON)</Form.Label>
                   <Form.Control
                     type="text"
-                    value={
-                      this.numberWithCommas(this.state.bazacalcul)
-                    }
+                    value={this.numberWithCommas(this.state.bazacalcul)}
                     onChange={(e) => {
                       this.setState({ bazacalcul: e.target.value });
                     }}
@@ -808,7 +813,7 @@ class CMTabel extends React.Component {
                       this.setNrZile
                     )
                   }
-                  disabled={typeof this.state.angajat === 'undefined'}
+                  disabled={!this.state.angajat}
                 >
                   Adaugă concediu
                 </Button>
@@ -827,7 +832,7 @@ class CMTabel extends React.Component {
                 </Button>
 
                 <Row>
-                  <Form.Group as={Col} sm="3" className="mt-3">
+                  <Form.Group as={Col} sm="auto" className="mt-3">
                     <Form.Label>An</Form.Label>
                     <Form.Control
                       as="select"
@@ -838,7 +843,7 @@ class CMTabel extends React.Component {
                       {yearsComponent}
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group as={Col} sm="3" className="mt-3">
+                  <Form.Group as={Col} sm="auto" className="mt-3">
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
                       as="select"
@@ -864,7 +869,7 @@ class CMTabel extends React.Component {
                       <th>Serie si nr. certificat</th>
                       <th>Data eliberare</th>
                       <th>Cod urgență</th>
-											<th>Cod boală infecțioasă</th>
+                      <th>Cod boală infecțioasă</th>
                       <th>Procent</th>
                       <th>Bază calcul</th>
                       <th>Bază calcul plafonată</th>

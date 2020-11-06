@@ -78,14 +78,9 @@ public class COController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CO> updateCO(@PathVariable(value = "id") int coId, @RequestBody CO coDetails)
+	public ResponseEntity<CODTO> updateCO(@PathVariable(value = "id") int coId, @RequestBody CODTO coDetails)
 			throws ResourceNotFoundException {
-		CO co = coRepository.findById(coId)
-				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
-
-		coDetails.setId(co.getId());
-		final CO updatedCO = coRepository.save(coDetails);
-		return ResponseEntity.ok(updatedCO);
+		return ResponseEntity.ok(coService.update(coId, coDetails));
 	}
 
 	@DeleteMapping("{id}")

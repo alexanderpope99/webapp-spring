@@ -11,7 +11,7 @@ import net.guides.springboot2.crud.model.CM;
 
 @Repository
 public interface CMRepository extends JpaRepository<CM, Integer> {
-	@Query(value = "select * from cm where idcontract = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM cm WHERE idcontract = ?1 ORDER BY dela DESC, panala DESC", nativeQuery = true)
 	List<CM> findByIdcontract(int idcontract);
 
 	@Query(value = "select * from cm where idcontract = ?1 and dela between ?2 and ?3", nativeQuery = true)

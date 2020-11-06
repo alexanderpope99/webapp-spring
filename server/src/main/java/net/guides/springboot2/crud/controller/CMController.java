@@ -3,7 +3,9 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.CMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.repository.CMRepository;
+import net.guides.springboot2.crud.services.CMService;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
@@ -26,39 +31,42 @@ public class CMController {
 	@Autowired
 	private CMRepository cmRepository;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private CMService cmService;
+
 	@GetMapping
-	public List<CM> getAllCMs() {
-		return cmRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	public List<CMDTO> getAllCMs() {
+		return cmRepository.findAll(Sort.by(Sort.Direction.DESC, "dela"))
+				.stream().map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CM> getCMById(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
+	public ResponseEntity<CMDTO> getCMById(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
 		CM cm = cmRepository.findById(cmId)
 				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
-		return ResponseEntity.ok().body(cm);
+		return ResponseEntity.ok().body(modelMapper.map(cm, CMDTO.class));
 	}
 
 	@GetMapping("idc={id}")
-	public ResponseEntity<List<CM>> getCMByIdcontract(@PathVariable(value = "id") int idcontract)
+	public ResponseEntity<List<CMDTO>> getCMByIdcontract(@PathVariable(value = "id") int idcontract)
 			throws ResourceNotFoundException {
-		List<CM> cm = cmRepository.findByIdcontract(idcontract);
+		List<CMDTO> cm = cmRepository.findByIdcontract(idcontract).stream().map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
+
 		return ResponseEntity.ok().body(cm);
 	}
 
 	@PostMapping
-	public CM createCM(@RequestBody CM cm) {
-		return cmRepository.save(cm);
+	public CMDTO createCM(@RequestBody CMDTO cmDTO) throws ResourceNotFoundException {
+		return cmService.save(cmDTO);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CM> updateCM(@PathVariable(value = "id") int cmId, @RequestBody CM cmDetails)
+	public ResponseEntity<CMDTO> updateCM(@PathVariable(value = "id") int cmId, @RequestBody CMDTO cmDTO)
 			throws ResourceNotFoundException {
-		CM cm = cmRepository.findById(cmId)
-				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
-
-		cmDetails.setId(cm.getId());
-		final CM updatedCM = cmRepository.save(cmDetails);
-		return ResponseEntity.ok(updatedCM);
+		return ResponseEntity.ok(cmService.update(cmId, cmDTO));
 	}
 
 	@DeleteMapping("{id}")

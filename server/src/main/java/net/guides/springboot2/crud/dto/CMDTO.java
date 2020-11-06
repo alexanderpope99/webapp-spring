@@ -7,6 +7,8 @@ import net.guides.springboot2.crud.model.Contract;
 public class CMDTO {
 	private int id;
 
+	private int idcontract;
+
 	private LocalDate dela;
 
 	private LocalDate panala;
@@ -97,11 +99,10 @@ public class CMDTO {
 		return id;
 	}
 
-	public Integer getIdcontract() {
-		if (contract == null)
-			return null;
-		else
-			return contract.getId();
+	public Integer getIdontract() {
+		if(contract == null)
+			return idcontract;
+		return contract.getId();
 	}
 
 	public Double getIndemnizatiefirma() {
@@ -196,8 +197,16 @@ public class CMDTO {
 		this.id = id;
 	}
 
-	public void setContract(Contract idcontract) {
-		this.contract = idcontract;
+	public void setContract(Contract contract) {
+		this.idcontract = contract.getId();
+	}
+
+	public void setIdcontract(Contract contract) {
+		this.idcontract = contract.getId();
+	}
+
+	public void setIdcontract(int idcontract) {
+		this.idcontract = idcontract;
 	}
 
 	public void setIndemnizatiefirma(Double indemnizatiefirma) {
