@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "cm")
-public class CM  implements Serializable {
+public class CM implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +33,14 @@ public class CM  implements Serializable {
 	@Column(name = "datainceput")
 	private LocalDate datainceput;
 
-	@Column(name = "serienrcertificat")
-	private String serienrcertificat;
+	@Column(name = "serie")
+	private String serie;
+
+	@Column(name = "nr")
+	private String nr;
+
+	@Column(name = "cnpcopil")
+	private String cnpcopil;
 
 	@Column(name = "dataeliberare")
 	private String dataeliberare;
@@ -78,6 +84,9 @@ public class CM  implements Serializable {
 	@Column(name = "nravizmedic")
 	private String nravizmedic;
 
+	@Column(name = "codindemnizatie")
+	private String codindemnizatie;
+
 	@Column(name = "codboala")
 	private String codboala;
 
@@ -94,16 +103,18 @@ public class CM  implements Serializable {
 	public CM() {
 	}
 
-	public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat,
+	public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serie, String nr,
 			String dataeliberare, String codurgenta, Float procent, String codboalainfcont, Float bazacalcul,
 			Float bazacalculplafonata, Integer zilebazacalcul, Float mediezilnica, Integer zilefirma,
 			Float indemnizatiefirma, Integer zilefnuass, Float indemnizatiefnuass, String locprescriere,
-			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract) {
+			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract, String cnpcopil,
+			String codindemnizatie) {
 		this.dela = dela;
 		this.panala = panala;
 		this.continuare = continuare;
 		this.datainceput = datainceput;
-		this.serienrcertificat = serienrcertificat;
+		this.serie = serie;
+		this.nr = nr;
 		this.dataeliberare = dataeliberare;
 		this.codurgenta = codurgenta;
 		this.procent = procent;
@@ -122,6 +133,8 @@ public class CM  implements Serializable {
 		this.urgenta = urgenta;
 		this.conditii = conditii;
 		this.contract = contract;
+		this.cnpcopil = cnpcopil;
+		this.codindemnizatie = codindemnizatie;
 	}
 
 	public int getId() {
@@ -164,12 +177,28 @@ public class CM  implements Serializable {
 		this.datainceput = datainceput;
 	}
 
-	public String getSerienrcertificat() {
-		return serienrcertificat;
+	public String getSerie() {
+		return serie;
 	}
 
-	public void setSerienrcertificat(String serienrcertificat) {
-		this.serienrcertificat = serienrcertificat;
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+
+	public String getNr() {
+		return nr;
+	}
+
+	public void setNr(String nr) {
+		this.nr = nr;
+	}
+
+	public String getCnpcopil() {
+		return cnpcopil;
+	}
+
+	public void setCnpcopil(String cnpcopil) {
+		this.cnpcopil = cnpcopil;
 	}
 
 	public String getDataeliberare() {
@@ -314,5 +343,13 @@ public class CM  implements Serializable {
 
 	public void setContract(Contract contract) {
 		this.contract = contract;
+	}
+
+	public String getCodindemnizatie() {
+		return codindemnizatie;
+	}
+
+	public void setCodindemnizatie(String codindemnizatie) {
+		this.codindemnizatie = codindemnizatie;
 	}
 }

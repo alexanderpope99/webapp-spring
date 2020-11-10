@@ -22,12 +22,16 @@ import javax.xml.transform.stream.StreamResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.PersoanaIntretinere;
+import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.PersoanaRepository;
+import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
 import org.w3c.dom.Attr;
@@ -40,7 +44,16 @@ public class Dec112Service {
 	private SocietateRepository societateRepository;
 
 	@Autowired
+	private RealizariRetineriRepository realizariRetineriRepository;
+
+	@Autowired
 	private ZileService zileService;
+
+	@Autowired
+	private CMService cmService;
+
+	@Autowired
+	private BazacalculService bazaCalculService;
 
 	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
 
@@ -48,6 +61,8 @@ public class Dec112Service {
 			String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+		List<Angajat> angajati = societate.getAngajat().stream().filter((angajat) -> angajat.getContract() != null)
+				.collect(Collectors.toList());
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		try {
 
@@ -57,6 +72,8 @@ public class Dec112Service {
 			Document doc = docBuilder.newDocument();
 			Element frmMAIN = doc.createElement("frmMAIN");
 			doc.appendChild(frmMAIN);
+
+			String sectiune = "";
 
 			Element sbfrmPage1Ang = doc.createElement("sbfrmPage1Ang");
 			frmMAIN.appendChild(sbfrmPage1Ang);
@@ -213,8 +230,26 @@ public class Dec112Service {
 			childElement.appendChild(doc.createTextNode("5503XXXXXX"));
 			sfmSectAVal.appendChild(childElement);
 
+			int impozit_datorat = 0;
+			int impozit_scutit = 0;
+			int cas = 0;
+			int cass = 0;
+			int cam = 0;
+			for (Angajat angajat : angajati) {
+				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna,
+						an, angajat.getContract().getId()));
+				impozit_datorat += realizariRetineri.getImpozit();
+				impozit_scutit += realizariRetineri.getImpozitscutit();
+				cas += realizariRetineri.getCas();
+				cass += realizariRetineri.getCass();
+				cam += realizariRetineri.getCam();
+			}
+
 			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(""));// ----------------de completat datorat impozit + impozit
+			childElement.appendChild(doc.createTextNode(String.valueOf((impozit_datorat + impozit_scutit)))); // impozit
+																												// datorat
+																												// +
+																												// scutit
 			sfmSectAVal.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -222,7 +257,7 @@ public class Dec112Service {
 			sfmSectAVal.appendChild(childElement);
 
 			childElement = doc.createElement("a_scutit");
-			childElement.appendChild(doc.createTextNode(""));// ----------------de completat scutit
+			childElement.appendChild(doc.createTextNode((String.valueOf((impozit_scutit))))); // impozit scutit
 			sfmSectAVal.appendChild(childElement);
 
 			Element sfmSectAVal2 = doc.createElement("sfmSectAVal");
@@ -241,7 +276,7 @@ public class Dec112Service {
 			sfmSectAVal2.appendChild(childElement);
 
 			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(""));// ----------------de completat datorat cas
+			childElement.appendChild(doc.createTextNode(String.valueOf(cas)));// cas
 			sfmSectAVal2.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -268,7 +303,7 @@ public class Dec112Service {
 			sfmSectAVal3.appendChild(childElement);
 
 			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(""));// ----------------de completat datorat cass
+			childElement.appendChild(doc.createTextNode((String.valueOf(cass))));// cass
 			sfmSectAVal3.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -295,7 +330,7 @@ public class Dec112Service {
 			sfmSectAVal4.appendChild(childElement);
 
 			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(""));// ----------------de completat datorat cam
+			childElement.appendChild(doc.createTextNode(String.valueOf(cam)));// cam
 			sfmSectAVal4.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -497,9 +532,6 @@ public class Dec112Service {
 
 			// end sbfrmPage1Ang
 
-			List<Angajat> angajati = societate.getAngajat().stream().filter((angajat) -> angajat.getContract() != null)
-					.collect(Collectors.toList());
-
 			int c = 1;
 			DateFormat dateFormat = new SimpleDateFormat("dd.mm.YYYY");
 			for (Angajat angajat : angajati) {
@@ -628,450 +660,553 @@ public class Dec112Service {
 
 				// -------SECTIUNEA A------ salariat normal, fara concediu medical in luna
 				// respectiva
+				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna,
+						an, angajat.getContract().getId()));
 
-				Element sfmButoaneA = doc.createElement("sfmButoane");
-				sbfrmPage1Asig.appendChild(sfmButoaneA);
+				if (angajat.getContract().getTip() == "Contract de munca" && realizariRetineri.getZilecm() == 0)
 
-				childElement = doc.createElement("rbl");
-				childElement.appendChild(doc.createTextNode("3"));
-				sfmButoaneA.appendChild(childElement);
+				{
+					sectiune = "A";
+					Element sfmButoaneA = doc.createElement("sfmButoane");
+					sbfrmPage1Asig.appendChild(sfmButoaneA);
 
-				childElement = doc.createElement("flag");
-				childElement.appendChild(doc.createTextNode("1"));
-				sfmButoaneA.appendChild(childElement);
+					childElement = doc.createElement("rbl");
+					childElement.appendChild(doc.createTextNode("3"));
+					sfmButoaneA.appendChild(childElement);
 
-				Element rbl2A = doc.createElement("rbl2");
-				sfmButoaneA.appendChild(rbl2A);
+					childElement = doc.createElement("flag");
+					childElement.appendChild(doc.createTextNode("1"));
+					sfmButoaneA.appendChild(childElement);
 
-				childElement = doc.createElement("rbC");
-				childElement.appendChild(doc.createTextNode("0"));
-				rbl2A.appendChild(childElement);
+					Element rbl2A = doc.createElement("rbl2");
+					sfmButoaneA.appendChild(rbl2A);
 
-				childElement = doc.createElement("rbB");
-				childElement.appendChild(doc.createTextNode("0"));
-				rbl2A.appendChild(childElement);
+					childElement = doc.createElement("rbC");
+					childElement.appendChild(doc.createTextNode("0"));
+					rbl2A.appendChild(childElement);
 
-				childElement = doc.createElement("rbA");
-				childElement.appendChild(doc.createTextNode("1"));
-				rbl2A.appendChild(childElement);
+					childElement = doc.createElement("rbB");
+					childElement.appendChild(doc.createTextNode("0"));
+					rbl2A.appendChild(childElement);
 
-				Element sbfrmSectiuneaA = doc.createElement("sbfrmSectiuneaA");
-				sbfrmPage1Asig.appendChild(sbfrmSectiuneaA);
+					childElement = doc.createElement("rbA");
+					childElement.appendChild(doc.createTextNode("1"));
+					rbl2A.appendChild(childElement);
 
-				childElement = doc.createElement("VB_A");
-				childElement.appendChild(doc.createTextNode("")); // de completat venit brut
-				sbfrmSectiuneaA.appendChild(childElement);
+					Element sbfrmSectiuneaA = doc.createElement("sbfrmSectiuneaA");
+					sbfrmPage1Asig.appendChild(sbfrmSectiuneaA);
 
-				childElement = doc.createElement("tichete_A");
-				childElement.appendChild(doc.createTextNode("")); // de completat tichete
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("VB_A");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // venit
+																														// brut
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_1");
-				childElement.appendChild(doc.createTextNode("1")); // tip asigurat
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("tichete_A");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getValoaretichete()))); // completat
+																															// tichete
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_2");
-				childElement.appendChild(doc.createTextNode("")); // de completat pensionar sau nu
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("A_1");
+					childElement.appendChild(doc.createTextNode("1")); // tip asigurat
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_3");
-				childElement.appendChild(doc.createTextNode("")); // de completat tip contract (daca durata zi lucru
-																	// este 8 atunci punem N, daca este diferti de 8
-																	// punem P urmat de nr de ore dintr-o zi de lucru)
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("A_2");
+					childElement.appendChild(doc.createTextNode(angajat.getContract().isPensionar() ? "1" : "0")); // pensionar
+																													// sau
+																													// nu
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_4");
-				childElement.appendChild(doc.createTextNode("8")); // norma ore
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("A_3");
+					childElement.appendChild(doc.createTextNode(realizariRetineri.getDuratazilucru() == 8 ? "N"
+							: "P" + String.valueOf(realizariRetineri.getDuratazilucru()))); // tip contract
 
-				childElement = doc.createElement("A_6");
-				childElement.appendChild(doc.createTextNode("")); // de completat ore lucrate efectiv in luna
-				sbfrmSectiuneaA.appendChild(childElement);
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_7");
-				childElement.appendChild(doc.createTextNode("0")); // ore suspendate in luna
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("A_4");
+					childElement.appendChild(doc.createTextNode("8")); // norma ore
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_8");
-				childElement.appendChild(doc.createTextNode("")); // de completat total zile lucrate
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("A_6");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getOrelucrate()))); // ore
+																														// lucrate
+																														// efectiv
+																														// in
+																														// luna
+					sbfrmSectiuneaA.appendChild(childElement);
 
-				childElement = doc.createElement("A_9");
-				childElement.appendChild(doc.createTextNode("")); // baza de calcul somaj
-				sbfrmSectiuneaA.appendChild(childElement);
+					childElement = doc.createElement("A_7");
+					childElement.appendChild(doc.createTextNode("0")); // ore suspendate in luna
+					sbfrmSectiuneaA.appendChild(childElement);
+
+					childElement = doc.createElement("A_8");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate()))); // total
+																														// zile
+																														// lucrate
+					sbfrmSectiuneaA.appendChild(childElement);
+
+					childElement = doc.createElement("A_9");
+					childElement.appendChild(doc.createTextNode("0")); // baza de calcul somaj
+					sbfrmSectiuneaA.appendChild(childElement);
+				}
 
 				// -----------END SECTIUNEA A-------
 
 				// -------SECTIUNEA B------ salariat normal + are concediu medical in luna
 				// respectiva
 
-				Element sfmButoaneB = doc.createElement("sfmButoane");
-				sbfrmPage1Asig.appendChild(sfmButoaneB);
-
-				childElement = doc.createElement("rbl");
-				childElement.appendChild(doc.createTextNode("3"));
-				sfmButoaneB.appendChild(childElement);
-
-				childElement = doc.createElement("flag");
-				childElement.appendChild(doc.createTextNode("1"));
-				sfmButoaneB.appendChild(childElement);
-
-				Element rbl2B = doc.createElement("rbl2");
-				sfmButoaneB.appendChild(rbl2B);
-
-				childElement = doc.createElement("rbC");
-				childElement.appendChild(doc.createTextNode("0"));
-				rbl2B.appendChild(childElement);
-
-				childElement = doc.createElement("rbB");
-				childElement.appendChild(doc.createTextNode("2"));
-				rbl2B.appendChild(childElement);
-
-				childElement = doc.createElement("rbA");
-				childElement.appendChild(doc.createTextNode("0"));
-				rbl2B.appendChild(childElement);
-
-				Element sbfrmSectiuneaB = doc.createElement("sbfrmSectiuneaB");
-				sbfrmPage1Asig.appendChild(sbfrmSectiuneaB);
-
-				childElement = doc.createElement("calc_aut");
-				childElement.appendChild(doc.createTextNode("1"));
-				sbfrmSectiuneaB.appendChild(childElement);
-
-				Element sbfrmSectiuneaB1rep = doc.createElement("sbfrmSectiuneaB1rep");
-				sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB1rep);
-
-				Element sbfrmSectiuneaB1 = doc.createElement("sbfrmSectiuneaB1");
-				sbfrmSectiuneaB1rep.appendChild(sbfrmSectiuneaB1);
-
-				childElement = doc.createElement("VB_B");
-				childElement.appendChild(doc.createTextNode("")); // de completat total drepturi
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_1");
-				childElement.appendChild(doc.createTextNode("1")); // de completat total drepturi
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_2");
-				childElement.appendChild(doc.createTextNode("")); // de completat pensionar sau nu
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_3");
-				childElement.appendChild(doc.createTextNode("")); // de completat tip contract (daca durata zi lucru
-																	// este 8 atunci punem N, daca este diferti de 8
-																	// punem P urmat de nr de ore dintr-o zi de lucru)
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_4");
-				childElement.appendChild(doc.createTextNode("8")); // norma ore
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_6");
-				childElement.appendChild(doc.createTextNode("")); // de completat ore lucrate efectiv in luna
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_7");
-				childElement.appendChild(doc.createTextNode("0")); // ore suspendate in luna
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_15");
-				childElement.appendChild(doc.createTextNode("")); // de completat total zile lucrate
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_5");
-				childElement.appendChild(doc.createTextNode("")); // de completat baza calcul CAM (total drepturi
-																	// probabil)
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("B1_10");
-				childElement.appendChild(doc.createTextNode("")); // de completat baza calcul indemnizatie somaj (total
-																	// drepturi probabil)
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("tfNrCrt");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				childElement = doc.createElement("tichete_B");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB1.appendChild(childElement);
-
-				Element SbfrmSectiuneaB2 = doc.createElement("SbfrmSectiuneaB2");
-				sbfrmSectiuneaB.appendChild(SbfrmSectiuneaB2);
-
-				childElement = doc.createElement("B2_2");
-				childElement.appendChild(doc.createTextNode("")); // de completat total zile lucrate
-				SbfrmSectiuneaB2.appendChild(childElement);
-
-				childElement = doc.createElement("B2_5");
-				childElement.appendChild(doc.createTextNode("")); // de completat contributii sociale (totaldrepturi -
-																	// indemnizatii fnuass cm - indemnizatii firma cm)
-				SbfrmSectiuneaB2.appendChild(childElement);
-
-				childElement = doc.createElement("B2_6");
-				childElement.appendChild(doc.createTextNode(""));
-				SbfrmSectiuneaB2.appendChild(childElement);
-
-				childElement = doc.createElement("B2_7");
-				childElement.appendChild(doc.createTextNode(""));
-				SbfrmSectiuneaB2.appendChild(childElement);
-
-				Element sbfrmSectiuneaB3 = doc.createElement("sbfrmSectiuneaB3");
-				sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB3);
-
-				childElement = doc.createElement("B3_1");
-				childElement.appendChild(doc.createTextNode("")); // de completat zile indemnizatie (adica nr de zile
-																	// lucratoare din timpul CM)
-				sbfrmSectiuneaB3.appendChild(childElement);
-
-				childElement = doc.createElement("B3_6");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB3.appendChild(childElement);
-
-				childElement = doc.createElement("B3_7");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB3.appendChild(childElement);
-
-				childElement = doc.createElement("B3_11");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB3.appendChild(childElement);
-
-				childElement = doc.createElement("B3_12");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB3.appendChild(childElement);
-
-				childElement = doc.createElement("B3_13");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB3.appendChild(childElement);
-
-				Element facilitati = doc.createElement("facilitati");
-				sbfrmSectiuneaB3.appendChild(facilitati);
-
-				Element sbfrmSectiuneaB4 = doc.createElement("sbfrmSectiuneaB4");
-				sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB4);
-
-				childElement = doc.createElement("B4_6");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				childElement = doc.createElement("B4_7");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				childElement = doc.createElement("B4_8");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				childElement = doc.createElement("B4_14");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				childElement = doc.createElement("B4_5");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				Element facilitati2 = doc.createElement("facilitati");
-				sbfrmSectiuneaB4.appendChild(facilitati2);
-
-				childElement = doc.createElement("B4_5f");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_6f");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_7f");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_8f");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_14f");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_5i");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_6i");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_7i");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_8i");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_14i");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("SalBrut_B");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B_81");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B_82");
-				childElement.appendChild(doc.createTextNode(""));
-				facilitati2.appendChild(childElement);
-
-				childElement = doc.createElement("B4_2");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				childElement = doc.createElement("B4_1");
-				childElement.appendChild(doc.createTextNode(""));
-				sbfrmSectiuneaB4.appendChild(childElement);
-
-				// ---------SECTIUNEA D ------- DACA EXISTA SECTIUNEA B
-
-				Element sbfrmSectiuneaDAsig = doc.createElement("sbfrmSectiuneaD");
-				sbfrmPage1Asig.appendChild(sbfrmSectiuneaDAsig);
-
-				Element sbfrmSectiuneaDrep = doc.createElement("sbfrmSectiuneaDrep");
-				sbfrmSectiuneaDAsig.appendChild(sbfrmSectiuneaDrep);
-
-				childElement = doc.createElement("D_1");
-				childElement.appendChild(doc.createTextNode("")); // de completat seria certificatului medical
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_2");
-				childElement.appendChild(doc.createTextNode("")); // de completat numarul certificatului medical
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_5");
-				childElement.appendChild(doc.createTextNode("")); // de completat data acordarii certificatului medical
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_6");
-				childElement.appendChild(doc.createTextNode("")); // de completat data inceput valabilitate cm
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_7");
-				childElement.appendChild(doc.createTextNode("")); // de completat data sfarsit valabilitate cm
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_8");
-				childElement.appendChild(doc.createTextNode("")); // de completat cnp copil
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_9");
-				childElement.appendChild(doc.createTextNode("")); // de completat codul indemnizatiei (1 -> 15) == tipul
-																	// de boala
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_10");
-				childElement.appendChild(doc.createTextNode("")); // de completat locul de prescriere (1->4)
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_11");
-				childElement.appendChild(doc.createTextNode("")); // de completat codul de urgenta medico-chirurgicala
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_12");
-				childElement.appendChild(doc.createTextNode("")); // Cod boală infectocontagioasă grupa A
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_14");
-				childElement.appendChild(doc.createTextNode("")); // de completat zile lucratoare suportate de angajator
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_15");
-				childElement.appendChild(doc.createTextNode("")); // de completat zile lucratoare suportate de fnuass
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_17");
-				childElement.appendChild(doc.createTextNode("")); // de completat suma veniturilor in ultimele 6 luni
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_18");
-				childElement.appendChild(doc.createTextNode("")); // de completat nr zile lucratoare in ultimele 6 luni
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_19");
-				childElement.appendChild(doc.createTextNode("")); // de completat media zilnica a bazei de calcul
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_20");
-				childElement.appendChild(doc.createTextNode("")); // de completat indemnizatie suportata de angajator
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_21");
-				childElement.appendChild(doc.createTextNode("")); // de completat indemnizatie FNUASS
-				sbfrmSectiuneaDrep.appendChild(childElement);
-
-				childElement = doc.createElement("D_23");
-				childElement.appendChild(doc.createTextNode("")); // de completat cod boala
-				sbfrmSectiuneaDrep.appendChild(childElement);
+				if (angajat.getContract().getTip() == "Contract de munca" && realizariRetineri.getZilecm() != 0) {
+					sectiune = "B";
+					Element sfmButoaneB = doc.createElement("sfmButoane");
+					sbfrmPage1Asig.appendChild(sfmButoaneB);
+
+					childElement = doc.createElement("rbl");
+					childElement.appendChild(doc.createTextNode("3"));
+					sfmButoaneB.appendChild(childElement);
+
+					childElement = doc.createElement("flag");
+					childElement.appendChild(doc.createTextNode("1"));
+					sfmButoaneB.appendChild(childElement);
+
+					Element rbl2B = doc.createElement("rbl2");
+					sfmButoaneB.appendChild(rbl2B);
+
+					childElement = doc.createElement("rbC");
+					childElement.appendChild(doc.createTextNode("0"));
+					rbl2B.appendChild(childElement);
+
+					childElement = doc.createElement("rbB");
+					childElement.appendChild(doc.createTextNode("2"));
+					rbl2B.appendChild(childElement);
+
+					childElement = doc.createElement("rbA");
+					childElement.appendChild(doc.createTextNode("0"));
+					rbl2B.appendChild(childElement);
+
+					Element sbfrmSectiuneaB = doc.createElement("sbfrmSectiuneaB");
+					sbfrmPage1Asig.appendChild(sbfrmSectiuneaB);
+
+					childElement = doc.createElement("calc_aut");
+					childElement.appendChild(doc.createTextNode("1"));
+					sbfrmSectiuneaB.appendChild(childElement);
+
+					Element sbfrmSectiuneaB1rep = doc.createElement("sbfrmSectiuneaB1rep");
+					sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB1rep);
+
+					Element sbfrmSectiuneaB1 = doc.createElement("sbfrmSectiuneaB1");
+					sbfrmSectiuneaB1rep.appendChild(sbfrmSectiuneaB1);
+
+					childElement = doc.createElement("VB_B");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));// total
+																														// drepturi
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_1");
+					childElement.appendChild(doc.createTextNode("1"));
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_2");
+					childElement.appendChild(doc.createTextNode(angajat.getContract().isPensionar() ? "1" : "0")); // pensionar
+																													// sau
+																													// nu
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_3");
+					childElement.appendChild(doc.createTextNode(realizariRetineri.getDuratazilucru() == 8 ? "N"
+							: "P" + String.valueOf(realizariRetineri.getDuratazilucru()))); // tip contract
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_4");
+					childElement.appendChild(doc.createTextNode("8")); // norma ore
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_6");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getOrelucrate()))); // ore
+																														// lucrate
+																														// efectiv
+																														// in
+																														// luna
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_7");
+					childElement.appendChild(doc.createTextNode("0")); // ore suspendate in luna
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_15");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate()))); // total
+																														// zile
+																														// lucrate
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_5");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // baza
+																														// calcul
+																														// CAM
+																														// (total
+																														// drepturi
+					// probabil)
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("B1_10");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // baza
+																														// calcul
+																														// indemnizatie
+																														// somaj
+					// (total
+					// drepturi probabil)
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("tfNrCrt");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					childElement = doc.createElement("tichete_B");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB1.appendChild(childElement);
+
+					Element SbfrmSectiuneaB2 = doc.createElement("SbfrmSectiuneaB2");
+					sbfrmSectiuneaB.appendChild(SbfrmSectiuneaB2);
+
+					childElement = doc.createElement("B2_2");
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate()))); // total
+																														// zile
+																														// lucrate
+					SbfrmSectiuneaB2.appendChild(childElement);
+
+					Double indem_fnuass = 0d;
+					Double indem_firma = 0d;
+					for (CM cm : cmService.getCMInLunaAnul(luna, an, angajat.getContract().getId())) {
+						indem_fnuass += cm.getIndemnizatiefnuass();
+						indem_firma += cm.getIndemnizatiefirma();
+					}
+
+					childElement = doc.createElement("B2_5");
+					childElement.appendChild(doc.createTextNode(
+							String.valueOf(realizariRetineri.getTotaldrepturi() - indem_fnuass - indem_firma))); // contributii
+					// sociale
+					// (totaldrepturi
+					// indemnizatii fnuass cm - indemnizatii firma
+					// cm)
+					SbfrmSectiuneaB2.appendChild(childElement);
+
+					childElement = doc.createElement("B2_6");
+					childElement.appendChild(doc.createTextNode(""));
+					SbfrmSectiuneaB2.appendChild(childElement);
+
+					childElement = doc.createElement("B2_7");
+					childElement.appendChild(doc.createTextNode(""));
+					SbfrmSectiuneaB2.appendChild(childElement);
+
+					Element sbfrmSectiuneaB3 = doc.createElement("sbfrmSectiuneaB3");
+					sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB3);
+
+					childElement = doc.createElement("B3_1");
+					// zile indemnizatie nr de zile lucratoare din timpul CM)
+					childElement
+							.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilecmlucratoare())));
+					sbfrmSectiuneaB3.appendChild(childElement);
+
+					childElement = doc.createElement("B3_6");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB3.appendChild(childElement);
+
+					childElement = doc.createElement("B3_7");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB3.appendChild(childElement);
+
+					childElement = doc.createElement("B3_11");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB3.appendChild(childElement);
+
+					childElement = doc.createElement("B3_12");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB3.appendChild(childElement);
+
+					childElement = doc.createElement("B3_13");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB3.appendChild(childElement);
+
+					Element facilitati = doc.createElement("facilitati");
+					sbfrmSectiuneaB3.appendChild(facilitati);
+
+					Element sbfrmSectiuneaB4 = doc.createElement("sbfrmSectiuneaB4");
+					sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB4);
+
+					childElement = doc.createElement("B4_6");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					childElement = doc.createElement("B4_7");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					childElement = doc.createElement("B4_8");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					childElement = doc.createElement("B4_14");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					childElement = doc.createElement("B4_5");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					Element facilitati2 = doc.createElement("facilitati");
+					sbfrmSectiuneaB4.appendChild(facilitati2);
+
+					childElement = doc.createElement("B4_5f");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_6f");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_7f");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_8f");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_14f");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_5i");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_6i");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_7i");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_8i");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_14i");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("SalBrut_B");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B_81");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B_82");
+					childElement.appendChild(doc.createTextNode(""));
+					facilitati2.appendChild(childElement);
+
+					childElement = doc.createElement("B4_2");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					childElement = doc.createElement("B4_1");
+					childElement.appendChild(doc.createTextNode(""));
+					sbfrmSectiuneaB4.appendChild(childElement);
+
+					// ---------SECTIUNEA D ------- DACA EXISTA SECTIUNEA B
+					for (CM cm : cmService.getCMInLunaAnul(luna, an, angajat.getContract().getId())) {
+
+						Element sbfrmSectiuneaDAsig = doc.createElement("sbfrmSectiuneaD");
+						sbfrmPage1Asig.appendChild(sbfrmSectiuneaDAsig);
+
+						Element sbfrmSectiuneaDrep = doc.createElement("sbfrmSectiuneaDrep");
+						sbfrmSectiuneaDAsig.appendChild(sbfrmSectiuneaDrep);
+
+						childElement = doc.createElement("D_1");
+						childElement.appendChild(doc.createTextNode(cm.getSerie())); // seria certificatului
+																						// medical
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_2");
+						childElement.appendChild(doc.createTextNode(cm.getNr())); // numarul certificatului
+																					// medical
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_5");
+						// data acordarii certificatului medical
+						childElement.appendChild(doc.createTextNode(dateFormat.format(cm.getDataeliberare())));
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_6");
+						childElement.appendChild(doc.createTextNode(dateFormat.format(cm.getDatainceput()))); // data
+																												// inceput
+																												// valabilitate
+																												// cm
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_7");
+						childElement.appendChild(doc.createTextNode(dateFormat.format(cm.getPanala()))); // data
+																											// sfarsit
+																											// valabilitate
+																											// cm
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_8");
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getCnpcopil()))); // cnp copil
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_9");
+						childElement.appendChild(doc.createTextNode(cm.getCodindemnizatie())); // codul indemnizatiei (1
+																								// -> 15)
+						// ==
+						// tipul
+						// de boala
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_10");
+						childElement.appendChild(doc.createTextNode(cm.getLocprescriere())); // locul de prescriere
+																								// (1->4)
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_11");
+						childElement.appendChild(doc.createTextNode(cm.getCodurgenta()));// codul de urgenta
+						// medico-chirurgicala
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_12");
+						childElement.appendChild(doc.createTextNode(cm.getCodboalainfcont())); // Cod boală
+																								// infectocontagioasă
+																								// grupa A
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_14");
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getZilefirma()))); // zile
+																											// lucratoare
+																											// suportate
+																											// de
+						// angajator
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_15");
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getZilefnuass()))); // zile
+																											// lucratoare
+																											// suportate
+																											// de
+						// fnuass
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						BazaCalculCMDTO bazaCalculCMDTO = bazaCalculService.getBazaCalculCMDTO(luna, an,
+								angajat.getPersoana().getId());
+
+						childElement = doc.createElement("D_17");
+						childElement.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getBazacalcul()))); // suma
+																														// veniturilor
+																														// in
+																														// ultimele
+																														// 6
+						// luni
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_18");
+						childElement
+								.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getZilebazacalcul()))); // nr
+																														// zile
+																														// lucratoare
+																														// in
+																														// ultimele
+						// 6
+						// luni
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_19");
+						childElement.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getMediezilnica()))); // media
+						// zilnica
+						// a
+						// bazei
+						// de
+						// calcul
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_20");
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getIndemnizatiefirma()))); // indemnizatie
+																													// suportata
+																													// de
+						// angajator
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_21");
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getIndemnizatiefnuass()))); // indemnizatie
+																													// FNUASS
+						sbfrmSectiuneaDrep.appendChild(childElement);
+
+						childElement = doc.createElement("D_23");
+						childElement.appendChild(doc.createTextNode(cm.getCodboala()));// cod boala
+						sbfrmSectiuneaDrep.appendChild(childElement);
+					}
+				}
 
 				// ---------SECTIUNEA C-------------avem salariatii care nu au contract de
 				// munca,
 				// dar care au venituri assimilate salariilor.
 				// Aici pot fi incluse contractele de administrare.
 
-				Element sbfrmSectiuneaCAsig = doc.createElement("sbfrmSectiuneaC");
-				sbfrmPage1Asig.appendChild(sbfrmSectiuneaCAsig);
+				if (angajat.getContract().getTip() == "Contract de administrator") {
+					sectiune = "C";
+					Element sbfrmSectiuneaCAsig = doc.createElement("sbfrmSectiuneaC");
+					sbfrmPage1Asig.appendChild(sbfrmSectiuneaCAsig);
 
-				Element SectiuneaC = doc.createElement("SectiuneaC");
-				sbfrmSectiuneaCAsig.appendChild(SectiuneaC);
+					Element SectiuneaC = doc.createElement("SectiuneaC");
+					sbfrmSectiuneaCAsig.appendChild(SectiuneaC);
 
-				childElement = doc.createElement("ID_C");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("ID_C");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_2");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_2");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_5");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_5");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_3");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_3");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_17");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_17");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_19");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_19");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_4");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_4");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_18");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_18");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_8");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_8");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_9");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_9");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_10");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_10");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
 
-				childElement = doc.createElement("C_11");
-				childElement.appendChild(doc.createTextNode(""));
-				SectiuneaC.appendChild(childElement);
+					childElement = doc.createElement("C_11");
+					childElement.appendChild(doc.createTextNode(""));
+					SectiuneaC.appendChild(childElement);
+				}
 
 				// ------SECTIUNEA E----
 
@@ -1086,17 +1221,29 @@ public class Dec112Service {
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_1");
-				childElement.appendChild(doc.createTextNode("")); // de completat sectiune asigurat
+				childElement.appendChild(doc.createTextNode(sectiune)); // sectiune asigurat
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_2");
-				childElement.appendChild(doc.createTextNode("")); // de completat tip asigurat, daca are studii sup si
-																	// vechime atunci este 26, altfel este 1
+				childElement.appendChild(doc.createTextNode(angajat.getContract().isStudiisuperioare() ? "26" : "1")); // tip
+																														// asigurat,
+																														// daca
+																														// are
+																														// studii
+																														// sup
+																														// si
+				// vechime atunci este 26, altfel este 1
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_3");
-				childElement.appendChild(doc.createTextNode("")); // de completat functie de baza, daca are atunci este
-																	// 1, altfel e 2
+				childElement.appendChild(doc.createTextNode(angajat.getContract().isFunctiedebaza() ? "1" : "2")); // functie
+																													// de
+																													// baza,
+																													// daca
+																													// are
+																													// atunci
+																													// este
+				// 1, altfel e 2
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_4");

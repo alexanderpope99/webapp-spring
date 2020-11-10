@@ -17,7 +17,11 @@ public class CMDTO {
 
 	private LocalDate datainceput;
 
-	private String serienrcertificat;
+	private String serie;
+
+	private String nr;
+
+	private String cnpcopil;
 
 	private String dataeliberare;
 
@@ -100,7 +104,7 @@ public class CMDTO {
 	}
 
 	public Integer getIdontract() {
-		if(contract == null)
+		if (contract == null)
 			return idcontract;
 		return contract.getId();
 	}
@@ -131,10 +135,6 @@ public class CMDTO {
 
 	public Double getProcent() {
 		return procent;
-	}
-
-	public String getSerienrcertificat() {
-		return serienrcertificat;
 	}
 
 	public Boolean getUrgenta() {
@@ -237,10 +237,6 @@ public class CMDTO {
 		this.procent = procent;
 	}
 
-	public void setSerienrcertificat(String serienrcertificat) {
-		this.serienrcertificat = serienrcertificat;
-	}
-
 	public void setUrgenta(Boolean urgenta) {
 		this.urgenta = urgenta;
 	}
@@ -255,5 +251,29 @@ public class CMDTO {
 
 	public void setZilefnuass(Integer zilefnuass) {
 		this.zilefnuass = zilefnuass;
+	}
+
+	public String getCnpcopil() {
+		return cnpcopil;
+	}
+
+	public void setCnpcopil(String cnpcopil) {
+		this.cnpcopil = cnpcopil;
+	}
+
+	public String getNr() {
+		return nr;
+	}
+
+	public void setNr(String nr) {
+		this.nr = nr;
+	}
+
+	public String getSerie() {
+		return serie;
+	}
+
+	public void setSerie(String serie) {
+		this.serie = serie;
 	}
 }
