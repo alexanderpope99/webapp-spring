@@ -23,7 +23,7 @@ public class CMDTO {
 
 	private String cnpcopil;
 
-	private String dataeliberare;
+	private LocalDate dataeliberare;
 
 	private String codurgenta;
 
@@ -87,7 +87,7 @@ public class CMDTO {
 		return continuare;
 	}
 
-	public String getDataeliberare() {
+	public LocalDate getDataeliberare() {
 		return dataeliberare;
 	}
 
@@ -181,7 +181,7 @@ public class CMDTO {
 		this.continuare = continuare;
 	}
 
-	public void setDataeliberare(String dataeliberare) {
+	public void setDataeliberare(LocalDate dataeliberare) {
 		this.dataeliberare = dataeliberare;
 	}
 

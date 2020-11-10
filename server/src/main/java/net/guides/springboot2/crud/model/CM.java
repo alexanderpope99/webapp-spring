@@ -43,7 +43,7 @@ public class CM implements Serializable {
 	private String cnpcopil;
 
 	@Column(name = "dataeliberare")
-	private String dataeliberare;
+	private LocalDate dataeliberare;
 
 	@Column(name = "codurgenta")
 	private String codurgenta;
@@ -104,7 +104,7 @@ public class CM implements Serializable {
 	}
 
 	public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serie, String nr,
-			String dataeliberare, String codurgenta, Float procent, String codboalainfcont, Float bazacalcul,
+			LocalDate dataeliberare, String codurgenta, Float procent, String codboalainfcont, Float bazacalcul,
 			Float bazacalculplafonata, Integer zilebazacalcul, Float mediezilnica, Integer zilefirma,
 			Float indemnizatiefirma, Integer zilefnuass, Float indemnizatiefnuass, String locprescriere,
 			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract, String cnpcopil,
@@ -201,11 +201,11 @@ public class CM implements Serializable {
 		this.cnpcopil = cnpcopil;
 	}
 
-	public String getDataeliberare() {
+	public LocalDate getDataeliberare() {
 		return dataeliberare;
 	}
 
-	public void setDataeliberare(String dataeliberare) {
+	public void setDataeliberare(LocalDate dataeliberare) {
 		this.dataeliberare = dataeliberare;
 	}
 

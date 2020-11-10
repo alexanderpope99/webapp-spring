@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -533,7 +532,7 @@ public class Dec112Service {
 			// end sbfrmPage1Ang
 
 			int c = 1;
-			DateFormat dateFormat = new SimpleDateFormat("dd.mm.YYYY");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 			for (Angajat angajat : angajati) {
 				Element sbfrmPage1Asig = doc.createElement("sbfrmPage1Asig");
 				frmMAIN.appendChild(sbfrmPage1Asig);
@@ -559,7 +558,7 @@ public class Dec112Service {
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("Pren_asig");
-				childElement.appendChild(doc.createTextNode(dateFormat.format(angajat.getContract().getData())));
+				childElement.appendChild(doc.createTextNode(formatter.format(angajat.getContract().getData())));
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("Casa_sn");
@@ -1035,21 +1034,21 @@ public class Dec112Service {
 
 						childElement = doc.createElement("D_5");
 						// data acordarii certificatului medical
-						childElement.appendChild(doc.createTextNode(dateFormat.format(cm.getDataeliberare())));
+						childElement.appendChild(doc.createTextNode(formatter.format(cm.getDataeliberare())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_6");
-						childElement.appendChild(doc.createTextNode(dateFormat.format(cm.getDatainceput()))); // data
+						childElement.appendChild(doc.createTextNode(formatter.format(cm.getDatainceput()))); // data
 																												// inceput
 																												// valabilitate
 																												// cm
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_7");
-						childElement.appendChild(doc.createTextNode(dateFormat.format(cm.getPanala()))); // data
-																											// sfarsit
-																											// valabilitate
-																											// cm
+						childElement.appendChild(doc.createTextNode(formatter.format(cm.getPanala()))); // data
+																										// sfarsit
+																										// valabilitate
+																										// cm
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_8");
