@@ -3,10 +3,13 @@ package net.guides.springboot2.crud.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
+import net.guides.springboot2.crud.dto.BazacalculDTO;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Bazacalcul;
 import net.guides.springboot2.crud.model.RealizariRetineri;
@@ -19,6 +22,19 @@ public class BazacalculService {
 	private BazacalculRepository bazacalculRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	public BazacalculDTO save(BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
+		Bazacalcul bc = modelMapper.map(bazacalculDTO, Bazacalcul.class);
+		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat())
+			.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + bazacalculDTO.getIdangajat()));
+
+		bc.setAngajat(angajat);
+		bazacalculRepository.save(bc);
+		return bazacalculDTO;
+	}
 
 	public List<Bazacalcul> getBazaCalculUltimele6Luni(int luna, int an, int idangajat) {
 		int luna6, an6 = an;
@@ -144,7 +160,7 @@ public class BazacalculService {
 		return bazacalculRepository.save(bazaCalcul);
 	}
 
-	public BazaCalculCMDTO getBazaCalculCM(int luna, int an, int idangajat) {
+	public BazaCalculCMDTO getBazaCalculCMDTO(int luna, int an, int idangajat) {
 		List<Bazacalcul> bazeUltimele6Luni = this.getBazaCalculUltimele6Luni(luna, an, idangajat);
 		if (bazeUltimele6Luni.size() < 6)
 			return new BazaCalculCMDTO(0, 0, 0);

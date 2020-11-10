@@ -93,7 +93,7 @@ public class Bazacalcul implements Serializable {
 		this.an = an;
 	}
 
-	// public void setAngajat(Angajat angajat) {
-	// 	this.angajat = angajat;
-	// }
+	 public void setAngajat(Angajat angajat) {
+	 	this.angajat = angajat;
+	 }
 }

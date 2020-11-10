@@ -49,15 +49,15 @@ public class Angajat implements Serializable {
 	// private Set<Angajat> subalterni = new HashSet<Angajat>();
 
 	@JsonBackReference(value = "cerereconcediu-angajat")
-	@OneToMany(mappedBy = "pentru", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "pentru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CereriConcediu> cereriConcediu;
 
 	@JsonBackReference(value = "persoanaintretinere-angajat")
-	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PersoanaIntretinere> persoaneIntretinere;
 
 	@JsonBackReference(value = "bazacalcul-angajat")
-	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Bazacalcul> bazaCalcul;
 
 	public Angajat() {}
