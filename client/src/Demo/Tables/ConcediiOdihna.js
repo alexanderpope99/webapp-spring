@@ -317,6 +317,7 @@ class COTabel extends React.Component {
   // function to create react table rows with fetched data
   renderCO() {
     this.setState({
+      // eslint-disable-next-line array-callback-return
       coComponent: this.state.co.map((co, index) => {
         if (
           co.dela
@@ -427,7 +428,7 @@ class COTabel extends React.Component {
                   required
                   type="date"
                   value={this.state.dela}
-                  max={this.state.panala}
+                  max={this.state.panala === this.state.dela ? null : this.state.panala}
                   onChange={(e) => this.onChangeDela(e.target.value)}
                 />
               </Form.Group>

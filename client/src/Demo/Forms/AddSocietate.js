@@ -83,47 +83,22 @@ class AddSocietate extends React.Component {
       if (this.state[key] === '' || this.state[key] === "''") this.state[key] = null;
     }
 
-    var caen_id = null;
-    // if (this.state.idcaen !== null) {
-    //   caen_id = await axios
-    //     .get(`${server.address}/caen/${this.state.idcaen}`, { headers: authHeader() })
-    //     .then((res) => (res.status === 200 ? res.data : -1));
+    // var caen_id = null;
 
-    //   if (caen_id === -1) {
-    //     caen_id = null;
-    //   } else {
-    //     caen_id = caen_id.id;
-    //     console.log('caen_id:', caen_id);
-    //   }
-    // }
-
-    var idadresa = null;
-    // if aresa hass all fields null, don't add adresa or idadresa
-    if (this.state.adresa !== null || this.state.localitate !== null) {
-      // FIRST ADD ADRESA TO DATABASE
-      const adresa_body = {
-        adresa: this.state.adresa,
-        localitate: this.state.localitate,
-        judet: this.state.judet,
-        tara: null,
-      };
-      // console.log(JSON.stringify(adresa_body));
-      let adresa = await axios
-        .post(`${server.address}/adresa`, adresa_body, {
-          headers: authHeader(),
-        })
-        .then((res) => res.data);
-      idadresa = adresa.id;
-      console.log('idadresa:', adresa);
-    }
+		let adresa_body = {
+			adresa: this.state.adresa,
+			localitate: this.state.localitate,
+			judet: this.state.judet,
+			tara: null,
+		};
     // build societate JSON for POST with adr_id as idadresa
     const societate_body = {
       nume: this.state.nume,
-      idcaen: this.state.idcaen,
+      idcaen: Number(this.state.idcaen),
       cif: this.state.cif,
       capsoc: this.state.capsoc,
       regcom: this.state.regcom,
-      idadresa: idadresa,
+      adresa: adresa_body,
       email: this.state.email,
       telefon: this.state.telefon,
     };
