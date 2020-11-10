@@ -21,6 +21,8 @@ import net.guides.springboot2.crud.dto.AngajatDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.repository.AngajatRepository;
+import net.guides.springboot2.crud.services.AngajatService;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
@@ -28,6 +30,9 @@ import org.springframework.data.domain.Sort;
 public class AngajatController {
 	@Autowired
 	private AngajatRepository angajatRepository;
+
+	@Autowired
+	private AngajatService angajatService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -52,7 +57,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<AngajatDTO> getAngajatById(@PathVariable(value = "id") int angajatId)
+	public ResponseEntity<AngajatDTO> getAngajatByIdDTO(@PathVariable(value = "id") int angajatId)
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
@@ -61,7 +66,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("/expand/{id}")
-	public ResponseEntity<Angajat> getAngajatByIdExpand(@PathVariable(value = "id") int angajatId)
+	public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") int angajatId)
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
@@ -84,9 +89,20 @@ public class AngajatController {
 		return angajatRepository.countByIdsocietate(idsocietate);
 	}
 
-	@PostMapping
+	@PostMapping("/expand")
 	public Angajat createAngajat(@RequestBody Angajat angajat) {
 		return angajatRepository.save(angajat);
+	}
+
+	@PostMapping
+	public Angajat createAngajatDTO(@RequestBody AngajatDTO angajatDTO) throws ResourceNotFoundException {
+		return angajatService.save(angajatDTO);
+	}
+
+	@PostMapping("ids={ids}")
+	public Angajat createAngajat(@PathVariable("ids") int ids, @RequestBody Angajat angajat)
+		throws ResourceNotFoundException {
+		return angajatService.save(angajat, ids);
 	}
 
 	@PutMapping("{id}")

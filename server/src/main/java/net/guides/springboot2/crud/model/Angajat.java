@@ -1,21 +1,17 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
-// import java.util.HashSet;
-// import java.util.Set;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-// import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -26,12 +22,12 @@ public class Angajat implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "idpersoana")
 	private int idpersoana;
 
 	// @JsonManagedReference(value = "angajat-persoana")
-	@OneToOne
-	@PrimaryKeyJoinColumn(name = "idpersoana", referencedColumnName = "id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idpersoana", referencedColumnName = "id")
+	@MapsId
 	private Persoana persoana;
 
 	// @JsonManagedReference(value = "angajat-contract")
@@ -45,7 +41,7 @@ public class Angajat implements Serializable {
 	private Societate societate;
 
 	// @JsonManagedReference(value = "angajat-angajat")
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@ManyToOne
 	@JoinColumn(name = "idsuperior")
 	private Angajat superior;
 
@@ -53,20 +49,18 @@ public class Angajat implements Serializable {
 	// private Set<Angajat> subalterni = new HashSet<Angajat>();
 
 	@JsonBackReference(value = "cerereconcediu-angajat")
-	@OneToMany(mappedBy = "pentru", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "pentru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CereriConcediu> cereriConcediu;
 
 	@JsonBackReference(value = "persoanaintretinere-angajat")
-	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PersoanaIntretinere> persoaneIntretinere;
 
 	@JsonBackReference(value = "bazacalcul-angajat")
-	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Bazacalcul> bazaCalcul;
 
-	public Angajat() {
-
-	}
+	public Angajat() {}
 
 	public Angajat(Contract contract, Societate societate) {
 		this.contract = contract;

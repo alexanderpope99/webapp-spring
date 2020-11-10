@@ -36,7 +36,6 @@ public class RealizariRetineriService {
     @Autowired
     private TicheteService ticheteService;
     @Autowired
-
     private RetineriService retineriService;
     @Autowired
     private BazacalculService bazacalculService;

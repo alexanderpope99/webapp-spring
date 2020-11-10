@@ -80,8 +80,8 @@ class Angajat extends React.Component {
 
   async getSelectedAngajatData() {
     // get id of selected angajat
-		const angajatsel = getAngajatSel();
-		const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
+    const angajatsel = getAngajatSel();
+    const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
     if (!idpersoana) {
       this.contract.current.clearFields();
       this.setState({ angajatsel: null });
@@ -105,7 +105,7 @@ class Angajat extends React.Component {
   }
 
   async onFocusContract() {
-		const angajat = await this.getSelectedAngajatData();
+    const angajat = await this.getSelectedAngajatData();
     if (!angajat) return;
     // declared for typing convenience
     let idcontract = angajat.idcontract;
@@ -113,61 +113,34 @@ class Angajat extends React.Component {
 
     var contract = null;
     // if angajat has contract
-    if (idcontract !== null) {
+    if (idcontract) {
       // fetch data from contract
       contract = await axios
         .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
     }
-		//* FILL CONTRACT
+    //* FILL CONTRACT
     this.contract.current.fillForm(contract, idpersoana);
   }
 
   async onFocusCO() {
-    // can also work with state.angajat
-    const angajat = await this.getSelectedAngajatData();
-    if (typeof angajat === 'undefined') return;
-    if (angajat.idcontract === null) {
-      this.setState(
-        {
-          show: true,
-          modalMessage: 'Pentru concedii, angajatul are nevoie de un contract de muncă.',
-        },
-        () => this.setState({ key: 'contract' })
-      );
-      return;
-    }
-
-    this.co.current.setAngajat(angajat);
+    await this.co.current.updateAngajatSel();
+    this.setState({ angajatsel: getAngajatSel() });
   }
 
   async onFocusCM() {
-    // can also work with state.angajat
-    const angajat = await this.getSelectedAngajatData();
-    if (typeof angajat === 'undefined') return;
-
-    // angajatul nu are contract, deci nu se pot adauga concedii
-    if (angajat.idcontract === null) {
-      this.setState({
-        show: true,
-        modalMessage: 'Pentru concedii, angajatul are nevoie de un contract de muncă.',
-        key: 'contract',
-      });
-      return;
-    }
-
-    this.cm.current.setAngajat(angajat);
+    await this.cm.current.updateAngajatSel();
+    this.setState({ angajatsel: getAngajatSel() });
   }
+
   async onFocusBC() {
     await this.bc.current.updateAngajatSel();
-    this.bc.current.onRefresh();
     this.setState({ anajatsel: getAngajatSel() });
   }
 
   async onFocusPI() {
     await this.persoaneintretinere.current.updateAngajatSel();
-    this.persoaneintretinere.current.onRefresh();
     this.setState({ angajatsel: getAngajatSel() });
   }
 
@@ -185,7 +158,8 @@ class Angajat extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Row>
+        
+				<Row>
           <Col>
             <h5>
               {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat

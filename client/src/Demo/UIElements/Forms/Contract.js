@@ -28,7 +28,7 @@ class Contract extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
-      id: null,
+      id: 0,
       modelContract: 'Contract de munca', //text
       numărContract: '', //text
       marca: '', //text
@@ -71,7 +71,7 @@ class Contract extends React.Component {
 
   clearFields() {
     this.setState({
-      id: null,
+      id: 0,
       modelContract: 'Contract de munca', //text
       numărContract: '', //text
       marca: '', //text
@@ -135,14 +135,14 @@ class Contract extends React.Component {
   }
 
   async fillForm(contract, idangajat) {
-    if (contract === null) {
+    if (!contract) {
       this.clearFields();
       // get adresa
       const adresa = await axios
         .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
-
+      console.log(adresa);
       // get casa_de_sanatate
       var cs = '-';
       if (adresa.judet) {
@@ -216,18 +216,10 @@ class Contract extends React.Component {
   }
 
   hasRequired() {
-    if (this.state.numărContract === '') {
+    if (!this.state.numărContract) {
       this.setState({
         show: true,
         modalMessage: 'Contractul trebuie să aibă un număr.',
-      });
-      return false;
-    }
-
-    if (this.state.numărContract === '') {
-      this.setState({
-        show: true,
-        modalMessage: 'Contractul trebuie să aibă o marcă.',
       });
       return false;
     }
@@ -251,7 +243,7 @@ class Contract extends React.Component {
 
     var method = 'PUT';
     // if person is missing contract
-    if (idcontract === null) {
+    if (!idcontract) {
       method = 'POST';
       idcontract = '';
     }
@@ -336,13 +328,12 @@ class Contract extends React.Component {
         method = 'PUT';
       }
       console.log('idcontract:', contract.id);
-		}
-		else {
-			this.setState({
-				show: true,
-				modalMessage: 'A aparut o eroare ⛔'
-			})
-		}
+    } else {
+      this.setState({
+        show: true,
+        modalMessage: 'A aparut o eroare ⛔',
+      });
+    }
   }
 
   render() {

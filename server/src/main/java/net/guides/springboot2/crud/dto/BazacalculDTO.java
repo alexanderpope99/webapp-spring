@@ -13,6 +13,7 @@ public class BazacalculDTO {
 
 	private int salariurealizat;
 
+	private int idangajat;
 	private Angajat angajat;
 
 	public int getAn() {
@@ -33,13 +34,19 @@ public class BazacalculDTO {
 
 	public Integer getIdangajat() {
 		if (angajat == null)
-			return null;
+			return idangajat;
 		else
 			return angajat.getPersoana().getId();
 	}
 
-	public void setAngajat(Angajat idangajat) {
-		this.angajat = idangajat;
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
+	}
+	public void setIdangajat(int idangajat) {
+		this.idangajat = idangajat;
+	}
+	public void setIdangajat(Angajat angajat) {
+		this.idangajat = angajat.getPersoana().getId();
 	}
 
 	public int getLuna() {

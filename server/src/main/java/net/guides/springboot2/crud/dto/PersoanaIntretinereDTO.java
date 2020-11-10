@@ -23,6 +23,7 @@ public class PersoanaIntretinereDTO {
 
 	private Boolean coasigurat;
 
+	private int idangajat;
 	private Angajat angajat;
 
 	public String getCnp() {
@@ -51,7 +52,7 @@ public class PersoanaIntretinereDTO {
 
 	public Integer getIdangajat() {
 		if (angajat == null)
-			return null;
+			return idangajat;
 		else
 			return angajat.getPersoana().getId();
 	}
@@ -92,9 +93,16 @@ public class PersoanaIntretinereDTO {
 		this.id = id;
 	}
 
-	public void setAngajat(Angajat idangajat) {
-		this.angajat = idangajat;
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
 	}
+	public void setIdangajat(Angajat angajat) {
+		this.idangajat = angajat.getPersoana().getId();
+	}
+	public void setIdangajat(int idangajat) {
+		this.idangajat = idangajat;
+	}
+	
 
 	public void setIntretinut(Boolean intretinut) {
 		this.intretinut = intretinut;

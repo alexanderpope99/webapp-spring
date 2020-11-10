@@ -30,7 +30,7 @@ public class Societate implements Serializable {
 	private String nume;
 
 	@Column(name = "idcaen")
-	private Long idcaen;
+	private Integer idcaen;
 
 	@Column(name = "cif")
 	private String cif;
@@ -74,7 +74,7 @@ public class Societate implements Serializable {
 	public Societate() {
 	}
 
-	public Societate(String nume, Long idcaen, String cif, Double capsoc, String regcom, Adresa adresa, String email,
+	public Societate(String nume, Integer idcaen, String cif, Double capsoc, String regcom, Adresa adresa, String email,
 			String telefon) {
 		this.nume = nume;
 		this.cif = cif;
@@ -110,7 +110,7 @@ public class Societate implements Serializable {
 		return adresa;
 	}
 
-	public Long getIdcaen() {
+	public Integer getIdcaen() {
 		return idcaen;
 	}
 
@@ -147,7 +147,7 @@ public class Societate implements Serializable {
 		this.adresa = adresa;
 	}
 
-	public void setIdcaen(Long idcaen) {
+	public void setIdcaen(Integer idcaen) {
 		this.idcaen = idcaen;
 	}
 

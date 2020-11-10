@@ -126,13 +126,13 @@ class Persoana extends React.Component {
   handleClose() {
     this.setState({
       show: false,
-			modalMessage: '',
-		});
-		window.scrollTo({
-			top: 0,
-			left: 0,
-			behavior: 'smooth',
-		});
+      modalMessage: '',
+    });
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   hasRequired() {
@@ -173,85 +173,55 @@ class Persoana extends React.Component {
 
     if (!this.hasRequired()) return;
 
-    var idactidentitate = null,
-      idadresa = null;
-
-    // POST only if any adrese fields is filled
-    if (this.state.adresacompleta || this.state.localitate || this.state.judet) {
-      const adresa_body = {
-        adresa: this.state.adresacompleta,
-        localitate: this.state.localitate,
-        judet: this.state.judet,
-        tara: null,
-      };
-
-      idadresa = await axios
-        .post(`${server.address}/adresa`, adresa_body, { headers: authHeader() })
-        .then((adresa) => adresa.data.id)
-        .catch((err) => console.error(err));
-      // console.log('idadresa:', adresa.id);
-    }
-
-    // POST only if any actitentitate field is filled
-    if (
-      this.state.serie ||
-      this.state.numar ||
-      this.state.cnp ||
-      this.state.eliberatde ||
-      this.state.dataeliberarii ||
-      this.state.datanasterii ||
-      this.state.loculnasterii
-    ) {
-      const buletin_body = {
-        cnp: this.state.cnp,
-        tip: this.state.tipact,
-        serie: this.state.serie,
-        numar: this.state.numar,
-        datanasterii: this.state.datanasterii,
-        eliberatde: this.state.eliberatde,
-        dataeliberarii: this.state.dataeliberarii,
-        loculnasterii: this.state.loculnasterii,
-      };
-
-      idactidentitate = await axios
-        .post(`${server.address}/actidentitate`, buletin_body, {
-          headers: authHeader(),
-        })
-        .then((res) => {
-          console.log('idactidentitate:', res.data.id);
-          return res.data.id;
-        });
-    }
-
-    const persoana_body = {
-      gen: this.state.gen,
-      nume: this.state.nume,
-      prenume: this.state.prenume,
-      idactidentitate: idactidentitate,
-      idadresa: idadresa,
-      starecivila: this.state.starecivila,
-      email: this.state.email,
-      telefon: this.state.telefon,
-      cnp: this.state.cnp,
+    let adresa_body = {
+      adresa: this.state.adresacompleta,
+      localitate: this.state.localitate,
+      judet: this.state.judet,
+      tara: null,
     };
-    console.log(persoana_body);
+
+    let buletin_body = {
+      cnp: this.state.cnp,
+      tip: this.state.tipact,
+      serie: this.state.serie,
+      numar: this.state.numar,
+      datanasterii: this.state.datanasterii,
+      eliberatde: this.state.eliberatde,
+      dataeliberarii: this.state.dataeliberarii,
+      loculnasterii: this.state.loculnasterii,
+    };
+
+    const angajat_body = {
+      persoana: {
+        gen: this.state.gen,
+        nume: this.state.nume,
+        prenume: this.state.prenume,
+        actidentitate: buletin_body,
+        adresa: adresa_body,
+        starecivila: this.state.starecivila,
+        email: this.state.email,
+        telefon: this.state.telefon,
+        cnp: this.state.cnp,
+      },
+    };
 
     const persoana = await axios
-      .post(`${server.address}/persoana`, persoana_body, { headers: authHeader() })
+      .post(`${server.address}/angajat/ids=${this.state.socsel.id}`, angajat_body, {
+        headers: authHeader(),
+      })
       .then((res) => (res.status === 200 ? res.data : null))
-			.catch((err) => console.error('error:', err.message));
-			console.log(persoana);
+      .catch((err) => console.error('error:', err.message));
 
     if (persoana) {
-			this.clearFields();
+      this.clearFields();
       this.setState({
         show: true,
         modalMessage: 'Persoana adaugată cu succes 💾',
       });
-      
+
       console.log('idpersoana:', persoana.id);
 
-      await this.createAngajat(persoana.id);
+      // await this.createAngajat(persoana.id);
     } else return;
   }
 

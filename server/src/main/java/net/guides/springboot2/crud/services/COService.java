@@ -29,26 +29,20 @@ public class COService {
 	@Autowired
 	private ContractRepository contractRepository;
 
-	public CO save(CODTO coDTO) throws ResourceNotFoundException {
+	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
 		CO co = modelMapper.map(coDTO, CO.class);
 		
 		Contract contract = contractRepository.findById(coDTO.getIdcontract())
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
 
 		co.setContract(contract);
-		return coRepository.save(co);
+		coRepository.save(co);
+		return coDTO;
 	}
 
 	public CODTO update(int coID, CODTO newCoDTO) throws ResourceNotFoundException {
 		newCoDTO.setId(coID);
-		CO newCO = modelMapper.map(newCoDTO, CO.class);
-		Contract contract = contractRepository.findById(newCoDTO.getIdcontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
-		newCO.setContract(contract);
-
-		coRepository.save(newCO);
-
-		return newCoDTO;
+		return save(newCoDTO);
 	}
 
 	public int getZileCFP(int luna, int an, int idcontract) {

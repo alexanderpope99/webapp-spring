@@ -46,7 +46,8 @@ public class PersoanaIntretinere implements Serializable {
 	@Column(name = "coasigurat")
 	private Boolean coasigurat;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne
 	@JoinColumn(name = "idangajat")
 	private Angajat angajat;
 
@@ -94,8 +95,15 @@ public class PersoanaIntretinere implements Serializable {
 		return gradinvaliditate;
 	}
 
-	public Angajat getAngajat() {
-		return angajat;
+	//public Angajat getAngajat() {
+	//	return angajat;
+	//}
+
+	public int getIdangajat() {
+		if(angajat == null)
+			return 0;
+			
+		return angajat.getPersoana().getId();
 	}
 
 	public Boolean getIntretinut() {

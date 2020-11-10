@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.repository.AdresaRepository;
+import net.guides.springboot2.crud.repository.PersoanaRepository;
 
 @RestController
 @RequestMapping("/adresa")
 public class AdresaController {
 	@Autowired
 	private AdresaRepository adresaRepository;
+	@Autowired
+	private PersoanaRepository persoanaRepository;
 
 	// @Autowired
 	// private ModelMapper modelMapper;
@@ -32,10 +35,6 @@ public class AdresaController {
 	@GetMapping
 	public List<Adresa> getAll() {
 		List<Adresa> adrese = adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-		// List<AdresaDTO> adreseDTO = new ArrayList<>();
-		// for (Adresa adr : adrese) {
-		// 	adreseDTO.add(modelMapper.map(adr, AdresaDTO.class));
-		// }
 		return adrese;
 	}
 
@@ -47,8 +46,14 @@ public class AdresaController {
 		return ResponseEntity.ok().body(adresa);
 	}
 
+	@GetMapping("idp={idp}")
+	public Adresa getAddressByIdpersoana(@PathVariable("idp") int idp) throws ResourceNotFoundException {
+		Adresa adresa = persoanaRepository.findById(idp).get().getAdresa();
+		return adresa;
+	}
+
 	@PostMapping
-	public Adresa createAdresa(@RequestBody Adresa adresa) {
+	public Adresa createAdresaDTO(@RequestBody Adresa adresa) {
 		return adresaRepository.save(adresa);
 	}
 

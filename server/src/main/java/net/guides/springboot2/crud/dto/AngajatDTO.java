@@ -7,6 +7,9 @@ import net.guides.springboot2.crud.model.Societate;
 
 public class AngajatDTO {
 	private int idpersoana;
+	private int idsocietate;
+	private int idcontract;
+	private int idsuperior;
 
 	private Persoana persoana;
 
@@ -24,21 +27,21 @@ public class AngajatDTO {
 
 	public Integer getIdcontract() {
 		if (contract == null)
-			return null;
+			return idcontract;
 		else
 			return contract.getId();
 	}
 
 	public Integer getIdsocietate() {
 		if (societate == null)
-			return null;
+			return idsocietate;
 		else
 			return societate.getId();
 	}
 
 	public Integer getIduperior() {
 		if (superior == null)
-			return null;
+			return idsuperior;
 		else
 			return superior.getPersoana().getId();
 	}
@@ -46,20 +49,28 @@ public class AngajatDTO {
 	public void setContract(Contract contract) {
 		this.contract = contract;
 	}
-
-	public void setIdpersoana(int idpersoana) {
-		this.idpersoana = idpersoana;
+	public void setIdcontract(int idcontract) {
+		this.idcontract = idcontract;
 	}
-
+	
 	public void setPersoana(Persoana persoana) {
 		this.persoana = persoana;
+	}
+	public void setIdpersoana(int idpersoana) {
+		this.idpersoana = idpersoana;
 	}
 
 	public void setSocietate(Societate societate) {
 		this.societate = societate;
 	}
+	public void setIdsocietate(int idsocietate) {
+		this.idsocietate = idsocietate;
+	}
 
 	public void setSuperior(Angajat superior) {
 		this.superior = superior;
+	}
+	public void setIdsuperior(int idsuperior) {
+		this.idsuperior = idsuperior;
 	}
 }

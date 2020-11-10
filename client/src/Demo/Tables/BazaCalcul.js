@@ -21,7 +21,7 @@ class BazaCalcul extends React.Component {
   constructor(props) {
     super();
 
-    this.onRefresh = this.onRefresh.bind(this);
+    this.fillTable = this.fillTable.bind(this);
     this.addBazaCalcul = this.addBazaCalcul.bind(this);
     this.updateBazaCalcul = this.updateBazaCalcul.bind(this);
     this.editBazaCalcul = this.editBazaCalcul.bind(this);
@@ -35,7 +35,7 @@ class BazaCalcul extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
-      angajatsel: getAngajatSel(),
+      angajat: getAngajatSel(),
       bazacalcul: [],
       bazacalculComponent: null,
 
@@ -64,17 +64,30 @@ class BazaCalcul extends React.Component {
   componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
     this.setState({ an_sel: new Date().getFullYear() });
-    this.onRefresh();
+    this.fillTable();
     window.scrollTo(0, 0);
   }
 
-  updateAngajatSel() {
-    this.setState({ angajatsel: getAngajatSel() });
+  async updateAngajatSel() {
+    let angajatSel = getAngajatSel();
+    if (angajatSel) {
+      let angajat = await axios
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => console.error(err));
+      if (angajat)
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
+    } else {
+      this.setState({ angajat: null }, this.fillTable);
+    }
   }
 
   async addBazaCalcul() {
     const bazacalcul_body = {
-      idangajat: this.state.angajatsel.idpersoana,
+      idangajat: this.state.angajat.idpersoana,
       an: this.state.an,
       luna: this.state.luna.nr,
       salariurealizat: this.state.salariurealizat,
@@ -91,16 +104,16 @@ class BazaCalcul extends React.Component {
       this.setState(
         {
           showConfirm: true,
-          modalMessage: 'Bază calcul adaugată pentru ' + this.state.angajatsel.numeintreg,
+          modalMessage: 'Bază calcul adaugată pentru ' + this.state.angajat.numeintreg,
         },
-        this.onRefresh
+        this.fillTable
       );
     }
   }
 
   async updateBazaCalcul(idbazacalcul) {
     const bazacalcul_body = {
-      idangajat: this.state.angajatsel.idpersoana,
+      idangajat: this.state.angajat.idpersoana,
       an: this.state.an,
       luna: this.state.luna.nr,
       salariurealizat: this.state.salariurealizat,
@@ -115,7 +128,7 @@ class BazaCalcul extends React.Component {
       .catch((err) => console.error(err));
 
     if (ok) {
-      this.onRefresh();
+      this.fillTable();
       await this.handleClose();
       this.setState({
         showConfirm: true,
@@ -142,7 +155,7 @@ class BazaCalcul extends React.Component {
     axios
       .delete(`${server.address}/bazacalcul/${idbazacalcul}`, { headers: authHeader() })
       .then((response) => response.data)
-      .then(this.onRefresh)
+      .then(this.fillTable)
       .catch((err) => console.error(err));
   }
 
@@ -225,10 +238,10 @@ class BazaCalcul extends React.Component {
     });
   }
 
-  async onRefresh() {
-    if (this.state.angajatsel) {
+  async fillTable() {
+    if (this.state.angajat) {
       const bazacalcul = await axios
-        .get(`${server.address}/bazacalcul/ida=${this.state.angajatsel.idpersoana}`, {
+        .get(`${server.address}/bazacalcul/ida=${this.state.angajat.idpersoana}`, {
           headers: authHeader(),
         })
         .then((res) => res.data)
@@ -326,6 +339,12 @@ class BazaCalcul extends React.Component {
       <option key={index}>{an}</option>
     ));
 
+    var monthsComponent = months.map((month, index) => (
+      <option key={month} data-key={index}>
+        {month}
+      </option>
+    ));
+
     var luniFaraBazaComponent = null;
     if (this.state.luni_fara_baza && this.state.luni_fara_baza[this.state.an_sel])
       luniFaraBazaComponent = this.state.luni_fara_baza[this.state.an_sel].map((luna) => (
@@ -362,7 +381,14 @@ class BazaCalcul extends React.Component {
                       onChange={(e) => this.onChangeMonth(e)}
                     >
                       <option>-</option>
-                      {luniFaraBazaComponent}
+                      {this.state.isEdit
+                        ? [
+                            ...luniFaraBazaComponent,
+                            <option key={this.state.luna.nr} data-key={this.state.luna.nr}>
+                              {this.state.luna.nume}
+                            </option>,
+                          ]
+                        : luniFaraBazaComponent}
                     </Form.Control>
                   </Form.Group>
                   <Form.Group>
@@ -412,20 +438,22 @@ class BazaCalcul extends React.Component {
                 <Card.Title as="h5">Bază calcul</Card.Title>
 
                 <Button
-                  variant="outline-info"
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  onClick={this.onRefresh}
+                  disabled={!this.state.angajat}
+                  onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
                 <Button
-                  onClick={this.openModalAdd}
-                  variant="outline-info"
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
+                  disabled={!this.state.angajat}
+                  onClick={this.openModalAdd}
                 >
                   <Add className="m-0 p-0" />
                 </Button>
