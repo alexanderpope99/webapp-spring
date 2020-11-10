@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.PersoanaIntretinereDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.PersoanaIntretinere;
 import net.guides.springboot2.crud.repository.PersoanaIntretinereRepository;
+import net.guides.springboot2.crud.services.PersoanaIntretinereService;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
@@ -25,6 +29,11 @@ import org.springframework.data.domain.Sort;
 public class PersoanaIntretinereController {
 	@Autowired
 	private PersoanaIntretinereRepository persoanaIntretinereRepository;
+	@Autowired
+	private PersoanaIntretinereService persoanaintretinereService;
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@GetMapping
 	public List<PersoanaIntretinere> getAllPersoane() {
@@ -46,20 +55,15 @@ public class PersoanaIntretinereController {
 	}
 
 	@PostMapping
-	public PersoanaIntretinere createPersoanaIntretinere(@RequestBody PersoanaIntretinere persoanaIntretinere) {
-		return persoanaIntretinereRepository.save(persoanaIntretinere);
+	public PersoanaIntretinereDTO createPersoanaIntretinere(@RequestBody PersoanaIntretinereDTO persoanaIntretinereDTO)
+			throws ResourceNotFoundException {
+		return persoanaintretinereService.save(persoanaIntretinereDTO);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<PersoanaIntretinere> updatePersoanaIntretinere(@PathVariable(value = "id") int id,
-			@RequestBody PersoanaIntretinere newPersoanaIntretinere) throws ResourceNotFoundException {
-		PersoanaIntretinere persoanaIntretinere = persoanaIntretinereRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
-
-		newPersoanaIntretinere.setId(persoanaIntretinere.getId());
-		final PersoanaIntretinere updatedPersoanaIntretinere = persoanaIntretinereRepository
-				.save(newPersoanaIntretinere);
-		return ResponseEntity.ok(updatedPersoanaIntretinere);
+	public ResponseEntity<PersoanaIntretinereDTO> updatePersoanaIntretinere(@PathVariable(value = "id") int id,
+			@RequestBody PersoanaIntretinereDTO piDTO) throws ResourceNotFoundException {
+		return ResponseEntity.ok().body(persoanaintretinereService.update(id, piDTO));
 	}
 
 	@DeleteMapping("{id}")

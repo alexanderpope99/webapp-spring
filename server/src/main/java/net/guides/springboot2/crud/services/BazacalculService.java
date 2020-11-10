@@ -36,6 +36,11 @@ public class BazacalculService {
 		return bazacalculDTO;
 	}
 
+	public BazacalculDTO update(int id, BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
+		bazacalculDTO.setId(id);
+		return save(bazacalculDTO);
+	}
+
 	public List<Bazacalcul> getBazaCalculUltimele6Luni(int luna, int an, int idangajat) {
 		int luna6, an6 = an;
 		if (luna <= 6) {

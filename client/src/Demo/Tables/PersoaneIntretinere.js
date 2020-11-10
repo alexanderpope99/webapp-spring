@@ -184,6 +184,60 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   // function to create react component with fetched data
+
+
+  async fillTable() {
+    if (this.state.angajat) {
+      const persoane = await axios
+        .get(`${server.address}/persoanaintretinere/ida=${this.state.angajat.idpersoana}`, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
+      if (persoane) {
+        this.setState(
+          {
+            persoane: persoane,
+          },
+          this.renderPersoane
+        );
+      }
+    } else {
+      this.setState({
+        persoane: [],
+        persoaneComponent: null,
+      });
+    }
+  }
+
+  async onSubmit(e) {
+    e.preventDefault();
+    if (this.state.isEdit) this.updatePersoanaIntretinere(this.state.id);
+    else this.addPersoanaIntretinere();
+  }
+
+  async handleClose() {
+    this.setState({
+      show: false,
+      id: null,
+      nume: '',
+      prenume: '',
+      cnp: '',
+      datanasterii: '',
+      grad: '',
+      gradinvaliditate: 'valid',
+      intretinut: false,
+      coasigurat: false,
+      idangajat: null,
+    });
+  }
+
+  handleCloseConfirm() {
+    this.setState({
+      modalMessage: '',
+      showConfirm: false,
+    });
+  }
   renderPersoane() {
     this.setState({
       persoaneComponent: this.state.persoane.map((pers, index) => {
@@ -195,8 +249,8 @@ class PersoaneIntretinereTabel extends React.Component {
             <th>{pers.cnp}</th>
             <th>{pers.grad}</th>
             <th>{pers.gradinvaliditate}</th>
-            <th>{pers.intretinut ? 'DA' : 'NU'}</th>
             <th>{pers.coasigurat ? 'DA' : 'NU'}</th>
+            <th>{pers.intretinut ? 'DA' : 'NU'}</th>
             <th>
               <Row>
                 <Button
@@ -262,61 +316,8 @@ class PersoaneIntretinereTabel extends React.Component {
         );
       }),
     });
-  }
-
-  async fillTable() {
-    if (this.state.angajat) {
-      const persoane = await axios
-        .get(`${server.address}/persoanaintretinere/ida=${this.state.angajat.idpersoana}`, {
-          headers: authHeader(),
-        })
-        .then((res) => res.data)
-        .catch((err) => console.error(err));
-      if (persoane) {
-        this.setState(
-          {
-            persoane: persoane,
-          },
-          this.renderPersoane
-        );
-      }
-    } else {
-      this.setState({
-        persoane: [],
-        persoaneComponent: null,
-      });
-    }
-  }
-
-  async onSubmit(e) {
-    e.preventDefault();
-    if (this.state.isEdit) this.updatePersoanaIntretinere(this.state.id);
-    else this.addPersoanaIntretinere();
-  }
-
-  async handleClose() {
-    this.setState({
-      show: false,
-      id: null,
-      nume: '',
-      prenume: '',
-      cnp: '',
-      datanasterii: '',
-      grad: '',
-      gradinvaliditate: 'valid',
-      intretinut: false,
-      coasigurat: false,
-      idangajat: null,
-    });
-  }
-
-  handleCloseConfirm() {
-    this.setState({
-      modalMessage: '',
-      showConfirm: false,
-    });
-  }
-
+	}
+	
   render() {
     return (
       <Aux>

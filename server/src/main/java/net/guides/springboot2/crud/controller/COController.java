@@ -73,14 +73,14 @@ public class COController {
 	}
 
 	@PostMapping
-	public CO createCO(@RequestBody CODTO co) throws ResourceNotFoundException {
+	public CODTO createCO(@RequestBody CODTO co) throws ResourceNotFoundException {
 		return coService.save(co);
 	}
 
 	@PutMapping("{id}")
 	public ResponseEntity<CODTO> updateCO(@PathVariable(value = "id") int coId, @RequestBody CODTO coDetails)
 			throws ResourceNotFoundException {
-		return ResponseEntity.ok(coService.update(coId, coDetails));
+		return ResponseEntity.ok().body(coService.update(coId, coDetails));
 	}
 
 	@DeleteMapping("{id}")

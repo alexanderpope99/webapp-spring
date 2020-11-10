@@ -53,14 +53,7 @@ public class CMService {
 
 	public CMDTO update(int cmID, CMDTO newCmDTO) throws ResourceNotFoundException {
 		newCmDTO.setId(cmID);
-		CM newCM = modelMapper.map(newCmDTO, CM.class);
-		Contract contract = contractRepository.findById(newCmDTO.getIdontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + newCmDTO.getIdontract()));
-		newCM.setContract(contract);
-
-		cmRepository.save(newCM);
-
-		return newCmDTO;
+		return save(newCmDTO);
 	}
 
 	public int getZileCM(int luna, int an, int idcontract) {

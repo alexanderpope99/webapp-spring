@@ -5,10 +5,7 @@ import java.time.LocalDate;
 import net.guides.springboot2.crud.model.Contract;
 
 public class CODTO {
-
 	private int id;
-
-	private int idcontract;
 
 	private String tip;
 
@@ -18,6 +15,7 @@ public class CODTO {
 
 	private Boolean sporuripermanente;
 
+	private int idcontract;
 	private Contract contract;
 
 	public LocalDate getDela() {

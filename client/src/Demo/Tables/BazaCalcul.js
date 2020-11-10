@@ -69,17 +69,20 @@ class BazaCalcul extends React.Component {
   }
 
   async updateAngajatSel() {
-		let angajatSel = getAngajatSel();
-		if(angajatSel) {
-			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
-				.then(res => res.status === 200 ? res.data : null)
-				.catch(err => console.error(err));
-			if(angajat)
-				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
-		}
-		else {
-			this.setState({angajat: null}, this.fillTable);
-		}
+    let angajatSel = getAngajatSel();
+    if (angajatSel) {
+      let angajat = await axios
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => console.error(err));
+      if (angajat)
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
+    } else {
+      this.setState({ angajat: null }, this.fillTable);
+    }
   }
 
   async addBazaCalcul() {
@@ -336,6 +339,12 @@ class BazaCalcul extends React.Component {
       <option key={index}>{an}</option>
     ));
 
+    var monthsComponent = months.map((month, index) => (
+      <option key={month} data-key={index}>
+        {month}
+      </option>
+    ));
+
     var luniFaraBazaComponent = null;
     if (this.state.luni_fara_baza && this.state.luni_fara_baza[this.state.an_sel])
       luniFaraBazaComponent = this.state.luni_fara_baza[this.state.an_sel].map((luna) => (
@@ -372,7 +381,14 @@ class BazaCalcul extends React.Component {
                       onChange={(e) => this.onChangeMonth(e)}
                     >
                       <option>-</option>
-                      {luniFaraBazaComponent}
+                      {this.state.isEdit
+                        ? [
+                            ...luniFaraBazaComponent,
+                            <option key={this.state.luna.nr} data-key={this.state.luna.nr}>
+                              {this.state.luna.nume}
+                            </option>,
+                          ]
+                        : luniFaraBazaComponent}
                     </Form.Control>
                   </Form.Group>
                   <Form.Group>

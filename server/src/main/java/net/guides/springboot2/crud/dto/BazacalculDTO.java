@@ -42,8 +42,11 @@ public class BazacalculDTO {
 	public void setAngajat(Angajat angajat) {
 		this.angajat = angajat;
 	}
-	public void setAngajat(int idangajat) {
+	public void setIdangajat(int idangajat) {
 		this.idangajat = idangajat;
+	}
+	public void setIdangajat(Angajat angajat) {
+		this.idangajat = angajat.getPersoana().getId();
 	}
 
 	public int getLuna() {
