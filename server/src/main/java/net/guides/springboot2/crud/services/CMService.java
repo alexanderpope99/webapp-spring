@@ -3,12 +3,17 @@ package net.guides.springboot2.crud.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.dto.CMDTO;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CM;
+import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CMRepository;
+import net.guides.springboot2.crud.repository.ContractRepository;
 
 @Service
 public class CMService {
@@ -18,12 +23,45 @@ public class CMService {
 	@Autowired
 	private CMRepository cmRepository;
 	@Autowired
-	private BazacalculService bazacalculService;
-	@Autowired
 	private AngajatRepository angajatRepository;
+	@Autowired
+	private ContractRepository contractRepository;
 
 	@Autowired
 	private SarbatoriService sarbatoriService;
+	@Autowired
+	private BazacalculService bazacalculService;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	public CMDTO save(CMDTO cmDTO) throws ResourceNotFoundException {
+		// convert from DTO to Entity
+		CM cm = modelMapper.map(cmDTO, CM.class);
+
+		Contract contract = contractRepository.findById(cmDTO.getIdontract())
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + cmDTO.getIdontract()));
+		cm.setContract(contract);
+
+		// save to DB
+		cm = cmRepository.save(cm);
+
+		// return sent body with correct id
+		cmDTO.setId(cm.getId());
+		return cmDTO;
+	}
+
+	public CMDTO update(int cmID, CMDTO newCmDTO) throws ResourceNotFoundException {
+		newCmDTO.setId(cmID);
+		CM newCM = modelMapper.map(newCmDTO, CM.class);
+		Contract contract = contractRepository.findById(newCmDTO.getIdontract())
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + newCmDTO.getIdontract()));
+		newCM.setContract(contract);
+
+		cmRepository.save(newCM);
+
+		return newCmDTO;
+	}
 
 	public int getZileCM(int luna, int an, int idcontract) {
 		// find all by idcontract
@@ -67,8 +105,6 @@ public class CMService {
 
 		return Math.round(valCM);
 	}
-
-	
 
 	private int zileC(int luna, int an, List<CM> concedii) {
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
