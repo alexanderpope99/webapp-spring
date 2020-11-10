@@ -378,8 +378,8 @@ class CMTabel extends React.Component {
       idcontract: cm.idcontract,
 
       isEdit: true,
-      show: true,
-    });
+			show: true
+    }, this.setNrZile);
   }
 
   // function to create react component with fetched data

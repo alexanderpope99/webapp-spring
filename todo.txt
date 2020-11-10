@@ -16,11 +16,6 @@ buton edit pentru:  [concediu odihna]
 
 adauga Părinte in optiune persoanaIntretinere.grad in frontend
 
-API FOR:
-	SOCIETATE,
-	BAZA CALCUL,
-	PERSOANA,
-
 *** INTREBARE: ***
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
