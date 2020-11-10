@@ -43,34 +43,34 @@ public class CM  implements Serializable {
 	private String codurgenta;
 
 	@Column(name = "procent")
-	private Double procent;
+	private Float procent;
 
 	@Column(name = "codboalainfcont")
 	private String codboalainfcont;
 
 	@Column(name = "bazacalcul")
-	private Double bazacalcul;
+	private Float bazacalcul;
 
 	@Column(name = "bazacalculplafonata")
-	private Double bazacalculplafonata;
+	private Float bazacalculplafonata;
 
 	@Column(name = "zilebazacalcul")
 	private Integer zilebazacalcul;
 
 	@Column(name = "mediezilnica")
-	private Double mediezilnica;
+	private Float mediezilnica;
 
 	@Column(name = "zilefirma")
 	private Integer zilefirma;
 
 	@Column(name = "indemnizatiefirma")
-	private Double indemnizatiefirma;
+	private Float indemnizatiefirma;
 
 	@Column(name = "zilefnuass")
 	private Integer zilefnuass;
 
 	@Column(name = "indemnizatiefnuass")
-	private Double indemnizatiefnuass;
+	private Float indemnizatiefnuass;
 
 	@Column(name = "locprescriere")
 	private String locprescriere;
@@ -95,9 +95,9 @@ public class CM  implements Serializable {
 	}
 
 	public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serienrcertificat,
-			String dataeliberare, String codurgenta, Double procent, String codboalainfcont, Double bazacalcul,
-			Double bazacalculplafonata, Integer zilebazacalcul, Double mediezilnica, Integer zilefirma,
-			Double indemnizatiefirma, Integer zilefnuass, Double indemnizatiefnuass, String locprescriere,
+			String dataeliberare, String codurgenta, Float procent, String codboalainfcont, Float bazacalcul,
+			Float bazacalculplafonata, Integer zilebazacalcul, Float mediezilnica, Integer zilefirma,
+			Float indemnizatiefirma, Integer zilefnuass, Float indemnizatiefnuass, String locprescriere,
 			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract) {
 		this.dela = dela;
 		this.panala = panala;
@@ -188,11 +188,11 @@ public class CM  implements Serializable {
 		this.codurgenta = codurgenta;
 	}
 
-	public Double getProcent() {
+	public Float getProcent() {
 		return procent;
 	}
 
-	public void setProcent(Double procent) {
+	public void setProcent(Float procent) {
 		this.procent = procent;
 	}
 
@@ -204,19 +204,19 @@ public class CM  implements Serializable {
 		this.codboalainfcont = codboalainfcont;
 	}
 
-	public Double getBazacalcul() {
+	public Float getBazacalcul() {
 		return bazacalcul;
 	}
 
-	public void setBazacalcul(Double bazacalcul) {
+	public void setBazacalcul(Float bazacalcul) {
 		this.bazacalcul = bazacalcul;
 	}
 
-	public Double getBazacalculplafonata() {
+	public Float getBazacalculplafonata() {
 		return bazacalculplafonata;
 	}
 
-	public void setBazacalculplafonata(Double bazacalculplafonata) {
+	public void setBazacalculplafonata(Float bazacalculplafonata) {
 		this.bazacalculplafonata = bazacalculplafonata;
 	}
 
@@ -228,11 +228,11 @@ public class CM  implements Serializable {
 		this.zilebazacalcul = zilebazacalcul;
 	}
 
-	public Double getMediezilnica() {
+	public Float getMediezilnica() {
 		return mediezilnica;
 	}
 
-	public void setMediezilnica(Double mediezilnica) {
+	public void setMediezilnica(Float mediezilnica) {
 		this.mediezilnica = mediezilnica;
 	}
 
@@ -244,11 +244,11 @@ public class CM  implements Serializable {
 		this.zilefirma = zilefirma;
 	}
 
-	public Double getIndemnizatiefirma() {
+	public Float getIndemnizatiefirma() {
 		return indemnizatiefirma;
 	}
 
-	public void setIndemnizatiefirma(Double indemnizatiefirma) {
+	public void setIndemnizatiefirma(Float indemnizatiefirma) {
 		this.indemnizatiefirma = indemnizatiefirma;
 	}
 
@@ -260,11 +260,11 @@ public class CM  implements Serializable {
 		this.zilefnuass = zilefnuass;
 	}
 
-	public Double getIndemnizatiefnuass() {
+	public Float getIndemnizatiefnuass() {
 		return indemnizatiefnuass;
 	}
 
-	public void setIndemnizatiefnuass(Double indemnizatiefnuass) {
+	public void setIndemnizatiefnuass(Float indemnizatiefnuass) {
 		this.indemnizatiefnuass = indemnizatiefnuass;
 	}
 
