@@ -17,10 +17,10 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
 class PersoaneIntretinereTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
-    this.onRefresh = this.onRefresh.bind(this);
+    this.fillTable = this.fillTable.bind(this);
     this.addPersoanaIntretinere = this.addPersoanaIntretinere.bind(this);
     this.updatePersoanaIntretinere = this.updatePersoanaIntretinere.bind(this);
     this.editPersoanaIntretinere = this.editPersoanaIntretinere.bind(this);
@@ -32,7 +32,7 @@ class PersoaneIntretinereTabel extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
-      angajatsel: getAngajatSel(),
+      angajat: getAngajatSel(),
       persoane: [],
       persoaneComponent: null,
 
@@ -59,12 +59,22 @@ class PersoaneIntretinereTabel extends React.Component {
   componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    this.onRefresh();
+    this.fillTable();
     window.scrollTo(0, 0);
   }
 
-  updateAngajatSel() {
-    this.setState({ angajatsel: getAngajatSel() });
+  async updateAngajatSel() {
+		let angajatSel = getAngajatSel();
+		if(angajatSel) {
+			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+				.then(res => res.status === 200 ? res.data : null)
+				.catch(err => console.error(err));
+			if(angajat)
+				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
+		}
+		else {
+			this.setState({angajat: null}, this.fillTable);
+		}
   }
 
   async addPersoanaIntretinere() {
@@ -77,7 +87,7 @@ class PersoaneIntretinereTabel extends React.Component {
       gradinvaliditate: this.state.gradinvaliditate.toLowerCase(),
       coasigurat: this.state.coasigurat,
       intretinut: this.state.intretinut,
-      idangajat: this.state.angajatsel.idpersoana,
+      idangajat: this.state.angajat.idpersoana,
     };
 
     let ok = await axios
@@ -89,9 +99,9 @@ class PersoaneIntretinereTabel extends React.Component {
       this.setState(
         {
           showConfirm: true,
-          modalMessage: 'Persoana întreținută adaugată pentru ' + this.state.angajatsel.numeintreg,
+          modalMessage: 'Persoana întreținută adaugată pentru ' + this.state.angajat.numeintreg,
         },
-        this.onRefresh
+        this.fillTable
       );
     }
   }
@@ -106,7 +116,7 @@ class PersoaneIntretinereTabel extends React.Component {
       gradinvaliditate: this.state.gradinvaliditate.toLowerCase(),
       coasigurat: this.state.coasigurat,
       intretinut: this.state.intretinut,
-      idangajat: this.state.angajatsel.idpersoana,
+      idangajat: this.state.angajat.idpersoana,
     };
 
     const ok = await axios
@@ -117,7 +127,7 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) => console.error(err));
 
     if (ok) {
-      this.onRefresh();
+      this.fillTable();
       await this.handleClose();
       this.setState({
         showConfirm: true,
@@ -145,11 +155,11 @@ class PersoaneIntretinereTabel extends React.Component {
     });
   }
 
-  async deletePersoana(id, nume, prenume) {
+  async deletePersoana(id) {
     axios
       .delete(`${server.address}/persoanaintretinere/${id}`, { headers: authHeader() })
       .then((response) => response.data)
-      .then(this.onRefresh)
+      .then(this.fillTable)
       .catch((err) => console.error(err));
   }
 
@@ -254,10 +264,10 @@ class PersoaneIntretinereTabel extends React.Component {
     });
   }
 
-  async onRefresh() {
-    if (this.state.angajatsel) {
+  async fillTable() {
+    if (this.state.angajat) {
       const persoane = await axios
-        .get(`${server.address}/persoanaintretinere/ida=${this.state.angajatsel.idpersoana}`, {
+        .get(`${server.address}/persoanaintretinere/ida=${this.state.angajat.idpersoana}`, {
           headers: authHeader(),
         })
         .then((res) => res.data)
@@ -435,20 +445,22 @@ class PersoaneIntretinereTabel extends React.Component {
                 <Card.Title as="h5">Persoane Întreținere</Card.Title>
 
                 <Button
-                  variant="outline-info"
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  onClick={this.onRefresh}
+                  disabled={!this.state.angajat}
+                  onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
                 <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
-                  variant="outline-info"
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
+                  disabled={!this.state.angajat}
+                  onClick={() => this.setState({ isEdit: false, show: true })}
                 >
                   <Add className="m-0 p-0" />
                 </Button>

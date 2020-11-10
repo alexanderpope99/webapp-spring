@@ -306,14 +306,14 @@ class RealizariRetineri extends React.Component {
     else
       setAngajatSel({
         numeintreg: e.target.value,
-        idpersoana: idangajat,
+				idpersoana: idangajat,
       });
 
     this.setState(
       {
         selected_angajat: getAngajatSel(),
       },
-      () => this.fillForm()
+      this.fillForm
     );
   }
 
@@ -333,7 +333,7 @@ class RealizariRetineri extends React.Component {
     }
 
     // save retineri to DB
-		console.log('################');
+    console.log('################');
     await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,

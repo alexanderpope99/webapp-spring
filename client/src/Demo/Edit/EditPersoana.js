@@ -248,7 +248,7 @@ class EditPersoana extends React.Component {
 
     setAngajatSel({
       idpersoana: persoana.id,
-      numeintreg: persoana.nume + ' ' + persoana.prenume,
+			numeintreg: persoana.nume + ' ' + persoana.prenume
     });
 
     if (persoana.adresa) {

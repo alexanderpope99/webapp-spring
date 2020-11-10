@@ -10,12 +10,13 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
 class COTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.handleClose = this.handleClose.bind(this);
@@ -31,7 +32,7 @@ class COTabel extends React.Component {
     this.setNrZile = this.setNrZile.bind(this);
 
     this.state = {
-      angajat: props.angajat,
+      angajat: getAngajatSel(),
 
       id: 0,
       today: '',
@@ -75,14 +76,19 @@ class COTabel extends React.Component {
       modalMessage: '',
     });
   }
-
-  setAngajat(angajat) {
-    this.setState(
-      {
-        angajat: angajat,
-      },
-      () => this.fillTable()
-    );
+	
+	async updateAngajatSel() {
+		let angajatSel = getAngajatSel();
+		if(angajatSel) {
+			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+				.then(res => res.status === 200 ? res.data : null)
+				.catch(err => console.error(err));
+			if(angajat)
+				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
+		}
+		else {
+			this.setState({angajat: null}, this.fillTable);
+		}
   }
 
   componentDidMount() {
@@ -140,8 +146,11 @@ class COTabel extends React.Component {
   }
 
   async fillTable() {
-    if (typeof this.state.angajat === 'undefined') return;
-    if (this.state.angajat.idcontract === null) {
+		if (!this.state.angajat) {
+      this.setState({ co: [] }, this.renderCO);
+      return;
+    }
+    if (!this.state.angajat.idcontract) {
       this.setState({ co: [] }, this.renderCO);
       return;
     }
@@ -151,7 +160,8 @@ class COTabel extends React.Component {
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((co) => (co.status == 200 ? co.data : null))
-      .catch((err) => console.error('err', err));
+			.catch((err) => console.error('err', err));
+		console.log(co);
 
     if (co) {
       var ani_cu_concediu = new Set();
@@ -227,7 +237,6 @@ class COTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  // TODO: adds, but modal doesnt change
   async addCO() {
     if (!this.state.angajat) return;
     if (!this.state.angajat.idcontract) {
@@ -293,7 +302,7 @@ class COTabel extends React.Component {
   }
 
   editCO(co) {
-    if (this.state.angajat.idcontract === null) {
+    if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
         modalMessage: 'Angajatul are nevoide de un contract de muncă',
@@ -500,29 +509,25 @@ class COTabel extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
-                  variant={
-                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                  }
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   className="float-right"
+                  disabled={!this.state.angajat}
                   onClick={() =>
                     this.setState(
                       { show: true, dela: this.state.today, panala: this.state.today },
                       this.setNrZile
                     )
                   }
-                  disabled={typeof this.state.angajat === 'undefined'}
                 >
                   Adaugă concediu
                 </Button>
 
                 <Button
-                  variant={
-                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                  }
-                  disabled={typeof this.state.angajat === 'undefined'}
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  onClick={this.fillTable}
+									disabled={!this.state.angajat}
+									onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />
                   {/* ↺ */}

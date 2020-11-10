@@ -100,7 +100,7 @@ public class AngajatController {
 	}
 
 	@PostMapping("ids={ids}")
-	public Angajat createAngajatDTO(@PathVariable("ids") int ids, @RequestBody Angajat angajat)
+	public Angajat createAngajat(@PathVariable("ids") int ids, @RequestBody Angajat angajat)
 		throws ResourceNotFoundException {
 		return angajatService.save(angajat, ids);
 	}

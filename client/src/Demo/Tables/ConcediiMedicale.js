@@ -10,12 +10,13 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
 class CMTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.handleClose = this.handleClose.bind(this);
@@ -30,7 +31,7 @@ class CMTabel extends React.Component {
     this.numberWithCommas = this.numberWithCommas.bind(this);
 
     this.state = {
-      angajat: props.angajat,
+      angajat: getAngajatSel(),
 
       an: '',
       luna: { nume: '-', nr: '-' },
@@ -110,13 +111,18 @@ class CMTabel extends React.Component {
     });
   }
 
-  setAngajat(angajat) {
-    this.setState(
-      {
-        angajat: angajat,
-      },
-      () => this.fillTable()
-    );
+  async updateAngajatSel() {
+		let angajatSel = getAngajatSel();
+		if(angajatSel) {
+			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+				.then(res => res.status === 200 ? res.data : null)
+				.catch(err => console.error(err));
+			if(angajat)
+				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
+		}
+		else {
+			this.setState({angajat: null}, this.fillTable);
+		}
   }
 
   numberWithCommas(x) {
@@ -158,9 +164,9 @@ class CMTabel extends React.Component {
   }
 
   onChangeDela(dela) {
-		if (!this.state.dela || dela > this.state.panala) 
-			this.setState({ dela: dela, panala: dela }, this.setNrZile);
-		else this.setState({ dela: dela }, this.setNrZile);
+    if (!this.state.dela || dela > this.state.panala)
+      this.setState({ dela: dela, panala: dela }, this.setNrZile);
+    else this.setState({ dela: dela }, this.setNrZile);
   }
   onChangePanala(panala) {
     this.setState({ panala: panala }, this.setNrZile);
@@ -178,7 +184,10 @@ class CMTabel extends React.Component {
   }
 
   async fillTable() {
-    if (!this.state.angajat) return;
+    if (!this.state.angajat) {
+      this.setState({ cm: [] }, this.renderCM);
+      return;
+    }
 
     if (!this.state.angajat.idcontract) {
       this.setState({ cm: [] }, this.renderCM);
@@ -331,7 +340,7 @@ class CMTabel extends React.Component {
   }
 
   async editCM(cm) {
-		if (!this.state.angajat) return;
+    if (!this.state.angajat) return;
     if (this.state.angajat.idcontract === null) {
       this.setState({
         show_confirm: true,
@@ -479,7 +488,7 @@ class CMTabel extends React.Component {
 
   // uses [this.state.an, this.state.luna]
   async getBazaCalculCM() {
-    if (typeof this.state.angajat === 'undefined' || !this.state.dela || !this.state.panala) {
+    if (!this.state.angajat || !this.state.dela || !this.state.panala) {
       console.log('dela/panala neselectat');
       return;
     }
@@ -532,8 +541,8 @@ class CMTabel extends React.Component {
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
                   type="date"
-									value={this.state.dela}
-									max={this.state.panala}
+                  value={this.state.dela}
+                  max={this.state.panala}
                   onChange={(e) => this.onChangeDela(e.target.value)}
                 />
               </Form.Group>
@@ -803,28 +812,24 @@ class CMTabel extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii medicale</Card.Title>
                 <Button
-                  variant={
-                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                  }
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   className="float-right"
+                  disabled={!this.state.angajat}
                   onClick={() =>
                     this.setState(
                       { show: true, dela: this.state.today, panala: this.state.today },
                       this.setNrZile
                     )
                   }
-                  disabled={!this.state.angajat}
                 >
                   Adaugă concediu
                 </Button>
 
                 <Button
-                  variant={
-                    typeof this.state.angajat === 'undefined' ? 'outline-dark' : 'outline-primary'
-                  }
-                  disabled={typeof this.state.angajat === 'undefined'}
+                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
+                  disabled={!this.state.angajat}
                   onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />
