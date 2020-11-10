@@ -41,4 +41,18 @@ public class AngajatService {
 		angajat = angajatRepository.save(angajat);
 		return angajat;
 	}
+
+	// angajat.persoana not null, other fields are null
+	public Angajat save(Angajat angajat, int idsocietate) throws ResourceNotFoundException {
+
+		angajat.setPersoana(persoanaRepository.save(angajat.getPersoana()));
+
+		Societate societate = societateRepository.findById(idsocietate)
+		.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+
+		angajat.setSocietate(societate);
+
+		angajat = angajatRepository.save(angajat);
+		return angajat;
+	}
 }

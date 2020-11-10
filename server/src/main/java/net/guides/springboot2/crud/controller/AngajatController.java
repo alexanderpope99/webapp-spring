@@ -99,6 +99,12 @@ public class AngajatController {
 		return angajatService.save(angajatDTO);
 	}
 
+	@PostMapping("ids={ids}")
+	public Angajat createAngajatDTO(@PathVariable("ids") int ids, @RequestBody Angajat angajat)
+		throws ResourceNotFoundException {
+		return angajatService.save(angajat, ids);
+	}
+
 	@PutMapping("{id}")
 	public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") int angajatId,
 			@RequestBody Angajat angajatDetails) throws ResourceNotFoundException {

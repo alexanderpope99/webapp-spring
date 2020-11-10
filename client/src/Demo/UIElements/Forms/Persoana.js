@@ -191,24 +191,26 @@ class Persoana extends React.Component {
       loculnasterii: this.state.loculnasterii,
     };
 
-    const persoana_body = {
-      gen: this.state.gen,
-      nume: this.state.nume,
-      prenume: this.state.prenume,
-      actidentitate: buletin_body,
-      adresa: adresa_body,
-      starecivila: this.state.starecivila,
-      email: this.state.email,
-      telefon: this.state.telefon,
-      cnp: this.state.cnp,
+    const angajat_body = {
+      persoana: {
+        gen: this.state.gen,
+        nume: this.state.nume,
+        prenume: this.state.prenume,
+        actidentitate: buletin_body,
+        adresa: adresa_body,
+        starecivila: this.state.starecivila,
+        email: this.state.email,
+        telefon: this.state.telefon,
+        cnp: this.state.cnp,
+      },
     };
-    console.log(persoana_body);
 
     const persoana = await axios
-      .post(`${server.address}/persoana`, persoana_body, { headers: authHeader() })
+      .post(`${server.address}/angajat/ids=${this.state.socsel.id}`, angajat_body, {
+        headers: authHeader(),
+      })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error('error:', err.message));
-    console.log(persoana);
 
     if (persoana) {
       this.clearFields();
@@ -219,7 +221,7 @@ class Persoana extends React.Component {
 
       console.log('idpersoana:', persoana.id);
 
-      await this.createAngajat(persoana.id);
+      // await this.createAngajat(persoana.id);
     } else return;
   }
 

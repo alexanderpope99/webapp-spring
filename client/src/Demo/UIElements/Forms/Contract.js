@@ -142,7 +142,7 @@ class Contract extends React.Component {
         .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
-			console.log(adresa);
+      console.log(adresa);
       // get casa_de_sanatate
       var cs = '-';
       if (adresa.judet) {
@@ -328,13 +328,12 @@ class Contract extends React.Component {
         method = 'PUT';
       }
       console.log('idcontract:', contract.id);
-		}
-		else {
-			this.setState({
-				show: true,
-				modalMessage: 'A aparut o eroare ⛔'
-			})
-		}
+    } else {
+      this.setState({
+        show: true,
+        modalMessage: 'A aparut o eroare ⛔',
+      });
+    }
   }
 
   render() {

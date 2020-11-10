@@ -53,7 +53,7 @@ public class AdresaController {
 	}
 
 	@PostMapping
-	public Adresa createAdresa(@RequestBody Adresa adresa) {
+	public Adresa createAdresaDTO(@RequestBody Adresa adresa) {
 		return adresaRepository.save(adresa);
 	}
 

@@ -34,12 +34,13 @@ class PersoaneTabel extends React.Component {
 
     this.onRefresh();
     window.scrollTo(0, 0);
-  }
-  deletePersoana(id, nume, prenume) {
+	}
+	
+  deletePersoana(id) {
     setAngajatSel(null);
 
     axios
-      .delete(`${server.address}/persoana/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/angajat/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(() => {
         // console.log(response);

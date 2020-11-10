@@ -1,8 +1,6 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
-// import java.util.HashSet;
-// import java.util.Set;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,7 +25,7 @@ public class Angajat implements Serializable {
 	private int idpersoana;
 
 	// @JsonManagedReference(value = "angajat-persoana")
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idpersoana", referencedColumnName = "id")
 	@MapsId
 	private Persoana persoana;
@@ -43,7 +41,7 @@ public class Angajat implements Serializable {
 	private Societate societate;
 
 	// @JsonManagedReference(value = "angajat-angajat")
-	@ManyToOne(cascade = { CascadeType.ALL })
+	@ManyToOne
 	@JoinColumn(name = "idsuperior")
 	private Angajat superior;
 
