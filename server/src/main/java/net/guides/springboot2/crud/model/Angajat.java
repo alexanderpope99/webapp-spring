@@ -6,16 +6,14 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-// import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -26,12 +24,12 @@ public class Angajat implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "idpersoana")
 	private int idpersoana;
 
 	// @JsonManagedReference(value = "angajat-persoana")
 	@OneToOne
-	@PrimaryKeyJoinColumn(name = "idpersoana", referencedColumnName = "id")
+	@JoinColumn(name = "idpersoana", referencedColumnName = "id")
+	@MapsId
 	private Persoana persoana;
 
 	// @JsonManagedReference(value = "angajat-contract")
@@ -64,9 +62,7 @@ public class Angajat implements Serializable {
 	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY)
 	private List<Bazacalcul> bazaCalcul;
 
-	public Angajat() {
-
-	}
+	public Angajat() {}
 
 	public Angajat(Contract contract, Societate societate) {
 		this.contract = contract;

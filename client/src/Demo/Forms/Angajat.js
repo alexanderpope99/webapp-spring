@@ -113,7 +113,7 @@ class Angajat extends React.Component {
 
     var contract = null;
     // if angajat has contract
-    if (idcontract !== null) {
+    if (idcontract) {
       // fetch data from contract
       contract = await axios
         .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
