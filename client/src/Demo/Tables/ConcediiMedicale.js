@@ -52,7 +52,8 @@ class CMTabel extends React.Component {
       nr_zile: 0,
       continuare: false,
       datainceput: '',
-      serienrcertificat: '',
+			serie: '',
+			nr: '',
       dataeliberare: '',
       codurgenta: '',
       procent: 100,
@@ -62,14 +63,16 @@ class CMTabel extends React.Component {
       zilebazacalcul: '',
       mediezilnica: '',
       zilefirma: '',
+			zilefnuass: '',
+			codindemnizatie: '',
       indemnizatiefirma: '',
-      zilefnuass: '',
       indemnizatiefnuass: '',
       locprescriere: '',
       nravizmedic: '',
       codboala: '',
       urgenta: false,
-      conditii: '',
+			conditii: '',
+			cnpcopil: '',
       idcontract: null,
 
       // succes modal:
@@ -89,7 +92,8 @@ class CMTabel extends React.Component {
       nr_zile: 0,
       continuare: false,
       datainceput: '',
-      serienrcertificat: '',
+			serie: '',
+			nr: '',
       dataeliberare: '',
       codurgenta: '',
       procent: 100,
@@ -99,14 +103,16 @@ class CMTabel extends React.Component {
       zilebazacalcul: '',
       mediezilnica: '',
       zilefirma: '',
+			zilefnuass: '',
+			codindemnizatie: '',
       indemnizatiefirma: '',
-      zilefnuass: '',
       indemnizatiefnuass: '',
       locprescriere: '',
       nravizmedic: '',
       codboala: '',
       urgenta: false,
-      conditii: '',
+			conditii: '',
+			cnpcopil: '',
       idcontract: null,
     });
   }
@@ -357,7 +363,10 @@ class CMTabel extends React.Component {
       panala: cm.panala.substring(0, 10),
       continuare: cm.continuare,
       datainceput: cm.datainceput.substring(0, 10),
-      serienrcertificat: cm.serienrcertificat,
+			serie: cm.serie,
+			nr: cm.nr,
+			codindemnizatie: cm.codindemnizatie,
+			cnpcopil: cm.cnpcopil,
       dataeliberare: cm.dataeliberare.substring(0, 10),
       codurgenta: cm.codurgenta,
       procent: cm.procent,
@@ -461,7 +470,8 @@ class CMTabel extends React.Component {
               <th>{cm.panala.substring(0, 10).split('-').reverse().join('.')}</th>
               <th>{cm.continuare ? 'Da' : 'Nu'}</th>
               <th>{cm.datainceput.substring(0, 10).split('-').reverse().join('.')}</th>
-              <th>{cm.serienrcertificat}</th>
+              <th>{cm.serie}</th>
+              <th>{cm.nr}</th>
               <th>{cm.dataeliberare.substring(0, 10).split('-').reverse().join('.')}</th>
               <th>{cm.codurgenta}</th>
               <th>{cm.codboalainfcont}</th>
@@ -470,6 +480,7 @@ class CMTabel extends React.Component {
               <th>{cm.bazacalculplafonata}</th>
               <th>{cm.zilebazacalcul}</th>
               <th>{cm.mediezilnica}</th>
+              <th>{cm.codindemnizatie}</th>
               <th>{cm.zilefirma}</th>
               <th>{cm.indemnizatiefirma}</th>
               <th>{cm.zilefnuass}</th>
@@ -479,6 +490,7 @@ class CMTabel extends React.Component {
               <th>{cm.codboala}</th>
               <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
               <th>{cm.conditii}</th>
+              <th>{cm.cnpcopil}</th>
             </tr>
           );
         }
@@ -595,13 +607,23 @@ class CMTabel extends React.Component {
                   </Form.Group>
                 </Col>
               </Row>
-              <Form.Group id="serienrcertificat">
-                <Form.Label>Serie și număr certificat</Form.Label>
+              <Form.Group id="seriecertificat">
+                <Form.Label>Serie certificat</Form.Label>
                 <Form.Control
                   type="text"
-                  value={this.state.serienrcertificat}
+                  value={this.state.serie}
                   onChange={(e) => {
-                    this.setState({ serienrcertificat: e.target.value });
+                    this.setState({ serie: e.target.value });
+                  }}
+                />
+              </Form.Group>
+							<Form.Group id="nrcertificat">
+                <Form.Label>Număr certificat</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.nr}
+                  onChange={(e) => {
+                    this.setState({ nr: e.target.value });
                   }}
                 />
               </Form.Group>
@@ -700,6 +722,16 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
+							<Form.Group id="codindemnizatie">
+                <Form.Label>Cod indemnizație</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.codindemnizatie}
+                  onChange={(e) => {
+                    this.setState({ codindemnizatie: e.target.value });
+                  }}
+                />
+              </Form.Group>
               <Form.Group id="indemnizatiefirma">
                 <Form.Label>Indemnizație firmă</Form.Label>
                 <Form.Control
@@ -780,6 +812,16 @@ class CMTabel extends React.Component {
                   value={this.state.conditii}
                   onChange={(e) => {
                     this.setState({ conditii: e.target.value });
+                  }}
+                />
+              </Form.Group>
+							<Form.Group id="cnpcopil">
+                <Form.Label>CNP Copil</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.cnpcopil}
+                  onChange={(e) => {
+                    this.setState({ cnpcopil: e.target.value });
                   }}
                 />
               </Form.Group>
@@ -871,6 +913,8 @@ class CMTabel extends React.Component {
                       <th>Până la (inclusiv)</th>
                       <th>Continuare</th>
                       <th>Data început</th>
+                      <th>Nr. certificat</th>
+                      <th>Serie certificat</th>
                       <th>Serie si nr. certificat</th>
                       <th>Data eliberare</th>
                       <th>Cod urgență</th>
@@ -890,6 +934,7 @@ class CMTabel extends React.Component {
                       <th>Cod boală infecțioasă/contagioasă</th>
                       <th>Urgență</th>
                       <th>Condiții</th>
+                      <th>CNP Copil</th>
                     </tr>
                   </thead>
                   <tbody>{this.state.cmComponent}</tbody>
