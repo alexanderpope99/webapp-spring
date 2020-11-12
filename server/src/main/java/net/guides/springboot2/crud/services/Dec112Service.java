@@ -26,15 +26,12 @@ import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.CM;
-import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.PersoanaIntretinere;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
-import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
