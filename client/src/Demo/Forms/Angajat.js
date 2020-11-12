@@ -135,8 +135,8 @@ class Angajat extends React.Component {
   }
 
   async onFocusBC() {
-    await this.bc.current.updateAngajatSel();
-    this.setState({ anajatsel: getAngajatSel() });
+		await this.bc.current.updateAngajatSel();
+    this.setState({ angajatsel: getAngajatSel() });
   }
 
   async onFocusPI() {

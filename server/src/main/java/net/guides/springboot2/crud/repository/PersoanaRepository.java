@@ -18,6 +18,6 @@ public interface PersoanaRepository extends JpaRepository<Persoana, Integer> {
 	@Query(value = "SELECT a.persoana from Angajat a WHERE a.contract.id IS NOT NULL AND a.societate.id = ?1 ORDER BY a.persoana.nume, a.persoana.prenume")
 	List<Persoana> findByIdsocietateWithContract(int idsocietate);
 
-	@Query(value = "select nume, cnp from persoana where id in (select idpersoana from angajat where idcontract is nou null and id societate = ?1) order by nume", nativeQuery = true)
+	@Query(value = "select nume, cnp from persoana where id in (select idpersoana from angajat where idcontract is nou null and id societate = ?1) order by nume asc", nativeQuery = true)
 	Map<String, String> getNumeCnpPersoanaByIdsocietate(int idsocietate);
 }

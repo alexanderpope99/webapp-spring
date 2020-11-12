@@ -59,6 +59,8 @@ public class CMDTO {
 
 	private Contract contract;
 
+	private String codinemnizatie;
+
 	public Double getBazacalcul() {
 		return bazacalcul;
 	}
@@ -151,6 +153,10 @@ public class CMDTO {
 
 	public Integer getZilefnuass() {
 		return zilefnuass;
+	}
+
+	public String getCodinemnizatie() {
+		return codinemnizatie;
 	}
 
 	public void setBazacalcul(Double bazacalcul) {
@@ -275,5 +281,9 @@ public class CMDTO {
 
 	public void setSerie(String serie) {
 		this.serie = serie;
+	}
+
+	public void setCodinemnizatie(String codinemnizatie) {
+		this.codinemnizatie = codinemnizatie;
 	}
 }

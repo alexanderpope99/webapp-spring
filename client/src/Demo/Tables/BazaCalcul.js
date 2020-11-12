@@ -83,8 +83,8 @@ class BazaCalcul extends React.Component {
     } else {
       this.setState({ angajat: null }, this.fillTable);
     }
-  }
-
+	}
+	
   async addBazaCalcul() {
     const bazacalcul_body = {
       idangajat: this.state.angajat.idpersoana,

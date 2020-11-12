@@ -16,7 +16,9 @@ in RealizariRetineri.js:
 	ia detaliile ramase || adauga si in clearForm
 	fix ore suplimentare
 
+!! fix concediu medical
 **fix all repositories
+
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
