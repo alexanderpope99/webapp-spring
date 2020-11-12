@@ -76,19 +76,22 @@ class COTabel extends React.Component {
       modalMessage: '',
     });
   }
-	
-	async updateAngajatSel() {
-		let angajatSel = getAngajatSel();
-		if(angajatSel) {
-			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
-				.then(res => res.status === 200 ? res.data : null)
-				.catch(err => console.error(err));
-			if(angajat)
-				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
-		}
-		else {
-			this.setState({angajat: null}, this.fillTable);
-		}
+
+  async updateAngajatSel() {
+    let angajatSel = getAngajatSel();
+    if (angajatSel) {
+      let angajat = await axios
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => console.error(err));
+      if (angajat)
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
+    } else {
+      this.setState({ angajat: null }, this.fillTable);
+    }
   }
 
   componentDidMount() {
@@ -146,7 +149,7 @@ class COTabel extends React.Component {
   }
 
   async fillTable() {
-		if (!this.state.angajat) {
+    if (!this.state.angajat) {
       this.setState({ co: [] }, this.renderCO);
       return;
     }
@@ -160,8 +163,7 @@ class COTabel extends React.Component {
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((co) => (co.status == 200 ? co.data : null))
-			.catch((err) => console.error('err', err));
-		console.log(co);
+      .catch((err) => console.error('err', err));
 
     if (co) {
       var ani_cu_concediu = new Set();
@@ -274,11 +276,11 @@ class COTabel extends React.Component {
 
   async updateCO() {
     var co_body = {
-			id: this.state.id,
-			dela: this.state.dela,
-			panala: this.state.panala,
-			tip: this.state.tip,
-			idcontract: this.state.angajat.idcontract
+      id: this.state.id,
+      dela: this.state.dela,
+      panala: this.state.panala,
+      tip: this.state.tip,
+      idcontract: this.state.angajat.idcontract,
     };
 
     let ok = await axios
@@ -312,15 +314,18 @@ class COTabel extends React.Component {
 
     for (let key in co) if (co[key] === '-') co[key] = '';
 
-    this.setState({
-      id: co.id,
-      dela: co.dela.substring(0, 10),
-      panala: co.panala.substring(0, 10),
-      tip: co.tip,
+    this.setState(
+      {
+        id: co.id,
+        dela: co.dela.substring(0, 10),
+        panala: co.panala.substring(0, 10),
+        tip: co.tip,
 
-      isEdit: true,
-      show: true,
-    }, this.setNrZile);
+        isEdit: true,
+        show: true,
+      },
+      this.setNrZile
+    );
   }
 
   // function to create react table rows with fetched data
@@ -526,8 +531,8 @@ class COTabel extends React.Component {
                   variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-									disabled={!this.state.angajat}
-									onClick={this.fillTable}
+                  disabled={!this.state.angajat}
+                  onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />
                   {/* ↺ */}
