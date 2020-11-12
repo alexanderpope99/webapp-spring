@@ -335,6 +335,10 @@ public class RealizariRetineri implements Serializable {
 		return zilecontract;
 	}
 
+	public List<Oresuplimentare> getOresuplimentare() {
+		return oresuplimentare;
+	}
+
 	// ! SETTERS
 	public void setNrtichete(Integer nrtichete) {
 		this.nrtichete = nrtichete;
@@ -482,5 +486,8 @@ public class RealizariRetineri implements Serializable {
 
 	public void setZilecontract(Integer zilecontract) {
 		this.zilecontract = zilecontract;
+	}
+	public void setOresuplimentare(List<Oresuplimentare> oresuplimentare) {
+		this.oresuplimentare = oresuplimentare;
 	}
 }

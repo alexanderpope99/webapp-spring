@@ -29,8 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.CO;
+import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
@@ -38,7 +40,6 @@ import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CMRepository;
 import net.guides.springboot2.crud.repository.CORepository;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
-import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
@@ -48,8 +49,6 @@ public class FoaiePontajService {
 	@Autowired
 	private ZileService zileService;
 
-	@Autowired
-	private PersoanaRepository persoanaRepository;
 	@Autowired
 	private SocietateRepository societateRepository;
 	@Autowired
@@ -68,8 +67,8 @@ public class FoaiePontajService {
 		Societate societate = societateRepository.findById((int) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
-		List<Persoana> persoane = persoanaRepository.findByIdsocietateWithContract(idsocietate);
-
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+	
 		String statTemplateLocation = homeLocation + "\\templates";
 
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "FoaiePontaj.xlsx"));
@@ -87,7 +86,11 @@ public class FoaiePontajService {
 
 		// ? write angajati
 		int nrAngajat = 0;
-		for (Persoana persoana : persoane) {
+		for (Angajat angajat : angajati) {
+			Persoana persoana = angajat.getPersoana();
+			Contract contract = angajat.getContract();
+			int idcontract = contract.getId();
+
 			int rowNr = 14 + nrAngajat;
 
 			Row row = sheet.createRow(rowNr);
@@ -106,14 +109,16 @@ public class FoaiePontajService {
 			// set border
 			PropertyTemplate allCellsBordered = new PropertyTemplate();
 
-			int idcontract = angajatRepository.findIdcontractByIdpersoana(persoana.getId());
-
+			// if it doesn't exist, create it
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
 
 			// get concediu odihna
-			List<CO> co = coRepository.findByContract_Id(idcontract);
+			List<CO> co = contract.getConcediiOdihna();
+			// List<CO> co = coRepository.findByContract_Id(idcontract);
 			// get concediu medical
-			List<CM> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
+			List<CM> cm = contract.getConcediiMedicale();
+			// List<CM> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
+			
 			// get oresuplimentare
 			int oresuplimentare200 = oresuplimentareRepository
 					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);

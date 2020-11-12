@@ -35,7 +35,6 @@ public class Retineri implements Serializable {
 	@Column(name = "imprumuturi")
 	private Integer imprumuturi;
 
-	// @JsonManagedReference(value = "retineri-realizariretineri")
 	@ManyToOne
 	@JoinColumn(name = "idstat")
 	private RealizariRetineri stat;
@@ -61,7 +60,7 @@ public class Retineri implements Serializable {
 		this.id = id;
 	}
 
-	// GETTERS
+	//! GETTERS
 	public RealizariRetineri getStat() {
 		return stat;
 	}
@@ -86,7 +85,7 @@ public class Retineri implements Serializable {
 		return popriri;
 	}
 
-	// SETTERS
+	//! SETTERS
 	public void setStat(RealizariRetineri stat) {
 		this.stat = stat;
 	}

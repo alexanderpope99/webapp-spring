@@ -17,6 +17,7 @@ public interface SarbatoriRepository extends JpaRepository<Sarbatori, Long> {
 
 	@Query(value = "select * from sarbatori order by dela desc", nativeQuery = true)
 	public List<Sarbatori> findAllByOrderByDelaDesc();
+	
 	@Query(value = "select * from sarbatori order by dela asc", nativeQuery = true)
 	public List<Sarbatori> findAllByOrderByDelaAsc();
 }

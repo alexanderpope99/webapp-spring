@@ -20,13 +20,13 @@ public class ParametriiSalariu implements Serializable {
 	private int id;
 
 	@Column(name = "salariumin")
-	private Float salariumin;
+	private Integer salariumin;
 
 	@Column(name = "salariuminstudiivechime")
-	private Float salariuminstudiivechime;
+	private Integer salariuminstudiivechime;
 
 	@Column(name = "salariumediubrut")
-	private Float salariumediubrut;
+	private Integer salariumediubrut;
 
 	@Column(name = "impozit")
 	private Float impozit;
@@ -49,7 +49,7 @@ public class ParametriiSalariu implements Serializable {
 	public ParametriiSalariu() {
 	}
 
-	public ParametriiSalariu(Float salariumin, Float salariuminstudiivechime, Float salariumediubrut, Float impozit,
+	public ParametriiSalariu(Integer salariumin, Integer salariuminstudiivechime, Integer salariumediubrut, Float impozit,
 			Float cas, Float cass, Float cam, Float valtichet, LocalDate date) {
 		this.salariumin = salariumin;
 		this.salariuminstudiivechime = salariuminstudiivechime;
@@ -87,15 +87,15 @@ public class ParametriiSalariu implements Serializable {
 		return impozit;
 	}
 
-	public Float getSalariumediubrut() {
+	public Integer getSalariumediubrut() {
 		return salariumediubrut;
 	}
 
-	public Float getSalariumin() {
+	public Integer getSalariumin() {
 		return salariumin;
 	}
 
-	public Float getSalariuminstudiivechime() {
+	public Integer getSalariuminstudiivechime() {
 		return salariuminstudiivechime;
 	}
 
@@ -124,15 +124,15 @@ public class ParametriiSalariu implements Serializable {
 		this.impozit = impozit;
 	}
 
-	public void setSalariumediubrut(Float salariumediubrut) {
+	public void setSalariumediubrut(Integer salariumediubrut) {
 		this.salariumediubrut = salariumediubrut;
 	}
 
-	public void setSalariumin(Float salariumin) {
+	public void setSalariumin(Integer salariumin) {
 		this.salariumin = salariumin;
 	}
 
-	public void setSalariuminstudiivechime(Float salariuminstudiivechime) {
+	public void setSalariuminstudiivechime(Integer salariuminstudiivechime) {
 		this.salariuminstudiivechime = salariuminstudiivechime;
 	}
 

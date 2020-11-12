@@ -74,7 +74,7 @@ public class RealizariRetineriController {
 			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract,
 			@RequestBody RealizariRetineri newRealizariRetineri) throws ResourceNotFoundException {
 
-		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
+		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 				idcontract);
 		newRealizariRetineri.setId(oldRealizariRetineri.getId());
 
@@ -89,7 +89,7 @@ public class RealizariRetineriController {
 	public RealizariRetineriDTO recalcRealizariRetineri(@PathVariable(name = "luna") int luna,
 			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract) throws ResourceNotFoundException {
 
-		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
+		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 				idcontract);
 
 		RealizariRetineri newRealizariRetineri = realizariRetineriService.resetRealizariRetineri(luna, an, idcontract);
@@ -109,7 +109,7 @@ public class RealizariRetineriController {
 			@PathVariable(value = "pb") Integer primaBruta, @PathVariable(value = "nrt") Integer nrTichete,
 			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
 
-		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
+		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 				idcontract);
 		int idstat = oldRealizariRetineri.getId();
 

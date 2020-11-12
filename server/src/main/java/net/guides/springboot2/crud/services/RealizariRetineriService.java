@@ -60,7 +60,7 @@ public class RealizariRetineriService {
     // gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu
     // datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
-				RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
+				RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
 				// RealizariRetineri rv = realizariRetineriRepository.findAll().stream()
 				// 	.filter(r ->{return (r.getLuna() == luna && r.getAn() == an && r.getContract().getId() == idcontract);})
 				// 	.collect(Collectors.toList()).get(0);
@@ -249,7 +249,7 @@ public class RealizariRetineriService {
     public RealizariRetineri resetRealizariRetineri(int luna, int an, int idcontract)
             throws ResourceNotFoundException {
 
-        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
+        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
                 idcontract);
 
         int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);

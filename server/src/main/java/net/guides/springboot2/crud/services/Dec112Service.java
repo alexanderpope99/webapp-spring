@@ -232,7 +232,7 @@ public class Dec112Service {
 			int cass = 0;
 			int cam = 0;
 			for (Angajat angajat : angajati) {
-				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna,
+				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna,
 						an, angajat.getContract().getId()));
 				impozit_datorat += realizariRetineri.getImpozit();
 				impozit_scutit += realizariRetineri.getImpozitscutit();
@@ -710,7 +710,7 @@ public class Dec112Service {
 
 				// -------SECTIUNEA A------ salariat normal, fara concediu medical in luna
 				// respectiva
-				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna,
+				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna,
 						an, angajat.getContract().getId()));
 
 				if (angajat.getContract().getTip().compareTo("Contract de munca") == 0
