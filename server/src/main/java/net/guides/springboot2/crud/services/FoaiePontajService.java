@@ -113,7 +113,7 @@ public class FoaiePontajService {
 			// get concediu odihna
 			List<CO> co = coRepository.findByIdcontract(idcontract);
 			// get concediu medical
-			List<CM> cm = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract);
+			List<CM> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 			// get oresuplimentare
 			int oresuplimentare200 = oresuplimentareRepository
 					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);

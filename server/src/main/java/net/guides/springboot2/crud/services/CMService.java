@@ -58,7 +58,7 @@ public class CMService {
 
 	public int getZileCM(int luna, int an, int idcontract) {
 		// find all by idcontract
-		List<CM> concediiMedicale = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract);
+		List<CM> concediiMedicale = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 		if (concediiMedicale.size() == 0)
 			return 0;
 
@@ -67,7 +67,7 @@ public class CMService {
 
 	public int getZileCMLucratoare(int luna, int an, int idcontract) {
 		// find all by idcontract
-		List<CM> concediiMedicale = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract);
+		List<CM> concediiMedicale = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 		if (concediiMedicale.size() == 0)
 			return 0;
 
@@ -80,7 +80,7 @@ public class CMService {
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
 		LocalDate sfarsitLuna = LocalDate.of(an, luna, nrZileLuna);
 
-		return cmRepository.findByIdcontractAndDelaBetween(idcontract, inceputLuna, sfarsitLuna);
+		return cmRepository.findByContract_IdAndDelaBetween(idcontract, inceputLuna, sfarsitLuna);
 	}
 
 	public int getValCM(int luna, int an, int idcontract) {

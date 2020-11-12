@@ -35,10 +35,7 @@ import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Societate;
-import net.guides.springboot2.crud.repository.AdresaRepository;
 import net.guides.springboot2.crud.repository.AngajatRepository;
-import net.guides.springboot2.crud.repository.ContractRepository;
-import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
@@ -55,13 +52,7 @@ public class StatSalariiService {
     private CMService cmService;
 
     @Autowired
-    private PersoanaRepository persoanaRepository;
-    @Autowired
     private SocietateRepository societateRepository;
-    @Autowired
-    private AdresaRepository adresaRepository;
-    @Autowired
-		private ContractRepository contractRepository;
 		@Autowired
 		private AngajatRepository angajatRepository;
 
@@ -945,14 +936,12 @@ public class StatSalariiService {
         try {
             Societate societate = societateRepository.findById(idsocietate).orElseThrow(
                     () -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-            Adresa adresaSocietate = adresaRepository.findById(idsocietate)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Adresa not found for this societate :: " + societate.getNume()));
-            Persoana persoana = persoanaRepository.findById(idangajat)
-                    .orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + idangajat));
+						Adresa adresaSocietate = societate.getAdresa();
+						
+						Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + idangajat));
 
-            Contract contract = contractRepository.findByIdPersoana(persoana.getId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Contract not found for this id :: " + persoana.getId()));
+						Persoana persoana = angajat.getPersoana();
+						Contract contract = angajat.getContract();
 
             String statTemplateLocation = homeLocation + "/templates";
             FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatIndividual.xlsx"));

@@ -10,6 +10,6 @@ import net.guides.springboot2.crud.model.Contract;
 
 @Repository
 public interface ContractRepository extends JpaRepository<Contract, Integer> {
-	@Query(value = "select * from contract where id = (select idcontract from angajat where idpersoana = ?1)", nativeQuery = true)
+	@Query(value = "SELECT c FROM Contract c WHERE c.id = (SELECT a.contract.id FROM Angajat a WHERE a.idpersoana = ?1)")
 	Optional<Contract> findByIdPersoana(int idpersoana);
 }
