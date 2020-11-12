@@ -17,9 +17,9 @@ public class RealizariRetineriDTO {
 
 	private Integer zilecolucratoare;
 
-	private Integer zileconeplatit = 0;
+	private Integer zilecfp = 0;
 
-	private Integer zileconeplatitlucratoare;
+	private Integer zilecfplucratoare;
 
 	private Integer zilecm = 0;
 
@@ -206,12 +206,12 @@ public class RealizariRetineriDTO {
 		return zilecolucratoare;
 	}
 
-	public Integer getZileconeplatit() {
-		return zileconeplatit;
+	public Integer getZilecfp() {
+		return zilecfp;
 	}
 
-	public Integer getZileconeplatitlucratoare() {
-		return zileconeplatitlucratoare;
+	public Integer getZilecfplucratoare() {
+		return zilecfplucratoare;
 	}
 
 	public Integer getZilelucrate() {
@@ -350,12 +350,12 @@ public class RealizariRetineriDTO {
 		this.zilecolucratoare = zilecolucratoare;
 	}
 
-	public void setZileconeplatit(Integer zileconeplatit) {
-		this.zileconeplatit = zileconeplatit;
+	public void setZilecfp(Integer zilecfp) {
+		this.zilecfp = zilecfp;
 	}
 
-	public void setZileconeplatitlucratoare(Integer zileconeplatitlucratoare) {
-		this.zileconeplatitlucratoare = zileconeplatitlucratoare;
+	public void setZilecfplucratoare(Integer zilecfplucratoare) {
+		this.zilecfplucratoare = zilecfplucratoare;
 	}
 
 	public void setZilelucrate(Integer zilelucrate) {

@@ -76,7 +76,7 @@ public class AngajatController {
 
 	@GetMapping("/c")
 	public List<Angajat> getAngajatByIdWhereIdcontractNotNull() {
-		return angajatRepository.findByIdcontractNotNull();
+		return angajatRepository.findByContract_IdNotNull();
 	}
 
 	@GetMapping("/userid/{id}")
@@ -84,9 +84,14 @@ public class AngajatController {
 		return angajatRepository.findPersoanaIdByUserId(userId);
 	}
 
+	@GetMapping("/ids={ids}&c")
+	public List<Angajat> findPerssoaneWithContractByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+		return angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+	}
+
 	@GetMapping("/ids={ids}/count")
 	public int countAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
-		return angajatRepository.countByIdsocietate(idsocietate);
+		return angajatRepository.countBySocietate_Id(idsocietate);
 	}
 
 	@PostMapping("/expand")

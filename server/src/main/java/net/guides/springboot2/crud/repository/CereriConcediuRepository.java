@@ -16,9 +16,9 @@ public interface CereriConcediuRepository extends JpaRepository<CereriConcediu, 
 	@Query(value = "SELECT * from cerericoncediu INNER JOIN angajat on angajat.idpersoana=cerericoncediu.pentru where idsuperior=(select id_angajat from users where users.id=?1) and idsocietate=?2 ORDER by dela asc", nativeQuery = true)
 	List<CereriConcediu> findCerereConcediuBySuperiorIdAndSocietyId(int supId, int socId);
 
-	@Query(value = "UPDATE cerericoncediu SET status='Aprobat' WHERE id=?1 RETURNING *", nativeQuery = true)
+	@Query(value = "UPDATE cerericoncediu SET status='Aprobat' WHERE id = ?1 RETURNING *", nativeQuery = true)
 	CereriConcediu approveStatus(int cereriConcediuId);
 
-	@Query(value = "UPDATE cerericoncediu SET status='Respins' WHERE id=?1 RETURNING *", nativeQuery = true)
+	@Query(value = "UPDATE cerericoncediu SET status='Respins' WHERE id = ?1 RETURNING *", nativeQuery = true)
 	CereriConcediu rejectStatus(int cereriConcediuId);
 }

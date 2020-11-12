@@ -58,7 +58,7 @@ public class CMService {
 
 	public int getZileCM(int luna, int an, int idcontract) {
 		// find all by idcontract
-		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
+		List<CM> concediiMedicale = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract);
 		if (concediiMedicale.size() == 0)
 			return 0;
 
@@ -67,7 +67,7 @@ public class CMService {
 
 	public int getZileCMLucratoare(int luna, int an, int idcontract) {
 		// find all by idcontract
-		List<CM> concediiMedicale = cmRepository.findByIdcontract(idcontract);
+		List<CM> concediiMedicale = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract);
 		if (concediiMedicale.size() == 0)
 			return 0;
 

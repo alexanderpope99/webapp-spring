@@ -372,6 +372,7 @@ class PersoaneIntretinereTabel extends React.Component {
                           onChange={(e) => this.setState({ grad: e.target.value })}
                         >
                           <option>Soț/Soție</option>
+                          <option>Părinte</option>
                           <option>Copil</option>
                           <option>Altă rudă</option>
                         </Form.Control>
