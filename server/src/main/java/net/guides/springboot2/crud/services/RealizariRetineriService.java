@@ -66,7 +66,7 @@ public class RealizariRetineriService {
 				// 	.collect(Collectors.toList()).get(0);
 
         int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
-        boolean areBC = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna, an, idangajat);
+        boolean areBC = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(luna, an, idangajat);
         if (!areBC) {
             bazacalculService.saveBazacalcul(rv);
         }

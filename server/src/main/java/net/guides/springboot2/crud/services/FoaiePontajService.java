@@ -68,7 +68,7 @@ public class FoaiePontajService {
 		Societate societate = societateRepository.findById((int) idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
-		List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
+		List<Persoana> persoane = persoanaRepository.findByIdsocietateWithContract(idsocietate);
 
 		String statTemplateLocation = homeLocation + "\\templates";
 
@@ -113,7 +113,7 @@ public class FoaiePontajService {
 			// get concediu odihna
 			List<CO> co = coRepository.findByIdcontract(idcontract);
 			// get concediu medical
-			List<CM> cm = cmRepository.findByIdcontract(idcontract);
+			List<CM> cm = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract);
 			// get oresuplimentare
 			int oresuplimentare200 = oresuplimentareRepository
 					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);

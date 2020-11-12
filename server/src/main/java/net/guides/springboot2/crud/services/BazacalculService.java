@@ -48,7 +48,7 @@ public class BazacalculService {
 			an6--;
 		} else
 			luna6 = luna - 6;
-		boolean areBazacalcul = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna6, an6, idangajat);
+		boolean areBazacalcul = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(luna6, an6, idangajat);
 		if (!areBazacalcul)
 			return null;
 
@@ -58,13 +58,13 @@ public class BazacalculService {
 		Bazacalcul bc;
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
-				bc = bazacalculRepository.findByLunaAndAnAndIdangajat(i, an6, idangajat);
+				bc = bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an6, idangajat);
 				if (bc == null)
 					return rv;
 				rv.add(bc);
 			}
 			for (int i = 1; i < luna; ++i) {
-				bc = bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat);
+				bc = bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat);
 				if (bc == null)
 					return rv;
 				rv.add(bc);
@@ -72,7 +72,7 @@ public class BazacalculService {
 		} // daca cele 6 luni sunt in anul selectat
 		else {
 			for (int i = luna6; i <= luna; ++i) {
-				bc = bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat);
+				bc = bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat);
 				if (bc == null)
 					return rv;
 				rv.add(bc);
@@ -89,7 +89,7 @@ public class BazacalculService {
 			an6--;
 		} else
 			luna6 = luna - 6;
-		boolean areBazacalcul = bazacalculRepository.existsByLunaAndAnAndIdangajat(luna6, an6, idangajat);
+		boolean areBazacalcul = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(luna6, an6, idangajat);
 		if (!areBazacalcul)
 			return 0;
 
@@ -98,27 +98,27 @@ public class BazacalculService {
 		// daca bazacalcul include anul trecut
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
-				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndIdangajat(i, an6, idangajat);
+				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(i, an6, idangajat);
 				if (!areBazacalcul)
 					return 0;
 
-				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an6, idangajat));
+				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an6, idangajat));
 			}
 			for (int i = 1; i < luna; ++i) {
-				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndIdangajat(i, an, idangajat);
+				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat);
 				if (!areBazacalcul)
 					return 0;
 
-				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat));
+				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat));
 			}
 		} // daca cele 6 luni sunt in anul selectat
 		else {
 			for (int i = luna6; i < luna; ++i) {
-				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndIdangajat(i, an, idangajat);
+				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat);
 				if (!areBazacalcul)
 					return 0;
 
-				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndIdangajat(i, an, idangajat));
+				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat));
 			}
 		}
 
@@ -140,7 +140,7 @@ public class BazacalculService {
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 
-		Angajat idangajat = angajatRepository.findPersoanaByIdcontract(realizariRetineri.getContract().getId());
+		Angajat idangajat = angajatRepository.findByContract_Id(realizariRetineri.getContract().getId());
 
 		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, (int) realizariRetineri.getZilelucrate(),
 				(int) realizariRetineri.getSalariurealizat(), idangajat);
@@ -151,9 +151,9 @@ public class BazacalculService {
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 
-		Angajat angajat = angajatRepository.findPersoanaByIdcontract(realizariRetineri.getContract().getId());
+		Angajat angajat = angajatRepository.findByContract_Id(realizariRetineri.getContract().getId());
 
-		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an,
+		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(luna, an,
 				angajat.getPersoana().getId());
 
 		if (oldBazacalcul == null)

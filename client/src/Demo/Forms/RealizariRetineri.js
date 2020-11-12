@@ -48,7 +48,7 @@ class RealizariRetineri extends React.Component {
     this.state = {
       socsel: getSocSel(),
       // angajatsel: getAngajatSel(),
-      detaliiAccordion: true,
+      detaliiAccordion: false,
       show: false,
       modalMessage: '',
 
@@ -264,6 +264,7 @@ class RealizariRetineri extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
+		// set states with data
     this.setState({
       //* realizari
       an_inceput_contract: contract.dataincepere.substring(0, 4),
@@ -304,13 +305,21 @@ class RealizariRetineri extends React.Component {
       restplata: data.restplata,
       cam: data.cam,
 
+			//* detalii
+			bazaimpozit: data.bazaimpozit,
+      impozitscutit: data.impozitscutit,
+      salariurealizat: data.salariurealizat,
+      venitnet: data.venitnet,
+      zilelucrate: data.zilelucrate,
+      zileplatite: data.zileplatite,
+
       //
       idstat: data.id,
       idcontract: contract.id,
       oresuplimentare: oresuplimentare,
       totaloresuplimentare: totaloresuplimentare,
       primabruta: data.primabruta,
-      detalii: data,
+			
     });
   }
 
@@ -1219,7 +1228,7 @@ class RealizariRetineri extends React.Component {
                         aria-controls="accordion1"
                         aria-expanded={this.state.detaliiAccordion}
                       >
-                        Mai multe detalii
+                        Detalii
                       </Card.Title>
                     </Card.Header>
                     <Collapse in={this.state.detaliiAccordion}>
@@ -1251,7 +1260,7 @@ class RealizariRetineri extends React.Component {
                                 />
                               </Form.Group>
 															<Form.Group id="salariupeora" as={Col} md="6">
-                                <Form.Label>Salariu pe ora</Form.Label>
+                                <Form.Label>Salariu pe oră</Form.Label>
                                 <Form.Control
                                   type="number"
                                   value={this.state.salariupeora}
@@ -1274,14 +1283,6 @@ class RealizariRetineri extends React.Component {
                                   disabled
                                 />
                               </Form.Group>
-															<Form.Group id="valoaretichete" as={Col} md="6">
-                                <Form.Label>Valoare tichete</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.valoaretichete}
-                                  disabled
-                                />
-                              </Form.Group>
 															<Form.Group id="venitnet" as={Col} md="6">
                                 <Form.Label>Venit net</Form.Label>
                                 <Form.Control
@@ -1299,7 +1300,7 @@ class RealizariRetineri extends React.Component {
                                 />
                               </Form.Group>
 															<Form.Group id="zilecmlucratoare" as={Col} md="6">
-                                <Form.Label>Zile concediu medical lucratoare</Form.Label>
+                                <Form.Label>Zile concediu medical lucrătoare</Form.Label>
                                 <Form.Control
                                   type="number"
                                   value={this.state.zilecmlucratoare}
@@ -1307,7 +1308,7 @@ class RealizariRetineri extends React.Component {
                                 />
                               </Form.Group>
 															<Form.Group id="zilecolucratoare" as={Col} md="6">
-                                <Form.Label>Zile concediu odihna lucratoare</Form.Label>
+                                <Form.Label>Zile concediu odihna lucrătoare</Form.Label>
                                 <Form.Control
                                   type="number"
                                   value={this.state.zilecolucratoare}
@@ -1315,15 +1316,7 @@ class RealizariRetineri extends React.Component {
                                 />
                               </Form.Group>
 															<Form.Group id="zilecfp" as={Col} md="6">
-                                <Form.Label>Zile concediu fara plata</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilecfp}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilecfp" as={Col} md="6">
-                                <Form.Label>Zile concediu fara plata</Form.Label>
+                                <Form.Label>Zile concediu fară plată</Form.Label>
                                 <Form.Control
                                   type="number"
                                   value={this.state.zilecfp}
@@ -1331,7 +1324,7 @@ class RealizariRetineri extends React.Component {
                                 />
                               </Form.Group>
 															<Form.Group id="zilecfplucratoare" as={Col} md="6">
-                                <Form.Label>Zile concediu fara plata lucratoare</Form.Label>
+                                <Form.Label>Zile concediu fara plată lucrătoare</Form.Label>
                                 <Form.Control
                                   type="number"
                                   value={this.state.zilecfplucratoare}
@@ -1347,7 +1340,7 @@ class RealizariRetineri extends React.Component {
                                 />
                               </Form.Group>
 															<Form.Group id="zileplatite" as={Col} md="6">
-                                <Form.Label>Zile platite</Form.Label>
+                                <Form.Label>Zile plătite</Form.Label>
                                 <Form.Control
                                   type="number"
                                   value={this.state.zileplatite}

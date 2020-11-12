@@ -29,12 +29,14 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
+import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
+import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.PersoanaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
@@ -59,7 +61,9 @@ public class StatSalariiService {
     @Autowired
     private AdresaRepository adresaRepository;
     @Autowired
-    private ContractRepository contractRepository;
+		private ContractRepository contractRepository;
+		@Autowired
+		private AngajatRepository angajatRepository;
 
     private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
@@ -86,12 +90,9 @@ public class StatSalariiService {
         try {
             Societate societate = societateRepository.findById(idsocietate).orElseThrow(
                     () -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-            Adresa adresaSocietate = adresaRepository.findById(idsocietate)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-														"Adresa not found for this societate :: " + societate.getNume()));
+            Adresa adresaSocietate = societate.getAdresa();
 														
-
-            List<Persoana> persoane = persoanaRepository.getPersoanaByIdsocietateWithContract(idsocietate);
+						List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
             String statTemplateLocation = homeLocation + "/templates";
 
@@ -153,16 +154,15 @@ public class StatSalariiService {
             // ? write angajati:
             int nrAngajat = 0;
             int impozitScutit = 0;
-            for (Persoana persoana : persoane) {
+            for (Angajat angajat : angajati) {
                 int rowNr = 14 + nrAngajat * 3;
                 Row row1 = stat.createRow(rowNr);
                 Row row2 = stat.createRow(rowNr + 1);
                 Row row3 = stat.createRow(rowNr + 2);
 
-                // * 1. get contract + stat(luna, an, idcontract);
-                Contract contract = contractRepository.findByIdPersoana(persoana.getId())
-                        .orElseThrow(() -> new ResourceNotFoundException(
-                                "Contract not found for this idpersoana :: " + persoana.getId()));
+								// * 1. get contract + stat(luna, an, idcontract); -- contract should not be null :line 95
+								Contract contract = angajat.getContract();
+								Persoana persoana = angajat.getPersoana();
 
                 int idcontract = contract.getId();
 
