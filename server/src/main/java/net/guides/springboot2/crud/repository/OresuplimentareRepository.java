@@ -10,15 +10,14 @@ import net.guides.springboot2.crud.model.Oresuplimentare;
 
 @Repository
 public interface OresuplimentareRepository extends JpaRepository<Oresuplimentare, Integer> {
-	@Query(value = "select * from oresuplimentare where idstatsalariat = ?1", nativeQuery = true)
-	List<Oresuplimentare> findByIdstatsalariat(int idstat);
+	List<Oresuplimentare> findByStatsalariat_Id(int idstat);
 
-	@Query(value = "select * from oresuplimentare where idstatsalariat = (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract = ?3)", nativeQuery = true)
+	@Query(value = "SELECT r.oresuplimentare FROM RealizariRetineri r WHERE r.luna = ?1 AND r.an = ?2 AND r.contract.id = ?3")
 	List<Oresuplimentare> findByLunaAndAnAndIdcontract(int luna, int an, int idcontract);
 
 	@Query(value = "SELECT COALESCE( (select sum(nr) from oresuplimentare where idstatsalariat = ?1), 0)", nativeQuery = true)
-	Integer countNrOreSuplimentareByIdstat(int idstat);
+	Integer getNrOreSuplimentareByIdstat(int idstat);
 
 	@Query(value = "SELECT COALESCE( (select sum(nr) from oresuplimentare where idstatsalariat = ?1 and procent = ?2), 0)", nativeQuery = true)
-	int countByIdstatsalariatAndProcent(int idstat, double procent);
+	Integer getNrByIdstatsalariatAndProcent(int idstat, double procent);
 }

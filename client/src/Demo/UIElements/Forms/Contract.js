@@ -193,7 +193,7 @@ class Contract extends React.Component {
           funcție: contract.functie || '', //text
           nivelStudii: contract.nivelstudii || '', //text
           cor: contract.cor || '',
-          pensionar: contract.pensionar || '',
+          pensionar: contract.pensionar,
           spor: contract.spor || '',
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', contract.id)

@@ -47,7 +47,12 @@ public class PersoanaIntretinereController {
 
 	@GetMapping("ida={id}")
 	public List<PersoanaIntretinere> getPersoanaIntretinereByIdangajat(@PathVariable(value = "id") int id) {
-		return persoanaIntretinereRepository.findByIdangajatOrderByNumeAscPrenumeAsc(id);
+		return persoanaIntretinereRepository.findByAngajat_IdpersoanaOrderByNumeAscPrenumeAsc(id);
+	}
+
+	@GetMapping("idc={id}")
+	public List<PersoanaIntretinere> getPersoanaIntretinereByIdcontract(@PathVariable(value = "id") int id) {
+		return persoanaIntretinereRepository.findByIdcontract(id);
 	}
 
 	@PostMapping

@@ -116,13 +116,13 @@ public class FoaiePontajService {
 			List<CM> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 			// get oresuplimentare
 			int oresuplimentare200 = oresuplimentareRepository
-					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);
+					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);
 			int oresuplimentare175 = oresuplimentareRepository
-					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 175);
+					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 175);
 			int oresuplimentare150 = oresuplimentareRepository
-					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 150);
+					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 150);
 			int oresuplimentare100 = oresuplimentareRepository
-					.countByIdstatsalariatAndProcent(realizariRetineri.getId(), 100);
+					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 100);
 
 			// get weekends
 			int weekdayNr;

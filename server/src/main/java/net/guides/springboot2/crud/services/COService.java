@@ -37,6 +37,7 @@ public class COService {
 
 		co.setContract(contract);
 		coRepository.save(co);
+		coDTO.setId(co.getId());
 		return coDTO;
 	}
 

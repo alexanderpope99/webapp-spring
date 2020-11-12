@@ -54,7 +54,7 @@ public class Angajat implements Serializable {
 
 	@JsonBackReference(value = "persoanaintretinere-angajat")
 	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<PersoanaIntretinere> persoaneIntretinere;
+	private List<PersoanaIntretinere> persoaneintretinere;
 
 	@JsonBackReference(value = "bazacalcul-angajat")
 	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -92,6 +92,6 @@ public class Angajat implements Serializable {
 	}
 
 	public List<PersoanaIntretinere> getPersoaneIntretinere() {
-		return persoaneIntretinere;
+		return persoaneintretinere;
 	}
 }

@@ -170,7 +170,7 @@ public class RealizariRetineriService {
 
         float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
 
-        int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
+        int nrPersoaneIntretinere = persoaneIntretinereService.getNrPersoaneIntretinere(contract.getId());
 
         int restPlata = 0;
         if (zileLucrate > 0)
@@ -184,7 +184,7 @@ public class RealizariRetineriService {
                 (int) totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata,
                 nrPersoaneIntretinere, (int) this.deducere, primaBruta, totalOreSuplimentare);
 
-        int nrOreSuplimentare = oresuplimentareRepository.countNrOreSuplimentareByIdstat(rr.getId());
+        int nrOreSuplimentare = oresuplimentareRepository.getNrOreSuplimentareByIdstat(rr.getId());
         int zilePlatite = norma - zileCFPLucratoare;
 
         rr.setValcm(valCM);
