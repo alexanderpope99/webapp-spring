@@ -46,7 +46,7 @@ public class BazacalculController {
 
 	@GetMapping("ida={ida}")
 	public List<Bazacalcul> getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida) {
-		return bazacalculRepository.findByIdangajatOrderByAnDescLunaDesc(ida);
+		return bazacalculRepository.findByAngajat_IdpersoanaOrderByAnDescLunaDesc(ida);
 	}
 
 	@GetMapping("cm/{ida}/mo={luna}&y={an}")
@@ -58,7 +58,7 @@ public class BazacalculController {
 	@GetMapping("ida={ida}/mo={luna}&y={an}")
 	public Bazacalcul getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida, @PathVariable("luna") int luna,
 			@PathVariable("an") int an) {
-		return bazacalculRepository.findByLunaAndAnAndIdangajat(luna, an, ida);
+		return bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(luna, an, ida);
 	}
 
 	@PostMapping

@@ -12,11 +12,13 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 buton de 'show password' la schimba prola
 
-buton edit pentru:  [concediu odihna]
+in RealizariRetineri.js:
+	ia detaliile ramase || adauga si in clearForm
+	fix ore suplimentare
 
-adauga Părinte in optiune persoanaIntretinere.grad in frontend
+**fix all repositories
 
-*** INTREBARE: ***
+*** INTREBARI: ***
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
 

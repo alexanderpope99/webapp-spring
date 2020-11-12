@@ -53,7 +53,7 @@ public class CMController {
 	@GetMapping("idc={id}")
 	public ResponseEntity<List<CMDTO>> getCMByIdcontract(@PathVariable(value = "id") int idcontract)
 			throws ResourceNotFoundException {
-		List<CMDTO> cm = cmRepository.findByIdcontract(idcontract).stream().map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
+		List<CMDTO> cm = cmRepository.findByContract_IdORderByDelaDescPanalaDesc(idcontract).stream().map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(cm);
 	}
