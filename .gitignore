@@ -1,6 +1,6 @@
-.vscode/launch.json
+.vscode/
 target/
 server/target
 server/pom.xml
-# server/src/main/java/net/guides/springboot2/crud/security
+src/main/java/net/guides/springboot2/crud/downloads/
 server/src/main/java/net/guides/springboot2/crud/downloads/
