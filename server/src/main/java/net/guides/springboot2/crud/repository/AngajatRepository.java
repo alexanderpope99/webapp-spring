@@ -21,9 +21,9 @@ public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 	@Query(value = "SELECT a.contract.id FROM Angajat a WHERE a.idpersoana = ?1")
 	int findIdcontractByIdpersoana(int idangajat);
 
-	@Query(value = "select a.idpersoana from Angajat a where a.contract.id = ?1")
+	@Query(value = "SELECT a.idpersoana FROM Angajat a WHERE a.contract.id = ?1")
 	int findIdpersoanaByIdcontract(int idcontract);
 
-	@Query(value = "SELECT id_angajat from users where users.id = ?1", nativeQuery = true)
+	@Query(value = "SELECT id_angajat FROM users WHERE users.id = ?1", nativeQuery = true)
 	int findPersoanaIdByUserId(long userid);
 }

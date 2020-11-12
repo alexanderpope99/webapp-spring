@@ -25,13 +25,13 @@ public class Oresuplimentare implements Serializable {
 	private Long nr;
 
 	@Column(name = "procent")
-	private Double procent;
+	private Integer procent;
 
 	@Column(name = "includenormale")
 	private Boolean includenormale;
 
 	@Column(name = "total")
-	private Double total;
+	private Float total;
 
 	// @JsonManagedReference(value = "oresuplimentare-realizariretineri")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +41,7 @@ public class Oresuplimentare implements Serializable {
 	public Oresuplimentare() {
 	}
 
-	public Oresuplimentare(Long nr, Double procent, Boolean includenormale, Double total,
+	public Oresuplimentare(Long nr, Integer procent, Boolean includenormale, Float total,
 			RealizariRetineri statsalariat) {
 		this.nr = nr;
 		this.procent = procent;
@@ -66,11 +66,11 @@ public class Oresuplimentare implements Serializable {
 		return statsalariat;
 	}
 
-	public void setProcent(Double procent) {
+	public void setProcent(Integer procent) {
 		this.procent = procent;
 	}
 
-	public Double getProcent() {
+	public Integer getProcent() {
 		return procent;
 	}
 
@@ -90,11 +90,11 @@ public class Oresuplimentare implements Serializable {
 		this.includenormale = includenormale;
 	}
 
-	public Double getTotal() {
+	public Float getTotal() {
 		return total;
 	}
 
-	public void setTotal(Double total) {
+	public void setTotal(Float total) {
 		this.total = total;
 	}
 }

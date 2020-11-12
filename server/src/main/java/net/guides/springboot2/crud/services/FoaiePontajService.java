@@ -33,13 +33,11 @@ import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AngajatRepository;
-import net.guides.springboot2.crud.repository.CMRepository;
-import net.guides.springboot2.crud.repository.CORepository;
-import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
@@ -53,12 +51,6 @@ public class FoaiePontajService {
 	private SocietateRepository societateRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
-	@Autowired
-	private CORepository coRepository;
-	@Autowired
-	private CMRepository cmRepository;
-	@Autowired
-	private OresuplimentareRepository oresuplimentareRepository;
 
 	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
 
@@ -114,20 +106,27 @@ public class FoaiePontajService {
 
 			// get concediu odihna
 			List<CO> co = contract.getConcediiOdihna();
-			// List<CO> co = coRepository.findByContract_Id(idcontract);
 			// get concediu medical
 			List<CM> cm = contract.getConcediiMedicale();
-			// List<CM> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
-			
-			// get oresuplimentare
-			int oresuplimentare200 = oresuplimentareRepository
-					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 200);
-			int oresuplimentare175 = oresuplimentareRepository
-					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 175);
-			int oresuplimentare150 = oresuplimentareRepository
-					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 150);
-			int oresuplimentare100 = oresuplimentareRepository
-					.getNrByIdstatsalariatAndProcent(realizariRetineri.getId(), 100);
+
+			int oresuplimentare200 = 0, oresuplimentare175 = 0, oresuplimentare150 = 0, oresuplimentare100 = 0;
+			int procent;
+			for(Oresuplimentare os : realizariRetineri.getOresuplimentare()) {
+				procent = os.getProcent();
+				switch (procent) {
+					case 200:
+					oresuplimentare200 += os.getNr();
+						break;
+					case 175:
+						oresuplimentare175 += os.getNr();		
+					case 150:
+						oresuplimentare150 += os.getNr();
+					case 100:
+						oresuplimentare100 += os.getNr();
+					default:
+						break;
+				}
+			}
 
 			// get weekends
 			int weekdayNr;
