@@ -558,16 +558,21 @@ public class Dec112Service {
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("Pren_asig");
-				childElement.appendChild(doc.createTextNode(formatter.format(angajat.getContract().getData())));
+				childElement.appendChild(doc.createTextNode(angajat.getContract().getData() == null ? ""
+						: formatter.format(angajat.getContract().getData())));
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("Casa_sn");
-				if (angajat.getContract().getCasasanatate().length() == 0
-						|| angajat.getContract().getCasasanatate().length() == 1) {
-					childElement.appendChild(doc.createTextNode(""));
+				if (angajat.getContract().getCasasanatate() != null) {
+					if (angajat.getContract().getCasasanatate().length() == 0
+							|| angajat.getContract().getCasasanatate().length() == 1) {
+						childElement.appendChild(doc.createTextNode(""));
+					} else {
+						String s = angajat.getContract().getCasasanatate();
+						childElement.appendChild(doc.createTextNode(s.substring(s.length() - 2)));
+					}
 				} else {
-					String s = angajat.getContract().getCasasanatate();
-					childElement.appendChild(doc.createTextNode(s.substring(s.length() - 2)));
+					childElement.appendChild(doc.createTextNode(""));
 				}
 				sfmDateIdentif.appendChild(childElement);
 
@@ -1034,21 +1039,24 @@ public class Dec112Service {
 
 						childElement = doc.createElement("D_5");
 						// data acordarii certificatului medical
-						childElement.appendChild(doc.createTextNode(formatter.format(cm.getDataeliberare())));
+						childElement.appendChild(doc.createTextNode(
+								cm.getDataeliberare() == null ? "" : formatter.format(cm.getDataeliberare())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_6");
-						childElement.appendChild(doc.createTextNode(formatter.format(cm.getDatainceput()))); // data
-																												// inceput
-																												// valabilitate
-																												// cm
+						childElement.appendChild(doc.createTextNode(
+								cm.getDatainceput() == null ? "" : formatter.format(cm.getDatainceput()))); // data
+						// inceput
+						// valabilitate
+						// cm
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_7");
-						childElement.appendChild(doc.createTextNode(formatter.format(cm.getPanala()))); // data
-																										// sfarsit
-																										// valabilitate
-																										// cm
+						childElement.appendChild(
+								doc.createTextNode(cm.getPanala() == null ? "" : formatter.format(cm.getPanala()))); // data
+						// sfarsit
+						// valabilitate
+						// cm
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_8");

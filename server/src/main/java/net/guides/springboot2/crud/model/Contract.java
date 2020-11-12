@@ -114,11 +114,12 @@ public class Contract implements Serializable {
 	}
 
 	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
-			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
-			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Float salariutarifar, String monedasalariu,
-			String conditiimunca, Boolean pensieprivata, Double cotizatiepensieprivata, Double avans, String monedaavans,
-			Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate, String functie,
-			String nivelstudii, String cor, Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
+			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament,
+			Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru,
+			Float salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata,
+			Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru,
+			String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor,
+			Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
@@ -417,10 +418,10 @@ public class Contract implements Serializable {
 	}
 
 	// public Angajat getAngajat() {
-	// 	return angajat;
+	// return angajat;
 	// }
 
 	// public void setAngajat(Angajat angajat) {
-	// 	this.angajat = angajat;
+	// this.angajat = angajat;
 	// }
 }
