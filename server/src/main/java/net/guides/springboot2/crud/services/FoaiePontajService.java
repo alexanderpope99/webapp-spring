@@ -111,7 +111,7 @@ public class FoaiePontajService {
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
 
 			// get concediu odihna
-			List<CO> co = coRepository.findByIdcontract(idcontract);
+			List<CO> co = coRepository.findByContract_Id(idcontract);
 			// get concediu medical
 			List<CM> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 			// get oresuplimentare

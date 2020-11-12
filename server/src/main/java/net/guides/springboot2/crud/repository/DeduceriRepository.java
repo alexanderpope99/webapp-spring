@@ -8,9 +8,9 @@ import net.guides.springboot2.crud.model.Deduceri;
 
 @Repository
 public interface DeduceriRepository extends JpaRepository<Deduceri, Integer> {
-	@Query(value = "select ?2 from deduceri where dela <= ?1 and ?1 <= panala", nativeQuery = true)
+	@Query(value = "SELECT ?2 FROM deduceri WHERE dela <= ?1 AND ?1 <= panala", nativeQuery = true)
 	public Deduceri getDeducereBySalariuAndNrPersoane(float salariu, String strNrPersoaneIntretinere);
 
-	@Query(value = "select * from deduceri where dela <= ?1 and ?1 <= panala", nativeQuery = true)
+	@Query(value = "SELECT d FROM Deduceri d WHERE d.dela <= ?1 AND ?1 <= d.panala")
 	public Deduceri getDeducereBySalariu(float salariu);
 }
