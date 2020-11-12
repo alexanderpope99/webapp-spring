@@ -127,13 +127,16 @@ class RealizariRetineri extends React.Component {
       salariubrut: '',
       orelucrate: '',
       nrtichete: '',
+      zilec: '',
       zilecm: '',
+      zilecmlucratoare: '',
       valcm: '',
       zileco: '',
+      zilecolucratoare: '',
       zilecfp: '',
-      zilec: '',
+      zilecfplucratoare: '',
       zileinvoire: 0, // user input
-      primabruta: 0,
+      primabruta: 0, // user input
       zilelibere: 0, // user input
       salariupezi: 0,
       salariupeora: 0,
@@ -161,7 +164,15 @@ class RealizariRetineri extends React.Component {
       valoaretichete: '',
       impozit: '',
       restplata: '',
-      detalii: null,
+			detalii: null,
+			
+			// detalii
+      bazaimpozit: '',
+      impozitscutit: '',
+      salariurealizat: '',
+      venitnet: '',
+      zilelucrate: '',
+      zileplatite: '',
     });
   }
   clearUserInput() {

@@ -11,7 +11,7 @@ import net.guides.springboot2.crud.model.Persoana;
 
 @Repository
 public interface PersoanaRepository extends JpaRepository<Persoana, Integer> {
-	@Query(value = "SELECT a.persoana from Angajat a WHERE a.societate.id = ?1")
+	@Query(value = "SELECT a.persoana from Angajat a WHERE a.societate.id = ?1 ORDER BY a.persoana.nume ASC, a.persoana.prenume ASC")
 	List<Persoana> findByIdsocietate(int idsocietate);
 
 

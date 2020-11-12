@@ -57,7 +57,7 @@ public class COController {
 	@GetMapping("idc={id}")
 	public ResponseEntity<List<CODTO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract)
 			throws ResourceNotFoundException {
-		List<CO> co = coRepository.findByIdcontractOrderByDelaDesc(idcontract);
+		List<CO> co = coRepository.findByContract_IdOrderByDelaDesc(idcontract);
 
 		List<CODTO> coDTO = new ArrayList<>();
 		co.forEach(c -> coDTO.add(modelMapper.map(c, CODTO.class)));
@@ -68,7 +68,7 @@ public class COController {
 	@GetMapping("fp&idc={id}")
 	public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract)
 			throws ResourceNotFoundException {
-		List<CO> co = coRepository.findByIdcontractAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
+		List<CO> co = coRepository.findByContract_IdAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
 		return ResponseEntity.ok().body(co);
 	}
 

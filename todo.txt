@@ -13,12 +13,9 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 buton de 'show password' la schimba prola
 
 in RealizariRetineri.js:
-	ia detaliile ramase || adauga si in clearForm
 	fix ore suplimentare
 
-!! fix concediu medical
 **fix all repositories
-
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:

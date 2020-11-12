@@ -46,7 +46,7 @@ public class COService {
 	}
 
 	public int getZileCFP(int luna, int an, int idcontract) {
-		List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
+		List<CO> concediiOdihnaNeplatite = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
 		if (concediiOdihnaNeplatite.size() == 0)
 			return 0;
 
@@ -54,7 +54,7 @@ public class COService {
 	}
 
 	public int getZileCFPLucratoare(int luna, int an, int idcontract) {
-		List<CO> concediiOdihnaNeplatite = coRepository.findByIdcontractAndTip(idcontract, "Concediu fără plată");
+		List<CO> concediiOdihnaNeplatite = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
 		if (concediiOdihnaNeplatite.size() == 0)
 			return 0;
 
@@ -62,7 +62,7 @@ public class COService {
 	}
 
 	public int getZileCOTotal(int luna, int an, int idcontract) {
-		List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
+		List<CO> concediiOdihna = coRepository.findByContract_Id(idcontract);
 		if (concediiOdihna.size() == 0)
 			return 0;
 
@@ -70,7 +70,7 @@ public class COService {
 	}
 
 	public int getZileCOLucratoare(int luna, int an, int idcontract) {
-		List<CO> concediiOdihna = coRepository.findByIdcontract(idcontract);
+		List<CO> concediiOdihna = coRepository.findByContract_Id(idcontract);
 		if (concediiOdihna.size() == 0)
 			return 0;
 
@@ -78,7 +78,7 @@ public class COService {
 	}
 
 	public int getZileCS(int luna, int an, int idcontract) {
-		List<CO> cs = coRepository.findByIdcontractAndTip(idcontract, "Concediu pentru studii");
+		List<CO> cs = coRepository.findByContract_IdAndTip(idcontract, "Concediu pentru studii");
 		if (cs.size() == 0)
 			return 0;
 
@@ -86,7 +86,7 @@ public class COService {
 	}
 
 	public int getZileST(int luna, int an, int idcontract) {
-		List<CO> st = coRepository.findByIdcontractAndTip(idcontract, "Concediu pentru situații speciale");
+		List<CO> st = coRepository.findByContract_IdAndTip(idcontract, "Concediu pentru situații speciale");
 		if (st.size() == 0)
 			return 0;
 
@@ -94,7 +94,7 @@ public class COService {
 	}
 
 	public int getZileCO(int luna, int an, int idcontract) {
-		List<CO> st = coRepository.findByIdcontractAndTip(idcontract, "Concediu de odihnă");
+		List<CO> st = coRepository.findByContract_IdAndTip(idcontract, "Concediu de odihnă");
 		if (st.size() == 0)
 			return 0;
 
