@@ -51,6 +51,6 @@ public class RetineriService {
 	}
 
 	public Retineri getRetinereByIdstat(int stat) {
-		return retineriRepository.findByIdstat(stat);
+		return retineriRepository.findByStat_Id(stat);
 	}
 }

@@ -13,6 +13,7 @@ public class OresuplimentareDTO {
 
 	private Double total;
 
+	private Integer idstatsalariat;
 	private RealizariRetineri statsalariat;
 
 	public int getId() {
@@ -57,12 +58,18 @@ public class OresuplimentareDTO {
 
 	public Integer getIdstatsalariat() {
 		if (statsalariat == null)
-			return null;
+			return idstatsalariat;
 		else
 			return statsalariat.getId();
 	}
 
-	public void setStatsalariat(RealizariRetineri idstatsalariat) {
-		this.statsalariat = idstatsalariat;
+	public void setStatsalariat(RealizariRetineri statsalariat) {
+		this.statsalariat = statsalariat;
+	}
+	public void setIdstatsalariat(RealizariRetineri statsalariat) {
+		this.idstatsalariat = statsalariat.getId();
+	}
+	public void setIdstatsalariat(int idstatsalariat) {
+		this.idstatsalariat = idstatsalariat;
 	}
 }

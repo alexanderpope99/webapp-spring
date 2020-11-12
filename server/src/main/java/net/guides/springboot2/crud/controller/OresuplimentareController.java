@@ -3,7 +3,9 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.OresuplimentareDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
+import net.guides.springboot2.crud.services.OresuplimentareService;
 
 import org.springframework.data.domain.Sort;
 
@@ -25,53 +29,57 @@ import org.springframework.data.domain.Sort;
 @RequestMapping("/oresuplimentare")
 public class OresuplimentareController {
 	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
 	private OresuplimentareRepository oresuplimentareRepository;
 
+	@Autowired
+	private OresuplimentareService oresuplimentareService;
+
 	@GetMapping
-	public List<Oresuplimentare> getAllPersoane() {
-		return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	public List<OresuplimentareDTO> getAllPersoane() {
+		return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+			.stream().map(os -> modelMapper.map(os, OresuplimentareDTO.class)).collect(Collectors.toList());
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value = "id") int id)
+	public ResponseEntity<OresuplimentareDTO> getOresuplimentareById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
-		return ResponseEntity.ok().body(oresuplimentare);
+		return ResponseEntity.ok().body(modelMapper.map(oresuplimentare, OresuplimentareDTO.class));
 	}
 
 	@GetMapping("/api/idc={id}&mo={luna}&y={an}")
-	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByLunaAnIdcontract(
+	public ResponseEntity<List<OresuplimentareDTO>> getOresuplimentareByLunaAnIdcontract(
 			@PathVariable(value = "id") int idcontract, @PathVariable(value = "luna") Integer luna,
 			@PathVariable(value = "an") Integer an) {
-		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an,
-				idcontract);
+		List<OresuplimentareDTO> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an,
+				idcontract).stream().map(os -> modelMapper.map(os, OresuplimentareDTO.class)).collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(oresuplimentare);
 	}
 
 	@GetMapping("idss={id}")
-	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable(value = "id") int idstat) {
-		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByIdstatsalariat(idstat);
+	public ResponseEntity<List<OresuplimentareDTO>> getOresuplimentareByIdstat(@PathVariable(value = "id") int idstat) {
+		List<OresuplimentareDTO> oresuplimentare = oresuplimentareRepository.findByStatsalariat_Id(idstat)
+		.stream().map(os -> modelMapper.map(os, OresuplimentareDTO.class)).collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(oresuplimentare);
 	}
 
 	@PostMapping
-	public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare) {
-		return oresuplimentareRepository.save(oresuplimentare);
+	public OresuplimentareDTO createOresuplimentare(@RequestBody OresuplimentareDTO oresuplimentare)
+			throws ResourceNotFoundException {
+		return oresuplimentareService.save(oresuplimentare);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") int id,
-			@RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
-		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
-
-		newOresuplimentare.setId(oresuplimentare.getId());
-		final Oresuplimentare updatedOresuplimentare = oresuplimentareRepository.save(newOresuplimentare);
-		return ResponseEntity.ok(updatedOresuplimentare);
+	public ResponseEntity<OresuplimentareDTO> updateOresuplimentare(@PathVariable(value = "id") int id,
+			@RequestBody OresuplimentareDTO newOresuplimentare) throws ResourceNotFoundException {
+		return ResponseEntity.ok(oresuplimentareService.update(id, newOresuplimentare));
 	}
 
 	@DeleteMapping("{id}")

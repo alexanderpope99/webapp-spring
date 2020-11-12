@@ -110,6 +110,14 @@ public class Contract implements Serializable {
 	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
 	private List<RealizariRetineri> realizariRetineri;
 
+	@JsonBackReference(value = "co-contract")
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	private List<CO> concediiOdihna;
+
+	@JsonBackReference(value = "cm-contract")
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	private List<CM> concediiMedicale;
+
 	public Contract() {
 	}
 
@@ -417,11 +425,18 @@ public class Contract implements Serializable {
 		this.contbancar = contbancar;
 	}
 
-	// public Angajat getAngajat() {
-	// return angajat;
-	// }
+	public List<CO> getConcediiOdihna() {
+		return concediiOdihna;
+	}
+	public void setConcediiOdihna(List<CO> concediiOdihna) {
+		this.concediiOdihna = concediiOdihna;
+	}
 
-	// public void setAngajat(Angajat angajat) {
-	// this.angajat = angajat;
-	// }
+	public List<CM> getConcediiMedicale() {
+		return concediiMedicale;
+	}
+
+	public void setConcediiMedicale(List<CM> concediiMedicale) {
+		this.concediiMedicale = concediiMedicale;
+	}
 }

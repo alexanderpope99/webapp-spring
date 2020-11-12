@@ -60,7 +60,7 @@ public class RealizariRetineriService {
     // gets RealizariRetineri + daca nu are BazaCalcul => creeaza una noua, cu
     // datele existente
     public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
-				RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
+				RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
 				// RealizariRetineri rv = realizariRetineriRepository.findAll().stream()
 				// 	.filter(r ->{return (r.getLuna() == luna && r.getAn() == an && r.getContract().getId() == idcontract);})
 				// 	.collect(Collectors.toList()).get(0);
@@ -170,7 +170,7 @@ public class RealizariRetineriService {
 
         float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
 
-        int nrPersoaneIntretinere = persoaneIntretinereService.getNrPerosaneIntretinere(contract.getId());
+        int nrPersoaneIntretinere = persoaneIntretinereService.getNrPersoaneIntretinere(contract.getId());
 
         int restPlata = 0;
         if (zileLucrate > 0)
@@ -184,7 +184,7 @@ public class RealizariRetineriService {
                 (int) totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata,
                 nrPersoaneIntretinere, (int) this.deducere, primaBruta, totalOreSuplimentare);
 
-        int nrOreSuplimentare = oresuplimentareRepository.countNrOreSuplimentareByIdstat(rr.getId());
+        int nrOreSuplimentare = oresuplimentareRepository.getNrOreSuplimentareByIdstat(rr.getId());
         int zilePlatite = norma - zileCFPLucratoare;
 
         rr.setValcm(valCM);
@@ -249,7 +249,7 @@ public class RealizariRetineriService {
     public RealizariRetineri resetRealizariRetineri(int luna, int an, int idcontract)
             throws ResourceNotFoundException {
 
-        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndIdcontract(luna, an,
+        RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
                 idcontract);
 
         int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);

@@ -112,28 +112,18 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
-	// @JsonManagedReference(value = "realizariretineri-contract")
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
-
-	// @JsonBackReference
-	// @OneToMany(mappedBy = "stat", fetch = FetchType.LAZY)
-	// private List<AlteDrepturi> altedrepturi;
 
 	@JsonBackReference(value = "oresuplimentare-realizariretineri")
 	@OneToMany(mappedBy = "statsalariat", fetch = FetchType.LAZY)
 	private List<Oresuplimentare> oresuplimentare;
 
-	// @OneToMany(mappedBy = "stat")
-	// private Set<Prime> prime;
 
 	@JsonBackReference(value = "retineri-realizariretineri")
 	@OneToMany(mappedBy = "stat", fetch = FetchType.LAZY)
 	private List<Retineri> retineri;
-
-	// @OneToMany(mappedBy = "stat")
-	// private Set<Tichete> tichete;
 
 	public RealizariRetineri() {
 	}
@@ -345,6 +335,10 @@ public class RealizariRetineri implements Serializable {
 		return zilecontract;
 	}
 
+	public List<Oresuplimentare> getOresuplimentare() {
+		return oresuplimentare;
+	}
+
 	// ! SETTERS
 	public void setNrtichete(Integer nrtichete) {
 		this.nrtichete = nrtichete;
@@ -492,5 +486,8 @@ public class RealizariRetineri implements Serializable {
 
 	public void setZilecontract(Integer zilecontract) {
 		this.zilecontract = zilecontract;
+	}
+	public void setOresuplimentare(List<Oresuplimentare> oresuplimentare) {
+		this.oresuplimentare = oresuplimentare;
 	}
 }

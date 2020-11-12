@@ -1,7 +1,6 @@
-.vscode
+.vscode/
 target/
 server/target
 server/pom.xml
-# server/src/main/java/net/guides/springboot2/crud/security
-server/src/main/java/net/guides/springboot2/crud/downloads
-src/main/java/net/guides/springboot2/crud/downloads
+src/main/java/net/guides/springboot2/crud/downloads/
+server/src/main/java/net/guides/springboot2/crud/downloads/

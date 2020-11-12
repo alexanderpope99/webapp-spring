@@ -10,15 +10,11 @@ import net.guides.springboot2.crud.model.PersoanaIntretinere;
 
 @Repository
 public interface PersoanaIntretinereRepository extends JpaRepository<PersoanaIntretinere, Integer> {
-	@Query(value = "select count(id) from persoanaintretinere where idangajat = ?1", nativeQuery = true)
-	public int getNrPersoaneIntretinereByIdangajat(int idangajat);
-
 	@Query(value = "select count(*) from persoanaintretinere where idangajat = (select idpersoana from angajat where idcontract = ?1)", nativeQuery = true)
 	public int getNrPersoaneIntretinereByIdcontract(int idcontract);
 
-	@Query(value = "select * from persoanaintretinere where idangajat = ?1", nativeQuery = true)
-	public List<PersoanaIntretinere> findByIdangajat(int idangajat);
+	@Query(value = "SELECT a.persoaneintretinere FROM Angajat a WHERE a.contract.id = ?1")
+	public List<PersoanaIntretinere> findByIdcontract(int idcontract);
 
-	@Query(value = "select * from persoanaintretinere where idangajat = ?1 order by nume asc, prenume asc", nativeQuery = true)
-	public List<PersoanaIntretinere> findByIdangajatOrderByNumeAscPrenumeAsc(int idangajat);
+	public List<PersoanaIntretinere> findByAngajat_IdpersoanaOrderByNumeAscPrenumeAsc(int idangajat);
 }
