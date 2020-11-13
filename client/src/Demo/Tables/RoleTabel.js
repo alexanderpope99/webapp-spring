@@ -127,8 +127,8 @@ class RoleTabel extends React.Component {
   async addRole() {
     if (typeof this.state.roles === 'undefined') return;
     const role_body = {
-      name: this.state.nume,
-      descriere: this.state.desc,
+      name: this.state.nume || null,
+      descriere: this.state.desc || null,
     };
 
     let ok = await fetch(`${server.address}/role`, {
@@ -154,8 +154,8 @@ class RoleTabel extends React.Component {
   async updateRole() {
     const role_body = {
       id: this.state.id,
-      name: this.state.nume,
-      descriere: this.state.desc,
+      name: this.state.nume || null,
+      descriere: this.state.desc || null,
     };
 
     let ok = await fetch(`${server.address}/role/${this.state.id}`, {

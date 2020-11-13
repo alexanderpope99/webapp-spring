@@ -88,10 +88,10 @@ class BazaCalcul extends React.Component {
   async addBazaCalcul() {
     const bazacalcul_body = {
       idangajat: this.state.angajat.idpersoana,
-      an: this.state.an,
-      luna: this.state.luna.nr,
-      salariurealizat: this.state.salariurealizat,
-      zilelucrate: this.state.zilelucrate,
+      an: this.state.an || null,
+      luna: this.state.luna.nr || null,
+      salariurealizat: this.state.salariurealizat || null,
+      zilelucrate: this.state.zilelucrate || null,
     };
 
     let ok = await axios
@@ -114,10 +114,10 @@ class BazaCalcul extends React.Component {
   async updateBazaCalcul(idbazacalcul) {
     const bazacalcul_body = {
       idangajat: this.state.angajat.idpersoana,
-      an: this.state.an,
-      luna: this.state.luna.nr,
-      salariurealizat: this.state.salariurealizat,
-      zilelucrate: this.state.zilelucrate,
+      an: this.state.an || null,
+      luna: this.state.luna.nr || null,
+      salariurealizat: this.state.salariurealizat || null,
+      zilelucrate: this.state.zilelucrate || null,
     };
 
     const ok = await axios

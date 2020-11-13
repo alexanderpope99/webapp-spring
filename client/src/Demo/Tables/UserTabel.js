@@ -84,11 +84,11 @@ class UserTabel extends React.Component {
       .catch((err) => console.error(err));
 
     const user_body = {
-      pentru: pentruId,
-      dela: this.state.dela,
-      panala: this.state.panala,
-      tip: this.state.tip,
-      motiv: this.state.motiv,
+      pentru: pentruId || null,
+      dela: this.state.dela || null,
+      panala: this.state.panala || null,
+      tip: this.state.tip || null,
+      motiv: this.state.motiv || null,
       societate: getSocSel().id,
       status: 'Propus (Modificat)',
     };

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.repository.ContractRepository;
+import net.guides.springboot2.crud.services.ContractService;
 
 import org.springframework.data.domain.Sort;
 
@@ -26,6 +27,8 @@ import org.springframework.data.domain.Sort;
 public class ContractController {
 	@Autowired
 	private ContractRepository contractRepository;
+	@Autowired
+	private ContractService contractService;
 
 	@GetMapping
 	public List<Contract> getAllContracts() {
@@ -51,6 +54,12 @@ public class ContractController {
 	@PostMapping
 	public Contract createContract(@RequestBody Contract contract) {
 		return contractRepository.save(contract);
+	}
+
+	@PostMapping("{ida}")
+	public Contract createContractForAngajat(@RequestBody Contract contract, @PathVariable("ida") int ida)
+			throws ResourceNotFoundException {
+		return contractService.saveForAngajat(contract, ida);
 	}
 
 	@PutMapping("{id}")

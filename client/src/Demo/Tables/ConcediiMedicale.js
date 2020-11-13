@@ -115,30 +115,31 @@ class CMTabel extends React.Component {
 			cnpcopil: '',
       idcontract: null,
     });
-  }
-
-  async updateAngajatSel() {
-		let angajatSel = getAngajatSel();
-		if(angajatSel) {
-			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
-				.then(res => res.status === 200 ? res.data : null)
-				.catch(err => console.error(err));
-			if(angajat)
-				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
-		}
-		else {
-			this.setState({angajat: null}, this.fillTable);
-		}
-  }
-
-  numberWithCommas(x) {
+	}
+	
+	numberWithCommas(x) {
     if (!x) return 0;
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   componentDidMount() {
-    this.setCurrentYear();
-    this.fillTable();
+		this.setCurrentYear();
+    this.updateAngajatSel();
+	}
+	
+	async updateAngajatSel() {
+		let angajatSel = getAngajatSel();
+		if(angajatSel) {
+			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+				.then(res => res.status === 200 ? res.data : null)
+				.catch(err => console.error(err));
+			if(angajat) {
+				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
+			}
+		}
+		else {
+			this.setState({angajat: null}, this.fillTable);
+		}
   }
 
   setCurrentYear() {
@@ -278,14 +279,14 @@ class CMTabel extends React.Component {
   }
 
   async addCM() {
-    if (this.state.angajat.idcontract === null) {
+    if (this.state.angajat) return;
+    if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
         modalMessage: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
     }
-    if (typeof this.state.angajat === 'undefined') return;
 
     let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
@@ -312,19 +313,23 @@ class CMTabel extends React.Component {
   }
 
   async updateCM() {
-    let {
+		let {
       angajat,
       cm,
       cmComponent,
       show,
       show_confirm,
-      modalMessage,
+			modalMessage,
       id,
       isEdit,
       ...cm_body
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
+		for(let key of cm_body) {
+			key = key || null;
+		}
+		
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
         headers: authHeader(),
@@ -538,7 +543,10 @@ class CMTabel extends React.Component {
 
     const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
       <option key={index}>{an}</option>
-    ));
+		));
+		
+		let angajat = this.state.angajat;
+		let exists = angajat && angajat.idcontract;
 
     return (
       <Aux>
@@ -854,9 +862,9 @@ class CMTabel extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii medicale</Card.Title>
                 <Button
-                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
+                  variant={exists ? 'outline-primary' : 'outline-dark'}
                   className="float-right"
-                  disabled={!this.state.angajat}
+                  disabled={!exists}
                   onClick={() =>
                     this.setState(
                       { show: true, dela: this.state.today, panala: this.state.today },
@@ -868,10 +876,10 @@ class CMTabel extends React.Component {
                 </Button>
 
                 <Button
-                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
+                  variant={exists ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  disabled={!this.state.angajat}
+                  disabled={!exists}
                   onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />

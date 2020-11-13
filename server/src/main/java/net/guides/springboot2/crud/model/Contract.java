@@ -99,7 +99,7 @@ public class Contract implements Serializable {
 	private Departament departament;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "idcontbancar", referencedColumnName = "iban")
+	@JoinColumn(name = "idcontbancar", referencedColumnName = "id")
 	private ContBancar contbancar;
 
 	@JsonBackReference(value = "angajat-contract")

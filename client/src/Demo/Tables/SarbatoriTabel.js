@@ -123,9 +123,9 @@ class SarbatoriTabel extends React.Component {
 
   async addSarbatoare() {
     const sarbatoare_body = {
-      dela: this.state.dela,
-      panala: this.state.panala,
-      nume: this.state.nume,
+      dela: this.state.dela || null,
+      panala: this.state.panala || null,
+      nume: this.state.nume || null,
       // in DB also has sporuripermanente
     };
 

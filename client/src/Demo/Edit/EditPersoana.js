@@ -38,7 +38,7 @@ class EditPersoana extends React.Component {
 
     let angajatSel = getAngajatSel();
     var idOfSelected = null;
-    if (typeof props.location !== 'undefined') {
+    if (props.location) {
       let search = props.location.search; // returns the URL query String
       let params = new URLSearchParams(search);
       idOfSelected = params.get('id');
@@ -302,33 +302,33 @@ class EditPersoana extends React.Component {
     if (!this.hasRequired()) return -1;
 
     var adresa_body = {
-      adresa: this.state.adresacompleta,
-      localitate: this.state.localitate,
-      judet: this.state.judet,
+      adresa: this.state.adresacompleta || null,
+      localitate: this.state.localitate || null,
+      judet: this.state.judet || null,
       tara: null,
     };
 
     var buletin_body = {
-      cnp: this.state.cnp,
-      tip: this.state.tipact,
-      serie: this.state.serie,
-      numar: this.state.numar,
-      datanasterii: this.state.datanasterii,
-      eliberatde: this.state.eliberatde,
-      dataeliberarii: this.state.dataeliberarii,
-      loculnasterii: this.state.loculnasterii,
+      cnp: this.state.cnp || null,
+      tip: this.state.tipact || null,
+      serie: this.state.serie || null,
+      numar: this.state.numar || null,
+      datanasterii: this.state.datanasterii || null,
+      eliberatde: this.state.eliberatde || null,
+      dataeliberarii: this.state.dataeliberarii || null,
+      loculnasterii: this.state.loculnasterii || null,
     };
 
     let persoana_body = {
-      gen: this.state.gen,
-      nume: this.state.nume,
-      prenume: this.state.prenume,
+      gen: this.state.gen || null,
+      nume: this.state.nume || null,
+      prenume: this.state.prenume || null,
       actidentitate: buletin_body,
       adresa: adresa_body,
-      starecivila: this.state.starecivila,
-      email: this.state.email,
-      telefon: this.state.telefon,
-      cnp: this.state.cnp,
+      starecivila: this.state.starecivila || null,
+      email: this.state.email || null,
+      telefon: this.state.telefon || null,
+      cnp: this.state.cnp || null,
     };
 
     // update persoana

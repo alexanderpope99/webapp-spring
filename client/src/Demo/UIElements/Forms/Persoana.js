@@ -174,34 +174,34 @@ class Persoana extends React.Component {
     if (!this.hasRequired()) return;
 
     let adresa_body = {
-      adresa: this.state.adresacompleta,
-      localitate: this.state.localitate,
-      judet: this.state.judet,
+      adresa: this.state.adresacompleta || null,
+      localitate: this.state.localitate || null,
+      judet: this.state.judet || null,
       tara: null,
     };
 
     let buletin_body = {
-      cnp: this.state.cnp,
-      tip: this.state.tipact,
-      serie: this.state.serie,
-      numar: this.state.numar,
-      datanasterii: this.state.datanasterii,
-      eliberatde: this.state.eliberatde,
-      dataeliberarii: this.state.dataeliberarii,
-      loculnasterii: this.state.loculnasterii,
+      cnp: this.state.cnp || null,
+      tip: this.state.tipact || null,
+      serie: this.state.serie || null,
+      numar: this.state.numar || null,
+      datanasterii: this.state.datanasterii || null,
+      eliberatde: this.state.eliberatde || null,
+      dataeliberarii: this.state.dataeliberarii || null,
+      loculnasterii: this.state.loculnasterii || null,
     };
 
     const angajat_body = {
       persoana: {
-        gen: this.state.gen,
-        nume: this.state.nume,
-        prenume: this.state.prenume,
+        gen: this.state.gen || null,
+        nume: this.state.nume || null,
+        prenume: this.state.prenume || null,
         actidentitate: buletin_body,
         adresa: adresa_body,
-        starecivila: this.state.starecivila,
-        email: this.state.email,
-        telefon: this.state.telefon,
-        cnp: this.state.cnp,
+        starecivila: this.state.starecivila || null,
+        email: this.state.email || null,
+        telefon: this.state.telefon || null,
+        cnp: this.state.cnp || null,
       },
     };
 
@@ -221,7 +221,6 @@ class Persoana extends React.Component {
 
       console.log('idpersoana:', persoana.id);
 
-      // await this.createAngajat(persoana.id);
     } else return;
   }
 

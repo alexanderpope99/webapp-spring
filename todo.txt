@@ -12,11 +12,6 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 buton de 'show password' la schimba prola
 
-in RealizariRetineri.js:
-	fix ore suplimentare
-
-**fix all repositories
-
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND

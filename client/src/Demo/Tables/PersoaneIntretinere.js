@@ -79,14 +79,14 @@ class PersoaneIntretinereTabel extends React.Component {
 
   async addPersoanaIntretinere() {
     const persoana_body = {
-      nume: this.state.nume,
-      prenume: this.state.prenume,
-      cnp: this.state.cnp,
-      datanasterii: this.state.datanasterii,
-      grad: this.state.grad,
-      gradinvaliditate: this.state.gradinvaliditate.toLowerCase(),
-      coasigurat: this.state.coasigurat,
-      intretinut: this.state.intretinut,
+      nume: this.state.nume || null,
+      prenume: this.state.prenume || null,
+      cnp: this.state.cnp || null,
+      datanasterii: this.state.datanasterii || null,
+      grad: this.state.grad || null,
+      gradinvaliditate: this.state.gradinvaliditate.toLowerCase() || null,
+      coasigurat: this.state.coasigurat || null,
+      intretinut: this.state.intretinut || null,
       idangajat: this.state.angajat.idpersoana,
     };
 
@@ -108,15 +108,15 @@ class PersoaneIntretinereTabel extends React.Component {
 
   async updatePersoanaIntretinere(idpers) {
     const persoana_body = {
-      nume: this.state.nume,
-      prenume: this.state.prenume,
-      cnp: this.state.cnp,
-      datanasterii: this.state.datanasterii,
-      grad: this.state.grad,
-      gradinvaliditate: this.state.gradinvaliditate.toLowerCase(),
-      coasigurat: this.state.coasigurat,
-      intretinut: this.state.intretinut,
-      idangajat: this.state.angajat.idpersoana,
+      nume: this.state.nume || null,
+      prenume: this.state.prenume || null,
+      cnp: this.state.cnp || null,
+      datanasterii: this.state.datanasterii || null,
+      grad: this.state.grad || null,
+      gradinvaliditate: this.state.gradinvaliditate.toLowerCase() || null,
+      coasigurat: this.state.coasigurat || null,
+      intretinut: this.state.intretinut || null,
+      idangajat: this.state.angajat.idpersoana || null,
     };
 
     const ok = await axios

@@ -96,7 +96,7 @@ class COTabel extends React.Component {
 
   componentDidMount() {
     this.setCurrentYear();
-    this.fillTable();
+    this.updateAngajatSel();
   }
 
   setCurrentYear() {
@@ -250,9 +250,9 @@ class COTabel extends React.Component {
     }
 
     const co_body = {
-      dela: this.state.dela,
-      panala: this.state.panala,
-      tip: this.state.tip,
+      dela: this.state.dela || null,
+      panala: this.state.panala || null,
+      tip: this.state.tip || null,
       idcontract: this.state.angajat.idcontract,
     };
 
@@ -276,10 +276,10 @@ class COTabel extends React.Component {
 
   async updateCO() {
     var co_body = {
-      id: this.state.id,
-      dela: this.state.dela,
-      panala: this.state.panala,
-      tip: this.state.tip,
+      id: this.state.id || null,
+      dela: this.state.dela || null,
+      panala: this.state.panala || null,
+      tip: this.state.tip || null,
       idcontract: this.state.angajat.idcontract,
     };
 
@@ -425,7 +425,9 @@ class COTabel extends React.Component {
 
     const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
       <option key={index}>{an}</option>
-    ));
+		));
+		
+		let exists = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
@@ -514,9 +516,9 @@ class COTabel extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
-                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
+                  variant={exists ? 'outline-primary' : 'outline-dark'}
                   className="float-right"
-                  disabled={!this.state.angajat}
+                  disabled={!exists}
                   onClick={() =>
                     this.setState(
                       { show: true, dela: this.state.today, panala: this.state.today },
@@ -528,10 +530,10 @@ class COTabel extends React.Component {
                 </Button>
 
                 <Button
-                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
+                  variant={exists ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  disabled={!this.state.angajat}
+                  disabled={!exists}
                   onClick={this.fillTable}
                 >
                   <Refresh className="m-0 p-0" />

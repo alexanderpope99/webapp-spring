@@ -51,11 +51,11 @@ class AddUser extends React.Component {
 
     // build user JSON for POST
     const user_body = {
-      username: this.state.username,
-      password: this.state.password,
-      nume: this.state.nume,
-      prenume: this.state.prenume,
-      societateselectată: this.state.societateselectată,
+      username: this.state.username || null,
+      password: this.state.password || null,
+      nume: this.state.nume || null,
+      prenume: this.state.prenume || null,
+      societateselectată: this.state.societateselectată || null,
     };
     // ADD User TO DATABASE
     await axios

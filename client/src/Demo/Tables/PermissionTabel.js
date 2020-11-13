@@ -124,7 +124,7 @@ class PermissionTabel extends React.Component {
   async addPermission() {
     if (typeof this.state.permissions === 'undefined') return;
     const permission_body = {
-      name: this.state.nume,
+      name: this.state.nume || null,
     };
 
     let ok = await fetch(`${server.address}/permission`, {
@@ -150,7 +150,7 @@ class PermissionTabel extends React.Component {
   async updatePermission() {
     const permission_body = {
       id: this.state.id,
-      name: this.state.nume,
+      name: this.state.nume || null,
     };
 
     let ok = await fetch(`${server.address}/permission/${this.state.id}`, {

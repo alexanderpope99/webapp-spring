@@ -246,41 +246,46 @@ class Contract extends React.Component {
     if (!idcontract) {
       method = 'POST';
       idcontract = '';
-    }
+		}
+		
+		let contbancar_body = null;
+		if(this.state.iban || this.state.numebanca)
+			contbancar_body = {iban: this.state.iban, numebanca: this.state.numebanca};
 
     const contract_body = {
-      tip: this.state.modelContract,
-      nr: this.state.numărContract,
-      marca: this.state.marca,
-      data: this.state.dataContract,
-      dataincepere: this.state.dataIncepere,
-      idpunctlucru: null, //punctlucru.id,  // null or int
-      idcentrucost: null, //centrucost.id,
-      idechipa: null, //echipa.id,
-      iddepartament: null, //departament.id,
-      functiedebaza: this.state.functieBaza,
-      calculdeduceri: this.state.deduceri,
-      studiisuperioare: this.state.studiiSuperioare,
-      normalucru: this.state.normăLucru.nrOre,
-      salariutarifar: this.state.salariu,
-      contbancar: { iban: this.state.iban, numebanca: this.state.numeBanca },
-      conditiimunca: this.state.condițiiMuncă,
-      sindicat: this.state.sindicat,
-      cotizatiesindicat: this.state.cotizațieSindicat,
-      pensieprivata: this.state.pensiePrivată,
-      cotizatiepensieprivata: this.state.cotizațiePensie,
-      avans: this.state.avans,
-      monedaavans: this.state.monedăAvans,
-      zilecoan: this.state.zileCOan,
-      ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru,
-      casasanatate: this.state.casăSănătate,
-      gradinvaliditate: this.state.gradInvalid,
-      functie: this.state.funcție,
-      nivelstudii: this.state.nivelStudii,
-      cor: this.state.cor,
-      pensionar: this.state.pensionar,
-      spor: this.state.spor,
-    };
+      tip: this.state.modelContract || null,
+      nr: this.state.numărContract || null,
+      marca: this.state.marca || null,
+      data: this.state.dataContract || null,
+      dataincepere: this.state.dataIncepere || null,
+      idpunctlucru: null, //punctlucru.id,  // null or in || nullt
+      idcentrucost: null, //centrucost.id || null,
+      idechipa: null, //echipa.id || null,
+      iddepartament: null, //departament.id || null,
+      functiedebaza: this.state.functieBaza || null,
+      calculdeduceri: this.state.deduceri || null,
+      studiisuperioare: this.state.studiiSuperioare || null,
+      normalucru: this.state.normăLucru.nrOre || null,
+      salariutarifar: this.state.salariu || null,
+      contbancar: contbancar_body,
+      conditiimunca: this.state.condițiiMuncă || null,
+      sindicat: this.state.sindicat || null,
+      cotizatiesindicat: this.state.cotizațieSindicat || null,
+      pensieprivata: this.state.pensiePrivată || null,
+      cotizatiepensieprivata: this.state.cotizațiePensie || null,
+      avans: this.state.avans || null,
+      monedaavans: this.state.monedăAvans || null,
+      zilecoan: this.state.zileCOan || null,
+      ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru || null,
+      casasanatate: this.state.casăSănătate || null,
+      gradinvaliditate: this.state.gradInvalid || null,
+      functie: this.state.funcție || null,
+      nivelstudii: this.state.nivelStudii || null,
+      cor: this.state.cor || null,
+      pensionar: this.state.pensionar || null,
+      spor: this.state.spor || null,
+		};
+		
     let contract;
     if (method === 'PUT')
       contract = await axios
@@ -293,7 +298,7 @@ class Contract extends React.Component {
         });
     else if (method === 'POST')
       contract = await axios
-        .post(`${server.address}/contract/${idcontract}`, contract_body, {
+        .post(`${server.address}/contract/${idangajat}`, contract_body, {
           headers: authHeader(),
         })
         .then((res) => (res.status === 200 ? res.data : null))
@@ -310,24 +315,24 @@ class Contract extends React.Component {
         id: contract.id,
       });
 
-      if (method === 'POST') {
-        // update angajat with idangajat from functon props
-        await axios
-          .put(
-            `${server.address}/angajat/${idangajat}`,
-            {
-              idcontract: contract.id,
-              idpersoana: idangajat,
-              idsocietate: this.state.socsel.id,
-            },
-            {
-              headers: authHeader(),
-            }
-          )
-          .catch((err) => console.error(err));
-        method = 'PUT';
-      }
-      console.log('idcontract:', contract.id);
+      // if (method === 'POST') {
+      //   // update angajat with idangajat from functon props
+      //   await axios
+      //     .put(
+      //       `${server.address}/angajat/${idangajat}`,
+      //       {
+      //         idcontract: contract.id,
+      //         idpersoana: idangajat,
+      //         idsocietate: this.state.socsel.id,
+      //       },
+      //       {
+      //         headers: authHeader(),
+      //       }
+      //     )
+      //     .catch((err) => console.error(err));
+      //   method = 'PUT';
+      // }
+      // console.log('idcontract:', contract.id);
     } else {
       this.setState({
         show: true,

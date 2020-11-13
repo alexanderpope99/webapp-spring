@@ -86,21 +86,21 @@ class AddSocietate extends React.Component {
     // var caen_id = null;
 
 		let adresa_body = {
-			adresa: this.state.adresa,
-			localitate: this.state.localitate,
-			judet: this.state.judet,
+			adresa: this.state.adresa || null,
+			localitate: this.state.localitate || null,
+			judet: this.state.judet || null,
 			tara: null,
 		};
     // build societate JSON for POST with adr_id as idadresa
     const societate_body = {
-      nume: this.state.nume,
-      idcaen: Number(this.state.idcaen),
-      cif: this.state.cif,
-      capsoc: this.state.capsoc,
-      regcom: this.state.regcom,
+      nume: this.state.nume || null,
+      idcaen: Number(this.state.idcaen) || null,
+      cif: this.state.cif || null,
+      capsoc: this.state.capsoc || null,
+      regcom: this.state.regcom || null,
       adresa: adresa_body,
-      email: this.state.email,
-      telefon: this.state.telefon,
+      email: this.state.email || null,
+      telefon: this.state.telefon || null,
     };
     console.log(societate_body);
 		// ADD SOCIETATE TO DATABASE

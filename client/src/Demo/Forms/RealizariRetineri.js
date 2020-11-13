@@ -515,8 +515,8 @@ class RealizariRetineri extends React.Component {
   async addOrasuplimentara(n, p, t) {
     const ore_body = {
       idstatsalariat: this.state.idstat,
-      nr: n,
-      procent: p,
+      nr: n || null,
+      procent: p || null,
       total: t.toFixed(0),
     };
 
