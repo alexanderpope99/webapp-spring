@@ -180,6 +180,13 @@ var items = [
         url: '/dec112',
         icon: 'feather icon-grid',
       },
+      {
+        id: 'mta',
+        title: 'Plăți Salarii MTA',
+        type: 'item',
+        url: '/mta',
+        icon: 'feather icon-grid',
+      },
     ],
   },
   {

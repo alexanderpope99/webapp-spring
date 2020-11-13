@@ -1434,7 +1434,7 @@ public class Dec112Service {
 				childElement = doc.createElement("E3_14");
 				childElement.appendChild(doc.createTextNode(
 						String.valueOf(realizariRetineri.getTotaldrepturi() - realizariRetineri.getValoaretichete()
-								- realizariRetineri.getCas() - realizariRetineri.getCass()))); // de completat baza
+								- realizariRetineri.getCas() - realizariRetineri.getCass()))); // baza
 																								// calcul impozit
 																								// (venitBrut +
 				// tichete - cas - cass)
