@@ -264,7 +264,7 @@ class EditPersoana extends React.Component {
     if (persoana.actidentitate) {
       this.setState({
         idactidentitate: persoana.actidentitate.id,
-        tipact: persoana.actidentitate.tipact || '',
+        tipact: persoana.actidentitate.tip || 'Carte de identitate',
         serie: persoana.actidentitate.serie || '',
         numar: persoana.actidentitate.numar || '',
         cnp: persoana.actidentitate.cnp || '',
@@ -312,7 +312,7 @@ class EditPersoana extends React.Component {
     var buletin_body = {
 			id: this.state.idactidentitate,
       cnp: this.state.cnp || null,
-      tip: this.state.tipact || null,
+      tip: this.state.tipact || 'Carte de identitate',
       serie: this.state.serie || null,
       numar: this.state.numar || null,
       datanasterii: this.state.datanasterii || null,

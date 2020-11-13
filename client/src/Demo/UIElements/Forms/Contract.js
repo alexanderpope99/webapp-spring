@@ -163,7 +163,7 @@ class Contract extends React.Component {
         {
           idangajat: idangajat,
           id: contract.id,
-          modelContract: contract.tip, //text
+          modelContract: contract.tip || '', //text
           numărContract: contract.nr || '', //text
           marca: contract.marca || '', //text
           dataContract: contract.data ? contract.data.substring(0, 10) : '',
