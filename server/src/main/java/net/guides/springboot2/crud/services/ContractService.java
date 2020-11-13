@@ -26,6 +26,7 @@ public class ContractService {
 		Angajat angajat = angajatRepository.findById(idangajat)
 			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + idangajat));
 		angajat.setContract(contract);
+		angajatRepository.save(angajat);
 
 		return contract;
 	}

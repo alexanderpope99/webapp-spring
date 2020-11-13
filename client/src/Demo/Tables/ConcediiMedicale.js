@@ -326,8 +326,8 @@ class CMTabel extends React.Component {
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
-		for(let key of cm_body) {
-			key = key || null;
+		for(let key in cm_body) {
+			cm_body[key] = cm_body[key] || null;
 		}
 		
     let ok = await axios
@@ -412,7 +412,7 @@ class CMTabel extends React.Component {
         ) {
           for (let key in cm) {
             if (!cm[key]) cm[key] = '-';
-          }
+					}
           return (
             <tr key={cm.id}>
               <th className="d-inline-flex flex-row justify-content-around">
@@ -473,7 +473,7 @@ class CMTabel extends React.Component {
               </th>
               <th>{cm.dela.substring(0, 10).split('-').reverse().join('.')}</th>
               <th>{cm.panala.substring(0, 10).split('-').reverse().join('.')}</th>
-              <th>{cm.continuare ? 'Da' : 'Nu'}</th>
+              <th>{cm.continuare === '-' ? 'Nu' : 'Da'}</th>
               <th>{cm.datainceput.substring(0, 10).split('-').reverse().join('.')}</th>
               <th>{cm.serie}</th>
               <th>{cm.nr}</th>
@@ -490,9 +490,10 @@ class CMTabel extends React.Component {
               <th>{cm.indemnizatiefirma}</th>
               <th>{cm.zilefnuass}</th>
               <th>{cm.indemnizatiefnuass}</th>
-              <th>{cm.locprescriere}</th>
               <th>{cm.nravizmedic}</th>
+              <th>{cm.locprescriere}</th>
               <th>{cm.codboala}</th>
+              <th>{cm.codboalainfcont}</th>
               <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
               <th>{cm.conditii}</th>
               <th>{cm.cnpcopil}</th>
@@ -723,7 +724,7 @@ class CMTabel extends React.Component {
               <Form.Group id="zilefirma">
                 <Form.Label>Zile suportate de firmă</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.zilefirma}
                   onChange={(e) => {
                     this.setState({ zilefirma: e.target.value });
@@ -743,7 +744,7 @@ class CMTabel extends React.Component {
               <Form.Group id="indemnizatiefirma">
                 <Form.Label>Indemnizație firmă</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.indemnizatiefirma}
                   onChange={(e) => {
                     this.setState({ indemnizatiefirma: e.target.value });
@@ -753,7 +754,7 @@ class CMTabel extends React.Component {
               <Form.Group id="zilefnuass">
                 <Form.Label>Zile FNUASS</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.zilefnuass}
                   onChange={(e) => {
                     this.setState({ zilefnuass: e.target.value });
@@ -763,7 +764,7 @@ class CMTabel extends React.Component {
               <Form.Group id="indemnizatiefnuass">
                 <Form.Label>Indemnizație FNUASS</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.indemnizatiefnuass}
                   onChange={(e) => {
                     this.setState({ indemnizatiefnuass: e.target.value });
@@ -921,9 +922,8 @@ class CMTabel extends React.Component {
                       <th>Până la (inclusiv)</th>
                       <th>Continuare</th>
                       <th>Data început</th>
-                      <th>Nr. certificat</th>
                       <th>Serie certificat</th>
-                      <th>Serie si nr. certificat</th>
+                      <th>Nr. certificat</th>
                       <th>Data eliberare</th>
                       <th>Cod urgență</th>
                       <th>Cod boală infecțioasă</th>
@@ -932,6 +932,7 @@ class CMTabel extends React.Component {
                       <th>Bază calcul plafonată</th>
                       <th>Zile bază calul</th>
                       <th>Medie zilnică</th>
+                      <th>Cod indemnizație</th>
                       <th>Zile firmă</th>
                       <th>Indemnizație firmă</th>
                       <th>Zile FNUASS</th>
