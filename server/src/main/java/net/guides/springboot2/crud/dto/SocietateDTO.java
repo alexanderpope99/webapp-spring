@@ -22,6 +22,8 @@ public class SocietateDTO {
 
 	private String telefon;
 
+	private String fax;
+
 	public Double getCapsoc() {
 		return capsoc;
 	}
@@ -95,6 +97,14 @@ public class SocietateDTO {
 
 	public void setAdresa(Adresa idadresa) {
 		this.adresa = idadresa;
+	}
+
+	public String getFax() {
+		return fax;
+	}
+
+	public void setFax(String fax) {
+		this.fax = fax;
 	}
 
 }

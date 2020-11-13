@@ -5,16 +5,14 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
 
-class Dec112 extends React.Component {
+class PlatiSalariiMTA extends React.Component {
   constructor() {
     super();
 
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    this.downloadXML = this.downloadXML.bind(this);
-    this.downloadPDF = this.downloadPDF.bind(this);
-    this.creeazaDec112XML = this.creeazaDec112XML.bind(this);
-    this.creeazaDec112PDF = this.creeazaDec112PDF.bind(this);
+    this.download = this.download.bind(this);
+    this.creeazaMTA = this.creeazaMTA.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -45,35 +43,7 @@ class Dec112 extends React.Component {
     });
   }
 
-  // luna is object of type { nume: string, nr: int }
-  async downloadXML(luna, an) {
-    const token = this.state.user.accessToken;
-    console.log('trying to download...');
-    let societateNume = this.state.socsel.nume;
-    await fetch(
-      `${server.address}/download/${this.state.user.id}/Declaratia 112 - ${societateNume} - ${luna.nume} ${an}.xml`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-      .then((res) => res.blob())
-      .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = `Declaratia 112 - ${societateNume} - ${luna.nume} ${an}.xml`;
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click();
-        a.remove(); //afterwards we remove the element again
-        console.log('downloaded');
-      });
-  }
-
-  async downloadPDF(luna, an) {
+  async download(luna, an) {
     const token = this.state.user.accessToken;
     console.log('trying to download...');
     let societateNume = this.state.socsel.nume;
@@ -100,7 +70,7 @@ class Dec112 extends React.Component {
       });
   }
 
-  async creeazaDec112XML(e) {
+  async creeazaMTA(e) {
     e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
@@ -126,32 +96,6 @@ class Dec112 extends React.Component {
     if (created) this.downloadXML(luna, an);
   }
 
-  async creeazaDec112PDF(e) {
-    e.preventDefault();
-    // make request to create stat for soc, luna, an
-    let luna = this.state.luna;
-    let an = this.state.an;
-    let d_rec = this.state.d_rec ? 1 : 0;
-    let numeDec = this.state.numeDeclarant;
-    let prenumeDec = this.state.prenumeDeclarant;
-    let functieDec = this.state.functieDeclarant;
-
-    const created = await fetch(
-      `${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.state.user.accessToken}`,
-        },
-      }
-    )
-      .then((res) => res.ok)
-      .catch((err) => console.error(err));
-
-    if (created) this.downloadPDF(luna, an);
-  }
-
   render() {
     const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
@@ -163,10 +107,10 @@ class Dec112 extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume} - Declarația 112</Typography>
+          <Typography variant="h5">{this.state.socsel.nume} - Plăți Salarii MTA</Typography>
         </Card.Header>
         <Card.Body>
-          <Form onSubmit={this.creeazaDec112}>
+          <Form onSubmit={this.creeazaMTA}>
             <Row>
               {/* LUNA */}
               <Col md={4}>
@@ -248,25 +192,9 @@ class Dec112 extends React.Component {
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
-              <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
-                <Form.Group controlId="d_rec">
-                  <Form.Check
-                    type="checkbox"
-                    label="Decl. Rectificativă"
-                    onChange={(e) =>
-                      this.setState({
-                        d_rec: e.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
           </Form>
           <div className="mt-4">
-            <Button onClick={this.creeazaDec112XML}>Generează XML</Button>
-            <Button onClick={this.creeazaDec112PDF}>Generează PDF</Button>
+            <Button onClick={this.creeazaMTA}>Generează MTA</Button>
           </div>
         </Card.Body>
       </Card>
@@ -274,4 +202,4 @@ class Dec112 extends React.Component {
   }
 }
 
-export default Dec112;
+export default PlatiSalariiMTA;

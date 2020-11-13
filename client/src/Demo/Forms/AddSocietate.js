@@ -26,6 +26,7 @@ class AddSocietate extends React.Component {
       capitala: 'Județ',
       email: '', // text
       telefon: '', // text
+      fax: '', //text
       show: false,
       modalMessage: '', // text,
     };
@@ -44,6 +45,7 @@ class AddSocietate extends React.Component {
       capitala: 'Județ',
       email: '', // text
       telefon: '', // text
+      fax: '',
       show: false,
       modalMessage: '', //text
     });
@@ -52,8 +54,8 @@ class AddSocietate extends React.Component {
   onChangeLocalitate(e) {
     if (
       e.target.value.toLowerCase() === 'bucuresti' ||
-			e.target.value.toLowerCase() === 'bucurești' ||
-			e.target.value.toLowerCase() === 'bucharest'
+      e.target.value.toLowerCase() === 'bucurești' ||
+      e.target.value.toLowerCase() === 'bucharest'
     )
       this.setState({
         capitala: 'Sector',
@@ -101,10 +103,11 @@ class AddSocietate extends React.Component {
       adresa: adresa_body,
       email: this.state.email || null,
       telefon: this.state.telefon || null,
+      fax: this.state.fax || null,
     };
     console.log(societate_body);
-		// ADD SOCIETATE TO DATABASE
-		const user = JSON.parse(localStorage.getItem('user'));
+    // ADD SOCIETATE TO DATABASE
+    const user = JSON.parse(localStorage.getItem('user'));
     await axios
       .post(`${server.address}/societate/${user.id}`, societate_body, {
         headers: authHeader(),
@@ -114,15 +117,15 @@ class AddSocietate extends React.Component {
         this.setState({
           show: true,
           modalMessage: 'Societate adăugată cu succes!',
-				});
-				window.scrollTo({
-					top: 0,
-					left: 0,
-					behavior: 'smooth',
-				});
+        });
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
       })
-			.then(this.clearFields())
-			.catch(err => console.error(err));
+      .then(this.clearFields())
+      .catch((err) => console.error(err));
   }
 
   render() {
@@ -164,7 +167,7 @@ class AddSocietate extends React.Component {
                 <Form onSubmit={this.onSubmit}>
                   <Row>
                     {/* <Form> */}
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="nume">
                         <Form.Label>Denumire societate</Form.Label>
                         <Form.Control
@@ -180,9 +183,9 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="adresa">
-                        <Form.Label>Punct de lucru</Form.Label>
+                        <Form.Label>Adresă</Form.Label>
                         <Form.Control
                           type="text"
                           placeholder="eg. Strada nr. 1"
@@ -195,7 +198,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="localitate">
                         <Form.Label>Localitate</Form.Label>
                         <Form.Control
@@ -206,7 +209,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="judet">
                         <Form.Label>{this.state.capitala}</Form.Label>
                         <Form.Control
@@ -223,7 +226,7 @@ class AddSocietate extends React.Component {
                         </Form.Control>
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="codCaen">
                         <Form.Label>Cod CAEN</Form.Label>
                         <Form.Control
@@ -238,7 +241,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="cif">
                         <Form.Label>CIF</Form.Label>
                         <Form.Control
@@ -253,7 +256,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="capSoc">
                         <Form.Label>Capital social</Form.Label>
                         <Form.Control
@@ -268,7 +271,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="regcom">
                         <Form.Label>Registrul comerțului</Form.Label>
                         <Form.Control
@@ -283,7 +286,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="telefon">
                         <Form.Label>Telefon</Form.Label>
                         <Form.Control
@@ -298,7 +301,7 @@ class AddSocietate extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group controlId="email">
                         <Form.Label>E-mail</Form.Label>
                         <Form.Control
@@ -308,6 +311,21 @@ class AddSocietate extends React.Component {
                           onChange={(e) =>
                             this.setState({
                               email: e.target.value,
+                            })
+                          }
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                      <Form.Group controlId="email">
+                        <Form.Label>Fax</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="fax"
+                          value={this.state.fax}
+                          onChange={(e) =>
+                            this.setState({
+                              fax: e.target.value,
                             })
                           }
                         />

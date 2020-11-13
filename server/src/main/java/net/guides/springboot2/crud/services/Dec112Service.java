@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.services;
 import java.io.IOException;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -338,7 +343,10 @@ public class Dec112Service {
 			sfmSectAVal4.appendChild(childElement);
 
 			childElement = doc.createElement("sfmSectATotal");
-			childElement.appendChild(doc.createTextNode(""));// de completat totalurile din A
+			childElement.appendChild(doc.createTextNode(String.valueOf(impozit_datorat + cas + cass + cam)));// de
+																												// completat
+																												// totalurile
+																												// din A
 			sbfrmPage1Ang.appendChild(childElement);
 
 			// Element sfmSectB = doc.createElement("sfmSectB");
@@ -1426,7 +1434,7 @@ public class Dec112Service {
 				childElement = doc.createElement("E3_14");
 				childElement.appendChild(doc.createTextNode(
 						String.valueOf(realizariRetineri.getTotaldrepturi() - realizariRetineri.getValoaretichete()
-								- realizariRetineri.getCas() - realizariRetineri.getCass()))); // de completat baza
+								- realizariRetineri.getCas() - realizariRetineri.getCass()))); // baza
 																								// calcul impozit
 																								// (venitBrut +
 				// tichete - cas - cass)
@@ -1507,13 +1515,27 @@ public class Dec112Service {
 
 			transformer.transform(source, result);
 
+			var pdfReader = new PdfReader(homeLocation + "templates\\D112.pdf");
+			String newFileLocationPDF = String.format("%s\\downloads\\%d\\Declaratia 112 - %s - %s %d.pdf",
+					homeLocation, userID, societate.getNume(), lunaNume, an);
+			var outputStream = new FileOutputStream(newFileLocationPDF);
+
+			PdfStamper stamper = new PdfStamper(pdfReader, outputStream, '\0', true);
+
+			stamper.getAcroFields().getXfa().fillXfaForm(new File(newFileLocation));
+
+			stamper.close();
+
 		} catch (
 
 		ParserConfigurationException pce) {
 			pce.printStackTrace();
 		} catch (TransformerException tfe) {
 			tfe.printStackTrace();
+		} catch (DocumentException de) {
+			de.printStackTrace();
 		}
+
 		return true;
 	}
 
