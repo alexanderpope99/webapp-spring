@@ -20,7 +20,7 @@ public class ActIdentitate implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	@Column(name = "cnp")
 	private String cnp;
 	@Column(name = "tip")
@@ -57,11 +57,11 @@ public class ActIdentitate implements Serializable {
 		this.loculnasterii = loculnasterii;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

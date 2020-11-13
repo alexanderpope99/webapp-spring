@@ -19,7 +19,7 @@ public class Adresa implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	@Column(name = "adresa")
 	private String adresa;
 	@Column(name = "localitate")
@@ -46,11 +46,11 @@ public class Adresa implements Serializable {
 		this.tara = tara;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

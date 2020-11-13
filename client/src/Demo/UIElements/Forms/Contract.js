@@ -142,10 +142,10 @@ class Contract extends React.Component {
         .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) => console.error(err));
-      console.log(adresa);
       // get casa_de_sanatate
       var cs = '-';
       if (adresa.judet) {
+				// if judet is SECTOR ?
         if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
         else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
       }

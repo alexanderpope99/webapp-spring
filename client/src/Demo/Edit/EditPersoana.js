@@ -263,7 +263,7 @@ class EditPersoana extends React.Component {
     }
     if (persoana.actidentitate) {
       this.setState({
-        idactidentitate: persoana.actidentitate,
+        idactidentitate: persoana.actidentitate.id,
         tipact: persoana.actidentitate.tipact || '',
         serie: persoana.actidentitate.serie || '',
         numar: persoana.actidentitate.numar || '',
@@ -302,6 +302,7 @@ class EditPersoana extends React.Component {
     if (!this.hasRequired()) return -1;
 
     var adresa_body = {
+			id: this.state.idadresa,
       adresa: this.state.adresacompleta || null,
       localitate: this.state.localitate || null,
       judet: this.state.judet || null,
@@ -309,6 +310,7 @@ class EditPersoana extends React.Component {
     };
 
     var buletin_body = {
+			id: this.state.idactidentitate,
       cnp: this.state.cnp || null,
       tip: this.state.tipact || null,
       serie: this.state.serie || null,
@@ -317,7 +319,8 @@ class EditPersoana extends React.Component {
       eliberatde: this.state.eliberatde || null,
       dataeliberarii: this.state.dataeliberarii || null,
       loculnasterii: this.state.loculnasterii || null,
-    };
+		};
+		console.log(buletin_body.id);
 
     let persoana_body = {
       gen: this.state.gen || null,
