@@ -58,15 +58,15 @@ class CMTabel extends React.Component {
       codurgenta: '',
       procent: 100,
       codboalainfcont: '',
-      bazacalcul: '',
-      bazacalculplafonata: '',
-      zilebazacalcul: '',
-      mediezilnica: '',
-      zilefirma: '',
-			zilefnuass: '',
+      bazacalcul: 0,
+      bazacalculplafonata: 0,
+      zilebazacalcul: 0,
+      mediezilnica: 0,
+      zilefirma: 0,
+			zilefnuass: 0,
 			codindemnizatie: '',
-      indemnizatiefirma: '',
-      indemnizatiefnuass: '',
+      indemnizatiefirma: 0,
+      indemnizatiefnuass: 0,
       locprescriere: '',
       nravizmedic: '',
       codboala: '',
@@ -98,15 +98,15 @@ class CMTabel extends React.Component {
       codurgenta: '',
       procent: 100,
       codboalainfcont: '',
-      bazacalcul: '',
-      bazacalculplafonata: '',
-      zilebazacalcul: '',
-      mediezilnica: '',
-      zilefirma: '',
-			zilefnuass: '',
+      bazacalcul: 0,
+      bazacalculplafonata: 0,
+      zilebazacalcul: 0,
+      mediezilnica: 0,
+      zilefirma: 0,
+			zilefnuass: 0,
 			codindemnizatie: '',
-      indemnizatiefirma: '',
-      indemnizatiefnuass: '',
+      indemnizatiefirma: 0,
+      indemnizatiefnuass: 0,
       locprescriere: '',
       nravizmedic: '',
       codboala: '',
@@ -279,17 +279,17 @@ class CMTabel extends React.Component {
   }
 
   async addCM() {
-    if (this.state.angajat) return;
+    if (!this.state.angajat) return;
     if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
         modalMessage: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
-    }
+		}
 
     let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
-    cm_body.idcontract = this.state.angajat.idcontract;
+		cm_body.idcontract = this.state.angajat.idcontract;
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })

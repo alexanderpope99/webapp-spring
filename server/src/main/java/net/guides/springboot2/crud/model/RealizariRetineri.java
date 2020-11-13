@@ -112,17 +112,17 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
 
 	@JsonBackReference(value = "oresuplimentare-realizariretineri")
-	@OneToMany(mappedBy = "statsalariat", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "statsalariat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Oresuplimentare> oresuplimentare;
 
 
 	@JsonBackReference(value = "retineri-realizariretineri")
-	@OneToMany(mappedBy = "stat", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "stat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Retineri> retineri;
 
 	public RealizariRetineri() {

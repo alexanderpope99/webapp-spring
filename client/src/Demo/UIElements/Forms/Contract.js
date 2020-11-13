@@ -36,7 +36,7 @@ class Contract extends React.Component {
       centruCost: '', //text
       echipa: '', //text,
       departament: '',
-      deduceri: true,
+      calculdeduceri: true,
       studiiSuperioare: false,
       functieBaza: true,
       normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
@@ -79,7 +79,7 @@ class Contract extends React.Component {
       centruCost: '', //text
       echipa: '', //text,
       departament: '',
-      deduceri: true,
+      calculdeduceri: true,
       studiiSuperioare: false,
       functieBaza: true,
       normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
@@ -173,11 +173,11 @@ class Contract extends React.Component {
           echipa: contract.idechipa || '',
           departament: contract.iddepartament || '',
           functieBaza: contract.functiedebaza || false,
-          deduceri: contract.calculdeduceri || false,
+          calculdeduceri: contract.calculdeduceri || false,
           studiiSuperioare: contract.studiisuperioare || false,
           normăLucru: { nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru) },
-          salariu: contract.salariutarifar,
-          condițiiMuncă: contract.conditiimunca,
+          salariu: contract.salariutarifar || '',
+          condițiiMuncă: contract.conditiimunca || '',
           iban: contract.contbancar ? contract.contbancar.iban : '',
           numeBanca: contract.contbancar ? contract.contbancar.numebanca : '',
           sindicat: contract.sindicat || false,
@@ -185,7 +185,7 @@ class Contract extends React.Component {
           pensiePrivată: contract.pensieprivata || false,
           cotizațiePensie: contract.cotizatiepensieprivata || '',
           avans: contract.avans || 0,
-          monedăAvans: contract.monedaavans,
+          monedăAvans: contract.monedaavans || 'RON',
           zileCOan: contract.zilecoan || 0,
           ultimaZiLucru: contract.ultimaZiLucru ? contract.ultimazilucru.substring(0, 10) : '',
           casăSănătate: contract.casasanatate || '-',
@@ -193,7 +193,7 @@ class Contract extends React.Component {
           funcție: contract.functie || '', //text
           nivelStudii: contract.nivelstudii || '', //text
           cor: contract.cor || '',
-          pensionar: contract.pensionar,
+          pensionar: contract.pensionar || false,
           spor: contract.spor || '',
         },
         () => console.log('idangajat:', idangajat, '\tidcontract:', contract.id)
@@ -262,27 +262,28 @@ class Contract extends React.Component {
       idcentrucost: null, //centrucost.id || null,
       idechipa: null, //echipa.id || null,
       iddepartament: null, //departament.id || null,
-      functiedebaza: this.state.functieBaza || null,
-      calculdeduceri: this.state.deduceri || null,
-      studiisuperioare: this.state.studiiSuperioare || null,
+      functiedebaza: this.state.functieBaza,
+      calculdeduceri: this.state.calculdeduceri,
+      studiisuperioare: this.state.studiiSuperioare,
       normalucru: this.state.normăLucru.nrOre || null,
-      salariutarifar: this.state.salariu || null,
+			salariutarifar: this.state.salariu || null,
+			monedasalariu: this.state.monedăSalariu || null,
       contbancar: contbancar_body,
       conditiimunca: this.state.condițiiMuncă || null,
-      sindicat: this.state.sindicat || null,
+      sindicat: this.state.sindicat,
       cotizatiesindicat: this.state.cotizațieSindicat || null,
-      pensieprivata: this.state.pensiePrivată || null,
+      pensieprivata: this.state.pensiePrivată,
       cotizatiepensieprivata: this.state.cotizațiePensie || null,
       avans: this.state.avans || null,
       monedaavans: this.state.monedăAvans || null,
-      zilecoan: this.state.zileCOan || null,
+      zilecoan: this.state.zileCOan || 21,
       ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru || null,
       casasanatate: this.state.casăSănătate || null,
       gradinvaliditate: this.state.gradInvalid || null,
       functie: this.state.funcție || null,
       nivelstudii: this.state.nivelStudii || null,
       cor: this.state.cor || null,
-      pensionar: this.state.pensionar || null,
+      pensionar: this.state.pensionar,
       spor: this.state.spor || null,
 		};
 		
@@ -468,9 +469,9 @@ class Contract extends React.Component {
                   type="checkbox"
                   id="deduceriCheck"
                   label="Calcul deduceri"
-                  checked={this.state.deduceri}
+                  checked={this.state.calculdeduceri}
                   onChange={(e) => {
-                    this.setState({ deduceri: e.target.checked });
+                    this.setState({ calculdeduceri: e.target.checked });
                   }}
                 />
               </Form.Group>

@@ -91,7 +91,7 @@ public class RealizariRetineriService {
 
         this.deducere = 0;
         if (totalDrepturi < 3600)
-            this.deducere = deduceriService.getDeducereBySalariu(totalDrepturi, nrPersoaneIntretinere)
+            this.deducere = deduceriService.getDeducereBySalariu((int)totalDrepturi, nrPersoaneIntretinere)
                     * areFunctieDebaza * platesteImpozit;
 
         float restPlata = totalDrepturi - casSalariu - cassSalariu;

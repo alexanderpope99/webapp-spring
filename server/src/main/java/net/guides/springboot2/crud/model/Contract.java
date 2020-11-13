@@ -46,7 +46,7 @@ public class Contract implements Serializable {
 	@Column(name = "normalucru")
 	private Integer normalucru;
 	@Column(name = "salariutarifar")
-	private Float salariutarifar;
+	private Integer salariutarifar;
 	@Column(name = "monedasalariu")
 	private String monedasalariu;
 	@Column(name = "conditiimunca")
@@ -107,15 +107,15 @@ public class Contract implements Serializable {
 	private Angajat angajat;
 
 	@JsonBackReference(value = "retineri-contract")
-	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<RealizariRetineri> realizariRetineri;
 
 	@JsonBackReference(value = "co-contract")
-	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CO> concediiOdihna;
 
 	@JsonBackReference(value = "cm-contract")
-	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CM> concediiMedicale;
 
 	public Contract() {
@@ -124,7 +124,7 @@ public class Contract implements Serializable {
 	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
 			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament,
 			Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru,
-			Float salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata,
+			Integer salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata,
 			Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru,
 			String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor,
 			Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
@@ -273,11 +273,11 @@ public class Contract implements Serializable {
 		this.normalucru = normalucru;
 	}
 
-	public Float getSalariutarifar() {
+	public Integer getSalariutarifar() {
 		return salariutarifar;
 	}
 
-	public void setSalariutarifar(Float salariutarifar) {
+	public void setSalariutarifar(Integer salariutarifar) {
 		this.salariutarifar = salariutarifar;
 	}
 

@@ -11,7 +11,7 @@ public class DeduceriService {
 	@Autowired
 	private DeduceriRepository deduceriRepository;
 
-	public float getDeducereBySalariu(float salariu, int nrNrPersoaneIntretinere) {
+	public float getDeducereBySalariu(int salariu, int nrNrPersoaneIntretinere) {
 		Deduceri deduceri = deduceriRepository.getDeducereBySalariu(salariu);
 		switch (nrNrPersoaneIntretinere) {
 			case 0:

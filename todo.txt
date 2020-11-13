@@ -12,6 +12,12 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 buton de 'show password' la schimba prola
 
++ la societati (card)
+
+ERORI:
+	baza calcul frontend cand editeaza bazacalcul
+	completeaza cont bancar -> iban = pkey sau nustiu
+
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
