@@ -16,7 +16,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-
 @Entity
 @Table(name = "societate")
 public class Societate implements Serializable {
@@ -51,8 +50,12 @@ public class Societate implements Serializable {
 	@Column(name = "telefon")
 	private String telefon;
 
+	@Column(name = "fax")
+	private String fax;
+
 	// @ManyToMany(fetch = FetchType.LAZY)
-	// @JoinTable(name = "listacontbancar", joinColumns = @JoinColumn(name = "idsocietate"), inverseJoinColumns = @JoinColumn(name = "iban"))
+	// @JoinTable(name = "listacontbancar", joinColumns = @JoinColumn(name =
+	// "idsocietate"), inverseJoinColumns = @JoinColumn(name = "iban"))
 	// private Set<ContBancar> iban = new HashSet<>();
 
 	@JsonBackReference(value = "angajat-societate")
@@ -75,7 +78,7 @@ public class Societate implements Serializable {
 	}
 
 	public Societate(String nume, Integer idcaen, String cif, Double capsoc, String regcom, Adresa adresa, String email,
-			String telefon) {
+			String telefon, String fax) {
 		this.nume = nume;
 		this.cif = cif;
 		this.capsoc = capsoc;
@@ -83,6 +86,7 @@ public class Societate implements Serializable {
 		this.adresa = adresa;
 		this.email = email;
 		this.telefon = telefon;
+		this.fax = fax;
 	}
 
 	public int getId() {
@@ -93,7 +97,7 @@ public class Societate implements Serializable {
 		this.id = id;
 	}
 
-	//! GETTERS
+	// ! GETTERS
 	public Double getCapsoc() {
 		return capsoc;
 	}
@@ -130,7 +134,7 @@ public class Societate implements Serializable {
 		return angajat;
 	}
 
-	//! SETTERS
+	// ! SETTERS
 	public void setCapsoc(Double capsoc) {
 		this.capsoc = capsoc;
 	}
@@ -165,5 +169,13 @@ public class Societate implements Serializable {
 
 	public void setAngajat(List<Angajat> angajat) {
 		this.angajat = angajat;
+	}
+
+	public String getFax() {
+		return fax;
+	}
+
+	public void setFax(String fax) {
+		this.fax = fax;
 	}
 }
