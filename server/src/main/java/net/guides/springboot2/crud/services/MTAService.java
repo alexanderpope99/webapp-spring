@@ -2,14 +2,11 @@ package net.guides.springboot2.crud.services;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
-import com.itextpdf.text.api.WriterOperation;
 
 import org.apache.poi.ss.usermodel.BorderExtent;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -27,22 +24,14 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
-import net.guides.springboot2.crud.model.ContBancar;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
-import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AngajatRepository;
-import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
-import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
 public class MTAService {
-	@Autowired
-	private ContractRepository contractRespository;
-	@Autowired
-	private SocietateRepository societateRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
 	@Autowired
