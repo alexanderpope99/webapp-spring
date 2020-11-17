@@ -67,10 +67,6 @@ public class Dec112Service {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
-		// List<Angajat> angajati = societate.getAngajat().stream().filter((angajat) ->
-		// angajat.getContract() != null)
-		// .collect(Collectors.toList());
-
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
 		String lunaNume = zileService.getNumeLunaByNr(luna);

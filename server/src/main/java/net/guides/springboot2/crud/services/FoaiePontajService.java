@@ -90,16 +90,12 @@ public class FoaiePontajService {
 			// * Nr. Crt.
 			writerCell = row.createCell(0);
 			writerCell.setCellValue(nrAngajat + 1);
-			// set border
 
 			// * Nume angajat
 			writerCell = row.createCell(1);
 			writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
 
 			// * nr de marca ??
-
-			// set border
-			PropertyTemplate allCellsBordered = new PropertyTemplate();
 
 			// if it doesn't exist, create it
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
@@ -168,7 +164,7 @@ public class FoaiePontajService {
 				}
 			}
 
-			// should get zile sarbatori here
+			// should get zile sarbatori here TODO
 
 			CellStyle greyed = workbook.createCellStyle();
 			greyed.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -288,6 +284,7 @@ public class FoaiePontajService {
 			evaluator.evaluateAll();
 
 			// * set borders
+			PropertyTemplate allCellsBordered = new PropertyTemplate();
 			String cellRange = "$A$" + (rowNr + 1) + ":$BE$" + (rowNr + 1);
 			allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);
 			allCellsBordered.applyBorders(sheet);

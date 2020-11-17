@@ -44,7 +44,7 @@ class Contract extends React.Component {
       monedăSalariu: 'RON', //text
       idcontbancar: null,
       iban: '',
-      numeBanca: '',
+      numebanca: '',
       condițiiMuncă: 'Normale', //text
       sindicat: false,
       cotizațieSindicat: '',
@@ -88,7 +88,7 @@ class Contract extends React.Component {
       salariu: '',
       idcontbancar: null,
       iban: '',
-      numeBanca: '',
+      numebanca: '',
       condițiiMuncă: 'Normale', //text
       sindicat: false,
       cotizațieSindicat: '',
@@ -147,7 +147,7 @@ class Contract extends React.Component {
       // get casa_de_sanatate
       var cs = '-';
       if (adresa.judet) {
-        // if judet is SECTOR ?
+        // if judet is SECTOR => casa de sanatate = bucuresti
         if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
         else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
       }
@@ -182,7 +182,7 @@ class Contract extends React.Component {
           condițiiMuncă: contract.conditiimunca || '',
           idcontbancar: contract.contbancar ? contract.contbancar.id : null,
           iban: contract.contbancar ? contract.contbancar.iban : '',
-          numeBanca: contract.contbancar ? contract.contbancar.numebanca : '',
+          numebanca: contract.contbancar ? contract.contbancar.numebanca : '',
           sindicat: contract.sindicat || false,
           cotizațieSindicat: contract.cotizatiesindicat || '',
           pensiePrivată: contract.pensieprivata || false,
@@ -251,13 +251,17 @@ class Contract extends React.Component {
       idcontract = '';
     }
 
-    let contbancar_body = null;
+    let contbancar_body;
     if (this.state.idcontbancar)
       contbancar_body = {
         id: this.state.idcontbancar,
         iban: this.state.iban,
         numebanca: this.state.numebanca,
-      };
+			};
+		else contbancar_body = {
+			iban: this.state.iban,
+			numebanca: this.state.numebanca
+		}
 
     const contract_body = {
       tip: this.state.modelContract || null,
@@ -612,9 +616,9 @@ class Contract extends React.Component {
                 <Form.Label>Nume banca</Form.Label>
                 <Form.Control
                   type="text"
-                  value={this.state.numeBanca}
+                  value={this.state.numebanca}
                   onChange={(e) => {
-                    this.setState({ numeBanca: e.target.value });
+                    this.setState({ numebanca: e.target.value });
                   }}
                 />
               </Form.Group>

@@ -29,7 +29,6 @@ public class DownloadsController {
 			IOUtils.copy(fileAsIS, response.getOutputStream());
 
 			response.getOutputStream().flush();
-
 		} catch (IOException ex) {
 			throw new RuntimeException("IOError writing file to output stream");
 		}

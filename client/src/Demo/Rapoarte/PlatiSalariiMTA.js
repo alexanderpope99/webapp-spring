@@ -46,24 +46,21 @@ class PlatiSalariiMTA extends React.Component {
   async download(luna, an) {
     const token = this.state.user.accessToken;
     console.log('trying to download...');
-    let societateNume = this.state.socsel.nume;
-    await fetch(
-      `${server.address}/download/${this.state.user.id}/Declaratia 112 - ${societateNume} - ${luna.nume} ${an}.pdf`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    //let societateNume = this.state.socsel.nume;
+    await fetch(`${server.address}/download/${this.state.user.id}/FisierMTA.xlsx`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.blob())
       .then((blob) => {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = `Declaratia 112 - ${societateNume} - ${luna.nume} ${an}.xml`;
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+        a.download = `FisierMTA - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`;
+        document.body.appendChild(a);
         a.click();
         a.remove(); //afterwards we remove the element again
         console.log('downloaded');
@@ -75,13 +72,9 @@ class PlatiSalariiMTA extends React.Component {
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
-    let d_rec = this.state.d_rec ? 1 : 0;
-    let numeDec = this.state.numeDeclarant;
-    let prenumeDec = this.state.prenumeDeclarant;
-    let functieDec = this.state.functieDeclarant;
 
     const created = await fetch(
-      `${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
+      `${server.address}/mta/${this.state.socsel.id}&mo=${luna.nr}&y=${an}/${this.state.user.id}`,
       {
         method: 'GET',
         headers: {
@@ -93,16 +86,11 @@ class PlatiSalariiMTA extends React.Component {
       .then((res) => res.ok)
       .catch((err) => console.error(err));
 
-    if (created) this.downloadXML(luna, an);
+    if (created) this.download(luna, an);
   }
 
   render() {
     const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
-
-    const this_year = new Date().getFullYear();
-    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
-      <option key={year}>{year}</option>
-    ));
 
     return (
       <Card>
@@ -119,12 +107,9 @@ class PlatiSalariiMTA extends React.Component {
                     as="select"
                     value={this.state.luna.nume}
                     onChange={(e) =>
-                      this.setState(
-                        {
-                          luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                        },
-                        this.fillForm
-                      )
+                      this.setState({
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                      })
                     }
                   >
                     {luni}
@@ -135,57 +120,11 @@ class PlatiSalariiMTA extends React.Component {
               <Col md={4}>
                 <Form.Group>
                   <FormControl
-                    as="select"
+                    type="number"
                     value={this.state.an}
                     onChange={(e) =>
                       this.setState({
                         an: e.target.value,
-                      })
-                    }
-                  >
-                    {ani}
-                  </FormControl>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={4}>
-                <Form.Group controlId="numeDeclarant">
-                  <Form.Control
-                    type="text"
-                    placeholder="Nume Declarant"
-                    value={this.state.numeDeclarant}
-                    onChange={(e) =>
-                      this.setState({
-                        numeDeclarant: e.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="prenumeDeclarant">
-                  <Form.Control
-                    type="text"
-                    placeholder="Prenume Declarant"
-                    value={this.state.prenumeDeclarant}
-                    onChange={(e) =>
-                      this.setState({
-                        prenumeDeclarant: e.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="functieDeclarant">
-                  <Form.Control
-                    type="text"
-                    placeholder="Functie Declarant"
-                    value={this.state.functieDeclarant}
-                    onChange={(e) =>
-                      this.setState({
-                        functieDeclarant: e.target.value,
                       })
                     }
                   />
