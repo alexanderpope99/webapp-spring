@@ -95,7 +95,7 @@ public class Contract implements Serializable {
 	private Echipa echipa;
 
 	@ManyToOne()
-	@JoinColumn(name = "iddepartapent")
+	@JoinColumn(name = "iddepartament")
 	private Departament departament;
 
 	@OneToOne(cascade = CascadeType.ALL)
