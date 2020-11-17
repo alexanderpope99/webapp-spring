@@ -28,8 +28,8 @@ public class BazacalculService {
 
 	public BazacalculDTO save(BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
 		Bazacalcul bc = modelMapper.map(bazacalculDTO, Bazacalcul.class);
-		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat())
-			.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + bazacalculDTO.getIdangajat()));
+		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat()).orElseThrow(
+				() -> new ResourceNotFoundException("Angajat not found for this id :: " + bazacalculDTO.getIdangajat()));
 
 		bc.setAngajat(angajat);
 		bazacalculRepository.save(bc);
@@ -132,18 +132,23 @@ public class BazacalculService {
 	}
 
 	public Bazacalcul saveBazacalcul(RealizariRetineri realizariRetineri) {
-		// contractul inca nu a inceput, deci o baza de calcul nu are sens => trebuie
-		// adaugata manual
+		// contractul inca nu a inceput, deci o baza de calcul nu are sens
 		if (realizariRetineri.getZilecontract() == 0)
 			return null;
 
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 
-		Angajat idangajat = angajatRepository.findByContract_Id(realizariRetineri.getContract().getId());
+		// Angajat angajat =
+		// angajatRepository.findByContract_Id(realizariRetineri.getContract().getId());
+		Angajat angajat = realizariRetineri.getContract().getAngajat();
+
+		if (bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(luna, an, angajat.getPersoana().getId())) {
+			return null;
+		}
 
 		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, (int) realizariRetineri.getZilelucrate(),
-				(int) realizariRetineri.getSalariurealizat(), idangajat);
+				(int) realizariRetineri.getSalariurealizat(), angajat);
 		return bazacalculRepository.save(bazaCalcul);
 	}
 

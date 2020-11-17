@@ -439,4 +439,12 @@ public class Contract implements Serializable {
 	public void setConcediiMedicale(List<CM> concediiMedicale) {
 		this.concediiMedicale = concediiMedicale;
 	}
+
+	public Angajat getAngajat() {
+		return angajat;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
+	}
 }

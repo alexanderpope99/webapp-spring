@@ -2,29 +2,18 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)
 
-
-problem: in luna, anul: 
-	sterg stat salarii, baza calcul ramane pentru ca bazacalcul nu are idstatsalariat
-	=> cand creez noul stat, se creeaza doua baze de calcul in aceeasi luna, an => multe erori
-	** stat_salarii se poate sterge doar in baza de date
-solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
-
 buton de 'show password' la schimba prola
 
 
 UPGRADES: 
-	buton pentru calculul pe 6 luni pentru toata societatea
+	buton pentru calculul per 1 luna/societate
+												per 6 luni/societatea
 	+ la societati (card)
 	cont bancar pill in angajat (dupa pers. intr.)
 
 
 ERORI:
-	stat salarii per societate
-	foaie pontaj
-
 	baza calcul frontend cand editeaza bazacalcul
-
-	
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:

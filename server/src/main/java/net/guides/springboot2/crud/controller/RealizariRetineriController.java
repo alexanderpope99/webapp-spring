@@ -124,7 +124,7 @@ public class RealizariRetineriController {
 	}
 
 	@PutMapping("calc/ultimele6/idc={idc}&mo={luna}&y={an}")
-	public ResponseEntity<?> calcUltimele6Luni(
+	public ResponseEntity<?> calcUltimele6Luni (
 		@PathVariable("idc") int idcontract, 
 		@PathVariable("luna") int luna,
 		@PathVariable("an") int an) throws ResourceNotFoundException {
