@@ -7,8 +7,8 @@ import months from '../Resources/months';
 
 class Pontaj extends React.Component {
   constructor() {
-		super();
-		
+    super();
+
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
     this.download = this.download.bind(this);
@@ -18,7 +18,7 @@ class Pontaj extends React.Component {
       socsel: getSocSel(),
       luna: '',
       an: '',
-			user: JSON.parse(localStorage.getItem('user'))
+      user: JSON.parse(localStorage.getItem('user')),
     };
   }
 
@@ -41,7 +41,7 @@ class Pontaj extends React.Component {
 
   // luna is object of type { nume: string, nr: int }
   async download(luna, an) {
-		const token = this.state.user.accessToken;
+    const token = this.state.user.accessToken;
     console.log('trying to download...');
     let societateNume = this.state.socsel.nume;
     await fetch(
@@ -50,7 +50,7 @@ class Pontaj extends React.Component {
         method: 'GET',
         headers: {
           'Content-Type': 'application/octet-stream',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     )
@@ -63,12 +63,12 @@ class Pontaj extends React.Component {
         document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
         a.click();
         a.remove(); //afterwards we remove the element again
-				console.log('downloaded');
+        console.log('downloaded');
       });
   }
 
   async creeazaFoaiePontaj(e) {
-	  e.preventDefault();
+    e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
@@ -79,7 +79,7 @@ class Pontaj extends React.Component {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.state.user.accessToken}`,
+          Authorization: `Bearer ${this.state.user.accessToken}`,
         },
       }
     )
@@ -91,11 +91,6 @@ class Pontaj extends React.Component {
 
   render() {
     const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
-
-    const this_year = new Date().getFullYear();
-    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
-      <option key={year}>{year}</option>
-    ));
 
     return (
       <Card>
@@ -111,12 +106,9 @@ class Pontaj extends React.Component {
                   as="select"
                   value={this.state.luna.nume}
                   onChange={(e) =>
-                    this.setState(
-                      {
-                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                      },
-                      this.fillForm
-                    )
+                    this.setState({
+                      luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                    })
                   }
                 >
                   {luni}
@@ -125,16 +117,14 @@ class Pontaj extends React.Component {
               {/* AN */}
               <Col md={4}>
                 <FormControl
-                  as="select"
+                  type="number"
                   value={this.state.an}
                   onChange={(e) =>
                     this.setState({
                       an: e.target.value,
                     })
                   }
-                >
-                  {ani}
-                </FormControl>
+                />
               </Col>
             </Row>
           </Form>

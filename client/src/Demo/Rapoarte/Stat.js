@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
+import axios from 'axios';
 
 class Stat extends React.Component {
   constructor() {
@@ -71,20 +72,15 @@ class Stat extends React.Component {
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
-    let i = this.state.intocmitDe ? this.state.intocmitDe : '-';
+    let i = this.state.intocmitDe || '-';
 
-    const created = await fetch(
-      `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.state.user.accessToken}`,
-        },
-      }
-    )
-      .then((res) => res.ok)
-      .catch((err) => console.error(err));
+    const created = await axios
+      .get(
+        `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
+        { headers: this.state.user.accessToken }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
 
     if (created)
       this.download(`Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`);
@@ -95,18 +91,13 @@ class Stat extends React.Component {
     let luna = this.state.luna;
     let an = this.state.an;
 
-    const created = await fetch(
-      `${server.address}/notacontabila/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.state.user.accessToken}`,
-        },
-      }
-    )
-      .then((res) => res.ok)
-      .catch((err) => console.error(err));
+    const created = await axios
+      .get(
+        `${server.address}/notacontabila/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
+        { headers: this.state.user.accessToken }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
 
     if (created)
       this.download(`Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`);
@@ -114,11 +105,6 @@ class Stat extends React.Component {
 
   render() {
     const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
-
-    const this_year = new Date().getFullYear();
-    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
-      <option key={year}>{year}</option>
-    ));
 
     return (
       <React.Fragment>
@@ -135,12 +121,9 @@ class Stat extends React.Component {
                     as="select"
                     value={this.state.luna.nume}
                     onChange={(e) =>
-                      this.setState(
-                        {
-                          luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                        },
-                        this.fillForm
-                      )
+                      this.setState({
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                      })
                     }
                   >
                     {luni}
@@ -149,16 +132,14 @@ class Stat extends React.Component {
                 {/* AN */}
                 <Col md={4}>
                   <FormControl
-                    as="select"
+                    type="number"
                     value={this.state.an}
                     onChange={(e) =>
                       this.setState({
                         an: e.target.value,
                       })
                     }
-                  >
-                    {ani}
-                  </FormControl>
+                  />
                 </Col>
                 <Col md={4}>
                   <Form.Group controlId="intocmitde">
@@ -195,12 +176,9 @@ class Stat extends React.Component {
                     as="select"
                     value={this.state.luna.nume}
                     onChange={(e) =>
-                      this.setState(
-                        {
-                          luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                        },
-                        this.fillForm
-                      )
+                      this.setState({
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                      })
                     }
                   >
                     {luni}
@@ -209,16 +187,14 @@ class Stat extends React.Component {
                 {/* AN */}
                 <Col md={4}>
                   <FormControl
-                    as="select"
+                    type="number"
                     value={this.state.an}
                     onChange={(e) =>
                       this.setState({
                         an: e.target.value,
                       })
                     }
-                  >
-                    {ani}
-                  </FormControl>
+                  />
                 </Col>
               </Row>
             </Form>
