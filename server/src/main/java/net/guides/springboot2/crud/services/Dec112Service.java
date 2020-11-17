@@ -30,9 +30,11 @@ import net.guides.springboot2.crud.dto.BazaCalculCMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.CM;
+import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.PersoanaIntretinere;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
+import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
@@ -43,6 +45,9 @@ import org.w3c.dom.Element;
 public class Dec112Service {
 	@Autowired
 	private SocietateRepository societateRepository;
+
+	@Autowired
+	private AngajatRepository angajatRepository;
 
 	@Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
@@ -62,8 +67,13 @@ public class Dec112Service {
 			String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
-		List<Angajat> angajati = societate.getAngajat().stream().filter((angajat) -> angajat.getContract() != null)
-				.collect(Collectors.toList());
+
+		// List<Angajat> angajati = societate.getAngajat().stream().filter((angajat) ->
+		// angajat.getContract() != null)
+		// .collect(Collectors.toList());
+
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		try {
 
@@ -246,19 +256,16 @@ public class Dec112Service {
 				cam += realizariRetineri.getCam();
 			}
 
-			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(String.valueOf((impozit_datorat + impozit_scutit)))); // impozit
-																												// datorat
-																												// +
-																												// scutit
+			childElement = doc.createElement("a_datorat"); // impozit datorat + scutit
+			childElement.appendChild(doc.createTextNode(String.valueOf((impozit_datorat + impozit_scutit))));
 			sfmSectAVal.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
 			childElement.appendChild(doc.createTextNode("0"));
 			sfmSectAVal.appendChild(childElement);
 
-			childElement = doc.createElement("a_scutit");
-			childElement.appendChild(doc.createTextNode((String.valueOf((impozit_scutit))))); // impozit scutit
+			childElement = doc.createElement("a_scutit"); // impozit scutit
+			childElement.appendChild(doc.createTextNode((String.valueOf((impozit_scutit)))));
 			sfmSectAVal.appendChild(childElement);
 
 			Element sfmSectAVal2 = doc.createElement("sfmSectAVal");
@@ -276,8 +283,8 @@ public class Dec112Service {
 			childElement.appendChild(doc.createTextNode("5503XXXXXX"));
 			sfmSectAVal2.appendChild(childElement);
 
-			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(String.valueOf(cas)));// cas
+			childElement = doc.createElement("a_datorat");// cas
+			childElement.appendChild(doc.createTextNode(String.valueOf(cas)));
 			sfmSectAVal2.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -303,8 +310,8 @@ public class Dec112Service {
 			childElement.appendChild(doc.createTextNode("5503XXXXXX"));
 			sfmSectAVal3.appendChild(childElement);
 
-			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode((String.valueOf(cass))));// cass
+			childElement = doc.createElement("a_datorat");// cass
+			childElement.appendChild(doc.createTextNode((String.valueOf(cass))));
 			sfmSectAVal3.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -330,8 +337,8 @@ public class Dec112Service {
 			childElement.appendChild(doc.createTextNode("20470300XX"));
 			sfmSectAVal4.appendChild(childElement);
 
-			childElement = doc.createElement("a_datorat");
-			childElement.appendChild(doc.createTextNode(String.valueOf(cam)));// cam
+			childElement = doc.createElement("a_datorat");// cam
+			childElement.appendChild(doc.createTextNode(String.valueOf(cam)));
 			sfmSectAVal4.appendChild(childElement);
 
 			childElement = doc.createElement("a_deductibil");
@@ -342,11 +349,8 @@ public class Dec112Service {
 			childElement.appendChild(doc.createTextNode("0"));
 			sfmSectAVal4.appendChild(childElement);
 
-			childElement = doc.createElement("sfmSectATotal");
-			childElement.appendChild(doc.createTextNode(String.valueOf(impozit_datorat + cas + cass + cam)));// de
-																												// completat
-																												// totalurile
-																												// din A
+			childElement = doc.createElement("sfmSectATotal");// de completat totalurile din A
+			childElement.appendChild(doc.createTextNode(String.valueOf(impozit_datorat + cas + cass + cam)));
 			sbfrmPage1Ang.appendChild(childElement);
 
 			// Element sfmSectB = doc.createElement("sfmSectB");
@@ -588,6 +592,7 @@ public class Dec112Service {
 			int c = 1;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 			for (Angajat angajat : angajati) {
+				Contract contract = angajat.getContract();
 				Element sbfrmPage1Asig = doc.createElement("sbfrmPage1Asig");
 				frmMAIN.appendChild(sbfrmPage1Asig);
 
@@ -612,18 +617,17 @@ public class Dec112Service {
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("Pren_asig");
-				childElement.appendChild(doc.createTextNode(angajat.getContract().getData() == null ? ""
-						: formatter.format(angajat.getContract().getData())));
+				childElement.appendChild(
+						doc.createTextNode(contract.getData() == null ? "" : formatter.format(contract.getData())));
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("Casa_sn");
-				if (angajat.getContract().getCasasanatate() != null) {
-					if (angajat.getContract().getCasasanatate().length() == 0
-							|| angajat.getContract().getCasasanatate().length() == 1) {
+				String casaSanatate = contract.getCasasanatate();
+				if (casaSanatate != null) {
+					if (casaSanatate.length() == 0 || casaSanatate.length() == 1) {
 						childElement.appendChild(doc.createTextNode(""));
 					} else {
-						String s = angajat.getContract().getCasasanatate();
-						childElement.appendChild(doc.createTextNode(s.substring(s.length() - 2)));
+						childElement.appendChild(doc.createTextNode(casaSanatate.substring(casaSanatate.length() - 2)));
 					}
 				} else {
 					childElement.appendChild(doc.createTextNode(""));
@@ -639,7 +643,7 @@ public class Dec112Service {
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("asigScu");
-				childElement.appendChild(doc.createTextNode(angajat.getContract().isCalculdeduceri() ? "2" : "0"));
+				childElement.appendChild(doc.createTextNode(contract.isCalculdeduceri() ? "2" : "0"));
 				sfmDateIdentif.appendChild(childElement);
 
 				childElement = doc.createElement("an_r");
@@ -719,12 +723,9 @@ public class Dec112Service {
 				// -------SECTIUNEA A------ salariat normal, fara concediu medical in luna
 				// respectiva
 				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna,
-						an, angajat.getContract().getId()));
+						an, contract.getId()));
 
-				if (angajat.getContract().getTip().compareTo("Contract de munca") == 0
-						&& realizariRetineri.getZilecm() == 0)
-
-				{
+				if (contract.getTip().compareTo("Contract de munca") == 0 && realizariRetineri.getZilecm() == 0) {
 					sectiune = "A";
 					Element sfmButoaneA = doc.createElement("sfmButoane");
 					sbfrmPage1Asig.appendChild(sfmButoaneA);
@@ -755,66 +756,53 @@ public class Dec112Service {
 					Element sbfrmSectiuneaA = doc.createElement("sbfrmSectiuneaA");
 					sbfrmPage1Asig.appendChild(sbfrmSectiuneaA);
 
-					childElement = doc.createElement("VB_A");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // venit
-																														// brut
+					childElement = doc.createElement("VB_A"); // venit brut
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("tichete_A");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getValoaretichete()))); // completat
-																															// tichete
+					childElement = doc.createElement("tichete_A"); // tichete
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getValoaretichete())));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_1");
-					childElement.appendChild(doc.createTextNode("1")); // tip asigurat
+					childElement = doc.createElement("A_1"); // tip asigurat
+					childElement.appendChild(doc.createTextNode("1"));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_2");
-					childElement.appendChild(doc.createTextNode(angajat.getContract().isPensionar() ? "1" : "0")); // pensionar
-																													// sau
-																													// nu
+					childElement = doc.createElement("A_2"); // pensionar
+					childElement.appendChild(doc.createTextNode(contract.isPensionar() ? "1" : "0"));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_3");
+					childElement = doc.createElement("A_3"); // tip contract
 					childElement.appendChild(doc.createTextNode(realizariRetineri.getDuratazilucru() == 8 ? "N"
-							: "P" + String.valueOf(realizariRetineri.getDuratazilucru()))); // tip contract
+							: "P" + String.valueOf(realizariRetineri.getDuratazilucru())));
 
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_4");
-					childElement.appendChild(doc.createTextNode("8")); // norma ore
+					childElement = doc.createElement("A_4"); // norma ore
+					childElement.appendChild(doc.createTextNode("8"));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_6");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getOrelucrate()))); // ore
-																														// lucrate
-																														// efectiv
-																														// in
-																														// luna
+					childElement = doc.createElement("A_6"); // ore lucrate efectiv in luna
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getOrelucrate())));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_7");
-					childElement.appendChild(doc.createTextNode("0")); // ore suspendate in luna
+					childElement = doc.createElement("A_7"); // ore suspendate in luna
+					childElement.appendChild(doc.createTextNode("0"));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_8");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate()))); // total
-																														// zile
-																														// lucrate
+					childElement = doc.createElement("A_8"); // total zile lucrate
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate())));
 					sbfrmSectiuneaA.appendChild(childElement);
 
-					childElement = doc.createElement("A_9");
-					childElement.appendChild(doc.createTextNode("0")); // baza de calcul somaj
+					childElement = doc.createElement("A_9"); // baza de calcul somaj
+					childElement.appendChild(doc.createTextNode("0"));
 					sbfrmSectiuneaA.appendChild(childElement);
 				}
-
 				// -----------END SECTIUNEA A-------
 
 				// -------SECTIUNEA B------ salariat normal + are concediu medical in luna
 				// respectiva
-
-				if (angajat.getContract().getTip().compareTo("Contract de munca") == 0
-						&& realizariRetineri.getZilecm() != 0) {
+				if (contract.getTip().compareTo("Contract de munca") == 0 && realizariRetineri.getZilecm() != 0) {
 					sectiune = "B";
 					Element sfmButoaneB = doc.createElement("sfmButoane");
 					sbfrmPage1Asig.appendChild(sfmButoaneB);
@@ -855,64 +843,46 @@ public class Dec112Service {
 					Element sbfrmSectiuneaB1 = doc.createElement("sbfrmSectiuneaB1");
 					sbfrmSectiuneaB1rep.appendChild(sbfrmSectiuneaB1);
 
-					childElement = doc.createElement("VB_B");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));// total
-																														// drepturi
+					childElement = doc.createElement("VB_B"); // total drepturi
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("B1_1");
 					childElement.appendChild(doc.createTextNode("1"));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_2");
-					childElement.appendChild(doc.createTextNode(angajat.getContract().isPensionar() ? "1" : "0")); // pensionar
-																													// sau
-																													// nu
+					childElement = doc.createElement("B1_2"); // pensionar
+					childElement.appendChild(doc.createTextNode(contract.isPensionar() ? "1" : "0"));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_3");
+					childElement = doc.createElement("B1_3"); // tip contract
 					childElement.appendChild(doc.createTextNode(realizariRetineri.getDuratazilucru() == 8 ? "N"
-							: "P" + String.valueOf(realizariRetineri.getDuratazilucru()))); // tip contract
+							: "P" + String.valueOf(realizariRetineri.getDuratazilucru())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_4");
-					childElement.appendChild(doc.createTextNode("8")); // norma ore
+					childElement = doc.createElement("B1_4"); // norma ore
+					childElement.appendChild(doc.createTextNode("8"));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_6");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getOrelucrate()))); // ore
-																														// lucrate
-																														// efectiv
-																														// in
-																														// luna
+					childElement = doc.createElement("B1_6"); // ore lucrate efectiv in luna
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getOrelucrate())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_7");
-					childElement.appendChild(doc.createTextNode("0")); // ore suspendate in luna
+					childElement = doc.createElement("B1_7"); // ore suspendate in luna
+					childElement.appendChild(doc.createTextNode("0"));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_15");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate()))); // total
-																														// zile
-																														// lucrate
+					childElement = doc.createElement("B1_15"); // total zile lucrate
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_5");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // baza
-																														// calcul
-																														// CAM
-																														// (total
-																														// drepturi
-					// probabil)
+					childElement = doc.createElement("B1_5"); // baza calcul CAM (total drepturi probabil)
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_10");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // baza
-																														// calcul
-																														// indemnizatie
-																														// somaj
-					// (total
-					// drepturi probabil)
+					childElement = doc.createElement("B1_10"); // baza calcul indemnizatie somaj (total drepturi
+																// probabil)
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("tfNrCrt");
@@ -926,26 +896,21 @@ public class Dec112Service {
 					Element SbfrmSectiuneaB2 = doc.createElement("SbfrmSectiuneaB2");
 					sbfrmSectiuneaB.appendChild(SbfrmSectiuneaB2);
 
-					childElement = doc.createElement("B2_2");
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate()))); // total
-																														// zile
-																														// lucrate
+					childElement = doc.createElement("B2_2"); // total zile lucrate
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilelucrate())));
 					SbfrmSectiuneaB2.appendChild(childElement);
 
 					Double indem_fnuass = 0d;
 					Double indem_firma = 0d;
-					for (CM cm : cmService.getCMInLunaAnul(luna, an, angajat.getContract().getId())) {
+					for (CM cm : cmService.getCMInLunaAnul(luna, an, contract.getId())) {
 						indem_fnuass += cm.getIndemnizatiefnuass();
 						indem_firma += cm.getIndemnizatiefirma();
 					}
 
+					// contributii sociale (totaldrepturi indemnizatii - indemnizatii firma cm)
 					childElement = doc.createElement("B2_5");
 					childElement.appendChild(doc.createTextNode(
-							String.valueOf(realizariRetineri.getTotaldrepturi() - indem_fnuass - indem_firma))); // contributii
-					// sociale
-					// (totaldrepturi
-					// indemnizatii fnuass cm - indemnizatii firma
-					// cm)
+							String.valueOf(realizariRetineri.getTotaldrepturi() - indem_fnuass - indem_firma)));
 					SbfrmSectiuneaB2.appendChild(childElement);
 
 					childElement = doc.createElement("B2_6");
@@ -959,8 +924,8 @@ public class Dec112Service {
 					Element sbfrmSectiuneaB3 = doc.createElement("sbfrmSectiuneaB3");
 					sbfrmSectiuneaB.appendChild(sbfrmSectiuneaB3);
 
-					childElement = doc.createElement("B3_1");
 					// zile indemnizatie nr de zile lucratoare din timpul CM)
+					childElement = doc.createElement("B3_1");
 					childElement
 							.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilecmlucratoare())));
 					sbfrmSectiuneaB3.appendChild(childElement);
@@ -1075,7 +1040,7 @@ public class Dec112Service {
 					sbfrmSectiuneaB4.appendChild(childElement);
 
 					// ---------SECTIUNEA D ------- DACA EXISTA SECTIUNEA B
-					for (CM cm : cmService.getCMInLunaAnul(luna, an, angajat.getContract().getId())) {
+					for (CM cm : cmService.getCMInLunaAnul(luna, an, contract.getId())) {
 
 						Element sbfrmSectiuneaDAsig = doc.createElement("sbfrmSectiuneaD");
 						sbfrmPage1Asig.appendChild(sbfrmSectiuneaDAsig);
@@ -1083,128 +1048,85 @@ public class Dec112Service {
 						Element sbfrmSectiuneaDrep = doc.createElement("sbfrmSectiuneaDrep");
 						sbfrmSectiuneaDAsig.appendChild(sbfrmSectiuneaDrep);
 
-						childElement = doc.createElement("D_1");
-						childElement.appendChild(doc.createTextNode(cm.getSerie())); // seria certificatului
-																						// medical
+						childElement = doc.createElement("D_1"); // seria certificatului medical
+						childElement.appendChild(doc.createTextNode(cm.getSerie()));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_2");
-						childElement.appendChild(doc.createTextNode(cm.getNr())); // numarul certificatului
-																					// medical
+						childElement = doc.createElement("D_2"); // numarul certificatului medical
+						childElement.appendChild(doc.createTextNode(cm.getNr()));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_5");
-						// data acordarii certificatului medical
+						childElement = doc.createElement("D_5");// data acordarii certificatului medical
 						childElement.appendChild(doc.createTextNode(
 								cm.getDataeliberare() == null ? "" : formatter.format(cm.getDataeliberare())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_6");
+						childElement = doc.createElement("D_6"); // data inceput valabilitate cm
 						childElement.appendChild(doc.createTextNode(
-								cm.getDatainceput() == null ? "" : formatter.format(cm.getDatainceput()))); // data
-						// inceput
-						// valabilitate
-						// cm
+								cm.getDatainceput() == null ? "" : formatter.format(cm.getDatainceput())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_7");
+						childElement = doc.createElement("D_7"); // data sfarsit valabilitate cm
 						childElement.appendChild(
-								doc.createTextNode(cm.getPanala() == null ? "" : formatter.format(cm.getPanala()))); // data
-						// sfarsit
-						// valabilitate
-						// cm
+								doc.createTextNode(cm.getPanala() == null ? "" : formatter.format(cm.getPanala())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_8");
-						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getCnpcopil()))); // cnp copil
+						childElement = doc.createElement("D_8"); // cnp copil
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getCnpcopil())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_9");
-						childElement.appendChild(doc.createTextNode(cm.getCodindemnizatie())); // codul indemnizatiei (1
-																								// -> 15)
-						// ==
-						// tipul
-						// de boala
+						childElement = doc.createElement("D_9"); // codul indemnizatiei (1 -> 15) == tipul de boala
+						childElement.appendChild(doc.createTextNode(cm.getCodindemnizatie()));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_10");
-						childElement.appendChild(doc.createTextNode(cm.getLocprescriere())); // locul de prescriere
-																								// (1->4)
+						childElement = doc.createElement("D_10"); // locul de prescriere
+						childElement.appendChild(doc.createTextNode(cm.getLocprescriere()));
+						// (1->4)
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_11");
-						childElement.appendChild(doc.createTextNode(cm.getCodurgenta()));// codul de urgenta
+						childElement = doc.createElement("D_11");// codul de urgenta
+						childElement.appendChild(doc.createTextNode(cm.getCodurgenta()));
 						// medico-chirurgicala
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_12");
-						childElement.appendChild(doc.createTextNode(cm.getCodboalainfcont())); // Cod boală
-																								// infectocontagioasă
-																								// grupa A
+						childElement = doc.createElement("D_12"); // Cod boală infectocontagioasă grupa A
+						childElement.appendChild(doc.createTextNode(cm.getCodboalainfcont()));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_14");
-						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getZilefirma()))); // zile
-																											// lucratoare
-																											// suportate
-																											// de
-						// angajator
+						childElement = doc.createElement("D_14"); // zile lucratoare suportate de angajator
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getZilefirma())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_15");
-						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getZilefnuass()))); // zile
-																											// lucratoare
-																											// suportate
-																											// de
-						// fnuass
+						childElement = doc.createElement("D_15"); // zile lucratoare suportate de fnuass
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getZilefnuass())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						BazaCalculCMDTO bazaCalculCMDTO = bazaCalculService.getBazaCalculCMDTO(luna, an,
 								angajat.getPersoana().getId());
 
-						childElement = doc.createElement("D_17");
-						childElement.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getBazacalcul()))); // suma
-																														// veniturilor
-																														// in
-																														// ultimele
-																														// 6
-						// luni
+						childElement = doc.createElement("D_17"); // suma veniturilor in ultimele 6 luni
+						childElement.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getBazacalcul())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_18");
+						childElement = doc.createElement("D_18"); // nr zile lucratoare in ultimele 6 luni
 						childElement
-								.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getZilebazacalcul()))); // nr
-																														// zile
-																														// lucratoare
-																														// in
-																														// ultimele
-						// 6
-						// luni
+								.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getZilebazacalcul())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_19");
-						childElement.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getMediezilnica()))); // media
-						// zilnica
-						// a
-						// bazei
-						// de
-						// calcul
+						childElement = doc.createElement("D_19"); // media zilnica a bazei de calcul
+						childElement.appendChild(doc.createTextNode(String.valueOf(bazaCalculCMDTO.getMediezilnica())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_20");
-						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getIndemnizatiefirma()))); // indemnizatie
-																													// suportata
-																													// de
-						// angajator
+						childElement = doc.createElement("D_20"); // indemnizatie suportata de angajator
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getIndemnizatiefirma())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_21");
-						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getIndemnizatiefnuass()))); // indemnizatie
-																													// FNUASS
+						childElement = doc.createElement("D_21"); // indemnizatie FNUASS
+						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getIndemnizatiefnuass())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
-						childElement = doc.createElement("D_23");
-						childElement.appendChild(doc.createTextNode(cm.getCodboala()));// cod boala
+						childElement = doc.createElement("D_23");// cod boala
+						childElement.appendChild(doc.createTextNode(cm.getCodboala()));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 					}
 				}
@@ -1213,8 +1135,7 @@ public class Dec112Service {
 				// munca,
 				// dar care au venituri assimilate salariilor.
 				// Aici pot fi incluse contractele de administrare.
-
-				if (angajat.getContract().getTip().compareTo("Contract de administrator") == 0) {
+				if (contract.getTip().compareTo("Contract de administrator") == 0) {
 					sectiune = "C";
 					Element sbfrmSectiuneaCAsig = doc.createElement("sbfrmSectiuneaC");
 					sbfrmPage1Asig.appendChild(sbfrmSectiuneaCAsig);
@@ -1283,61 +1204,38 @@ public class Dec112Service {
 				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_1");
-				childElement.appendChild(doc.createTextNode(sectiune)); // sectiune asigurat
+				childElement = doc.createElement("E3_1"); // sectiune asigurat
+				childElement.appendChild(doc.createTextNode(sectiune));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
+				// tip asigurat, daca are studii sup si vechime atunci este 26, altfel este 1
 				childElement = doc.createElement("E3_2");
-				childElement.appendChild(doc.createTextNode(angajat.getContract().isStudiisuperioare() ? "26" : "1")); // tip
-																														// asigurat,
-																														// daca
-																														// are
-																														// studii
-																														// sup
-																														// si
-				// vechime atunci este 26, altfel este 1
+				childElement.appendChild(doc.createTextNode(contract.isStudiisuperioare() ? "26" : "1"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_3");
-				childElement.appendChild(doc.createTextNode(angajat.getContract().isFunctiedebaza() ? "1" : "2")); // functie
-																													// de
-																													// baza,
-																													// daca
-																													// are
-																													// atunci
-																													// este
-				// 1, altfel e 2
+				childElement = doc.createElement("E3_3"); // functie de baza, daca are atunci este 1, altfel e 2
+				childElement.appendChild(doc.createTextNode(contract.isFunctiedebaza() ? "1" : "2"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_4");
-				childElement.appendChild(doc.createTextNode("P")); // tip venit referitor la perioada de raportare
+				childElement = doc.createElement("E3_4"); // tip venit referitor la perioada de raportare
+				childElement.appendChild(doc.createTextNode("P"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_8");
-				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()))); // venit
-																													// brut
-																													// (probabil
-																													// total
-																													// drepturi)
+				childElement = doc.createElement("E3_8"); // venit brut (probabil total drepturi)
+				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_9");
+				childElement = doc.createElement("E3_9"); // contributii sociale obligatorii (cas+cass)
 				childElement.appendChild(
-						doc.createTextNode(String.valueOf(realizariRetineri.getCas() + realizariRetineri.getCass())));// contributii
-																														// sociale
-																														// obligatorii
-				// (cas+cass)
+						doc.createTextNode(String.valueOf(realizariRetineri.getCas() + realizariRetineri.getCass())));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_10");
-				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getValoaretichete()))); // tichete
-																														// de
-																														// masa
-																														// acordate
+				childElement = doc.createElement("E3_10"); // tichete de masa acordate
+				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getValoaretichete())));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_20");
-				childElement.appendChild(doc.createTextNode("0")); // tichete de masa restituite
+				childElement = doc.createElement("E3_20"); // tichete de masa restituite
+				childElement.appendChild(doc.createTextNode("0"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_43");
@@ -1364,17 +1262,17 @@ public class Dec112Service {
 				childElement.appendChild(doc.createTextNode("0"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_25");
+				childElement = doc.createElement("E3_25"); // venit scutit
 				childElement
 						.appendChild(doc.createTextNode(
-								angajat.getContract().isCalculdeduceri()
+								contract.isCalculdeduceri()
 										? String.valueOf(realizariRetineri.getTotaldrepturi()
 												- realizariRetineri.getCas() - realizariRetineri.getCass())
-										: "0")); // venit scutit
+										: "0"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_26");
-				childElement.appendChild(doc.createTextNode("")); // impozit scutit
+				childElement = doc.createElement("E3_26"); // impozit scutit
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				///// ?????????????
@@ -1413,51 +1311,34 @@ public class Dec112Service {
 
 				///// ?????????????
 
-				childElement = doc.createElement("E3_11");
+				childElement = doc.createElement("E3_11"); // nr persoane deducere
 				childElement
 						.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getNrpersoaneintretinere())));
-				// nr
-				// persoane
-				// deducere
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_12");
+				childElement = doc.createElement("E3_12"); // deduceri personale
 				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getDeducere())));
-				// deduceri
-				// persoanle
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_13");
-				childElement.appendChild(doc.createTextNode("0")); // alte deduceri
+				childElement = doc.createElement("E3_13"); // alte deduceri
+				childElement.appendChild(doc.createTextNode("0"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_14");
+				childElement = doc.createElement("E3_14"); // baza calcul impozit (venitBrut + tichete - cas - cass)
 				childElement.appendChild(doc.createTextNode(
 						String.valueOf(realizariRetineri.getTotaldrepturi() - realizariRetineri.getValoaretichete()
-								- realizariRetineri.getCas() - realizariRetineri.getCass()))); // \\\\\\\ baza
-																								// calcul impozit
-																								// (venitBrut +
-				// tichete - cas - cass)
+								- realizariRetineri.getCas() - realizariRetineri.getCass())));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_15");
-				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getImpozit()))); // de
-																												// completat
-																												// impozit,
-																												// adica
-																												// baza
-																												// calcul
-																												// impozit
-																												// *
+				childElement = doc.createElement("E3_15"); // de completat impozit, adica baza calcul impozit
+				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getImpozit())));
 				// impozit (procentual/indice)
 				sbfrmSectiuneaE3.appendChild(childElement);
 
-				childElement = doc.createElement("E3_16");
+				childElement = doc.createElement("E3_16"); // de completat impozit incasat bazaImpozit-impozit
 				childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi()
 						- realizariRetineri.getValoaretichete() - realizariRetineri.getCas()
-						- realizariRetineri.getCass() - realizariRetineri.getImpozit()))); // de completat impozit
-																							// incasat
-																							// bazaImpozit-impozit
+						- realizariRetineri.getCass() - realizariRetineri.getImpozit())));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				Element sbfrmSectiuneaE4_ab = doc.createElement("sbfrmSectiuneaE4_ab");

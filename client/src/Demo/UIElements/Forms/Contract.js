@@ -42,6 +42,7 @@ class Contract extends React.Component {
       normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
       salariu: '',
       monedăSalariu: 'RON', //text
+      idcontbancar: null,
       iban: '',
       numeBanca: '',
       condițiiMuncă: 'Normale', //text
@@ -85,6 +86,7 @@ class Contract extends React.Component {
       normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
       monedăSalariu: 'RON', //text
       salariu: '',
+      idcontbancar: null,
       iban: '',
       numeBanca: '',
       condițiiMuncă: 'Normale', //text
@@ -145,7 +147,7 @@ class Contract extends React.Component {
       // get casa_de_sanatate
       var cs = '-';
       if (adresa.judet) {
-				// if judet is SECTOR ?
+        // if judet is SECTOR ?
         if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
         else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
       }
@@ -178,6 +180,7 @@ class Contract extends React.Component {
           normăLucru: { nrOre: contract.normalucru, nume: this.getNumeNorma(contract.normalucru) },
           salariu: contract.salariutarifar || '',
           condițiiMuncă: contract.conditiimunca || '',
+          idcontbancar: contract.contbancar ? contract.contbancar.id : null,
           iban: contract.contbancar ? contract.contbancar.iban : '',
           numeBanca: contract.contbancar ? contract.contbancar.numebanca : '',
           sindicat: contract.sindicat || false,
@@ -246,11 +249,15 @@ class Contract extends React.Component {
     if (!idcontract) {
       method = 'POST';
       idcontract = '';
-		}
-		
-		let contbancar_body = null;
-		if(this.state.iban || this.state.numebanca)
-			contbancar_body = {iban: this.state.iban, numebanca: this.state.numebanca};
+    }
+
+    let contbancar_body = null;
+    if (this.state.idcontbancar)
+      contbancar_body = {
+        id: this.state.idcontbancar,
+        iban: this.state.iban,
+        numebanca: this.state.numebanca,
+      };
 
     const contract_body = {
       tip: this.state.modelContract || null,
@@ -266,8 +273,8 @@ class Contract extends React.Component {
       calculdeduceri: this.state.calculdeduceri,
       studiisuperioare: this.state.studiiSuperioare,
       normalucru: this.state.normăLucru.nrOre || null,
-			salariutarifar: this.state.salariu || null,
-			monedasalariu: this.state.monedăSalariu || null,
+      salariutarifar: this.state.salariu || null,
+      monedasalariu: this.state.monedăSalariu || null,
       contbancar: contbancar_body,
       conditiimunca: this.state.condițiiMuncă || null,
       sindicat: this.state.sindicat,
@@ -285,8 +292,8 @@ class Contract extends React.Component {
       cor: this.state.cor || null,
       pensionar: this.state.pensionar,
       spor: this.state.spor || null,
-		};
-		
+    };
+
     let contract;
     if (method === 'PUT')
       contract = await axios
@@ -315,25 +322,6 @@ class Contract extends React.Component {
           method === 'POST' ? 'Contract adăugat cu succes 📄' : 'Contract actualizat 💾',
         id: contract.id,
       });
-
-      // if (method === 'POST') {
-      //   // update angajat with idangajat from functon props
-      //   await axios
-      //     .put(
-      //       `${server.address}/angajat/${idangajat}`,
-      //       {
-      //         idcontract: contract.id,
-      //         idpersoana: idangajat,
-      //         idsocietate: this.state.socsel.id,
-      //       },
-      //       {
-      //         headers: authHeader(),
-      //       }
-      //     )
-      //     .catch((err) => console.error(err));
-      //   method = 'PUT';
-      // }
-      // console.log('idcontract:', contract.id);
     } else {
       this.setState({
         show: true,

@@ -12,11 +12,14 @@ solutie: cascade delete bazacalcul <- bazacalcul needs idstatsalariat_fk
 
 buton de 'show password' la schimba prola
 
-+ la societati (card)
+UPGRADES: 
+	+ la societati (card)
+	cont bancar pill in angajat (dupa pers. intr.)
+
 
 ERORI:
 	baza calcul frontend cand editeaza bazacalcul
-	completeaza cont bancar -> iban = pkey sau nustiu
+	
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
