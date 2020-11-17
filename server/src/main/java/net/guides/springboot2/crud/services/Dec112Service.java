@@ -248,13 +248,13 @@ public class Dec112Service {
 				if (realizariRetineri == null) {
 					erori += "Angajatul " + angajat.getPersoana().getNume() + " " + angajat.getPersoana().getPrenume()
 							+ " nu are Realizari/Retineri efectuat in " + lunaNume + " " + an + "\n";
-					break;
+				} else {
+					impozit_datorat += realizariRetineri.getImpozit();
+					impozit_scutit += realizariRetineri.getImpozitscutit();
+					cas += realizariRetineri.getCas();
+					cass += realizariRetineri.getCass();
+					cam += realizariRetineri.getCam();
 				}
-				impozit_datorat += realizariRetineri.getImpozit();
-				impozit_scutit += realizariRetineri.getImpozitscutit();
-				cas += realizariRetineri.getCas();
-				cass += realizariRetineri.getCass();
-				cam += realizariRetineri.getCam();
 			}
 
 			if (erori.compareTo("") != 0)
