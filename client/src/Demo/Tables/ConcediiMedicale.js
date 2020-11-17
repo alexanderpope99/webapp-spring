@@ -290,6 +290,9 @@ class CMTabel extends React.Component {
 
     let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
 		cm_body.idcontract = this.state.angajat.idcontract;
+		for(let key in cm_body) {
+			cm_body[key] = cm_body[key] === '' ? null : cm_body[key]; //skips 0 values
+		}
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
@@ -329,6 +332,8 @@ class CMTabel extends React.Component {
 		for(let key in cm_body) {
 			cm_body[key] = cm_body[key] || null;
 		}
+		//console.log(cm_body);
+		//return;
 		
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {

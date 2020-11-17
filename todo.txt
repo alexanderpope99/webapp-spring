@@ -1,11 +1,7 @@
-PLATI MTA
-adauga sarbatori in foaie pontaj
-
 alte retineri
 alte drepturi
 retineri (doar avans merge)
 
-buton pentru calculul pe 6 luni pentru toata societatea
 
 problem: in luna, anul: 
 	sterg stat salarii, baza calcul ramane pentru ca bazacalcul nu are idstatsalariat
@@ -17,12 +13,17 @@ buton de 'show password' la schimba prola
 
 
 UPGRADES: 
+	buton pentru calculul pe 6 luni pentru toata societatea
 	+ la societati (card)
 	cont bancar pill in angajat (dupa pers. intr.)
 
 
 ERORI:
+	stat salarii per societate
+	foaie pontaj
+
 	baza calcul frontend cand editeaza bazacalcul
+
 	
 
 *** INTREBARI: ***

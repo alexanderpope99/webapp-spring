@@ -205,6 +205,7 @@ public class RealizariRetineriService {
         return rr;
     } // calcRealizariRetineri
 
+		// daca exista deja calculate, le returneaza pe acelea, daca nu, calculeaza 
     public RealizariRetineri saveRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
         if (realizariRetineriRepository.existsByLunaAndAnAndIdcontract(luna, an, idcontract))
             return getRealizariRetineri(luna, an, idcontract);
@@ -216,7 +217,6 @@ public class RealizariRetineriService {
         // create and save baza calcul only if contract valid in month, year
         bazacalculService.saveBazacalcul(realizariRetineri);
 
-        // create empty retinere
         realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
         retineriService.saveRetinere(realizariRetineri);
 

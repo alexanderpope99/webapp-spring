@@ -47,22 +47,19 @@ class PlatiSalariiMTA extends React.Component {
     const token = this.state.user.accessToken;
     console.log('trying to download...');
     //let societateNume = this.state.socsel.nume;
-    await fetch(
-      `${server.address}/download/${this.state.user.id}/FisierMTA.xlsx`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    await fetch(`${server.address}/download/${this.state.user.id}/FisierMTA.xlsx`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.blob())
       .then((blob) => {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = `FisierMTA ${this.state.socsel.nume} ${luna.nume} ${an}.xlsx`;
+        a.download = `FisierMTA - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`;
         document.body.appendChild(a);
         a.click();
         a.remove(); //afterwards we remove the element again
@@ -95,11 +92,6 @@ class PlatiSalariiMTA extends React.Component {
   render() {
     const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
-    const this_year = new Date().getFullYear();
-    const ani = [this_year - 1, this_year, this_year + 1, this_year + 2].map((year) => (
-      <option key={year}>{year}</option>
-    ));
-
     return (
       <Card>
         <Card.Header>
@@ -116,8 +108,8 @@ class PlatiSalariiMTA extends React.Component {
                     value={this.state.luna.nume}
                     onChange={(e) =>
                       this.setState({
-                          luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                        })
+                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                      })
                     }
                   >
                     {luni}
@@ -128,16 +120,14 @@ class PlatiSalariiMTA extends React.Component {
               <Col md={4}>
                 <Form.Group>
                   <FormControl
-                    as="select"
+                    type="number"
                     value={this.state.an}
                     onChange={(e) =>
                       this.setState({
                         an: e.target.value,
                       })
                     }
-                  >
-                    {ani}
-                  </FormControl>
+                  />
                 </Form.Group>
               </Col>
             </Row>
