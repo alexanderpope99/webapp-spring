@@ -170,7 +170,11 @@ class Dec112 extends React.Component {
               <Modal.Header closeButton>
                 <Modal.Title>Eroare</Modal.Title>
               </Modal.Header>
-              <Modal.Body>{this.state.errorMessage}</Modal.Body>
+              <Modal.Body>
+                {this.state.errorMessage.split('\n').map((item, i) => (
+                  <p key={i}>{item}</p>
+                ))}
+              </Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={() => this.setState({ show: false })}>
                   OK
