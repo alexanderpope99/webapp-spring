@@ -14,6 +14,7 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import { cod_boala, getProcent } from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
   constructor() {
@@ -27,6 +28,7 @@ class CMTabel extends React.Component {
     this.deleteCM = this.deleteCM.bind(this);
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
+    this.onChangeCodboala = this.onChangeCodboala.bind(this);
     this.getBazaCalculCM = this.getBazaCalculCM.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
 
@@ -52,27 +54,27 @@ class CMTabel extends React.Component {
       nr_zile: 0,
       continuare: false,
       datainceput: '',
-			serie: '',
-			nr: '',
+      serie: '',
+      nr: '',
       dataeliberare: '',
       codurgenta: '',
-      procent: 100,
+      procent: ['100'],
       codboalainfcont: '',
       bazacalcul: 0,
       bazacalculplafonata: 0,
       zilebazacalcul: 0,
       mediezilnica: 0,
       zilefirma: 0,
-			zilefnuass: 0,
-			codindemnizatie: '',
+      zilefnuass: 0,
+      codindemnizatie: '',
       indemnizatiefirma: 0,
       indemnizatiefnuass: 0,
-      locprescriere: '',
+      locprescriere: 'Medic de familie',
       nravizmedic: '',
       codboala: '',
       urgenta: false,
-			conditii: '',
-			cnpcopil: '',
+      conditii: '',
+      cnpcopil: '',
       idcontract: null,
 
       // succes modal:
@@ -92,54 +94,57 @@ class CMTabel extends React.Component {
       nr_zile: 0,
       continuare: false,
       datainceput: '',
-			serie: '',
-			nr: '',
+      serie: '',
+      nr: '',
       dataeliberare: '',
       codurgenta: '',
-      procent: 100,
+      procent: ['100'],
       codboalainfcont: '',
       bazacalcul: 0,
       bazacalculplafonata: 0,
       zilebazacalcul: 0,
       mediezilnica: 0,
       zilefirma: 0,
-			zilefnuass: 0,
-			codindemnizatie: '',
+      zilefnuass: 0,
+      codindemnizatie: '',
       indemnizatiefirma: 0,
       indemnizatiefnuass: 0,
-      locprescriere: '',
+      locprescriere: 'Medic de familie',
       nravizmedic: '',
       codboala: '',
       urgenta: false,
-			conditii: '',
-			cnpcopil: '',
+      conditii: '',
+      cnpcopil: '',
       idcontract: null,
     });
-	}
-	
-	numberWithCommas(x) {
+  }
+
+  numberWithCommas(x) {
     if (!x) return 0;
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   componentDidMount() {
-		this.setCurrentYear();
+    this.setCurrentYear();
     this.updateAngajatSel();
-	}
-	
-	async updateAngajatSel() {
-		let angajatSel = getAngajatSel();
-		if(angajatSel) {
-			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
-				.then(res => res.status === 200 ? res.data : null)
-				.catch(err => console.error(err));
-			if(angajat) {
-				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
-			}
-		}
-		else {
-			this.setState({angajat: null}, this.fillTable);
-		}
+  }
+
+  async updateAngajatSel() {
+    let angajatSel = getAngajatSel();
+    if (angajatSel) {
+      let angajat = await axios
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => console.error(err));
+      if (angajat) {
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
+      }
+    } else {
+      this.setState({ angajat: null }, this.fillTable);
+    }
   }
 
   setCurrentYear() {
@@ -188,6 +193,13 @@ class CMTabel extends React.Component {
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
     }
     this.setState({ panala: panala, nr_zile: nr_zile });
+  }
+
+  onChangeCodboala(cod) {
+    this.setState({
+      codboala: cod,
+      procent: getProcent(cod),
+    });
   }
 
   async fillTable() {
@@ -258,19 +270,6 @@ class CMTabel extends React.Component {
     }
   }
 
-  handleClose(confirmWindow) {
-    if (confirmWindow)
-      this.setState({
-        show_confirm: false,
-        modalMessage: '',
-      });
-    else
-      this.setState({
-        show: false,
-        isEdit: false,
-      });
-  }
-
   async deleteCM(id) {
     await axios
       .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
@@ -286,13 +285,13 @@ class CMTabel extends React.Component {
         modalMessage: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
-		}
+    }
 
     let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
-		cm_body.idcontract = this.state.angajat.idcontract;
-		for(let key in cm_body) {
-			cm_body[key] = cm_body[key] === '' ? null : cm_body[key]; //skips 0 values
-		}
+    cm_body.idcontract = this.state.angajat.idcontract;
+    for (let key in cm_body) {
+      cm_body[key] = cm_body[key] === '' ? null : cm_body[key]; //skips 0 values
+    }
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
@@ -316,25 +315,25 @@ class CMTabel extends React.Component {
   }
 
   async updateCM() {
-		let {
+    let {
       angajat,
       cm,
       cmComponent,
       show,
       show_confirm,
-			modalMessage,
+      modalMessage,
       id,
       isEdit,
       ...cm_body
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
 
-		for(let key in cm_body) {
-			cm_body[key] = cm_body[key] || null;
-		}
-		//console.log(cm_body);
-		//return;
-		
+    for (let key in cm_body) {
+      cm_body[key] = cm_body[key] || null;
+    }
+    //console.log(cm_body);
+    //return;
+
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
         headers: authHeader(),
@@ -367,40 +366,55 @@ class CMTabel extends React.Component {
 
     for (let key in cm) if (cm[key] === '-') cm[key] = '';
 
-    this.setState({
-      id: cm.id,
-      dela: cm.dela.substring(0, 10),
-      panala: cm.panala.substring(0, 10),
-      continuare: cm.continuare,
-      datainceput: cm.datainceput.substring(0, 10),
-			serie: cm.serie,
-			nr: cm.nr,
-			codindemnizatie: cm.codindemnizatie,
-			cnpcopil: cm.cnpcopil,
-      dataeliberare: cm.dataeliberare.substring(0, 10),
-      codurgenta: cm.codurgenta,
-      procent: cm.procent,
-      codboalainfcont: cm.codboalainfcont,
-      bazacalcul: cm.bazacalcul,
-      bazacalculplafonata: cm.bazacalculplafonata,
-      zilebazacalcul: cm.zilebazacalcul,
-      mediezilnica: cm.mediezilnica,
-      zilefirma: cm.zilefirma,
-      indemnizatiefirma: cm.indemnizatiefirma,
-      zilefnuass: cm.zilefnuass,
-      indemnizatiefnuass: cm.indemnizatiefnuass,
-      locprescriere: cm.locprescriere,
-      nravizmedic: cm.nravizmedic,
-      codboala: cm.codboala,
-      urgenta: cm.urgenta,
-      conditii: cm.conditii,
-      idcontract: cm.idcontract,
+    this.setState(
+      {
+        id: cm.id,
+        dela: cm.dela.substring(0, 10),
+        panala: cm.panala.substring(0, 10),
+        continuare: cm.continuare,
+        datainceput: cm.datainceput.substring(0, 10),
+        serie: cm.serie,
+        nr: cm.nr,
+        codindemnizatie: cm.codindemnizatie,
+        cnpcopil: cm.cnpcopil,
+        dataeliberare: cm.dataeliberare.substring(0, 10),
+        codurgenta: cm.codurgenta,
+        procent: [cm.procent],
+        codboalainfcont: cm.codboalainfcont,
+        bazacalcul: cm.bazacalcul,
+        bazacalculplafonata: cm.bazacalculplafonata,
+        zilebazacalcul: cm.zilebazacalcul,
+        mediezilnica: cm.mediezilnica,
+        zilefirma: cm.zilefirma,
+        indemnizatiefirma: cm.indemnizatiefirma,
+        zilefnuass: cm.zilefnuass,
+        indemnizatiefnuass: cm.indemnizatiefnuass,
+        locprescriere: cm.locprescriere,
+        nravizmedic: cm.nravizmedic,
+        codboala: cm.codboala,
+        urgenta: cm.urgenta,
+        conditii: cm.conditii,
+        idcontract: cm.idcontract,
 
-      isEdit: true,
-			show: true
-    }, this.setNrZile);
+        isEdit: true,
+        show: true,
+      },
+      this.setNrZile
+    );
   }
 
+  handleClose(confirmWindow) {
+    if (confirmWindow)
+      this.setState({
+        show_confirm: false,
+        modalMessage: '',
+      });
+    else
+      this.setState({
+        show: false,
+        isEdit: false,
+      });
+  }
   // function to create react component with fetched data
   renderCM() {
     this.setState({
@@ -417,7 +431,7 @@ class CMTabel extends React.Component {
         ) {
           for (let key in cm) {
             if (!cm[key]) cm[key] = '-';
-					}
+          }
           return (
             <tr key={cm.id}>
               <th className="d-inline-flex flex-row justify-content-around">
@@ -549,10 +563,12 @@ class CMTabel extends React.Component {
 
     const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
       <option key={index}>{an}</option>
-		));
-		
-		let angajat = this.state.angajat;
-		let exists = angajat && angajat.idcontract;
+    ));
+
+		const codBoalaComponent = cod_boala.map((cod, index) => <option key={index}>{cod}</option>);
+    const procentComponent = this.state.procent.map((p, index) => <option key={index}>{p}</option>);
+
+    let exists = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
@@ -631,7 +647,7 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-							<Form.Group id="nrcertificat">
+              <Form.Group id="nrcertificat">
                 <Form.Label>Număr certificat</Form.Label>
                 <Form.Control
                   type="text"
@@ -651,14 +667,23 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
+              <Form.Group id="codboala">
+                <Form.Label>Cod boală</Form.Label>
+                <Form.Control
+									as="select"
+                  value={this.state.codboala}
+                  onChange={(e) => this.onChangeCodboala(e.target.value)}
+                >
+                  <option>-</option>
+                  {codBoalaComponent}
+                </Form.Control>
+              </Form.Group>
               <Form.Group id="codurgenta">
                 <Form.Label>Cod urgență</Form.Label>
                 <Form.Control
                   type="text"
                   value={this.state.codurgenta}
-                  onChange={(e) => {
-                    this.setState({ codurgenta: e.target.value });
-                  }}
+                  onChange={(e) => this.setState({ codurgenta: e.target.value })}
                 />
               </Form.Group>
               <Form.Group id="codboalainfcont">
@@ -674,12 +699,15 @@ class CMTabel extends React.Component {
               <Form.Group id="procent">
                 <Form.Label>Procent %</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="select"
                   value={this.state.procent}
                   onChange={(e) => {
-                    this.setState({ procent: e.target.value });
+                    this.setState({ procent: [e.target.value] });
                   }}
-                />
+                >
+                  <option>-</option>
+                  {procentComponent}
+                </Form.Control>
               </Form.Group>
               <div className="border rounded p-3 pb-0 mb-1">
                 <Form.Group id="bazacalcul">
@@ -736,7 +764,7 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-							<Form.Group id="codindemnizatie">
+              <Form.Group id="codindemnizatie">
                 <Form.Label>Cod indemnizație</Form.Label>
                 <Form.Control
                   type="text"
@@ -779,12 +807,17 @@ class CMTabel extends React.Component {
               <Form.Group id="locprescriere">
                 <Form.Label>Loc prescriere</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="select"
                   value={this.state.locprescriere}
                   onChange={(e) => {
                     this.setState({ locprescriere: e.target.value });
                   }}
-                />
+                >
+                  <option>Medic de familie</option>
+                  <option>Spital</option>
+                  <option>Ambulatoriu</option>
+                  <option>CAS</option>
+                </Form.Control>
               </Form.Group>
               <Form.Group id="nravizmedic">
                 <Form.Label>Nr. aviz medical</Form.Label>
@@ -793,16 +826,6 @@ class CMTabel extends React.Component {
                   value={this.state.nravizmedic}
                   onChange={(e) => {
                     this.setState({ nravizmedic: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="codboala">
-                <Form.Label>Cod boală</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.codboala}
-                  onChange={(e) => {
-                    this.setState({ codboala: e.target.value });
                   }}
                 />
               </Form.Group>
@@ -829,7 +852,7 @@ class CMTabel extends React.Component {
                   }}
                 />
               </Form.Group>
-							<Form.Group id="cnpcopil">
+              <Form.Group id="cnpcopil">
                 <Form.Label>CNP Copil</Form.Label>
                 <Form.Control
                   type="text"
@@ -861,7 +884,7 @@ class CMTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* PAGE CMNTENTS */}
+        {/* PAGE CONTENTS */}
         <Row>
           <Col>
             <Card>
