@@ -1,9 +1,12 @@
 import React from 'react';
-import { Row, Col, Card, Form, Button, FormControl } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, FormControl, Modal } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
+
+import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class Dec112 extends React.Component {
   constructor() {
@@ -25,6 +28,8 @@ class Dec112 extends React.Component {
       prenumeDeclarant: '',
       functieDeclarant: '',
       user: JSON.parse(localStorage.getItem('user')),
+      show: false,
+      errorMessage: '',
     };
   }
 
@@ -92,7 +97,7 @@ class Dec112 extends React.Component {
         var url = window.URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = `Declaratia 112 - ${societateNume} - ${luna.nume} ${an}.xml`;
+        a.download = `Declaratia 112 - ${societateNume} - ${luna.nume} ${an}.pdf`;
         document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
         a.click();
         a.remove(); //afterwards we remove the element again
@@ -110,18 +115,15 @@ class Dec112 extends React.Component {
     let prenumeDec = this.state.prenumeDeclarant;
     let functieDec = this.state.functieDeclarant;
 
-    const created = await fetch(
-      `${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.state.user.accessToken}`,
-        },
-      }
-    )
-      .then((res) => res.ok)
-      .catch((err) => console.error(err));
+    const created = await axios
+      .get(
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
 
     if (created) this.downloadXML(luna, an);
   }
@@ -136,18 +138,15 @@ class Dec112 extends React.Component {
     let prenumeDec = this.state.prenumeDeclarant;
     let functieDec = this.state.functieDeclarant;
 
-    const created = await fetch(
-      `${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.state.user.accessToken}`,
-        },
-      }
-    )
-      .then((res) => res.ok)
-      .catch((err) => console.error(err));
+    const created = await axios
+      .get(
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
 
     if (created) this.downloadPDF(luna, an);
   }
@@ -167,6 +166,17 @@ class Dec112 extends React.Component {
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaDec112}>
+            <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
+              <Modal.Header closeButton>
+                <Modal.Title>Eroare</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{this.state.errorMessage}</Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={() => this.setState({ show: false })}>
+                  OK
+                </Button>
+              </Modal.Footer>
+            </Modal>
             <Row>
               {/* LUNA */}
               <Col md={4}>

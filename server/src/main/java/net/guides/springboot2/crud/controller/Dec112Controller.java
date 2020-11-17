@@ -22,6 +22,11 @@ public class Dec112Controller {
 			@PathVariable("an") int an, @PathVariable("uid") int uid, @PathVariable("drec") int drec,
 			@PathVariable("numeDec") String numeDeclarant, @PathVariable("prenumeDec") String prenumeDeclarant,
 			@PathVariable("functieDec") String functieDeclarant) throws IOException, ResourceNotFoundException {
-		return dec112Service.createDec112(luna, an, ids, uid, drec, numeDeclarant, prenumeDeclarant, functieDeclarant);
+		try {
+			return dec112Service.createDec112(luna, an, ids, uid, drec, numeDeclarant, prenumeDeclarant,
+					functieDeclarant);
+		} catch (ResourceNotFoundException e) {
+			throw e;
+		}
 	}
 }
