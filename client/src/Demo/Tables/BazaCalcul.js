@@ -339,12 +339,6 @@ class BazaCalcul extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-    var monthsComponent = months.map((month, index) => (
-      <option key={month} data-key={index}>
-        {month}
-      </option>
-    ));
-
     var luniFaraBazaComponent = null;
     if (this.state.luni_fara_baza && this.state.luni_fara_baza[this.state.an_sel])
       luniFaraBazaComponent = this.state.luni_fara_baza[this.state.an_sel].map((luna) => (
@@ -367,7 +361,8 @@ class BazaCalcul extends React.Component {
                   <Form.Group>
                     <Form.Label>An</Form.Label>
                     <Form.Control
-                      type="number"
+											disabled={this.state.an_sel !== '-'}
+											type="number"
                       value={this.state.an}
                       onChange={(e) => this.setState({ an: e.target.value })}
                     />
@@ -376,7 +371,6 @@ class BazaCalcul extends React.Component {
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
                       as="select"
-                      // type="number"
                       value={this.state.luna.nume}
                       onChange={(e) => this.onChangeMonth(e)}
                     >

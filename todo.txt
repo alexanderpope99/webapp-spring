@@ -14,6 +14,7 @@ UPGRADES:
 
 ERORI:
 	baza calcul frontend cand editeaza bazacalcul
+	concedii medicale trebuie sa nu aiba valori nule
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
