@@ -14,7 +14,7 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import { cod_boala, getProcent } from '../Resources/cm.js';
+import { cod_boala, getProcente } from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
   constructor() {
@@ -44,7 +44,7 @@ class CMTabel extends React.Component {
       cmComponent: null,
 
       // cm modal:
-      show: false,
+      show: true,
       isEdit: false,
       id: '',
       // cm modal fields
@@ -58,7 +58,9 @@ class CMTabel extends React.Component {
       nr: '',
       dataeliberare: '',
       codurgenta: '',
-      procent: ['100'],
+      codboala: '01-Boala obisnuita si accidente in afara muncii',
+      procent: '75',
+      procente: ['75'],
       codboalainfcont: '',
       bazacalcul: 0,
       bazacalculplafonata: 0,
@@ -71,7 +73,6 @@ class CMTabel extends React.Component {
       indemnizatiefnuass: 0,
       locprescriere: 'Medic de familie',
       nravizmedic: '',
-      codboala: '',
       urgenta: false,
       conditii: '',
       cnpcopil: '',
@@ -98,7 +99,9 @@ class CMTabel extends React.Component {
       nr: '',
       dataeliberare: '',
       codurgenta: '',
-      procent: ['100'],
+      codboala: '01-Boala obisnuita si accidente in afara muncii',
+      procent: '75',
+      procente: ['75'],
       codboalainfcont: '',
       bazacalcul: 0,
       bazacalculplafonata: 0,
@@ -111,7 +114,6 @@ class CMTabel extends React.Component {
       indemnizatiefnuass: 0,
       locprescriere: 'Medic de familie',
       nravizmedic: '',
-      codboala: '',
       urgenta: false,
       conditii: '',
       cnpcopil: '',
@@ -196,9 +198,11 @@ class CMTabel extends React.Component {
   }
 
   onChangeCodboala(cod) {
+    let procente = getProcente(cod);
     this.setState({
       codboala: cod,
-      procent: getProcent(cod),
+      procente: procente,
+      procent: procente[0],
     });
   }
 
@@ -289,6 +293,7 @@ class CMTabel extends React.Component {
 
     let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
+    cm_body.codboala = cm_body.codboala.substring(0, 2);
     for (let key in cm_body) {
       cm_body[key] = cm_body[key] === '' ? null : cm_body[key]; //skips 0 values
     }
@@ -324,9 +329,11 @@ class CMTabel extends React.Component {
       modalMessage,
       id,
       isEdit,
+      procente,
       ...cm_body
     } = this.state;
     cm_body.idcontract = this.state.angajat.idcontract;
+    cm_body.codboala = cm_body.codboala.substring(0, 2);
 
     for (let key in cm_body) {
       cm_body[key] = cm_body[key] || null;
@@ -379,7 +386,8 @@ class CMTabel extends React.Component {
         cnpcopil: cm.cnpcopil,
         dataeliberare: cm.dataeliberare.substring(0, 10),
         codurgenta: cm.codurgenta,
-        procent: [cm.procent],
+        procent: cm.procent,
+        procente: getProcente(cm.codboala),
         codboalainfcont: cm.codboalainfcont,
         bazacalcul: cm.bazacalcul,
         bazacalculplafonata: cm.bazacalculplafonata,
@@ -497,6 +505,7 @@ class CMTabel extends React.Component {
               <th>{cm.serie}</th>
               <th>{cm.nr}</th>
               <th>{cm.dataeliberare.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{cm.codboala}</th>
               <th>{cm.codurgenta}</th>
               <th>{cm.codboalainfcont}</th>
               <th>{cm.procent}%</th>
@@ -511,8 +520,7 @@ class CMTabel extends React.Component {
               <th>{cm.indemnizatiefnuass}</th>
               <th>{cm.nravizmedic}</th>
               <th>{cm.locprescriere}</th>
-              <th>{cm.codboala}</th>
-              <th>{cm.codboalainfcont}</th>
+
               <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
               <th>{cm.conditii}</th>
               <th>{cm.cnpcopil}</th>
@@ -565,303 +573,302 @@ class CMTabel extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-		const codBoalaComponent = cod_boala.map((cod, index) => <option key={index}>{cod}</option>);
-    const procentComponent = this.state.procent.map((p, index) => <option key={index}>{p}</option>);
+    const codBoalaComponent = cod_boala.map((cod, index) => <option key={index}>{cod}</option>);
+    const procentComponent = this.state.procente.map((p, index) => (
+      <option key={index}>{p}</option>
+    ));
 
     let exists = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
         {/* C.M. MODAL */}
-        <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
+        <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Concediu medical</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group id="dela">
-                <Form.Label>Începând cu (inclusiv)</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.dela}
-                  max={this.state.panala}
-                  onChange={(e) => this.onChangeDela(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group id="panala">
-                <Form.Label>Până la (inclusiv)</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.panala}
-                  min={this.state.dela}
-                  onChange={(e) => this.onChangePanala(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>
-                  {this.state.nr_zile === 0
-                    ? ''
-                    : this.state.nr_zile +
-                      (this.state.nr_zile > 1
-                        ? ' zile concediu (include weekend-uri și sărbători)'
-                        : ' zi concediu (include weekend și sărbători)')}
-                </Form.Label>
-              </Form.Group>
               <Row>
-                <Col md={6}>
-                  <Form.Group id="continuare">
-                    <Form.Check
-                      custom
-                      type="checkbox"
-                      id="continuareCheck"
-                      label="Continuare"
-                      checked={this.state.continuare}
-                      value={this.state.continuare}
-                      onChange={(e) => {
-                        this.setState({ continuare: e.target.checked });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group id="panala">
-                    <Form.Label>Dată început</Form.Label>
+                <Form.Group id="dela" as={Col} md="6">
+                  <Form.Label>Începând cu (inclusiv)</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.dela}
+                    max={this.state.panala}
+                    onChange={(e) => this.onChangeDela(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group id="panala" as={Col} md="6">
+                  <Form.Label>Până la (inclusiv)</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.panala}
+                    min={this.state.dela}
+                    onChange={(e) => this.onChangePanala(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="12">
+                  <Form.Label>
+                    {this.state.nr_zile === 0
+                      ? ''
+                      : this.state.nr_zile +
+                        (this.state.nr_zile > 1
+                          ? ' zile concediu (include weekend-uri și sărbători)'
+                          : ' zi concediu (include weekend și sărbători)')}
+                  </Form.Label>
+                </Form.Group>
+                <Form.Group id="continuare" as={Col} md="6">
+                  <Form.Check
+                    custom
+                    type="checkbox"
+                    id="continuareCheck"
+                    label="Continuare"
+                    checked={this.state.continuare}
+                    value={this.state.continuare}
+                    onChange={(e) => {
+                      this.setState({ continuare: e.target.checked });
+                    }}
+                  />
+                </Form.Group>
+
+                <Form.Group id="panala" as={Col} md="6">
+                  <Form.Label>Dată început</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.datainceput}
+                    disabled={!this.state.continuare}
+                    onChange={(e) => {
+                      this.setState({ datainceput: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="seriecertificat" as={Col} md="6">
+                  <Form.Label>Serie certificat</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.serie}
+                    onChange={(e) => {
+                      this.setState({ serie: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="nrcertificat" as={Col} md="6">
+                  <Form.Label>Număr certificat</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.nr}
+                    onChange={(e) => {
+                      this.setState({ nr: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="dataeliberare" as={Col} md="6">
+                  <Form.Label>Dată eliberare</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.dataeliberare}
+                    onChange={(e) => {
+                      this.setState({ dataeliberare: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="codboala" as={Col} md="6">
+                  <Form.Label>Cod boală</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.codboala}
+                    onChange={(e) => this.onChangeCodboala(e.target.value)}
+                  >
+                    {/* <option>-</option> */}
+                    {codBoalaComponent}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group id="codurgenta" as={Col} md="6">
+                  <Form.Label>Cod urgență</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.codurgenta}
+                    onChange={(e) => this.setState({ codurgenta: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group id="codboalainfcont" as={Col} md="6">
+                  <Form.Label>Cod boală infecțioasă/contagioasă</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.codboalainfcont}
+                    onChange={(e) => {
+                      this.setState({ codboalainfcont: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="procent" as={Col} md="6">
+                  <Form.Label>Procent %</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.procent}
+                    onChange={(e) => {
+                      this.setState({ procent: e.target.value });
+                    }}
+                  >
+                    {/* <option>-</option> */}
+                    {procentComponent}
+                  </Form.Control>
+                </Form.Group>
+                <Row className="border rounded pt-3 m-3">
+                  <Form.Group id="bazacalcul" as={Col} md="6">
+                    <Form.Label>Bază calcul (RON)</Form.Label>
                     <Form.Control
-                      type="date"
-                      value={this.state.datainceput}
-                      disabled={!this.state.continuare}
+                      type="text"
+                      value={this.numberWithCommas(this.state.bazacalcul)}
                       onChange={(e) => {
-                        this.setState({ datainceput: e.target.value });
+                        this.setState({ bazacalcul: e.target.value });
                       }}
                     />
                   </Form.Group>
-                </Col>
+                  <Form.Group id="bazacalculplafonata" as={Col} md="6">
+                    <Form.Label>Bază calcul plafonată (RON)</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.bazacalculplafonata}
+                      onChange={(e) => {
+                        this.setState({ bazacalculplafonata: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="zilebazacalcul" as={Col} md="6">
+                    <Form.Label>Zile bază calcul</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.zilebazacalcul}
+                      onChange={(e) => {
+                        this.setState({ zilebazacalcul: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="mediezilnica" as={Col} md="6">
+                    <Form.Label>Medie zilnică (RON)</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.mediezilnica}
+                      onChange={(e) => {
+                        this.setState({ mediezilnica: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-0" as={Col} md="6">
+                    <Button onClick={this.getBazaCalculCM}>Calculează automat</Button>
+                  </Form.Group>
+                </Row>
+                <Form.Group id="zilefirma" as={Col} md="6">
+                  <Form.Label>Zile suportate de firmă</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.zilefirma}
+                    onChange={(e) => {
+                      this.setState({ zilefirma: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="codindemnizatie" as={Col} md="6">
+                  <Form.Label>Cod indemnizație</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.codindemnizatie}
+                    onChange={(e) => {
+                      this.setState({ codindemnizatie: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="indemnizatiefirma" as={Col} md="6">
+                  <Form.Label>Indemnizație firmă</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.indemnizatiefirma}
+                    onChange={(e) => {
+                      this.setState({ indemnizatiefirma: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="zilefnuass" as={Col} md="6">
+                  <Form.Label>Zile FNUASS</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.zilefnuass}
+                    onChange={(e) => {
+                      this.setState({ zilefnuass: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="indemnizatiefnuass" as={Col} md="6">
+                  <Form.Label>Indemnizație FNUASS</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.indemnizatiefnuass}
+                    onChange={(e) => {
+                      this.setState({ indemnizatiefnuass: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="locprescriere" as={Col} md="6">
+                  <Form.Label>Loc prescriere</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.locprescriere}
+                    onChange={(e) => {
+                      this.setState({ locprescriere: e.target.value });
+                    }}
+                  >
+                    <option>Medic de familie</option>
+                    <option>Spital</option>
+                    <option>Ambulatoriu</option>
+                    <option>CAS</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group id="nravizmedic" as={Col} md="6">
+                  <Form.Label>Nr. aviz medical</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.nravizmedic}
+                    onChange={(e) => {
+                      this.setState({ nravizmedic: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="urgenta" as={Col} md="6">
+                  <Form.Check
+                    custom
+                    type="checkbox"
+                    id="urgentaCheck"
+                    label="Urgență"
+                    checked={this.state.urgenta}
+                    value={this.state.urgenta}
+                    onChange={(e) => {
+                      this.setState({ urgenta: e.target.checked });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="conditii" as={Col} md="6">
+                  <Form.Label>Condiții</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.conditii}
+                    onChange={(e) => {
+                      this.setState({ conditii: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="cnpcopil" as={Col} md="6">
+                  <Form.Label>CNP Copil</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.cnpcopil}
+                    onChange={(e) => {
+                      this.setState({ cnpcopil: e.target.value });
+                    }}
+                  />
+                </Form.Group>
               </Row>
-              <Form.Group id="seriecertificat">
-                <Form.Label>Serie certificat</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.serie}
-                  onChange={(e) => {
-                    this.setState({ serie: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="nrcertificat">
-                <Form.Label>Număr certificat</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.nr}
-                  onChange={(e) => {
-                    this.setState({ nr: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="dataeliberare">
-                <Form.Label>Dată eliberare</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.dataeliberare}
-                  onChange={(e) => {
-                    this.setState({ dataeliberare: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="codboala">
-                <Form.Label>Cod boală</Form.Label>
-                <Form.Control
-									as="select"
-                  value={this.state.codboala}
-                  onChange={(e) => this.onChangeCodboala(e.target.value)}
-                >
-                  <option>-</option>
-                  {codBoalaComponent}
-                </Form.Control>
-              </Form.Group>
-              <Form.Group id="codurgenta">
-                <Form.Label>Cod urgență</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.codurgenta}
-                  onChange={(e) => this.setState({ codurgenta: e.target.value })}
-                />
-              </Form.Group>
-              <Form.Group id="codboalainfcont">
-                <Form.Label>Cod boală infecțioasă/contagioasă</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.codboalainfcont}
-                  onChange={(e) => {
-                    this.setState({ codboalainfcont: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="procent">
-                <Form.Label>Procent %</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.procent}
-                  onChange={(e) => {
-                    this.setState({ procent: [e.target.value] });
-                  }}
-                >
-                  <option>-</option>
-                  {procentComponent}
-                </Form.Control>
-              </Form.Group>
-              <div className="border rounded p-3 pb-0 mb-1">
-                <Form.Group id="bazacalcul">
-                  <Form.Label>Bază calcul (RON)</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.numberWithCommas(this.state.bazacalcul)}
-                    onChange={(e) => {
-                      this.setState({ bazacalcul: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="bazacalculplafonata">
-                  <Form.Label>Bază calcul plafonată (RON)</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.bazacalculplafonata}
-                    onChange={(e) => {
-                      this.setState({ bazacalculplafonata: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="zilebazacalcul">
-                  <Form.Label>Zile bază calcul</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.zilebazacalcul}
-                    onChange={(e) => {
-                      this.setState({ zilebazacalcul: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="mediezilnica">
-                  <Form.Label>Medie zilnică (RON)</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.mediezilnica}
-                    onChange={(e) => {
-                      this.setState({ mediezilnica: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-0">
-                  <Button onClick={this.getBazaCalculCM}>Calculează automat</Button>
-                </Form.Group>
-              </div>
-              <Form.Group id="zilefirma">
-                <Form.Label>Zile suportate de firmă</Form.Label>
-                <Form.Control
-                  type="number"
-                  value={this.state.zilefirma}
-                  onChange={(e) => {
-                    this.setState({ zilefirma: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="codindemnizatie">
-                <Form.Label>Cod indemnizație</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.codindemnizatie}
-                  onChange={(e) => {
-                    this.setState({ codindemnizatie: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="indemnizatiefirma">
-                <Form.Label>Indemnizație firmă</Form.Label>
-                <Form.Control
-                  type="number"
-                  value={this.state.indemnizatiefirma}
-                  onChange={(e) => {
-                    this.setState({ indemnizatiefirma: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="zilefnuass">
-                <Form.Label>Zile FNUASS</Form.Label>
-                <Form.Control
-                  type="number"
-                  value={this.state.zilefnuass}
-                  onChange={(e) => {
-                    this.setState({ zilefnuass: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="indemnizatiefnuass">
-                <Form.Label>Indemnizație FNUASS</Form.Label>
-                <Form.Control
-                  type="number"
-                  value={this.state.indemnizatiefnuass}
-                  onChange={(e) => {
-                    this.setState({ indemnizatiefnuass: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="locprescriere">
-                <Form.Label>Loc prescriere</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.locprescriere}
-                  onChange={(e) => {
-                    this.setState({ locprescriere: e.target.value });
-                  }}
-                >
-                  <option>Medic de familie</option>
-                  <option>Spital</option>
-                  <option>Ambulatoriu</option>
-                  <option>CAS</option>
-                </Form.Control>
-              </Form.Group>
-              <Form.Group id="nravizmedic">
-                <Form.Label>Nr. aviz medical</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.nravizmedic}
-                  onChange={(e) => {
-                    this.setState({ nravizmedic: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="urgenta">
-                <Form.Check
-                  custom
-                  type="checkbox"
-                  id="urgentaCheck"
-                  label="Urgență"
-                  checked={this.state.urgenta}
-                  value={this.state.urgenta}
-                  onChange={(e) => {
-                    this.setState({ urgenta: e.target.checked });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="conditii">
-                <Form.Label>Condiții</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.conditii}
-                  onChange={(e) => {
-                    this.setState({ conditii: e.target.value });
-                  }}
-                />
-              </Form.Group>
-              <Form.Group id="cnpcopil">
-                <Form.Label>CNP Copil</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.cnpcopil}
-                  onChange={(e) => {
-                    this.setState({ cnpcopil: e.target.value });
-                  }}
-                />
-              </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -953,8 +960,9 @@ class CMTabel extends React.Component {
                       <th>Serie certificat</th>
                       <th>Nr. certificat</th>
                       <th>Data eliberare</th>
+                      <th>Cod boală</th>
                       <th>Cod urgență</th>
-                      <th>Cod boală infecțioasă</th>
+                      <th>Cod boală infecțioasă/contagioasă</th>
                       <th>Procent</th>
                       <th>Bază calcul</th>
                       <th>Bază calcul plafonată</th>
@@ -967,8 +975,6 @@ class CMTabel extends React.Component {
                       <th>Indemnizație FNUASS</th>
                       <th>Nr. aviz medic</th>
                       <th>Loc prescriere</th>
-                      <th>Cod boală</th>
-                      <th>Cod boală infecțioasă/contagioasă</th>
                       <th>Urgență</th>
                       <th>Condiții</th>
                       <th>CNP Copil</th>

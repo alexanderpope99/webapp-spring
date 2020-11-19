@@ -16,7 +16,7 @@ const cod_boala = [
   '15-Risc maternal',
 ];
 
-function getProcent(cod) {
+function getProcente(cod) {
   cod = cod.substring(0, 2);
   switch (cod) {
     case '01':
@@ -55,4 +55,4 @@ function getProcent(cod) {
 	}
 }
 
-export { cod_boala, getProcent };
+export { cod_boala, getProcente };
