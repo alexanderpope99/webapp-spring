@@ -188,23 +188,28 @@ class CMTabel extends React.Component {
   }
 
   setNrZile() {
+		// Math.round(this.state.zilefirma * baza_calcul.mediezilnica)
     let panala = this.state.panala;
     let dela = this.state.dela;
     var nr_zile = 0,
       nr_zile_weekend = 0,
-      zilefirma = 0;
+			zilefirma = 0,
+			indemnizatiefirma = 0;
     if (dela && panala) {
       let date1 = new Date(dela);
       let date2 = new Date(panala);
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
       nr_zile_weekend = countWeekendDays(date1, date2);
-      zilefirma = getZileFirma(date1, date2);
+			zilefirma = getZileFirma(date1, date2);
+			if(this.state.mediezilnica)
+				indemnizatiefirma = Math.round(zilefirma * this.state.mediezilnica);
 		}
 		
     this.setState({
       nr_zile: nr_zile,
       nr_zile_weekend: nr_zile_weekend,
-      zilefirma: zilefirma,
+			zilefirma: zilefirma,
+			indemnizatiefirma: indemnizatiefirma
     });
   }
 
@@ -228,13 +233,11 @@ class CMTabel extends React.Component {
       return;
     }
 
-    //? fetch must be with idcontract
     const cm = await axios
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
-      .then((cm) => (cm.status == 200 ? cm.data : null))
+      .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) => console.error('err', err));
-
     if (cm) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
@@ -307,7 +310,7 @@ class CMTabel extends React.Component {
     cm_body.codboala = cm_body.codboala.substring(0, 2);
     for (let key in cm_body) {
       cm_body[key] = cm_body[key] === '' ? null : cm_body[key]; //skips 0 values
-    }
+		}
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
@@ -349,8 +352,8 @@ class CMTabel extends React.Component {
     for (let key in cm_body) {
       cm_body[key] = cm_body[key] || null;
     }
-    //console.log(cm_body);
-    //return;
+    // console.log(cm_body);
+    // return;
 
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
@@ -450,7 +453,7 @@ class CMTabel extends React.Component {
         ) {
           for (let key in cm) {
             if (!cm[key]) cm[key] = '-';
-          }
+					}
           return (
             <tr key={cm.id}>
               <th className="d-inline-flex flex-row justify-content-around">
@@ -531,7 +534,6 @@ class CMTabel extends React.Component {
               <th>{cm.indemnizatiefnuass}</th>
               <th>{cm.nravizmedic}</th>
               <th>{cm.locprescriere}</th>
-
               <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
               <th>{cm.conditii}</th>
               <th>{cm.cnpcopil}</th>
@@ -565,7 +567,8 @@ class CMTabel extends React.Component {
       this.setState({
         bazacalcul: baza_calcul.bazacalcul,
         zilebazacalcul: baza_calcul.zilebazacalcul,
-        mediezilnica: baza_calcul.mediezilnica,
+				mediezilnica: baza_calcul.mediezilnica,
+				indemnizatiefirma: Math.round(this.state.zilefirma * baza_calcul.mediezilnica),
       });
     }
   }
@@ -623,8 +626,8 @@ class CMTabel extends React.Component {
                   <Form.Label>
                     {this.state.nr_zile +
                       (this.state.nr_zile > 1
-                        ? ` zile concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`
-                        : ` zi concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`)}
+                        ? ` zile concediu, din care ${this.state.nr_zile_weekend} in weekend (sărbători incluse)`
+                        : ` zi concediu, din care ${this.state.nr_zile_weekend} in weekend (sărbători incluse)`)}
                   </Form.Label>
                 </Form.Group>
                 <Form.Group id="continuare" as={Col} md="2" className="mt-4">

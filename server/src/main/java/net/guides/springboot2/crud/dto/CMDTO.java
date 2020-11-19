@@ -59,7 +59,7 @@ public class CMDTO {
 
 	private Contract contract;
 
-	private String codinemnizatie;
+	private String codindemnizatie;
 
 	public Double getBazacalcul() {
 		return bazacalcul;
@@ -155,8 +155,8 @@ public class CMDTO {
 		return zilefnuass;
 	}
 
-	public String getCodinemnizatie() {
-		return codinemnizatie;
+	public String getCodindemnizatie() {
+		return codindemnizatie;
 	}
 
 	public void setBazacalcul(Double bazacalcul) {
@@ -283,7 +283,7 @@ public class CMDTO {
 		this.serie = serie;
 	}
 
-	public void setCodinemnizatie(String codinemnizatie) {
-		this.codinemnizatie = codinemnizatie;
+	public void setCodindemnizatie(String codindemnizatie) {
+		this.codindemnizatie = codindemnizatie;
 	}
 }
