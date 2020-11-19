@@ -55,10 +55,23 @@ function getProcente(cod) {
   }
 }
 
+function getZileFirma(dela, panala) {
+  console.log(addDays(dela, 4));
+  let nr_zile = (panala.getTime() - dela.getTime()) / (1000 * 3600 * 24) + 1;
+  if (nr_zile <= 5) return nr_zile - countWeekendDays(dela, panala);
+  else return 5 - countWeekendDays(dela, addDays(dela, 4));
+}
+
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
 function countWeekendDays(d0, d1) {
   var ndays = 1 + Math.round((d1.getTime() - d0.getTime()) / (24 * 3600 * 1000));
   var nsaturdays = Math.floor((d0.getDay() + ndays) / 7);
   return 2 * nsaturdays + (d0.getDay() == 0) - (d1.getDay() == 6);
 }
 
-export { cod_boala, getProcente, countWeekendDays };
+export { cod_boala, getProcente, getZileFirma, countWeekendDays };

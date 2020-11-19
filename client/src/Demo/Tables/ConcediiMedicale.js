@@ -14,7 +14,7 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import { cod_boala, getProcente, countWeekendDays } from '../Resources/cm.js';
+import { cod_boala, getProcente, getZileFirma, countWeekendDays } from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
   constructor() {
@@ -51,8 +51,8 @@ class CMTabel extends React.Component {
       today: '',
       dela: '',
       panala: '',
-	  nr_zile: 0,
-	  nr_zile_weekend: 0,
+      nr_zile: 0,
+      nr_zile_weekend: 0,
       continuare: false,
       datainceput: '',
       serie: '',
@@ -188,22 +188,24 @@ class CMTabel extends React.Component {
   }
 
   setNrZile() {
-	let panala = this.state.panala;
-	let dela = this.state.dela;
-    var nr_zile = 0, nr_zile_weekend = 0, zilefirma = 0;
+    let panala = this.state.panala;
+    let dela = this.state.dela;
+    var nr_zile = 0,
+      nr_zile_weekend = 0,
+      zilefirma = 0;
     if (dela && panala) {
       let date1 = new Date(dela);
       let date2 = new Date(panala);
-	  nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
-	  nr_zile_weekend = countWeekendDays(date1, date2);
-	  let _nwekend = nr_zile_weekend > 2 ? 2 : nr_zile_weekend;
-	  zilefirma = nr_zile > 5 ? 5 - _nwekend : nr_zile - _nwekend;
-    }
-	this.setState({
-		nr_zile: nr_zile, 
-		nr_zile_weekend: nr_zile_weekend,
-		zilefirma: zilefirma,
-	});
+      nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+      nr_zile_weekend = countWeekendDays(date1, date2);
+      zilefirma = getZileFirma(date1, date2);
+		}
+		
+    this.setState({
+      nr_zile: nr_zile,
+      nr_zile_weekend: nr_zile_weekend,
+      zilefirma: zilefirma,
+    });
   }
 
   onChangeCodboala(cod) {
@@ -620,9 +622,9 @@ class CMTabel extends React.Component {
                 <Form.Group as={Col} md="12">
                   <Form.Label>
                     {this.state.nr_zile +
-                        (this.state.nr_zile > 1
-                          ? ` zile concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`
-                          : ` zi concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`)}
+                      (this.state.nr_zile > 1
+                        ? ` zile concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`
+                        : ` zi concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`)}
                   </Form.Label>
                 </Form.Group>
                 <Form.Group id="continuare" as={Col} md="2" className="mt-4">
@@ -649,7 +651,7 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-				<Form.Group id="dataeliberare" as={Col} md="5">
+                <Form.Group id="dataeliberare" as={Col} md="5">
                   <Form.Label>Dată eliberare</Form.Label>
                   <Form.Control
                     type="date"
@@ -816,7 +818,7 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-				<Form.Group id="locprescriere" as={Col} md="6">
+                <Form.Group id="locprescriere" as={Col} md="6">
                   <Form.Label>Loc prescriere</Form.Label>
                   <Form.Control
                     number="text"
@@ -825,7 +827,7 @@ class CMTabel extends React.Component {
                       this.setState({ locprescriere: e.target.value });
                     }}
                   />
-                    {/* <option>Medic de familie</option>
+                  {/* <option>Medic de familie</option>
                     <option>Spital</option>
                     <option>Ambulatoriu</option>
                     <option>CAS</option>
