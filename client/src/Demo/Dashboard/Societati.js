@@ -1,12 +1,14 @@
 import React from 'react';
 import { Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
+import axios from 'axios';
 
 import { getSocSel, setSocSel } from '../Resources/socsel';
 import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
 import { setAngajatSel } from '../Resources/angajatsel';
-import axios from 'axios';
+import { download } from '../Resources/download';
+import months from '../Resources/months';
 import authHeader from '../../services/auth-header';
 import { Edit } from 'react-feather';
 
@@ -19,12 +21,14 @@ class Societati extends React.Component {
     this.onChangeLocalitate = this.onChangeLocalitate.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.statSalarii = this.statSalarii.bind(this);
 
     this.state = {
       show: false,
       modalMessage: '',
       isEdit: false,
-      show_confirm: false,
+			show_confirm: false,
+			socsel: getSocSel(),
 
       societati: {},
       id: null,
@@ -97,7 +101,7 @@ class Societati extends React.Component {
   }
 
   async getSocietati() {
-		this.clearFields();
+    this.clearFields();
     const user = JSON.parse(localStorage.getItem('user'));
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) {
@@ -115,7 +119,7 @@ class Societati extends React.Component {
       // var date_societati = this.state.date_societati;
       societati_res.forEach((societate) => {
         societati[societate.nume] = { opacity: '.3', ...societate };
-      });
+			});
     }
     let selected = getSocSel();
     if (selected) this.select(selected.nume);
@@ -139,33 +143,54 @@ class Societati extends React.Component {
     // select nume_soc
     if (nume_soc) {
       societati[nume_soc].opacity = '1';
-      this.setState({ societati: societati });
-
-			setSocSel({ id: societati[nume_soc].id, nume: nume_soc });
+			
+      setSocSel({ id: societati[nume_soc].id, nume: nume_soc });
 			console.log(getSocSel());
+			
+      this.setState({ societati: societati, socsel: getSocSel() });
     }
   }
 
   editSocietate(societate) {
-    this.setState({
-      show: true,
-      isEdit: true,
+		console.log(societate.id);
+    this.setState(
+      {
+        show: true,
+        isEdit: true,
 
-      id: societate.id,
-      nume: societate.nume,
-      idcaen: societate.idcaen,
-      cif: societate.cif,
-      capsoc: societate.capsoc,
-      regcom: societate.regcom,
-      idadresa: societate.adresa ? societate.adresa.id : null,
-      adresa: societate.adresa ? societate.adresa.adresa : '',
-      localitate: societate.adresa ? societate.adresa.localitate : '',
-      judet: societate.adresa ? societate.adresa.judet : '',
-      capitala: 'Județ',
-      email: societate.email,
-      telefon: societate.telefon,
-      fax: societate.fax,
-    }, () => societate.adresa ? this.onChangeLocalitate(societate.adresa.localitate) : null);
+        id: societate.id,
+        nume: societate.nume,
+        idcaen: societate.idcaen,
+        cif: societate.cif,
+        capsoc: societate.capsoc,
+        regcom: societate.regcom,
+        idadresa: societate.adresa ? societate.adresa.id : null,
+        adresa: societate.adresa ? societate.adresa.adresa : '',
+        localitate: societate.adresa ? societate.adresa.localitate : '',
+        judet: societate.adresa ? societate.adresa.judet : '',
+        capitala: 'Județ',
+        email: societate.email,
+        telefon: societate.telefon,
+        fax: societate.fax,
+      },
+      () => (societate.adresa ? this.onChangeLocalitate(societate.adresa.localitate) : null)
+    );
+  }
+
+  async statSalarii() {
+    let today = new Date();
+    let luna = today.getMonth();
+    let an = today.getFullYear();
+		let user = JSON.parse(localStorage.getItem('user'));
+
+    const created = await axios
+      .get(`${server.address}/stat/${this.state.socsel.id}/mo=${luna+1}&y=${an}&i=-/${user.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (created) download(`Stat Salarii - ${this.state.socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
   }
 
   async onSubmit(e) {
@@ -193,22 +218,25 @@ class Societati extends React.Component {
       email: this.state.email || null,
       telefon: this.state.telefon || null,
       fax: this.state.fax || null,
-		};
+    };
     // ADD SOCIETATE TO DATABASE
     await axios
       .put(`${server.address}/societate/${this.state.id}`, societate_body, {
         headers: authHeader(),
       })
       .then((res) => {
-				//alert("Societate adaugata cu succes!");
-        this.setState({
-					show: false,
-          show_confirm: true,
-          modalMessage: 'Societate adăugată cu succes!',
-        }, this.getSocietati);
-				return res.data;
-			})
-			.catch((err) => console.error(err));
+        //alert("Societate adaugata cu succes!");
+        this.setState(
+          {
+            show: false,
+            show_confirm: true,
+            modalMessage: 'Societate adăugată cu succes!',
+          },
+          this.getSocietati
+        );
+        return res.data;
+      })
+      .catch((err) => console.error(err));
   }
 
   render() {
@@ -229,12 +257,26 @@ class Societati extends React.Component {
         >
           <Card.Body>
             <h3 className="d-flex justify-content-around">{key}</h3>
-            <Edit
-              className="d-flex justify-content-around float float-right"
+            <div
+              className="mt-5"
               visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.editSocietate(this.state.societati[key])}
-            />
+            >
+              <Edit
+                className="d-flex justify-content-around float float-right"
+                visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
+                style={{ cursor: 'pointer' }}
+                onClick={() => this.editSocietate(this.state.societati[key])}
+              />
+              <Button
+                size="sm"
+                onClick={() => this.statSalarii()}
+                style={{
+                  visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
+                }}
+              >
+                Stat salarii
+              </Button>
+            </div>
           </Card.Body>
         </Card>
       </Col>
@@ -415,8 +457,8 @@ class Societati extends React.Component {
           </Modal.Footer>
         </Modal>
 
-				{/* CONFIRM MODAL */}
-				<Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
+        {/* CONFIRM MODAL */}
+        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
             <Modal.Title>Societate actualizată</Modal.Title>
           </Modal.Header>
