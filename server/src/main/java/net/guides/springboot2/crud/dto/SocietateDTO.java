@@ -24,6 +24,8 @@ public class SocietateDTO {
 
 	private String fax;
 
+	private Integer nrangajati;
+
 	public Double getCapsoc() {
 		return capsoc;
 	}
@@ -107,4 +109,11 @@ public class SocietateDTO {
 		this.fax = fax;
 	}
 
+	public Integer getNrangajati() {
+		return nrangajati;
+	}
+
+	public void setNrangajati(Integer nrangajati) {
+		this.nrangajati = nrangajati;
+	}
 }

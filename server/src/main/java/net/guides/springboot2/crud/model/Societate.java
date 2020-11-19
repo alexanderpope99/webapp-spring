@@ -53,26 +53,9 @@ public class Societate implements Serializable {
 	@Column(name = "fax")
 	private String fax;
 
-	// @ManyToMany(fetch = FetchType.LAZY)
-	// @JoinTable(name = "listacontbancar", joinColumns = @JoinColumn(name =
-	// "idsocietate"), inverseJoinColumns = @JoinColumn(name = "iban"))
-	// private Set<ContBancar> iban = new HashSet<>();
-
 	@JsonBackReference(value = "angajat-societate")
 	@OneToMany(mappedBy = "societate")
 	private List<Angajat> angajat;
-
-	// @OneToMany(mappedBy = "societate")
-	// private Set<CentruCost> centruCost;
-
-	// @OneToMany(mappedBy = "societate")
-	// private Set<CereriConcediu> cereriConcediu;
-
-	// @OneToMany(mappedBy = "societate")
-	// private Set<Departament> departamente;
-
-	// @OneToOne(mappedBy = "societate")
-	// private PunctDeLucru punctDeLucru;
 
 	public Societate() {
 	}
@@ -80,6 +63,7 @@ public class Societate implements Serializable {
 	public Societate(String nume, Integer idcaen, String cif, Double capsoc, String regcom, Adresa adresa, String email,
 			String telefon, String fax) {
 		this.nume = nume;
+		this.idcaen = idcaen;
 		this.cif = cif;
 		this.capsoc = capsoc;
 		this.regcom = regcom;

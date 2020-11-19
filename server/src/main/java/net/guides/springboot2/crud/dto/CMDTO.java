@@ -204,7 +204,7 @@ public class CMDTO {
 	}
 
 	public void setContract(Contract contract) {
-		this.idcontract = contract.getId();
+		this.contract = contract;
 	}
 
 	public void setIdcontract(Contract contract) {

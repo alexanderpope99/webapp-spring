@@ -48,8 +48,7 @@ public class SocietateController {
 	}
 
 	@GetMapping("/user/{id}")
-	public List<Societate> getSocietateByUserId(@PathVariable(value = "id") Integer id)
-			throws ResourceNotFoundException {
+	public List<Societate> getSocietateByUserId(@PathVariable(value = "id") Integer id) {
 		return societateRepository.findByUserId(id);
 	}
 

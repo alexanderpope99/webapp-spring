@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
-
 import Aux from '../../hoc/_Aux';
+
 import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
 import axios from 'axios';
@@ -85,14 +85,13 @@ class AddSocietate extends React.Component {
       if (this.state[key] === '' || this.state[key] === "''") this.state[key] = null;
     }
 
-    // var caen_id = null;
+    let adresa_body = {
+      adresa: this.state.adresa || null,
+      localitate: this.state.localitate || null,
+      judet: this.state.judet || null,
+      tara: null,
+    };
 
-		let adresa_body = {
-			adresa: this.state.adresa || null,
-			localitate: this.state.localitate || null,
-			judet: this.state.judet || null,
-			tara: null,
-		};
     // build societate JSON for POST with adr_id as idadresa
     const societate_body = {
       nume: this.state.nume || null,
@@ -317,7 +316,7 @@ class AddSocietate extends React.Component {
                       </Form.Group>
                     </Col>
                     <Col md={4}>
-                      <Form.Group controlId="email">
+                      <Form.Group controlId="fax">
                         <Form.Label>Fax</Form.Label>
                         <Form.Control
                           type="text"
