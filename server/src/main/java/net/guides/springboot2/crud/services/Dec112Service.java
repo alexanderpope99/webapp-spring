@@ -578,7 +578,7 @@ public class Dec112Service {
 			sbfrmSectiuneaF.appendChild(sbfrmF1);
 
 			childElement = doc.createElement("F1_suma");
-			childElement.appendChild(doc.createTextNode("0"));
+			childElement.appendChild(doc.createTextNode(String.valueOf(impozit_datorat + impozit_scutit)));
 			sbfrmF1.appendChild(childElement);
 
 			childElement = doc.createElement("F1_suma_ded");
@@ -586,7 +586,7 @@ public class Dec112Service {
 			sbfrmF1.appendChild(childElement);
 
 			childElement = doc.createElement("F1_suma_scut");
-			childElement.appendChild(doc.createTextNode("0"));
+			childElement.appendChild(doc.createTextNode(String.valueOf(impozit_scutit)));
 			sbfrmF1.appendChild(childElement);
 
 			// end sbfrmSectiuneaF
@@ -884,7 +884,8 @@ public class Dec112Service {
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("B1_7"); // ore suspendate in luna
-					childElement.appendChild(doc.createTextNode("0"));
+					childElement.appendChild(doc.createTextNode(
+							String.valueOf(realizariRetineri.getZilecm() * realizariRetineri.getDuratazilucru())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("B1_15"); // total zile lucrate
@@ -1077,8 +1078,8 @@ public class Dec112Service {
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_6"); // data inceput valabilitate cm
-						childElement.appendChild(doc.createTextNode(
-								cm.getDatainceput() == null ? "" : formatter.format(cm.getDatainceput())));
+						childElement.appendChild(
+								doc.createTextNode(cm.getDela() == null ? "" : formatter.format(cm.getDela())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_7"); // data sfarsit valabilitate cm
@@ -1087,7 +1088,8 @@ public class Dec112Service {
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_8"); // cnp copil
-						childElement.appendChild(doc.createTextNode(String.valueOf(cm.getCnpcopil())));
+						childElement.appendChild(
+								doc.createTextNode(cm.getCnpcopil() == null ? "" : String.valueOf(cm.getCnpcopil())));
 						sbfrmSectiuneaDrep.appendChild(childElement);
 
 						childElement = doc.createElement("D_9"); // codul indemnizatiei (1 -> 15) == tipul de boala
@@ -1237,35 +1239,35 @@ public class Dec112Service {
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_5");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_6");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_37");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_38");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_39");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_40");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_41");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_42");
-				childElement.appendChild(doc.createTextNode("0"));
+				childElement.appendChild(doc.createTextNode(""));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_8"); // venit brut (probabil total drepturi)
@@ -1371,12 +1373,13 @@ public class Dec112Service {
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_14"); // baza calcul impozit (venitBrut + tichete - cas - cass)
-				childElement.appendChild(
-						doc.createTextNode(contract.isCalculdeduceri()
-								? String.valueOf(
-										realizariRetineri.getTotaldrepturi() + realizariRetineri.getValoaretichete()
-												- realizariRetineri.getCas() - realizariRetineri.getCass())
-								: "0"));
+				childElement
+						.appendChild(
+								doc.createTextNode(contract.isCalculdeduceri()
+										? String.valueOf(realizariRetineri.getTotaldrepturi()
+												+ realizariRetineri.getValoaretichete() - realizariRetineri.getCas()
+												- realizariRetineri.getCass() - realizariRetineri.getDeducere())
+										: "0"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_15"); // de completat impozit, adica baza calcul impozit
