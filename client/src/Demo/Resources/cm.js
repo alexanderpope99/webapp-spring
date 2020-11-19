@@ -7,7 +7,7 @@ const cod_boala = [
   '06-Urgenta medico-chirurgicala',
   '07-Carantina',
   '08-Sarcina si lehuzie (maternitate)',
-  '09-INgrijire copil bolnav in varsta de pana la 7 ani sau copil cu handicap, pentru afectiuni intercurente, pana la implinirea varstei de 18 ani 85%',
+  '09-Ingrijire copil bolnav in varsta de pana la 7 ani sau copil cu handicap, pentru afectiuni intercurente, pana la implinirea varstei de 18 ani 85%',
   '10-Reducerea duratei cu ¼ a duratei normale a timpului de lucru',
   '11-Trecerea temporara in alt loc de munca',
   '12-Tuberculoza',
@@ -52,7 +52,13 @@ function getProcente(cod) {
 
     default:
       return ['100'];
-	}
+  }
 }
 
-export { cod_boala, getProcente };
+function countWeekendDays(d0, d1) {
+  var ndays = 1 + Math.round((d1.getTime() - d0.getTime()) / (24 * 3600 * 1000));
+  var nsaturdays = Math.floor((d0.getDay() + ndays) / 7);
+  return 2 * nsaturdays + (d0.getDay() == 0) - (d1.getDay() == 6);
+}
+
+export { cod_boala, getProcente, countWeekendDays };

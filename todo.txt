@@ -10,6 +10,9 @@ UPGRADES:
 												per 6 luni/societatea
 	+ la societati (card)
 	cont bancar pill in angajat (dupa pers. intr.)
+	in CM autoamtization:
+		calcul zile firma: primele 5, nu se platesc weekend-urile
+		calcul zile fnuass
 
 
 ERORI:

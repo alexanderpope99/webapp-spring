@@ -14,7 +14,7 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import { cod_boala, getProcente } from '../Resources/cm.js';
+import { cod_boala, getProcente, countWeekendDays } from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
   constructor() {
@@ -44,14 +44,15 @@ class CMTabel extends React.Component {
       cmComponent: null,
 
       // cm modal:
-      show: true,
+      show: false,
       isEdit: false,
       id: '',
       // cm modal fields
       today: '',
       dela: '',
       panala: '',
-      nr_zile: 0,
+	  nr_zile: 0,
+	  nr_zile_weekend: 0,
       continuare: false,
       datainceput: '',
       serie: '',
@@ -187,14 +188,22 @@ class CMTabel extends React.Component {
   }
 
   setNrZile() {
-    const panala = this.state.panala;
-    var nr_zile = 0;
-    if (this.state.dela && this.state.panala) {
-      let date1 = new Date(this.state.dela);
-      let date2 = new Date(this.state.panala);
-      nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+	let panala = this.state.panala;
+	let dela = this.state.dela;
+    var nr_zile = 0, nr_zile_weekend = 0, zilefirma = 0;
+    if (dela && panala) {
+      let date1 = new Date(dela);
+      let date2 = new Date(panala);
+	  nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+	  nr_zile_weekend = countWeekendDays(date1, date2);
+	  let _nwekend = nr_zile_weekend > 2 ? 2 : nr_zile_weekend;
+	  zilefirma = nr_zile > 5 ? 5 - _nwekend : nr_zile - _nwekend;
     }
-    this.setState({ panala: panala, nr_zile: nr_zile });
+	this.setState({
+		nr_zile: nr_zile, 
+		nr_zile_weekend: nr_zile_weekend,
+		zilefirma: zilefirma,
+	});
   }
 
   onChangeCodboala(cod) {
@@ -610,15 +619,13 @@ class CMTabel extends React.Component {
                 </Form.Group>
                 <Form.Group as={Col} md="12">
                   <Form.Label>
-                    {this.state.nr_zile === 0
-                      ? ''
-                      : this.state.nr_zile +
+                    {this.state.nr_zile +
                         (this.state.nr_zile > 1
-                          ? ' zile concediu (include weekend-uri și sărbători)'
-                          : ' zi concediu (include weekend și sărbători)')}
+                          ? ` zile concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`
+                          : ` zi concediu, in weekend: ${this.state.nr_zile_weekend} (sărbători incluse)`)}
                   </Form.Label>
                 </Form.Group>
-                <Form.Group id="continuare" as={Col} md="6">
+                <Form.Group id="continuare" as={Col} md="2" className="mt-4">
                   <Form.Check
                     custom
                     type="checkbox"
@@ -631,8 +638,7 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-
-                <Form.Group id="panala" as={Col} md="6">
+                <Form.Group id="datainceput" as={Col} md="5">
                   <Form.Label>Dată început</Form.Label>
                   <Form.Control
                     type="date"
@@ -640,6 +646,16 @@ class CMTabel extends React.Component {
                     disabled={!this.state.continuare}
                     onChange={(e) => {
                       this.setState({ datainceput: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+				<Form.Group id="dataeliberare" as={Col} md="5">
+                  <Form.Label>Dată eliberare</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.dataeliberare}
+                    onChange={(e) => {
+                      this.setState({ dataeliberare: e.target.value });
                     }}
                   />
                 </Form.Group>
@@ -660,16 +676,6 @@ class CMTabel extends React.Component {
                     value={this.state.nr}
                     onChange={(e) => {
                       this.setState({ nr: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="dataeliberare" as={Col} md="6">
-                  <Form.Label>Dată eliberare</Form.Label>
-                  <Form.Control
-                    type="date"
-                    value={this.state.dataeliberare}
-                    onChange={(e) => {
-                      this.setState({ dataeliberare: e.target.value });
                     }}
                   />
                 </Form.Group>
@@ -715,7 +721,7 @@ class CMTabel extends React.Component {
                     {procentComponent}
                   </Form.Control>
                 </Form.Group>
-                <Row className="border rounded pt-3 m-3">
+                <Row className="border rounded pt-3 pb-3 m-3">
                   <Form.Group id="bazacalcul" as={Col} md="6">
                     <Form.Label>Bază calcul (RON)</Form.Label>
                     <Form.Control
@@ -770,13 +776,13 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-                <Form.Group id="codindemnizatie" as={Col} md="6">
-                  <Form.Label>Cod indemnizație</Form.Label>
+                <Form.Group id="zilefnuass" as={Col} md="6">
+                  <Form.Label>Zile FNUASS</Form.Label>
                   <Form.Control
-                    type="text"
-                    value={this.state.codindemnizatie}
+                    type="number"
+                    value={this.state.zilefnuass}
                     onChange={(e) => {
-                      this.setState({ codindemnizatie: e.target.value });
+                      this.setState({ zilefnuass: e.target.value });
                     }}
                   />
                 </Form.Group>
@@ -790,16 +796,6 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-                <Form.Group id="zilefnuass" as={Col} md="6">
-                  <Form.Label>Zile FNUASS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={this.state.zilefnuass}
-                    onChange={(e) => {
-                      this.setState({ zilefnuass: e.target.value });
-                    }}
-                  />
-                </Form.Group>
                 <Form.Group id="indemnizatiefnuass" as={Col} md="6">
                   <Form.Label>Indemnizație FNUASS</Form.Label>
                   <Form.Control
@@ -810,20 +806,30 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-                <Form.Group id="locprescriere" as={Col} md="6">
+                <Form.Group id="codindemnizatie" as={Col} md="6">
+                  <Form.Label>Cod indemnizație</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.codindemnizatie}
+                    onChange={(e) => {
+                      this.setState({ codindemnizatie: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+				<Form.Group id="locprescriere" as={Col} md="6">
                   <Form.Label>Loc prescriere</Form.Label>
                   <Form.Control
-                    as="select"
+                    number="text"
                     value={this.state.locprescriere}
                     onChange={(e) => {
                       this.setState({ locprescriere: e.target.value });
                     }}
-                  >
-                    <option>Medic de familie</option>
+                  />
+                    {/* <option>Medic de familie</option>
                     <option>Spital</option>
                     <option>Ambulatoriu</option>
                     <option>CAS</option>
-                  </Form.Control>
+                  </Form.Control> */}
                 </Form.Group>
                 <Form.Group id="nravizmedic" as={Col} md="6">
                   <Form.Label>Nr. aviz medical</Form.Label>
@@ -835,7 +841,7 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
-                <Form.Group id="urgenta" as={Col} md="6">
+                <Form.Group id="urgenta" as={Col} md="6" className="mt-4">
                   <Form.Check
                     custom
                     type="checkbox"
