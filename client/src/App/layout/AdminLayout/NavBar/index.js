@@ -31,7 +31,7 @@ class NavBar extends Component {
             >
               <span />
             </a>
-            <a href={DEMO.BLANK_LINK} className="b-brand">
+            <a href="/" className="b-brand">
               <div className="b-bg">
                 <i className="feather icon-trending-up" />
               </div>

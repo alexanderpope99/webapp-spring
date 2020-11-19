@@ -150,7 +150,7 @@ class ParametriiSalarii extends React.Component {
       .get(`${server.address}/parametriisalariu/`, { headers: authHeader() })
       .then((res) => res.data);
 
-    console.log(parametriiSalarii);
+    // console.log(parametriiSalarii);
 
     this.state.parametriiSalarii = parametriiSalarii;
 
@@ -166,7 +166,6 @@ class ParametriiSalarii extends React.Component {
       date: parametriiSalarii[0].date,
     });
 
-    console.log('onRefresh called');
     this.renderParametriiSalarii();
   }
 

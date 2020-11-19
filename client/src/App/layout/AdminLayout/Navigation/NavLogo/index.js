@@ -11,7 +11,7 @@ const navLogo = (props) => {
   return (
     <Aux>
       <div className="navbar-brand header-logo">
-        <a href={DEMO.BLANK_LINK} className="b-brand">
+        <a href="/dashboard/societati" className="b-brand">
           <div className="b-bg">
             <i className="feather icon-trending-up" />
           </div>
