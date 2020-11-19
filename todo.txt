@@ -4,8 +4,8 @@ retineri (doar avans merge)
 
 buton de 'show password' la schimba prola
 
-
 UPGRADES: 
+	zile FNUASS + indemnizatie FNUASS
 	buton pentru calculul per 1 luna/societate
 												per 6 luni/societatea
 	+ la societati (card)

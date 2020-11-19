@@ -784,7 +784,8 @@ class CMTabel extends React.Component {
                 <Form.Group id="zilefnuass" as={Col} md="6">
                   <Form.Label>Zile FNUASS</Form.Label>
                   <Form.Control
-                    type="number"
+					type="number"
+					disabled
                     value={this.state.zilefnuass}
                     onChange={(e) => {
                       this.setState({ zilefnuass: e.target.value });
@@ -794,7 +795,8 @@ class CMTabel extends React.Component {
                 <Form.Group id="indemnizatiefirma" as={Col} md="6">
                   <Form.Label>Indemnizație firmă</Form.Label>
                   <Form.Control
-                    type="number"
+					type="number"
+					disabled
                     value={this.state.indemnizatiefirma}
                     onChange={(e) => {
                       this.setState({ indemnizatiefirma: e.target.value });
@@ -804,7 +806,8 @@ class CMTabel extends React.Component {
                 <Form.Group id="indemnizatiefnuass" as={Col} md="6">
                   <Form.Label>Indemnizație FNUASS</Form.Label>
                   <Form.Control
-                    type="number"
+					type="number"
+					disabled
                     value={this.state.indemnizatiefnuass}
                     onChange={(e) => {
                       this.setState({ indemnizatiefnuass: e.target.value });
@@ -814,7 +817,8 @@ class CMTabel extends React.Component {
                 <Form.Group id="codindemnizatie" as={Col} md="6">
                   <Form.Label>Cod indemnizație</Form.Label>
                   <Form.Control
-                    type="text"
+					type="text"
+					disabled
                     value={this.state.codindemnizatie}
                     onChange={(e) => {
                       this.setState({ codindemnizatie: e.target.value });

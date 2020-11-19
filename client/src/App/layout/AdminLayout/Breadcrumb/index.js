@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom';
 
 import config from '../../../../config';
 import navigation from '../../../../menu-items';
-import DEMO from "../../../../store/constant";
 import Aux from "../../../../hoc/_Aux";
 
 class Breadcrumb extends Component {
@@ -19,7 +18,7 @@ class Breadcrumb extends Component {
             }
             return false;
         });
-    };
+    }
 
     componentWillReceiveProps = () => {
         (navigation.items).map((item, index) => {
