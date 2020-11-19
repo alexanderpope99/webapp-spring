@@ -5,6 +5,7 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
 import axios from 'axios';
+import authHeader from '../../services/auth-header';
 
 class Stat extends React.Component {
   constructor() {
@@ -14,7 +15,8 @@ class Stat extends React.Component {
 
     this.download = this.download.bind(this);
     this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
-    this.creeazaNotaContabila = this.creeazaNotaContabila.bind(this);
+	this.creeazaNotaContabila = this.creeazaNotaContabila.bind(this);
+	this.download = this.download.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -77,10 +79,10 @@ class Stat extends React.Component {
     const created = await axios
       .get(
         `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
-        { headers: this.state.user.accessToken }
+        { headers: authHeader() }
       )
-      .then((res) => res.status === 200)
-      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
 
     if (created)
       this.download(`Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`);
@@ -94,10 +96,10 @@ class Stat extends React.Component {
     const created = await axios
       .get(
         `${server.address}/notacontabila/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
-        { headers: this.state.user.accessToken }
+        { headers: authHeader() }
       )
-      .then((res) => res.status === 200)
-      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
 
     if (created)
       this.download(`Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`);

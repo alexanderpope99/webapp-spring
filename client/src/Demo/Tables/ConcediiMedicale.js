@@ -252,8 +252,8 @@ class CMTabel extends React.Component {
         }
       }
       // add ani in luni_cu_concediu
-      for (let an of ani_cu_concediu) {
-        luni_cu_concediu[an] = new Set();
+      for (let _an of ani_cu_concediu) {
+        luni_cu_concediu[_an] = new Set();
       }
       // add luni in luni_cu_concediu
       let an;
@@ -264,8 +264,8 @@ class CMTabel extends React.Component {
         }
       }
       // convert to array from set
-      for (let an of ani_cu_concediu) {
-        luni_cu_concediu[an] = [...luni_cu_concediu[an]];
+      for (let _an of ani_cu_concediu) {
+        luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
 
       this.setState(
