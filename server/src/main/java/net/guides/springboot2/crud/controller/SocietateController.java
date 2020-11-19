@@ -1,10 +1,14 @@
 package net.guides.springboot2.crud.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.SocietateDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
@@ -32,24 +37,37 @@ public class SocietateController {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@GetMapping
-	public List<Societate> getAll() {
+	public List<SocietateDTO> getAll() {
 		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
-		return societati;
+		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class)).collect(Collectors.toList());
+		for(int i=0; i < societati.size(); ++i) {
+			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajat());
+		}
+		return societatiDTO;
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Societate> getSocietateById(@PathVariable(value = "id") int id)
+	public ResponseEntity<SocietateDTO> getSocietateById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		Societate societate = societateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
-
-		return ResponseEntity.ok().body(societate);
+		SocietateDTO societateDTO = modelMapper.map(societate, SocietateDTO.class);
+		societateDTO.setNrangajati(societate.getAngajat().size());
+		return ResponseEntity.ok().body(societateDTO);
 	}
 
 	@GetMapping("/user/{id}")
-	public List<Societate> getSocietateByUserId(@PathVariable(value = "id") Integer id) {
-		return societateRepository.findByUserId(id);
+	public List<SocietateDTO> getSocietateByUserId(@PathVariable(value = "id") Integer id) {
+		List<Societate> societati = societateRepository.findByUserId(id);
+		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class)).collect(Collectors.toList());
+		for(int i=0; i < societati.size(); ++i) {
+			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajat().size());
+		}
+		return societatiDTO;
 	}
 
 	@PostMapping
@@ -75,6 +93,7 @@ public class SocietateController {
 		Societate societate = societateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 		newSocietate.setId(societate.getId());
+
 		final Societate updatedSocietate = societateRepository.save(newSocietate);
 
 		return ResponseEntity.ok().body(updatedSocietate);

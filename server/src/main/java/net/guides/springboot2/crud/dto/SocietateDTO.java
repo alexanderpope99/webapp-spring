@@ -1,6 +1,9 @@
 package net.guides.springboot2.crud.dto;
 
+import java.util.List;
+
 import net.guides.springboot2.crud.model.Adresa;
+import net.guides.springboot2.crud.model.Angajat;
 
 public class SocietateDTO {
 
@@ -90,15 +93,12 @@ public class SocietateDTO {
 		this.telefon = telefon;
 	}
 
-	public Integer getIdadresa() {
-		if (adresa == null)
-			return null;
-		else
-			return adresa.getId();
+	public Adresa getAdresa() {
+		return adresa;
 	}
 
-	public void setAdresa(Adresa idadresa) {
-		this.adresa = idadresa;
+	public void setAdresa(Adresa adresa) {
+		this.adresa = adresa;
 	}
 
 	public String getFax() {
@@ -115,5 +115,9 @@ public class SocietateDTO {
 
 	public void setNrangajati(Integer nrangajati) {
 		this.nrangajati = nrangajati;
+	}
+
+	public void setNrangajati(List<Angajat> angajati) {
+		this.nrangajati = angajati.size();
 	}
 }
