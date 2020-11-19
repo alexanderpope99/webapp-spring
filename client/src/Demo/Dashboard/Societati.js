@@ -12,19 +12,20 @@ import { Edit } from 'react-feather';
 class Societati extends React.Component {
   constructor() {
     super();
-    this.unselectAll = this.unselectAll.bind(this);
+		this.unselectAll = this.unselectAll.bind(this);
+		this.select = this.select.bind(this);
 
     this.state = {
-		societati: {},
-		nume: '',
-	};
+      societati: {},
+      nume: '',
+    };
   }
 
   async componentDidMount() {
-    await this.getNumeSocietati();
+    await this.getSocietati();
   }
 
-  async getNumeSocietati() {
+  async getSocietati() {
     const user = JSON.parse(localStorage.getItem('user'));
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) {
@@ -38,40 +39,38 @@ class Societati extends React.Component {
       .catch((err) => console.log(err));
 
     if (Array.isArray(societati_res)) {
+			var societati = this.state.societati;
+			// var date_societati = this.state.date_societati;
       societati_res.forEach((societate) => {
-		console.log(societate);
-		this.setState({
-			societati: {...this.state.societati, [societate.nume]: { opacity: '.3', id: societate.id }},
-		  });
-	  });
+				societati[societate.nume] = {opacity: '.3', ...societate};
+			});
+			console.log(societati);
     }
-	console.log(this.state.societati);
     let selected = getSocSel();
-    // console.log(selected);
-	if (selected) this.select(selected.nume);
-	// for(let key in this.state.societati) {
-	// 	console.log(key);
-	// }
+    if (selected) this.select(selected.nume);
   }
 
   unselectAll() {
-	var societati = this.state.societati;
+    var societati = this.state.societati;
     for (let nume_soc in societati) {
-      societati[nume_soc] = {opacity: '.3', id: societati[nume_soc].id}
+			societati[nume_soc].opacity = '.3';
     }
   }
 
   select(nume_soc) {
-	this.unselectAll();
-	setAngajatSel(null);
-	console.log(nume_soc);
+		// unselect all
+		var societati = this.state.societati;
+    for (let _nume_soc in societati) {
+			societati[_nume_soc].opacity = '.3';
+		}
+		setAngajatSel(null);
+		
+		// select nume_soc
     if (nume_soc) {
-      let id = this.state.societati[nume_soc].id;
-      this.setState({
-        societati: {...this.state.societati, [nume_soc]: { opacity: '1', id: id }},
-      });
+			societati[nume_soc].opacity = '1';
+			this.setState({societati: societati});
 
-      setSocSel({ id: id, nume: nume_soc });
+      setSocSel({ id: societati[nume_soc].id, nume: nume_soc });
       console.log(getSocSel());
     }
   }
