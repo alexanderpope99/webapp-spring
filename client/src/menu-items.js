@@ -190,6 +190,25 @@ var items = [
     ],
   },
   {
+    id: 'facturi',
+    title: 'Facturi',
+    type: 'group',
+    icon: 'icon-group',
+    show:
+      user.roles.includes('ROLE_USER') ||
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_DIRECTOR'),
+    children: [
+      {
+        id: 'facturi',
+        title: 'Tabel Facturi',
+        type: 'item',
+        url: '/facturi',
+        icon: 'feather icon-file-text',
+      },
+    ],
+  },
+  {
     id: 'configurare',
     title: 'CONFIGURARE',
     type: 'group',
