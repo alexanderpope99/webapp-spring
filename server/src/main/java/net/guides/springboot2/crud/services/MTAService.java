@@ -22,7 +22,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
@@ -40,7 +39,7 @@ public class MTAService {
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createMTA(int idsocietate, int luna, int an, int userID)
-			throws ResourceNotFoundException, IOException {
+			throws IOException {
 
 		// * READ THE FILE
 		String templateLocation = homeLocation + "/templates";

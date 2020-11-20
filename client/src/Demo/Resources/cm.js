@@ -57,8 +57,13 @@ function getProcente(cod) {
 
 function getZileFirma(dela, panala) {
   let nr_zile = (panala.getTime() - dela.getTime()) / (1000 * 3600 * 24) + 1;
-  if (nr_zile <= 5) return nr_zile - countWeekendDays(dela, panala);
-  else return 5 - countWeekendDays(dela, addDays(dela, 4));
+	if (nr_zile <= 5)
+		return [nr_zile - countWeekendDays(dela, panala), 0];
+  else {
+		let zilefirma = 5 - countWeekendDays(dela, addDays(dela, 4));
+		let zilefnuass = nr_zile - 5 - countWeekendDays(addDays(dela, 4), panala);
+		return [zilefirma, zilefnuass];
+	}
 }
 
 function addDays(date, days) {
