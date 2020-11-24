@@ -15,7 +15,7 @@ import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-class PersoaneIntretinereTabel extends React.Component {
+class CereriConcediuTabel extends React.Component {
   constructor(props) {
     super();
 
@@ -420,4 +420,4 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 }
 
-export default PersoaneIntretinereTabel;
+export default CereriConcediuTabel;

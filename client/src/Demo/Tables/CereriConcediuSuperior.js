@@ -10,7 +10,7 @@ import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-class PersoaneIntretinereTabel extends React.Component {
+class CereriConcediuSuperiorTabel extends React.Component {
   constructor(props) {
     super();
 
@@ -130,9 +130,9 @@ class PersoaneIntretinereTabel extends React.Component {
         }
       )
       .then((res) => res.data)
-			.catch((err) => console.error(err));
-			
-		if(!cereriConcediu) return;
+      .catch((err) => console.error(err));
+
+    if (!cereriConcediu) return;
 
     cereriConcediu = await Promise.all(
       cereriConcediu.map(async (v) => ({
@@ -230,4 +230,4 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 }
 
-export default PersoaneIntretinereTabel;
+export default CereriConcediuSuperiorTabel;

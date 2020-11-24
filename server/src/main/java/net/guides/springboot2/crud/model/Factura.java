@@ -1,0 +1,243 @@
+package net.guides.springboot2.crud.model;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity
+@Table(name = "factura")
+public class Factura implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column(name = "denumirefurnizor")
+	private String denumirefurnizor;
+
+	@Column(name = "ciffurnizor")
+	private String ciffurnizor;
+
+	@Column(name = "nr")
+	private String nr;
+
+	@Column(name = "data")
+	private LocalDate data;
+
+	@Column(name = "moneda")
+	private String moneda;
+
+	@Column(name = "sumafaratva")
+	private double sumafaratva;
+
+	@Column(name = "termenscadenta")
+	private LocalDate termenscadenta;
+
+	@Column(name = "tipachizitie")
+	private String tipachizitie;
+
+	@Column(name = "descriereactivitati")
+	private String descriereactivitati;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "aprobator", referencedColumnName = "idpersoana")
+	private Angajat aprobator;
+
+	@Column(name = "aprobat")
+	private boolean aprobat;
+
+	@Column(name = "observatii")
+	private String observatii;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "centrucost", referencedColumnName = "id")
+	private CentruCost centrucost;
+
+	@Column(name = "dataplatii")
+	private LocalDate dataplatii;
+
+	@Column(name = "sumaachitata")
+	private double sumaachitata;
+
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "idsocietate", referencedColumnName = "id")
+	private Societate societate;
+
+	public Factura() {
+
+	}
+
+	public Factura(String denumirefurnizor, String ciffurnizor, String nr, LocalDate data, String moneda,
+			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati,
+			Angajat aprobator, boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii,
+			double sumaachitata, Societate societate) {
+		this.denumirefurnizor = denumirefurnizor;
+		this.ciffurnizor = ciffurnizor;
+		this.nr = nr;
+		this.data = data;
+		this.moneda = moneda;
+		this.sumafaratva = sumafaratva;
+		this.termenscadenta = termenscadenta;
+		this.tipachizitie = tipachizitie;
+		this.descriereactivitati = descriereactivitati;
+		this.aprobator = aprobator;
+		this.aprobat = aprobat;
+		this.observatii = observatii;
+		this.centrucost = centrucost;
+		this.dataplatii = dataplatii;
+		this.sumaachitata = sumaachitata;
+		this.societate = societate;
+	}
+
+	public Angajat getAprobator() {
+		return aprobator;
+	}
+
+	public void setAprobator(Angajat aprobator) {
+		this.aprobator = aprobator;
+	}
+
+	public CentruCost getCentrucost() {
+		return centrucost;
+	}
+
+	public void setCentrucost(CentruCost centrucost) {
+		this.centrucost = centrucost;
+	}
+
+	public String getCiffurnizor() {
+		return ciffurnizor;
+	}
+
+	public void setCiffurnizor(String ciffurnizor) {
+		this.ciffurnizor = ciffurnizor;
+	}
+
+	public boolean isAprobat() {
+		return aprobat;
+	}
+
+	public void setAprobat(boolean aprobat) {
+		this.aprobat = aprobat;
+	}
+
+	public LocalDate getData() {
+		return data;
+	}
+
+	public void setData(LocalDate data) {
+		this.data = data;
+	}
+
+	public LocalDate getDataplatii() {
+		return dataplatii;
+	}
+
+	public void setDataplatii(LocalDate dataplatii) {
+		this.dataplatii = dataplatii;
+	}
+
+	public String getDenumirefurnizor() {
+		return denumirefurnizor;
+	}
+
+	public void setDenumirefurnizor(String denumirefurnizor) {
+		this.denumirefurnizor = denumirefurnizor;
+	}
+
+	public String getDescriereactivitati() {
+		return descriereactivitati;
+	}
+
+	public void setDescriereactivitati(String descriereactivitati) {
+		this.descriereactivitati = descriereactivitati;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(String moneda) {
+		this.moneda = moneda;
+	}
+
+	public String getNr() {
+		return nr;
+	}
+
+	public void setNr(String nr) {
+		this.nr = nr;
+	}
+
+	public String getObservatii() {
+		return observatii;
+	}
+
+	public void setObservatii(String observatii) {
+		this.observatii = observatii;
+	}
+
+	public double getSumaachitata() {
+		return sumaachitata;
+	}
+
+	public void setSumaachitata(double sumaachitata) {
+		this.sumaachitata = sumaachitata;
+	}
+
+	public double getSumafaratva() {
+		return sumafaratva;
+	}
+
+	public void setSumafaratva(double sumafaratva) {
+		this.sumafaratva = sumafaratva;
+	}
+
+	public LocalDate getTermenscadenta() {
+		return termenscadenta;
+	}
+
+	public void setTermenscadenta(LocalDate termenscadenta) {
+		this.termenscadenta = termenscadenta;
+	}
+
+	public String getTipachizitie() {
+		return tipachizitie;
+	}
+
+	public void setTipachizitie(String tipachizitie) {
+		this.tipachizitie = tipachizitie;
+	}
+
+	public Societate getSocietate() {
+		return societate;
+	}
+
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
+	}
+
+}

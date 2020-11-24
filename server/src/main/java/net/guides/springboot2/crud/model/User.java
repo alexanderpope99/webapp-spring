@@ -9,6 +9,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "username"),
 		@UniqueConstraint(columnNames = "email") })
@@ -35,10 +37,12 @@ public class User implements Serializable {
 	@JoinColumn(name = "id_angajat", referencedColumnName = "idpersoana")
 	private Angajat angajat;
 
+	@JsonBackReference
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
+	@JsonBackReference
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_societati", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "societate_id"))
 	private Set<Societate> societati = new HashSet<>();
