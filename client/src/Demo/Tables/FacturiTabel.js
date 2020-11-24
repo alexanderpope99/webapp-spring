@@ -61,7 +61,9 @@ class FacturiTabel extends React.Component {
       idsocietate: null,
       show: false,
 
-      idcentrucost: null,
+			idcentrucost: null,
+			
+			file: null,
     };
   }
 
@@ -91,7 +93,7 @@ class FacturiTabel extends React.Component {
       sumaachitata: this.state.sumaachitata || null,
       idsocietate: this.state.socsel.id,
     };
-		console.log(factura_body);
+    console.log(factura_body);
     let ok = await axios
       .post(`${server.address}/factura`, factura_body, { headers: authHeader() })
       .then((res) => res.status === 200)
@@ -359,126 +361,144 @@ class FacturiTabel extends React.Component {
     return (
       <Aux>
         {/* add/edit modal */}
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal show={this.state.show} onHide={this.handleClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addFactura}>
               <Row>
-                <Col md={12}>
-                  <Form.Group>
-                    <Form.Label>Denumire Furnizor</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.denumirefurnizor}
-                      onChange={(e) => this.setState({ denumirefurnizor: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>CIF Furnizor</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.ciffurnizor}
-                      onChange={(e) => this.setState({ ciffurnizor: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Nr</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.nr}
-                      onChange={(e) => this.setState({ nr: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Data</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.data}
-                      onChange={(e) => this.setState({ data: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Moneda</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={this.state.moneda}
-                      onChange={(e) => this.setState({ moneda: e.target.value })}
-                    >
-                      <option key="1">RON</option>
-                      <option key="2">EUR</option>
-                      <option key="3">USD</option>
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Sumă fără TVA</Form.Label>
-                    <Form.Control
-                      type="number"
-                      value={this.state.sumafaratva}
-                      onChange={(e) => this.setState({ sumafaratva: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Termen scadență</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.termenscadenta}
-                      onChange={(e) => this.setState({ termenscadenta: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Tip Achiziție</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.tipachizitie}
-                      onChange={(e) => this.setState({ tipachizitie: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Descriere Activități</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.descriereactivitati}
-                      onChange={(e) => this.setState({ descriereactivitati: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Observații</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.observatii}
-                      onChange={(e) => this.setState({ observatii: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Centru Cost</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={this.state.centrucost}
-                      onChange={this.onChangeCentruCost}
-                    >
-                      <option>-</option>
-                      {centreCost}
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Data Plății</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.dataplatii}
-                      onChange={(e) => this.setState({ dataplatii: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Sumă Achitată</Form.Label>
-                    <Form.Control
-                      type="number"
-                      value={this.state.sumaachitata}
-                      onChange={(e) => this.setState({ sumaachitata: e.target.value })}
-                    />
-                  </Form.Group>
-                </Col>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Denumire Furnizor</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.denumirefurnizor}
+                    onChange={(e) => this.setState({ denumirefurnizor: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>CIF Furnizor</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.ciffurnizor}
+                    onChange={(e) => this.setState({ ciffurnizor: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Nr</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.nr}
+                    onChange={(e) => this.setState({ nr: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Data</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.data}
+                    onChange={(e) => this.setState({ data: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Moneda</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.moneda}
+                    onChange={(e) => this.setState({ moneda: e.target.value })}
+                  >
+                    <option key="1">RON</option>
+                    <option key="2">EUR</option>
+                    <option key="3">USD</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Sumă fără TVA</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.sumafaratva}
+                    onChange={(e) => this.setState({ sumafaratva: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Termen scadență</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.termenscadenta}
+                    onChange={(e) => this.setState({ termenscadenta: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Tip Achiziție</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.tipachizitie}
+                    onChange={(e) => this.setState({ tipachizitie: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Descriere Activități</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.descriereactivitati}
+                    onChange={(e) => this.setState({ descriereactivitati: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Observații</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.observatii}
+                    onChange={(e) => this.setState({ observatii: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Centru Cost</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.centrucost}
+                    onChange={this.onChangeCentruCost}
+                  >
+                    <option>-</option>
+                    {centreCost}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Data Plății</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.dataplatii}
+                    onChange={(e) => this.setState({ dataplatii: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Sumă Achitată</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.sumaachitata}
+                    onChange={(e) => this.setState({ sumaachitata: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Factura</Form.Label>
+                  <Form.File
+                    custom
+                    id="factura"
+                    label={this.state.file ? this.state.file.name : 'Niciun fisier ales'}
+                    style={{ cursor: 'pointer' }}
+                    onChange={(e) => this.setState({ file: e.target.files[0] })}
+                  />
+                  {/*<Button
+                    variant="link"
+                    className="m-0 p-0 float float-right"
+                    style={{
+											visibility: this.state.file ? 'visible' : 'hidden',
+										}}
+										onClick={() => this.setState({file: null})}
+                  >
+                    Sterge fisierul
+                  </Button>*/}
+                </Form.Group>
               </Row>
             </Form>
           </Modal.Body>
@@ -561,4 +581,3 @@ class FacturiTabel extends React.Component {
 }
 
 export default FacturiTabel;
-

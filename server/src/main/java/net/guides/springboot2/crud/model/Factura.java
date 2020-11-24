@@ -63,6 +63,9 @@ public class Factura implements Serializable {
 	@Column(name = "sumaachitata")
 	private double sumaachitata;
 
+	@Column(name = "numefisier")
+	private String numefisier;
+	
 	@Lob
 	@Column(name = "fisier")
 	private byte[] fisier;
