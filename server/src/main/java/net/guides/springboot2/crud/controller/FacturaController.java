@@ -60,9 +60,9 @@ public class FacturaController {
 	}
 
 	@GetMapping("/idsoc/{ids}")
-	public List<FacturaDTO> getFacturaByIdSocietate(@PathVariable(value = "ids") int societateId) {
-		List<Factura> factura = facturaRepository.findFacturiByIdsocietate(societateId);
-		return factura.stream().map(c -> modelMapper.map(c, FacturaDTO.class)).collect(Collectors.toList());
+	public List<Factura> getFacturaByIdSocietate(@PathVariable(value = "ids") int societateId) {
+		List<Factura> facturi = facturaRepository.findFacturiByIdsocietate(societateId);
+		return facturi;
 
 	}
 

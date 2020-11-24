@@ -91,7 +91,7 @@ class FacturiTabel extends React.Component {
       sumaachitata: this.state.sumaachitata || null,
       idsocietate: this.state.socsel.id,
     };
-		console.log(factura_body);
+    console.log(factura_body);
     let ok = await axios
       .post(`${server.address}/factura`, factura_body, { headers: authHeader() })
       .then((res) => res.status === 200)
@@ -195,10 +195,14 @@ class FacturiTabel extends React.Component {
               <th>{fact.termenscadenta}</th>
               <th>{fact.tipachizitie}</th>
               <th>{fact.descriereactivitati}</th>
-              <th>{fact.idaprobator}</th>
+              <th>
+                {fact.aprobator === null
+                  ? '-'
+                  : fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume}
+              </th>
               <th>{fact.aprobat}</th>
               <th>{fact.observatii}</th>
-              <th>{fact.centrucost}</th>
+              <th>{fact.centrucost === null ? '-' : fact.centrucost.nume}</th>
               <th>{fact.dataplatii}</th>
               <th>{fact.sumaachitata}</th>
               <th>
@@ -540,7 +544,7 @@ class FacturiTabel extends React.Component {
                       <th>Termen Scadență</th>
                       <th>Tip Achiziție</th>
                       <th>Descriere Activități</th>
-                      <th>Id Aprobator</th>
+                      <th>Aprobator</th>
                       <th>Aprobat</th>
                       <th>Observații</th>
                       <th>Centru Cost</th>
@@ -561,4 +565,3 @@ class FacturiTabel extends React.Component {
 }
 
 export default FacturiTabel;
-
