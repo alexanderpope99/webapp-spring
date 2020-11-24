@@ -95,7 +95,7 @@ class Pontaj extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume} - Foaie de pontaj</Typography>
+          <Typography variant="h5"> Foaie de pontaj</Typography>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaFoaiePontaj}>

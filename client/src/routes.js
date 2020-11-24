@@ -28,6 +28,7 @@ const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
 
 // RAPOARTE
+const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
 const Stat = React.lazy(() => import('./Demo/Rapoarte/Stat'));
 const Pontaj = React.lazy(() => import('./Demo/Rapoarte/Pontaj'));
 const Dec112 = React.lazy(() => import('./Demo/Rapoarte/Dec112'));
@@ -107,6 +108,7 @@ const routes = [
   },
 
   // RAPOARTE
+  { path: '/rapoarte', exact: true, name: 'Rapoarte', component: Rapoarte },
   { path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
   { path: '/pontaj', exact: true, name: 'Foaie pontaj', component: Pontaj },
   { path: '/dec112', exact: true, name: 'Declarația 112', component: Dec112 },

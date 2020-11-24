@@ -8,13 +8,13 @@ import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-class Stat extends React.Component {
+class NotaContabila extends React.Component {
   constructor() {
     super();
 
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
+    this.creeazaNotaContabila = this.creeazaNotaContabila.bind(this);
     // this.download = this.download.bind(this);
 
     this.state = {
@@ -43,26 +43,21 @@ class Stat extends React.Component {
     });
   }
 
-  async creeazaStatSalarii(e) {
-    e.preventDefault();
+  async creeazaNotaContabila() {
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
-    let i = this.state.intocmitDe || '-';
 
     const created = await axios
       .get(
-        `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
+        `${server.address}/notacontabila/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
     if (created)
-      download(
-        `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
-        this.state.user.id
-      );
+      this.download(`Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`);
   }
 
   render() {
@@ -72,7 +67,7 @@ class Stat extends React.Component {
       <React.Fragment>
         <Card className="border">
           <Card.Header>
-            <Typography variant="h5">Ștat salarii</Typography>
+            <Typography variant="h5">Notă Contabilă</Typography>
           </Card.Header>
           <Card.Body>
             <Form onSubmit={this.creeazaStatSalarii}>
@@ -103,24 +98,10 @@ class Stat extends React.Component {
                     }
                   />
                 </Col>
-                <Col md={4}>
-                  <Form.Group controlId="intocmitde">
-                    <Form.Control
-                      type="text"
-                      placeholder="Intocmit de"
-                      value={this.state.intocmitDe}
-                      onChange={(e) =>
-                        this.setState({
-                          intocmitDe: e.target.value,
-                        })
-                      }
-                    />
-                  </Form.Group>
-                </Col>
               </Row>
             </Form>
-            <div className="mt-2">
-              <Button onClick={this.creeazaStatSalarii}>Stat salarii in Excel</Button>
+            <div className="mt-4">
+              <Button onClick={this.creeazaNotaContabila}>Notă contabilă in Excel</Button>
             </div>
           </Card.Body>
         </Card>
@@ -129,4 +110,4 @@ class Stat extends React.Component {
   }
 }
 
-export default Stat;
+export default NotaContabila;
