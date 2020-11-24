@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.modelmapper.ModelMapper;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
@@ -30,10 +31,6 @@ public class FacturaService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public Factura getWithFile(int id) {
-		return facturaRepository.findById(id).get();
-	}
-
 	public FacturaDTO save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		// convert from DTO to Entity
 		Factura factura = modelMapper.map(facturaDTO, Factura.class);
@@ -54,6 +51,24 @@ public class FacturaService {
 		// return sent body with correct id
 		facturaDTO.setId(factura.getId());
 		return facturaDTO;
+	}
+
+	public boolean saveWithFile(FacturaDTO facturaDTO) throws ResourceNotFoundException {
+		Factura factura = modelMapper.map(facturaDTO, Factura.class);
+
+		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
+				() -> new ResourceNotFoundException("Societate not found for this id :: " + facturaDTO.getIdsocietate()));
+		factura.setSocietate(societate);
+
+		if (facturaDTO.getIdcentrucost() != 0) {
+			CentruCost centruCost = centruCostRepository.findById(facturaDTO.getIdcentrucost()).orElseThrow(
+					() -> new ResourceNotFoundException("Centrucost not found for this id :: " + facturaDTO.getIdsocietate()));
+			factura.setCentrucost(centruCost);
+		}
+		
+		facturaRepository.save(factura);
+
+		return false;
 	}
 
 	public FacturaDTO update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {

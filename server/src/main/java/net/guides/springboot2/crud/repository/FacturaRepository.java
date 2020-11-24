@@ -10,6 +10,6 @@ import net.guides.springboot2.crud.model.Factura;
 
 @Repository
 public interface FacturaRepository extends JpaRepository<Factura, Integer> {
-	@Query(value = "SELECT f FROM Factura f WHERE f.societate.id = ?1")
-	List<Factura> findFacturiByIdsocietate(int idsocietate);
+	//@Query(value = "SELECT f FROM Factura f WHERE f.societate.id = ?1")
+	List<Factura> findBySocietate_Id(int idsocietate);
 }
