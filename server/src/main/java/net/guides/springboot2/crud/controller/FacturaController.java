@@ -51,6 +51,14 @@ public class FacturaController {
 		return ResponseEntity.ok().body(modelMapper.map(factura, FacturaDTO.class));
 	}
 
+	@GetMapping("{id}/expand")
+	public ResponseEntity<Factura> getFacturaByIdExpand(@PathVariable(value = "id") int facturaId)
+			throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(facturaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
+		return ResponseEntity.ok().body(factura);
+	}
+
 	@GetMapping("/idsoc/{ids}")
 	public List<FacturaDTO> getFacturaByIdSocietate(@PathVariable(value = "ids") int societateId) {
 		List<Factura> factura = facturaRepository.findFacturiByIdsocietate(societateId);

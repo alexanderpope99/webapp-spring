@@ -27,52 +27,69 @@ public class FacturaDTO {
 
 	private String descriereactivitati;
 
-	private Angajat aprobator;
-
 	private boolean aprobat;
 
 	private String observatii;
-
-	private CentruCost centrucost;
 
 	private LocalDate dataplatii;
 
 	private double sumaachitata;
 
+
+	//* ///////////////////
+	private Angajat aprobator;
+	private int idaprobator;
+	private CentruCost centrucost;
+	private int idcentrucost;
 	private Societate societate;
+	private int idsocietate;
 
-	public Integer getIdaprobator() {
-		if (aprobator == null)
-			return null;
-		else
-			return aprobator.getPersoana().getId();
+	public int getIdaprobator() {
+		if(aprobator == null)
+			return idaprobator;
+		return aprobator.getPersoana().getId();
+	}
+	public int getIdcentrucost() {
+		if(centrucost == null)
+			return idcentrucost;
+		return centrucost.getId();
+	}
+	public int getIdsocietate() {
+		if(societate == null)
+			return idsocietate;
+		return societate.getId();
 	}
 
-	public void setAprobator(Angajat idaprobator) {
-		this.aprobator = idaprobator;
+	public void setAprobator(Angajat aprobator) {
+		this.aprobator = aprobator;
+	}
+	public void setIdaprobator(Angajat aprobator) {
+		this.idaprobator = aprobator.getPersoana().getId();
+	}
+	public void setIdaprobator(int idaprobator) {
+		this.idaprobator = idaprobator;
 	}
 
-	public Integer getIdcentrucost() {
-		if (centrucost == null)
-			return null;
-		else
-			return centrucost.getId();
+	public void setCentrucost(CentruCost centrucost) {
+		this.centrucost = centrucost;
+	}
+	public void setIdcentrucost(CentruCost centrucost) {
+		this.idcentrucost = centrucost.getId();
+	}
+	public void setIdcentrucost(int idcentrucost) {
+		this.idcentrucost = idcentrucost;
 	}
 
-	public void setCentrucost(CentruCost idcentrucost) {
-		this.centrucost = idcentrucost;
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
 	}
-
-	public Integer getIdsocietate() {
-		if (societate == null)
-			return null;
-		else
-			return societate.getId();
+	public void setIdsocietate(Societate societate) {
+		this.idsocietate = societate.getId();
 	}
-
-	public void setSocietate(Societate idsocietate) {
-		this.societate = idsocietate;
+	public void setIdsocietate(int idsocietate) {
+		this.idsocietate = idsocietate;
 	}
+	//* ///////////////////
 
 	public String getCiffurnizor() {
 		return ciffurnizor;

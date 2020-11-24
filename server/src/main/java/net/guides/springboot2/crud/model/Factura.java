@@ -3,16 +3,14 @@ package net.guides.springboot2.crud.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -53,25 +51,29 @@ public class Factura implements Serializable {
 	@Column(name = "descriereactivitati")
 	private String descriereactivitati;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "aprobator", referencedColumnName = "idpersoana")
-	private Angajat aprobator;
-
 	@Column(name = "aprobat")
 	private boolean aprobat;
 
 	@Column(name = "observatii")
 	private String observatii;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "centrucost", referencedColumnName = "id")
-	private CentruCost centrucost;
-
 	@Column(name = "dataplatii")
 	private LocalDate dataplatii;
 
 	@Column(name = "sumaachitata")
 	private double sumaachitata;
+
+	@Lob
+	@Column(name = "fisier")
+	private byte[] fisier;
+
+	@ManyToOne
+	@JoinColumn(name = "idaprobator", referencedColumnName = "idpersoana")
+	private Angajat aprobator;
+
+	@ManyToOne
+	@JoinColumn(name = "idcentrucost", referencedColumnName = "id")
+	private CentruCost centrucost;
 
 	@JsonBackReference
 	@ManyToOne
@@ -83,9 +85,9 @@ public class Factura implements Serializable {
 	}
 
 	public Factura(String denumirefurnizor, String ciffurnizor, String nr, LocalDate data, String moneda,
-			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati,
-			Angajat aprobator, boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii,
-			double sumaachitata, Societate societate) {
+			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati, Angajat aprobator,
+			boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii, double sumaachitata,
+			Societate societate) {
 		this.denumirefurnizor = denumirefurnizor;
 		this.ciffurnizor = ciffurnizor;
 		this.nr = nr;

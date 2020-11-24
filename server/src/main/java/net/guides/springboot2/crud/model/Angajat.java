@@ -24,29 +24,30 @@ public class Angajat implements Serializable {
 	@Id
 	private int idpersoana;
 
-	// @JsonManagedReference(value = "angajat-persoana")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idpersoana", referencedColumnName = "id")
 	@MapsId
 	private Persoana persoana;
 
-	// @JsonManagedReference(value = "angajat-contract")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
 
-	// @JsonManagedReference(value = "angajat-societate")
 	@ManyToOne
 	@JoinColumn(name = "idsocietate")
 	private Societate societate;
 
-	// @JsonManagedReference(value = "angajat-angajat")
 	@ManyToOne
 	@JoinColumn(name = "idsuperior")
 	private Angajat superior;
 
-	// @OneToMany(mappedBy = "superior")
-	// private Set<Angajat> subalterni = new HashSet<Angajat>();
+	@JsonBackReference(value = "factura-aprobator")
+	@OneToMany(mappedBy = "aprobator", cascade = CascadeType.ALL)
+	private List<Factura> facturi;
+
+	@JsonBackReference(value = "angajat-angajat")
+	@OneToMany(mappedBy = "superior")
+	private List<Angajat> subalterni;
 
 	@JsonBackReference(value = "cerereconcediu-angajat")
 	@OneToMany(mappedBy = "pentru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -60,7 +61,8 @@ public class Angajat implements Serializable {
 	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Bazacalcul> bazaCalcul;
 
-	public Angajat() {}
+	public Angajat() {
+	}
 
 	public Angajat(Contract contract, Societate societate) {
 		this.contract = contract;

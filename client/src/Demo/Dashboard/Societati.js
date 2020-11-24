@@ -22,6 +22,7 @@ class Societati extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.statSalarii = this.statSalarii.bind(this);
+    this.dec112 = this.dec112.bind(this);
 
     this.state = {
       show: false,
@@ -29,6 +30,8 @@ class Societati extends React.Component {
       isEdit: false,
       show_confirm: false,
       socsel: getSocSel(),
+
+      today: new Date(),
 
       societati: {},
       id: null,
@@ -98,6 +101,13 @@ class Societati extends React.Component {
 
   async componentDidMount() {
     await this.getSocietati();
+    let today = new Date();
+    this.setState({
+      today: today,
+      luna: today.getMonth(),
+      an: today.getFullYear(),
+      user: JSON.parse(localStorage.getItem('user')),
+    });
   }
 
   async getSocietati() {
@@ -178,20 +188,38 @@ class Societati extends React.Component {
   }
 
   async statSalarii() {
-    let today = new Date();
-    let luna = today.getMonth();
-    let an = today.getFullYear();
-    let user = JSON.parse(localStorage.getItem('user'));
+    let luna = this.state.luna;
+    let an = this.state.an;
+    let user = this.state.user;
+    let socsel = this.state.socsel;
 
     const created = await axios
-      .get(`${server.address}/stat/${this.state.socsel.id}/mo=${luna + 1}&y=${an}&i=-/${user.id}`, {
+      .get(`${server.address}/stat/${socsel.id}/mo=${luna}&y=${an}&i=-/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
-    if (created)
-      download(`Stat Salarii - ${this.state.socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
+    if (created) download(`Stat Salarii - ${socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
+  }
+
+  async dec112() {
+    let luna = this.state.luna;
+    let an = this.state.an;
+    let user = this.state.user;
+    let socsel = this.state.socsel;
+
+    const created = await axios
+      .get(
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna}&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (created) download(`Declaratia 112 - ${socsel.nume} - ${months[luna]} ${an}.pdf`, user.id);
   }
 
   async onSubmit(e) {
@@ -226,12 +254,11 @@ class Societati extends React.Component {
         headers: authHeader(),
       })
       .then((res) => {
-        //alert("Societate adaugata cu succes!");
         this.setState(
           {
             show: false,
             show_confirm: true,
-            modalMessage: 'Societate adăugată cu succes!',
+            modalMessage: 'Date actualizate!',
           },
           this.getSocietati
         );
@@ -270,12 +297,21 @@ class Societati extends React.Component {
               />
               <Button
                 size="sm"
-                onClick={() => this.statSalarii()}
+                onClick={this.statSalarii}
                 style={{
                   visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
                 }}
               >
                 Stat salarii
+              </Button>
+              <Button
+                size="sm"
+                onClick={this.dec112}
+                style={{
+                  visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
+                }}
+              >
+                Dec.112
               </Button>
             </div>
           </Card.Body>
@@ -477,9 +513,8 @@ class Societati extends React.Component {
         {/* CONFIRM MODAL */}
         <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
-            <Modal.Title>Societate actualizată</Modal.Title>
+            <Modal.Title>{this.state.modalMessage}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.handleClose}>
               OK
