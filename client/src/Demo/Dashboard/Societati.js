@@ -10,7 +10,7 @@ import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
 import months from '../Resources/months';
 import authHeader from '../../services/auth-header';
-import { Edit } from 'react-feather';
+import { Edit, PlusCircle } from 'react-feather';
 
 class Societati extends React.Component {
   constructor() {
@@ -27,8 +27,8 @@ class Societati extends React.Component {
       show: false,
       modalMessage: '',
       isEdit: false,
-			show_confirm: false,
-			socsel: getSocSel(),
+      show_confirm: false,
+      socsel: getSocSel(),
 
       societati: {},
       id: null,
@@ -119,7 +119,7 @@ class Societati extends React.Component {
       // var date_societati = this.state.date_societati;
       societati_res.forEach((societate) => {
         societati[societate.nume] = { opacity: '.3', ...societate };
-			});
+      });
     }
     let selected = getSocSel();
     if (selected) this.select(selected.nume);
@@ -143,16 +143,16 @@ class Societati extends React.Component {
     // select nume_soc
     if (nume_soc) {
       societati[nume_soc].opacity = '1';
-			
+
       setSocSel({ id: societati[nume_soc].id, nume: nume_soc });
-			console.log(getSocSel());
-			
+      console.log(getSocSel());
+
       this.setState({ societati: societati, socsel: getSocSel() });
     }
   }
 
   editSocietate(societate) {
-		console.log(societate.id);
+    console.log(societate.id);
     this.setState(
       {
         show: true,
@@ -181,16 +181,17 @@ class Societati extends React.Component {
     let today = new Date();
     let luna = today.getMonth();
     let an = today.getFullYear();
-		let user = JSON.parse(localStorage.getItem('user'));
+    let user = JSON.parse(localStorage.getItem('user'));
 
     const created = await axios
-      .get(`${server.address}/stat/${this.state.socsel.id}/mo=${luna+1}&y=${an}&i=-/${user.id}`, {
+      .get(`${server.address}/stat/${this.state.socsel.id}/mo=${luna + 1}&y=${an}&i=-/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
-    if (created) download(`Stat Salarii - ${this.state.socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
+    if (created)
+      download(`Stat Salarii - ${this.state.socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
   }
 
   async onSubmit(e) {
@@ -281,6 +282,22 @@ class Societati extends React.Component {
         </Card>
       </Col>
     ));
+
+    const addSocietateComponent = (
+      <Col md={6} xl={4}>
+        <Card
+          style={{
+            opacity: 0.4,
+            cursor: 'pointer',
+          }}
+          onClick={() => (window.location.href = '/forms/add-societate')}
+        >
+          <Card.Body className="mt-2 d-flex justify-content-center align-items-center">
+            <PlusCircle style={{ width: '80px', height: '80px' }} />
+          </Card.Body>
+        </Card>
+      </Col>
+    );
 
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
@@ -470,8 +487,10 @@ class Societati extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        <Button href="/forms/add-societate">Adaugă societate</Button>
-        <Row>{societatiComponent}</Row>
+        <Row>
+          {societatiComponent}
+          {addSocietateComponent}
+        </Row>
       </Aux>
     );
   }
