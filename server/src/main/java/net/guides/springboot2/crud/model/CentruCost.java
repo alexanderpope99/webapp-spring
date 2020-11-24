@@ -33,8 +33,7 @@ public class CentruCost implements Serializable {
 	@JoinColumn(name = "idadresa", referencedColumnName = "id")
 	private Adresa adresa;
 
-
-
+	@JsonBackReference(value = "societate-centrucost")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsocietate", referencedColumnName = "id")
 	private Societate societate;

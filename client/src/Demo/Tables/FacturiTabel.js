@@ -93,7 +93,6 @@ class FacturiTabel extends React.Component {
       sumaachitata: this.state.sumaachitata || null,
       idsocietate: this.state.socsel.id,
     };
-    console.log(factura_body);
     let ok = await axios
       .post(`${server.address}/factura`, factura_body, { headers: authHeader() })
       .then((res) => res.status === 200)
@@ -121,10 +120,10 @@ class FacturiTabel extends React.Component {
       termenscadenta: this.state.termenscadenta || null,
       tipachizitie: this.state.tipachizitie || null,
       descriereactivitati: this.state.descriereactivitati || null,
-      idaprobator: this.state.idaprobator || null,
+      idaprobator: null,
       aprobat: this.state.aprobat || null,
       observatii: this.state.observatii || null,
-      centrucost: this.state.centrucost || null,
+      idcentrucost: this.state.idcentrucost || null,
       dataplatii: this.state.dataplatii || null,
       sumaachitata: this.state.sumaachitata || null,
       idsocietate: this.state.socsel.id,
@@ -165,10 +164,10 @@ class FacturiTabel extends React.Component {
       idaprobator: fact.idaprobator,
       aprobat: fact.aprobat,
       observatii: fact.observatii,
+      centrucost: fact.centrucost === null ? '-' : fact.centrucost,
       idcentrucost: fact.idcentrucost,
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
-      centrucost: fact.centrucost,
     });
   }
 
@@ -197,10 +196,14 @@ class FacturiTabel extends React.Component {
               <th>{fact.termenscadenta}</th>
               <th>{fact.tipachizitie}</th>
               <th>{fact.descriereactivitati}</th>
-              <th>{fact.idaprobator}</th>
+              <th>
+                {fact.aprobator === null
+                  ? '-'
+                  : fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume}
+              </th>
               <th>{fact.aprobat}</th>
               <th>{fact.observatii}</th>
-              <th>{fact.centrucost}</th>
+              <th>{fact.centrucost === null ? '-' : fact.centrucost.nume}</th>
               <th>{fact.dataplatii}</th>
               <th>{fact.sumaachitata}</th>
               <th>
@@ -363,7 +366,7 @@ class FacturiTabel extends React.Component {
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose} size="lg">
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Adaugă Factură</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addFactura}>
@@ -456,7 +459,7 @@ class FacturiTabel extends React.Component {
                   <Form.Label>Centru Cost</Form.Label>
                   <Form.Control
                     as="select"
-                    value={this.state.centrucost}
+                    value={this.state.centrucost.nume}
                     onChange={this.onChangeCentruCost}
                   >
                     <option>-</option>
@@ -560,7 +563,7 @@ class FacturiTabel extends React.Component {
                       <th>Termen Scadență</th>
                       <th>Tip Achiziție</th>
                       <th>Descriere Activități</th>
-                      <th>Id Aprobator</th>
+                      <th>Aprobator</th>
                       <th>Aprobat</th>
                       <th>Observații</th>
                       <th>Centru Cost</th>
