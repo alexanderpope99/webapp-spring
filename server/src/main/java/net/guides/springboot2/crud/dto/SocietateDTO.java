@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.ContBancar;
 
 public class SocietateDTO {
 
@@ -26,6 +27,8 @@ public class SocietateDTO {
 	private String telefon;
 
 	private String fax;
+
+	private List<ContBancar> contbancar;
 
 	private Integer nrangajati;
 
@@ -119,5 +122,12 @@ public class SocietateDTO {
 
 	public void setNrangajati(List<Angajat> angajati) {
 		this.nrangajati = angajati.size();
+	}
+
+	public void setContbancar(List<ContBancar> contbancar) {
+		this.contbancar = contbancar;
+	}
+	public List<ContBancar> getContbancar() {
+		return contbancar;
 	}
 }

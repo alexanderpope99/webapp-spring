@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -29,9 +30,13 @@ public class ContBancar implements Serializable {
 	@Column(name = "numebanca")
 	private String numebanca;
 
-	@JsonBackReference
+	@JsonBackReference(value = "contract-contbancar")
 	@OneToOne(mappedBy = "contbancar", fetch = FetchType.LAZY)
 	private Contract contract;
+
+	@JsonBackReference(value = "societate-contbancar")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Societate societate;
 
 	public ContBancar() {}
 

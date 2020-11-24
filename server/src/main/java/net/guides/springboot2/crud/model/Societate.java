@@ -53,9 +53,16 @@ public class Societate implements Serializable {
 	@Column(name = "fax")
 	private String fax;
 
+	@OneToMany(mappedBy = "societate")
+	private List<ContBancar> contbancar;
+
 	@JsonBackReference(value = "angajat-societate")
 	@OneToMany(mappedBy = "societate")
 	private List<Angajat> angajat;
+
+	@JsonBackReference(value = "factura-societate")
+	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
+	private List<Factura> facturi;
 
 	public Societate() {
 	}
@@ -114,6 +121,10 @@ public class Societate implements Serializable {
 		return telefon;
 	}
 
+	public List<ContBancar> getContbancar() {
+		return contbancar;
+	}
+
 	public List<Angajat> getAngajat() {
 		return angajat;
 	}
@@ -161,5 +172,9 @@ public class Societate implements Serializable {
 
 	public void setFax(String fax) {
 		this.fax = fax;
+	}
+
+	public void setContbancar(List<ContBancar> contbancar) {
+		this.contbancar = contbancar;
 	}
 }

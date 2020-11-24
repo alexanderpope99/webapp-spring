@@ -254,12 +254,11 @@ class Societati extends React.Component {
         headers: authHeader(),
       })
       .then((res) => {
-        //alert("Societate adaugata cu succes!");
         this.setState(
           {
             show: false,
             show_confirm: true,
-            modalMessage: 'Societate adăugată cu succes!',
+            modalMessage: 'Date actualizate!',
           },
           this.getSocietati
         );
@@ -498,9 +497,8 @@ class Societati extends React.Component {
         {/* CONFIRM MODAL */}
         <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
-            <Modal.Title>Societate actualizată</Modal.Title>
+            <Modal.Title>{this.state.modalMessage}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.handleClose}>
               OK

@@ -91,7 +91,7 @@ class FacturiTabel extends React.Component {
       sumaachitata: this.state.sumaachitata || null,
       idsocietate: this.state.socsel.id,
     };
-
+		console.log(factura_body);
     let ok = await axios
       .post(`${server.address}/factura`, factura_body, { headers: authHeader() })
       .then((res) => res.status === 200)
@@ -561,3 +561,4 @@ class FacturiTabel extends React.Component {
 }
 
 export default FacturiTabel;
+
