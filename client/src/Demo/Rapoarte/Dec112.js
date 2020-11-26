@@ -162,7 +162,7 @@ class Dec112 extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume} - Declarația 112</Typography>
+          <Typography variant="h5">Declarația 112</Typography>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaDec112}>

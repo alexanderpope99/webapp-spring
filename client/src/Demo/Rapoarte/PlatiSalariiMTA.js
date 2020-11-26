@@ -95,7 +95,7 @@ class PlatiSalariiMTA extends React.Component {
     return (
       <Card>
         <Card.Header>
-          <Typography variant="h5">{this.state.socsel.nume} - Plăți Salarii MTA</Typography>
+          <Typography variant="h5">Plăți Salarii MTA</Typography>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaMTA}>

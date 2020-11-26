@@ -147,48 +147,55 @@ var items = [
         url: '/tables/cereri-concediu',
         icon: 'feather icon-briefcase',
       },
-    ],
-  },
-  {
-    id: 'rapoarte',
-    title: 'Rapoarte',
-    type: 'group',
-    icon: 'icon-group',
-    show:
-      user.roles.includes('ROLE_USER') ||
-      user.roles.includes('ROLE_ADMIN') ||
-      user.roles.includes('ROLE_DIRECTOR'),
-    children: [
       {
-        id: 'stat',
-        title: 'Ștate salarii',
+        id: 'rapoarte',
+        title: 'Rapoarte',
         type: 'item',
-        url: '/state-salarii',
+        url: '/rapoarte',
         icon: 'feather icon-file-text',
       },
-      {
-        id: 'pontaj',
-        title: 'Foi pontaj',
-        type: 'item',
-        url: '/pontaj',
-        icon: 'feather icon-grid',
-      },
-      {
-        id: 'dec112',
-        title: 'Declarația 112',
-        type: 'item',
-        url: '/dec112',
-        icon: 'feather icon-grid',
-      },
-      {
-        id: 'mta',
-        title: 'Plăți Salarii MTA',
-        type: 'item',
-        url: '/mta',
-        icon: 'feather icon-grid',
-      },
     ],
   },
+  //   {
+  //     id: 'rapoarte',
+  //     title: 'Rapoarte',
+  //     type: 'group',
+  //     icon: 'icon-group',
+  //     show:
+  //       user.roles.includes('ROLE_USER') ||
+  //       user.roles.includes('ROLE_ADMIN') ||
+  //       user.roles.includes('ROLE_DIRECTOR'),
+  //     children: [
+  //       {
+  //         id: 'stat',
+  //         title: 'Ștate salarii',
+  //         type: 'item',
+  //         url: '/state-salarii',
+  //         icon: 'feather icon-file-text',
+  //       },
+  //       {
+  //         id: 'pontaj',
+  //         title: 'Foi pontaj',
+  //         type: 'item',
+  //         url: '/pontaj',
+  //         icon: 'feather icon-grid',
+  //       },
+  //       {
+  //         id: 'dec112',
+  //         title: 'Declarația 112',
+  //         type: 'item',
+  //         url: '/dec112',
+  //         icon: 'feather icon-grid',
+  //       },
+  //       {
+  //         id: 'mta',
+  //         title: 'Plăți Salarii MTA',
+  //         type: 'item',
+  //         url: '/mta',
+  //         icon: 'feather icon-grid',
+  //       },
+  //     ],
+  //   },
   {
     id: 'facturi',
     title: 'Facturi',
