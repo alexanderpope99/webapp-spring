@@ -87,13 +87,13 @@ class FacturiTabel extends React.Component {
       ciffurnizor: this.state.ciffurnizor || null,
       nr: this.state.nr || null,
       data: this.state.data || null,
-      moneda: this.state.moneda || null,
+      moneda: this.state.moneda || 'RON',
       sumafaratva: this.state.sumafaratva || null,
       termenscadenta: this.state.termenscadenta || null,
       tipachizitie: this.state.tipachizitie || null,
       descriereactivitati: this.state.descriereactivitati || null,
       idaprobator: null,
-      aprobat: this.state.aprobat || null,
+      aprobat: this.state.aprobat || false,
       observatii: this.state.observatii || null,
       idcentrucost: this.state.idcentrucost || null,
       dataplatii: this.state.dataplatii || null,
@@ -183,31 +183,34 @@ class FacturiTabel extends React.Component {
 
   async editFactura(fact) {
     console.log(fact);
-    this.setState({
-      isEdit: true,
-      show: true,
+    this.setState(
+      {
+        isEdit: true,
+        show: true,
 
-      id: fact.id,
-      denumirefurnizor: fact.denumirefurnizor,
-      ciffurnizor: fact.ciffurnizor,
-      nr: fact.nr,
-      data: fact.data ? fact.data.substring(0, 10) : '',
-      moneda: fact.moneda,
-      sumafaratva: fact.sumafaratva,
-      termenscadenta: fact.termenscadenta,
-      tipachizitie: fact.tipachizitie,
-      descriereactivitati: fact.descriereactivitati,
-      idaprobator: fact.idaprobator,
-      aprobat: fact.aprobat,
-      observatii: fact.observatii,
-      centrucost: fact.centrucost ? fact.centrucost : '-',
-      idcentrucost: fact.centrucost ? fact.centrucost.id : null,
-      dataplatii: fact.dataplatii,
-      sumaachitata: fact.sumaachitata,
+        id: fact.id,
+        denumirefurnizor: fact.denumirefurnizor,
+        ciffurnizor: fact.ciffurnizor,
+        nr: fact.nr,
+        data: fact.data ? fact.data.substring(0, 10) : '',
+        moneda: fact.moneda,
+        sumafaratva: fact.sumafaratva,
+        termenscadenta: fact.termenscadenta,
+        tipachizitie: fact.tipachizitie,
+        descriereactivitati: fact.descriereactivitati,
+        idaprobator: fact.idaprobator,
+        aprobat: fact.aprobat,
+        observatii: fact.observatii,
+        centrucost: fact.centrucost ? fact.centrucost : '-',
+        idcentrucost: fact.centrucost ? fact.centrucost.id : null,
+        dataplatii: fact.dataplatii,
+        sumaachitata: fact.sumaachitata,
 
-      fisier: fact.size,
-      numefisier: fact.numefisier,
-    });
+        fisier: { name: fact.numefisier, size: fact.dimensiunefisier },
+        numefisier: fact.numefisier,
+      },
+      () => console.log(this.state)
+    );
   }
 
   async deleteFactura(id) {
@@ -411,18 +414,21 @@ class FacturiTabel extends React.Component {
         </option>
       ));
 
-    const handleChangeStatus = ({ meta }, status) => {
+    const handleChangeStatus = ({ file }, status) => {
       if (status === 'done') {
-        console.log(status, meta);
-        this.setState({ fisier: meta });
+        console.log(status, file);
+        this.setState({ fisier: file });
       }
     };
+
+    // const getUploadParams = ({file, meta}) => {
+    // 	this.setState({fisier: file});
+    // }
 
     // const handleSubmit = (files, allFiles) => {
     // 	console.log(files[0].meta);
     // 	allFiles.forEach(f => f.remove());
     // }
-
     return (
       <Aux>
         {/* add/edit modal */}
@@ -433,7 +439,7 @@ class FacturiTabel extends React.Component {
           <Modal.Body>
             <Form onSubmit={this.addFactura}>
               <Row>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="6" controlId="denumirefurnizor">
                   <Form.Label>Denumire Furnizor</Form.Label>
                   <Form.Control
                     type="text"
@@ -547,11 +553,29 @@ class FacturiTabel extends React.Component {
                 {/* file upload below */}
                 <Form.Group as={Col} md="12">
                   <Form.Label>Factura</Form.Label>
-                  <Dropzone
-                    onChangeStatus={handleChangeStatus}
-                    // onSubmit={handleSubmit}
-                    maxFiles={1}
-                  />
+                  {this.state.numefisier ? (
+                    <div>
+                      <Button
+                        variant="dark"
+                        onClick={() => downloadFactura(this.state.numefisier, this.state.id)}
+                      >
+                        {this.state.numefisier}
+                      </Button>
+                      <Button
+                        variant="link"
+                        onClick={() => this.setState({ fisier: undefined, numefisier: undefined })}
+                      >
+                        Șterge
+                      </Button>
+                    </div>
+                  ) : (
+                    <Dropzone
+                      onChangeStatus={handleChangeStatus}
+                      // getUploadParams={getUploadParams}
+                      // onSubmit={handleSubmit}
+                      maxFiles={1}
+                    />
+                  )}
                 </Form.Group>
               </Row>
             </Form>

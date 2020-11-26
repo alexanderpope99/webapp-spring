@@ -88,7 +88,7 @@ public class FacturaController {
 	}
 
 	@PostMapping("/file")
-	public boolean saveWithFile(@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
+	public Factura saveWithFile(@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		return facturaService.saveWithFile(facturaDTO);
 	}
 
