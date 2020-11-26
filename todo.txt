@@ -6,7 +6,6 @@ buton de 'show password' la schimba prola
 
 UPGRADES: 
 	sarbatori in foaie pontaj
-	Facturi - dropzone for file upload
 
 	cont bancar la societate
 	cont bancar pill in angajat (dupa pers. intr.)

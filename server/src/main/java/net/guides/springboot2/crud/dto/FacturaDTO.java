@@ -104,8 +104,7 @@ public class FacturaDTO {
 	// * ///////////////////
 
 	public void setFisier(MultipartFile fisier) {
-		if(fisier != null)
-			this.fisier = fisier;
+		this.fisier = fisier;
 	}
 
 	public byte[] getFisier() throws IOException {
@@ -121,7 +120,7 @@ public class FacturaDTO {
 		else return null;
 	}
 
-	public long getMarimefisier() {
+	public long getDimensiunefisier() {
 		if(fisier != null)
 			return fisier.getSize();
 		else return 0;

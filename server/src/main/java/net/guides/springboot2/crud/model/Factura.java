@@ -66,6 +66,9 @@ public class Factura implements Serializable {
 
 	@Column(name = "numefisier")
 	private String numefisier;
+
+	@Column(name = "dimensiune")
+	private Long dimensiunefisier;
 	
 	@JsonIgnore
 	@Lob
@@ -253,6 +256,7 @@ public class Factura implements Serializable {
 	public String getNumefisier() {
 		return numefisier;
 	}
+	
 	public void setFisier(byte[] fisier) {
 		this.fisier = fisier;
 	}
@@ -260,4 +264,10 @@ public class Factura implements Serializable {
 		this.numefisier = numefisier;
 	}
 
+	public Long getDimensiunefisier() {
+		return dimensiunefisier;
+	}
+	public void setDimensiunefisier(Long dimensiunefisier) {
+		this.dimensiunefisier = dimensiunefisier;
+	}
 }

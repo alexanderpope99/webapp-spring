@@ -15,7 +15,7 @@ import { getSocSel } from '../Resources/socsel';
 import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import 'react-dropzone-uploader/dist/styles.css'
+import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
 class FacturiTabel extends React.Component {
@@ -87,13 +87,13 @@ class FacturiTabel extends React.Component {
       ciffurnizor: this.state.ciffurnizor || null,
       nr: this.state.nr || null,
       data: this.state.data || null,
-      moneda: this.state.moneda || null,
+      moneda: this.state.moneda || 'RON',
       sumafaratva: this.state.sumafaratva || null,
       termenscadenta: this.state.termenscadenta || null,
       tipachizitie: this.state.tipachizitie || null,
       descriereactivitati: this.state.descriereactivitati || null,
       idaprobator: null,
-      aprobat: this.state.aprobat || null,
+      aprobat: this.state.aprobat || false,
       observatii: this.state.observatii || null,
       idcentrucost: this.state.idcentrucost || null,
       dataplatii: this.state.dataplatii || null,
@@ -111,7 +111,7 @@ class FacturiTabel extends React.Component {
 
     let ok = await axios
       .post(
-        `${server.address}/factura/${this.state.fisier ? 'fisier' : ''}`,
+        `${server.address}/factura/${this.state.fisier ? 'file' : ''}`,
         this.state.fisier ? formData : factura_body,
         { headers: authHeader() }
       )
@@ -204,16 +204,15 @@ class FacturiTabel extends React.Component {
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
 
-      fisier: fact.size,
-      numefisier: fact.numefisier,
-    });
+			fisier: {name: fact.numefisier, size: fact.dimensiunefisier},
+			numefisier: fact.numefisier,
+    }, () => console.log(this.state));
   }
 
   async deleteFactura(id) {
     await axios
       .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
       .then((response) => response.data)
-      .then(this.onRefresh)
       .catch((err) => console.error(err));
   }
 
@@ -409,20 +408,23 @@ class FacturiTabel extends React.Component {
         <option key={index} data-key={cod.id}>
           {cod.nume}
         </option>
-			));
+      ));
 
-		const handleChangeStatus = ({ meta }, status) => {
-			if(status === 'done') {
-				console.log(status, meta);
-				this.setState({fisier: meta});
-			}
-		}
-	
-		// const handleSubmit = (files, allFiles) => {
-		// 	console.log(files[0].meta);
-		// 	allFiles.forEach(f => f.remove());
-		// }
+    const handleChangeStatus = ({ file }, status) => {
+      if (status === 'done') {
+        console.log(status, file);
+        this.setState({ fisier: file });
+      }
+    };
 
+    // const getUploadParams = ({file, meta}) => {
+    // 	this.setState({fisier: file});
+    // }
+
+    // const handleSubmit = (files, allFiles) => {
+    // 	console.log(files[0].meta);
+    // 	allFiles.forEach(f => f.remove());
+    // }
     return (
       <Aux>
         {/* add/edit modal */}
@@ -433,7 +435,7 @@ class FacturiTabel extends React.Component {
           <Modal.Body>
             <Form onSubmit={this.addFactura}>
               <Row>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="6" controlId="denumirefurnizor">
                   <Form.Label>Denumire Furnizor</Form.Label>
                   <Form.Control
                     type="text"
@@ -547,24 +549,20 @@ class FacturiTabel extends React.Component {
                 {/* file upload below */}
                 <Form.Group as={Col} md="12">
                   <Form.Label>Factura</Form.Label>
-									<Dropzone
-										onChangeStatus={handleChangeStatus}
-										// onSubmit={handleSubmit}
-										maxFiles={1}
-									/>
-									{/* <div className="border d-flex justify-content-md-center align-middle">
-									<Dropzone 
-									onDrop={(acceptedFiles) => this.setState({fisier: acceptedFiles[0]})}>
-                    {({ getRootProps, getInputProps }) => (
-                      <section>
-                        <div {...getRootProps()}>
-                          <input {...getInputProps()} />
-                          <p>{label}</p>
-                        </div>
-                      </section>
-                    )}
-                  </Dropzone>
-									</div> */}
+									{this.state.numefisier ? 
+									<div>
+										<Button variant="dark" onClick={() => downloadFactura(this.state.numefisier, this.state.id)}>
+											{this.state.numefisier}
+										</Button>
+										<Button variant="link" onClick={() => this.setState({fisier: undefined, numefisier: undefined})}>Șterge</Button>
+									</div>
+                  : <Dropzone
+                    onChangeStatus={handleChangeStatus}
+                    // getUploadParams={getUploadParams}
+                    // onSubmit={handleSubmit}
+                    maxFiles={1}
+                  />
+									}
                 </Form.Group>
               </Row>
             </Form>

@@ -52,7 +52,7 @@ public class FacturaService {
 		return facturaDTO;
 	}
 
-	public boolean saveWithFile(FacturaDTO facturaDTO) throws ResourceNotFoundException {
+	public Factura saveWithFile(FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		Factura factura = modelMapper.map(facturaDTO, Factura.class);
 
 		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
@@ -65,9 +65,7 @@ public class FacturaService {
 			factura.setCentrucost(centruCost);
 		}
 		
-		facturaRepository.save(factura);
-
-		return false;
+		return facturaRepository.save(factura);
 	}
 
 	public FacturaDTO update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {

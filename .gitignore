@@ -4,3 +4,4 @@ server/target
 server/pom.xml
 src/main/java/net/guides/springboot2/crud/downloads/
 server/src/main/java/net/guides/springboot2/crud/downloads/
+client.rar
