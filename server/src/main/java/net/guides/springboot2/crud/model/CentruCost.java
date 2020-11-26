@@ -1,7 +1,6 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
-// import java.util.Set;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-// import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -42,7 +40,7 @@ public class CentruCost implements Serializable {
 	private String nume;
 
 	@JsonBackReference(value = "factura-centrucost")
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Factura> facturi;
 
 	public CentruCost() {

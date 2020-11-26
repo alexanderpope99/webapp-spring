@@ -80,7 +80,7 @@ function atable() {
 }
 
 class BazaCalcul extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.fillTable = this.fillTable.bind(this);
@@ -225,6 +225,7 @@ class BazaCalcul extends React.Component {
   // function to create react component with fetched data
   renderBazaCalcul() {
     this.setState({
+      // eslint-disable-next-line array-callback-return
       bazacalculComponent: this.state.bazacalcul.map((bc, index) => {
         // eslint-disable-next-line eqeqeq
         if (bc.an == this.state.an_sel || this.state.an_sel === '-')

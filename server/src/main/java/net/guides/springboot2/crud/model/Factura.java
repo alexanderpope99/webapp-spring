@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "factura")
@@ -63,6 +64,10 @@ public class Factura implements Serializable {
 	@Column(name = "sumaachitata")
 	private double sumaachitata;
 
+	@Column(name = "numefisier")
+	private String numefisier;
+	
+	@JsonIgnore
 	@Lob
 	@Column(name = "fisier")
 	private byte[] fisier;
@@ -240,6 +245,19 @@ public class Factura implements Serializable {
 
 	public void setSocietate(Societate societate) {
 		this.societate = societate;
+	}
+
+	public byte[] getFisier() {
+		return fisier;
+	}
+	public String getNumefisier() {
+		return numefisier;
+	}
+	public void setFisier(byte[] fisier) {
+		this.fisier = fisier;
+	}
+	public void setNumefisier(String numefisier) {
+		this.numefisier = numefisier;
 	}
 
 }

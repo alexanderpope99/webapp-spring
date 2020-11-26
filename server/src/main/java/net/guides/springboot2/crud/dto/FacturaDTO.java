@@ -1,6 +1,9 @@
 package net.guides.springboot2.crud.dto;
 
+import java.io.IOException;
 import java.time.LocalDate;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.CentruCost;
@@ -35,8 +38,9 @@ public class FacturaDTO {
 
 	private double sumaachitata;
 
+	private MultipartFile fisier;
 
-	//* ///////////////////
+	// * ///////////////////
 	private Angajat aprobator;
 	private int idaprobator;
 	private CentruCost centrucost;
@@ -45,17 +49,19 @@ public class FacturaDTO {
 	private int idsocietate;
 
 	public int getIdaprobator() {
-		if(aprobator == null)
+		if (aprobator == null)
 			return idaprobator;
 		return aprobator.getPersoana().getId();
 	}
+
 	public int getIdcentrucost() {
-		if(centrucost == null)
+		if (centrucost == null)
 			return idcentrucost;
 		return centrucost.getId();
 	}
+
 	public int getIdsocietate() {
-		if(societate == null)
+		if (societate == null)
 			return idsocietate;
 		return societate.getId();
 	}
@@ -63,9 +69,11 @@ public class FacturaDTO {
 	public void setAprobator(Angajat aprobator) {
 		this.aprobator = aprobator;
 	}
+
 	public void setIdaprobator(Angajat aprobator) {
 		this.idaprobator = aprobator.getPersoana().getId();
 	}
+
 	public void setIdaprobator(int idaprobator) {
 		this.idaprobator = idaprobator;
 	}
@@ -73,9 +81,11 @@ public class FacturaDTO {
 	public void setCentrucost(CentruCost centrucost) {
 		this.centrucost = centrucost;
 	}
+
 	public void setIdcentrucost(CentruCost centrucost) {
 		this.idcentrucost = centrucost.getId();
 	}
+
 	public void setIdcentrucost(int idcentrucost) {
 		this.idcentrucost = idcentrucost;
 	}
@@ -83,13 +93,40 @@ public class FacturaDTO {
 	public void setSocietate(Societate societate) {
 		this.societate = societate;
 	}
+
 	public void setIdsocietate(Societate societate) {
 		this.idsocietate = societate.getId();
 	}
+
 	public void setIdsocietate(int idsocietate) {
 		this.idsocietate = idsocietate;
 	}
-	//* ///////////////////
+	// * ///////////////////
+
+	public void setFisier(MultipartFile fisier) {
+		if(fisier != null)
+			this.fisier = fisier;
+	}
+
+	public byte[] getFisier() throws IOException {
+		if(fisier != null)
+			return fisier.getBytes();
+		//	returns empty array instead of null
+		else return new byte[0];
+	}
+	
+	public String getNumefisier() {
+		if(fisier != null)
+			return fisier.getOriginalFilename();
+		else return null;
+	}
+
+	public long getMarimefisier() {
+		if(fisier != null)
+			return fisier.getSize();
+		else return 0;
+	}
+	// * ///////////////////
 
 	public String getCiffurnizor() {
 		return ciffurnizor;

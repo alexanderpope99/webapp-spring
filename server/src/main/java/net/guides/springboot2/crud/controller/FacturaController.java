@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,6 +46,11 @@ public class FacturaController {
 				.map(c -> modelMapper.map(c, FacturaDTO.class)).collect(Collectors.toList());
 	}
 
+	@GetMapping("/expand")
+	public List<Factura> getAllFacturiExpand() {
+		return facturaRepository.findAll(Sort.by(Sort.Direction.DESC, "data"));
+	}
+
 	@GetMapping("{id}")
 	public ResponseEntity<FacturaDTO> getFacturaById(@PathVariable(value = "id") int facturaId)
 			throws ResourceNotFoundException {
@@ -59,11 +67,19 @@ public class FacturaController {
 		return ResponseEntity.ok().body(factura);
 	}
 
+	@Transactional
 	@GetMapping("/idsoc/{ids}")
 	public List<Factura> getFacturaByIdSocietate(@PathVariable(value = "ids") int societateId) {
-		List<Factura> facturi = facturaRepository.findFacturiByIdsocietate(societateId);
-		return facturi;
+		return facturaRepository.findBySocietate_Id(societateId);
+	}
 
+	@GetMapping("file/{id}")
+	public ResponseEntity<byte[]> getFile(@PathVariable("id") int id) throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + id));
+		
+				return ResponseEntity.ok()
+        .header("Content-Disposition", "attachment; filename=\"" + factura.getNumefisier() + "\"").body(factura.getFisier());
 	}
 
 	@PostMapping
@@ -71,14 +87,19 @@ public class FacturaController {
 		return facturaService.save(factura);
 	}
 
+	@PostMapping("/file")
+	public boolean saveWithFile(@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
+		return facturaService.saveWithFile(facturaDTO);
+	}
+
 	@PutMapping("{id}")
-	public ResponseEntity<FacturaDTO> updateFactura(@PathVariable(value = "id") int facturaId,
-			@RequestBody FacturaDTO facturaDTO) throws ResourceNotFoundException {
+	public ResponseEntity<FacturaDTO> updateFactura(@PathVariable("id") int facturaId,
+			@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		return ResponseEntity.ok(facturaService.update(facturaId, facturaDTO));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteFactura(@PathVariable(value = "id") int facturaId)
+	public Map<String, Boolean> deleteFactura(@PathVariable("id") int facturaId)
 			throws ResourceNotFoundException {
 		Factura factura = facturaRepository.findById(facturaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));

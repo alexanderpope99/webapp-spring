@@ -12,11 +12,14 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
+import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import 'react-dropzone-uploader/dist/styles.css'
+import Dropzone from 'react-dropzone-uploader';
 
 class FacturiTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
@@ -62,6 +65,9 @@ class FacturiTabel extends React.Component {
       show: false,
 
       idcentrucost: null,
+
+      fisier: null,
+      numefisier: '',
     };
   }
 
@@ -73,6 +79,9 @@ class FacturiTabel extends React.Component {
   }
 
   async addFactura() {
+    const formData = new FormData();
+    if (this.state.fisier) formData.append('fisier', this.state.fisier);
+
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
       ciffurnizor: this.state.ciffurnizor || null,
@@ -91,9 +100,22 @@ class FacturiTabel extends React.Component {
       sumaachitata: this.state.sumaachitata || null,
       idsocietate: this.state.socsel.id,
     };
+
+    for (let key in factura_body) {
+      if (factura_body[key]) formData.append(key, factura_body[key]);
+    }
+
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ', ' + pair[1]);
+    // }
+
     let ok = await axios
-      .post(`${server.address}/factura`, factura_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
+      .post(
+        `${server.address}/factura/${this.state.fisier ? 'fisier' : ''}`,
+        this.state.fisier ? formData : factura_body,
+        { headers: authHeader() }
+      )
+      .then((res) => res.data)
       .catch((err) => console.error(err));
     if (ok) {
       await this.handleClose();
@@ -108,6 +130,11 @@ class FacturiTabel extends React.Component {
   }
 
   async updateFactura(idfactura) {
+    const formData = new FormData();
+    if (this.state.fisier) {
+      formData.append('fisier', this.state.fisier);
+    }
+
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
       ciffurnizor: this.state.ciffurnizor || null,
@@ -127,20 +154,30 @@ class FacturiTabel extends React.Component {
       idsocietate: this.state.socsel.id,
     };
 
+    for (let key in factura_body) {
+      if (factura_body[key]) formData.append(key, factura_body[key]);
+    }
+
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ', ' + pair[1]);
+    // }
+
     const ok = await axios
-      .put(`${server.address}/factura/${idfactura}`, factura_body, {
+      .put(`${server.address}/factura/${idfactura}`, formData, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
     if (ok) {
-      this.onRefresh();
       await this.handleClose();
-      this.setState({
-        showConfirm: true,
-        modalMessage: 'Factură actualizată',
-      });
+      this.setState(
+        {
+          showConfirm: true,
+          modalMessage: 'Factură actualizată',
+        },
+        this.onRefresh
+      );
     }
   }
 
@@ -162,10 +199,13 @@ class FacturiTabel extends React.Component {
       idaprobator: fact.idaprobator,
       aprobat: fact.aprobat,
       observatii: fact.observatii,
-      centrucost: fact.centrucost === null ? '-' : fact.centrucost,
-      idcentrucost: fact.idcentrucost,
+      centrucost: fact.centrucost ? fact.centrucost : '-',
+      idcentrucost: fact.centrucost ? fact.centrucost.id : null,
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
+
+      fisier: fact.size,
+      numefisier: fact.numefisier,
     });
   }
 
@@ -185,27 +225,8 @@ class FacturiTabel extends React.Component {
           return (
             // TODO
             <tr key={fact.id}>
-              <th>{fact.denumirefurnizor}</th>
-              <th>{fact.ciffurnizor}</th>
-              <th>{fact.nr}</th>
-              <th>{fact.data}</th>
-              <th>{fact.moneda}</th>
-              <th>{fact.sumafaratva}</th>
-              <th>{fact.termenscadenta}</th>
-              <th>{fact.tipachizitie}</th>
-              <th>{fact.descriereactivitati}</th>
               <th>
-                {fact.aprobator === null
-                  ? '-'
-                  : fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume}
-              </th>
-              <th>{fact.aprobat}</th>
-              <th>{fact.observatii}</th>
-              <th>{fact.centrucost === null ? '-' : fact.centrucost.nume}</th>
-              <th>{fact.dataplatii}</th>
-              <th>{fact.sumaachitata}</th>
-              <th>
-                <Row>
+                <div className="d-flex">
                   <Button
                     onClick={() => this.editFactura(fact)}
                     variant="outline-secondary"
@@ -265,7 +286,36 @@ class FacturiTabel extends React.Component {
                       </div>
                     )}
                   </PopupState>
-                </Row>
+                </div>
+              </th>
+
+              <th>{fact.denumirefurnizor}</th>
+              <th>{fact.ciffurnizor}</th>
+              <th>{fact.nr}</th>
+              <th>{fact.data}</th>
+              <th>{fact.moneda}</th>
+              <th>{fact.sumafaratva}</th>
+              <th>{fact.termenscadenta}</th>
+              <th>{fact.tipachizitie}</th>
+              <th>{fact.descriereactivitati}</th>
+              <th>
+                {fact.aprobator
+                  ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+                  : '-'}
+              </th>
+              <th>{fact.aprobat}</th>
+              <th>{fact.observatii}</th>
+              <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
+              <th>{fact.dataplatii}</th>
+              <th>{fact.sumaachitata}</th>
+              <th>
+                {fact.numefisier ? (
+                  <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>
+                    {fact.numefisier}
+                  </Button>
+                ) : (
+                  'Niciun fisier âncarcat'
+                )}
               </th>
             </tr>
           );
@@ -340,6 +390,8 @@ class FacturiTabel extends React.Component {
       dataplatii: '',
       sumaachitata: '',
       idsocietate: '',
+      fisier: null,
+      numefisier: null,
     });
   }
 
@@ -352,13 +404,25 @@ class FacturiTabel extends React.Component {
 
   render() {
     var centreCost = [];
-    if (this.state.centreCostComponent.length === 0) centreCost = [];
-    else
+    if (this.state.centreCostComponent.length > 0)
       centreCost = this.state.centreCostComponent.map((cod, index) => (
         <option key={index} data-key={cod.id}>
           {cod.nume}
         </option>
-      ));
+			));
+
+		const handleChangeStatus = ({ meta }, status) => {
+			if(status === 'done') {
+				console.log(status, meta);
+				this.setState({fisier: meta});
+			}
+		}
+	
+		// const handleSubmit = (files, allFiles) => {
+		// 	console.log(files[0].meta);
+		// 	allFiles.forEach(f => f.remove());
+		// }
+
     return (
       <Aux>
         {/* add/edit modal */}
@@ -480,6 +544,28 @@ class FacturiTabel extends React.Component {
                     onChange={(e) => this.setState({ sumaachitata: e.target.value })}
                   />
                 </Form.Group>
+                {/* file upload below */}
+                <Form.Group as={Col} md="12">
+                  <Form.Label>Factura</Form.Label>
+									<Dropzone
+										onChangeStatus={handleChangeStatus}
+										// onSubmit={handleSubmit}
+										maxFiles={1}
+									/>
+									{/* <div className="border d-flex justify-content-md-center align-middle">
+									<Dropzone 
+									onDrop={(acceptedFiles) => this.setState({fisier: acceptedFiles[0]})}>
+                    {({ getRootProps, getInputProps }) => (
+                      <section>
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p>{label}</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+									</div> */}
+                </Form.Group>
               </Row>
             </Form>
           </Modal.Body>
@@ -532,6 +618,7 @@ class FacturiTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th></th>
                       <th>Denumire Furnizor</th>
                       <th>CIF Furnizor</th>
                       <th>Nr.</th>
@@ -547,7 +634,6 @@ class FacturiTabel extends React.Component {
                       <th>Centru Cost</th>
                       <th>Data plății</th>
                       <th>Suma Achitată</th>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody>{this.state.facturaComponent}</tbody>
