@@ -573,7 +573,7 @@ class CMTabel extends React.Component {
         bazacalcul: baza_calcul.bazacalcul,
         zilebazacalcul: baza_calcul.zilebazacalcul,
         mediezilnica: baza_calcul.mediezilnica,
-        indemnizatiefirma: Math.round(this.state.zilefirma * baza_calcul.mediezilnica),
+				indemnizatiefirma: Math.round(this.state.zilefirma * baza_calcul.mediezilnica),
       });
     }
   }

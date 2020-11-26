@@ -30,29 +30,7 @@ public class FacturaService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public FacturaDTO save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
-		// convert from DTO to Entity
-		Factura factura = modelMapper.map(facturaDTO, Factura.class);
-
-		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Societate not found for this id :: " + facturaDTO.getIdsocietate()));
-		factura.setSocietate(societate);
-
-		if (facturaDTO.getIdcentrucost() != 0) {
-			CentruCost centruCost = centruCostRepository.findById(facturaDTO.getIdcentrucost()).orElseThrow(
-					() -> new ResourceNotFoundException("Societate not found for this id :: " + facturaDTO.getIdsocietate()));
-			factura.setCentrucost(centruCost);
-		}
-
-		// save to DB
-		factura = facturaRepository.save(factura);
-
-		// return sent body with correct id
-		facturaDTO.setId(factura.getId());
-		return facturaDTO;
-	}
-
-	public Factura saveWithFile(FacturaDTO facturaDTO) throws ResourceNotFoundException {
+	public Factura save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		Factura factura = modelMapper.map(facturaDTO, Factura.class);
 
 		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
@@ -68,7 +46,7 @@ public class FacturaService {
 		return facturaRepository.save(factura);
 	}
 
-	public FacturaDTO update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
+	public Factura update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
 		newFacturaDTO.setId(facturaID);
 		return save(newFacturaDTO);
 	}

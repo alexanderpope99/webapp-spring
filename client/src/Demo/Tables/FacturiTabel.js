@@ -79,8 +79,9 @@ class FacturiTabel extends React.Component {
   }
 
   async addFactura() {
-    const formData = new FormData();
-    if (this.state.fisier) formData.append('fisier', this.state.fisier);
+		const formData = new FormData();
+		console.log(this.state.numefisier);
+    if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
@@ -105,14 +106,14 @@ class FacturiTabel extends React.Component {
       if (factura_body[key]) formData.append(key, factura_body[key]);
     }
 
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1]);
-    // }
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
 
     let ok = await axios
       .post(
-        `${server.address}/factura/${this.state.fisier ? 'file' : ''}`,
-        this.state.fisier ? formData : factura_body,
+        `${server.address}/factura/`,
+        formData,
         { headers: authHeader() }
       )
       .then((res) => res.data)
@@ -131,7 +132,7 @@ class FacturiTabel extends React.Component {
 
   async updateFactura(idfactura) {
     const formData = new FormData();
-    if (this.state.fisier) {
+    if (!this.state.fisier.name) {
       formData.append('fisier', this.state.fisier);
     }
 
@@ -158,9 +159,9 @@ class FacturiTabel extends React.Component {
       if (factura_body[key]) formData.append(key, factura_body[key]);
     }
 
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1]);
-    // }
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
 
     const ok = await axios
       .put(`${server.address}/factura/${idfactura}`, formData, {
@@ -206,7 +207,7 @@ class FacturiTabel extends React.Component {
 
 			fisier: {name: fact.numefisier, size: fact.dimensiunefisier},
 			numefisier: fact.numefisier,
-    }, () => console.log(this.state));
+    });
   }
 
   async deleteFactura(id) {
@@ -413,7 +414,7 @@ class FacturiTabel extends React.Component {
     const handleChangeStatus = ({ file }, status) => {
       if (status === 'done') {
         console.log(status, file);
-        this.setState({ fisier: file });
+        this.setState({ fisier: file, numefisier: file.name });
       }
     };
 

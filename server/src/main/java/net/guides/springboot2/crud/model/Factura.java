@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 @Entity
 @Table(name = "factura")
 public class Factura implements Serializable {
@@ -34,17 +37,11 @@ public class Factura implements Serializable {
 	@Column(name = "nr")
 	private String nr;
 
-	@Column(name = "data")
-	private LocalDate data;
-
 	@Column(name = "moneda")
 	private String moneda;
 
 	@Column(name = "sumafaratva")
 	private double sumafaratva;
-
-	@Column(name = "termenscadenta")
-	private LocalDate termenscadenta;
 
 	@Column(name = "tipachizitie")
 	private String tipachizitie;
@@ -58,7 +55,16 @@ public class Factura implements Serializable {
 	@Column(name = "observatii")
 	private String observatii;
 
+	@Column(name = "data")
+	@DateTimeFormat(pattern = "yyyy-MM-dd", iso = ISO.DATE)
+	private LocalDate data;
+
+	@Column(name = "termenscadenta")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate termenscadenta;	
+
 	@Column(name = "dataplatii")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataplatii;
 
 	@Column(name = "sumaachitata")
@@ -67,7 +73,7 @@ public class Factura implements Serializable {
 	@Column(name = "numefisier")
 	private String numefisier;
 
-	@Column(name = "dimensiune")
+	@Column(name = "dimensiunefisier")
 	private Long dimensiunefisier;
 	
 	@JsonIgnore
