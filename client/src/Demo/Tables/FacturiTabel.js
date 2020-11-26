@@ -64,8 +64,8 @@ class FacturiTabel extends React.Component {
 
       idcentrucost: null,
 
-			file: null,
-			numefisier: '',
+      file: null,
+      numefisier: '',
     };
   }
 
@@ -78,7 +78,7 @@ class FacturiTabel extends React.Component {
 
   async addFactura() {
     const formData = new FormData();
-    formData.append('fisier', this.state.file);
+    if (this.state.file) formData.append('fisier', this.state.file);
 
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
@@ -100,16 +100,14 @@ class FacturiTabel extends React.Component {
     };
 
     for (let key in factura_body) {
-			if(factura_body[key])
-				formData.append(key, factura_body[key]);
-		}
+      if (factura_body[key]) formData.append(key, factura_body[key]);
+    }
 
     for (var pair of formData.entries()) {
       console.log(pair[0] + ', ' + pair[1]);
     }
-
     let ok = await axios
-      .post(`${server.address}/factura/file`, formData, { headers: authHeader() })
+      .post(`${server.address}/factura/${this.state.file ? 'file' : ''}`, this.state.file ? formData : factura_body, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (ok) {
@@ -125,10 +123,10 @@ class FacturiTabel extends React.Component {
   }
 
   async updateFactura(idfactura) {
-		const formData = new FormData();
-		if(this.state.file) {
-			formData.append('fisier', this.state.file);
-		}
+    const formData = new FormData();
+    if (this.state.file) {
+      formData.append('fisier', this.state.file);
+    }
 
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
@@ -150,11 +148,10 @@ class FacturiTabel extends React.Component {
     };
 
     for (let key in factura_body) {
-			if(factura_body[key])
-				formData.append(key, factura_body[key]);
-		}
-		
-		for (var pair of formData.entries()) {
+      if (factura_body[key]) formData.append(key, factura_body[key]);
+    }
+
+    for (var pair of formData.entries()) {
       console.log(pair[0] + ', ' + pair[1]);
     }
 
@@ -166,16 +163,19 @@ class FacturiTabel extends React.Component {
       .catch((err) => console.error(err));
 
     if (ok) {
-      this.onRefresh();
       await this.handleClose();
-      this.setState({
-        showConfirm: true,
-        modalMessage: 'Factură actualizată',
-      });
+      this.setState(
+        {
+          showConfirm: true,
+          modalMessage: 'Factură actualizată',
+        },
+        this.onRefresh
+      );
     }
   }
 
   async editFactura(fact) {
+		console.log(fact);
     this.setState({
       isEdit: true,
       show: true,
@@ -196,11 +196,11 @@ class FacturiTabel extends React.Component {
       centrucost: fact.centrucost ? fact.centrucost : '-',
       idcentrucost: fact.centrucost ? fact.centrucost.id : null,
       dataplatii: fact.dataplatii,
-			sumaachitata: fact.sumaachitata,
-			
-			file: fact.fisier,
-			numefisier: fact.numefisier,
-    });
+      sumaachitata: fact.sumaachitata,
+
+      file: fact.fisier,
+      numefisier: fact.numefisier,
+		});
   }
 
   async deleteFactura(id) {
@@ -302,11 +302,14 @@ class FacturiTabel extends React.Component {
               <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
               <th>{fact.dataplatii}</th>
               <th>{fact.sumaachitata}</th>
-              <th>{
-								fact.numefisier ? <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>{fact.numefisier}</Button>
-								: "Niciun fisier âncarcat"
-								}
-                
+              <th>
+                {fact.numefisier ? (
+                  <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>
+                    {fact.numefisier}
+                  </Button>
+                ) : (
+                  'Niciun fisier âncarcat'
+                )}
               </th>
             </tr>
           );
@@ -344,7 +347,7 @@ class FacturiTabel extends React.Component {
         this.renderFacturi
       );
     }
-	}
+  }
 
   async onSubmit(e) {
     e.preventDefault();
@@ -380,9 +383,9 @@ class FacturiTabel extends React.Component {
       centrucost: '',
       dataplatii: '',
       sumaachitata: '',
-			idsocietate: '',
-			file: null,
-			numefisier: null,
+      idsocietate: '',
+      file: null,
+      numefisier: null,
     });
   }
 
@@ -528,7 +531,7 @@ class FacturiTabel extends React.Component {
                     id="factura"
                     label="Factura"
                     style={{ cursor: 'pointer' }}
-                    onChange={(e) => this.setState({ file: e.target.files[0] })}
+                    onChange={(e) => this.setState({ file: e.target.files[0] }, () => console.log(e.target.files[0]))}
                   />
                 </Form.Group>
               </Row>

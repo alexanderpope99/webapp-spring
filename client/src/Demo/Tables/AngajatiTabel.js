@@ -35,7 +35,8 @@ class AngatjatiTabel extends React.Component {
   async getData() {
     const persoane = await axios
       .get(`${server.address}/persoana`, { headers: authHeader() })
-      .then((persoane) => persoane.data);
+			.then((res) => res.data)
+			.catch(err => console.error(err));
 
     //for loop to keep only the display-able data in state.data
     for (let pers in persoane) {
@@ -56,11 +57,6 @@ class AngatjatiTabel extends React.Component {
       <Aux>
         <Row>
           <Col>
-            {/* <Card>
-              <Card.Header>
-                <Card.Title as="h5">Listă angajați</Card.Title>
-              </Card.Header>
-              <Card.Body> */}
             <MaterialTable
               title="Angajați"
               columns={this.state.columns}

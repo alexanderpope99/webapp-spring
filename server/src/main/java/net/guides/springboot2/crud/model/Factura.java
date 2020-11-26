@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.springframework.web.multipart.MultipartFile;
-
 @Entity
 @Table(name = "factura")
 public class Factura implements Serializable {

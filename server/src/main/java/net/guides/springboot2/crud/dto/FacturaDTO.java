@@ -104,16 +104,29 @@ public class FacturaDTO {
 	// * ///////////////////
 
 	public void setFisier(MultipartFile fisier) {
-		this.fisier = fisier;
+		if(fisier != null)
+			this.fisier = fisier;
 	}
 
 	public byte[] getFisier() throws IOException {
-		return fisier.getBytes();
+		if(fisier != null)
+			return fisier.getBytes();
+		//	returns empty array instead of null
+		else return new byte[0];
 	}
 	
 	public String getNumefisier() {
-		return fisier.getOriginalFilename();
+		if(fisier != null)
+			return fisier.getOriginalFilename();
+		else return null;
 	}
+
+	public long getMarimefisier() {
+		if(fisier != null)
+			return fisier.getSize();
+		else return 0;
+	}
+	// * ///////////////////
 
 	public String getCiffurnizor() {
 		return ciffurnizor;
