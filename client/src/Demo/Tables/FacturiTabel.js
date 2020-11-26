@@ -132,7 +132,7 @@ class FacturiTabel extends React.Component {
 
   async updateFactura(idfactura) {
     const formData = new FormData();
-    if (!this.state.fisier.name) {
+    if (this.state.fisier ? this.state.fisier.name : false) {
       formData.append('fisier', this.state.fisier);
     }
 
@@ -205,7 +205,6 @@ class FacturiTabel extends React.Component {
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
 
-			fisier: {name: fact.numefisier, size: fact.dimensiunefisier},
 			numefisier: fact.numefisier,
     });
   }

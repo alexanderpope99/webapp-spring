@@ -50,4 +50,10 @@ public class FacturaService {
 		newFacturaDTO.setId(facturaID);
 		return save(newFacturaDTO);
 	}
+
+	public Factura updateIgnoreFile(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
+		newFacturaDTO.setId(facturaID);
+		
+		return save(newFacturaDTO);
+	}
 }
