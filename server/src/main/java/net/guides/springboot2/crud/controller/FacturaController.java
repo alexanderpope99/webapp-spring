@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.controller;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
@@ -29,7 +26,6 @@ import net.guides.springboot2.crud.repository.FacturaRepository;
 import net.guides.springboot2.crud.services.FacturaService;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequestMapping("/factura")
@@ -86,14 +82,20 @@ public class FacturaController {
 	}
 
 	@PostMapping
-	public Factura saveWithFile(@ModelAttribute FacturaDTO facturaDTO, @RequestParam(name = "date", required = false) LocalDate data) throws ResourceNotFoundException {
+	public Factura saveWithFile(@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		return facturaService.save(facturaDTO);
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("{id}/new-file")
 	public ResponseEntity<Factura> updateFactura(@PathVariable("id") int facturaId,
 			@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		return ResponseEntity.ok(facturaService.update(facturaId, facturaDTO));
+	}
+
+	@PutMapping("{id}/keep-file")
+	public ResponseEntity<Factura> updateFacturaIgnoreFile(@PathVariable("id") int facturaId,
+			@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
+		return ResponseEntity.ok(facturaService.updateKeepOldFile(facturaId, facturaDTO));
 	}
 
 	@DeleteMapping("{id}")

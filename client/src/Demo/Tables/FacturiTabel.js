@@ -79,8 +79,8 @@ class FacturiTabel extends React.Component {
   }
 
   async addFactura() {
-		const formData = new FormData();
-		console.log(this.state.numefisier);
+    const formData = new FormData();
+    console.log(this.state.numefisier);
     if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
     const factura_body = {
@@ -111,11 +111,7 @@ class FacturiTabel extends React.Component {
     }
 
     let ok = await axios
-      .post(
-        `${server.address}/factura/`,
-        formData,
-        { headers: authHeader() }
-      )
+      .post(`${server.address}/factura/`, formData, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (ok) {
@@ -132,9 +128,12 @@ class FacturiTabel extends React.Component {
 
   async updateFactura(idfactura) {
     const formData = new FormData();
-    if (this.state.fisier ? this.state.fisier.name : false) {
-      formData.append('fisier', this.state.fisier);
-    }
+    var withFileUri = 'keep-file';
+    if (this.state.sterge) withFileUri = 'new-file';
+    if (this.state.fisier) {
+			formData.append('fisier', this.state.fisier);
+			withFileUri = 'new-file';
+		}
 
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
@@ -164,7 +163,7 @@ class FacturiTabel extends React.Component {
     }
 
     const ok = await axios
-      .put(`${server.address}/factura/${idfactura}`, formData, {
+      .put(`${server.address}/factura/${idfactura}/${withFileUri}`, formData, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
@@ -205,7 +204,8 @@ class FacturiTabel extends React.Component {
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
 
-			numefisier: fact.numefisier,
+      numefisier: fact.numefisier,
+      sterge: false,
     });
   }
 
@@ -549,20 +549,31 @@ class FacturiTabel extends React.Component {
                 {/* file upload below */}
                 <Form.Group as={Col} md="12">
                   <Form.Label>Factura</Form.Label>
-									{this.state.numefisier ? 
-									<div>
-										<Button variant="dark" onClick={() => downloadFactura(this.state.numefisier, this.state.id)}>
-											{this.state.numefisier}
-										</Button>
-										<Button variant="link" onClick={() => this.setState({fisier: undefined, numefisier: undefined})}>Șterge</Button>
-									</div>
-                  : <Dropzone
-                    onChangeStatus={handleChangeStatus}
-                    // getUploadParams={getUploadParams}
-                    // onSubmit={handleSubmit}
-                    maxFiles={1}
-                  />
-									}
+                  {this.state.numefisier ? (
+                    <div>
+                      <Button
+                        variant="dark"
+                        onClick={() => downloadFactura(this.state.numefisier, this.state.id)}
+                      >
+                        {this.state.numefisier}
+                      </Button>
+                      <Button
+                        variant="link"
+                        onClick={() =>
+                          this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
+                        }
+                      >
+                        Șterge
+                      </Button>
+                    </div>
+                  ) : (
+                    <Dropzone
+                      onChangeStatus={handleChangeStatus}
+                      // getUploadParams={getUploadParams}
+                      // onSubmit={handleSubmit}
+                      maxFiles={1}
+                    />
+                  )}
                 </Form.Group>
               </Row>
             </Form>

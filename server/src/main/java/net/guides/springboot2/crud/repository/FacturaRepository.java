@@ -10,4 +10,6 @@ import net.guides.springboot2.crud.model.Factura;
 @Repository
 public interface FacturaRepository extends JpaRepository<Factura, Integer> {
 	List<Factura> findBySocietate_Id(int idsocietate);
+
+	
 }
