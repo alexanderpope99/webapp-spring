@@ -18,10 +18,6 @@ import authHeader from '../../services/auth-header';
 import 'react-dropzone-uploader/dist/styles.css'
 import Dropzone from 'react-dropzone-uploader';
 
-const dropZoneStyle = {
-	border: "solid"
-}
-
 class FacturiTabel extends React.Component {
   constructor() {
     super();
@@ -208,7 +204,7 @@ class FacturiTabel extends React.Component {
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
 
-      fisier: fact.fisier,
+      fisier: fact.size,
       numefisier: fact.numefisier,
     });
   }
@@ -416,13 +412,16 @@ class FacturiTabel extends React.Component {
 			));
 
 		const handleChangeStatus = ({ meta }, status) => {
-			console.log(status, meta)
+			if(status === 'done') {
+				console.log(status, meta);
+				this.setState({fisier: meta});
+			}
 		}
 	
-		const handleSubmit = (files, allFiles) => {
-			console.log(files.map(f => f.meta))
-			allFiles.forEach(f => f.remove())
-		}
+		// const handleSubmit = (files, allFiles) => {
+		// 	console.log(files[0].meta);
+		// 	allFiles.forEach(f => f.remove());
+		// }
 
     return (
       <Aux>
@@ -550,7 +549,7 @@ class FacturiTabel extends React.Component {
                   <Form.Label>Factura</Form.Label>
 									<Dropzone
 										onChangeStatus={handleChangeStatus}
-										onSubmit={handleSubmit}
+										// onSubmit={handleSubmit}
 										maxFiles={1}
 									/>
 									{/* <div className="border d-flex justify-content-md-center align-middle">
