@@ -15,6 +15,12 @@ import { getSocSel } from '../Resources/socsel';
 import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import 'react-dropzone-uploader/dist/styles.css'
+import Dropzone from 'react-dropzone-uploader';
+
+const dropZoneStyle = {
+	border: "solid"
+}
 
 class FacturiTabel extends React.Component {
   constructor() {
@@ -64,7 +70,7 @@ class FacturiTabel extends React.Component {
 
       idcentrucost: null,
 
-      file: null,
+      fisier: null,
       numefisier: '',
     };
   }
@@ -78,7 +84,7 @@ class FacturiTabel extends React.Component {
 
   async addFactura() {
     const formData = new FormData();
-    if (this.state.file) formData.append('fisier', this.state.file);
+    if (this.state.fisier) formData.append('fisier', this.state.fisier);
 
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
@@ -103,11 +109,16 @@ class FacturiTabel extends React.Component {
       if (factura_body[key]) formData.append(key, factura_body[key]);
     }
 
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ', ' + pair[1]);
+    // }
+
     let ok = await axios
-      .post(`${server.address}/factura/${this.state.file ? 'file' : ''}`, this.state.file ? formData : factura_body, { headers: authHeader() })
+      .post(
+        `${server.address}/factura/${this.state.fisier ? 'fisier' : ''}`,
+        this.state.fisier ? formData : factura_body,
+        { headers: authHeader() }
+      )
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (ok) {
@@ -124,8 +135,8 @@ class FacturiTabel extends React.Component {
 
   async updateFactura(idfactura) {
     const formData = new FormData();
-    if (this.state.file) {
-      formData.append('fisier', this.state.file);
+    if (this.state.fisier) {
+      formData.append('fisier', this.state.fisier);
     }
 
     const factura_body = {
@@ -151,9 +162,9 @@ class FacturiTabel extends React.Component {
       if (factura_body[key]) formData.append(key, factura_body[key]);
     }
 
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
+    // for (var pair of formData.entries()) {
+    //   console.log(pair[0] + ', ' + pair[1]);
+    // }
 
     const ok = await axios
       .put(`${server.address}/factura/${idfactura}`, formData, {
@@ -175,7 +186,6 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-		console.log(fact);
     this.setState({
       isEdit: true,
       show: true,
@@ -198,9 +208,9 @@ class FacturiTabel extends React.Component {
       dataplatii: fact.dataplatii,
       sumaachitata: fact.sumaachitata,
 
-      file: fact.fisier,
+      fisier: fact.fisier,
       numefisier: fact.numefisier,
-		});
+    });
   }
 
   async deleteFactura(id) {
@@ -384,7 +394,7 @@ class FacturiTabel extends React.Component {
       dataplatii: '',
       sumaachitata: '',
       idsocietate: '',
-      file: null,
+      fisier: null,
       numefisier: null,
     });
   }
@@ -403,7 +413,17 @@ class FacturiTabel extends React.Component {
         <option key={index} data-key={cod.id}>
           {cod.nume}
         </option>
-      ));
+			));
+
+		const handleChangeStatus = ({ meta }, status) => {
+			console.log(status, meta)
+		}
+	
+		const handleSubmit = (files, allFiles) => {
+			console.log(files.map(f => f.meta))
+			allFiles.forEach(f => f.remove())
+		}
+
     return (
       <Aux>
         {/* add/edit modal */}
@@ -525,14 +545,27 @@ class FacturiTabel extends React.Component {
                     onChange={(e) => this.setState({ sumaachitata: e.target.value })}
                   />
                 </Form.Group>
-                <Form.Group as={Col} md="6">
-                  {/*<Form.Label>Factura</Form.Label>*/}
-                  <Form.File
-                    id="factura"
-                    label="Factura"
-                    style={{ cursor: 'pointer' }}
-                    onChange={(e) => this.setState({ file: e.target.files[0] }, () => console.log(e.target.files[0]))}
-                  />
+                {/* file upload below */}
+                <Form.Group as={Col} md="12">
+                  <Form.Label>Factura</Form.Label>
+									<Dropzone
+										onChangeStatus={handleChangeStatus}
+										onSubmit={handleSubmit}
+										maxFiles={1}
+									/>
+									{/* <div className="border d-flex justify-content-md-center align-middle">
+									<Dropzone 
+									onDrop={(acceptedFiles) => this.setState({fisier: acceptedFiles[0]})}>
+                    {({ getRootProps, getInputProps }) => (
+                      <section>
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p>{label}</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+									</div> */}
                 </Form.Group>
               </Row>
             </Form>

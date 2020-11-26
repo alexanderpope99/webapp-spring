@@ -17,14 +17,6 @@ import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
-global.jQuery = $;
-
-$.DataTable = require( 'datatables.net-bs' );
-require( 'datatables.net-scroller' );
-
 class BazaCalcul extends React.Component {
   constructor() {
     super();
