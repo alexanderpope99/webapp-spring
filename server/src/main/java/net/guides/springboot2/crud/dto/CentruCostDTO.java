@@ -20,8 +20,11 @@ public class CentruCostDTO {
 		this.id = id;
 	}
 
-	public int getIdadresa() {
-		return adresa.getId();
+	public Integer getIdadresa() {
+		if (adresa == null)
+			return null;
+		else
+			return adresa.getId();
 	}
 
 	public void setAdresa(Adresa idadresa) {

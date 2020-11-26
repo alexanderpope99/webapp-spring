@@ -3,6 +3,8 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.CentruCostDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CentruCost;
 import net.guides.springboot2.crud.repository.CentruCostRepository;
@@ -25,6 +28,9 @@ import org.springframework.data.domain.Sort;
 public class CentruCostController {
 	@Autowired
 	private CentruCostRepository centruCostRepository;
+
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@GetMapping
 	public List<CentruCost> getAllCentruCosts() {
@@ -37,6 +43,14 @@ public class CentruCostController {
 		CentruCost centruCost = centruCostRepository.findById(centruCostId).orElseThrow(
 				() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
 		return ResponseEntity.ok().body(centruCost);
+	}
+
+	@GetMapping("/idsoc/{id}")
+	public List<CentruCostDTO> getCentruCostByIdsocietate(@PathVariable(value = "id") int societateId)
+			throws ResourceNotFoundException {
+		List<CentruCost> centreCost = centruCostRepository.findCentreCostByIdsocietate(societateId);
+		return centreCost.stream().map(c -> modelMapper.map(c, CentruCostDTO.class)).collect(Collectors.toList());
+
 	}
 
 	@PostMapping
