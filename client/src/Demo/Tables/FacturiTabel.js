@@ -15,7 +15,7 @@ import { getSocSel } from '../Resources/socsel';
 import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import 'react-dropzone-uploader/dist/styles.css'
+import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
 class FacturiTabel extends React.Component {
@@ -105,13 +105,13 @@ class FacturiTabel extends React.Component {
       if (factura_body[key]) formData.append(key, factura_body[key]);
     }
 
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1]);
-    // }
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
 
     let ok = await axios
       .post(
-        `${server.address}/factura/${this.state.fisier ? 'fisier' : ''}`,
+        `${server.address}/factura/${this.state.fisier ? 'file' : ''}`,
         this.state.fisier ? formData : factura_body,
         { headers: authHeader() }
       )
@@ -158,9 +158,9 @@ class FacturiTabel extends React.Component {
       if (factura_body[key]) formData.append(key, factura_body[key]);
     }
 
-    // for (var pair of formData.entries()) {
-    //   console.log(pair[0] + ', ' + pair[1]);
-    // }
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
 
     const ok = await axios
       .put(`${server.address}/factura/${idfactura}`, formData, {
@@ -182,6 +182,7 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
+    console.log(fact);
     this.setState({
       isEdit: true,
       show: true,
@@ -213,7 +214,6 @@ class FacturiTabel extends React.Component {
     await axios
       .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
       .then((response) => response.data)
-      .then(this.onRefresh)
       .catch((err) => console.error(err));
   }
 
@@ -409,19 +409,19 @@ class FacturiTabel extends React.Component {
         <option key={index} data-key={cod.id}>
           {cod.nume}
         </option>
-			));
+      ));
 
-		const handleChangeStatus = ({ meta }, status) => {
-			if(status === 'done') {
-				console.log(status, meta);
-				this.setState({fisier: meta});
-			}
-		}
-	
-		// const handleSubmit = (files, allFiles) => {
-		// 	console.log(files[0].meta);
-		// 	allFiles.forEach(f => f.remove());
-		// }
+    const handleChangeStatus = ({ meta }, status) => {
+      if (status === 'done') {
+        console.log(status, meta);
+        this.setState({ fisier: meta });
+      }
+    };
+
+    // const handleSubmit = (files, allFiles) => {
+    // 	console.log(files[0].meta);
+    // 	allFiles.forEach(f => f.remove());
+    // }
 
     return (
       <Aux>
@@ -547,24 +547,11 @@ class FacturiTabel extends React.Component {
                 {/* file upload below */}
                 <Form.Group as={Col} md="12">
                   <Form.Label>Factura</Form.Label>
-									<Dropzone
-										onChangeStatus={handleChangeStatus}
-										// onSubmit={handleSubmit}
-										maxFiles={1}
-									/>
-									{/* <div className="border d-flex justify-content-md-center align-middle">
-									<Dropzone 
-									onDrop={(acceptedFiles) => this.setState({fisier: acceptedFiles[0]})}>
-                    {({ getRootProps, getInputProps }) => (
-                      <section>
-                        <div {...getRootProps()}>
-                          <input {...getInputProps()} />
-                          <p>{label}</p>
-                        </div>
-                      </section>
-                    )}
-                  </Dropzone>
-									</div> */}
+                  <Dropzone
+                    onChangeStatus={handleChangeStatus}
+                    // onSubmit={handleSubmit}
+                    maxFiles={1}
+                  />
                 </Form.Group>
               </Row>
             </Form>

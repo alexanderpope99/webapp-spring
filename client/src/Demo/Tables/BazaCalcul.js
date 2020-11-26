@@ -9,75 +9,13 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
+import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import Aux from '../../hoc/_Aux';
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
-global.jQuery = $;
-
-$.DataTable = require('datatables.net-bs');
-require('jszip');
-require('pdfmake/build/pdfmake.js');
-require('pdfmake/build/vfs_fonts.js');
-require('datatables.net-autofill');
-require('datatables.net-buttons-bs');
-require('datatables.net-buttons/js/buttons.colVis.js');
-require('datatables.net-buttons/js/buttons.flash.js');
-require('datatables.net-buttons/js/buttons.html5.js');
-require('datatables.net-buttons/js/buttons.print.js');
-require('datatables.net-colreorder');
-require('datatables.net-keytable');
-require('datatables.net-responsive-bs');
-require('datatables.net-rowgroup');
-require('datatables.net-rowreorder');
-require('datatables.net-scroller');
-require('datatables.net-select');
-require('datatables.net-fixedcolumns');
-require('datatables.net-fixedheader');
-
-function atable() {
-  let tableScroll = '#data-table-scroll';
-  $.fn.dataTable.ext.errMode = 'throw';
-  $(tableScroll).DataTable({
-    order: [[0, 'asc']],
-    columns: [
-      {
-        data: 'an',
-        render: function (data, type, row) {
-          return data;
-        },
-      },
-      {
-        data: 'luna',
-        render: function (data, type, row) {
-          return data;
-        },
-      },
-      {
-        data: 'zilelucrate',
-        render: function (data, type, row) {
-          return data;
-        },
-      },
-      {
-        data: 'salariurealizat',
-        render: function (data, type, row) {
-          return data;
-        },
-      },
-    ],
-    scrollY: '325px',
-    scrollX: true,
-    scrollCollapse: true,
-    paging: false,
-  });
-}
 
 class BazaCalcul extends React.Component {
   constructor() {
@@ -128,7 +66,6 @@ class BazaCalcul extends React.Component {
     this.setState({ an_sel: new Date().getFullYear() });
     this.fillTable();
     window.scrollTo(0, 0);
-    atable();
   }
 
   async updateAngajatSel() {
@@ -146,8 +83,8 @@ class BazaCalcul extends React.Component {
     } else {
       this.setState({ angajat: null }, this.fillTable);
     }
-  }
-
+	}
+	
   async addBazaCalcul() {
     const bazacalcul_body = {
       idangajat: this.state.angajat.idpersoana,
@@ -425,8 +362,8 @@ class BazaCalcul extends React.Component {
                   <Form.Group>
                     <Form.Label>An</Form.Label>
                     <Form.Control
-                      disabled={this.state.an_sel !== '-'}
-                      type="number"
+											disabled={this.state.an_sel !== '-'}
+											type="number"
                       value={this.state.an}
                       onChange={(e) => this.setState({ an: e.target.value })}
                     />
@@ -532,13 +469,7 @@ class BazaCalcul extends React.Component {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <Table
-                  ref="tbl"
-                  hover
-                  responsive
-                  className="table table-condensed"
-                  id="data-table-scroll"
-                >
+                <Table responsive hover>
                   <thead>
                     <tr>
                       <th>An</th>

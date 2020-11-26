@@ -37,10 +37,10 @@ class SocietatiTabel extends React.Component {
       .then(() => {
         console.log(response);
         // alert(`Deleted ${id}`);
-				this.onRefresh();
-				setSocSel(null);
+        this.onRefresh();
+        setSocSel(null);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }
 
   // function to render in react
@@ -52,7 +52,7 @@ class SocietatiTabel extends React.Component {
           <tr key={soc.id}>
             <th>{soc.nume || '-'}</th>
             <th>{soc.email || '-'}</th>
-						<th>{soc.telefon || '-'}</th>
+            <th>{soc.telefon || '-'}</th>
             <th>{soc.idcaen || '-'}</th>
             <th>{soc.cif || '-'}</th>
             <th>{soc.regcom || '-'}</th>
@@ -109,16 +109,13 @@ class SocietatiTabel extends React.Component {
   }
   async onRefresh() {
     // e.preventDefault();
-		const user = JSON.parse(localStorage.getItem('user'));
-		let uri = `${server.address}/societate/user/${user.id}`;
-		if(user.roles.includes('ROLE_DIRECTOR'))
-			uri = `${server.address}/societate/`;
+    const user = JSON.parse(localStorage.getItem('user'));
+    let uri = `${server.address}/societate/user/${user.id}`;
+    if (user.roles.includes('ROLE_DIRECTOR')) uri = `${server.address}/societate/`;
 
     let societati = await axios
-      .get(uri, {
-        headers: authHeader(),
-      })
-      .then((societati) => societati.data);
+      .get(uri, { headers: authHeader()})
+      .then((res) => res.data);
 
     societati = await Promise.all(
       societati.map(async (societate) => {
@@ -129,7 +126,6 @@ class SocietatiTabel extends React.Component {
         return { ...societate, nrangajati: nrAngajati };
       })
     );
-    console.log(societati);
 
     this.state.societati = societati;
 
