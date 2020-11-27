@@ -38,7 +38,7 @@ class FacturiTabel extends React.Component {
       factura: [],
       centreCostComponent: [],
       aprobatoriComponent: [],
-      facturaComponent: null,
+      facturaComponent: [],
 
       isEdit: false,
 
@@ -86,7 +86,6 @@ class FacturiTabel extends React.Component {
     console.log(this.state.numefisier);
     if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
-    console.log(this.state);
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
       ciffurnizor: this.state.ciffurnizor || null,
@@ -186,32 +185,35 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-    this.setState({
-      isEdit: true,
-      show: true,
+    this.setState(
+      {
+        isEdit: true,
+        show: true,
 
-      id: fact.id,
-      denumirefurnizor: fact.denumirefurnizor,
-      ciffurnizor: fact.ciffurnizor,
-      nr: fact.nr,
-      data: fact.data ? fact.data.substring(0, 10) : '',
-      moneda: fact.moneda,
-      sumafaratva: fact.sumafaratva,
-      termenscadenta: fact.termenscadenta,
-      tipachizitie: fact.tipachizitie,
-      descriereactivitati: fact.descriereactivitati,
-      aprobator: fact.aprobator ? fact.aprobator : '-',
-      idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
-      aprobat: fact.aprobat,
-      observatii: fact.observatii,
-      centrucost: fact.centrucost ? fact.centrucost : '-',
-      idcentrucost: fact.centrucost ? fact.centrucost.id : null,
-      dataplatii: fact.dataplatii,
-      sumaachitata: fact.sumaachitata,
+        id: fact.id,
+        denumirefurnizor: fact.denumirefurnizor,
+        ciffurnizor: fact.ciffurnizor,
+        nr: fact.nr,
+        data: fact.data ? fact.data.substring(0, 10) : '',
+        moneda: fact.moneda,
+        sumafaratva: fact.sumafaratva,
+        termenscadenta: fact.termenscadenta,
+        tipachizitie: fact.tipachizitie,
+        descriereactivitati: fact.descriereactivitati,
+        aprobator: fact.aprobator ? fact.aprobator : '-',
+        idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
+        aprobat: fact.aprobat,
+        observatii: fact.observatii,
+        centrucost: fact.centrucost ? fact.centrucost : '-',
+        idcentrucost: fact.centrucost ? fact.centrucost.id : null,
+        dataplatii: fact.dataplatii,
+        sumaachitata: fact.sumaachitata,
 
-      numefisier: fact.numefisier,
-      sterge: false,
-    });
+        numefisier: fact.numefisier,
+        sterge: false,
+      },
+      () => console.log(this.state)
+    );
   }
 
   async deleteFactura(id) {
@@ -292,7 +294,6 @@ class FacturiTabel extends React.Component {
                   </PopupState>
                 </div>
               </th>
-
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
@@ -335,14 +336,14 @@ class FacturiTabel extends React.Component {
       })
       .then((res) => res.data)
       .catch((err) => console.error(err));
-    const fact = await axios
-      .get(`${server.address}/factura/idsoc/${this.state.socsel.id}`, {
+    const aprobatori = await axios
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
       .catch((err) => console.error(err));
-    const aprobatori = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
+    const fact = await axios
+      .get(`${server.address}/factura/idsoc/${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -355,18 +356,18 @@ class FacturiTabel extends React.Component {
         this.renderFacturi
       );
     }
-    if (fact) {
-      this.setState(
-        {
-          factura: fact,
-        },
-        this.renderFacturi
-      );
-    }
     if (aprobatori) {
       this.setState(
         {
           aprobatoriComponent: aprobatori,
+        },
+        this.renderFacturi
+      );
+    }
+    if (fact) {
+      this.setState(
+        {
+          factura: fact,
         },
         this.renderFacturi
       );
@@ -569,13 +570,13 @@ class FacturiTabel extends React.Component {
                 <Form.Group as={Col} md="6">
                   <Form.Label>Aprobator</Form.Label>
                   <Form.Control
-                    as="select"
+                    type="text"
                     value={this.state.aprobator.nume}
                     onChange={this.onChangeAprobator}
-                  >
-                    <option>-</option>
-                    {aprobatori}
-                  </Form.Control>
+                  />
+                  {/* <option>-</option>
+                    {aprobatori} */}
+                  {/* </Form.Control> */}
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Data Plății</Form.Label>
