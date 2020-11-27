@@ -32,6 +32,7 @@ class FacturiTabel extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
+    this.changeSortOrder = this.changeSortOrder.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -41,6 +42,8 @@ class FacturiTabel extends React.Component {
       facturaComponent: [],
 
       isEdit: false,
+      sortBy: 'data',
+      sortAsc: true,
 
       // confirm modal
       showConfirm: false,
@@ -60,7 +63,7 @@ class FacturiTabel extends React.Component {
       aprobat: false,
       observatii: '',
       centrucost: '',
-      aprobator: '',
+      numeaprobator: '',
       dataplatii: '',
       sumaachitata: '',
       idsocietate: null,
@@ -200,7 +203,9 @@ class FacturiTabel extends React.Component {
         termenscadenta: fact.termenscadenta,
         tipachizitie: fact.tipachizitie,
         descriereactivitati: fact.descriereactivitati,
-        aprobator: fact.aprobator ? fact.aprobator : '-',
+        numeaprobator: fact.aprobator
+          ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+          : '-',
         idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
         aprobat: fact.aprobat,
         observatii: fact.observatii,
@@ -225,9 +230,22 @@ class FacturiTabel extends React.Component {
 
   // function to create react component with fetched data
   async renderFacturi() {
+		
+    const compare = (f1, f2) => {
+			var sortBy = this.state.sortBy;
+			var sortAsc = this.state.sortAsc;
+      if(sortAsc)
+				return f1[sortBy] < f2[sortBy] ? -1 : 1;
+			else
+				return f1[sortBy] > f2[sortBy] ? -1 : 1;
+    };
+
+    console.log(this.state.sortAsc, this.state.sortBy);
+    const facturi = this.state.factura.sort(compare);
+    console.log(facturi);
     this.setState({
       facturaComponent: await Promise.all(
-        this.state.factura.map(async (fact, index) => {
+        facturi.map(async (fact, index) => {
           return (
             // TODO
             <tr key={fact.id}>
@@ -329,6 +347,12 @@ class FacturiTabel extends React.Component {
     });
   }
 
+  changeSortOrder(sortBy) {
+    this.state.sortBy === sortBy
+      ? this.setState({ sortAsc: !this.state.sortAsc }, this.renderFacturi)
+      : this.setState({ sortBy: sortBy }, this.renderFacturi);
+  }
+
   async onRefresh() {
     const centreCost = await axios
       .get(`${server.address}/centrucost/idsoc/${this.state.socsel.id}`, {
@@ -394,7 +418,7 @@ class FacturiTabel extends React.Component {
     const idapb = e.target.options[selectedIndex].getAttribute('data-key');
     this.setState({
       idaprobator: idapb,
-      aprobator: e.target.value,
+      numeaprobator: e.target.value,
     });
   }
 
@@ -411,7 +435,7 @@ class FacturiTabel extends React.Component {
       termenscadenta: '',
       tipachizitie: '',
       descriereactivitati: '',
-      aprobator: '',
+      numeaprobator: '',
       aprobat: false,
       observatii: '',
       centrucost: '',
@@ -453,7 +477,6 @@ class FacturiTabel extends React.Component {
         this.setState({ fisier: file, numefisier: file.name });
       }
     };
-
     // const getUploadParams = ({file, meta}) => {
     // 	this.setState({fisier: file});
     // }
@@ -570,13 +593,13 @@ class FacturiTabel extends React.Component {
                 <Form.Group as={Col} md="6">
                   <Form.Label>Aprobator</Form.Label>
                   <Form.Control
-                    type="text"
-                    value={this.state.aprobator.nume}
+                    as="select"
+                    value={this.state.numeaprobator || '-'}
                     onChange={this.onChangeAprobator}
-                  />
-                  {/* <option>-</option>
-                    {aprobatori} */}
-                  {/* </Form.Control> */}
+                  >
+                    <option>-</option>
+                    {aprobatori}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Data Plății</Form.Label>
@@ -676,10 +699,25 @@ class FacturiTabel extends React.Component {
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Denumire Furnizor</th>
+                      <th
+                        onClick={() => this.changeSortOrder('denumirefurnizor')}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Denumire Furnizor
+                        {this.state.sortBy === 'denumirefurnizor'
+                          ? this.state.sortAsc
+                            ? ' ↓'
+                            : ' ↑'
+                          : ''}
+                      </th>
                       <th>CIF Furnizor</th>
                       <th>Nr.</th>
-                      <th>Dată</th>
+                      <th
+                        onClick={() => this.changeSortOrder('data')}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Dată{this.state.sortBy === 'data' ? (this.state.sortAsc ? ' ↓' : ' ↑') : ''}
+                      </th>
                       <th>Monedă</th>
                       <th>Sumă fără TVA</th>
                       <th>Termen Scadență</th>
