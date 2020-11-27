@@ -707,6 +707,22 @@ class RealizariRetineri extends React.Component {
     console.log(this.state.showToast);
     return (
       <Aux>
+				<Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={2500}
+					autohide
+					className="position-fixed"
+					style={{top: "10px", right: "5px", zIndex: "9999"}}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Recalculat!</strong>
+          </Toast.Header>
+          <Toast.Body>
+            Realizari/Retineri recalculate in {this.state.luna.nume} {this.state.an}
+          </Toast.Body>
+        </Toast>
+
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Ore suplimentare</Modal.Title>
@@ -784,21 +800,7 @@ class RealizariRetineri extends React.Component {
             </Table>
           </Modal.Body>
         </Modal>
-        <Toast
-          onClose={() => this.setState({ showToast: false })}
-          show={this.state.showToast}
-          delay={2500}
-          autohide
-					className="position-fixed"
-					style={{top: "10px", right: "5px"}}
-        >
-          <Toast.Header>
-            <strong className="mr-auto">Recalculat!</strong>
-          </Toast.Header>
-          <Toast.Body>
-            Realizari/Retineri recalculate in {this.state.luna.nume} {this.state.an} ✔
-          </Toast.Body>
-        </Toast>
+        
 
         <Card>
           {/* SELECT LUNA + AN */}
