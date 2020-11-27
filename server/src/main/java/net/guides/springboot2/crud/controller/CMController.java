@@ -39,8 +39,8 @@ public class CMController {
 
 	@GetMapping
 	public List<CMDTO> getAllCMs() {
-		return cmRepository.findAll(Sort.by(Sort.Direction.DESC, "dela"))
-				.stream().map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
+		return cmRepository.findAll(Sort.by(Sort.Direction.DESC, "dela")).stream()
+				.map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
 	}
 
 	@GetMapping("{id}")
@@ -53,9 +53,16 @@ public class CMController {
 	@GetMapping("idc={id}")
 	public ResponseEntity<List<CMDTO>> getCMByIdcontract(@PathVariable(value = "id") int idcontract)
 			throws ResourceNotFoundException {
-		List<CMDTO> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract).stream().map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
+		List<CMDTO> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract).stream()
+				.map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(cm);
+	}
+
+	@GetMapping("testvalcm/l={luna}an={an}idc={idcontract}")
+	public int getValCM(@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an,
+			@PathVariable(value = "idcontract") int idcontract) throws ResourceNotFoundException {
+		return cmService.getValCM(luna, an, idcontract);
 	}
 
 	@PostMapping

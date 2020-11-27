@@ -14,7 +14,14 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import { cod_boala, getProcente, getZileFirma, countWeekendDays } from '../Resources/cm.js';
+import {
+  cod_boala,
+  cod_urgenta,
+  cod_boala_infect,
+  getProcente,
+  getZileFirma,
+  countWeekendDays,
+} from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
   constructor() {
@@ -29,6 +36,7 @@ class CMTabel extends React.Component {
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangeCodboala = this.onChangeCodboala.bind(this);
+    this.onChangeProcent = this.onChangeProcent.bind(this);
     this.getBazaCalculCM = this.getBazaCalculCM.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
 
@@ -69,9 +77,11 @@ class CMTabel extends React.Component {
       mediezilnica: 0,
       zilefirma: 0,
       zilefnuass: 0,
+      zilefaambp: 0,
       codindemnizatie: '',
       indemnizatiefirma: 0,
       indemnizatiefnuass: 0,
+      indemnizatiefaambp: 0,
       locprescriere: 'Medic de familie',
       nravizmedic: '',
       urgenta: false,
@@ -110,6 +120,7 @@ class CMTabel extends React.Component {
       mediezilnica: 0,
       zilefirma: 0,
       zilefnuass: 0,
+      zilefaambp: 0,
       codindemnizatie: '',
       indemnizatiefirma: 0,
       indemnizatiefnuass: 0,
@@ -195,36 +206,65 @@ class CMTabel extends React.Component {
       nr_zile_weekend = 0,
       zilefirma = 0,
       zilefnuass = 0,
-      indemnizatiefirma = 0, indemnizatiefnuass = 0;
+      zilefaambp = 0,
+      indemnizatiefirma = 0,
+      indemnizatiefnuass = 0,
+      indemnizatiefaambp = 0;
     if (dela && panala) {
       let date1 = new Date(dela);
       let date2 = new Date(panala);
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
       nr_zile_weekend = countWeekendDays(date1, date2);
-      [zilefirma, zilefnuass] = getZileFirma(date1, date2);
+      console.log(this.state.codboala.substring(0, 2));
+      [zilefirma, zilefnuass, zilefaambp] = getZileFirma(
+        date1,
+        date2,
+        this.state.codboala.substring(0, 2)
+      );
       if (this.state.mediezilnica) {
-        indemnizatiefirma = Math.round(zilefirma * this.state.mediezilnica);
-				indemnizatiefnuass = Math.round(zilefnuass * this.state.mediezilnica);
-			}
+        indemnizatiefirma = Math.round(
+          zilefirma * Math.round(this.state.mediezilnica) * this.state.procent
+        );
+        indemnizatiefnuass = Math.round(
+          zilefnuass * Math.round(this.state.mediezilnica) * this.state.procent
+        );
+        indemnizatiefaambp = Math.round(
+          zilefaambp * Math.round(this.state.mediezilnica) * this.state.procent
+        );
+      }
     }
 
     this.setState({
       nr_zile: nr_zile,
       nr_zile_weekend: nr_zile_weekend,
-			zilefirma: zilefirma,
-			zilefnuass: zilefnuass,
-			indemnizatiefirma: indemnizatiefirma,
-			indemnizatiefnuass: indemnizatiefnuass,
+      zilefirma: zilefirma,
+      zilefnuass: zilefnuass,
+      zilefaambp: zilefaambp,
+      indemnizatiefirma: indemnizatiefirma,
+      indemnizatiefnuass: indemnizatiefnuass,
+      indemnizatiefaambp: indemnizatiefaambp,
     });
   }
 
   onChangeCodboala(cod) {
     let procente = getProcente(cod);
-    this.setState({
-      codboala: cod,
-      procente: procente,
-      procent: procente[0],
-    });
+    this.setState(
+      {
+        codboala: cod,
+        procente: procente,
+        procent: procente[0],
+      },
+      this.setNrZile
+    );
+  }
+
+  onChangeProcent(proc) {
+    this.setState(
+      {
+        procent: proc,
+      },
+      this.setNrZile
+    );
   }
 
   async fillTable() {
@@ -416,6 +456,8 @@ class CMTabel extends React.Component {
         indemnizatiefirma: cm.indemnizatiefirma,
         zilefnuass: cm.zilefnuass,
         indemnizatiefnuass: cm.indemnizatiefnuass,
+        zilefaambp: cm.zilefaambp,
+        indemnizatiefaambp: cm.zilefaambp,
         locprescriere: cm.locprescriere,
         nravizmedic: cm.nravizmedic,
         codboala: cm.codboala,
@@ -537,6 +579,8 @@ class CMTabel extends React.Component {
               <th>{cm.indemnizatiefirma}</th>
               <th>{cm.zilefnuass}</th>
               <th>{cm.indemnizatiefnuass}</th>
+              <th>{cm.zilefaambp}</th>
+              <th>{cm.indemnizatiefaambp}</th>
               <th>{cm.nravizmedic}</th>
               <th>{cm.locprescriere}</th>
               <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
@@ -569,11 +613,26 @@ class CMTabel extends React.Component {
       .catch((err) => console.error(err));
 
     if (baza_calcul) {
+      console.log(Math.round(baza_calcul.mediezilnica));
       this.setState({
         bazacalcul: baza_calcul.bazacalcul,
         zilebazacalcul: baza_calcul.zilebazacalcul,
         mediezilnica: baza_calcul.mediezilnica,
-				indemnizatiefirma: Math.round(this.state.zilefirma * baza_calcul.mediezilnica),
+        indemnizatiefirma: Math.round(
+          this.state.zilefirma *
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+            (this.state.procent / 100)
+        ),
+        indemnizatiefnuass: Math.round(
+          this.state.zilefnuass *
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+            (this.state.procent / 100)
+        ),
+        indemnizatiefaambp: Math.round(
+          this.state.zilefaambp *
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+            (this.state.procent / 100)
+        ),
       });
     }
   }
@@ -593,6 +652,11 @@ class CMTabel extends React.Component {
     ));
 
     const codBoalaComponent = cod_boala.map((cod, index) => <option key={index}>{cod}</option>);
+    const codUrgentaComponent = cod_urgenta.map((cod, index) => <option key={index}>{cod}</option>);
+
+    const codBoalaInfectComponent = cod_boala_infect.map((cod, index) => (
+      <option key={index}>{cod}</option>
+    ));
     const procentComponent = this.state.procente.map((p, index) => (
       <option key={index}>{p}</option>
     ));
@@ -703,29 +767,31 @@ class CMTabel extends React.Component {
                 <Form.Group id="codurgenta" as={Col} md="6">
                   <Form.Label>Cod urgență</Form.Label>
                   <Form.Control
-                    type="text"
+                    as="select"
                     value={this.state.codurgenta}
                     onChange={(e) => this.setState({ codurgenta: e.target.value })}
-                  />
+                  >
+                    {codUrgentaComponent}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group id="codboalainfcont" as={Col} md="6">
                   <Form.Label>Cod boală infecțioasă/contagioasă</Form.Label>
                   <Form.Control
-                    type="text"
+                    as="select"
                     value={this.state.codboalainfcont}
                     onChange={(e) => {
                       this.setState({ codboalainfcont: e.target.value });
                     }}
-                  />
+                  >
+                    {codBoalaInfectComponent}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group id="procent" as={Col} md="6">
                   <Form.Label>Procent %</Form.Label>
                   <Form.Control
                     as="select"
                     value={this.state.procent}
-                    onChange={(e) => {
-                      this.setState({ procent: e.target.value });
-                    }}
+                    onChange={(e) => this.onChangeProcent(e.target.value)}
                   >
                     {/* <option>-</option> */}
                     {procentComponent}
@@ -779,22 +845,11 @@ class CMTabel extends React.Component {
                 <Form.Group id="zilefirma" as={Col} md="6">
                   <Form.Label>Zile suportate de firmă</Form.Label>
                   <Form.Control
-										type="number"
-										disabled
+                    type="number"
+                    disabled
                     value={this.state.zilefirma}
                     onChange={(e) => {
                       this.setState({ zilefirma: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="zilefnuass" as={Col} md="6">
-                  <Form.Label>Zile FNUASS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.zilefnuass}
-                    onChange={(e) => {
-                      this.setState({ zilefnuass: e.target.value });
                     }}
                   />
                 </Form.Group>
@@ -809,6 +864,17 @@ class CMTabel extends React.Component {
                     }}
                   />
                 </Form.Group>
+                <Form.Group id="zilefnuass" as={Col} md="6">
+                  <Form.Label>Zile FNUASS</Form.Label>
+                  <Form.Control
+                    type="number"
+                    disabled
+                    value={this.state.zilefnuass}
+                    onChange={(e) => {
+                      this.setState({ zilefnuass: e.target.value });
+                    }}
+                  />
+                </Form.Group>
                 <Form.Group id="indemnizatiefnuass" as={Col} md="6">
                   <Form.Label>Indemnizație FNUASS</Form.Label>
                   <Form.Control
@@ -817,6 +883,28 @@ class CMTabel extends React.Component {
                     value={this.state.indemnizatiefnuass}
                     onChange={(e) => {
                       this.setState({ indemnizatiefnuass: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="zilefaambp" as={Col} md="6">
+                  <Form.Label>Zile FAAMBP</Form.Label>
+                  <Form.Control
+                    type="number"
+                    disabled
+                    value={this.state.zilefaambp}
+                    onChange={(e) => {
+                      this.setState({ zilefaambp: e.target.value });
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group id="indemnizatiefaambp" as={Col} md="6">
+                  <Form.Label>Indemnizație FAAMBP</Form.Label>
+                  <Form.Control
+                    type="number"
+                    disabled
+                    value={this.state.indemnizatiefaambp}
+                    onChange={(e) => {
+                      this.setState({ indemnizatiefaambp: e.target.value });
                     }}
                   />
                 </Form.Group>
@@ -994,6 +1082,8 @@ class CMTabel extends React.Component {
                       <th>Indemnizație firmă</th>
                       <th>Zile FNUASS</th>
                       <th>Indemnizație FNUASS</th>
+                      <th>Zile FAAMBP</th>
+                      <th>Indemnizație FAAMBP</th>
                       <th>Nr. aviz medic</th>
                       <th>Loc prescriere</th>
                       <th>Urgență</th>

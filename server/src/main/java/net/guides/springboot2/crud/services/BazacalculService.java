@@ -28,8 +28,9 @@ public class BazacalculService {
 
 	public BazacalculDTO save(BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
 		Bazacalcul bc = modelMapper.map(bazacalculDTO, Bazacalcul.class);
-		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat()).orElseThrow(
-				() -> new ResourceNotFoundException("Angajat not found for this id :: " + bazacalculDTO.getIdangajat()));
+		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat())
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Angajat not found for this id :: " + bazacalculDTO.getIdangajat()));
 
 		bc.setAngajat(angajat);
 		bazacalculRepository.save(bc);
@@ -71,7 +72,7 @@ public class BazacalculService {
 			}
 		} // daca cele 6 luni sunt in anul selectat
 		else {
-			for (int i = luna6; i <= luna; ++i) {
+			for (int i = luna6; i < luna; ++i) {
 				bc = bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat);
 				if (bc == null)
 					return rv;
@@ -102,14 +103,16 @@ public class BazacalculService {
 				if (!areBazacalcul)
 					return 0;
 
-				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an6, idangajat));
+				bazeCalculUltimele6Luni
+						.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an6, idangajat));
 			}
 			for (int i = 1; i < luna; ++i) {
 				areBazacalcul = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat);
 				if (!areBazacalcul)
 					return 0;
 
-				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat));
+				bazeCalculUltimele6Luni
+						.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat));
 			}
 		} // daca cele 6 luni sunt in anul selectat
 		else {
@@ -118,7 +121,8 @@ public class BazacalculService {
 				if (!areBazacalcul)
 					return 0;
 
-				bazeCalculUltimele6Luni.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat));
+				bazeCalculUltimele6Luni
+						.add(bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(i, an, idangajat));
 			}
 		}
 
