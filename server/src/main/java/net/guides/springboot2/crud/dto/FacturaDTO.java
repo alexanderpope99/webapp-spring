@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.dto;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.guides.springboot2.crud.model.Angajat;
@@ -18,13 +19,18 @@ public class FacturaDTO {
 
 	private String nr;
 
-	private LocalDate data;
-
 	private String moneda;
 
 	private double sumafaratva;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate data;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate termenscadenta;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dataplatii;
 
 	private String tipachizitie;
 
@@ -33,8 +39,6 @@ public class FacturaDTO {
 	private boolean aprobat;
 
 	private String observatii;
-
-	private LocalDate dataplatii;
 
 	private double sumaachitata;
 
@@ -102,7 +106,6 @@ public class FacturaDTO {
 		this.idsocietate = idsocietate;
 	}
 	// * ///////////////////
-
 	public void setFisier(MultipartFile fisier) {
 		this.fisier = fisier;
 	}
@@ -139,6 +142,9 @@ public class FacturaDTO {
 		return data;
 	}
 
+	public void setData(String data) {
+		this.data = LocalDate.parse(data);
+	}
 	public void setData(LocalDate data) {
 		this.data = data;
 	}
@@ -147,6 +153,9 @@ public class FacturaDTO {
 		return dataplatii;
 	}
 
+	public void setDataplatii(String dataplatii) {
+		this.dataplatii = LocalDate.parse(dataplatii);
+	}
 	public void setDataplatii(LocalDate dataplatii) {
 		this.dataplatii = dataplatii;
 	}
@@ -227,6 +236,9 @@ public class FacturaDTO {
 		return termenscadenta;
 	}
 
+	public void setTermenscadenta(String termenscadenta) {
+		this.termenscadenta = LocalDate.parse(termenscadenta);
+	}
 	public void setTermenscadenta(LocalDate termenscadenta) {
 		this.termenscadenta = termenscadenta;
 	}

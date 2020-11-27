@@ -83,7 +83,8 @@ class FacturiTabel extends React.Component {
 
   async addFactura() {
     const formData = new FormData();
-    if (this.state.fisier) formData.append('fisier', this.state.fisier);
+    console.log(this.state.numefisier);
+    if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
     console.log(this.state);
     const factura_body = {
@@ -114,11 +115,7 @@ class FacturiTabel extends React.Component {
     }
 
     let ok = await axios
-      .post(
-        `${server.address}/factura/${this.state.fisier ? 'file' : ''}`,
-        this.state.fisier ? formData : factura_body,
-        { headers: authHeader() }
-      )
+      .post(`${server.address}/factura/`, formData, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (ok) {
@@ -135,8 +132,11 @@ class FacturiTabel extends React.Component {
 
   async updateFactura(idfactura) {
     const formData = new FormData();
+    var withFileUri = 'keep-file';
+    if (this.state.sterge) withFileUri = 'new-file';
     if (this.state.fisier) {
       formData.append('fisier', this.state.fisier);
+      withFileUri = 'new-file';
     }
 
     const factura_body = {
@@ -167,7 +167,7 @@ class FacturiTabel extends React.Component {
     }
 
     const ok = await axios
-      .put(`${server.address}/factura/${idfactura}`, formData, {
+      .put(`${server.address}/factura/${idfactura}/${withFileUri}`, formData, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
@@ -186,34 +186,32 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-    this.setState(
-      {
-        isEdit: true,
-        show: true,
+    this.setState({
+      isEdit: true,
+      show: true,
 
-        id: fact.id,
-        denumirefurnizor: fact.denumirefurnizor,
-        ciffurnizor: fact.ciffurnizor,
-        nr: fact.nr,
-        data: fact.data ? fact.data.substring(0, 10) : '',
-        moneda: fact.moneda,
-        sumafaratva: fact.sumafaratva,
-        termenscadenta: fact.termenscadenta,
-        tipachizitie: fact.tipachizitie,
-        descriereactivitati: fact.descriereactivitati,
-        aprobator: fact.aprobator ? fact.aprobator : '-',
-        idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
-        aprobat: fact.aprobat,
-        observatii: fact.observatii,
-        centrucost: fact.centrucost ? fact.centrucost : '-',
-        idcentrucost: fact.centrucost ? fact.centrucost.id : null,
-        dataplatii: fact.dataplatii,
-        sumaachitata: fact.sumaachitata,
-        fisier: { name: fact.numefisier, size: fact.dimensiunefisier },
-        numefisier: fact.numefisier,
-      },
-      () => console.log(this.state)
-    );
+      id: fact.id,
+      denumirefurnizor: fact.denumirefurnizor,
+      ciffurnizor: fact.ciffurnizor,
+      nr: fact.nr,
+      data: fact.data ? fact.data.substring(0, 10) : '',
+      moneda: fact.moneda,
+      sumafaratva: fact.sumafaratva,
+      termenscadenta: fact.termenscadenta,
+      tipachizitie: fact.tipachizitie,
+      descriereactivitati: fact.descriereactivitati,
+      aprobator: fact.aprobator ? fact.aprobator : '-',
+      idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
+      aprobat: fact.aprobat,
+      observatii: fact.observatii,
+      centrucost: fact.centrucost ? fact.centrucost : '-',
+      idcentrucost: fact.centrucost ? fact.centrucost.id : null,
+      dataplatii: fact.dataplatii,
+      sumaachitata: fact.sumaachitata,
+
+      numefisier: fact.numefisier,
+      sterge: false,
+    });
   }
 
   async deleteFactura(id) {
@@ -450,7 +448,8 @@ class FacturiTabel extends React.Component {
 
     const handleChangeStatus = ({ file }, status) => {
       if (status === 'done') {
-        this.setState({ fisier: file });
+        console.log(status, file);
+        this.setState({ fisier: file, numefisier: file.name });
       }
     };
 
@@ -607,7 +606,9 @@ class FacturiTabel extends React.Component {
                       </Button>
                       <Button
                         variant="link"
-                        onClick={() => this.setState({ fisier: undefined, numefisier: undefined })}
+                        onClick={() =>
+                          this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
+                        }
                       >
                         Șterge
                       </Button>

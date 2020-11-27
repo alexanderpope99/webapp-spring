@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,19 +82,20 @@ public class FacturaController {
 	}
 
 	@PostMapping
-	public FacturaDTO createFactura(@RequestBody FacturaDTO factura) throws ResourceNotFoundException {
-		return facturaService.save(factura);
-	}
-
-	@PostMapping("/file")
 	public Factura saveWithFile(@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
-		return facturaService.saveWithFile(facturaDTO);
+		return facturaService.save(facturaDTO);
 	}
 
-	@PutMapping("{id}")
-	public ResponseEntity<FacturaDTO> updateFactura(@PathVariable("id") int facturaId,
+	@PutMapping("{id}/new-file")
+	public ResponseEntity<Factura> updateFactura(@PathVariable("id") int facturaId,
 			@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		return ResponseEntity.ok(facturaService.update(facturaId, facturaDTO));
+	}
+
+	@PutMapping("{id}/keep-file")
+	public ResponseEntity<Factura> updateFacturaIgnoreFile(@PathVariable("id") int facturaId,
+			@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
+		return ResponseEntity.ok(facturaService.updateKeepOldFile(facturaId, facturaDTO));
 	}
 
 	@DeleteMapping("{id}")

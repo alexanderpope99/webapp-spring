@@ -30,29 +30,7 @@ public class FacturaService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public FacturaDTO save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
-		// convert from DTO to Entity
-		Factura factura = modelMapper.map(facturaDTO, Factura.class);
-
-		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Societate not found for this id :: " + facturaDTO.getIdsocietate()));
-		factura.setSocietate(societate);
-
-		if (facturaDTO.getIdcentrucost() != 0) {
-			CentruCost centruCost = centruCostRepository.findById(facturaDTO.getIdcentrucost()).orElseThrow(
-					() -> new ResourceNotFoundException("Societate not found for this id :: " + facturaDTO.getIdsocietate()));
-			factura.setCentrucost(centruCost);
-		}
-
-		// save to DB
-		factura = facturaRepository.save(factura);
-
-		// return sent body with correct id
-		facturaDTO.setId(factura.getId());
-		return facturaDTO;
-	}
-
-	public Factura saveWithFile(FacturaDTO facturaDTO) throws ResourceNotFoundException {
+	public Factura save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		Factura factura = modelMapper.map(facturaDTO, Factura.class);
 
 		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
@@ -64,12 +42,35 @@ public class FacturaService {
 					() -> new ResourceNotFoundException("Centrucost not found for this id :: " + facturaDTO.getIdsocietate()));
 			factura.setCentrucost(centruCost);
 		}
-		
+
 		return facturaRepository.save(factura);
 	}
 
-	public FacturaDTO update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
+	public Factura update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
 		newFacturaDTO.setId(facturaID);
-		return save(newFacturaDTO);
+		return this.save(newFacturaDTO);
+	}
+
+	public Factura updateKeepOldFile(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
+		newFacturaDTO.setId(facturaID);
+		Factura oldFactura = facturaRepository.findById(facturaID)
+				.orElseThrow(() -> new ResourceNotFoundException("Centrucost not found for this id :: " + facturaID));
+
+		Factura factura = modelMapper.map(newFacturaDTO, Factura.class);
+		factura.setFisier(oldFactura.getFisier());
+		factura.setNumefisier(oldFactura.getNumefisier());
+		factura.setDimensiunefisier(oldFactura.getDimensiunefisier());
+
+		Societate societate = societateRepository.findById(newFacturaDTO.getIdsocietate()).orElseThrow(
+				() -> new ResourceNotFoundException("Societate not found for this id :: " + newFacturaDTO.getIdsocietate()));
+		factura.setSocietate(societate);
+
+		if (newFacturaDTO.getIdcentrucost() != 0) {
+			CentruCost centruCost = centruCostRepository.findById(newFacturaDTO.getIdcentrucost()).orElseThrow(
+					() -> new ResourceNotFoundException("Centrucost not found for this id :: " + newFacturaDTO.getIdsocietate()));
+			factura.setCentrucost(centruCost);
+		}
+
+		return facturaRepository.save(factura);
 	}
 }
