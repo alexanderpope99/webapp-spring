@@ -46,6 +46,8 @@ public class FoaiePontajService {
 	private RealizariRetineriService realizariRetineriService;
 	@Autowired
 	private ZileService zileService;
+	@Autowired
+	private SarbatoriService sarbatoriService;
 
 	@Autowired
 	private SocietateRepository societateRepository;
@@ -56,11 +58,11 @@ public class FoaiePontajService {
 
 	public boolean createFoaiePontaj(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
-		Societate societate = societateRepository.findById((int) idsocietate)
+		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
-	
+
 		String statTemplateLocation = homeLocation + "\\templates";
 
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "FoaiePontaj.xlsx"));
@@ -71,14 +73,43 @@ public class FoaiePontajService {
 		writerCell.setCellValue("Unitatea: " + societate.getNume());
 
 		// * luna, an
-		// Row a = sheet.getRow(4);
 		writerCell = sheet.getRow(4).getCell(17);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		writerCell.setCellValue("pentru luna " + lunaNume + " anul " + an);
 
-		// ? write angajati
+		// * get weekend-uri + sarbatori
+		int weekdayNr;
+		int nrZileLuna = YearMonth.of(an, luna).lengthOfMonth();
+		int[] oreInZiua = new int[nrZileLuna + 1];
+		boolean[] ziLibera = new boolean[nrZileLuna + 1];
+		Arrays.fill(oreInZiua, 8);
+		LocalDate _zi;
+		List<LocalDate> sarbatori = sarbatoriService.getZileSarbatoareInLunaAnul(luna, an);
+
+		for (int i = 1; i <= nrZileLuna; ++i) {
+			_zi = LocalDate.of(an, luna, i);
+
+			// * sarbatori
+			if (!sarbatori.isEmpty()) {
+				for (LocalDate sarbatoare : sarbatori) {
+					if (sarbatoare.compareTo(_zi) == 0) {
+						ziLibera[i] = true;
+					}
+				}
+			}
+			// * weekend
+			weekdayNr = _zi.getDayOfWeek().getValue();
+			if (weekdayNr == 6 || weekdayNr == 7) {
+				ziLibera[i] = true;
+			}
+		}
+
+		// ! write angajati
 		int nrAngajat = 0;
 		for (Angajat angajat : angajati) {
+			oreInZiua = new int[nrZileLuna + 1];
+			Arrays.fill(oreInZiua, 8);
+
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
 			int idcontract = contract.getId();
@@ -107,40 +138,27 @@ public class FoaiePontajService {
 
 			int oresuplimentare200 = 0, oresuplimentare175 = 0, oresuplimentare150 = 0, oresuplimentare100 = 0;
 			int procent;
-			for(Oresuplimentare os : realizariRetineri.getOresuplimentare()) {
+			for (Oresuplimentare os : realizariRetineri.getOresuplimentare()) {
 				procent = os.getProcent();
 				switch (procent) {
 					case 200:
-					oresuplimentare200 += os.getNr();
+						oresuplimentare200 += os.getNr();
 						break;
 					case 175:
-						oresuplimentare175 += os.getNr();		
+						oresuplimentare175 += os.getNr();
+						break;
 					case 150:
 						oresuplimentare150 += os.getNr();
+						break;
 					case 100:
 						oresuplimentare100 += os.getNr();
+						break;
 					default:
 						break;
 				}
 			}
 
-			// get weekends
-			int weekdayNr;
-			int nrZileLuna = YearMonth.of(an, luna).lengthOfMonth();
-			int[] oreInZiua = new int[nrZileLuna + 1];
-			boolean[] ziLibera = new boolean[nrZileLuna + 1];
-			Arrays.fill(oreInZiua, 8);
-			LocalDate _zi;
-			for (int i = 1; i <= nrZileLuna; ++i) {
-				_zi = LocalDate.of(an, luna, i);
-
-				weekdayNr = _zi.getDayOfWeek().getValue();
-				if (weekdayNr == 6 || weekdayNr == 7) {
-					oreInZiua[i] = 0;
-					ziLibera[i] = true;
-				}
-			}
-			// get zile concediu odihna
+			// * get zile concediu odihna
 			LocalDate dela, panala;
 			for (CO concediu : co) {
 				dela = concediu.getDela();
@@ -152,7 +170,7 @@ public class FoaiePontajService {
 						oreInZiua[i] = 0;
 				}
 			}
-			// get zile concediu medical
+			// * get zile concediu medical
 			for (CM concediu : cm) {
 				dela = concediu.getDela();
 				panala = concediu.getPanala();
@@ -164,8 +182,6 @@ public class FoaiePontajService {
 				}
 			}
 
-			// should get zile sarbatori here TODO
-
 			CellStyle greyed = workbook.createCellStyle();
 			greyed.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
 			greyed.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -173,9 +189,12 @@ public class FoaiePontajService {
 			// * write ore 1-15
 			for (int i = 1; i <= 15; ++i) {
 				writerCell = row.createCell(3 + i);
-				writerCell.setCellValue(oreInZiua[i]);
-				if (ziLibera[i])
+				if (ziLibera[i]) {
 					writerCell.setCellStyle(greyed);
+					writerCell.setCellValue(0);
+				}
+				else
+					writerCell.setCellValue(oreInZiua[i]);
 			}
 			// * Total 1-15 = formula
 			writerCell = row.createCell(19);
@@ -184,9 +203,12 @@ public class FoaiePontajService {
 			// * write ore 16-31
 			for (int i = 16; i <= nrZileLuna; ++i) {
 				writerCell = row.createCell(4 + i);
-				writerCell.setCellValue(oreInZiua[i]);
-				if (ziLibera[i])
+				if (ziLibera[i]) {
 					writerCell.setCellStyle(greyed);
+					writerCell.setCellValue(0);
+				}
+				else
+					writerCell.setCellValue(oreInZiua[i]);
 			}
 			// * Total ore lucrate
 			writerCell = row.createCell(36);
@@ -216,8 +238,7 @@ public class FoaiePontajService {
 			int norma = realizariRetineri.getDuratazilucru();
 			// * ore nelucrate
 			writerCell = row.createCell(43);
-			int nrZileNelucrate = zileService.getZileLucratoareInLunaAnul(luna, an)
-					- realizariRetineri.getZilelucrate();
+			int nrZileNelucrate = zileService.getZileLucratoareInLunaAnul(luna, an) - realizariRetineri.getZilelucrate();
 			writerCell.setCellValue(nrZileNelucrate * norma);
 
 			// * ore Intr
@@ -293,8 +314,8 @@ public class FoaiePontajService {
 		} // ! for loop end
 
 		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
-		String newFileLocation = String.format("%s\\downloads\\%d\\Foaie Pontaj - %s - %s %d.xlsx", homeLocation,
-				userID, societate.getNume(), lunaNume, an);
+		String newFileLocation = String.format("%s\\downloads\\%d\\Foaie Pontaj - %s - %s %d.xlsx", homeLocation, userID,
+				societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

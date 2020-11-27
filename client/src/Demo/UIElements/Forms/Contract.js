@@ -18,7 +18,7 @@ import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 
 class Contract extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.handleClose = this.handleClose.bind(this);
     this.onChangeCentrucost = this.onChangeCentrucost.bind(this);
@@ -215,7 +215,7 @@ class Contract extends React.Component {
     this.setState({
       show: false,
       modalMessage: '',
-    });
+    }, this.props.scrollToTopSmooth);
   }
 
   hasRequired() {

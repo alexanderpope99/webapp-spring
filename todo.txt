@@ -5,13 +5,12 @@ retineri (doar avans merge)
 buton de 'show password' la schimba prola
 
 UPGRADES: 
-	sarbatori in foaie pontaj
-
 	cont bancar la societate
 	cont bancar pill in angajat (dupa pers. intr.)
 
 
 ERORI:
+	nu pune caen la societate
 	baza calcul frontend cand editeaza bazacalcul
 	concedii medicale trebuie sa nu aiba valori nule
 

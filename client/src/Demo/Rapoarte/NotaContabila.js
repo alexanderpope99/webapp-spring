@@ -57,7 +57,7 @@ class NotaContabila extends React.Component {
       .catch((err) => console.error(err));
 
     if (created)
-      this.download(`Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`);
+      download(`Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`, this.state.user.id);
   }
 
   render() {

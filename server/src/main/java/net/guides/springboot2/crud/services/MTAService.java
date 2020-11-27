@@ -57,8 +57,8 @@ public class MTAService {
 		style.setFont(arial10);
 
 
-		// initialize writerCell;
-		Cell writerCell = sheet.getRow(0).getCell(0);
+		// * initialize writerCell;
+		Cell writerCell;
 
 		int nrAngajat = 1;
 		for (Angajat angajat : angajati) {

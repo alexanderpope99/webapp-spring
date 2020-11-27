@@ -72,7 +72,6 @@ class Pontaj extends React.Component {
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
-
     const created = await fetch(
       `${server.address}/pontaj/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
       {
