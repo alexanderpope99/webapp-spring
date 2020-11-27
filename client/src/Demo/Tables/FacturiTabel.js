@@ -31,11 +31,13 @@ class FacturiTabel extends React.Component {
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
+    this.onChangeAprobator = this.onChangeAprobator.bind(this);
 
     this.state = {
       socsel: getSocSel(),
       factura: [],
       centreCostComponent: [],
+      aprobatoriComponent: [],
       facturaComponent: null,
 
       isEdit: false,
@@ -55,16 +57,17 @@ class FacturiTabel extends React.Component {
       termenscadenta: '',
       tipachizitie: '',
       descriereactivitati: '',
-      idaprobator: null,
       aprobat: false,
       observatii: '',
       centrucost: '',
+      aprobator: '',
       dataplatii: '',
       sumaachitata: '',
       idsocietate: null,
       show: false,
 
       idcentrucost: null,
+      idaprobator: null,
 
       fisier: null,
       numefisier: '',
@@ -82,6 +85,7 @@ class FacturiTabel extends React.Component {
     const formData = new FormData();
     if (this.state.fisier) formData.append('fisier', this.state.fisier);
 
+    console.log(this.state);
     const factura_body = {
       denumirefurnizor: this.state.denumirefurnizor || null,
       ciffurnizor: this.state.ciffurnizor || null,
@@ -92,7 +96,7 @@ class FacturiTabel extends React.Component {
       termenscadenta: this.state.termenscadenta || null,
       tipachizitie: this.state.tipachizitie || null,
       descriereactivitati: this.state.descriereactivitati || null,
-      idaprobator: null,
+      idaprobator: this.state.idaprobator || null,
       aprobat: this.state.aprobat || false,
       observatii: this.state.observatii || null,
       idcentrucost: this.state.idcentrucost || null,
@@ -145,7 +149,7 @@ class FacturiTabel extends React.Component {
       termenscadenta: this.state.termenscadenta || null,
       tipachizitie: this.state.tipachizitie || null,
       descriereactivitati: this.state.descriereactivitati || null,
-      idaprobator: null,
+      idaprobator: this.state.idaprobator || null,
       aprobat: this.state.aprobat || null,
       observatii: this.state.observatii || null,
       idcentrucost: this.state.idcentrucost || null,
@@ -182,7 +186,6 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-    console.log(fact);
     this.setState(
       {
         isEdit: true,
@@ -198,14 +201,14 @@ class FacturiTabel extends React.Component {
         termenscadenta: fact.termenscadenta,
         tipachizitie: fact.tipachizitie,
         descriereactivitati: fact.descriereactivitati,
-        idaprobator: fact.idaprobator,
+        aprobator: fact.aprobator ? fact.aprobator : '-',
+        idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
         aprobat: fact.aprobat,
         observatii: fact.observatii,
         centrucost: fact.centrucost ? fact.centrucost : '-',
         idcentrucost: fact.centrucost ? fact.centrucost.id : null,
         dataplatii: fact.dataplatii,
         sumaachitata: fact.sumaachitata,
-
         fisier: { name: fact.numefisier, size: fact.dimensiunefisier },
         numefisier: fact.numefisier,
       },
@@ -340,6 +343,12 @@ class FacturiTabel extends React.Component {
       })
       .then((res) => res.data)
       .catch((err) => console.error(err));
+    const aprobatori = await axios
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
     if (centreCost) {
       this.setState(
         {
@@ -352,6 +361,14 @@ class FacturiTabel extends React.Component {
       this.setState(
         {
           factura: fact,
+        },
+        this.renderFacturi
+      );
+    }
+    if (aprobatori) {
+      this.setState(
+        {
+          aprobatoriComponent: aprobatori,
         },
         this.renderFacturi
       );
@@ -373,6 +390,15 @@ class FacturiTabel extends React.Component {
     });
   }
 
+  onChangeAprobator(e) {
+    const selectedIndex = e.target.options.selectedIndex;
+    const idapb = e.target.options[selectedIndex].getAttribute('data-key');
+    this.setState({
+      idaprobator: idapb,
+      aprobator: e.target.value,
+    });
+  }
+
   async handleClose() {
     this.setState({
       show: false,
@@ -386,7 +412,7 @@ class FacturiTabel extends React.Component {
       termenscadenta: '',
       tipachizitie: '',
       descriereactivitati: '',
-      idaprobator: null,
+      aprobator: '',
       aprobat: false,
       observatii: '',
       centrucost: '',
@@ -414,9 +440,16 @@ class FacturiTabel extends React.Component {
         </option>
       ));
 
+    var aprobatori = [];
+    if (this.state.aprobatoriComponent.length > 0)
+      aprobatori = this.state.aprobatoriComponent.map((cod, index) => (
+        <option key={index} data-key={cod.persoana.id}>
+          {cod.persoana.nume + ' ' + cod.persoana.prenume}
+        </option>
+      ));
+
     const handleChangeStatus = ({ file }, status) => {
       if (status === 'done') {
-        console.log(status, file);
         this.setState({ fisier: file });
       }
     };
@@ -532,6 +565,17 @@ class FacturiTabel extends React.Component {
                   >
                     <option>-</option>
                     {centreCost}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Aprobator</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.aprobator.nume}
+                    onChange={this.onChangeAprobator}
+                  >
+                    <option>-</option>
+                    {aprobatori}
                   </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
