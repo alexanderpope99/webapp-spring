@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
+import { download } from '../Resources/download';
 
 class Pontaj extends React.Component {
   constructor() {
@@ -11,7 +12,6 @@ class Pontaj extends React.Component {
 
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    this.download = this.download.bind(this);
     this.creeazaFoaiePontaj = this.creeazaFoaiePontaj.bind(this);
 
     this.state = {
@@ -39,34 +39,6 @@ class Pontaj extends React.Component {
     });
   }
 
-  // luna is object of type { nume: string, nr: int }
-  async download(luna, an) {
-    const token = this.state.user.accessToken;
-    console.log('trying to download...');
-    let societateNume = this.state.socsel.nume;
-    await fetch(
-      `${server.address}/download/${this.state.user.id}/Foaie Pontaj - ${societateNume} - ${luna.nume} ${an}.xlsx`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/octet-stream',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-      .then((res) => res.blob())
-      .then((blob) => {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = `Foaie Pontaj - ${societateNume} - ${luna.nume} ${an}.xlsx`;
-        document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click();
-        a.remove(); //afterwards we remove the element again
-        console.log('downloaded');
-      });
-  }
-
   async creeazaFoaiePontaj(e) {
     e.preventDefault();
     // make request to create stat for soc, luna, an
@@ -85,7 +57,11 @@ class Pontaj extends React.Component {
       .then((res) => res.ok)
       .catch((err) => console.error(err));
 
-    if (created) this.download(luna, an);
+    if (created)
+      download(
+        `Foaie Pontaj - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
+        this.state.user.id
+      );
   }
 
   render() {
