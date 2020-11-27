@@ -8,10 +8,12 @@ import net.guides.springboot2.crud.dto.FacturaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CentruCost;
 import net.guides.springboot2.crud.model.Factura;
+import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.CentruCostRepository;
 import net.guides.springboot2.crud.repository.FacturaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
+import net.guides.springboot2.crud.repository.AngajatRepository;
 
 @Service
 public class FacturaService {
@@ -28,19 +30,31 @@ public class FacturaService {
 	private CentruCostRepository centruCostRepository;
 
 	@Autowired
+	private AngajatRepository angajatRepository;
+
+	@Autowired
 	private ModelMapper modelMapper;
 
 	public Factura save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		Factura factura = modelMapper.map(facturaDTO, Factura.class);
 
-		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Societate not found for this id :: " + facturaDTO.getIdsocietate()));
+		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate())
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Societate not found for this id :: " + facturaDTO.getIdsocietate()));
 		factura.setSocietate(societate);
 
 		if (facturaDTO.getIdcentrucost() != 0) {
-			CentruCost centruCost = centruCostRepository.findById(facturaDTO.getIdcentrucost()).orElseThrow(
-					() -> new ResourceNotFoundException("Centrucost not found for this id :: " + facturaDTO.getIdsocietate()));
+			CentruCost centruCost = centruCostRepository.findById(facturaDTO.getIdcentrucost())
+					.orElseThrow(() -> new ResourceNotFoundException(
+							"Centrucost not found for this id :: " + facturaDTO.getIdcentrucost()));
 			factura.setCentrucost(centruCost);
+		}
+
+		if (facturaDTO.getIdaprobator() != 0) {
+			Angajat aprobator = angajatRepository.findById(facturaDTO.getIdaprobator())
+					.orElseThrow(() -> new ResourceNotFoundException(
+							"Angajat not found for this id :: " + facturaDTO.getIdaprobator()));
+			factura.setAprobator(aprobator);
 		}
 
 		return facturaRepository.save(factura);
@@ -61,14 +75,23 @@ public class FacturaService {
 		factura.setNumefisier(oldFactura.getNumefisier());
 		factura.setDimensiunefisier(oldFactura.getDimensiunefisier());
 
-		Societate societate = societateRepository.findById(newFacturaDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Societate not found for this id :: " + newFacturaDTO.getIdsocietate()));
+		Societate societate = societateRepository.findById(newFacturaDTO.getIdsocietate())
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Societate not found for this id :: " + newFacturaDTO.getIdsocietate()));
 		factura.setSocietate(societate);
 
 		if (newFacturaDTO.getIdcentrucost() != 0) {
-			CentruCost centruCost = centruCostRepository.findById(newFacturaDTO.getIdcentrucost()).orElseThrow(
-					() -> new ResourceNotFoundException("Centrucost not found for this id :: " + newFacturaDTO.getIdsocietate()));
+			CentruCost centruCost = centruCostRepository.findById(newFacturaDTO.getIdcentrucost())
+					.orElseThrow(() -> new ResourceNotFoundException(
+							"Centrucost not found for this id :: " + newFacturaDTO.getIdsocietate()));
 			factura.setCentrucost(centruCost);
+		}
+
+		if (newFacturaDTO.getIdaprobator() != 0) {
+			Angajat aprobator = angajatRepository.findById(newFacturaDTO.getIdaprobator())
+					.orElseThrow(() -> new ResourceNotFoundException(
+							"Angajat not found for this id :: " + newFacturaDTO.getIdaprobator()));
+			factura.setAprobator(aprobator);
 		}
 
 		return facturaRepository.save(factura);
