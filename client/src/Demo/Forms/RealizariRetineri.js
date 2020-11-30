@@ -713,7 +713,7 @@ class RealizariRetineri extends React.Component {
           delay={2500}
 					autohide
 					className="position-fixed"
-					style={{top: "10px", right: "5px", zIndex: "9999"}}
+					style={{top: "10px", right: "5px", zIndex: "9999", background: "lightgreen"}}
         >
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Recalculat!</strong>
