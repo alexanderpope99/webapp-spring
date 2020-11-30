@@ -707,13 +707,13 @@ class RealizariRetineri extends React.Component {
     console.log(this.state.showToast);
     return (
       <Aux>
-				<Toast
+        <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
           delay={2500}
-					autohide
-					className="position-fixed"
-					style={{top: "10px", right: "5px", zIndex: "9999"}}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
         >
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Recalculat!</strong>
@@ -800,7 +800,6 @@ class RealizariRetineri extends React.Component {
             </Table>
           </Modal.Body>
         </Modal>
-        
 
         <Card>
           {/* SELECT LUNA + AN */}
