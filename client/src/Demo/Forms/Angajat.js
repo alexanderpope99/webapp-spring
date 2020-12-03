@@ -41,6 +41,7 @@ class Angajat extends React.Component {
     // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);
 
     this.persoana = React.createRef();
     this.persoaneintretinere = React.createRef();
@@ -75,6 +76,14 @@ class Angajat extends React.Component {
     this.setState({
       show: false,
       modalMessage: '',
+    });
+  }
+
+  scrollToTopSmooth() {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
     });
   }
 
@@ -135,7 +144,7 @@ class Angajat extends React.Component {
   }
 
   async onFocusBC() {
-		await this.bc.current.updateAngajatSel();
+    await this.bc.current.updateAngajatSel();
     this.setState({ angajatsel: getAngajatSel() });
   }
 
@@ -158,8 +167,8 @@ class Angajat extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        
-				<Row>
+
+        <Row>
           <Col>
             <h5>
               {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
@@ -186,7 +195,7 @@ class Angajat extends React.Component {
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
-                <EditPersoana ref={this.persoana} />
+                <EditPersoana ref={this.persoana} scrollToTopSmooth={this.scrollToTopSmooth}/>
               </Tab>
 
               <Tab eventKey="contract" title="Contract de munca">
@@ -194,23 +203,27 @@ class Angajat extends React.Component {
                   ref={this.contract}
                   idcontract={this.state.idcontract}
                   idangajat={this.state.idangajat}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
 
               <Tab eventKey="co" title="C.O.">
-                <ConcediiOdihna ref={this.co} />
+                <ConcediiOdihna ref={this.co} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
 
               <Tab eventKey="cm" title="C.M.">
-                <ConcediiMedicale ref={this.cm} />
+                <ConcediiMedicale ref={this.cm} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
 
               <Tab eventKey="bc" title="Bază calcul">
-                <BazaCalcul ref={this.bc} />
+                <BazaCalcul ref={this.bc} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
 
               <Tab eventKey="pi" title="Pers. într.">
-                <PersoaneIntretinereTabel ref={this.persoaneintretinere} />
+                <PersoaneIntretinereTabel
+                  ref={this.persoaneintretinere}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
+                />
               </Tab>
             </Tabs>
             <Button

@@ -12,6 +12,7 @@ import {
   Tooltip,
   Table,
   Collapse,
+  Toast,
 } from 'react-bootstrap';
 import Add from '@material-ui/icons/Add';
 import Aux from '../../hoc/_Aux';
@@ -51,6 +52,7 @@ class RealizariRetineri extends React.Component {
       detaliiAccordion: false,
       show: false,
       modalMessage: '',
+      showToast: false,
 
       an: '',
       luna: '',
@@ -164,9 +166,9 @@ class RealizariRetineri extends React.Component {
       valoaretichete: '',
       impozit: '',
       restplata: '',
-			detalii: null,
-			
-			// detalii
+      detalii: null,
+
+      // detalii
       bazaimpozit: '',
       impozitscutit: '',
       salariurealizat: '',
@@ -275,11 +277,11 @@ class RealizariRetineri extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
-		// set states with data
+    // set states with data
     this.setState({
       //* realizari
-      an_inceput_contract: contract.dataincepere? contract.dataincepere.substring(0, 4) : '',
-      luna_inceput_contract: contract.dataincepere? contract.dataincepere.substring(5, 7) : '',
+      an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
+      luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
       functie: contract.functie || 0,
       duratazilucru: contract.normalucru || 0,
       normalucru: data.norma || 0, // zile lucratoare in luna respectiva
@@ -316,8 +318,8 @@ class RealizariRetineri extends React.Component {
       restplata: data.restplata || 0,
       cam: data.cam || 0,
 
-			//* detalii
-			bazaimpozit: data.bazaimpozit || 0,
+      //* detalii
+      bazaimpozit: data.bazaimpozit || 0,
       impozitscutit: data.impozitscutit || 0,
       salariurealizat: data.salariurealizat || 0,
       venitnet: data.venitnet || 0,
@@ -330,7 +332,6 @@ class RealizariRetineri extends React.Component {
       oresuplimentare: oresuplimentare || 0,
       totaloresuplimentare: totaloresuplimentare || 0,
       primabruta: data.primabruta || 0,
-			
     });
   }
 
@@ -412,6 +413,7 @@ class RealizariRetineri extends React.Component {
         cam: data.cam,
         impozit: data.impozit,
         valoaretichete: data.valoaretichete,
+        showToast: true,
       },
       this.fillForm
     );
@@ -702,6 +704,7 @@ class RealizariRetineri extends React.Component {
       </option>
     ));
 
+    console.log(this.state.showToast);
     return (
       <Aux>
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -781,6 +784,21 @@ class RealizariRetineri extends React.Component {
             </Table>
           </Modal.Body>
         </Modal>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={2500}
+          autohide
+					className="position-fixed"
+					style={{top: "10px", right: "5px"}}
+        >
+          <Toast.Header>
+            <strong className="mr-auto">Recalculat!</strong>
+          </Toast.Header>
+          <Toast.Body>
+            Realizari/Retineri recalculate in {this.state.luna.nume} {this.state.an} ✔
+          </Toast.Body>
+        </Toast>
 
         <Card>
           {/* SELECT LUNA + AN */}
@@ -1245,120 +1263,92 @@ class RealizariRetineri extends React.Component {
                     <Collapse in={this.state.detaliiAccordion}>
                       <div id="accordion1">
                         <Card.Body>
-                            <Row>
-                              <Form.Group id="bazaimpozit" as={Col} md="6">
-                                <Form.Label>Bază impozit</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.bazaimpozit}
-                                  disabled
-                                />
-                              </Form.Group>
-                              <Form.Group id="impozitscutit" as={Col} md="6">
-                                <Form.Label>Impozit scutit</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.impozitscutit}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="nrpersoaneintretinere" as={Col} md="6">
-                                <Form.Label>Număr persoane întreținere</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.nrpersoaneintretinere}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="salariupeora" as={Col} md="6">
-                                <Form.Label>Salariu pe oră</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.salariupeora}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="salariupezi" as={Col} md="6">
-                                <Form.Label>Salariu pe zi</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.salariupezi}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="salariurealizat" as={Col} md="6">
-                                <Form.Label>Salariu realizat</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.salariurealizat}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="venitnet" as={Col} md="6">
-                                <Form.Label>Venit net</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.venitnet}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilec" as={Col} md="6">
-                                <Form.Label>Zile concediu (total)</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilec}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilecmlucratoare" as={Col} md="6">
-                                <Form.Label>Zile concediu medical lucrătoare</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilecmlucratoare}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilecolucratoare" as={Col} md="6">
-                                <Form.Label>Zile concediu odihna lucrătoare</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilecolucratoare}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilecfp" as={Col} md="6">
-                                <Form.Label>Zile concediu fară plată</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilecfp}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilecfplucratoare" as={Col} md="6">
-                                <Form.Label>Zile concediu fara plată lucrătoare</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilecfplucratoare}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zilelucrate" as={Col} md="6">
-                                <Form.Label>Zile lucrate</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zilelucrate}
-                                  disabled
-                                />
-                              </Form.Group>
-															<Form.Group id="zileplatite" as={Col} md="6">
-                                <Form.Label>Zile plătite</Form.Label>
-                                <Form.Control
-                                  type="number"
-                                  value={this.state.zileplatite}
-                                  disabled
-                                />
-                              </Form.Group>
-                            </Row>
+                          <Row>
+                            <Form.Group id="bazaimpozit" as={Col} md="6">
+                              <Form.Label>Bază impozit</Form.Label>
+                              <Form.Control type="number" value={this.state.bazaimpozit} disabled />
+                            </Form.Group>
+                            <Form.Group id="impozitscutit" as={Col} md="6">
+                              <Form.Label>Impozit scutit</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.impozitscutit}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="nrpersoaneintretinere" as={Col} md="6">
+                              <Form.Label>Număr persoane întreținere</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.nrpersoaneintretinere}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="salariupeora" as={Col} md="6">
+                              <Form.Label>Salariu pe oră</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.salariupeora}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="salariupezi" as={Col} md="6">
+                              <Form.Label>Salariu pe zi</Form.Label>
+                              <Form.Control type="number" value={this.state.salariupezi} disabled />
+                            </Form.Group>
+                            <Form.Group id="salariurealizat" as={Col} md="6">
+                              <Form.Label>Salariu realizat</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.salariurealizat}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="venitnet" as={Col} md="6">
+                              <Form.Label>Venit net</Form.Label>
+                              <Form.Control type="number" value={this.state.venitnet} disabled />
+                            </Form.Group>
+                            <Form.Group id="zilec" as={Col} md="6">
+                              <Form.Label>Zile concediu (total)</Form.Label>
+                              <Form.Control type="number" value={this.state.zilec} disabled />
+                            </Form.Group>
+                            <Form.Group id="zilecmlucratoare" as={Col} md="6">
+                              <Form.Label>Zile concediu medical lucrătoare</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.zilecmlucratoare}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="zilecolucratoare" as={Col} md="6">
+                              <Form.Label>Zile concediu odihna lucrătoare</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.zilecolucratoare}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="zilecfp" as={Col} md="6">
+                              <Form.Label>Zile concediu fară plată</Form.Label>
+                              <Form.Control type="number" value={this.state.zilecfp} disabled />
+                            </Form.Group>
+                            <Form.Group id="zilecfplucratoare" as={Col} md="6">
+                              <Form.Label>Zile concediu fara plată lucrătoare</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={this.state.zilecfplucratoare}
+                                disabled
+                              />
+                            </Form.Group>
+                            <Form.Group id="zilelucrate" as={Col} md="6">
+                              <Form.Label>Zile lucrate</Form.Label>
+                              <Form.Control type="number" value={this.state.zilelucrate} disabled />
+                            </Form.Group>
+                            <Form.Group id="zileplatite" as={Col} md="6">
+                              <Form.Label>Zile plătite</Form.Label>
+                              <Form.Control type="number" value={this.state.zileplatite} disabled />
+                            </Form.Group>
+                          </Row>
                         </Card.Body>
                       </div>
                     </Collapse>

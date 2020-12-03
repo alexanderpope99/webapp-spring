@@ -220,7 +220,7 @@ class COTabel extends React.Component {
       this.setState({
         show_confirm: false,
         modalMessage: '',
-      });
+      }, this.props.scrollToTopSmooth);
     else
       this.setState({
         show: false,

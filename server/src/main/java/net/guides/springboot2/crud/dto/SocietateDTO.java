@@ -12,7 +12,7 @@ public class SocietateDTO {
 
 	private String nume;
 
-	private Long caen;
+	private Long idcaen;
 
 	private String cif;
 
@@ -48,8 +48,8 @@ public class SocietateDTO {
 		return id;
 	}
 
-	public Long getCaen() {
-		return caen;
+	public Long getIdcaen() {
+		return idcaen;
 	}
 
 	public String getNume() {
@@ -80,8 +80,8 @@ public class SocietateDTO {
 		this.id = id;
 	}
 
-	public void setCaen(Long idcaen) {
-		this.caen = idcaen;
+	public void setIdcaen(Long idcaen) {
+		this.idcaen = idcaen;
 	}
 
 	public void setNume(String nume) {

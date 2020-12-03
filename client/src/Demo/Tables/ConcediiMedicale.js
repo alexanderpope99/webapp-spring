@@ -223,13 +223,13 @@ class CMTabel extends React.Component {
       );
       if (this.state.mediezilnica) {
         indemnizatiefirma = Math.round(
-          zilefirma * Math.round(this.state.mediezilnica) * this.state.procent
+          zilefirma * Math.round(this.state.mediezilnica) * this.state.procent / 100
         );
         indemnizatiefnuass = Math.round(
-          zilefnuass * Math.round(this.state.mediezilnica) * this.state.procent
+          zilefnuass * Math.round(this.state.mediezilnica) * this.state.procent / 100
         );
         indemnizatiefaambp = Math.round(
-          zilefaambp * Math.round(this.state.mediezilnica) * this.state.procent
+          zilefaambp * Math.round(this.state.mediezilnica) * this.state.procent / 100
         );
       }
     }

@@ -20,9 +20,9 @@ async function download(fileName, userid) {
     var a = document.createElement('a');
     a.href = url;
     a.download = fileName;
-    document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+    document.body.appendChild(a); 
     a.click();
-    a.remove(); //afterwards we remove the element again
+    a.remove();
     console.log('downloaded');
   }
 }
@@ -46,9 +46,9 @@ async function downloadFactura(fileName, idfactura) {
     var a = document.createElement('a');
     a.href = url;
     a.download = fileName;
-    document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+    document.body.appendChild(a); 
     a.click();
-    a.remove(); //afterwards we remove the element again
+    a.remove();
     console.log('downloaded');
   }
 }

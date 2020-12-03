@@ -5,8 +5,6 @@ retineri (doar avans merge)
 buton de 'show password' la schimba prola
 
 UPGRADES: 
-	sarbatori in foaie pontaj
-
 	cont bancar la societate
 	cont bancar pill in angajat (dupa pers. intr.)
 

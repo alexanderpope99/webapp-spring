@@ -162,7 +162,7 @@ class Societati extends React.Component {
   }
 
   editSocietate(societate) {
-    console.log(societate.id);
+    console.log(societate);
     this.setState(
       {
         show: true,
@@ -247,13 +247,14 @@ class Societati extends React.Component {
       email: this.state.email || null,
       telefon: this.state.telefon || null,
       fax: this.state.fax || null,
-    };
-    // ADD SOCIETATE TO DATABASE
+		};
+
+		// UPDATE SOCIETATE
     await axios
       .put(`${server.address}/societate/${this.state.id}`, societate_body, {
         headers: authHeader(),
       })
-      .then((res) => {
+      .then(() => {
         this.setState(
           {
             show: false,
@@ -261,8 +262,7 @@ class Societati extends React.Component {
             modalMessage: 'Date actualizate!',
           },
           this.getSocietati
-        );
-        return res.data;
+        )
       })
       .catch((err) => console.error(err));
   }
