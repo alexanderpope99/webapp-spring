@@ -18,7 +18,7 @@ import authHeader from '../../services/auth-header';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
-class FacturiTabel extends React.Component {
+class FacturiAprobatorTabel extends React.Component {
   constructor() {
     super();
 
@@ -185,7 +185,6 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-    console.log(fact.aprobator);
     this.setState(
       {
         isEdit: true,
@@ -201,7 +200,7 @@ class FacturiTabel extends React.Component {
         termenscadenta: fact.termenscadenta,
         tipachizitie: fact.tipachizitie,
         descriereactivitati: fact.descriereactivitati,
-        aprobator: fact.aprobator ? fact.aprobator.persoana : '-',
+        aprobator: fact.aprobator ? fact.aprobator : '-',
         idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
         aprobat: fact.aprobat,
         observatii: fact.observatii,
@@ -213,7 +212,7 @@ class FacturiTabel extends React.Component {
         numefisier: fact.numefisier,
         sterge: false,
       },
-      () => console.log(this.state.aprobator)
+      () => console.log(this.state)
     );
   }
 
@@ -463,7 +462,6 @@ class FacturiTabel extends React.Component {
     // 	console.log(files[0].meta);
     // 	allFiles.forEach(f => f.remove());
     // }
-
     return (
       <Aux>
         {/* add/edit modal */}
@@ -572,13 +570,13 @@ class FacturiTabel extends React.Component {
                 <Form.Group as={Col} md="6">
                   <Form.Label>Aprobator</Form.Label>
                   <Form.Control
-                    as="select"
-                    value={this.state.aprobator.nume + ' ' + this.state.aprobator.prenume}
+                    type="text"
+                    value={this.state.aprobator.nume}
                     onChange={this.onChangeAprobator}
-                  >
-                    <option>-</option>
-                    {aprobatori}
-                  </Form.Control>
+                  />
+                  {/* <option>-</option>
+                    {aprobatori} */}
+                  {/* </Form.Control> */}
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Data Plății</Form.Label>
@@ -706,4 +704,4 @@ class FacturiTabel extends React.Component {
   }
 }
 
-export default FacturiTabel;
+export default FacturiAprobatorTabel;
