@@ -206,7 +206,7 @@ class UserTabel extends React.Component {
                     variant="outline-secondary"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <Edit3 fontSize="small" />
+                    <Edit3 size={20} />
                   </Button>
 
                   <PopupState variant="popover" popupId="demo-popup-popover">
@@ -217,7 +217,7 @@ class UserTabel extends React.Component {
                           className="m-1 p-1 rounded-circle border-0"
                           {...bindTrigger(popupState)}
                         >
-                          <Trash2 fontSize="small" />
+                          <Trash2 size={20} />
                         </Button>
                         <Popover
                           {...bindPopover(popupState)}

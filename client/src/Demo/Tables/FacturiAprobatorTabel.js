@@ -265,7 +265,7 @@ class FacturiAprobatorTabel extends React.Component {
                       variant="outline-danger"
                       className="m-1 p-1 rounded-circle border-0"
                     >
-                      <X />
+                      <X size={20} />
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger
@@ -282,7 +282,7 @@ class FacturiAprobatorTabel extends React.Component {
                       variant="outline-warning"
                       className="m-1 p-1 rounded-circle border-0"
                     >
-                      <Clock />
+                      <Clock size={20}/>
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger
@@ -299,7 +299,7 @@ class FacturiAprobatorTabel extends React.Component {
                       variant="outline-success"
                       className="m-1 p-1 rounded-circle border-0"
                     >
-                      <Check />
+                      <Check size={20}/>
                     </Button>
                   </OverlayTrigger>
                 </div>

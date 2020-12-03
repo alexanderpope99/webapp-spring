@@ -160,7 +160,7 @@ class COTabel extends React.Component {
     const co = await axios
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
-      .then((co) => (co.status == 200 ? co.data : null))
+      .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) => console.error('err', err));
 
     if (co) {
@@ -357,7 +357,7 @@ class COTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editCO(co)}
                 >
-                  <Edit3 fontSize="small" />
+                  <Edit3 size={20}/>
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -367,7 +367,7 @@ class COTabel extends React.Component {
                         className="m-0 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
-                        <Trash2 fontSize="small" />
+                        <Trash2 size={20} />
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}

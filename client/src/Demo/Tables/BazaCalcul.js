@@ -177,7 +177,7 @@ class BazaCalcul extends React.Component {
                     variant="outline-secondary"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <Edit3 fontSize="small" />
+                    <Edit3 size={20} />
                   </Button>
 
                   <PopupState variant="popover" popupId="demo-popup-popover">
@@ -188,7 +188,7 @@ class BazaCalcul extends React.Component {
                           className="m-1 p-1 rounded-circle border-0"
                           {...bindTrigger(popupState)}
                         >
-                          <DeleteIcon fontSize="small" />
+                          <DeleteIcon size={20} />
                         </Button>
                         <Popover
                           {...bindPopover(popupState)}
