@@ -1,13 +1,16 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Add from '@material-ui/icons/Add';
-import Refresh from '@material-ui/icons/Refresh';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
+import {
+  Row,
+  Col,
+  Card,
+  Table,
+  Button,
+  OverlayTrigger,
+  Tooltip,
+  Modal,
+  Form,
+} from 'react-bootstrap';
+import { X, Check, Clock, Plus, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -32,6 +35,7 @@ class FacturiAprobatorTabel extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
+    this.changeSortOrder = this.changeSortOrder.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -41,6 +45,8 @@ class FacturiAprobatorTabel extends React.Component {
       facturaComponent: [],
 
       isEdit: false,
+      sortBy: 'data',
+      sortAsc: true,
 
       // confirm modal
       showConfirm: false,
@@ -60,7 +66,7 @@ class FacturiAprobatorTabel extends React.Component {
       aprobat: false,
       observatii: '',
       centrucost: '',
-      aprobator: '',
+      numeaprobator: '',
       dataplatii: '',
       sumaachitata: '',
       idsocietate: null,
@@ -200,7 +206,9 @@ class FacturiAprobatorTabel extends React.Component {
         termenscadenta: fact.termenscadenta,
         tipachizitie: fact.tipachizitie,
         descriereactivitati: fact.descriereactivitati,
-        aprobator: fact.aprobator ? fact.aprobator : '-',
+        numeaprobator: fact.aprobator
+          ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+          : '-',
         idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
         aprobat: fact.aprobat,
         observatii: fact.observatii,
@@ -225,73 +233,75 @@ class FacturiAprobatorTabel extends React.Component {
 
   // function to create react component with fetched data
   async renderFacturi() {
+    const compare = (f1, f2) => {
+      var sortBy = this.state.sortBy;
+      var sortAsc = this.state.sortAsc;
+      if (sortAsc) return f1[sortBy] < f2[sortBy] ? -1 : 1;
+      else return f1[sortBy] > f2[sortBy] ? -1 : 1;
+    };
+
+    console.log(this.state.sortAsc, this.state.sortBy);
+    const facturi = this.state.factura.sort(compare);
+    console.log(facturi);
     this.setState({
       facturaComponent: await Promise.all(
-        this.state.factura.map(async (fact, index) => {
+        facturi.map(async (fact, index) => {
           return (
             // TODO
             <tr key={fact.id}>
               <th>
                 <div className="d-flex">
-                  <Button
-                    onClick={() => this.editFactura(fact)}
-                    variant="outline-secondary"
-                    className="m-1 p-1 rounded-circle border-0"
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                        Respinge
+                      </Tooltip>
+                    }
                   >
-                    <Edit fontSize="small" />
-                  </Button>
-
-                  <PopupState variant="popover" popupId="demo-popup-popover">
-                    {(popupState) => (
-                      <div>
-                        <Button
-                          variant="outline-secondary"
-                          className="m-1 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </Button>
-                        <Popover
-                          {...bindPopover(popupState)}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                          }}
-                        >
-                          <Box p={2}>
-                            <Typography>
-                              Sigur ștergeți factura {fact.dela} {fact.panala}?
-                            </Typography>
-                            <Typography variant="caption">
-                              Datele nu mai pot fi recuperate
-                            </Typography>
-                            <br />
-                            <Button
-                              variant="outline-danger"
-                              onClick={() => {
-                                popupState.close();
-                                this.deleteFactura(fact.id);
-                              }}
-                              className="mt-2 "
-                            >
-                              Da
-                            </Button>
-                            <Button
-                              variant="outline-persondary"
-                              onClick={popupState.close}
-                              className="mt-2"
-                            >
-                              Nu
-                            </Button>
-                          </Box>
-                        </Popover>
-                      </div>
-                    )}
-                  </PopupState>
+                    <Button
+                      onClick={() => this.rejectFactura(fact)}
+                      variant="outline-danger"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <X />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="postpone-button" style={{ opacity: '.4' }}>
+                        Amână
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() => this.postponeFactura(fact)}
+                      variant="outline-warning"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <Clock />
+                    </Button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                        Acceptă
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() => this.approveFactura(fact)}
+                      variant="outline-success"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <Check />
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </th>
               <th>{fact.denumirefurnizor}</th>
@@ -327,6 +337,12 @@ class FacturiAprobatorTabel extends React.Component {
         })
       ),
     });
+  }
+
+  changeSortOrder(sortBy) {
+    this.state.sortBy === sortBy
+      ? this.setState({ sortAsc: !this.state.sortAsc }, this.renderFacturi)
+      : this.setState({ sortBy: sortBy }, this.renderFacturi);
   }
 
   async onRefresh() {
@@ -394,7 +410,7 @@ class FacturiAprobatorTabel extends React.Component {
     const idapb = e.target.options[selectedIndex].getAttribute('data-key');
     this.setState({
       idaprobator: idapb,
-      aprobator: e.target.value,
+      numeaprobator: e.target.value,
     });
   }
 
@@ -411,7 +427,7 @@ class FacturiAprobatorTabel extends React.Component {
       termenscadenta: '',
       tipachizitie: '',
       descriereactivitati: '',
-      aprobator: '',
+      numeaprobator: '',
       aprobat: false,
       observatii: '',
       centrucost: '',
@@ -453,7 +469,6 @@ class FacturiAprobatorTabel extends React.Component {
         this.setState({ fisier: file, numefisier: file.name });
       }
     };
-
     // const getUploadParams = ({file, meta}) => {
     // 	this.setState({fisier: file});
     // }
@@ -570,13 +585,13 @@ class FacturiAprobatorTabel extends React.Component {
                 <Form.Group as={Col} md="6">
                   <Form.Label>Aprobator</Form.Label>
                   <Form.Control
-                    type="text"
-                    value={this.state.aprobator.nume}
+                    as="select"
+                    value={this.state.numeaprobator || '-'}
                     onChange={this.onChangeAprobator}
-                  />
-                  {/* <option>-</option>
-                    {aprobatori} */}
-                  {/* </Form.Control> */}
+                  >
+                    <option>-</option>
+                    {aprobatori}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Data Plății</Form.Label>
@@ -658,7 +673,7 @@ class FacturiAprobatorTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
@@ -668,7 +683,7 @@ class FacturiAprobatorTabel extends React.Component {
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  <Add className="m-0 p-0" />
+                  <Plus className="m-0 p-0" />
                 </Button>
               </Card.Header>
               <Card.Body>
@@ -676,10 +691,25 @@ class FacturiAprobatorTabel extends React.Component {
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Denumire Furnizor</th>
+                      <th
+                        onClick={() => this.changeSortOrder('denumirefurnizor')}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Denumire Furnizor
+                        {this.state.sortBy === 'denumirefurnizor'
+                          ? this.state.sortAsc
+                            ? ' ↓'
+                            : ' ↑'
+                          : ''}
+                      </th>
                       <th>CIF Furnizor</th>
                       <th>Nr.</th>
-                      <th>Dată</th>
+                      <th
+                        onClick={() => this.changeSortOrder('data')}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Dată{this.state.sortBy === 'data' ? (this.state.sortAsc ? ' ↓' : ' ↑') : ''}
+                      </th>
                       <th>Monedă</th>
                       <th>Sumă fără TVA</th>
                       <th>Termen Scadență</th>

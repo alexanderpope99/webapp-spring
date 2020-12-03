@@ -1,9 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Add from '@material-ui/icons/Add';
-import Refresh from '@material-ui/icons/Refresh';
+import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -192,7 +189,7 @@ class CereriConcediuTabel extends React.Component {
                     className="m-1 p-1 rounded-circle border-0"
                     disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
                   >
-                    <Edit fontSize="small" />
+                    <Edit3 fontSize="small" />
                   </Button>
 
                   <PopupState variant="popover" popupId="demo-popup-popover">
@@ -204,7 +201,7 @@ class CereriConcediuTabel extends React.Component {
                           disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
                           {...bindTrigger(popupState)}
                         >
-                          <DeleteIcon fontSize="small" />
+                          <Trash2 fontSize="small" />
                         </Button>
                         <Popover
                           {...bindPopover(popupState)}
@@ -309,7 +306,7 @@ class CereriConcediuTabel extends React.Component {
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Cerere Concediu</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addCerereConcediu}>
@@ -383,7 +380,7 @@ class CereriConcediuTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
@@ -393,7 +390,7 @@ class CereriConcediuTabel extends React.Component {
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  <Add className="m-0 p-0" />
+                  <Plus className="m-0 p-0" />
                 </Button>
               </Card.Header>
               <Card.Body>

@@ -213,8 +213,16 @@ var items = [
         url: '/facturi',
         icon: 'feather icon-file-text',
       },
+      {
+        id: 'facturi-aprobatori',
+        title: 'Tabel Facturi Aprobatori',
+        type: 'item',
+        url: '/facturi-aprobator',
+        icon: 'feather icon-file-text',
+      },
     ],
   },
+
   {
     id: 'configurare',
     title: 'CONFIGURARE',

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import CloseIcon from '@material-ui/icons/Close';
-import CheckIcon from '@material-ui/icons/Check';
-import Refresh from '@material-ui/icons/Refresh';
+import { X, Check, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -90,7 +88,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
                     variant="outline-success"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <CheckIcon fontSize="default" />
+                    <Check fontSize="default" />
                   </Button>
                 </OverlayTrigger>
 
@@ -108,7 +106,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
                     variant="outline-danger"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <CloseIcon fontSize="default" />
+                    <X fontSize="default" />
                   </Button>
                 </OverlayTrigger>
               </Row>
@@ -193,7 +191,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 

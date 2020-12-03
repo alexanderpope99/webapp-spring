@@ -14,11 +14,11 @@ import {
   Collapse,
   Toast,
 } from 'react-bootstrap';
-import Add from '@material-ui/icons/Add';
+import { Trash2, Plus } from 'react-feather';
+
 import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
 import Popover from '@material-ui/core/Popover';
-import DeleteIcon from '@material-ui/icons/Delete';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import months from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
@@ -654,7 +654,7 @@ class RealizariRetineri extends React.Component {
                     className="m-0 p-1 rounded-circle border-0"
                     {...bindTrigger(popupState)}
                   >
-                    <DeleteIcon fontSize="small" />
+                    <Trash2 fontSize="small" />
                   </Button>
                   <Popover
                     {...bindPopover(popupState)}
@@ -871,7 +871,7 @@ class RealizariRetineri extends React.Component {
                   }
                 >
                   <Button href="/forms/angajat" variant="outline-info" className="pb-0">
-                    <Add fontSize="small" className="m-0" />
+                    <Plus fontSize="small" className="m-0" />
                   </Button>
                 </OverlayTrigger>
               </InputGroup.Append>

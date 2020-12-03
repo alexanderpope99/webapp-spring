@@ -36,7 +36,6 @@ const PlatiSalariiMTA = React.lazy(() => import('./Demo/Rapoarte/PlatiSalariiMTA
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
-const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
@@ -45,6 +44,7 @@ const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConc
 const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 const FacturiTabel = React.lazy(() => import('./Demo/Tables/FacturiTabel'));
+const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -116,7 +116,6 @@ const routes = [
 
   // TABLES
   { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
-  { path: '/tables/angajati-tabel', exact: true, name: 'Tabel Angajati', component: AngajatiTabel },
   {
     path: '/tables/societati-tabel',
     exact: true,
@@ -159,6 +158,12 @@ const routes = [
     exact: true,
     name: 'Tabel Facturi',
     component: FacturiTabel,
+  },
+  {
+    path: '/facturi-aprobator',
+    exact: true,
+    name: 'Tabel Facturi Aprobator',
+    component: FacturiAprobatorTabel,
   },
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },

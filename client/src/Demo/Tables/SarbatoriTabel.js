@@ -1,8 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Refresh from '@material-ui/icons/Refresh';
+import { Trash2, Edit3, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -193,7 +191,7 @@ class SarbatoriTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editSarbatoare(sarbatoare)}
                 >
-                  <Edit fontSize="small" />
+                  <Edit3 fontSize="small" />
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -203,7 +201,7 @@ class SarbatoriTabel extends React.Component {
                         className="m-0 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
-                        <DeleteIcon fontSize="small" />
+                        <Trash2 fontSize="small" />
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}
@@ -376,7 +374,7 @@ class SarbatoriTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.fillTable}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                 </Button>
 
                 <Button

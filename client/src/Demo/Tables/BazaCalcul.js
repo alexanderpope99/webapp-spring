@@ -1,9 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Add from '@material-ui/icons/Add';
-import Refresh from '@material-ui/icons/Refresh';
+import { Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -83,8 +81,8 @@ class BazaCalcul extends React.Component {
     } else {
       this.setState({ angajat: null }, this.fillTable);
     }
-	}
-	
+  }
+
   async addBazaCalcul() {
     const bazacalcul_body = {
       idangajat: this.state.angajat.idpersoana,
@@ -179,7 +177,7 @@ class BazaCalcul extends React.Component {
                     variant="outline-secondary"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <Edit fontSize="small" />
+                    <Edit3 fontSize="small" />
                   </Button>
 
                   <PopupState variant="popover" popupId="demo-popup-popover">
@@ -362,8 +360,8 @@ class BazaCalcul extends React.Component {
                   <Form.Group>
                     <Form.Label>An</Form.Label>
                     <Form.Control
-											disabled={this.state.an_sel !== '-'}
-											type="number"
+                      disabled={this.state.an_sel !== '-'}
+                      type="number"
                       value={this.state.an}
                       onChange={(e) => this.setState({ an: e.target.value })}
                     />
@@ -439,7 +437,7 @@ class BazaCalcul extends React.Component {
                   disabled={!this.state.angajat}
                   onClick={this.fillTable}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
@@ -450,7 +448,7 @@ class BazaCalcul extends React.Component {
                   disabled={!this.state.angajat}
                   onClick={this.openModalAdd}
                 >
-                  <Add className="m-0 p-0" />
+                  <Plus className="m-0 p-0" />
                 </Button>
                 <Row>
                   <Form.Group as={Col} sm="3" className="mt-3">

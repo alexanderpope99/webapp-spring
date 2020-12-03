@@ -1,8 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Refresh from '@material-ui/icons/Refresh';
+import { Edit3, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -223,13 +222,13 @@ class CMTabel extends React.Component {
       );
       if (this.state.mediezilnica) {
         indemnizatiefirma = Math.round(
-          zilefirma * Math.round(this.state.mediezilnica) * this.state.procent / 100
+          (zilefirma * Math.round(this.state.mediezilnica) * this.state.procent) / 100
         );
         indemnizatiefnuass = Math.round(
-          zilefnuass * Math.round(this.state.mediezilnica) * this.state.procent / 100
+          (zilefnuass * Math.round(this.state.mediezilnica) * this.state.procent) / 100
         );
         indemnizatiefaambp = Math.round(
-          zilefaambp * Math.round(this.state.mediezilnica) * this.state.procent / 100
+          (zilefaambp * Math.round(this.state.mediezilnica) * this.state.procent) / 100
         );
       }
     }
@@ -509,7 +508,7 @@ class CMTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editCM(cm)}
                 >
-                  <Edit fontSize="small" />
+                  <Edit3 fontSize="small" />
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -1027,7 +1026,7 @@ class CMTabel extends React.Component {
                   disabled={!exists}
                   onClick={this.fillTable}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 

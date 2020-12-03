@@ -1,12 +1,11 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Refresh from '@material-ui/icons/Refresh';
+import { Trash2, RotateCw } from 'react-feather';
+
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
-import Edit from '@material-ui/icons/Edit';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -199,7 +198,7 @@ class RoleToPermissionTabel extends React.Component {
                       className="m-0 p-1 rounded-circle border-0"
                       {...bindTrigger(popupState)}
                     >
-                      <DeleteIcon fontSize="small" />
+                      <Trash2 fontSize="small" />
                     </Button>
                     <Popover
                       {...bindPopover(popupState)}
@@ -317,7 +316,7 @@ class RoleToPermissionTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.fillTable}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -62,7 +62,7 @@ class SocietatiTabel extends React.Component {
                 {(popupState) => (
                   <div>
                     <Button variant="contained" className="m-0 p-0" {...bindTrigger(popupState)}>
-                      <DeleteIcon fontSize="small" />
+                      <Trash2 fontSize="small" />
                     </Button>
                     <Popover
                       {...bindPopover(popupState)}
@@ -113,9 +113,7 @@ class SocietatiTabel extends React.Component {
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) uri = `${server.address}/societate/`;
 
-    let societati = await axios
-      .get(uri, { headers: authHeader()})
-      .then((res) => res.data);
+    let societati = await axios.get(uri, { headers: authHeader() }).then((res) => res.data);
 
     societati = await Promise.all(
       societati.map(async (societate) => {

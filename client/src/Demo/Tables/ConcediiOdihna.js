@@ -1,8 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import Edit from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Refresh from '@material-ui/icons/Refresh';
+import { Edit3, Trash2, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -217,10 +215,13 @@ class COTabel extends React.Component {
 
   handleClose(confirmWindow) {
     if (confirmWindow)
-      this.setState({
-        show_confirm: false,
-        modalMessage: '',
-      }, this.props.scrollToTopSmooth);
+      this.setState(
+        {
+          show_confirm: false,
+          modalMessage: '',
+        },
+        this.props.scrollToTopSmooth
+      );
     else
       this.setState({
         show: false,
@@ -356,7 +357,7 @@ class COTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editCO(co)}
                 >
-                  <Edit fontSize="small" />
+                  <Edit3 fontSize="small" />
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -366,7 +367,7 @@ class COTabel extends React.Component {
                         className="m-0 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
-                        <DeleteIcon fontSize="small" />
+                        <Trash2 fontSize="small" />
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}
@@ -425,9 +426,9 @@ class COTabel extends React.Component {
 
     const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
       <option key={index}>{an}</option>
-		));
-		
-		let exists = this.state.angajat && this.state.angajat.idcontract;
+    ));
+
+    let exists = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
@@ -536,7 +537,7 @@ class COTabel extends React.Component {
                   disabled={!exists}
                   onClick={this.fillTable}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
                 <Row>

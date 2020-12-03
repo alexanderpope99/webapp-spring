@@ -1,9 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Edit from '@material-ui/icons/Edit';
-import Add from '@material-ui/icons/Add';
-import Refresh from '@material-ui/icons/Refresh';
+import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -64,17 +61,20 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   async updateAngajatSel() {
-		let angajatSel = getAngajatSel();
-		if(angajatSel) {
-			let angajat = await axios.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
-				.then(res => res.status === 200 ? res.data : null)
-				.catch(err => console.error(err));
-			if(angajat)
-				this.setState({ angajat: {...angajat, numeintreg: getAngajatSel().numeintreg} }, this.fillTable);
-		}
-		else {
-			this.setState({angajat: null}, this.fillTable);
-		}
+    let angajatSel = getAngajatSel();
+    if (angajatSel) {
+      let angajat = await axios
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) => console.error(err));
+      if (angajat)
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
+    } else {
+      this.setState({ angajat: null }, this.fillTable);
+    }
   }
 
   async addPersoanaIntretinere() {
@@ -185,7 +185,6 @@ class PersoaneIntretinereTabel extends React.Component {
 
   // function to create react component with fetched data
 
-
   async fillTable() {
     if (this.state.angajat) {
       const persoane = await axios
@@ -258,7 +257,7 @@ class PersoaneIntretinereTabel extends React.Component {
                   variant="outline-secondary"
                   className="m-1 p-1 rounded-circle border-0"
                 >
-                  <Edit fontSize="small" />
+                  <Edit3 fontSize="small" />
                 </Button>
 
                 <PopupState variant="popover" popupId="demo-popup-popover">
@@ -269,7 +268,7 @@ class PersoaneIntretinereTabel extends React.Component {
                         className="m-1 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
-                        <DeleteIcon fontSize="small" />
+                        <Trash2 fontSize="small" />
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}
@@ -316,8 +315,8 @@ class PersoaneIntretinereTabel extends React.Component {
         );
       }),
     });
-	}
-	
+  }
+
   render() {
     return (
       <Aux>
@@ -453,7 +452,7 @@ class PersoaneIntretinereTabel extends React.Component {
                   disabled={!this.state.angajat}
                   onClick={this.fillTable}
                 >
-                  <Refresh className="m-0 p-0" />
+                  <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
 
@@ -464,7 +463,7 @@ class PersoaneIntretinereTabel extends React.Component {
                   disabled={!this.state.angajat}
                   onClick={() => this.setState({ isEdit: false, show: true })}
                 >
-                  <Add className="m-0 p-0" />
+                  <Plus className="m-0 p-0" />
                 </Button>
               </Card.Header>
               <Card.Body>
