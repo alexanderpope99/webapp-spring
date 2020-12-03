@@ -188,7 +188,6 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-    console.log(fact.aprobator);
     this.setState(
       {
         isEdit: true,
@@ -218,7 +217,7 @@ class FacturiTabel extends React.Component {
         numefisier: fact.numefisier,
         sterge: false,
       },
-      () => console.log(this.state.aprobator)
+      () => console.log(this.state)
     );
   }
 
@@ -231,11 +230,14 @@ class FacturiTabel extends React.Component {
 
   // function to create react component with fetched data
   async renderFacturi() {
+		
     const compare = (f1, f2) => {
-      var sortBy = this.state.sortBy;
-      var sortAsc = this.state.sortAsc;
-      if (sortAsc) return f1[sortBy] < f2[sortBy] ? -1 : 1;
-      else return f1[sortBy] > f2[sortBy] ? -1 : 1;
+			var sortBy = this.state.sortBy;
+			var sortAsc = this.state.sortAsc;
+      if(sortAsc)
+				return f1[sortBy] < f2[sortBy] ? -1 : 1;
+			else
+				return f1[sortBy] > f2[sortBy] ? -1 : 1;
     };
 
     console.log(this.state.sortAsc, this.state.sortBy);
@@ -483,7 +485,6 @@ class FacturiTabel extends React.Component {
     // 	console.log(files[0].meta);
     // 	allFiles.forEach(f => f.remove());
     // }
-
     return (
       <Aux>
         {/* add/edit modal */}
@@ -593,7 +594,7 @@ class FacturiTabel extends React.Component {
                   <Form.Label>Aprobator</Form.Label>
                   <Form.Control
                     as="select"
-                    value={this.state.aprobator.nume + ' ' + this.state.aprobator.prenume}
+                    value={this.state.numeaprobator || '-'}
                     onChange={this.onChangeAprobator}
                   >
                     <option>-</option>
