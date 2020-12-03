@@ -296,7 +296,6 @@ function getZileFirma(dela, panala, cod) {
     if (nr_zile <= 5) return [nr_zile - countWeekendDays(dela, panala), 0, 0];
     zilefirma = 5 - countWeekendDays(dela, addDays(dela, 4));
     zilefnuass = nr_zile - 5 - countWeekendDays(addDays(dela, 4), panala);
-    zilefaambp = 0;
   }
   if (cod === '02' || cod === '03' || cod === '04') {
     if (nr_zile <= 3) return [nr_zile - countWeekendDays(dela, panala), 0, 0];
@@ -330,6 +329,7 @@ function addDays(date, days) {
 function countWeekendDays(d0, d1) {
   var ndays = 1 + Math.round((d1.getTime() - d0.getTime()) / (24 * 3600 * 1000));
   var nsaturdays = Math.floor((d0.getDay() + ndays) / 7);
+  // eslint-disable-next-line eqeqeq
   return 2 * nsaturdays + (d0.getDay() == 0) - (d1.getDay() == 6);
 }
 
