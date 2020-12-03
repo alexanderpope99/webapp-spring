@@ -5,7 +5,6 @@ import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
-import Edit from '@material-ui/icons/Edit';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';

@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
-import Add from '@material-ui/icons/Add';
+import { Plus } from 'react-feather';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { getSocSel } from '../Resources/socsel';
@@ -129,8 +129,7 @@ class EditPersoana extends React.Component {
   componentDidMount() {
     this.getNumeintreg();
     // daca este selectat un angajat
-		if (this.state.id) 
-			this.fillForm();
+    if (this.state.id) this.fillForm();
   }
 
   async getNumeintreg() {
@@ -224,16 +223,16 @@ class EditPersoana extends React.Component {
   }
 
   async fillForm() {
-		this.clearFields();
-		// daca inca nu exista lista cu numele persoanelor
-		if(this.state.numeintreg.length === 0) {
-			await this.getNumeintreg();
-		}
+    this.clearFields();
+    // daca inca nu exista lista cu numele persoanelor
+    if (this.state.numeintreg.length === 0) {
+      await this.getNumeintreg();
+    }
 
     const id = this.state.id;
 
     if (id === -1) {
-			console.log("id was -1");
+      console.log('id was -1');
       this.setState({
         selectednume: '-',
       });
@@ -248,7 +247,7 @@ class EditPersoana extends React.Component {
 
     setAngajatSel({
       idpersoana: persoana.id,
-			numeintreg: persoana.nume + ' ' + persoana.prenume
+      numeintreg: persoana.nume + ' ' + persoana.prenume,
     });
 
     if (persoana.adresa) {
@@ -279,7 +278,7 @@ class EditPersoana extends React.Component {
     }
 
     this.setState({
-			id: persoana.id,
+      id: persoana.id,
       email: persoana.email || '',
       gen: persoana.gen || '',
       nume: persoana.nume || '',
@@ -287,13 +286,16 @@ class EditPersoana extends React.Component {
       telefon: persoana.telefon || '',
 
       selectednume: this.getNumeintregById(id),
-		});
+    });
   }
 
   handleClose() {
-    this.setState({
-      show: false,
-    }, this.props.scrollToTopSmooth);
+    this.setState(
+      {
+        show: false,
+      },
+      this.props.scrollToTopSmooth
+    );
   }
 
   async onSubmit(e) {
@@ -302,7 +304,7 @@ class EditPersoana extends React.Component {
     if (!this.hasRequired()) return -1;
 
     var adresa_body = {
-			id: this.state.idadresa,
+      id: this.state.idadresa,
       adresa: this.state.adresacompleta || null,
       localitate: this.state.localitate || null,
       judet: this.state.judet || null,
@@ -310,7 +312,7 @@ class EditPersoana extends React.Component {
     };
 
     var buletin_body = {
-			id: this.state.idactidentitate,
+      id: this.state.idactidentitate,
       cnp: this.state.cnp || null,
       tip: this.state.tipact || 'Carte de identitate',
       serie: this.state.serie || null,
@@ -319,8 +321,8 @@ class EditPersoana extends React.Component {
       eliberatde: this.state.eliberatde || null,
       dataeliberarii: this.state.dataeliberarii || null,
       loculnasterii: this.state.loculnasterii || null,
-		};
-		console.log(buletin_body.id);
+    };
+    console.log(buletin_body.id);
 
     let persoana_body = {
       gen: this.state.gen || null,
@@ -339,7 +341,7 @@ class EditPersoana extends React.Component {
       headers: authHeader(),
     });
 
-		// refresh numele angajatilor
+    // refresh numele angajatilor
     this.getNumeintreg();
     this.fillForm();
     console.log('persoana actualizata');
@@ -417,7 +419,7 @@ class EditPersoana extends React.Component {
                       }
                     >
                       <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
-                        <Add fontSize="small" className="m-0" />
+                        <Plus fontSize="small" className="m-0" />
                       </Button>
                     </OverlayTrigger>
                   </InputGroup.Append>
