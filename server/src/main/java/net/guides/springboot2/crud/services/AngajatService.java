@@ -26,14 +26,13 @@ public class AngajatService {
 	private ModelMapper modelMapper;
 
 	public Angajat save(AngajatDTO angajatDTO) throws ResourceNotFoundException {
-
 		Angajat angajat = modelMapper.map(angajatDTO, Angajat.class);
 
-		Persoana persoana = persoanaRepository.findById(angajatDTO.getIdpersoana())
-		.orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + angajatDTO.getIdpersoana()));
+		Persoana persoana = persoanaRepository.findById(angajatDTO.getIdpersoana()).orElseThrow(
+				() -> new ResourceNotFoundException("Persoana not found for this id :: " + angajatDTO.getIdpersoana()));
 
-		Societate societate = societateRepository.findById(angajatDTO.getIdsocietate())
-		.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + angajatDTO.getIdsocietate()));
+		Societate societate = societateRepository.findById(angajatDTO.getIdsocietate()).orElseThrow(
+				() -> new ResourceNotFoundException("Societate not found for this id :: " + angajatDTO.getIdsocietate()));
 
 		angajat.setPersoana(persoana);
 		angajat.setSocietate(societate);
@@ -42,15 +41,20 @@ public class AngajatService {
 		return angajat;
 	}
 
-	// angajat.persoana not null, other fields are null
-	public Angajat save(Angajat angajat, int idsocietate) throws ResourceNotFoundException {
-
+	// angajat.persoana not null, other fields can be null
+	public Angajat save(Angajat angajat, int idsocietate, Integer idsuperior) throws ResourceNotFoundException {
 		angajat.setPersoana(persoanaRepository.save(angajat.getPersoana()));
 
 		Societate societate = societateRepository.findById(idsocietate)
-		.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
 		angajat.setSocietate(societate);
+
+		if (idsuperior != null) {
+			Angajat superior = angajatRepository.findById(idsuperior)
+			.orElseThrow(() -> new ResourceNotFoundException("Superior (class Angajat) not found for this id :: " + idsuperior));
+			angajat.setSuperior(superior);
+		}
 
 		angajat = angajatRepository.save(angajat);
 		return angajat;

@@ -52,9 +52,8 @@ public class ZileService {
 
 		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
 
-		long businessDays = Stream.iterate(startDate, date -> date.plusDays(1)).limit(daysBetween + 1)
+		return Stream.iterate(startDate, date -> date.plusDays(1)).limit(daysBetween + 1)
 				.filter(isWeekend.negate()).count();
-		return businessDays;
 	}
 
 	public int getZileLucratoareInLunaAnul(int month, int year) {

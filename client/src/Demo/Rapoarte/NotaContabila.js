@@ -15,7 +15,6 @@ class NotaContabila extends React.Component {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
     this.creeazaNotaContabila = this.creeazaNotaContabila.bind(this);
-    // this.download = this.download.bind(this);
 
     this.state = {
       socsel: getSocSel(),

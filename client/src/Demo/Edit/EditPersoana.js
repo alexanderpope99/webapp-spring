@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
-import Add from '@material-ui/icons/Add';
+import {Plus} from 'react-feather';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { getSocSel } from '../Resources/socsel';
@@ -417,7 +417,7 @@ class EditPersoana extends React.Component {
                       }
                     >
                       <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
-                        <Add fontSize="small" className="m-0" />
+                        <Plus size={20} className="m-0" />
                       </Button>
                     </OverlayTrigger>
                   </InputGroup.Append>

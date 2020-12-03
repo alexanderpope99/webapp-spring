@@ -114,7 +114,7 @@ class COTabel extends React.Component {
     const selectedIndex = e.target.options.selectedIndex;
     this.setState(
       {
-        luna: {
+				luna: {
           nume: e.target.value,
           nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
         },
@@ -178,8 +178,8 @@ class COTabel extends React.Component {
         }
       }
       // add ani in luni_cu_concediu
-      for (let an of ani_cu_concediu) {
-        luni_cu_concediu[an] = new Set();
+      for (let _an of ani_cu_concediu) {
+        luni_cu_concediu[_an] = new Set();
       }
       // add luni in luni_cu_concediu
       for (let c of co) {
@@ -189,8 +189,8 @@ class COTabel extends React.Component {
         }
       }
       // convert to array from set
-      for (let an of ani_cu_concediu) {
-        luni_cu_concediu[an] = [...luni_cu_concediu[an]];
+      for (let _an of ani_cu_concediu) {
+        luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
 
       this.setState(
@@ -357,7 +357,7 @@ class COTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editCO(co)}
                 >
-                  <Edit3 size={20}/>
+                  <Edit3  size={20}/>
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -367,7 +367,7 @@ class COTabel extends React.Component {
                         className="m-0 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
-                        <Trash2 size={20} />
+                        <Trash2 fontSize="small" />
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}

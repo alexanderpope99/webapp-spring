@@ -1,8 +1,7 @@
 package net.guides.springboot2.crud.controller;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -87,7 +86,7 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()));
         user.setGen(signUpRequest.isGen());
 
-        Set<Role> roles = new HashSet<>();
+        List<Role> roles = new ArrayList<>();
 
         Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
                 .orElseThrow(() -> new RuntimeException("Error: ROLE_ANGAJAT not in database"));
@@ -101,7 +100,7 @@ public class AuthController {
 
 	@PutMapping("/change-password/{uid}")
 	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
-			@PathVariable("uid") Long uid) {
+			@PathVariable("uid") int uid) {
 
         User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
@@ -120,7 +119,7 @@ public class AuthController {
 
 	@PutMapping("update-profile/{uid}")
 	public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileReq,
-			@PathVariable("uid") Long uid) {
+			@PathVariable("uid") int uid) {
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 		user.setEmail(updateProfileReq.getEmail());
 		user.setGen(updateProfileReq.isGen());

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { Edit3, Plus, RotateCw } from 'react-feather';
+import { Edit3, Plus, RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -188,7 +187,7 @@ class BazaCalcul extends React.Component {
                           className="m-1 p-1 rounded-circle border-0"
                           {...bindTrigger(popupState)}
                         >
-                          <DeleteIcon size={20} />
+                          <Trash2 size={20} />
                         </Button>
                         <Popover
                           {...bindPopover(popupState)}

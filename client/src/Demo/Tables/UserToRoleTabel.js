@@ -1,11 +1,10 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Trash2, RotateCw } from 'react-feather';
+import { Trash2, RotateCw, Edit3 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
-import Edit from '@material-ui/icons/Edit';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -175,7 +174,7 @@ class UserToRoleTabel extends React.Component {
     this.setState({
       userToRoleComponent: this.state.userToRoles.map((userToRole, index) => {
         for (let key in userToRole) {
-          if (userToRole[key] === 'null' || userToRole[key] === null) userToRole[key] = '-';
+          if (!userToRole[key]) userToRole[key] = '-';
         }
         return (
           <tr key={userToRole.roleid + userToRole.userid}>

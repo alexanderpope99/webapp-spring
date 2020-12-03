@@ -23,6 +23,7 @@ class Societati extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.statSalarii = this.statSalarii.bind(this);
     this.dec112 = this.dec112.bind(this);
+    this.mta = this.mta.bind(this);
 
     this.state = {
       show: false,
@@ -191,10 +192,10 @@ class Societati extends React.Component {
     let luna = this.state.luna;
     let an = this.state.an;
     let user = this.state.user;
-    let socsel = this.state.socsel;
+		let socsel = this.state.socsel;
 
-    const created = await axios
-      .get(`${server.address}/stat/${socsel.id}/mo=${luna}&y=${an}&i=-/${user.id}`, {
+		const created = await axios
+      .get(`${server.address}/stat/${socsel.id}/mo=${luna+1}&y=${an}&i=-/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
@@ -211,7 +212,7 @@ class Societati extends React.Component {
 
     const created = await axios
       .get(
-        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna}&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna+1}&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
         {
           headers: authHeader(),
         }
@@ -220,7 +221,23 @@ class Societati extends React.Component {
       .catch((err) => console.error(err));
 
     if (created) download(`Declaratia 112 - ${socsel.nume} - ${months[luna]} ${an}.pdf`, user.id);
-  }
+	}
+	
+	async mta() {
+    let luna = this.state.luna;
+    let an = this.state.an;
+    let user = this.state.user;
+		let socsel = this.state.socsel;
+
+		const created = await axios
+      .get(`${server.address}/mta/${socsel.id}&mo=${luna+1}&y=${an}/${user.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (created) download(`FisierMTA - ${socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
+	}
 
   async onSubmit(e) {
     try {
@@ -312,6 +329,15 @@ class Societati extends React.Component {
                 }}
               >
                 Dec.112
+              </Button>
+							<Button
+                size="sm"
+                onClick={this.mta}
+                style={{
+                  visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
+                }}
+              >
+                MTA
               </Button>
             </div>
           </Card.Body>

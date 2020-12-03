@@ -3,7 +3,6 @@ package net.guides.springboot2.crud.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -74,10 +73,10 @@ public class SocietateController {
 	}
 
 	@PostMapping("/{uid}")
-	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") Long uid) {
+	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") int uid) {
 		Societate newSoc = societateRepository.save(societate);
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error"));
-		Set<Societate> societati = user.getSocietati();
+		List<Societate> societati = user.getSocietati();
 		societati.add(newSoc);
 		user.setSocietati(societati);
 		userRepository.save(user);

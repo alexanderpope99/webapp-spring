@@ -1,8 +1,7 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -18,7 +17,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 
 	@NotBlank
 	@Size(max = 20)
@@ -33,19 +32,18 @@ public class User implements Serializable {
 	@Size(max = 120)
 	private String password;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_angajat", referencedColumnName = "idpersoana")
-	private Angajat angajat;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Angajat> angajat;
 
-	@JsonBackReference
+	@JsonBackReference(value = "user-role")
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	private List<Role> roles;
 
-	@JsonBackReference
+	@JsonBackReference(value = "user-societati")
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_societati", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "societate_id"))
-	private Set<Societate> societati = new HashSet<>();
+	private List<Societate> societati;
 
 	@Column(name = "gen")
 	private boolean gen;
@@ -59,11 +57,11 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -72,7 +70,7 @@ public class User implements Serializable {
 		return email;
 	}
 
-	public Angajat getAngajat() {
+	public List<Angajat> getAngajat() {
 		return angajat;
 	}
 
@@ -80,11 +78,11 @@ public class User implements Serializable {
 		return password;
 	}
 
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public Set<Societate> getSocietati() {
+	public List<Societate> getSocietati() {
 		return societati;
 	}
 
@@ -101,7 +99,7 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public void setAngajat(Angajat angajat) {
+	public void setAngajat(List<Angajat> angajat) {
 		this.angajat = angajat;
 	}
 
@@ -109,11 +107,11 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 
-	public void setSocietati(Set<Societate> societati) {
+	public void setSocietati(List<Societate> societati) {
 		this.societati = societati;
 	}
 
@@ -123,5 +121,9 @@ public class User implements Serializable {
 
 	public void setGen(boolean gen) {
 		this.gen = gen;
+	}
+
+	public void addSocietate(Societate newSocietate) {
+		this.societati.add(newSocietate);
 	}
 }

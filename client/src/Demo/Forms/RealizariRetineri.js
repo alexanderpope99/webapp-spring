@@ -703,8 +703,6 @@ class RealizariRetineri extends React.Component {
         {angajat.nume}
       </option>
     ));
-
-    console.log(this.state.showToast);
     return (
       <Aux>
         <Toast

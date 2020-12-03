@@ -33,10 +33,9 @@ class SocietatiTabel extends React.Component {
     // console.log(id);
     const response = axios
       .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
+      .then((res) => res.data)
       .then(() => {
         console.log(response);
-        // alert(`Deleted ${id}`);
         this.onRefresh();
         setSocSel(null);
       })
@@ -112,7 +111,6 @@ class SocietatiTabel extends React.Component {
     });
   }
   async onRefresh() {
-    // e.preventDefault();
     const user = JSON.parse(localStorage.getItem('user'));
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) uri = `${server.address}/societate/`;

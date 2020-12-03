@@ -22,12 +22,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
+import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
+import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
 public class MTAService {
@@ -35,11 +38,16 @@ public class MTAService {
 	private AngajatRepository angajatRepository;
 	@Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
+	@Autowired
+	private SocietateRepository societateRepository;
+
+	@Autowired
+	private ZileService zileService;
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean createMTA(int idsocietate, int luna, int an, int userID)
-			throws IOException {
+	public boolean createMTA(int idsocietate, int luna, int an, int userID) throws IOException,
+			ResourceNotFoundException {
 
 		// * READ THE FILE
 		String templateLocation = homeLocation + "/templates";
@@ -49,13 +57,13 @@ public class MTAService {
 
 		// ! WRITE FILE
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
 		Font arial10 = workbook.createFont();
 		arial10.setFontHeightInPoints((short) 10);
 		arial10.setFontName("Arial");
 		CellStyle style = workbook.createCellStyle();
 		style.setFont(arial10);
-
 
 		// * initialize writerCell;
 		Cell writerCell;
@@ -64,7 +72,7 @@ public class MTAService {
 		for (Angajat angajat : angajati) {
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
-			if(contract.getContbancar() == null)
+			if (contract.getContbancar() == null)
 				continue;
 
 			RealizariRetineri realizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
@@ -73,32 +81,32 @@ public class MTAService {
 			int rowNr = 2 + nrAngajat;
 			Row row = sheet.createRow(rowNr);
 
-			//* Descriere tranzactie cont beneficiar
+			// * Descriere tranzactie cont beneficiar
 			writerCell = row.createCell(0);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue("Plată salariu");
-			
-			//* Cont beneficiar
+
+			// * Cont beneficiar
 			writerCell = row.createCell(1);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue(contract.getContbancar().getIban());
-			
-			//* Suma
+
+			// * Suma
 			writerCell = row.createCell(2);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue(realizariRetineri.getRestplata());
 
-			//* CNP/CUI beneficiar
+			// * CNP/CUI beneficiar
 			writerCell = row.createCell(3);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue(persoana.getCnp());
 
-			//* Nume beneficiar (nume + prenume)
+			// * Nume beneficiar (nume + prenume)
 			writerCell = row.createCell(4);
 			writerCell.setCellStyle(style);
-			writerCell.setCellValue(persoana.getNume() +" "+ persoana.getPrenume());
+			writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
 
-			//* Nr. evidenta plata
+			// * Nr. evidenta plata
 			writerCell = row.createCell(5);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue(nrAngajat);
@@ -108,20 +116,20 @@ public class MTAService {
 
 		sheet.autoSizeColumn(0);
 		sheet.autoSizeColumn(1);
-		//sheet.autoSizeColumn(2);
+		// sheet.autoSizeColumn(2);
 		sheet.autoSizeColumn(4);
 		sheet.autoSizeColumn(5);
 
 		// * set borders
-		 PropertyTemplate allCellsBordered = new PropertyTemplate();
-		 String cellRange = "$A$4:$F$" + (2+nrAngajat);
-		 allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange),
-		 BorderStyle.THIN, BorderExtent.ALL);
-		 allCellsBordered.applyBorders(sheet);
+		PropertyTemplate allCellsBordered = new PropertyTemplate();
+		String cellRange = "$A$4:$F$" + (2 + nrAngajat);
+		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);
+		allCellsBordered.applyBorders(sheet);
 
 		// * OUTPUT THE FILE
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-		String newFileLocation = String.format("%s/downloads/%d/FisierMTA.xlsx", homeLocation, userID);
+		String lunaNume = zileService.getNumeLunaByNr(luna);
+		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

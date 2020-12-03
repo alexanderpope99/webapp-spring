@@ -51,9 +51,7 @@ public class AngajatController {
 
 	@GetMapping("/expand")
 	public List<Angajat> getAll() {
-		List<Angajat> angajati = angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
-
-		return angajati;
+		return angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
 	}
 
 	@GetMapping("{id}")
@@ -104,10 +102,10 @@ public class AngajatController {
 		return angajatService.save(angajatDTO);
 	}
 
-	@PostMapping("ids={ids}")
-	public Angajat createAngajat(@PathVariable("ids") int ids, @RequestBody Angajat angajat)
+	@PostMapping("ids={ids}/{idsuperior}")
+	public Angajat createAngajat(@PathVariable("ids") int ids, @PathVariable("idsuperior") Integer idsuperior, @RequestBody Angajat angajat)
 		throws ResourceNotFoundException {
-		return angajatService.save(angajat, ids);
+		return angajatService.save(angajat, ids, idsuperior);
 	}
 
 	@PutMapping("{id}")

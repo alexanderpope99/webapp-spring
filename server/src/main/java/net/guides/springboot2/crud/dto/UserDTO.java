@@ -1,100 +1,70 @@
 package net.guides.springboot2.crud.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.Societate;
 
 public class UserDTO {
-	private Long id;
+	private int id;
 
 	private String username;
 
 	private String email;
 
-	private String password;
+	private List<Angajat> angajat;
 
-	private Angajat angajat;
+	private List<Role> roles;
 
-	private Set<Role> roles;
-
-	private Set<Societate> societati;
+	private Map<Integer, String> societati;
 
 	private boolean gen;
 
-	public String getEmail() {
-		return email;
-	}
-
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-
-	public Integer getIdangajat() {
-		if (angajat == null)
-			return null;
-		else
-			return angajat.getPersoana().getId();
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public Set<Integer> getRoles() {
-		Set<Integer> rolesIds = new HashSet<Integer>();
-		for (Role role : roles)
-			rolesIds.add(role.getId());
-		return rolesIds;
-	}
-
-	public Set<Integer> getSocietati() {
-		Set<Integer> societatiIds = new HashSet<Integer>();
-		for (Societate societate : societati)
-			societatiIds.add(societate.getId());
-		return societatiIds;
-	}
-
 	public String getUsername() {
 		return username;
 	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public String getEmail() {
+		return email;
 	}
-
-	public void setGen(boolean gen) {
-		this.gen = gen;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setIdangajat(Angajat angajat) {
-		this.angajat = angajat;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	public void setSocietati(Set<Societate> societati) {
-		this.societati = societati;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public boolean isGen() {
 		return gen;
 	}
+	public List<Angajat> getAngajat() {
+		return angajat;
+	}
+	public List<Role> getRoles() {
+		return roles;
+	}
+	public Map<Integer, String> getSocietati() {
+		return societati;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public void setGen(boolean gen) {
+		this.gen = gen;
+	}
+	public void setAngajat(List<Angajat> angajat) {
+		this.angajat = angajat;
+	}
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+	public void setSocietati(Map<Integer, String> societati) {
+		this.societati = societati;
+	}	
 }

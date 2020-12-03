@@ -1,3 +1,5 @@
+de mutat baza de date din aplicatie c# in aici
+
 alte retineri
 alte drepturi
 retineri (doar avans merge)
@@ -12,6 +14,7 @@ UPGRADES:
 ERORI:
 	baza calcul frontend cand editeaza bazacalcul
 	concedii medicale trebuie sa nu aiba valori nule
+
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
@@ -31,3 +34,12 @@ angajat:
 	doar:
 	+ date personale,
 	+ face cereri
+
+operator_facturi: Daniela Mitran
+	acces la toate soc,
+
+operator_plati:
+
+administrator de firma: bogdan tanase + ion corneliu
+
+bogdan poate da acordul, dar ion aproba in final

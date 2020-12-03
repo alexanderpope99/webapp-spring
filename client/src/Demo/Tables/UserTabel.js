@@ -11,10 +11,17 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import { Multiselect } from 'multiselect-react-dropdown';
+import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
+
+const all_roles = [
+  { key: '1', label: 'ROLE_ADMIN' },
+  { key: '2', label: 'ROLE_DIRECTOR' },
+  { key: '3', label: 'ROLE_CONTABIL' },
+  { key: '4', label: 'ROLE_ANGAJAT' },
+];
 
 class UserTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
@@ -27,8 +34,16 @@ class UserTabel extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      user: [],
+      users: [],
       userComponent: null,
+      socsel: getSocSel(),
+      logged: JSON.parse(localStorage.getItem('user')),
+
+      user: null,
+      username: '',
+      email: '',
+      numeAngajat: '',
+      roles: [],
 
       isEdit: false,
 
@@ -37,15 +52,22 @@ class UserTabel extends React.Component {
       modalMessage: '',
 
       // add/edit modal
-      id: '',
-      dela: '',
-      panala: '',
-      tip: '',
-      motiv: '',
       status: '',
       show: false,
       socs: [],
     };
+  }
+
+  clearInput() {
+    this.setState({
+      user: null,
+      username: '',
+      email: '',
+      numeAngajat: '',
+      roles: [],
+
+      isEdit: false,
+    });
   }
 
   componentDidMount() {
@@ -53,67 +75,40 @@ class UserTabel extends React.Component {
     window.scrollTo(0, 0);
   }
 
-  async addUser() {
-    const user_body = {};
+  async addUser() {}
 
-    let ok = await axios
-      .post(`${server.address}/user`, user_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-    if (ok) {
-      await this.handleClose();
-      this.setState(
-        {
-          showConfirm: true,
-          modalMessage: 'Cerere adăugată cu succes',
-        },
-        this.onRefresh
-      );
-    }
+  async updateUser() {
+    if (!this.state.roles || !this.state.user) return;
+
+		var user = this.state.user;
+    const user_roles = [
+      ...this.state.roles.map((role) => ({ id: Number(role), name: all_roles[Number(role) - 1].label })),
+    ];
+		user.roles = user_roles;
+		console.log(user);
+		const ok = await axios
+			.put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
+			.then(res => res.status === 200)
+			.catch(err => console.error(err));
+		if(ok) {
+			this.setState({
+				show: false,
+				showConfirm:true,
+				modalMessage: "Utilizator actualizat"
+			}, this.onRefresh)
+		}
   }
 
-  async updateUser(iduser) {
-    let pentruId = await axios
-      .get(`${server.address}/user/${JSON.parse(localStorage.getItem('user')).id}`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-
-    const user_body = {
-      pentru: pentruId || null,
-      dela: this.state.dela || null,
-      panala: this.state.panala || null,
-      tip: this.state.tip || null,
-      motiv: this.state.motiv || null,
-      societate: getSocSel().id,
-      status: 'Propus (Modificat)',
-    };
-
-    const ok = await axios
-      .put(`${server.address}/user/${iduser}`, user_body, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-
-    if (ok) {
-      this.onRefresh();
-      await this.handleClose();
-      this.setState({
-        showConfirm: true,
-        modalMessage: 'User actualizat',
-      });
-    }
-  }
-
-  async editUser(usr) {
-    console.log(usr);
+  async editUser(user) {
     this.setState({
       isEdit: true,
       show: true,
 
-      id: usr.id,
+      user: user,
+      username: user.username,
+      email: user.email,
+      numeAngajat: user.angajat[0].persoana.nume + ' ' + user.angajat[0].persoana.prenume,
+      roles: user.roles.map((role) => String(role.id)),
     });
   }
 
@@ -125,205 +120,88 @@ class UserTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async onSelectRole(id) {
-    await axios
-
-      .delete(`${server.address}/user/roles/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(this.onRefresh)
+  async onRefresh() {
+    const socsel = this.state.socsel;
+    // get users
+    const users = await axios
+      .get(`${server.address}/user/ids=${socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
       .catch((err) => console.error(err));
-  }
-
-  async onRemoveRole(id) {
-    await axios
-      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(this.onRefresh)
-      .catch((err) => console.error(err));
+    // render table
+    if (users) {
+      this.setState({ users: users }, this.renderUsers);
+    }
   }
 
   // function to create react component with fetched data
   async renderUsers() {
     this.setState({
-      userComponent: await Promise.all(
-        this.state.user.map(async (usr, index) => {
-          return (
-            // TODO
-            <tr key={usr.id}>
-              <th>{usr.username}</th>
-              <th>{usr.email}</th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  selectedValues={usr.roles.map((val) => {
-                    return val['name'];
-                  })}
-                  options={['ROLE_ADMIN', 'ROLE_DIRECTOR', 'ROLE_CONTABIL', 'ROLE_ANGAJAT']}
-                  onSelect={this.onSelectRole}
-                  onRemove={this.onRemoveRole}
-                  isObject={false}
-                />
-              </th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  selectedValues={usr.societati.map((val) => {
-                    return val['nume'];
-                  })}
-                  options={this.state.socs}
-                  isObject={false}
-                />
-              </th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  singleSelect="true"
-                  selectedValues={usr.societate.map((val) => {
-                    return val['nume'];
-                  })}
-                  options={this.state.socs}
-                  isObject={false}
-                />
-              </th>
-              <th>
-                <Multiselect
-                  placeholder=""
-                  singleSelect="true"
-                  selectedValues={usr.persoana.map((val) => {
-                    return val['nume'] + ' ' + val['prenume'] === 'null null'
-                      ? ''
-                      : val['nume'] + ' ' + val['prenume'];
-                  })}
-                  options={this.state.socs}
-                  isObject={false}
-                />
-              </th>
-              <th></th>
-              <th>
-                <Row>
-                  <Button
-                    onClick={() => this.editUser(usr)}
-                    variant="outline-secondary"
-                    className="m-1 p-1 rounded-circle border-0"
-                  >
-                    <Edit3 size={20} />
-                  </Button>
-
-                  <PopupState variant="popover" popupId="demo-popup-popover">
-                    {(popupState) => (
-                      <div>
+      usersComponent: this.state.users.map((user, index) => (
+        <tr key={user.id}>
+          <th>{user.username || '-'}</th>
+          <th>{user.email || '-'}</th>
+          <th>{user.angajat[0].persoana.nume + ' ' + user.angajat[0].persoana.prenume}</th>
+          <th>
+            <div className="d-flex">
+              <Button
+                variant="outline-secondary"
+                className="ml-2 p-1 rounded-circle border-0"
+                onClick={() => this.editUser(user)}
+              >
+                <Edit3 size={20} />
+              </Button>
+              <PopupState variant="popover" popupId="demo-popup-popover">
+                {(popupState) => (
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      className="m-0 p-1 rounded-circle border-0"
+                      {...bindTrigger(popupState)}
+                    >
+                      <Trash2 size={20} />
+                    </Button>
+                    <Popover
+                      {...bindPopover(popupState)}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                    >
+                      <Box p={2}>
+                        <Typography>Sigur ștergeți userul {user.username}?</Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                        <br />
+                        <Button
+                          variant="outline-danger"
+                          onClick={() => {
+                            popupState.close();
+                            this.deleteSocietate(user.id);
+                          }}
+                          className="mt-2"
+                        >
+                          Da
+                        </Button>
                         <Button
                           variant="outline-secondary"
-                          className="m-1 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
+                          onClick={popupState.close}
+                          className="mt-2"
                         >
-                          <Trash2 size={20} />
+                          Nu
                         </Button>
-                        <Popover
-                          {...bindPopover(popupState)}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                          }}
-                        >
-                          <Box p={2}>
-                            <Typography>Sigur ștergeți userul?</Typography>
-                            <Typography variant="caption">
-                              Datele nu mai pot fi recuperate
-                            </Typography>
-                            <br />
-                            <Button
-                              variant="outline-danger"
-                              onClick={() => {
-                                popupState.close();
-                                this.deleteUser(usr.id);
-                              }}
-                              className="mt-2 "
-                            >
-                              Da
-                            </Button>
-                            <Button
-                              variant="outline-persondary"
-                              onClick={popupState.close}
-                              className="mt-2"
-                            >
-                              Nu
-                            </Button>
-                          </Box>
-                        </Popover>
-                      </div>
-                    )}
-                  </PopupState>
-                </Row>
-              </th>
-            </tr>
-          );
-        })
-      ),
+                      </Box>
+                    </Popover>
+                  </div>
+                )}
+              </PopupState>
+            </div>
+          </th>
+        </tr>
+      )),
     });
-  }
-
-  async onRefresh() {
-    let user = await axios
-      .get(`${server.address}/user`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-
-    let thesocs = await axios
-      .get(`${server.address}/societate`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-    this.setState({
-      socs: thesocs.map((val) => {
-        return val.nume;
-      }),
-    });
-
-    user = await Promise.all(
-      user.map(async (usr) => {
-        let roles = await axios
-          .get(`${server.address}/user/roles/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let societati = await axios
-          .get(`${server.address}/user/societati/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let persoana = await axios
-          .get(`${server.address}/user/persoana/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let societate = await axios
-          .get(`${server.address}/user/societate/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-        let superior = await axios
-          .get(`${server.address}/user/superior/${usr.id}`, { headers: authHeader() })
-          .then((res) => res.data);
-
-        return {
-          ...usr,
-          roles: roles,
-          societati: societati,
-          persoana: persoana,
-          societate: societate,
-          superior: superior,
-        };
-      })
-    );
-
-    if (user) {
-      this.setState(
-        {
-          user: user,
-        },
-        this.renderUsers
-      );
-    }
   }
 
   async onSubmit(e) {
@@ -333,15 +211,12 @@ class UserTabel extends React.Component {
   }
 
   async handleClose() {
-    this.setState({
-      show: false,
-      id: null,
-      pentru: '',
-      dela: '',
-      panala: '',
-      tip: '',
-      motiv: '',
-    });
+    this.setState(
+      {
+        show: false,
+      },
+      this.clearInput
+    );
   }
 
   handleCloseConfirm() {
@@ -355,47 +230,36 @@ class UserTabel extends React.Component {
     return (
       <Aux>
         {/* add/edit modal */}
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal show={this.state.show} onHide={this.handleClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addCerereConcediu}>
               <Row>
-                <Col md={12}>
-                  <Form.Group>
-                    <Form.Label>De la</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.dela}
-                      onChange={(e) => this.setState({ dela: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Până la</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={this.state.panala}
-                      onChange={(e) => this.setState({ panala: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Tip</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.tip}
-                      onChange={(e) => this.setState({ tip: e.target.value })}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Motiv</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.motiv}
-                      onChange={(e) => this.setState({ motiv: e.target.value })}
-                    />
-                  </Form.Group>
-                </Col>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control type="text" disabled value={this.state.username} />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="text" disabled value={this.state.email} />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Nume angajat</Form.Label>
+                  <Form.Control type="text" disabled value={this.state.numeAngajat} />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label> roluri </Form.Label>
+                  <DropdownMultiselect
+                    // optionKey="id"
+                    // optionLabel="name"
+                    options={all_roles}
+                    selected={this.state.roles}
+                    handleOnChange={(selected) => this.setState({ roles: selected })}
+                    name="roles"
+                  />
+                </Form.Group>
               </Row>
             </Form>
           </Modal.Body>
@@ -450,15 +314,16 @@ class UserTabel extends React.Component {
                     <tr>
                       <th>Username</th>
                       <th>Email</th>
-                      <th>Role-uri</th>
+                      <th>Nume angajat</th>
+                      <th></th>
+                      {/* <th>Role-uri</th>
                       <th>Societăți Acces</th>
                       <th>Societate</th>
                       <th>Persoană</th>
-                      <th>Superior</th>
-                      <th></th>
+                      <th>Superior</th> */}
                     </tr>
                   </thead>
-                  <tbody>{this.state.userComponent}</tbody>
+                  <tbody>{this.state.usersComponent}</tbody>
                 </Table>
               </Card.Body>
             </Card>

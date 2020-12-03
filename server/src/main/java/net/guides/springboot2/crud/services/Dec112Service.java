@@ -695,7 +695,7 @@ public class Dec112Service {
 				// end det1
 
 				int nrParinti = 0;
-				for (PersoanaIntretinere persInt : angajat.getPersoaneIntretinere()) {
+				for (PersoanaIntretinere persInt : angajat.getPersoaneintretinere()) {
 					switch (persInt.getGrad()) {
 						case "Soț/Soție":
 							childElement = doc.createElement("cnpSot");
