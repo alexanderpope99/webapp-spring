@@ -61,7 +61,11 @@ class SocietatiTabel extends React.Component {
               <PopupState variant="popover" popupId="demo-popup-popover">
                 {(popupState) => (
                   <div>
-                    <Button variant="contained" className="m-0 p-0" {...bindTrigger(popupState)}>
+                    <Button
+                      variant="outline-secondary"
+                      className="m-0 p-1 rounded-circle border-0"
+                      {...bindTrigger(popupState)}
+                    >
                       <Trash2 fontSize="small" />
                     </Button>
                     <Popover

@@ -40,6 +40,8 @@ public class FacturaDTO {
 
 	private String observatii;
 
+	private String status;
+
 	private double sumaachitata;
 
 	private MultipartFile fisier;
@@ -105,28 +107,32 @@ public class FacturaDTO {
 	public void setIdsocietate(int idsocietate) {
 		this.idsocietate = idsocietate;
 	}
+
 	// * ///////////////////
 	public void setFisier(MultipartFile fisier) {
 		this.fisier = fisier;
 	}
 
 	public byte[] getFisier() throws IOException {
-		if(fisier != null)
+		if (fisier != null)
 			return fisier.getBytes();
-		//	returns empty array instead of null
-		else return new byte[0];
+		// returns empty array instead of null
+		else
+			return new byte[0];
 	}
-	
+
 	public String getNumefisier() {
-		if(fisier != null)
+		if (fisier != null)
 			return fisier.getOriginalFilename();
-		else return null;
+		else
+			return null;
 	}
 
 	public long getDimensiunefisier() {
-		if(fisier != null)
+		if (fisier != null)
 			return fisier.getSize();
-		else return 0;
+		else
+			return 0;
 	}
 	// * ///////////////////
 
@@ -145,6 +151,7 @@ public class FacturaDTO {
 	public void setData(String data) {
 		this.data = LocalDate.parse(data);
 	}
+
 	public void setData(LocalDate data) {
 		this.data = data;
 	}
@@ -156,6 +163,7 @@ public class FacturaDTO {
 	public void setDataplatii(String dataplatii) {
 		this.dataplatii = LocalDate.parse(dataplatii);
 	}
+
 	public void setDataplatii(LocalDate dataplatii) {
 		this.dataplatii = dataplatii;
 	}
@@ -239,6 +247,7 @@ public class FacturaDTO {
 	public void setTermenscadenta(String termenscadenta) {
 		this.termenscadenta = LocalDate.parse(termenscadenta);
 	}
+
 	public void setTermenscadenta(LocalDate termenscadenta) {
 		this.termenscadenta = termenscadenta;
 	}
@@ -251,4 +260,11 @@ public class FacturaDTO {
 		this.tipachizitie = tipachizitie;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

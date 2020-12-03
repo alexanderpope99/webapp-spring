@@ -55,13 +55,16 @@ public class Factura implements Serializable {
 	@Column(name = "observatii")
 	private String observatii;
 
+	@Column(name = "status")
+	private String status;
+
 	@Column(name = "data")
 	@DateTimeFormat(pattern = "yyyy-MM-dd", iso = ISO.DATE)
 	private LocalDate data;
 
 	@Column(name = "termenscadenta")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate termenscadenta;	
+	private LocalDate termenscadenta;
 
 	@Column(name = "dataplatii")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -75,7 +78,7 @@ public class Factura implements Serializable {
 
 	@Column(name = "dimensiunefisier")
 	private Long dimensiunefisier;
-	
+
 	@JsonIgnore
 	@Lob
 	@Column(name = "fisier")
@@ -99,9 +102,9 @@ public class Factura implements Serializable {
 	}
 
 	public Factura(String denumirefurnizor, String ciffurnizor, String nr, LocalDate data, String moneda,
-			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati, Angajat aprobator,
-			boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii, double sumaachitata,
-			Societate societate) {
+			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati,
+			Angajat aprobator, boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii,
+			double sumaachitata, Societate societate) {
 		this.denumirefurnizor = denumirefurnizor;
 		this.ciffurnizor = ciffurnizor;
 		this.nr = nr;
@@ -259,13 +262,15 @@ public class Factura implements Serializable {
 	public byte[] getFisier() {
 		return fisier;
 	}
+
 	public String getNumefisier() {
 		return numefisier;
 	}
-	
+
 	public void setFisier(byte[] fisier) {
 		this.fisier = fisier;
 	}
+
 	public void setNumefisier(String numefisier) {
 		this.numefisier = numefisier;
 	}
@@ -273,7 +278,16 @@ public class Factura implements Serializable {
 	public Long getDimensiunefisier() {
 		return dimensiunefisier;
 	}
+
 	public void setDimensiunefisier(Long dimensiunefisier) {
 		this.dimensiunefisier = dimensiunefisier;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

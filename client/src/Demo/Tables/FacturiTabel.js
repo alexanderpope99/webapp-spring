@@ -87,6 +87,7 @@ class FacturiTabel extends React.Component {
     if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
     const factura_body = {
+      status: 'În așteptare',
       denumirefurnizor: this.state.denumirefurnizor || null,
       ciffurnizor: this.state.ciffurnizor || null,
       nr: this.state.nr || null,
@@ -139,6 +140,7 @@ class FacturiTabel extends React.Component {
     }
 
     const factura_body = {
+      status: 'În așteptare',
       denumirefurnizor: this.state.denumirefurnizor || null,
       ciffurnizor: this.state.ciffurnizor || null,
       nr: this.state.nr || null,
@@ -306,6 +308,7 @@ class FacturiTabel extends React.Component {
                   </PopupState>
                 </div>
               </th>
+              <th>{fact.status}</th>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
@@ -693,6 +696,7 @@ class FacturiTabel extends React.Component {
                   <thead>
                     <tr>
                       <th></th>
+                      <th>Status</th>
                       <th
                         onClick={() => this.changeSortOrder('denumirefurnizor')}
                         style={{ cursor: 'pointer' }}
