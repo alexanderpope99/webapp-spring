@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button } from 'react-bootstrap';
-import { Trash2 } from 'react-feather';
+import { RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -66,7 +66,7 @@ class SocietatiTabel extends React.Component {
                       className="m-0 p-1 rounded-circle border-0"
                       {...bindTrigger(popupState)}
                     >
-                      <Trash2 fontSize="small" />
+                      <Trash2 size={20} />
                     </Button>
                     <Popover
                       {...bindPopover(popupState)}
@@ -149,7 +149,7 @@ class SocietatiTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  ↺
+                  <RotateCw size={20} />
                 </Button>
                 <Button
                   onClick={() => (window.location.href = '/forms/add-societate')}

@@ -192,14 +192,14 @@ class PermissionTabel extends React.Component {
                       variant="outline-secondary"
                       className="ml-2 p-1 rounded-circle border-0"
                     >
-                      <Edit fontSize="small" />
+                      <Edit size={20} />
                     </Button>
                     <Button
                       variant="outline-secondary"
                       className="m-0 p-1 rounded-circle border-0"
                       {...bindTrigger(popupState)}
                     >
-                      <Trash2 fontSize="small" />
+                      <Trash2 size={20} />
                     </Button>
                     <Popover
                       {...bindPopover(popupState)}

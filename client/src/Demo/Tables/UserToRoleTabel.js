@@ -190,7 +190,7 @@ class UserToRoleTabel extends React.Component {
                       className="m-0 p-1 rounded-circle border-0"
                       {...bindTrigger(popupState)}
                     >
-                      <Trash2 fontSize="small" />
+                      <Trash2 size={20} />
                     </Button>
                     <Popover
                       {...bindPopover(popupState)}

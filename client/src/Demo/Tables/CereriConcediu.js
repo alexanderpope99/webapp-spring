@@ -189,7 +189,7 @@ class CereriConcediuTabel extends React.Component {
                     className="m-1 p-1 rounded-circle border-0"
                     disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
                   >
-                    <Edit3 fontSize="small" />
+                    <Edit3 size={20} />
                   </Button>
 
                   <PopupState variant="popover" popupId="demo-popup-popover">
@@ -201,7 +201,7 @@ class CereriConcediuTabel extends React.Component {
                           disabled={cer.status === 'Aprobat' || cer.status === 'Respins'}
                           {...bindTrigger(popupState)}
                         >
-                          <Trash2 fontSize="small" />
+                          <Trash2 size={20} />
                         </Button>
                         <Popover
                           {...bindPopover(popupState)}

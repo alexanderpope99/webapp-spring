@@ -191,7 +191,7 @@ class SarbatoriTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editSarbatoare(sarbatoare)}
                 >
-                  <Edit3 fontSize="small" />
+                  <Edit3 size={20} />
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -201,7 +201,7 @@ class SarbatoriTabel extends React.Component {
                         className="m-0 p-1 rounded-circle border-0"
                         {...bindTrigger(popupState)}
                       >
-                        <Trash2 fontSize="small" />
+                        <Trash2 size={20} />
                       </Button>
                       <Popover
                         {...bindPopover(popupState)}

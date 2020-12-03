@@ -88,7 +88,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
                     variant="outline-success"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <Check fontSize="default" />
+                    <Check size={20} />
                   </Button>
                 </OverlayTrigger>
 
@@ -106,7 +106,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
                     variant="outline-danger"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <X fontSize="default" />
+                    <X size={20} />
                   </Button>
                 </OverlayTrigger>
               </Row>
