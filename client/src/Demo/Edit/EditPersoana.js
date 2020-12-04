@@ -393,7 +393,8 @@ class EditPersoana extends React.Component {
                 <Card.Title as="h4">Persoana</Card.Title>
                 <InputGroup className="mb-3">
                   <FormControl
-                    as="select"
+                    type="text"
+                    disabled="true"
                     value={this.state.selectednume}
                     onChange={(e) =>
                       this.setState(
@@ -404,10 +405,10 @@ class EditPersoana extends React.Component {
                         this.fillForm
                       )
                     }
-                  >
-                    <option>-</option>
+                  />
+                  {/* <option>-</option>
                     {listaNumeintreg}
-                  </FormControl>
+                  </FormControl> */}
                   <InputGroup.Append>
                     <OverlayTrigger
                       placement="bottom"

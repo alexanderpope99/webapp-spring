@@ -26,16 +26,15 @@ class FacturiAprobatorTabel extends React.Component {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
-    this.addFactura = this.addFactura.bind(this);
-    this.updateFactura = this.updateFactura.bind(this);
-    this.editFactura = this.editFactura.bind(this);
-    this.deleteFactura = this.deleteFactura.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
     this.changeSortOrder = this.changeSortOrder.bind(this);
+    this.approveFactura = this.approveFactura.bind(this);
+    this.rejectFactura = this.rejectFactura.bind(this);
+    this.postponeFactura = this.postponeFactura.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -71,6 +70,7 @@ class FacturiAprobatorTabel extends React.Component {
       sumaachitata: '',
       idsocietate: null,
       show: false,
+      user: JSON.parse(localStorage.getItem('user')),
 
       idcentrucost: null,
       idaprobator: null,
@@ -87,148 +87,29 @@ class FacturiAprobatorTabel extends React.Component {
     window.scrollTo(0, 0);
   }
 
-  async addFactura() {
-    const formData = new FormData();
-    console.log(this.state.numefisier);
-    if (this.state.numefisier) formData.append('fisier', this.state.fisier);
-
-    const factura_body = {
-      denumirefurnizor: this.state.denumirefurnizor || null,
-      ciffurnizor: this.state.ciffurnizor || null,
-      nr: this.state.nr || null,
-      data: this.state.data || null,
-      moneda: this.state.moneda || 'RON',
-      sumafaratva: this.state.sumafaratva || null,
-      termenscadenta: this.state.termenscadenta || null,
-      tipachizitie: this.state.tipachizitie || null,
-      descriereactivitati: this.state.descriereactivitati || null,
-      idaprobator: this.state.idaprobator || null,
-      aprobat: this.state.aprobat || false,
-      observatii: this.state.observatii || null,
-      idcentrucost: this.state.idcentrucost || null,
-      dataplatii: this.state.dataplatii || null,
-      sumaachitata: this.state.sumaachitata || null,
-      idsocietate: this.state.socsel.id,
-    };
-
-    for (let key in factura_body) {
-      if (factura_body[key]) formData.append(key, factura_body[key]);
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
-
-    let ok = await axios
-      .post(`${server.address}/factura/`, formData, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-    if (ok) {
-      await this.handleClose();
-      this.setState(
-        {
-          showConfirm: true,
-          modalMessage: 'Factură adăugată cu succes',
-        },
-        this.onRefresh
-      );
-    }
-  }
-
-  async updateFactura(idfactura) {
-    const formData = new FormData();
-    var withFileUri = 'keep-file';
-    if (this.state.sterge) withFileUri = 'new-file';
-    if (this.state.fisier) {
-      formData.append('fisier', this.state.fisier);
-      withFileUri = 'new-file';
-    }
-
-    const factura_body = {
-      denumirefurnizor: this.state.denumirefurnizor || null,
-      ciffurnizor: this.state.ciffurnizor || null,
-      nr: this.state.nr || null,
-      data: this.state.data || null,
-      moneda: this.state.moneda || null,
-      sumafaratva: this.state.sumafaratva || null,
-      termenscadenta: this.state.termenscadenta || null,
-      tipachizitie: this.state.tipachizitie || null,
-      descriereactivitati: this.state.descriereactivitati || null,
-      idaprobator: this.state.idaprobator || null,
-      aprobat: this.state.aprobat || null,
-      observatii: this.state.observatii || null,
-      idcentrucost: this.state.idcentrucost || null,
-      dataplatii: this.state.dataplatii || null,
-      sumaachitata: this.state.sumaachitata || null,
-      idsocietate: this.state.socsel.id,
-    };
-
-    for (let key in factura_body) {
-      if (factura_body[key]) formData.append(key, factura_body[key]);
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
-
+  async approveFactura(fact) {
     const ok = await axios
-      .put(`${server.address}/factura/${idfactura}/${withFileUri}`, formData, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
+      .get(`${server.address}/factura/${fact.id}/aproba`, { headers: authHeader() })
+      .then((response) => response.status === 200)
       .catch((err) => console.error(err));
-
-    if (ok) {
-      await this.handleClose();
-      this.setState(
-        {
-          showConfirm: true,
-          modalMessage: 'Factură actualizată',
-        },
-        this.onRefresh
-      );
-    }
+    if (ok) this.onRefresh();
   }
 
-  async editFactura(fact) {
-    this.setState(
-      {
-        isEdit: true,
-        show: true,
-
-        id: fact.id,
-        denumirefurnizor: fact.denumirefurnizor,
-        ciffurnizor: fact.ciffurnizor,
-        nr: fact.nr,
-        data: fact.data ? fact.data.substring(0, 10) : '',
-        moneda: fact.moneda,
-        sumafaratva: fact.sumafaratva,
-        termenscadenta: fact.termenscadenta,
-        tipachizitie: fact.tipachizitie,
-        descriereactivitati: fact.descriereactivitati,
-        numeaprobator: fact.aprobator
-          ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
-          : '-',
-        idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
-        aprobat: fact.aprobat,
-        observatii: fact.observatii,
-        centrucost: fact.centrucost ? fact.centrucost : '-',
-        idcentrucost: fact.centrucost ? fact.centrucost.id : null,
-        dataplatii: fact.dataplatii,
-        sumaachitata: fact.sumaachitata,
-
-        numefisier: fact.numefisier,
-        sterge: false,
-      },
-      () => console.log(this.state)
-    );
+  async rejectFactura(fact) {
+    const ok = await axios
+      .get(`${server.address}/factura/${fact.id}/respinge`, { headers: authHeader() })
+      .then((response) => response.status === 200)
+      .catch((err) => console.error(err));
+    if (ok) this.onRefresh();
   }
 
-  async deleteFactura(id) {
-    await axios
-      .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
+  async postponeFactura(fact) {
+    console.log(`${server.address}/factura/${fact.id}/amana`);
+    const ok = await axios
+      .get(`${server.address}/factura/${fact.id}/amana`, { headers: authHeader() })
+      .then((response) => response.status === 200)
       .catch((err) => console.error(err));
+    if (ok) this.onRefresh();
   }
 
   // function to create react component with fetched data
@@ -282,7 +163,7 @@ class FacturiAprobatorTabel extends React.Component {
                       variant="outline-warning"
                       className="m-1 p-1 rounded-circle border-0"
                     >
-                      <Clock size={20}/>
+                      <Clock size={20} />
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger
@@ -299,11 +180,12 @@ class FacturiAprobatorTabel extends React.Component {
                       variant="outline-success"
                       className="m-1 p-1 rounded-circle border-0"
                     >
-                      <Check size={20}/>
+                      <Check size={20} />
                     </Button>
                   </OverlayTrigger>
                 </div>
               </th>
+              <th>{fact.status}</th>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
@@ -329,7 +211,7 @@ class FacturiAprobatorTabel extends React.Component {
                     {fact.numefisier}
                   </Button>
                 ) : (
-                  'Niciun fisier âncarcat'
+                  'Niciun fisier încărcat'
                 )}
               </th>
             </tr>
@@ -359,7 +241,7 @@ class FacturiAprobatorTabel extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
     const fact = await axios
-      .get(`${server.address}/factura/idsoc/${this.state.socsel.id}`, {
+      .get(`${server.address}/factura/idsocida/${this.state.socsel.id}&${this.state.user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -691,6 +573,7 @@ class FacturiAprobatorTabel extends React.Component {
                   <thead>
                     <tr>
                       <th></th>
+                      <th>Status</th>
                       <th
                         onClick={() => this.changeSortOrder('denumirefurnizor')}
                         style={{ cursor: 'pointer' }}

@@ -11,6 +11,10 @@ import { download } from '../Resources/download';
 import months from '../Resources/months';
 import authHeader from '../../services/auth-header';
 import { Edit, PlusCircle } from 'react-feather';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography/Typography';
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 
 class Societati extends React.Component {
   constructor() {
@@ -161,6 +165,22 @@ class Societati extends React.Component {
     }
   }
 
+  async deleteSocietate(id) {
+    // id = id.replace('"', '');
+    // console.log(id);
+    const response = axios
+      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .then((response) => response.data)
+      .then(() => {
+        console.log(response);
+        // alert(`Deleted ${id}`);
+        setSocSel(null);
+        this.setState({ show: false });
+        window.location.reload();
+      })
+      .catch((err) => console.error(err));
+  }
+
   editSocietate(societate) {
     console.log(societate);
     this.setState(
@@ -247,9 +267,9 @@ class Societati extends React.Component {
       email: this.state.email || null,
       telefon: this.state.telefon || null,
       fax: this.state.fax || null,
-		};
+    };
 
-		// UPDATE SOCIETATE
+    // UPDATE SOCIETATE
     await axios
       .put(`${server.address}/societate/${this.state.id}`, societate_body, {
         headers: authHeader(),
@@ -262,7 +282,7 @@ class Societati extends React.Component {
             modalMessage: 'Date actualizate!',
           },
           this.getSocietati
-        )
+        );
       })
       .catch((err) => console.error(err));
   }
@@ -295,6 +315,7 @@ class Societati extends React.Component {
                 style={{ cursor: 'pointer' }}
                 onClick={() => this.editSocietate(this.state.societati[key])}
               />
+
               <Button
                 size="sm"
                 onClick={this.statSalarii}
@@ -504,6 +525,49 @@ class Societati extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
+            <PopupState variant="popover" popupId="demo-popup-popover">
+              {(popupState) => (
+                <div>
+                  <Button variant="outline-danger" {...bindTrigger(popupState)}>
+                    Șterge Societatea
+                  </Button>
+                  <Popover
+                    {...bindPopover(popupState)}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                  >
+                    <Box p={2}>
+                      <Typography>Sigur ștergeți societatea {this.state.nume}?</Typography>
+                      <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                      <br />
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => {
+                          popupState.close();
+                          this.deleteSocietate(this.state.id);
+                        }}
+                        className="mt-2"
+                      >
+                        Da
+                      </Button>
+                      <Button
+                        variant="outline-secondary"
+                        onClick={popupState.close}
+                        className="mt-2"
+                      >
+                        Nu
+                      </Button>
+                    </Box>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
             <Button variant="primary" onClick={this.onSubmit}>
               Actualizează
             </Button>

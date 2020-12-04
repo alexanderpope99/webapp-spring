@@ -195,7 +195,7 @@ class Angajat extends React.Component {
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
-                <EditPersoana ref={this.persoana} scrollToTopSmooth={this.scrollToTopSmooth}/>
+                <EditPersoana ref={this.persoana} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
 
               <Tab eventKey="contract" title="Contract de munca">

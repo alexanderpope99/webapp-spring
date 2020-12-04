@@ -851,15 +851,16 @@ class RealizariRetineri extends React.Component {
             <InputGroup className="mb-3">
               {/* NUMELE ANGAJATILOR CU CONTRACT */}
               <FormControl
+                disabled="true"
                 aria-describedby="basic-addon2"
-                as="select"
+                type="text"
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
                 onChange={(e) => this.onSelect(e)}
-              >
-                <option> - </option>
-                {/* lista_angajati mapped as <option> */}
-                {nume_persoane_opt}
-              </FormControl>
+              />
+              {/* <option> - </option> */}
+              {/* lista_angajati mapped as <option> */}
+              {/* {nume_persoane_opt} */}
+              {/* </FormControl> */}
               <InputGroup.Append>
                 <OverlayTrigger
                   placement="bottom"

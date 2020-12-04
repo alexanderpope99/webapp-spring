@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -72,13 +71,42 @@ public class FacturaController {
 		return facturaRepository.findBySocietate_Id(societateId);
 	}
 
+	@Transactional
+	@GetMapping("/{id}/respinge")
+	public ResponseEntity<String> rejectFacturaById(@PathVariable(value = "id") int facturaId)
+			throws ResourceNotFoundException {
+		return facturaService.reject(facturaId);
+	}
+
+	@Transactional
+	@GetMapping("/{id}/aproba")
+	public ResponseEntity<String> approveFacturaById(@PathVariable(value = "id") int facturaId)
+			throws ResourceNotFoundException {
+		return facturaService.approve(facturaId);
+	}
+
+	@Transactional
+	@GetMapping("/{id}/amana")
+	public ResponseEntity<String> postponeFacturaById(@PathVariable(value = "id") int facturaId)
+			throws ResourceNotFoundException {
+		return facturaService.postpone(facturaId);
+	}
+
+	@Transactional
+	@GetMapping("/idsocida/{ids}&{ida}")
+	public List<Factura> getFacturaByIdSocietateAndIdAprobator(@PathVariable(value = "ids") int societateId,
+			@PathVariable(value = "ida") int aprobatorId) {
+		return facturaRepository.findBySocietate_IdAndAprobator_Idpersoana(societateId, aprobatorId);
+	}
+
 	@GetMapping("file/{id}")
 	public ResponseEntity<byte[]> getFile(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Factura factura = facturaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + id));
-		
-				return ResponseEntity.ok()
-        .header("Content-Disposition", "attachment; filename=\"" + factura.getNumefisier() + "\"").body(factura.getFisier());
+
+		return ResponseEntity.ok()
+				.header("Content-Disposition", "attachment; filename=\"" + factura.getNumefisier() + "\"")
+				.body(factura.getFisier());
 	}
 
 	@PostMapping
@@ -99,8 +127,7 @@ public class FacturaController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteFactura(@PathVariable("id") int facturaId)
-			throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteFactura(@PathVariable("id") int facturaId) throws ResourceNotFoundException {
 		Factura factura = facturaRepository.findById(facturaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
 

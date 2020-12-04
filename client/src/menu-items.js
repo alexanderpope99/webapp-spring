@@ -43,38 +43,6 @@ var items = [
     ],
   },
   {
-    id: 'cereri',
-    title: 'Cereri',
-    type: 'group',
-    icon: 'icon-group',
-    show: user.roles.includes('ROLE_DIRECTOR'),
-    children: [
-      {
-        id: 'cereriConcediu',
-        title: 'Cereri Concediu Director',
-        type: 'item',
-        url: '/tables/cereri-concediu-director',
-        icon: 'feather icon-dollar-sign',
-      },
-    ],
-  },
-  {
-    id: 'cereri',
-    title: 'Cereri',
-    type: 'group',
-    icon: 'icon-group',
-    show: user.roles.includes('ROLE_ANGAJAT'),
-    children: [
-      {
-        id: 'cereriConcediu',
-        title: 'Cereri Concediu',
-        type: 'item',
-        url: '/tables/cereri-concediu',
-        icon: 'feather icon-dollar-sign',
-      },
-    ],
-  },
-  {
     id: 'general',
     title: 'GENERAL',
     type: 'group',
@@ -85,19 +53,59 @@ var items = [
       user.roles.includes('ROLE_DIRECTOR'),
     children: [
       {
-        id: 'angajat',
-        title: 'Angajați',
+        id: 'cereri-concediu',
+        title: 'Cereri Concediu',
         type: 'item',
-        url: '/forms/angajat',
-        icon: 'feather icon-users',
+        url: '/tables/cereri-concediu',
+        icon: 'feather icon-briefcase',
       },
       {
-        id: 'realizari-retineri',
-        title: 'Realizări / Rețineri',
+        id: 'cereriConcediu',
+        title: 'Aprobare Cereri Concediu',
         type: 'item',
-        url: '/forms/realizari-retineri',
-        icon: 'feather icon-clipboard',
+        url: '/tables/cereri-concediu-director',
+        icon: 'feather icon-briefcase',
       },
+    ],
+  },
+  {
+    id: 'administrare',
+    title: 'ADMINISTRARE',
+    type: 'group',
+    icon: 'icon-group',
+    show:
+      user.roles.includes('ROLE_USER') ||
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_DIRECTOR'),
+    children: [
+      //   {
+      //     id: 'angajat',
+      //     title: 'Angajați',
+      //     type: 'item',
+      //     url: '/forms/angajat',
+      //     icon: 'feather icon-users',
+      //   },
+      //   {
+      //     id: 'societati-tabel',
+      //     title: 'Societăți',
+      //     type: 'item',
+      //     url: '/tables/societati-tabel',
+      //     icon: 'feather icon-credit-card',
+      //   },
+      {
+        id: 'angajati-tabel',
+        title: 'Angajați',
+        type: 'item',
+        url: '/tables/angajati',
+        icon: 'feather icon-users',
+      },
+      //   {
+      //     id: 'realizari-retineri',
+      //     title: 'Realizări / Rețineri',
+      //     type: 'item',
+      //     url: '/forms/realizari-retineri',
+      //     icon: 'feather icon-clipboard',
+      //   },
       // {
       //   id: 'add-persoana',
       //   title: 'Adauga Persoana',
@@ -105,13 +113,13 @@ var items = [
       //   url: '/forms/add-persoana',
       //   icon: 'feather icon-file-text',
       // },
-      {
-        id: 'persoane-tabel',
-        title: 'Tabel Persoane',
-        type: 'item',
-        url: '/tables/persoane-tabel',
-        icon: 'feather icon-credit-card',
-      },
+      //   {
+      //     id: 'persoane-tabel',
+      //     title: 'Tabel Persoane',
+      //     type: 'item',
+      //     url: '/tables/persoane-tabel',
+      //     icon: 'feather icon-credit-card',
+      //   },
       // {
       //   id: 'edit-persoana',
       //   title: 'Editeaza Persoana',
@@ -133,20 +141,6 @@ var items = [
       //   url: '/forms/add-societate',
       //   icon: 'feather icon-file-text',
       // },
-      {
-        id: 'societati-tabel',
-        title: 'Tabel Societăți',
-        type: 'item',
-        url: '/tables/societati-tabel',
-        icon: 'feather icon-credit-card',
-      },
-      {
-        id: 'cereri-concediu',
-        title: 'Cereri Concediu',
-        type: 'item',
-        url: '/tables/cereri-concediu',
-        icon: 'feather icon-briefcase',
-      },
       {
         id: 'rapoarte',
         title: 'Rapoarte',
@@ -208,14 +202,14 @@ var items = [
     children: [
       {
         id: 'facturi',
-        title: 'Tabel Facturi',
+        title: 'Facturi',
         type: 'item',
         url: '/facturi',
         icon: 'feather icon-file-text',
       },
       {
         id: 'facturi-aprobatori',
-        title: 'Tabel Facturi Aprobatori',
+        title: 'Aprobare Facturi',
         type: 'item',
         url: '/facturi-aprobator',
         icon: 'feather icon-file-text',
@@ -232,7 +226,7 @@ var items = [
     children: [
       {
         id: 'user-tabel',
-        title: 'Tabel Useri',
+        title: 'Utilizatori',
         type: 'item',
         url: '/tables/user-tabel',
         icon: 'feather icon-users',
