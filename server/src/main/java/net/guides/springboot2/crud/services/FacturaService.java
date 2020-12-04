@@ -14,6 +14,7 @@ import net.guides.springboot2.crud.repository.CentruCostRepository;
 import net.guides.springboot2.crud.repository.FacturaRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 import net.guides.springboot2.crud.repository.AngajatRepository;
+import org.springframework.http.ResponseEntity;
 
 @Service
 public class FacturaService {
@@ -63,6 +64,30 @@ public class FacturaService {
 	public Factura update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
 		newFacturaDTO.setId(facturaID);
 		return this.save(newFacturaDTO);
+	}
+
+	public ResponseEntity<String> approve(int facturaID) throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(facturaID)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaID));
+		factura.setStatus("Aprobată");
+		facturaRepository.save(factura);
+		return ResponseEntity.ok().body("Factură Aprobată");
+	}
+
+	public ResponseEntity<String> reject(int facturaID) throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(facturaID)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaID));
+		factura.setStatus("Respinsă");
+		facturaRepository.save(factura);
+		return ResponseEntity.ok().body("Factură Respinsă");
+	}
+
+	public ResponseEntity<String> postpone(int facturaID) throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(facturaID)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaID));
+		factura.setStatus("Amânată");
+		facturaRepository.save(factura);
+		return ResponseEntity.ok().body("Factură Amânată");
 	}
 
 	public Factura updateKeepOldFile(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {

@@ -45,6 +45,7 @@ const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 const FacturiTabel = React.lazy(() => import('./Demo/Tables/FacturiTabel'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
+const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -164,6 +165,12 @@ const routes = [
     exact: true,
     name: 'Tabel Facturi Aprobator',
     component: FacturiAprobatorTabel,
+  },
+  {
+    path: '/tables/angajati',
+    exact: true,
+    name: 'Tabel Angajați',
+    component: AngajatiTabel,
   },
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },

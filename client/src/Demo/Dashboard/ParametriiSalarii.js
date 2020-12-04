@@ -1,6 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button } from 'react-bootstrap';
-import { Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import { Trash2 } from 'react-feather';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
