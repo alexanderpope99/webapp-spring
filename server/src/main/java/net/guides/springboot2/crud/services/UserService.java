@@ -50,7 +50,7 @@ public class UserService {
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
 	}
 
-	public UserDTO update(int id, UserDTO newUserDTO) {
+	public UserDTO update(UserDTO newUserDTO) {
 		User newUser = modelMapper.map(newUserDTO, User.class);
 
 		//* keep angajati connected to user <- on frontend: angajati.user is null

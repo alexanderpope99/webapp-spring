@@ -102,7 +102,7 @@ public class UserController {
 
 	@PutMapping("{id}")
 	public UserDTO updateUser(@PathVariable("id") int id, @RequestBody UserDTO newUserDTO) {
-		return userService.update(id, newUserDTO);
+		return userService.update(newUserDTO);
 	}
 
 	@DeleteMapping("{id}")
