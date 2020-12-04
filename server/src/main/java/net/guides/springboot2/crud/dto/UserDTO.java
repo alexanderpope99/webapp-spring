@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.Societate;
@@ -16,7 +18,7 @@ public class UserDTO {
 
 	private String email;
 
-	private List<Angajat> angajat;
+	private List<Angajat> angajati;
 
 	private List<Role> roles;
 
@@ -36,8 +38,8 @@ public class UserDTO {
 	public boolean isGen() {
 		return gen;
 	}
-	public List<Angajat> getAngajat() {
-		return angajat;
+	public List<Angajat> getAngajati() {
+		return angajati;
 	}
 	public List<Role> getRoles() {
 		return roles;
@@ -58,13 +60,20 @@ public class UserDTO {
 	public void setGen(boolean gen) {
 		this.gen = gen;
 	}
-	public void setAngajat(List<Angajat> angajat) {
-		this.angajat = angajat;
+	public void setAngajati(List<Angajat> angajati) {
+		this.angajati = angajati;
 	}
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 	public void setSocietati(Map<Integer, String> societati) {
 		this.societati = societati;
-	}	
+	}
+	public void setSocietatiClass(List<Societate> societati) {
+		this.societati = new HashMap<>();
+		societati.forEach(soc -> this.societati.put(soc.getId(), soc.getNume()));
+	}
+
+		
+	
 }

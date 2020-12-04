@@ -100,7 +100,6 @@ public class UserController {
 		return userRepository.getRolesByUserId(usrid);
 	}
 
-	@Transactional
 	@PutMapping("{id}")
 	public UserDTO updateUser(@PathVariable("id") int id, @RequestBody UserDTO newUserDTO) {
 		return userService.update(id, newUserDTO);

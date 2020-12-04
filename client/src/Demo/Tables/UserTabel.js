@@ -107,7 +107,7 @@ class UserTabel extends React.Component {
       user: user,
       username: user.username,
       email: user.email,
-      numeAngajat: user.angajat[0].persoana.nume + ' ' + user.angajat[0].persoana.prenume,
+      numeAngajat: user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume,
       roles: user.roles.map((role) => String(role.id)),
     });
   }
@@ -140,7 +140,7 @@ class UserTabel extends React.Component {
         <tr key={user.id}>
           <th>{user.username || '-'}</th>
           <th>{user.email || '-'}</th>
-          <th>{user.angajat[0].persoana.nume + ' ' + user.angajat[0].persoana.prenume}</th>
+          <th>{user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume}</th>
           <th>
             <div className="d-flex">
               <Button

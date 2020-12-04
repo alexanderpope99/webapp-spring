@@ -20,6 +20,8 @@ ERORI:
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
 
+un mod de a mentine angajat.user la fel
+
 _________________________________________
 
 admin = nu vede datele

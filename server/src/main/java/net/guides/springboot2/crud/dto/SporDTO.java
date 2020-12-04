@@ -2,7 +2,7 @@ package net.guides.springboot2.crud.dto;
 
 import net.guides.springboot2.crud.model.RealizariRetineri;
 
-public class Spor {
+public class SporDTO {
 	private int id;
 
 	private String nume;

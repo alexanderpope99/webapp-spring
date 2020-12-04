@@ -33,7 +33,7 @@ public class User implements Serializable {
 	private String password;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Angajat> angajat;
+	private List<Angajat> angajati;
 
 	@JsonBackReference(value = "user-role")
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -70,8 +70,8 @@ public class User implements Serializable {
 		return email;
 	}
 
-	public List<Angajat> getAngajat() {
-		return angajat;
+	public List<Angajat> getAngajati() {
+		return angajati;
 	}
 
 	public String getPassword() {
@@ -99,8 +99,8 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public void setAngajat(List<Angajat> angajat) {
-		this.angajat = angajat;
+	public void setAngajati(List<Angajat> angajati) {
+		this.angajati = angajati;
 	}
 
 	public void setPassword(String password) {
