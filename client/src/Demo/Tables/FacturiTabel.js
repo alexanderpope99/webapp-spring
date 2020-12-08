@@ -241,9 +241,7 @@ class FacturiTabel extends React.Component {
       else return f1[sortBy] > f2[sortBy] ? -1 : 1;
     };
 
-    console.log(this.state.sortAsc, this.state.sortBy);
     const facturi = this.state.factura.sort(compare);
-    console.log(facturi);
     this.setState({
       facturaComponent: await Promise.all(
         facturi.map(async (fact, index) => {
