@@ -570,7 +570,7 @@ class Societati extends React.Component {
             <PopupState variant="popover" popupId="demo-popup-popover">
               {(popupState) => (
                 <div>
-                  <Button variant="outline-danger" {...bindTrigger(popupState)}>
+                  <Button variant="outline-danger" size="sm" className="border-0" {...bindTrigger(popupState)}>
                     Șterge Societatea
                   </Button>
                   <Popover

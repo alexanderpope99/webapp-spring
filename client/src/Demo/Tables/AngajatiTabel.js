@@ -57,7 +57,7 @@ class AngajatiTabel extends React.Component {
             <th>{index+1}</th>
             <th>{ang.persoana.nume}</th>
             <th>{ang.persoana.prenume}</th>
-            <th>{ang.contract.functie || 'lipsă contract'}</th>
+            <th>{ang.contract.functie || '-'}</th>
             <th>{ang.contract.salariutarifar ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu : 'lipsă contract'}</th>
             {/* <th className="d-inline-flex"> */}
             <th>
