@@ -328,7 +328,12 @@ class Societati extends React.Component {
         >
           <Card.Body>
             <h3
-              style={{ fontSize: key.length > 25 ? '20px' : '30px' }}
+              style={{
+                fontSize:
+                  key.length > 25
+                    ? (30 - Math.floor(key.length / 25) * 10).toString() + 'px'
+                    : '30px',
+              }}
               className="d-flex justify-content-around"
             >
               {key}

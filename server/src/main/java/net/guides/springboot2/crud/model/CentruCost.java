@@ -40,7 +40,7 @@ public class CentruCost implements Serializable {
 	private String nume;
 
 	@JsonBackReference(value = "factura-centrucost")
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY)
 	private List<Factura> facturi;
 
 	public CentruCost() {
@@ -83,5 +83,13 @@ public class CentruCost implements Serializable {
 
 	public void setNume(String nume) {
 		this.nume = nume;
+	}
+
+	public List<Factura> getFacturi() {
+		return facturi;
+	}
+
+	public void setFacturi(List<Factura> facturi) {
+		this.facturi = facturi;
 	}
 }

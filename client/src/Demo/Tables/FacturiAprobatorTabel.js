@@ -36,6 +36,7 @@ class FacturiAprobatorTabel extends React.Component {
     this.approveFactura = this.approveFactura.bind(this);
     this.rejectFactura = this.rejectFactura.bind(this);
     this.postponeFactura = this.postponeFactura.bind(this);
+    this.getStatusColor = this.getStatusColor.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -113,6 +114,12 @@ class FacturiAprobatorTabel extends React.Component {
     if (ok) this.onRefresh();
   }
 
+  getStatusColor(factStatus) {
+    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.1)';
+    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.1)';
+    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.1)';
+  }
+
   // function to create react component with fetched data
   async renderFacturi() {
     const compare = (f1, f2) => {
@@ -130,7 +137,7 @@ class FacturiAprobatorTabel extends React.Component {
         facturi.map(async (fact, index) => {
           return (
             // TODO
-            <tr key={fact.id}>
+            <tr style={{ backgroundColor: this.getStatusColor(fact.status) }} key={fact.id}>
               <th>
                 <div className="d-flex">
                   <OverlayTrigger
