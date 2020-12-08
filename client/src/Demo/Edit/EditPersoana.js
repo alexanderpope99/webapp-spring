@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
-import { Plus } from 'react-feather';
+import { Plus, Clipboard } from 'react-feather';
 import Aux from '../../hoc/_Aux';
 import { judete, sectoare } from '../Resources/judete';
 import { getSocSel } from '../Resources/socsel';
@@ -354,8 +354,6 @@ class EditPersoana extends React.Component {
   }
 
   render() {
-    const luni_nr = [];
-    for (var i = 1; i < 13; ++i) luni_nr.push(<option key={i}>{i}</option>);
 
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
@@ -408,6 +406,21 @@ class EditPersoana extends React.Component {
                     <option>-</option>
                     {listaNumeintreg}
                   </FormControl>
+									<InputGroup.Append>
+                <OverlayTrigger
+                  placement="bottom"
+                  delay={{ show: 250, hide: 250 }}
+                  overlay={
+                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                      Către realizări/rețineri
+                    </Tooltip>
+                  }
+                >
+                  <Button href="/forms/realizari-retineri" variant="outline-info" className="pb-0">
+                    <Clipboard size={20} className="m-0" />
+                  </Button>
+                </OverlayTrigger>
+              </InputGroup.Append>
                   <InputGroup.Append>
                     <OverlayTrigger
                       placement="bottom"

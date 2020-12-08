@@ -233,6 +233,14 @@ class Contract extends React.Component {
         modalMessage: 'Contractul trebuie să aibă un salariu.',
       });
       return false;
+		}
+		
+		if (!this.state.dataContract || !this.state.dataIncepere) {
+      this.setState({
+        show: true,
+        modalMessage: 'Contractul trebuie să aibă o dată și o dată de începere a activității.',
+      });
+      return false;
     }
 
     return true;

@@ -8,7 +8,7 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
-import { getSocSel, setSocSel } from '../Resources/socsel';
+import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
@@ -53,11 +53,11 @@ class AngajatiTabel extends React.Component {
         }
         return (
           <tr key={ang.persoana.id}>
-            <th>{++index}</th>
+            <th>{index+1}</th>
             <th>{ang.persoana.nume}</th>
             <th>{ang.persoana.prenume}</th>
-            <th>{ang.contract.functie}</th>
-            <th>{ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu}</th>
+            <th>{ang.contract.functie || 'lipsă contract'}</th>
+            <th>{ang.contract.salariutarifar ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu : 'lipsă contract'}</th>
             {/* <th className="d-inline-flex"> */}
             <th>
               <div className="d-inline-flex">
@@ -174,7 +174,7 @@ class AngajatiTabel extends React.Component {
 
   async onRefresh() {
     const angajati = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, { headers: authHeader() })
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data);
 
     this.setState({

@@ -14,7 +14,7 @@ import {
   Collapse,
   Toast,
 } from 'react-bootstrap';
-import { Trash2, Plus } from 'react-feather';
+import { Trash2, Plus, User, UserPlus } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
@@ -703,7 +703,9 @@ class RealizariRetineri extends React.Component {
       <option key={angajat.id} data-key={angajat.id}>
         {angajat.nume}
       </option>
-    ));
+		));
+		
+		console.log(this.props.asChild);
     return (
       <Aux>
         <Toast
@@ -853,12 +855,27 @@ class RealizariRetineri extends React.Component {
                 aria-describedby="basic-addon2"
                 as="select"
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
-                onChange={(e) => this.onSelect(e)}
+								onChange={(e) => this.onSelect(e)}
               >
                 <option> - </option>
                 {/* lista_angajati mapped as <option> */}
                 {nume_persoane_opt}
               </FormControl>
+							<InputGroup.Append>
+                <OverlayTrigger
+                  placement="bottom"
+                  delay={{ show: 250, hide: 250 }}
+                  overlay={
+                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                      Către date personale
+                    </Tooltip>
+                  }
+                >
+                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
+                    <User size={20} className="m-0" />
+                  </Button>
+                </OverlayTrigger>
+              </InputGroup.Append>
               <InputGroup.Append>
                 <OverlayTrigger
                   placement="bottom"
@@ -869,8 +886,8 @@ class RealizariRetineri extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
-                    <Plus fontSize="small" className="m-0" />
+                  <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
+                    <Plus size={20} className="m-0" />
                   </Button>
                 </OverlayTrigger>
               </InputGroup.Append>
