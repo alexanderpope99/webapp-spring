@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import net.guides.springboot2.crud.dto.RoleDTO;
 import net.guides.springboot2.crud.dto.SocietateDTO;
-import net.guides.springboot2.crud.dto.UserDTO;
 import net.guides.springboot2.crud.dto.PersoanaDTO;
 import net.guides.springboot2.crud.model.User;
 

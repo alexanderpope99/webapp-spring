@@ -3,9 +3,6 @@ package net.guides.springboot2.crud.dto;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Role;
