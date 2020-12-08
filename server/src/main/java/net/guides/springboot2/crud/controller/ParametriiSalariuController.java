@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.repository.ParametriiSalariuRepository;
+import net.guides.springboot2.crud.services.ParametriiSalariuService;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +30,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class ParametriiSalariuController {
 	@Autowired
 	private ParametriiSalariuRepository parametriiSalariuRepository;
+
+	@Autowired
+	private ParametriiSalariuService parametriiSalariuService;
 
 	@GetMapping
 	public List<ParametriiSalariu> getAllPersoane() {
@@ -49,6 +53,12 @@ public class ParametriiSalariuController {
 	@PostMapping
 	public ParametriiSalariu createParametriiSalariu(@RequestBody ParametriiSalariu parametriiSalariu) {
 		return parametriiSalariuRepository.save(parametriiSalariu);
+	}
+
+	@PostMapping("/init")
+	public String init() {
+		parametriiSalariuService.init();
+		return "Parametrii initializati";
 	}
 
 	@PutMapping("{id}")
