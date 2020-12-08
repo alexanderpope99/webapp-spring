@@ -607,7 +607,9 @@ class Contract extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Col>
-            <Col md={6}>
+						<Col>
+						<Row>
+            <Col md={6} className="border rounded pt-3">
               <Form.Group id="iban">
                 <Form.Label>IBAN</Form.Label>
                 <Form.Control
@@ -631,7 +633,8 @@ class Contract extends React.Component {
                 />
               </Form.Group>
             </Col>
-
+							</Row>
+						</Col>
             <Col md={6}>
               <Form.Group controlId="punctdelucru">
                 <Form.Label>Punct de lucru</Form.Label>

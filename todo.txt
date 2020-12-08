@@ -9,6 +9,7 @@ buton de 'show password' la schimba prola
 UPGRADES: 
 	cont bancar la societate
 	cont bancar pill in angajat (dupa pers. intr.)
+	pagina de centru cost
 
 
 ERORI:
@@ -20,6 +21,7 @@ UserTabel:
 	✔ can edit Roles
 	X can edit societati
 	X can edit angajati
+
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:

@@ -15,10 +15,11 @@ import authHeader from '../../services/auth-header';
 import { RotateCw, UserPlus, Edit3, Trash2, Clipboard } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
-    this.onRefresh = this.onRefresh.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
+		this.deleteAngajat = this.deleteAngajat.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -34,7 +35,7 @@ class AngajatiTabel extends React.Component {
     window.scrollTo(0, 0);
   }
 
-  deletePersoana(id) {
+  deleteAngajat(id) {
     axios
       .delete(`${server.address}/angajat/${id}`, { headers: authHeader() })
       .then((response) => response.data)
@@ -50,7 +51,7 @@ class AngajatiTabel extends React.Component {
       angajatiComponent: this.state.angajati.map((ang, index) => {
         for (let key in ang) {
           if (!ang[key]) ang[key] = '-';
-        }
+				}
         return (
           <tr key={ang.persoana.id}>
             <th>{index+1}</th>
@@ -146,7 +147,7 @@ class AngajatiTabel extends React.Component {
                             variant="outline-danger"
                             onClick={() => {
                               popupState.close();
-                              this.deleteAngajat(ang.id, ang.nume, ang.prenume);
+                              this.deleteAngajat(ang.persoana.id);
                             }}
                             className="mt-2 "
                           >
