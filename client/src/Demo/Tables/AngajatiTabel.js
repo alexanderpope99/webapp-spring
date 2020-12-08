@@ -71,6 +71,7 @@ class AngajatiTabel extends React.Component {
                   }
                 >
                   <Button
+										disabled={!ang.contract.id}
                     onClick={() => {
                       setAngajatSel({
                         idpersoana: ang.persoana.id,
