@@ -555,7 +555,7 @@ class FacturiAprobatorTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Facturi</Card.Title>
+                <Card.Title as="h5">Aprobare Facturi</Card.Title>
 
                 <Button
                   variant="outline-info"
@@ -565,15 +565,6 @@ class FacturiAprobatorTabel extends React.Component {
                 >
                   <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
-                </Button>
-
-                <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
-                  variant="outline-info"
-                  size="sm"
-                  style={{ fontSize: '1.25rem', float: 'right' }}
-                >
-                  <Plus className="m-0 p-0" />
                 </Button>
               </Card.Header>
               <Card.Body>

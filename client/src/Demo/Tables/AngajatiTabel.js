@@ -12,7 +12,7 @@ import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
-import { RotateCw, Plus, Edit3, Trash2, Clipboard } from 'react-feather';
+import { RotateCw, UserPlus, Edit3, Trash2, Clipboard } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
   constructor(props) {
@@ -230,7 +230,7 @@ class AngajatiTabel extends React.Component {
                     size="sm"
                     style={{ fontSize: '1.25rem', float: 'right' }}
                   >
-                    <Plus className="m-0 p-0" />
+                    <UserPlus className="m-0 p-0" />
                   </Button>
                 </OverlayTrigger>
               </Card.Header>
