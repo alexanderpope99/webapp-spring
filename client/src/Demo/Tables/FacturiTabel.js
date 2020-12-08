@@ -30,6 +30,7 @@ class FacturiTabel extends React.Component {
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
     this.changeSortOrder = this.changeSortOrder.bind(this);
+    this.getStatusColor = this.getStatusColor.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -226,7 +227,11 @@ class FacturiTabel extends React.Component {
       .then((response) => response.data)
       .catch((err) => console.error(err));
   }
-
+  getStatusColor(factStatus) {
+    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.1)';
+    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.1)';
+    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.1)';
+  }
   // function to create react component with fetched data
   async renderFacturi() {
     const compare = (f1, f2) => {
@@ -244,7 +249,12 @@ class FacturiTabel extends React.Component {
         facturi.map(async (fact, index) => {
           return (
             // TODO
-            <tr key={fact.id}>
+            <tr
+              style={{
+                backgroundColor: this.getStatusColor(fact.status),
+              }}
+              key={fact.id}
+            >
               <th>
                 <div className="d-flex">
                   <Button
@@ -252,7 +262,7 @@ class FacturiTabel extends React.Component {
                     variant="outline-secondary"
                     className="m-1 p-1 rounded-circle border-0"
                   >
-                    <Edit3 size={20}/>
+                    <Edit3 size={20} />
                   </Button>
 
                   <PopupState variant="popover" popupId="demo-popup-popover">
@@ -334,7 +344,7 @@ class FacturiTabel extends React.Component {
                     {fact.numefisier}
                   </Button>
                 ) : (
-                  'Niciun fisier âncarcat'
+                  'Niciun fișier încărcat'
                 )}
               </th>
             </tr>
@@ -636,6 +646,7 @@ class FacturiTabel extends React.Component {
                     </div>
                   ) : (
                     <Dropzone
+                      inputLabel="Trage fișierul"
                       onChangeStatus={handleChangeStatus}
                       // getUploadParams={getUploadParams}
                       // onSubmit={handleSubmit}
