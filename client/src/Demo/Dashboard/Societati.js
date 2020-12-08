@@ -103,6 +103,8 @@ class Societati extends React.Component {
         show: false,
         isEdit: false,
       });
+    setSocSel(null);
+    window.location.reload();
   }
 
   async componentDidMount() {
@@ -213,10 +215,10 @@ class Societati extends React.Component {
     let luna = this.state.luna;
     let an = this.state.an;
     let user = this.state.user;
-		let socsel = this.state.socsel;
+    let socsel = this.state.socsel;
 
-		const created = await axios
-      .get(`${server.address}/stat/${socsel.id}/mo=${luna+1}&y=${an}&i=-/${user.id}`, {
+    const created = await axios
+      .get(`${server.address}/stat/${socsel.id}/mo=${luna + 1}&y=${an}&i=-/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
@@ -233,7 +235,9 @@ class Societati extends React.Component {
 
     const created = await axios
       .get(
-        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna+1}&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${
+          luna + 1
+        }&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
         {
           headers: authHeader(),
         }
@@ -242,23 +246,23 @@ class Societati extends React.Component {
       .catch((err) => console.error(err));
 
     if (created) download(`Declaratia 112 - ${socsel.nume} - ${months[luna]} ${an}.pdf`, user.id);
-	}
-	
-	async mta() {
+  }
+
+  async mta() {
     let luna = this.state.luna;
     let an = this.state.an;
     let user = this.state.user;
-		let socsel = this.state.socsel;
+    let socsel = this.state.socsel;
 
-		const created = await axios
-      .get(`${server.address}/mta/${socsel.id}&mo=${luna+1}&y=${an}/${user.id}`, {
+    const created = await axios
+      .get(`${server.address}/mta/${socsel.id}&mo=${luna + 1}&y=${an}/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
     if (created) download(`FisierMTA - ${socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
-	}
+  }
 
   async onSubmit(e) {
     try {
@@ -310,6 +314,7 @@ class Societati extends React.Component {
       <Col md={6} xl={4} key={key}>
         <Card
           style={{
+            maxBlockSize: 150,
             opacity: this.state.societati[key].opacity,
             cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
           }}
@@ -322,9 +327,14 @@ class Societati extends React.Component {
           }
         >
           <Card.Body>
-            <h3 className="d-flex justify-content-around">{key}</h3>
+            <h3
+              style={{ fontSize: key.length > 25 ? '20px' : '30px' }}
+              className="d-flex justify-content-around"
+            >
+              {key}
+            </h3>
             <div
-              className="mt-5"
+              className="mt-4"
               visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
             >
               <Edit
@@ -352,7 +362,7 @@ class Societati extends React.Component {
               >
                 Dec.112
               </Button>
-							<Button
+              <Button
                 size="sm"
                 onClick={this.mta}
                 style={{

@@ -57,6 +57,7 @@ class AngajatiTabel extends React.Component {
             <th>{ang.persoana.nume}</th>
             <th>{ang.persoana.prenume}</th>
             <th>{ang.contract.functie}</th>
+            <th>{ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu}</th>
             {/* <th className="d-inline-flex"> */}
             <th>
               <div className="d-inline-flex">
@@ -241,6 +242,7 @@ class AngajatiTabel extends React.Component {
                       <th>Nume</th>
                       <th>Prenume</th>
                       <th>Funcție</th>
+                      <th>Salariu Tarifar</th>
                       <th></th>
                     </tr>
                   </thead>
