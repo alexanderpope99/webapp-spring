@@ -131,7 +131,7 @@ class Societati extends React.Component {
       .catch((err) => console.log(err));
 
     if (Array.isArray(societati_res)) {
-      var societati = this.state.societati;
+			var societati = this.state.societati;
       // var date_societati = this.state.date_societati;
       societati_res.forEach((societate) => {
         societati[societate.nume] = { opacity: '.3', ...societate };
