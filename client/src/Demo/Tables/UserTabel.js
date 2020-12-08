@@ -11,14 +11,8 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
-
-const all_roles = [
-  { key: '1', label: 'ROLE_ADMIN' },
-  { key: '2', label: 'ROLE_DIRECTOR' },
-  { key: '3', label: 'ROLE_CONTABIL' },
-  { key: '4', label: 'ROLE_ANGAJAT' },
-];
 
 class UserTabel extends React.Component {
   constructor() {
@@ -37,13 +31,14 @@ class UserTabel extends React.Component {
       users: [],
       userComponent: null,
       socsel: getSocSel(),
-      logged: JSON.parse(localStorage.getItem('user')),
+      logged: authService.getCurrentUser(),
 
       user: null,
       username: '',
       email: '',
       numeAngajat: '',
-      roles: [],
+      roles: [], // [...id's as strings] selected in multiselect-dropdown
+      societati: [], // [...id's as strings] selected in multiselect-dropdown
 
       isEdit: false,
 
@@ -55,6 +50,10 @@ class UserTabel extends React.Component {
       status: '',
       show: false,
       socs: [],
+
+      // da
+      all_roles: [],
+      all_societati: [],
     };
   }
 
@@ -70,8 +69,23 @@ class UserTabel extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.onRefresh();
+  async componentDidMount() {
+    // get all societati
+    var all_societati = await axios
+      .get(`${server.address}/societate`, { headers: authHeader() })
+      .then((res) =>
+        res.data ? res.data.map((societate) => ({ key: societate.id, label: societate.nume })) : []
+      )
+      .catch((err) => console.error(err));
+    console.log(all_societati);
+    // get all roles
+    var all_roles = await axios
+      .get(`${server.address}/role`, { headers: authHeader() })
+      .then((res) => (res.data ? res.data.map((role) => ({ key: role.id, label: role.name })) : []))
+      .catch((err) => console.error(err));
+    console.log(all_roles);
+
+    this.setState({ all_roles: all_roles, all_societati: all_societati }, this.onRefresh);
     window.scrollTo(0, 0);
   }
 
@@ -82,12 +96,22 @@ class UserTabel extends React.Component {
 
     var user = this.state.user;
     const user_roles = [
-      ...this.state.roles.map((role) => ({
-        id: Number(role),
-        name: all_roles[Number(role) - 1].label,
+      ...this.state.roles.map((idrole) => ({
+        id: Number(idrole),
+        name: this.state.all_roles[Number(idrole) - 1].label,
       })),
     ];
     user.roles = user_roles;
+
+    const iduri_societati_selectate = this.state.societati;
+    var user_societati = {};
+    // iterate throgh all_societati
+    for (let soc of this.state.all_societati) {
+      if (iduri_societati_selectate.indexOf(String(soc.key)) !== -1) {
+        user_societati[String(soc.key)] = soc.label;
+      }
+    }
+    user.societati = user_societati;
     console.log(user);
     const ok = await axios
       .put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
@@ -106,6 +130,12 @@ class UserTabel extends React.Component {
   }
 
   async editUser(user) {
+    console.log(user);
+    var societati = [];
+    for (let idsoc in user.societati) {
+      societati.push(idsoc);
+    }
+
     this.setState({
       isEdit: true,
       show: true,
@@ -115,6 +145,7 @@ class UserTabel extends React.Component {
       email: user.email,
       numeAngajat: user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume,
       roles: user.roles.map((role) => String(role.id)),
+      societati: societati,
     });
   }
 
@@ -244,27 +275,38 @@ class UserTabel extends React.Component {
           <Modal.Body>
             <Form onSubmit={this.addCerereConcediu}>
               <Row>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} lg="6">
                   <Form.Label>Username</Form.Label>
                   <Form.Control type="text" disabled value={this.state.username} />
                 </Form.Group>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} lg="6">
                   <Form.Label>Email</Form.Label>
                   <Form.Control type="text" disabled value={this.state.email} />
                 </Form.Group>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} lg="6">
                   <Form.Label>Nume angajat</Form.Label>
                   <Form.Control type="text" disabled value={this.state.numeAngajat} />
                 </Form.Group>
-                <Form.Group>
-                  <Form.Label> roluri </Form.Label>
+                <Form.Group as={Col} lg="6">
+                  <Form.Label>Roluri/Permisiuni</Form.Label>
                   <DropdownMultiselect
                     // optionKey="id"
                     // optionLabel="name"
-                    options={all_roles}
+                    options={this.state.all_roles}
                     selected={this.state.roles}
                     handleOnChange={(selected) => this.setState({ roles: selected })}
                     name="roles"
+                  />
+                </Form.Group>
+                <Form.Group as={Col} lg="12">
+                  <Form.Label>Societati</Form.Label>
+                  <DropdownMultiselect
+                    // optionKey="id"
+                    // optionLabel="name"
+                    options={this.state.all_societati}
+                    selected={this.state.societati}
+                    handleOnChange={(selected) => this.setState({ societati: selected })}
+                    name="societati"
                   />
                 </Form.Group>
               </Row>

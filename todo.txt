@@ -15,12 +15,15 @@ ERORI:
 	baza calcul frontend cand editeaza bazacalcul
 	concedii medicale trebuie sa nu aiba valori nule
 
+UserTabel:
+	1. change from multiselect to checkboxes
+	✔ can edit Roles
+	X can edit societati
+	X can edit angajati
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
-
-un mod de a mentine angajat.user la fel
 
 _________________________________________
 

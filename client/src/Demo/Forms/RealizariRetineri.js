@@ -27,6 +27,7 @@ import { server } from '../Resources/server-address';
 import { Typography } from '@material-ui/core';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 
 class RealizariRetineri extends React.Component {
   constructor() {
@@ -565,7 +566,7 @@ class RealizariRetineri extends React.Component {
     const idangajat = this.state.selected_angajat.idpersoana;
     const luna = this.state.luna;
     const an = this.state.an;
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
 
     const ok = await axios
       .get(
@@ -582,7 +583,7 @@ class RealizariRetineri extends React.Component {
   }
 
   async downloadStatIndividual(numeintreg, luna, an) {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     console.log('trying to download...');
     await fetch(
       `${server.address}/download/${user.id}/Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`,
