@@ -61,7 +61,7 @@ class AdminLayout extends Component {
                     <div className="page-wrapper">
                       <Suspense fallback={<Loader />}>
                         <Switch>
-                          {localStorage.getItem('user') === null ? (
+                          {sessionStorage.getItem('user') === null ? (
                             <Redirect to="/auth/signin-1" />
                           ) : (
                             menu

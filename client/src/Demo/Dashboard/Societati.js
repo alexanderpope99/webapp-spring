@@ -15,6 +15,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import authService from '../../services/auth.service';
 
 class Societati extends React.Component {
   constructor() {
@@ -111,13 +112,13 @@ class Societati extends React.Component {
       today: today,
       luna: today.getMonth(),
       an: today.getFullYear(),
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
     });
   }
 
   async getSocietati() {
     this.clearFields();
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) {
       uri = `${server.address}/societate/`;

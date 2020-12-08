@@ -7,6 +7,7 @@ import { download } from '../Resources/download';
 import months from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 
 class Stat extends React.Component {
   constructor() {
@@ -22,7 +23,7 @@ class Stat extends React.Component {
       luna: '',
       an: '',
       intocmitDe: '',
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
     };
   }
 

@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
+import authService from '../../services/auth.service';
 
 class PlatiSalariiMTA extends React.Component {
   constructor() {
@@ -22,7 +23,7 @@ class PlatiSalariiMTA extends React.Component {
       numeDeclarant: '',
       prenumeDeclarant: '',
       functieDeclarant: '',
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
     };
   }
 

@@ -9,7 +9,7 @@ import AuthService from '../../../services/auth.service';
 class SignUp1 extends React.Component {
   constructor() {
     super();
-    if (localStorage.getItem('user') !== null) window.location.href = '/dashboard/societati';
+    if (sessionStorage.getItem('user') !== null) window.location.href = '/dashboard/societati';
     this.handleRegister = this.handleRegister.bind(this);
     this.state = {
       username: '',
@@ -57,7 +57,7 @@ class SignUp1 extends React.Component {
     }
   }
   render() {
-    if (localStorage.getItem('user') !== null) return <Redirect to="/auth/signin-1" />;
+    if (sessionStorage.getItem('user') !== null) return <Redirect to="/auth/signin-1" />;
     else
       return (
         <Aux>

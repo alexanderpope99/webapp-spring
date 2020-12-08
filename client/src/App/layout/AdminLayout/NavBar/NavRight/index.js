@@ -127,7 +127,7 @@ class NavRight extends Component {
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
                   <img src={AvatarProp} className="img-radius" alt="User Profile" />
-                  <span>{JSON.parse(localStorage.getItem('user')).username}</span>
+                  <span>{this.state.currentUser ? this.state.currentUser.username : ''}</span>
                   <a
                     href={DEMO.BLANK_LINK}
                     className="dud-logout"

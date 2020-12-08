@@ -11,6 +11,7 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
 
 class UserTabel extends React.Component {
@@ -30,7 +31,7 @@ class UserTabel extends React.Component {
       users: [],
       userComponent: null,
       socsel: getSocSel(),
-      logged: JSON.parse(localStorage.getItem('user')),
+      logged: authService.getCurrentUser(),
 
       user: null,
       username: '',

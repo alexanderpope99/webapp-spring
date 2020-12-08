@@ -18,6 +18,7 @@ import { getSocSel } from '../Resources/socsel';
 import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
@@ -70,7 +71,7 @@ class FacturiAprobatorTabel extends React.Component {
       sumaachitata: '',
       idsocietate: null,
       show: false,
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
 
       idcentrucost: null,
       idaprobator: null,
