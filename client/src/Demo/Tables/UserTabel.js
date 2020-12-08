@@ -80,23 +80,29 @@ class UserTabel extends React.Component {
   async updateUser() {
     if (!this.state.roles || !this.state.user) return;
 
-		var user = this.state.user;
+    var user = this.state.user;
     const user_roles = [
-      ...this.state.roles.map((role) => ({ id: Number(role), name: all_roles[Number(role) - 1].label })),
+      ...this.state.roles.map((role) => ({
+        id: Number(role),
+        name: all_roles[Number(role) - 1].label,
+      })),
     ];
-		user.roles = user_roles;
-		console.log(user);
-		const ok = await axios
-			.put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
-			.then(res => res.status === 200)
-			.catch(err => console.error(err));
-		if(ok) {
-			this.setState({
-				show: false,
-				showConfirm:true,
-				modalMessage: "Utilizator actualizat"
-			}, this.onRefresh)
-		}
+    user.roles = user_roles;
+    console.log(user);
+    const ok = await axios
+      .put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+    if (ok) {
+      this.setState(
+        {
+          show: false,
+          showConfirm: true,
+          modalMessage: 'Utilizator actualizat',
+        },
+        this.onRefresh
+      );
+    }
   }
 
   async editUser(user) {
@@ -127,6 +133,7 @@ class UserTabel extends React.Component {
       .get(`${server.address}/user/ids=${socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
+    console.log(users);
     // render table
     if (users) {
       this.setState({ users: users }, this.renderUsers);
