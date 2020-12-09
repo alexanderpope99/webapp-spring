@@ -13,6 +13,7 @@ import authHeader from '../../services/auth-header';
 import { getAngajatSel } from '../Resources/angajatsel';
 import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
 import BazaCalcul from '../Tables/BazaCalcul';
+import RealizariRetineri from './RealizariRetineri';
 
 /*
   ? how it works now:
@@ -170,13 +171,14 @@ class Angajat extends React.Component {
 
         <Row>
           <Col>
-            <h5>
+            <h5 className="mb-3">
               {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
               {this.state.angajatsel && this.state.key !== 'date-personale'
                 ? ' - ' + this.state.angajatsel.numeintreg
                 : this.state.key !== 'date-personale'
                 ? ' *niciun angajat selectat'
                 : ''}
+								<Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">Realizări/Rețineri</Button>
             </h5>
 
             <hr />

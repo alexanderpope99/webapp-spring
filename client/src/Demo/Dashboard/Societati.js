@@ -15,6 +15,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import authService from '../../services/auth.service';
 
 class Societati extends React.Component {
   constructor() {
@@ -102,6 +103,8 @@ class Societati extends React.Component {
         show: false,
         isEdit: false,
       });
+    setSocSel(null);
+    window.location.reload();
   }
 
   async componentDidMount() {
@@ -111,13 +114,13 @@ class Societati extends React.Component {
       today: today,
       luna: today.getMonth(),
       an: today.getFullYear(),
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
     });
   }
 
   async getSocietati() {
     this.clearFields();
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) {
       uri = `${server.address}/societate/`;
@@ -130,7 +133,7 @@ class Societati extends React.Component {
       .catch((err) => console.log(err));
 
     if (Array.isArray(societati_res)) {
-      var societati = this.state.societati;
+			var societati = this.state.societati;
       // var date_societati = this.state.date_societati;
       societati_res.forEach((societate) => {
         societati[societate.nume] = { opacity: '.3', ...societate };
@@ -212,10 +215,10 @@ class Societati extends React.Component {
     let luna = this.state.luna;
     let an = this.state.an;
     let user = this.state.user;
-		let socsel = this.state.socsel;
+    let socsel = this.state.socsel;
 
-		const created = await axios
-      .get(`${server.address}/stat/${socsel.id}/mo=${luna+1}&y=${an}&i=-/${user.id}`, {
+    const created = await axios
+      .get(`${server.address}/stat/${socsel.id}/mo=${luna + 1}&y=${an}&i=-/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
@@ -232,7 +235,9 @@ class Societati extends React.Component {
 
     const created = await axios
       .get(
-        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna+1}&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${
+          luna + 1
+        }&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
         {
           headers: authHeader(),
         }
@@ -241,23 +246,23 @@ class Societati extends React.Component {
       .catch((err) => console.error(err));
 
     if (created) download(`Declaratia 112 - ${socsel.nume} - ${months[luna]} ${an}.pdf`, user.id);
-	}
-	
-	async mta() {
+  }
+
+  async mta() {
     let luna = this.state.luna;
     let an = this.state.an;
     let user = this.state.user;
-		let socsel = this.state.socsel;
+    let socsel = this.state.socsel;
 
-		const created = await axios
-      .get(`${server.address}/mta/${socsel.id}&mo=${luna+1}&y=${an}/${user.id}`, {
+    const created = await axios
+      .get(`${server.address}/mta/${socsel.id}&mo=${luna + 1}&y=${an}/${user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
     if (created) download(`FisierMTA - ${socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
-	}
+  }
 
   async onSubmit(e) {
     try {
@@ -309,6 +314,7 @@ class Societati extends React.Component {
       <Col md={6} xl={4} key={key}>
         <Card
           style={{
+            maxBlockSize: 150,
             opacity: this.state.societati[key].opacity,
             cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
           }}
@@ -321,9 +327,19 @@ class Societati extends React.Component {
           }
         >
           <Card.Body>
-            <h3 className="d-flex justify-content-around">{key}</h3>
+            <h3
+              style={{
+                fontSize:
+                  key.length > 25
+                    ? (30 - Math.floor(key.length / 25) * 10).toString() + 'px'
+                    : '30px',
+              }}
+              className="d-flex justify-content-around"
+            >
+              {key}
+            </h3>
             <div
-              className="mt-5"
+              className="mt-4"
               visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
             >
               <Edit
@@ -351,7 +367,7 @@ class Societati extends React.Component {
               >
                 Dec.112
               </Button>
-							<Button
+              <Button
                 size="sm"
                 onClick={this.mta}
                 style={{
@@ -554,7 +570,7 @@ class Societati extends React.Component {
             <PopupState variant="popover" popupId="demo-popup-popover">
               {(popupState) => (
                 <div>
-                  <Button variant="outline-danger" {...bindTrigger(popupState)}>
+                  <Button variant="outline-danger" size="sm" className="border-0" {...bindTrigger(popupState)}>
                     Șterge Societatea
                   </Button>
                   <Popover

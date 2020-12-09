@@ -233,6 +233,14 @@ class Contract extends React.Component {
         modalMessage: 'Contractul trebuie să aibă un salariu.',
       });
       return false;
+		}
+		
+		if (!this.state.dataContract || !this.state.dataIncepere) {
+      this.setState({
+        show: true,
+        modalMessage: 'Contractul trebuie să aibă o dată și o dată de începere a activității.',
+      });
+      return false;
     }
 
     return true;
@@ -599,7 +607,9 @@ class Contract extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Col>
-            <Col md={6}>
+						<Col>
+						<Row>
+            <Col md={6} className="border rounded pt-3">
               <Form.Group id="iban">
                 <Form.Label>IBAN</Form.Label>
                 <Form.Control
@@ -623,7 +633,8 @@ class Contract extends React.Component {
                 />
               </Form.Group>
             </Col>
-
+							</Row>
+						</Col>
             <Col md={6}>
               <Form.Group controlId="punctdelucru">
                 <Form.Label>Punct de lucru</Form.Label>

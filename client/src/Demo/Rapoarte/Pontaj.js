@@ -5,6 +5,7 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import months from '../Resources/months';
 import { download } from '../Resources/download';
+import authService from '../../services/auth.service';
 
 class Pontaj extends React.Component {
   constructor() {
@@ -18,7 +19,7 @@ class Pontaj extends React.Component {
       socsel: getSocSel(),
       luna: '',
       an: '',
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
     };
   }
 

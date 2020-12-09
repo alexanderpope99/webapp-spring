@@ -206,7 +206,7 @@ class Persoana extends React.Component {
     };
 
     const persoana = await axios
-      .post(`${server.address}/angajat/ids=${this.state.socsel.id}`, angajat_body, {
+      .post(`${server.address}/angajat/ids=${this.state.socsel.id}/0`, angajat_body, {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
@@ -225,9 +225,6 @@ class Persoana extends React.Component {
   }
 
   render() {
-    const luni_nr = [];
-    for (var i = 1; i < 13; ++i) luni_nr.push(<option key={i}>{i}</option>);
-
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
     });

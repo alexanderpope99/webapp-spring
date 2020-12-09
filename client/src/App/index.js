@@ -35,7 +35,7 @@ class App extends Component {
           <Suspense fallback={<Loader />}>
             <Switch>
               {menu}
-              {localStorage.getItem('user') === null ? <Redirect to="/auth/signin-1" /> : null}
+              {sessionStorage.getItem('user') === null ? <Redirect to="/auth/signin-1" /> : null}
               <Route path="/" component={AdminLayout} />
             </Switch>
           </Suspense>

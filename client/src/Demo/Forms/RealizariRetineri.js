@@ -14,7 +14,7 @@ import {
   Collapse,
   Toast,
 } from 'react-bootstrap';
-import { Trash2, Plus } from 'react-feather';
+import { Trash2, Plus, User, UserPlus } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
@@ -27,6 +27,7 @@ import { server } from '../Resources/server-address';
 import { Typography } from '@material-ui/core';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 
 class RealizariRetineri extends React.Component {
   constructor() {
@@ -565,7 +566,7 @@ class RealizariRetineri extends React.Component {
     const idangajat = this.state.selected_angajat.idpersoana;
     const luna = this.state.luna;
     const an = this.state.an;
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
 
     const ok = await axios
       .get(
@@ -582,7 +583,7 @@ class RealizariRetineri extends React.Component {
   }
 
   async downloadStatIndividual(numeintreg, luna, an) {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     console.log('trying to download...');
     await fetch(
       `${server.address}/download/${user.id}/Stat Salarii - ${numeintreg} - ${luna.nume} ${an}.xlsx`,
@@ -702,7 +703,9 @@ class RealizariRetineri extends React.Component {
       <option key={angajat.id} data-key={angajat.id}>
         {angajat.nume}
       </option>
-    ));
+		));
+		
+		console.log(this.props.asChild);
     return (
       <Aux>
         <Toast
@@ -849,16 +852,30 @@ class RealizariRetineri extends React.Component {
             <InputGroup className="mb-3">
               {/* NUMELE ANGAJATILOR CU CONTRACT */}
               <FormControl
-                disabled="true"
                 aria-describedby="basic-addon2"
-                type="text"
+                as="select"
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
-                onChange={(e) => this.onSelect(e)}
-              />
-              {/* <option> - </option> */}
-              {/* lista_angajati mapped as <option> */}
-              {/* {nume_persoane_opt} */}
-              {/* </FormControl> */}
+								onChange={(e) => this.onSelect(e)}
+              >
+                <option> - </option>
+                {/* lista_angajati mapped as <option> */}
+                {nume_persoane_opt}
+              </FormControl>
+							<InputGroup.Append>
+                <OverlayTrigger
+                  placement="bottom"
+                  delay={{ show: 250, hide: 250 }}
+                  overlay={
+                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                      Către date personale
+                    </Tooltip>
+                  }
+                >
+                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
+                    <User size={20} className="m-0" />
+                  </Button>
+                </OverlayTrigger>
+              </InputGroup.Append>
               <InputGroup.Append>
                 <OverlayTrigger
                   placement="bottom"
@@ -869,8 +886,8 @@ class RealizariRetineri extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
-                    <Plus fontSize="small" className="m-0" />
+                  <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
+                    <Plus size={20} className="m-0" />
                   </Button>
                 </OverlayTrigger>
               </InputGroup.Append>

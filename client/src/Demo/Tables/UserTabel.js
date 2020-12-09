@@ -11,6 +11,7 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
 
 class UserTabel extends React.Component {
@@ -30,7 +31,7 @@ class UserTabel extends React.Component {
       users: [],
       userComponent: null,
       socsel: getSocSel(),
-      logged: JSON.parse(localStorage.getItem('user')),
+      logged: authService.getCurrentUser(),
 
       user: null,
       username: '',
@@ -108,10 +109,10 @@ class UserTabel extends React.Component {
     for (let soc of this.state.all_societati) {
       if (iduri_societati_selectate.indexOf(String(soc.key)) !== -1) {
         user_societati[String(soc.key)] = soc.label;
-			}
+      }
     }
-		user.societati = user_societati;
-		console.log(user);		
+    user.societati = user_societati;
+    console.log(user);
     const ok = await axios
       .put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
       .then((res) => res.status === 200)
@@ -163,6 +164,7 @@ class UserTabel extends React.Component {
       .get(`${server.address}/user/ids=${socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
+    console.log(users);
     // render table
     if (users) {
       this.setState({ users: users }, this.renderUsers);

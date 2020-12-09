@@ -14,6 +14,8 @@ public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 
 	List<Angajat> findBySocietate_IdAndContract_IdNotNull(int idsocietate);
 
+	List<Angajat> findBySocietate_Id(int idsocietate);
+
 	int countBySocietate_Id(int idsocietate);
 
 	Angajat findByContract_Id(int idcontract);

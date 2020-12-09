@@ -11,6 +11,7 @@ import { server } from '../Resources/server-address';
 import { setSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 
 class SocietatiTabel extends React.Component {
   constructor() {
@@ -111,7 +112,7 @@ class SocietatiTabel extends React.Component {
     });
   }
   async onRefresh() {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) uri = `${server.address}/societate/`;
 

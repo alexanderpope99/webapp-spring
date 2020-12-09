@@ -7,6 +7,7 @@ import months from '../Resources/months';
 
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 
 class Dec112 extends React.Component {
   constructor() {
@@ -27,7 +28,7 @@ class Dec112 extends React.Component {
       numeDeclarant: '',
       prenumeDeclarant: '',
       functieDeclarant: '',
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
       show: false,
       errorMessage: '',
     };

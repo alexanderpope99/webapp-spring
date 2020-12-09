@@ -10,13 +10,13 @@ class AuthService {
       password,
     });
     if (response.data.accessToken) {
-      localStorage.setItem('user', JSON.stringify(response.data));
+      sessionStorage.setItem('user', JSON.stringify(response.data));
     }
     return response.data;
   }
 
   logout() {
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     sessionStorage.removeItem('socsel');
     sessionStorage.removeItem('angajatsel');
   }
@@ -47,18 +47,22 @@ class AuthService {
       .catch((err) => console.error('auth.service.js :: line: 44\n', err));
     if (ok) {
       console.log('Updated profile!');
-      let user = JSON.parse(localStorage.getItem('user'));
+      let user = JSON.parse(sessionStorage.getItem('user'));
       user.gen = gen;
       user.email = email;
-      localStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem('user', JSON.stringify(user));
       window.location.reload();
     }
-		return ok;
+    return ok;
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));
-  }
+    return JSON.parse(sessionStorage.getItem('user'));
+	}
+	
+	setUser(user) {
+		sessionStorage.setItem('user', JSON.stringify(user));
+	}
 }
 
 export default new AuthService();

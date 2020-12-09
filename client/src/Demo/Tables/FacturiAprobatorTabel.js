@@ -18,6 +18,7 @@ import { getSocSel } from '../Resources/socsel';
 import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
@@ -35,6 +36,7 @@ class FacturiAprobatorTabel extends React.Component {
     this.approveFactura = this.approveFactura.bind(this);
     this.rejectFactura = this.rejectFactura.bind(this);
     this.postponeFactura = this.postponeFactura.bind(this);
+    this.getStatusColor = this.getStatusColor.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -70,7 +72,7 @@ class FacturiAprobatorTabel extends React.Component {
       sumaachitata: '',
       idsocietate: null,
       show: false,
-      user: JSON.parse(localStorage.getItem('user')),
+      user: authService.getCurrentUser(),
 
       idcentrucost: null,
       idaprobator: null,
@@ -112,6 +114,12 @@ class FacturiAprobatorTabel extends React.Component {
     if (ok) this.onRefresh();
   }
 
+  getStatusColor(factStatus) {
+    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.1)';
+    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.1)';
+    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.1)';
+  }
+
   // function to create react component with fetched data
   async renderFacturi() {
     const compare = (f1, f2) => {
@@ -129,7 +137,7 @@ class FacturiAprobatorTabel extends React.Component {
         facturi.map(async (fact, index) => {
           return (
             // TODO
-            <tr key={fact.id}>
+            <tr style={{ backgroundColor: this.getStatusColor(fact.status) }} key={fact.id}>
               <th>
                 <div className="d-flex">
                   <OverlayTrigger
@@ -547,7 +555,7 @@ class FacturiAprobatorTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Facturi</Card.Title>
+                <Card.Title as="h5">Aprobare Facturi</Card.Title>
 
                 <Button
                   variant="outline-info"
@@ -557,15 +565,6 @@ class FacturiAprobatorTabel extends React.Component {
                 >
                   <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
-                </Button>
-
-                <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
-                  variant="outline-info"
-                  size="sm"
-                  style={{ fontSize: '1.25rem', float: 'right' }}
-                >
-                  <Plus className="m-0 p-0" />
                 </Button>
               </Card.Header>
               <Card.Body>

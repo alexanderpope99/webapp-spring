@@ -47,7 +47,7 @@ public class SarbatoriController {
 		return sarbatoriRepository.save(sarbatori);
 	}
 
-	@PostMapping("initialize")
+	@PostMapping("init")
 	public List<Sarbatori> initializeSarbatori() {
 		sarbatoriService.initializeKnown();
 

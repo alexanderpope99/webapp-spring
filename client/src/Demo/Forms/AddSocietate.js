@@ -7,6 +7,8 @@ import { server } from '../Resources/server-address';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
+import authService from '../../services/auth.service';
+
 class AddSocietate extends React.Component {
   constructor(props) {
     super();
@@ -106,7 +108,7 @@ class AddSocietate extends React.Component {
     };
     console.log(societate_body);
     // ADD SOCIETATE TO DATABASE
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     await axios
       .post(`${server.address}/societate/${user.id}`, societate_body, {
         headers: authHeader(),

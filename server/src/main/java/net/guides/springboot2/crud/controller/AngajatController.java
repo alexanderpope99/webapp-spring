@@ -78,12 +78,17 @@ public class AngajatController {
 	}
 
 	@GetMapping("/userid/{id}")
-	public int getPersoanaIdByUserId(@PathVariable(value = "id") int userId) {
+	public int getAngajatIdByUserId(@PathVariable(value = "id") int userId) {
 		return angajatRepository.findPersoanaIdByUserId(userId);
 	}
 
+	@GetMapping("/ids={ids}")
+	public List<Angajat> findAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+		return angajatRepository.findBySocietate_Id(idsocietate);
+	}
+
 	@GetMapping("/ids={ids}&c")
-	public List<Angajat> findPerssoaneWithContractByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+	public List<Angajat> findAngajatiWithContractByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
 		return angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 	}
 

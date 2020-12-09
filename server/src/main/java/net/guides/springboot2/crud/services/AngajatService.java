@@ -50,9 +50,9 @@ public class AngajatService {
 
 		angajat.setSocietate(societate);
 
-		if (idsuperior != null) {
-			Angajat superior = angajatRepository.findById(idsuperior)
-			.orElseThrow(() -> new ResourceNotFoundException("Superior (class Angajat) not found for this id :: " + idsuperior));
+		if (idsuperior != null && idsuperior > 0) {
+			Angajat superior = angajatRepository.findById(idsuperior).orElseThrow(
+					() -> new ResourceNotFoundException("Superior (class Angajat) not found for this id :: " + idsuperior));
 			angajat.setSuperior(superior);
 		}
 

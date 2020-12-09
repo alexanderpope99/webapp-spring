@@ -7,6 +7,7 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
 
 class CereriConcediuSuperiorTabel extends React.Component {
   constructor(props) {
@@ -120,7 +121,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
   async onRefresh() {
     let cereriConcediu = await axios
       .get(
-        `${server.address}/cerericoncediu/supsoc/${JSON.parse(localStorage.getItem('user')).id}&${
+        `${server.address}/cerericoncediu/supsoc/${authService.getCurrentUser().id}&${
           getSocSel().id
         }`,
         {

@@ -9,6 +9,8 @@ import Avatar2 from '../../assets/images/user/avatar-2.jpg';
 
 import Aux from '../../hoc/_Aux';
 
+import authService from '../../services/auth.service';
+
 export default class Profile extends React.Component {
   4;
   /*
@@ -50,7 +52,7 @@ export default class Profile extends React.Component {
   }
 
   getUserDetails() {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = authService.getCurrentUser();
     this.setState({
       id: user.id,
       username: user.username,
