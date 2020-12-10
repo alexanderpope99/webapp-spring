@@ -59,7 +59,12 @@ public class UserService {
 		List<Angajat> newAngajati = new ArrayList<>();
 		newUserDTO.getAngajati().forEach(angajatOpt -> {
 			// get from db and push to list
-			angajatRepository.findById(angajatOpt.getIdpersoana()).ifPresent(newAngajati::add);
+			Angajat tmpAngajat = angajatRepository.findById(angajatOpt.getIdpersoana()).get();
+
+			//each angajat needs to point to this user
+			tmpAngajat.setUser(newUser);
+
+			newAngajati.add(tmpAngajat);
 		});
 		// set newUser with complete Angajati data
 		newUser.setAngajati(newAngajati);

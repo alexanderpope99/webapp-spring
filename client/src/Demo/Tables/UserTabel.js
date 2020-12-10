@@ -128,18 +128,6 @@ class UserTabel extends React.Component {
     ];
     user.roles = user_roles;
 
-    let has = this.state.all_angajati_of_socsel.find((a) => a.idpersoana === this.state.idAngajat);
-    console.log(has);
-    // get selected angajat by id
-    // push selected angajat in user.angajati only if it doesn't exist
-    if (this.state.idAngajat && !has) {
-      let angajat = this.state.all_angajati_of_socsel.find(
-        (ang) => ang.idpersoana == this.state.idAngajat
-      );
-      user.angajati.push(angajat);
-      console.log('pushed');
-    }
-
     // rebuild user.societati as it was recieved for compatibility convenience
     const user_societati = [
       ...this.state.societati.map((idsoc) => ({
@@ -147,7 +135,21 @@ class UserTabel extends React.Component {
         nume: this.state.all_societati.find((soc) => soc.key == idsoc).label,
       })),
     ];
-    user.societati = user_societati;
+		user.societati = user_societati;
+		
+		// get angajat from this societate
+		let has = this.state.all_angajati_of_socsel.find((a) => a.societate.id === this.state.socsel.id);
+
+		// push selected angajat in user.angajati only if it doesn't exist
+		// if another angajat exists and has same idsocietate, replace it
+    if (this.state.idAngajat && !has) {
+      let angajat = this.state.all_angajati_of_socsel.find(
+        (ang) => ang.idpersoana == this.state.idAngajat
+			);
+      if (Array.isArray(user.angajati)) user.angajati.push(angajat);
+			else user.angajati = [angajat];
+      console.log('pushed');
+    }
 
     console.log(user);
 
@@ -168,8 +170,10 @@ class UserTabel extends React.Component {
   }
 
   async editUser(user) {
+    console.log(user);
     // filter user.angajati to only keep the angajat from socsel
-    user.angajati = user.angajati.find((angajat) => angajat.societatei.id === this.state.socsel.id);
+		let angajat = user.angajati.find((ang) => ang.societate.id === this.state.socsel.id);
+    // let angajati = user.angajati.filter((angajat) => console.log(angajat));
 
     this.setState({
       isEdit: true,
@@ -178,13 +182,13 @@ class UserTabel extends React.Component {
       user: user,
       username: user.username,
       email: user.email,
-      idAngajat: user.angajati ? user.angajati.idpersoana : '',
-      numeAngajat: user.angajati
-        ? user.angajati.persoana.nume + ' ' + user.angajati.persoana.prenume
+      idAngajat: angajat ? angajat.idpersoana : '',
+      numeAngajat: angajat
+        ? angajat.persoana.nume + ' ' + angajat.persoana.prenume
         : '',
       roles: user.roles.map((role) => String(role.id)),
       societati: user.societati.map((soc) => String(soc.id)),
-    });
+    }, () => console.log(this.state));
   }
 
   async deleteUser(id) {
@@ -210,7 +214,9 @@ class UserTabel extends React.Component {
   // function to create react component with fetched data
   async renderUsers() {
     this.setState({
-      usersComponent: this.state.users.map((user, index) => (
+			usersComponent: this.state.users.map((user, index) => {
+				user.angajati = user.angajati.filter((ang) => ang.societate.id === this.state.socsel.id);
+				return(
         <tr key={user.id}>
           <th>{user.username || '-'}</th>
           <th>{user.email || '-'}</th>
@@ -278,7 +284,7 @@ class UserTabel extends React.Component {
             </div>
           </th>
         </tr>
-      )),
+      )}),
     });
   }
 
@@ -345,7 +351,7 @@ class UserTabel extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
-                  <Form.Label>Angajați asociati cu acest user</Form.Label>
+                  <Form.Label>Angajat al {this.state.socsel.nume} asociat cu acest user</Form.Label>
                   <Form.Control
                     as="select"
                     value={this.state.numeAngajat || ''}
@@ -400,7 +406,7 @@ class UserTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Useri</Card.Title>
+                <Card.Title as="h5">{this.state.socsel.nume} - Useri</Card.Title>
 
                 <Button
                   variant="outline-info"
