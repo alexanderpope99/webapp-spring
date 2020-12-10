@@ -29,13 +29,9 @@ public class AdresaController {
 	@Autowired
 	private PersoanaRepository persoanaRepository;
 
-	// @Autowired
-	// private ModelMapper modelMapper;
-
 	@GetMapping
 	public List<Adresa> getAll() {
-		List<Adresa> adrese = adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-		return adrese;
+		return adresaRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 	}
 
 	@GetMapping("{id}")
@@ -47,7 +43,7 @@ public class AdresaController {
 	}
 
 	@GetMapping("idp={idp}")
-	public Adresa getAddressByIdpersoana(@PathVariable("idp") int idp) throws ResourceNotFoundException {
+	public Adresa getAddressByIdpersoana(@PathVariable("idp") int idp) {
 		Adresa adresa = persoanaRepository.findById(idp).get().getAdresa();
 		return adresa;
 	}

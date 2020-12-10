@@ -10,6 +10,8 @@ UPGRADES:
 	pagina de centru cost
 
 ERORI:
+  edit angajat asociat: only one angajat/societate/user
+  fix societati of user to be ARRAY of key-value pairs -> NOT map like it is now
 	baza calcul frontend cand editeaza bazacalcul
 
 UserTabel:

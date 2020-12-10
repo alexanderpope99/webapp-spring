@@ -456,17 +456,17 @@ class FacturiTabel extends React.Component {
   render() {
     var centreCost = [];
     if (this.state.centreCostComponent.length > 0)
-      centreCost = this.state.centreCostComponent.map((cod, index) => (
-        <option key={index} data-key={cod.id}>
-          {cod.nume}
+      centreCost = this.state.centreCostComponent.map((centrucost, index) => (
+        <option key={index} data-key={centrucost.id}>
+          {centrucost.nume}
         </option>
       ));
 
     var aprobatori = [];
     if (this.state.aprobatoriComponent.length > 0)
-      aprobatori = this.state.aprobatoriComponent.map((cod, index) => (
-        <option key={index} data-key={cod.persoana.id}>
-          {cod.persoana.nume + ' ' + cod.persoana.prenume}
+      aprobatori = this.state.aprobatoriComponent.map((angajat, index) => (
+        <option key={index} data-key={angajat.persoana.id}>
+          {angajat.persoana.nume + ' ' + angajat.persoana.prenume}
         </option>
       ));
 
@@ -533,9 +533,9 @@ class FacturiTabel extends React.Component {
                     value={this.state.moneda}
                     onChange={(e) => this.setState({ moneda: e.target.value })}
                   >
-                    <option key="1">RON</option>
-                    <option key="2">EUR</option>
-                    <option key="3">USD</option>
+                    <option>RON</option>
+                    <option>EUR</option>
+                    <option>USD</option>
                   </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="6">

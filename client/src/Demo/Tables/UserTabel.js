@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
@@ -19,6 +20,7 @@ class UserTabel extends React.Component {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
+    this.onChangeAngajat = this.onChangeAngajat.bind(this);
     this.addUser = this.addUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.editUser = this.editUser.bind(this);
@@ -36,6 +38,7 @@ class UserTabel extends React.Component {
       user: null,
       username: '',
       email: '',
+      idAngajat: '',
       numeAngajat: '',
       roles: [], // [...id's as strings] selected in multiselect-dropdown
       societati: [], // [...id's as strings] selected in multiselect-dropdown
@@ -51,9 +54,10 @@ class UserTabel extends React.Component {
       show: false,
       socs: [],
 
-      // da
-      all_roles: [],
-      all_societati: [],
+      // for select/multiselect components
+      all_roles: [], // array of {key: role.id, label: role.name}  object - multiselect
+      all_societati: [], // array of {key: soc.id, label: soc.nume} objects - multiselect
+      all_angajati_of_socsel: [], // array of Persoana objects - simple select
     };
   }
 
@@ -62,8 +66,10 @@ class UserTabel extends React.Component {
       user: null,
       username: '',
       email: '',
+      idAngajat: '',
       numeAngajat: '',
       roles: [],
+      societati: [],
 
       isEdit: false,
     });
@@ -83,8 +89,29 @@ class UserTabel extends React.Component {
       .then((res) => (res.data ? res.data.map((role) => ({ key: role.id, label: role.name })) : []))
       .catch((err) => console.error(err));
 
-    this.setState({ all_roles: all_roles, all_societati: all_societati }, this.onRefresh);
+    var all_angajati_of_socsel = await axios
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    this.setState(
+      {
+        all_roles: all_roles,
+        all_societati: all_societati,
+        all_angajati_of_socsel: all_angajati_of_socsel,
+      },
+      this.onRefresh
+    );
     window.scrollTo(0, 0);
+  }
+
+  onChangeAngajat(e) {
+    const selectedIndex = e.target.options.selectedIndex;
+    const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
+    this.setState({
+      idAngajat: idangajat,
+      numeAngajat: e.target.value,
+    });
   }
 
   async addUser() {}
@@ -96,21 +123,34 @@ class UserTabel extends React.Component {
     const user_roles = [
       ...this.state.roles.map((idrole) => ({
         id: Number(idrole),
-        name: this.state.all_roles[Number(idrole) - 1].label,
+        name: this.state.all_roles.find((role) => role.key == idrole).label,
       })),
     ];
     user.roles = user_roles;
 
-    const iduri_societati_selectate = this.state.societati;
-    var user_societati = {};
-    // iterate throgh all_societati
-    for (let soc of this.state.all_societati) {
-      if (iduri_societati_selectate.indexOf(String(soc.key)) !== -1) {
-        user_societati[String(soc.key)] = soc.label;
-      }
+    let has = this.state.all_angajati_of_socsel.find((a) => a.idpersoana === this.state.idAngajat);
+    console.log(has);
+    // get selected angajat by id
+    // push selected angajat in user.angajati only if it doesn't exist
+    if (this.state.idAngajat && !has) {
+      let angajat = this.state.all_angajati_of_socsel.find(
+        (ang) => ang.idpersoana == this.state.idAngajat
+      );
+      user.angajati.push(angajat);
+      console.log('pushed');
     }
+
+    // rebuild user.societati as it was recieved for compatibility convenience
+    const user_societati = [
+      ...this.state.societati.map((idsoc) => ({
+        id: Number(idsoc),
+        nume: this.state.all_societati.find((soc) => soc.key == idsoc).label,
+      })),
+    ];
     user.societati = user_societati;
+
     console.log(user);
+
     const ok = await axios
       .put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
       .then((res) => res.status === 200)
@@ -128,11 +168,8 @@ class UserTabel extends React.Component {
   }
 
   async editUser(user) {
-    console.log(user);
-    var societati = [];
-    for (let idsoc in user.societati) {
-      societati.push(idsoc);
-    }
+    // filter user.angajati to only keep the angajat from socsel
+    user.angajati = user.angajati.find((angajat) => angajat.societatei.id === this.state.socsel.id);
 
     this.setState({
       isEdit: true,
@@ -141,16 +178,18 @@ class UserTabel extends React.Component {
       user: user,
       username: user.username,
       email: user.email,
-      numeAngajat: user.angajati[0] ? (user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume ): '',
+      idAngajat: user.angajati ? user.angajati.idpersoana : '',
+      numeAngajat: user.angajati
+        ? user.angajati.persoana.nume + ' ' + user.angajati.persoana.prenume
+        : '',
       roles: user.roles.map((role) => String(role.id)),
-      societati: societati,
+      societati: user.societati.map((soc) => String(soc.id)),
     });
   }
 
   async deleteUser(id) {
     await axios
       .delete(`${server.address}/user/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
       .then(this.onRefresh)
       .catch((err) => console.error(err));
   }
@@ -170,13 +209,16 @@ class UserTabel extends React.Component {
 
   // function to create react component with fetched data
   async renderUsers() {
-    console.log(this.state.users);
     this.setState({
       usersComponent: this.state.users.map((user, index) => (
         <tr key={user.id}>
           <th>{user.username || '-'}</th>
           <th>{user.email || '-'}</th>
-          <th>{user.angajati[0] ? (user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume) : 'lipsă angajat asociat'}</th>
+          <th>
+            {user.angajati[0]
+              ? user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume
+              : 'lipsă angajat asociat'}
+          </th>
           <th>
             <div className="d-flex">
               <Button
@@ -256,13 +298,24 @@ class UserTabel extends React.Component {
   }
 
   handleCloseConfirm() {
-    this.setState({
-      modalMessage: '',
-      showConfirm: false,
-    });
+    this.setState(
+      {
+        modalMessage: '',
+        showConfirm: false,
+      },
+      this.clearInput
+    );
   }
 
   render() {
+    var angajati = [];
+    if (this.state.all_angajati_of_socsel.length > 0)
+      angajati = this.state.all_angajati_of_socsel.map((angajat, index) => (
+        <option key={index} data-key={angajat.persoana.id}>
+          {angajat.persoana.nume + ' ' + angajat.persoana.prenume}
+        </option>
+      ));
+
     return (
       <Aux>
         {/* add/edit modal */}
@@ -275,21 +328,36 @@ class UserTabel extends React.Component {
               <Row>
                 <Form.Group as={Col} lg="6">
                   <Form.Label>Username</Form.Label>
-                  <Form.Control type="text" disabled value={this.state.username} />
+                  <Form.Control
+                    type="text"
+                    disabled={this.state.isEdit}
+                    value={this.state.username}
+                    onChange={(e) => this.setState({ username: e.target.value })}
+                  />
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control type="text" disabled value={this.state.email} />
+                  <Form.Control
+                    type="text"
+                    disabled={this.state.isEdit}
+                    value={this.state.email}
+                    onChange={(e) => this.setState({ email: e.target.value })}
+                  />
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
-                  <Form.Label>Nume angajat</Form.Label>
-                  <Form.Control type="text" disabled value={this.state.numeAngajat} />
+                  <Form.Label>Angajați asociati cu acest user</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.numeAngajat || ''}
+                    onChange={this.onChangeAngajat}
+                  >
+                    <option>-</option>
+                    {angajati}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
                   <Form.Label>Roluri/Permisiuni</Form.Label>
                   <DropdownMultiselect
-                    // optionKey="id"
-                    // optionLabel="name"
                     options={this.state.all_roles}
                     selected={this.state.roles}
                     handleOnChange={(selected) => this.setState({ roles: selected })}
@@ -299,8 +367,6 @@ class UserTabel extends React.Component {
                 <Form.Group as={Col} lg="12">
                   <Form.Label>Societati</Form.Label>
                   <DropdownMultiselect
-                    // optionKey="id"
-                    // optionLabel="name"
                     options={this.state.all_societati}
                     selected={this.state.societati}
                     handleOnChange={(selected) => this.setState({ societati: selected })}

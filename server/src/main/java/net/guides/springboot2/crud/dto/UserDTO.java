@@ -1,9 +1,7 @@
 package net.guides.springboot2.crud.dto;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.Societate;
@@ -19,7 +17,7 @@ public class UserDTO {
 
 	private List<Role> roles;
 
-	private Map<Integer, String> societati;
+	private List<SocietateJSON> societati;
 
 	private boolean gen;
 
@@ -41,7 +39,7 @@ public class UserDTO {
 	public List<Role> getRoles() {
 		return roles;
 	}
-	public Map<Integer, String> getSocietati() {
+	public List<SocietateJSON> getSocietati() {
 		return societati;
 	}
 
@@ -63,14 +61,13 @@ public class UserDTO {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	public void setSocietati(Map<Integer, String> societati) {
+	public void setSocietati(List<SocietateJSON> societati) {
 		this.societati = societati;
 	}
 	public void setSocietatiClass(List<Societate> societati) {
-		this.societati = new HashMap<>();
-		societati.forEach(soc -> this.societati.put(soc.getId(), soc.getNume()));
+    this.societati = new ArrayList<>();
+    societati.forEach(soc -> this.societati.add(new SocietateJSON(soc.getId(), soc.getNume())));
 	}
-
-		
-	
 }
+
+
