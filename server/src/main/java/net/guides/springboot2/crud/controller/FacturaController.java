@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
+import net.guides.springboot2.crud.dto.FacturaJSON;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Factura;
 import net.guides.springboot2.crud.repository.FacturaRepository;
@@ -112,6 +114,12 @@ public class FacturaController {
 	@PostMapping
 	public Factura saveWithFile(@ModelAttribute FacturaDTO facturaDTO) throws ResourceNotFoundException {
 		return facturaService.save(facturaDTO);
+	}
+
+	@PutMapping("{id}/obs&codp")
+	public ResponseEntity<String> updateFacturaObsCodp(@PathVariable(value = "id") int facturaId,
+			@RequestBody FacturaJSON obsCodp) throws ResourceNotFoundException {
+		return facturaService.updateObsCodp(facturaId, obsCodp);
 	}
 
 	@PutMapping("{id}/new-file")

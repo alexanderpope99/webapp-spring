@@ -29,6 +29,7 @@ class FacturiAprobatorTabel extends React.Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseApprover = this.handleCloseApprover.bind(this);
+    this.handleRejectApprover = this.handleRejectApprover.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
@@ -56,6 +57,7 @@ class FacturiAprobatorTabel extends React.Component {
 
       // approver modal
       showApprover: false,
+      showRejecter: false,
 
       // add/edit modal
       id: '',
@@ -116,7 +118,7 @@ class FacturiAprobatorTabel extends React.Component {
     if (ok) {
       this.onRefresh();
       this.setState({
-        showApprover: true,
+        showRejecter: true,
         id: fact.id,
       });
     }
@@ -215,6 +217,8 @@ class FacturiAprobatorTabel extends React.Component {
                 </div>
               </th>
               <th>{fact.status}</th>
+              <th>{fact.codproiect ? fact.codproiect : '-'}</th>
+              <th>{fact.observatii ? fact.observatii : '-'}</th>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
@@ -229,9 +233,6 @@ class FacturiAprobatorTabel extends React.Component {
                   ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
                   : '-'}
               </th>
-              <th>{fact.aprobat}</th>
-              <th>{fact.codproiect}</th>
-              <th>{fact.observatii}</th>
               <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
               <th>{fact.dataplatii}</th>
               <th>{fact.sumaachitata}</th>
@@ -311,6 +312,7 @@ class FacturiAprobatorTabel extends React.Component {
   exitCloseApprover() {
     this.setState({
       showApprover: false,
+      showRejecter: false,
     });
   }
 
@@ -320,14 +322,38 @@ class FacturiAprobatorTabel extends React.Component {
       observatii: this.state.observatii || null,
     };
     const ok = await axios
-      .put(`${server.address}/factura/${this.state.id}/keep-file`, factura_body, {
+      .put(`${server.address}/factura/${this.state.id}/obs&codp`, factura_body, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
     if (ok) {
+      this.onRefresh();
       this.setState({
         showApprover: false,
+        observatii: '',
+        codproiect: '',
+      });
+    }
+  }
+
+  async handleRejectApprover(e) {
+    const factura_body = {
+      codproiect: null,
+      observatii: this.state.observatii || null,
+    };
+    const ok = await axios
+      .put(`${server.address}/factura/${this.state.id}/obs&codp`, factura_body, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+    if (ok) {
+      this.onRefresh();
+      this.setState({
+        showRejecter: false,
+        observatii: '',
+        codproiect: '',
       });
     }
   }
@@ -449,6 +475,32 @@ class FacturiAprobatorTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
+        {/* Reject Info modal */}
+        <Modal show={this.state.showRejecter} onHide={this.exitCloseApprover}>
+          <Modal.Header closeButton>
+            <Modal.Title>Aprobator</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Row>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Observații</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.observatii}
+                    onChange={(e) => this.setState({ observatii: e.target.value })}
+                  />
+                </Form.Group>
+              </Row>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.handleRejectApprover}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <Row>
           <Col>
             <Card>
@@ -471,6 +523,8 @@ class FacturiAprobatorTabel extends React.Component {
                     <tr>
                       <th></th>
                       <th>Status</th>
+                      <th>Cod Proiect</th>
+                      <th>Observații</th>
                       <th
                         onClick={() => this.changeSortOrder('denumirefurnizor')}
                         style={{ cursor: 'pointer' }}
@@ -496,8 +550,6 @@ class FacturiAprobatorTabel extends React.Component {
                       <th>Tip Achiziție</th>
                       <th>Descriere Activități</th>
                       <th>Aprobator</th>
-                      <th>Aprobat</th>
-                      <th>Observații</th>
                       <th>Centru Cost</th>
                       <th>Data plății</th>
                       <th>Suma Achitată</th>

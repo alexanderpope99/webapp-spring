@@ -148,7 +148,8 @@ class FacturiTabel extends React.Component {
       descriereactivitati: this.state.descriereactivitati || null,
       idaprobator: this.state.idaprobator || null,
       aprobat: this.state.aprobat || null,
-      observatii: this.state.observatii || null,
+      observatii: null,
+      codproiect: null,
       idcentrucost: this.state.idcentrucost || null,
       dataplatii: this.state.dataplatii || null,
       sumaachitata: this.state.sumaachitata || null,
@@ -199,6 +200,7 @@ class FacturiTabel extends React.Component {
       idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
       aprobat: fact.aprobat,
       observatii: fact.observatii,
+      codproiect: fact.codproiect,
       centrucost: fact.centrucost ? fact.centrucost : '-',
       idcentrucost: fact.centrucost ? fact.centrucost.id : null,
       dataplatii: fact.dataplatii,
@@ -308,6 +310,8 @@ class FacturiTabel extends React.Component {
                 </div>
               </th>
               <th>{fact.status}</th>
+              <th>{fact.codproiect ? fact.codproiect : '-'}</th>
+              <th>{fact.observatii ? fact.observatii : '-'}</th>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
@@ -322,8 +326,6 @@ class FacturiTabel extends React.Component {
                   ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
                   : '-'}
               </th>
-              <th>{fact.aprobat}</th>
-              <th>{fact.observatii}</th>
               <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
               <th>{fact.dataplatii}</th>
               <th>{fact.sumaachitata}</th>
@@ -697,6 +699,8 @@ class FacturiTabel extends React.Component {
                     <tr>
                       <th></th>
                       <th>Status</th>
+                      <th>Cod Proiect</th>
+                      <th>Observații</th>
                       <th
                         onClick={() => this.changeSortOrder('denumirefurnizor')}
                         style={{ cursor: 'pointer' }}
@@ -722,8 +726,6 @@ class FacturiTabel extends React.Component {
                       <th>Tip Achiziție</th>
                       <th>Descriere Activități</th>
                       <th>Aprobator</th>
-                      <th>Aprobat</th>
-                      <th>Observații</th>
                       <th>Centru Cost</th>
                       <th>Data plății</th>
                       <th>Suma Achitată</th>

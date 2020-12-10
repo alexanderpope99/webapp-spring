@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
+import net.guides.springboot2.crud.dto.FacturaJSON;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CentruCost;
 import net.guides.springboot2.crud.model.Factura;
@@ -59,6 +60,15 @@ public class FacturaService {
 		}
 
 		return facturaRepository.save(factura);
+	}
+
+	public ResponseEntity<String> updateObsCodp(int facturaID, FacturaJSON obscodp) throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(facturaID)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaID));
+		factura.setObservatii(obscodp.getObservatii());
+		factura.setCodproiect(obscodp.getCodproiect());
+		facturaRepository.save(factura);
+		return ResponseEntity.ok().body("Factură Actualizată");
 	}
 
 	public Factura update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
