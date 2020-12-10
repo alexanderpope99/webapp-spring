@@ -77,13 +77,11 @@ class UserTabel extends React.Component {
         res.data ? res.data.map((societate) => ({ key: societate.id, label: societate.nume })) : []
       )
       .catch((err) => console.error(err));
-    console.log(all_societati);
     // get all roles
     var all_roles = await axios
       .get(`${server.address}/role`, { headers: authHeader() })
       .then((res) => (res.data ? res.data.map((role) => ({ key: role.id, label: role.name })) : []))
       .catch((err) => console.error(err));
-    console.log(all_roles);
 
     this.setState({ all_roles: all_roles, all_societati: all_societati }, this.onRefresh);
     window.scrollTo(0, 0);
@@ -143,7 +141,7 @@ class UserTabel extends React.Component {
       user: user,
       username: user.username,
       email: user.email,
-      numeAngajat: user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume,
+      numeAngajat: user.angajati[0] ? (user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume ): '',
       roles: user.roles.map((role) => String(role.id)),
       societati: societati,
     });
@@ -164,7 +162,6 @@ class UserTabel extends React.Component {
       .get(`${server.address}/user/ids=${socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
-    console.log(users);
     // render table
     if (users) {
       this.setState({ users: users }, this.renderUsers);
@@ -173,12 +170,13 @@ class UserTabel extends React.Component {
 
   // function to create react component with fetched data
   async renderUsers() {
+    console.log(this.state.users);
     this.setState({
       usersComponent: this.state.users.map((user, index) => (
         <tr key={user.id}>
           <th>{user.username || '-'}</th>
           <th>{user.email || '-'}</th>
-          <th>{user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume}</th>
+          <th>{user.angajati[0] ? (user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume) : 'lipsă angajat asociat'}</th>
           <th>
             <div className="d-flex">
               <Button
