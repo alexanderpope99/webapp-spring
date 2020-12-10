@@ -7,19 +7,18 @@ retineri (doar avans merge)
 buton de 'show password' la schimba prola
 
 UPGRADES: 
-	cont bancar la societate
-	cont bancar pill in angajat (dupa pers. intr.)
+	cont bancar highlight in contract
 	pagina de centru cost
-
+    facturi tabel wait until server response to refresh page
+    change nume in tabel aprobare cereri concediu
 
 ERORI:
 	baza calcul frontend cand editeaza bazacalcul
-	concedii medicale trebuie sa nu aiba valori nule
 
 UserTabel:
 	1. change from multiselect to checkboxes
 	✔ can edit Roles
-	X can edit societati
+	 can edit societati
 	X can edit angajati
 
 

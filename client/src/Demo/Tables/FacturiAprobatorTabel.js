@@ -10,7 +10,7 @@ import {
   Modal,
   Form,
 } from 'react-bootstrap';
-import { X, Check, Clock, Plus, RotateCw } from 'react-feather';
+import { X, Check, Clock, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -129,9 +129,7 @@ class FacturiAprobatorTabel extends React.Component {
       else return f1[sortBy] > f2[sortBy] ? -1 : 1;
     };
 
-    console.log(this.state.sortAsc, this.state.sortBy);
     const facturi = this.state.factura.sort(compare);
-    console.log(facturi);
     this.setState({
       facturaComponent: await Promise.all(
         facturi.map(async (fact, index) => {
@@ -359,14 +357,7 @@ class FacturiAprobatorTabel extends React.Component {
         this.setState({ fisier: file, numefisier: file.name });
       }
     };
-    // const getUploadParams = ({file, meta}) => {
-    // 	this.setState({fisier: file});
-    // }
 
-    // const handleSubmit = (files, allFiles) => {
-    // 	console.log(files[0].meta);
-    // 	allFiles.forEach(f => f.remove());
-    // }
     return (
       <Aux>
         {/* add/edit modal */}
@@ -522,8 +513,6 @@ class FacturiAprobatorTabel extends React.Component {
                   ) : (
                     <Dropzone
                       onChangeStatus={handleChangeStatus}
-                      // getUploadParams={getUploadParams}
-                      // onSubmit={handleSubmit}
                       maxFiles={1}
                     />
                   )}

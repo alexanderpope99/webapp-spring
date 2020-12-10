@@ -31,7 +31,6 @@ class EditPersoana extends React.Component {
     this.onChangeCnp = this.onChangeCnp.bind(this);
     this.getIdByNumeintreg = this.getIdByNumeintreg.bind(this);
     this.getNumeintregById = this.getNumeintregById.bind(this);
-    // this.onChangeSelected = this.onChangeSelected.bind(this);
     this.fillForm = this.fillForm.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
     this.handleClose = this.handleClose.bind(this);

@@ -184,7 +184,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Cereri Concediu</Card.Title>
+                <Card.Title as="h5">Aprobare Cereri Concediu</Card.Title>
 
                 <Button
                   variant="outline-info"
@@ -195,15 +195,6 @@ class CereriConcediuSuperiorTabel extends React.Component {
                   <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
                 </Button>
-
-                {/* <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
-                  variant="outline-info"
-                  size="sm"
-                  style={{ fontSize: '1.25rem', float: 'right' }}
-                >
-                  <Add className="m-0 p-0" />
-                </Button> */}
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>

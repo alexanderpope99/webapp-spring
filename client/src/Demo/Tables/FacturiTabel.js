@@ -84,7 +84,6 @@ class FacturiTabel extends React.Component {
 
   async addFactura() {
     const formData = new FormData();
-    console.log(this.state.numefisier);
     if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
     const factura_body = {
@@ -109,10 +108,6 @@ class FacturiTabel extends React.Component {
 
     for (let key in factura_body) {
       if (factura_body[key]) formData.append(key, factura_body[key]);
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
     }
 
     let ok = await axios
@@ -162,10 +157,6 @@ class FacturiTabel extends React.Component {
 
     for (let key in factura_body) {
       if (factura_body[key]) formData.append(key, factura_body[key]);
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
     }
 
     const ok = await axios
@@ -224,14 +215,17 @@ class FacturiTabel extends React.Component {
   async deleteFactura(id) {
     await axios
       .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
+      .then(this.onRefresh)
       .catch((err) => console.error(err));
+    // if(ok) this.onRefresh();
   }
+
   getStatusColor(factStatus) {
     if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.1)';
     if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.1)';
     if (factStatus === 'Amânată') return 'rgba(191,191,63,0.1)';
   }
+
   // function to create react component with fetched data
   async renderFacturi() {
     const compare = (f1, f2) => {

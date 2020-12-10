@@ -11,6 +11,7 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
+import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
 import { case_de_sanatate, judete } from '../../Resources/judete';
@@ -212,10 +213,13 @@ class Contract extends React.Component {
   }
 
   handleClose() {
-    this.setState({
-      show: false,
-      modalMessage: '',
-    }, this.props.scrollToTopSmooth);
+    this.setState(
+      {
+        show: false,
+        modalMessage: '',
+      },
+      this.props.scrollToTopSmooth
+    );
   }
 
   hasRequired() {
@@ -233,9 +237,9 @@ class Contract extends React.Component {
         modalMessage: 'Contractul trebuie să aibă un salariu.',
       });
       return false;
-		}
-		
-		if (!this.state.dataContract || !this.state.dataIncepere) {
+    }
+
+    if (!this.state.dataContract || !this.state.dataIncepere) {
       this.setState({
         show: true,
         modalMessage: 'Contractul trebuie să aibă o dată și o dată de începere a activității.',
@@ -265,11 +269,12 @@ class Contract extends React.Component {
         id: this.state.idcontbancar,
         iban: this.state.iban,
         numebanca: this.state.numebanca,
-			};
-		else contbancar_body = {
-			iban: this.state.iban,
-			numebanca: this.state.numebanca
-		}
+      };
+    else
+      contbancar_body = {
+        iban: this.state.iban,
+        numebanca: this.state.numebanca,
+      };
 
     const contract_body = {
       tip: this.state.modelContract || null,
@@ -607,34 +612,37 @@ class Contract extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Col>
-						<Col>
-						<Row>
-            <Col md={6} className="border rounded pt-3">
-              <Form.Group id="iban">
-                <Form.Label>IBAN</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.iban}
-                  onChange={(e) => {
-                    this.setState({ iban: e.target.value });
-                  }}
-                />
-              </Form.Group>
+            <Col md={12} className="border rounded pt-3">
+              <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                Cont bancar
+              </Typography>
+              <Row>
+                <Col md={6}>
+                  <Form.Group id="iban">
+                    <Form.Label>IBAN</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.iban}
+                      onChange={(e) => {
+                        this.setState({ iban: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group id="numebanca">
+                    <Form.Label>Nume bancă</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.numebanca}
+                      onChange={(e) => {
+                        this.setState({ numebanca: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
             </Col>
-            <Col md={6}>
-              <Form.Group id="numebanca">
-                <Form.Label>Nume banca</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={this.state.numebanca}
-                  onChange={(e) => {
-                    this.setState({ numebanca: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-							</Row>
-						</Col>
             <Col md={6}>
               <Form.Group controlId="punctdelucru">
                 <Form.Label>Punct de lucru</Form.Label>
