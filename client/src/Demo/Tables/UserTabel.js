@@ -135,26 +135,25 @@ class UserTabel extends React.Component {
         nume: this.state.all_societati.find((soc) => soc.key == idsoc).label,
       })),
     ];
-		user.societati = user_societati;
-		
-		// get angajat from this societate
-		let has = this.state.all_angajati_of_socsel.find((a) => a.societate.id === this.state.socsel.id);
+    user.societati = user_societati;
 
-		// push selected angajat in user.angajati only if it doesn't exist
-		// if another angajat exists and has same idsocietate, replace it
-    if (this.state.idAngajat && !has) {
+    // filter user.angajati to not contain angajat from this socsel
+    user.angajati = user.angajati.filter((ang) => ang.societate.id !== this.state.socsel.id);
+
+    // push selected angajat in user.angajati only if it doesn't exist
+    // if another angajat exists and has same idsocietate, replace it
+    if (this.state.idAngajat) {
       let angajat = this.state.all_angajati_of_socsel.find(
         (ang) => ang.idpersoana == this.state.idAngajat
-			);
+      );
       if (Array.isArray(user.angajati)) user.angajati.push(angajat);
-			else user.angajati = [angajat];
-      console.log('pushed');
+      else user.angajati = [angajat];
     }
 
-    console.log(user);
+    console.log('sent:', user);
 
     const ok = await axios
-      .put(`${server.address}/user/${user.id}`, user, { headers: authHeader() })
+      .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, { headers: authHeader() })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
     if (ok) {
@@ -172,7 +171,7 @@ class UserTabel extends React.Component {
   async editUser(user) {
     console.log(user);
     // filter user.angajati to only keep the angajat from socsel
-		let angajat = user.angajati.find((ang) => ang.societate.id === this.state.socsel.id);
+    let angajat = user.angajati.find((ang) => ang.societate.id === this.state.socsel.id);
     // let angajati = user.angajati.filter((angajat) => console.log(angajat));
 
     this.setState({
@@ -183,12 +182,10 @@ class UserTabel extends React.Component {
       username: user.username,
       email: user.email,
       idAngajat: angajat ? angajat.idpersoana : '',
-      numeAngajat: angajat
-        ? angajat.persoana.nume + ' ' + angajat.persoana.prenume
-        : '',
+      numeAngajat: angajat ? angajat.persoana.nume + ' ' + angajat.persoana.prenume : '',
       roles: user.roles.map((role) => String(role.id)),
       societati: user.societati.map((soc) => String(soc.id)),
-    }, () => console.log(this.state));
+    });
   }
 
   async deleteUser(id) {
@@ -214,77 +211,78 @@ class UserTabel extends React.Component {
   // function to create react component with fetched data
   async renderUsers() {
     this.setState({
-			usersComponent: this.state.users.map((user, index) => {
-				user.angajati = user.angajati.filter((ang) => ang.societate.id === this.state.socsel.id);
-				return(
-        <tr key={user.id}>
-          <th>{user.username || '-'}</th>
-          <th>{user.email || '-'}</th>
-          <th>
-            {user.angajati[0]
-              ? user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume
-              : 'lipsă angajat asociat'}
-          </th>
-          <th>
-            <div className="d-flex">
-              <Button
-                variant="outline-secondary"
-                className="ml-2 p-1 rounded-circle border-0"
-                onClick={() => this.editUser(user)}
-              >
-                <Edit3 size={20} />
-              </Button>
-              <PopupState variant="popover" popupId="demo-popup-popover">
-                {(popupState) => (
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      className="m-0 p-1 rounded-circle border-0"
-                      {...bindTrigger(popupState)}
-                    >
-                      <Trash2 size={20} />
-                    </Button>
-                    <Popover
-                      {...bindPopover(popupState)}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                      }}
-                    >
-                      <Box p={2}>
-                        <Typography>Sigur ștergeți userul {user.username}?</Typography>
-                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                        <br />
-                        <Button
-                          variant="outline-danger"
-                          onClick={() => {
-                            popupState.close();
-                            this.deleteSocietate(user.id);
-                          }}
-                          className="mt-2"
-                        >
-                          Da
-                        </Button>
-                        <Button
-                          variant="outline-secondary"
-                          onClick={popupState.close}
-                          className="mt-2"
-                        >
-                          Nu
-                        </Button>
-                      </Box>
-                    </Popover>
-                  </div>
-                )}
-              </PopupState>
-            </div>
-          </th>
-        </tr>
-      )}),
+      usersComponent: this.state.users.map((user, index) => {
+        user.angajati = user.angajati.filter((ang) => ang.societate.id === this.state.socsel.id);
+        return (
+          <tr key={user.id}>
+            <th>{user.username || '-'}</th>
+            <th>{user.email || '-'}</th>
+            <th>
+              {user.angajati[0]
+                ? user.angajati[0].persoana.nume + ' ' + user.angajati[0].persoana.prenume
+                : 'lipsă angajat asociat'}
+            </th>
+            <th>
+              <div className="d-flex">
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  onClick={() => this.editUser(user)}
+                >
+                  <Edit3 size={20} />
+                </Button>
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 size={20} />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Sigur ștergeți userul {user.username}?</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteSocietate(user.id);
+                            }}
+                            className="mt-2"
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-secondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </div>
+            </th>
+          </tr>
+        );
+      }),
     });
   }
 

@@ -50,18 +50,27 @@ public class UserService {
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
 	}
 
-	public UserDTO update(UserDTO newUserDTO) {
+	public UserDTO update(UserDTO newUserDTO, int idsocietate) {
+		// unassign angajat.user
+		userRepository.findById(newUserDTO.getId()).ifPresent(user -> user.getAngajati().forEach(angajat -> {
+			if (angajat.getSocietate().getId() == idsocietate) {
+				angajat.setUser(null);
+				angajatRepository.save(angajat);
+			}
+		}));
+
 		User newUser = modelMapper.map(newUserDTO, User.class);
 
-		//* keep angajati connected to user <- on frontend: angajati.user is null
-		// page making this request will not change angajat content, but can change the list
+		// * keep angajati connected to user <- on frontend: angajati.user is null
+		// page making this request will not change angajat content, but can change the
+		// list
 		// make new List of angajati with id's from request list
 		List<Angajat> newAngajati = new ArrayList<>();
 		newUserDTO.getAngajati().forEach(angajatOpt -> {
 			// get from db and push to list
 			Angajat tmpAngajat = angajatRepository.findById(angajatOpt.getIdpersoana()).get();
 
-			//each angajat needs to point to this user
+			// each angajat needs to point to this user
 			tmpAngajat.setUser(newUser);
 
 			newAngajati.add(tmpAngajat);
@@ -71,9 +80,8 @@ public class UserService {
 
 		// set societati
 		List<Societate> newSocietati = new ArrayList<>();
-		newUserDTO.getSocietati().forEach(societate -> {
-			societateRepository.findById(societate.getId()).ifPresent(newSocietati::add);
-		});
+		newUserDTO.getSocietati()
+				.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
 		newUser.setSocietati(newSocietati);
 
 		userRepository.save(newUser);
