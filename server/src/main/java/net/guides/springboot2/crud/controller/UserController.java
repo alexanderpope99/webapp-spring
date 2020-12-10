@@ -99,9 +99,9 @@ public class UserController {
 		return userRepository.getRolesByUserId(usrid);
 	}
 
-	@PutMapping("{id}")
-	public UserDTO updateUser(@PathVariable("id") int id, @RequestBody UserDTO newUserDTO) {
-		return userService.update(newUserDTO);
+	@PutMapping("{id}/ids={ids}")
+	public UserDTO updateUser(@PathVariable("id") int id, @PathVariable("ids") int idsocietate, @RequestBody UserDTO newUserDTO) {
+		return userService.update(newUserDTO, idsocietate);
 	}
 
 	@DeleteMapping("{id}")
