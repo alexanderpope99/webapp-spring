@@ -38,6 +38,8 @@ public class FacturaDTO {
 
 	private String observatii;
 
+	private String codproiect;
+
 	private String status;
 
 	private double sumaachitata;
@@ -256,5 +258,13 @@ public class FacturaDTO {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCodproiect() {
+		return codproiect;
+	}
+
+	public void setCodproiect(String codproiect) {
+		this.codproiect = codproiect;
 	}
 }

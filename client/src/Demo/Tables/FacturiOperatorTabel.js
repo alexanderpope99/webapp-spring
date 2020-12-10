@@ -22,13 +22,13 @@ import authService from '../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
-class FacturiAprobatorTabel extends React.Component {
+class FacturiOperatorTabel extends React.Component {
   constructor() {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseApprover = this.handleCloseApprover.bind(this);
+    this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
@@ -37,7 +37,6 @@ class FacturiAprobatorTabel extends React.Component {
     this.rejectFactura = this.rejectFactura.bind(this);
     this.postponeFactura = this.postponeFactura.bind(this);
     this.getStatusColor = this.getStatusColor.bind(this);
-    this.exitCloseApprover = this.exitCloseApprover.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -53,9 +52,6 @@ class FacturiAprobatorTabel extends React.Component {
       // confirm modal
       showConfirm: false,
       modalMessage: '',
-
-      // approver modal
-      showApprover: false,
 
       // add/edit modal
       id: '',
@@ -74,7 +70,6 @@ class FacturiAprobatorTabel extends React.Component {
       numeaprobator: '',
       dataplatii: '',
       sumaachitata: '',
-      codproiect: '',
       idsocietate: null,
       show: false,
       user: authService.getCurrentUser(),
@@ -99,13 +94,7 @@ class FacturiAprobatorTabel extends React.Component {
       .get(`${server.address}/factura/${fact.id}/aproba`, { headers: authHeader() })
       .then((response) => response.status === 200)
       .catch((err) => console.error(err));
-    if (ok) {
-      this.onRefresh();
-      this.setState({
-        showApprover: true,
-        id: fact.id,
-      });
-    }
+    if (ok) this.onRefresh();
   }
 
   async rejectFactura(fact) {
@@ -113,13 +102,7 @@ class FacturiAprobatorTabel extends React.Component {
       .get(`${server.address}/factura/${fact.id}/respinge`, { headers: authHeader() })
       .then((response) => response.status === 200)
       .catch((err) => console.error(err));
-    if (ok) {
-      this.onRefresh();
-      this.setState({
-        showApprover: true,
-        id: fact.id,
-      });
-    }
+    if (ok) this.onRefresh();
   }
 
   async postponeFactura(fact) {
@@ -128,13 +111,7 @@ class FacturiAprobatorTabel extends React.Component {
       .get(`${server.address}/factura/${fact.id}/amana`, { headers: authHeader() })
       .then((response) => response.status === 200)
       .catch((err) => console.error(err));
-    if (ok) {
-      this.onRefresh();
-      this.setState({
-        showApprover: true,
-        id: fact.id,
-      });
-    }
+    if (ok) this.onRefresh();
   }
 
   getStatusColor(factStatus) {
@@ -230,7 +207,6 @@ class FacturiAprobatorTabel extends React.Component {
                   : '-'}
               </th>
               <th>{fact.aprobat}</th>
-              <th>{fact.codproiect}</th>
               <th>{fact.observatii}</th>
               <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
               <th>{fact.dataplatii}</th>
@@ -308,30 +284,6 @@ class FacturiAprobatorTabel extends React.Component {
     else this.addFactura();
   }
 
-  exitCloseApprover() {
-    this.setState({
-      showApprover: false,
-    });
-  }
-
-  async handleCloseApprover(e) {
-    const factura_body = {
-      codproiect: this.state.codproiect || null,
-      observatii: this.state.observatii || null,
-    };
-    const ok = await axios
-      .put(`${server.address}/factura/${this.state.id}/keep-file`, factura_body, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-    if (ok) {
-      this.setState({
-        showApprover: false,
-      });
-    }
-  }
-
   onChangeCentruCost(e) {
     const selectedIndex = e.target.options.selectedIndex;
     const idcentru = e.target.options[selectedIndex].getAttribute('data-key');
@@ -366,13 +318,19 @@ class FacturiAprobatorTabel extends React.Component {
       numeaprobator: '',
       aprobat: false,
       observatii: '',
-      codproiect: '',
       centrucost: '',
       dataplatii: '',
       sumaachitata: '',
       idsocietate: '',
       fisier: null,
       numefisier: null,
+    });
+  }
+
+  handleCloseConfirm() {
+    this.setState({
+      modalMessage: '',
+      showConfirm: false,
     });
   }
 
@@ -402,33 +360,88 @@ class FacturiAprobatorTabel extends React.Component {
 
     return (
       <Aux>
-        {/* confirm modal */}
-        <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
+        {/* add/edit modal */}
+        <Modal show={this.state.show} onHide={this.handleClose} size="lg">
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.handleCloseConfirm}>
-              OK
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Approver Info modal */}
-        <Modal show={this.state.showApprover} onHide={this.exitCloseApprover}>
-          <Modal.Header closeButton>
-            <Modal.Title>Aprobator</Modal.Title>
+            <Modal.Title>Adaugă Factură</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={this.addFactura}>
               <Row>
-                <Form.Group as={Col} md="6">
-                  <Form.Label>Cod Proiect</Form.Label>
+                <Form.Group as={Col} md="6" controlId="denumirefurnizor">
+                  <Form.Label>Denumire Furnizor</Form.Label>
                   <Form.Control
                     type="text"
-                    value={this.state.codproiect}
-                    onChange={(e) => this.setState({ codproiect: e.target.value })}
+                    value={this.state.denumirefurnizor}
+                    onChange={(e) => this.setState({ denumirefurnizor: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>CIF Furnizor</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.ciffurnizor}
+                    onChange={(e) => this.setState({ ciffurnizor: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Nr</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.nr}
+                    onChange={(e) => this.setState({ nr: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Data</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.data}
+                    onChange={(e) => this.setState({ data: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Moneda</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.moneda}
+                    onChange={(e) => this.setState({ moneda: e.target.value })}
+                  >
+                    <option key="1">RON</option>
+                    <option key="2">EUR</option>
+                    <option key="3">USD</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Sumă fără TVA</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.sumafaratva}
+                    onChange={(e) => this.setState({ sumafaratva: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Termen scadență</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.termenscadenta}
+                    onChange={(e) => this.setState({ termenscadenta: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Tip Achiziție</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.tipachizitie}
+                    onChange={(e) => this.setState({ tipachizitie: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Descriere Activități</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.descriereactivitati}
+                    onChange={(e) => this.setState({ descriereactivitati: e.target.value })}
                   />
                 </Form.Group>
                 <Form.Group as={Col} md="6">
@@ -439,11 +452,86 @@ class FacturiAprobatorTabel extends React.Component {
                     onChange={(e) => this.setState({ observatii: e.target.value })}
                   />
                 </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Centru Cost</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.centrucost.nume}
+                    onChange={this.onChangeCentruCost}
+                  >
+                    <option>-</option>
+                    {centreCost}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Aprobator</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.numeaprobator || '-'}
+                    onChange={this.onChangeAprobator}
+                  >
+                    <option>-</option>
+                    {aprobatori}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Data Plății</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.dataplatii}
+                    onChange={(e) => this.setState({ dataplatii: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Sumă Achitată</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.sumaachitata}
+                    onChange={(e) => this.setState({ sumaachitata: e.target.value })}
+                  />
+                </Form.Group>
+                {/* file upload below */}
+                <Form.Group as={Col} md="12">
+                  <Form.Label>Factura</Form.Label>
+                  {this.state.numefisier ? (
+                    <div>
+                      <Button
+                        variant="dark"
+                        onClick={() => downloadFactura(this.state.numefisier, this.state.id)}
+                      >
+                        {this.state.numefisier}
+                      </Button>
+                      <Button
+                        variant="link"
+                        onClick={() =>
+                          this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
+                        }
+                      >
+                        Șterge
+                      </Button>
+                    </div>
+                  ) : (
+                    <Dropzone onChangeStatus={handleChangeStatus} maxFiles={1} />
+                  )}
+                </Form.Group>
               </Row>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handleCloseApprover}>
+            <Button variant="primary" onClick={this.onSubmit} type="submit">
+              {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* confirm modal */}
+        <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
+          <Modal.Header closeButton>
+            <Modal.Title>Mesaj</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.modalMessage}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.handleCloseConfirm}>
               OK
             </Button>
           </Modal.Footer>
@@ -514,4 +602,4 @@ class FacturiAprobatorTabel extends React.Component {
   }
 }
 
-export default FacturiAprobatorTabel;
+export default FacturiOperatorTabel;

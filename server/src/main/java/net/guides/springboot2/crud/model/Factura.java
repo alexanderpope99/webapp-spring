@@ -52,6 +52,9 @@ public class Factura implements Serializable {
 	@Column(name = "observatii")
 	private String observatii;
 
+	@Column(name = "codproiect")
+	private String codproiect;
+
 	@Column(name = "status")
 	private String status;
 
@@ -101,7 +104,7 @@ public class Factura implements Serializable {
 	public Factura(String denumirefurnizor, String ciffurnizor, String nr, LocalDate data, String moneda,
 			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati,
 			Angajat aprobator, boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii,
-			double sumaachitata, Societate societate) {
+			double sumaachitata, Societate societate, String codproiect) {
 		this.denumirefurnizor = denumirefurnizor;
 		this.ciffurnizor = ciffurnizor;
 		this.nr = nr;
@@ -113,6 +116,7 @@ public class Factura implements Serializable {
 		this.descriereactivitati = descriereactivitati;
 		this.aprobator = aprobator;
 		this.observatii = observatii;
+		this.codproiect = codproiect;
 		this.centrucost = centrucost;
 		this.dataplatii = dataplatii;
 		this.sumaachitata = sumaachitata;
@@ -278,4 +282,13 @@ public class Factura implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getCodproiect() {
+		return codproiect;
+	}
+
+	public void setCodproiect(String codproiect) {
+		this.codproiect = codproiect;
+	}
+
 }
