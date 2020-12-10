@@ -103,7 +103,7 @@ public class Factura implements Serializable {
 
 	public Factura(String denumirefurnizor, String ciffurnizor, String nr, LocalDate data, String moneda,
 			double sumafaratva, LocalDate termenscadenta, String tipachizitie, String descriereactivitati,
-			Angajat aprobator, boolean aprobat, String observatii, CentruCost centrucost, LocalDate dataplatii,
+			Angajat aprobator, String observatii, CentruCost centrucost, LocalDate dataplatii,
 			double sumaachitata, Societate societate, String codproiect) {
 		this.denumirefurnizor = denumirefurnizor;
 		this.ciffurnizor = ciffurnizor;
