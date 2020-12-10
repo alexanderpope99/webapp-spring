@@ -7,19 +7,19 @@ retineri (doar avans merge)
 buton de 'show password' la schimba prola
 
 UPGRADES: 
-	cont bancar la societate
-	cont bancar pill in angajat (dupa pers. intr.)
-
+	pagina de centru cost
 
 ERORI:
+  edit angajat asociat: only one angajat/societate/user
+  fix societati of user to be ARRAY of key-value pairs -> NOT map like it is now
 	baza calcul frontend cand editeaza bazacalcul
-	concedii medicale trebuie sa nu aiba valori nule
 
 UserTabel:
 	1. change from multiselect to checkboxes
 	✔ can edit Roles
-	X can edit societati
+	✔ can edit societati
 	X can edit angajati
+
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:

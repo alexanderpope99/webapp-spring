@@ -84,7 +84,6 @@ class FacturiTabel extends React.Component {
 
   async addFactura() {
     const formData = new FormData();
-    console.log(this.state.numefisier);
     if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
     const factura_body = {
@@ -109,10 +108,6 @@ class FacturiTabel extends React.Component {
 
     for (let key in factura_body) {
       if (factura_body[key]) formData.append(key, factura_body[key]);
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
     }
 
     let ok = await axios
@@ -162,10 +157,6 @@ class FacturiTabel extends React.Component {
 
     for (let key in factura_body) {
       if (factura_body[key]) formData.append(key, factura_body[key]);
-    }
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
     }
 
     const ok = await axios
@@ -224,14 +215,17 @@ class FacturiTabel extends React.Component {
   async deleteFactura(id) {
     await axios
       .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
+      .then(this.onRefresh)
       .catch((err) => console.error(err));
+    // if(ok) this.onRefresh();
   }
+
   getStatusColor(factStatus) {
     if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.05)';
     if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.05)';
     if (factStatus === 'Amânată') return 'rgba(191,191,63,0.05)';
   }
+
   // function to create react component with fetched data
   async renderFacturi() {
     const compare = (f1, f2) => {
@@ -241,9 +235,7 @@ class FacturiTabel extends React.Component {
       else return f1[sortBy] > f2[sortBy] ? -1 : 1;
     };
 
-    console.log(this.state.sortAsc, this.state.sortBy);
     const facturi = this.state.factura.sort(compare);
-    console.log(facturi);
     this.setState({
       facturaComponent: await Promise.all(
         facturi.map(async (fact, index) => {
@@ -464,17 +456,17 @@ class FacturiTabel extends React.Component {
   render() {
     var centreCost = [];
     if (this.state.centreCostComponent.length > 0)
-      centreCost = this.state.centreCostComponent.map((cod, index) => (
-        <option key={index} data-key={cod.id}>
-          {cod.nume}
+      centreCost = this.state.centreCostComponent.map((centrucost, index) => (
+        <option key={index} data-key={centrucost.id}>
+          {centrucost.nume}
         </option>
       ));
 
     var aprobatori = [];
     if (this.state.aprobatoriComponent.length > 0)
-      aprobatori = this.state.aprobatoriComponent.map((cod, index) => (
-        <option key={index} data-key={cod.persoana.id}>
-          {cod.persoana.nume + ' ' + cod.persoana.prenume}
+      aprobatori = this.state.aprobatoriComponent.map((angajat, index) => (
+        <option key={index} data-key={angajat.persoana.id}>
+          {angajat.persoana.nume + ' ' + angajat.persoana.prenume}
         </option>
       ));
 
@@ -541,9 +533,9 @@ class FacturiTabel extends React.Component {
                     value={this.state.moneda}
                     onChange={(e) => this.setState({ moneda: e.target.value })}
                   >
-                    <option key="1">RON</option>
-                    <option key="2">EUR</option>
-                    <option key="3">USD</option>
+                    <option>RON</option>
+                    <option>EUR</option>
+                    <option>USD</option>
                   </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="6">

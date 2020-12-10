@@ -66,8 +66,8 @@ public class UserService {
 
 		// set societati
 		List<Societate> newSocietati = new ArrayList<>();
-		newUserDTO.getSocietati().forEach((idsocietate, nume) -> {
-			societateRepository.findById(idsocietate).ifPresent(newSocietati::add);
+		newUserDTO.getSocietati().forEach(societate -> {
+			societateRepository.findById(societate.getId()).ifPresent(newSocietati::add);
 		});
 		newUser.setSocietati(newSocietati);
 

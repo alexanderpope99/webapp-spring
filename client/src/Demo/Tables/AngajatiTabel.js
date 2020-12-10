@@ -12,13 +12,14 @@ import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
-import { RotateCw, Plus, Edit3, Trash2, Clipboard } from 'react-feather';
+import { RotateCw, UserPlus, Edit3, Trash2, Clipboard } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
-    this.onRefresh = this.onRefresh.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
+		this.deleteAngajat = this.deleteAngajat.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -34,7 +35,7 @@ class AngajatiTabel extends React.Component {
     window.scrollTo(0, 0);
   }
 
-  deletePersoana(id) {
+  deleteAngajat(id) {
     axios
       .delete(`${server.address}/angajat/${id}`, { headers: authHeader() })
       .then((response) => response.data)
@@ -50,13 +51,13 @@ class AngajatiTabel extends React.Component {
       angajatiComponent: this.state.angajati.map((ang, index) => {
         for (let key in ang) {
           if (!ang[key]) ang[key] = '-';
-        }
+				}
         return (
           <tr key={ang.persoana.id}>
             <th>{index+1}</th>
             <th>{ang.persoana.nume}</th>
             <th>{ang.persoana.prenume}</th>
-            <th>{ang.contract.functie || 'lipsă contract'}</th>
+            <th>{ang.contract.functie || '-'}</th>
             <th>{ang.contract.salariutarifar ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu : 'lipsă contract'}</th>
             {/* <th className="d-inline-flex"> */}
             <th>
@@ -70,6 +71,7 @@ class AngajatiTabel extends React.Component {
                   }
                 >
                   <Button
+										disabled={!ang.contract.id}
                     onClick={() => {
                       setAngajatSel({
                         idpersoana: ang.persoana.id,
@@ -146,7 +148,7 @@ class AngajatiTabel extends React.Component {
                             variant="outline-danger"
                             onClick={() => {
                               popupState.close();
-                              this.deleteAngajat(ang.id, ang.nume, ang.prenume);
+                              this.deleteAngajat(ang.persoana.id);
                             }}
                             className="mt-2 "
                           >
@@ -230,7 +232,7 @@ class AngajatiTabel extends React.Component {
                     size="sm"
                     style={{ fontSize: '1.25rem', float: 'right' }}
                   >
-                    <Plus className="m-0 p-0" />
+                    <UserPlus className="m-0 p-0" />
                   </Button>
                 </OverlayTrigger>
               </Card.Header>
