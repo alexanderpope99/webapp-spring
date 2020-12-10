@@ -264,19 +264,22 @@ class FacturiAprobatorTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+			.catch((err) => console.error(err));
+			
     const aprobatori = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+			.catch((err) => console.error(err));
+			
     const fact = await axios
-      .get(`${server.address}/factura/idsocida/${this.state.socsel.id}&${this.state.user.id}`, {
+      .get(`${server.address}/factura/idsocuid/${this.state.socsel.id}&${this.state.user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+			.catch((err) => console.error(err));
+		console.log(fact);
     if (centreCost) {
       this.setState(
         {
@@ -403,28 +406,6 @@ class FacturiAprobatorTabel extends React.Component {
   }
 
   render() {
-    var centreCost = [];
-    if (this.state.centreCostComponent.length > 0)
-      centreCost = this.state.centreCostComponent.map((cod, index) => (
-        <option key={index} data-key={cod.id}>
-          {cod.nume}
-        </option>
-      ));
-
-    var aprobatori = [];
-    if (this.state.aprobatoriComponent.length > 0)
-      aprobatori = this.state.aprobatoriComponent.map((cod, index) => (
-        <option key={index} data-key={cod.persoana.id}>
-          {cod.persoana.nume + ' ' + cod.persoana.prenume}
-        </option>
-      ));
-
-    const handleChangeStatus = ({ file }, status) => {
-      if (status === 'done') {
-        console.log(status, file);
-        this.setState({ fisier: file, numefisier: file.name });
-      }
-    };
 
     return (
       <Aux>
@@ -449,7 +430,7 @@ class FacturiAprobatorTabel extends React.Component {
           <Modal.Body>
             <Form>
               <Row>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="12">
                   <Form.Label>Cod Proiect</Form.Label>
                   <Form.Control
                     type="text"
@@ -457,10 +438,10 @@ class FacturiAprobatorTabel extends React.Component {
                     onChange={(e) => this.setState({ codproiect: e.target.value })}
                   />
                 </Form.Group>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="12">
                   <Form.Label>Observații</Form.Label>
                   <Form.Control
-                    type="text"
+                    as="textarea"
                     value={this.state.observatii}
                     onChange={(e) => this.setState({ observatii: e.target.value })}
                   />

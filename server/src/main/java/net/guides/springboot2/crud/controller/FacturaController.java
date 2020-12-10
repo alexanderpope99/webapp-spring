@@ -95,10 +95,10 @@ public class FacturaController {
 	}
 
 	@Transactional
-	@GetMapping("/idsocida/{ids}&{ida}")
+	@GetMapping("/idsocuid/{ids}&{uid}")
 	public List<Factura> getFacturaByIdSocietateAndIdAprobator(@PathVariable(value = "ids") int societateId,
-			@PathVariable(value = "ida") int aprobatorId) {
-		return facturaRepository.findBySocietate_IdAndAprobator_Idpersoana(societateId, aprobatorId);
+			@PathVariable(value = "uid") int userID) {
+		return facturaRepository.findBySocietate_IdAndAprobator_User_Id(societateId, userID);
 	}
 
 	@GetMapping("file/{id}")

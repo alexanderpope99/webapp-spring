@@ -10,7 +10,6 @@ UPGRADES:
 	pagina de centru cost
 
 ERORI:
-  edit angajat asociat: only one angajat/societate/user
 	baza calcul frontend cand editeaza bazacalcul
 
 UserTabel:
