@@ -42,7 +42,7 @@ public class AngajatController {
 		List<Angajat> angajati = angajatRepository.findAll(Sort.by(Sort.Direction.ASC, "idpersoana"));
 
 		List<AngajatDTO> angajatiDTO = new ArrayList<>();
-		for(Angajat a : angajati) {
+		for (Angajat a : angajati) {
 			angajatiDTO.add(modelMapper.map(a, AngajatDTO.class));
 		}
 
@@ -59,7 +59,7 @@ public class AngajatController {
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
-				
+
 		return ResponseEntity.ok().body(modelMapper.map(angajat, AngajatDTO.class));
 	}
 
@@ -92,6 +92,11 @@ public class AngajatController {
 		return angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 	}
 
+	@GetMapping("/ids={ids}&u")
+	public List<Angajat> findAngajatiWithUserAndAccessByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+		return angajatRepository.findBySocietate_IdAndContract_IdNotNullWithUserAndAccess(idsocietate);
+	}
+
 	@GetMapping("/ids={ids}/count")
 	public int countAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
 		return angajatRepository.countBySocietate_Id(idsocietate);
@@ -108,8 +113,8 @@ public class AngajatController {
 	}
 
 	@PostMapping("ids={ids}/{idsuperior}")
-	public Angajat createAngajat(@PathVariable("ids") int ids, @PathVariable("idsuperior") Integer idsuperior, @RequestBody Angajat angajat)
-		throws ResourceNotFoundException {
+	public Angajat createAngajat(@PathVariable("ids") int ids, @PathVariable("idsuperior") Integer idsuperior,
+			@RequestBody Angajat angajat) throws ResourceNotFoundException {
 		return angajatService.save(angajat, ids, idsuperior);
 	}
 

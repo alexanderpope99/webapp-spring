@@ -115,9 +115,9 @@ class FacturiAprobatorTabel extends React.Component {
   }
 
   getStatusColor(factStatus) {
-    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.1)';
-    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.1)';
-    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.1)';
+    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.05)';
+    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.05)';
+    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.05)';
   }
 
   // function to create react component with fetched data

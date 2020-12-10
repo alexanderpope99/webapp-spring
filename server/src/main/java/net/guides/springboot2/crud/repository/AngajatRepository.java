@@ -12,6 +12,9 @@ import net.guides.springboot2.crud.model.Angajat;
 public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 	List<Angajat> findByContract_IdNotNull();
 
+	@Query(value = "select angajat.* from angajat where iduser is not null and iduser in (select user_id from user_societati where societate_id=?1)", nativeQuery = true)
+	List<Angajat> findBySocietate_IdAndContract_IdNotNullWithUserAndAccess(int idsocietate);
+
 	List<Angajat> findBySocietate_IdAndContract_IdNotNull(int idsocietate);
 
 	List<Angajat> findBySocietate_Id(int idsocietate);

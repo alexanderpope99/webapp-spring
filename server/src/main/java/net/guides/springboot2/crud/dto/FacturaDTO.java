@@ -36,8 +36,6 @@ public class FacturaDTO {
 
 	private String descriereactivitati;
 
-	private boolean aprobat;
-
 	private String observatii;
 
 	private String status;
@@ -230,14 +228,6 @@ public class FacturaDTO {
 
 	public void setSumafaratva(double sumafaratva) {
 		this.sumafaratva = sumafaratva;
-	}
-
-	public boolean isAprobat() {
-		return aprobat;
-	}
-
-	public void setAprobat(boolean aprobat) {
-		this.aprobat = aprobat;
 	}
 
 	public LocalDate getTermenscadenta() {

@@ -49,9 +49,6 @@ public class Factura implements Serializable {
 	@Column(name = "descriereactivitati")
 	private String descriereactivitati;
 
-	@Column(name = "aprobat")
-	private boolean aprobat;
-
 	@Column(name = "observatii")
 	private String observatii;
 
@@ -115,7 +112,6 @@ public class Factura implements Serializable {
 		this.tipachizitie = tipachizitie;
 		this.descriereactivitati = descriereactivitati;
 		this.aprobator = aprobator;
-		this.aprobat = aprobat;
 		this.observatii = observatii;
 		this.centrucost = centrucost;
 		this.dataplatii = dataplatii;
@@ -145,14 +141,6 @@ public class Factura implements Serializable {
 
 	public void setCiffurnizor(String ciffurnizor) {
 		this.ciffurnizor = ciffurnizor;
-	}
-
-	public boolean isAprobat() {
-		return aprobat;
-	}
-
-	public void setAprobat(boolean aprobat) {
-		this.aprobat = aprobat;
 	}
 
 	public LocalDate getData() {

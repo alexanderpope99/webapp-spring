@@ -228,9 +228,9 @@ class FacturiTabel extends React.Component {
       .catch((err) => console.error(err));
   }
   getStatusColor(factStatus) {
-    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.1)';
-    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.1)';
-    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.1)';
+    if (factStatus === 'Respinsă') return 'rgba(255,0,0,0.05)';
+    if (factStatus === 'Aprobată') return 'rgba(0,255,0,0.05)';
+    if (factStatus === 'Amânată') return 'rgba(191,191,63,0.05)';
   }
   // function to create react component with fetched data
   async renderFacturi() {
@@ -368,7 +368,7 @@ class FacturiTabel extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
     const aprobatori = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&u`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
