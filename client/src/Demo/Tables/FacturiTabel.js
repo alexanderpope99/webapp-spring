@@ -179,37 +179,34 @@ class FacturiTabel extends React.Component {
   }
 
   async editFactura(fact) {
-    this.setState(
-      {
-        isEdit: true,
-        show: true,
+    this.setState({
+      isEdit: true,
+      show: true,
 
-        id: fact.id,
-        denumirefurnizor: fact.denumirefurnizor,
-        ciffurnizor: fact.ciffurnizor,
-        nr: fact.nr,
-        data: fact.data ? fact.data.substring(0, 10) : '',
-        moneda: fact.moneda,
-        sumafaratva: fact.sumafaratva,
-        termenscadenta: fact.termenscadenta,
-        tipachizitie: fact.tipachizitie,
-        descriereactivitati: fact.descriereactivitati,
-        numeaprobator: fact.aprobator
-          ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
-          : '-',
-        idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
-        aprobat: fact.aprobat,
-        observatii: fact.observatii,
-        centrucost: fact.centrucost ? fact.centrucost : '-',
-        idcentrucost: fact.centrucost ? fact.centrucost.id : null,
-        dataplatii: fact.dataplatii,
-        sumaachitata: fact.sumaachitata,
+      id: fact.id,
+      denumirefurnizor: fact.denumirefurnizor,
+      ciffurnizor: fact.ciffurnizor,
+      nr: fact.nr,
+      data: fact.data ? fact.data.substring(0, 10) : '',
+      moneda: fact.moneda,
+      sumafaratva: fact.sumafaratva,
+      termenscadenta: fact.termenscadenta,
+      tipachizitie: fact.tipachizitie,
+      descriereactivitati: fact.descriereactivitati,
+      numeaprobator: fact.aprobator
+        ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+        : '-',
+      idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
+      aprobat: fact.aprobat,
+      observatii: fact.observatii,
+      centrucost: fact.centrucost ? fact.centrucost : '-',
+      idcentrucost: fact.centrucost ? fact.centrucost.id : null,
+      dataplatii: fact.dataplatii,
+      sumaachitata: fact.sumaachitata,
 
-        numefisier: fact.numefisier,
-        sterge: false,
-      },
-      () => console.log(this.state)
-    );
+      numefisier: fact.numefisier,
+      sterge: false,
+    });
   }
 
   async deleteFactura(id) {

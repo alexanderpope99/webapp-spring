@@ -42,7 +42,7 @@ public class SocietateController {
 		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
 		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class)).collect(Collectors.toList());
 		for(int i=0; i < societati.size(); ++i) {
-			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajat());
+			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati());
 		}
 		return societatiDTO;
 	}
@@ -53,7 +53,7 @@ public class SocietateController {
 		Societate societate = societateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 		SocietateDTO societateDTO = modelMapper.map(societate, SocietateDTO.class);
-		societateDTO.setNrangajati(societate.getAngajat().size());
+		societateDTO.setNrangajati(societate.getAngajati().size());
 		return ResponseEntity.ok().body(societateDTO);
 	}
 
@@ -62,7 +62,7 @@ public class SocietateController {
 		List<Societate> societati = societateRepository.findByUserId(id);
 		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class)).collect(Collectors.toList());
 		for(int i=0; i < societati.size(); ++i) {
-			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajat().size());
+			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati().size());
 		}
 		return societatiDTO;
 	}

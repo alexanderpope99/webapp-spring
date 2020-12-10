@@ -60,7 +60,7 @@ public class Societate implements Serializable {
 
 	@JsonBackReference(value = "angajat-societate")
 	@OneToMany(mappedBy = "societate")
-	private List<Angajat> angajat;
+	private List<Angajat> angajati;
 
 	@JsonBackReference(value = "factura-societate")
 	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
@@ -131,8 +131,8 @@ public class Societate implements Serializable {
 		return contbancar;
 	}
 
-	public List<Angajat> getAngajat() {
-		return angajat;
+	public List<Angajat> getAngajati() {
+		return angajati;
 	}
 
 	// ! SETTERS
@@ -168,8 +168,8 @@ public class Societate implements Serializable {
 		this.telefon = telefon;
 	}
 
-	public void setAngajat(List<Angajat> angajat) {
-		this.angajat = angajat;
+	public void setAngajati(List<Angajat> angajati) {
+		this.angajati = angajati;
 	}
 
 	public String getFax() {
