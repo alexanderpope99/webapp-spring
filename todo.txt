@@ -16,7 +16,7 @@ UserTabel:
 	1. change from multiselect to checkboxes
 	✔ can edit Roles
 	✔ can edit societati
-	X can edit angajati
+	✔ can edit angajati
 
 
 *** INTREBARI: ***
