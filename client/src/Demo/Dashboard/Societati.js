@@ -15,8 +15,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import authService from '../../services/auth.service';
-
+import authService from '../../services/auth.service'
 class Societati extends React.Component {
   constructor() {
     super();
@@ -75,20 +74,21 @@ class Societati extends React.Component {
     });
   }
 
-  onChangeLocalitate(e) {
+  onChangeLocalitate(localitate) {
+		if(!localitate) return;
     if (
-      e.toLowerCase() === 'bucuresti' ||
-      e.toLowerCase() === 'bucurești' ||
-      e.toLowerCase() === 'bucharest'
+      localitate.toLowerCase() === 'bucuresti' ||
+      localitate.toLowerCase() === 'bucurești' ||
+      localitate.toLowerCase() === 'bucharest'
     )
       this.setState({
         capitala: 'Sector',
-        localitate: e,
+        localitate: localitate,
       });
     else
       this.setState({
         capitala: 'Județ',
-        localitate: e,
+        localitate: localitate,
       });
   }
 
@@ -97,14 +97,12 @@ class Societati extends React.Component {
       this.setState({
         show_confirm: false,
         modalMessage: '',
-      });
+      }, () => {setSocSel(null); window.location.reload()});
     else
       this.setState({
         show: false,
         isEdit: false,
       });
-    setSocSel(null);
-    window.location.reload();
   }
 
   async componentDidMount() {
@@ -186,7 +184,6 @@ class Societati extends React.Component {
   }
 
   editSocietate(societate) {
-    console.log(societate);
     this.setState(
       {
         show: true,
@@ -563,9 +560,12 @@ class Societati extends React.Component {
                     }
                   />
                 </Form.Group>
+								<Col>
+								<Button  href="/forms/add-societate?isEdit" variant="link" className="float-right mt-4">Mai multe</Button>
+								</Col>
               </Row>
             </Form>
-          </Modal.Body>
+					</Modal.Body>
           <Modal.Footer>
             <PopupState variant="popover" popupId="demo-popup-popover">
               {(popupState) => (

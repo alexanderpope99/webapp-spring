@@ -70,6 +70,10 @@ public class Societate implements Serializable {
 	@ManyToMany(mappedBy = "societati", fetch = FetchType.LAZY)
 	private List<User> useri;
 
+	@JsonBackReference(value = "centrucost-societate")
+	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY)
+	private List<CentruCost> centreCost;
+
 	public Societate() {
 	}
 

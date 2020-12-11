@@ -60,9 +60,9 @@ class COTabel extends React.Component {
   }
   clearCO() {
     this.setState({
-      isEdit: false,
       // add modal:
       show: false,
+      isEdit: false,
       id: 0,
       dela: '',
       panala: '',

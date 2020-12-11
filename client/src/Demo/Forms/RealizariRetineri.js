@@ -14,7 +14,7 @@ import {
   Collapse,
   Toast,
 } from 'react-bootstrap';
-import { Trash2, Plus, User, UserPlus } from 'react-feather';
+import { Trash2, Plus, User } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
