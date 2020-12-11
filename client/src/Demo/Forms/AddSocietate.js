@@ -236,7 +236,7 @@ class AddSocietate extends React.Component {
                 <Form onSubmit={this.onSubmit}>
                   <Row>
                     {/* <Form> */}
-                    <Form.Group controlId="nume" as={Col} md="6">
+                    <Form.Group controlId="nume" as={Col} md="12">
                       <Form.Label>Denumire societate</Form.Label>
                       <Form.Control
                         required
@@ -250,19 +250,7 @@ class AddSocietate extends React.Component {
                         }
                       />
                     </Form.Group>
-                    <Form.Group controlId="adresa" as={Col} md="6">
-                      <Form.Label>Adresă</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="eg. Strada nr. 1"
-                        value={this.state.adresa}
-                        onChange={(e) =>
-                          this.setState({
-                            adresa: e.target.value,
-                          })
-                        }
-                      />
-                    </Form.Group>
+                    
                     <Form.Group controlId="localitate" as={Col} md="6">
                       <Form.Label>Localitate</Form.Label>
                       <Form.Control
@@ -286,6 +274,19 @@ class AddSocietate extends React.Component {
                         <option>-</option>
                         {judeteComponent()}
                       </Form.Control>
+                    </Form.Group>
+										<Form.Group controlId="adresa" as={Col} md="6">
+                      <Form.Label>Adresă</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="eg. Strada nr. 1"
+                        value={this.state.adresa}
+                        onChange={(e) =>
+                          this.setState({
+                            adresa: e.target.value,
+                          })
+                        }
+                      />
                     </Form.Group>
                     <Form.Group controlId="codCaen" as={Col} md="6">
                       <Form.Label>Cod CAEN</Form.Label>
