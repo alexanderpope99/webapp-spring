@@ -208,10 +208,17 @@ var items = [
         icon: 'feather icon-file-text',
       },
       {
-        id: 'facturi-aprobatori',
+        id: 'facturi-aprobator',
         title: 'Aprobare Facturi',
         type: 'item',
         url: '/facturi-aprobator',
+        icon: 'feather icon-file-text',
+      },
+      {
+        id: 'facturi-operator',
+        title: 'Operare Facturi',
+        type: 'item',
+        url: '/facturi-operator',
         icon: 'feather icon-file-text',
       },
     ],

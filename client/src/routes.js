@@ -45,6 +45,7 @@ const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 const FacturiTabel = React.lazy(() => import('./Demo/Tables/FacturiTabel'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
+const FacturiOperatorTabel = React.lazy(() => import('./Demo/Tables/FacturiOperatorTabel'));
 const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 
 // EDIT
@@ -165,6 +166,12 @@ const routes = [
     exact: true,
     name: 'Tabel Facturi Aprobator',
     component: FacturiAprobatorTabel,
+  },
+  {
+    path: '/facturi-operator',
+    exact: true,
+    name: 'Tabel Facturi Operator',
+    component: FacturiOperatorTabel,
   },
   {
     path: '/tables/angajati',

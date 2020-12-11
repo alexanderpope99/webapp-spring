@@ -136,61 +136,6 @@ class FacturiOperatorTabel extends React.Component {
           return (
             // TODO
             <tr style={{ backgroundColor: this.getStatusColor(fact.status) }} key={fact.id}>
-              <th>
-                <div className="d-flex">
-                  <OverlayTrigger
-                    placement="bottom"
-                    delay={{ show: 250, hide: 250 }}
-                    overlay={
-                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                        Respinge
-                      </Tooltip>
-                    }
-                  >
-                    <Button
-                      onClick={() => this.rejectFactura(fact)}
-                      variant="outline-danger"
-                      className="m-1 p-1 rounded-circle border-0"
-                    >
-                      <X size={20} />
-                    </Button>
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="bottom"
-                    delay={{ show: 250, hide: 250 }}
-                    overlay={
-                      <Tooltip id="postpone-button" style={{ opacity: '.4' }}>
-                        Amână
-                      </Tooltip>
-                    }
-                  >
-                    <Button
-                      onClick={() => this.postponeFactura(fact)}
-                      variant="outline-warning"
-                      className="m-1 p-1 rounded-circle border-0"
-                    >
-                      <Clock size={20} />
-                    </Button>
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="bottom"
-                    delay={{ show: 250, hide: 250 }}
-                    overlay={
-                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                        Acceptă
-                      </Tooltip>
-                    }
-                  >
-                    <Button
-                      onClick={() => this.approveFactura(fact)}
-                      variant="outline-success"
-                      className="m-1 p-1 rounded-circle border-0"
-                    >
-                      <Check size={20} />
-                    </Button>
-                  </OverlayTrigger>
-                </div>
-              </th>
               <th>{fact.status}</th>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
