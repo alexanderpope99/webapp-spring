@@ -35,9 +35,8 @@ public class ZileService {
 
 		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
 
-		long businessDays = Stream.iterate(startDate, date -> date.plusDays(1)).limit(daysBetween)
+		return Stream.iterate(startDate, date -> date.plusDays(1)).limit(daysBetween)
 				.filter(isHoliday.or(isWeekend).negate()).count();
-		return businessDays;
 	}
 
 	public long getZileLucratoareInIntervalNoHolidays(LocalDate startDate, LocalDate endDate) {
