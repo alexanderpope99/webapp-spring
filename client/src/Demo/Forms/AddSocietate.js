@@ -10,7 +10,14 @@ import authHeader from '../../services/auth-header';
 
 import authService from '../../services/auth.service';
 import CentruCostTabel from '../UIElements/Forms/CentruCostTabel';
-import { CardHeader } from '@material-ui/core';
+
+const judeteOptions = judete.map((judet, index) => {
+	return <option key={index}>{judet}</option>;
+});
+
+const sectoareOptions = sectoare.map((sector, index) => {
+	return <option key={index}>{sector}</option>;
+});
 
 class AddSocietate extends React.Component {
   constructor() {
@@ -43,7 +50,7 @@ class AddSocietate extends React.Component {
       adresa: '',
       localitate: '',
       judet: '',
-      capitala: 'Județ',
+      tipJudet: 'Județ',
       email: '',
       telefon: '',
       fax: '',
@@ -64,7 +71,7 @@ class AddSocietate extends React.Component {
       adresa: '',
       localitate: '',
       judet: '',
-      capitala: 'Județ',
+      tipJudet: 'Județ',
       email: '',
       telefon: '',
       fax: '',
@@ -120,12 +127,12 @@ class AddSocietate extends React.Component {
       localitate.toLowerCase() === 'bucharest'
     )
       this.setState({
-        capitala: 'Sector',
+        tipJudet: 'Sector',
         localitate: localitate,
       });
     else
       this.setState({
-        capitala: 'Județ',
+        tipJudet: 'Județ',
         localitate: localitate,
       });
   }
@@ -194,17 +201,11 @@ class AddSocietate extends React.Component {
   }
 
   render() {
-    const judeteObj = judete.map((judet, index) => {
-      return <option key={index}>{judet}</option>;
-    });
 
-    const sectoareObj = sectoare.map((sector, index) => {
-      return <option key={index}>{sector}</option>;
-    });
 
-    const list = () => {
-      if (this.state.capitala === 'Județ') return judeteObj;
-      return sectoareObj;
+    const judeteComponent = () => {
+      if (this.state.tipJudet === 'Județ') return judeteOptions;
+      return sectoareOptions;
     };
 
     return (
@@ -215,7 +216,7 @@ class AddSocietate extends React.Component {
             <Modal.Title>{this.state.modalMessage}</Modal.Title>
           </Modal.Header>
           <Modal.Footer>
-            <Button variant="primary" href="/dashboard/societati">
+            <Button variant="primary" href="/dashboard/societati" onClick={() => setSocSel(null)}>
               Către societați
             </Button>
             <Button variant="primary" onClick={this.handleClose}>
@@ -272,7 +273,7 @@ class AddSocietate extends React.Component {
                       />
                     </Form.Group>
                     <Form.Group controlId="judet" as={Col} md="6">
-                      <Form.Label>{this.state.capitala}</Form.Label>
+                      <Form.Label>{this.state.tipJudet}</Form.Label>
                       <Form.Control
                         as="select"
                         value={this.state.judet}
@@ -283,7 +284,7 @@ class AddSocietate extends React.Component {
                         }
                       >
                         <option>-</option>
-                        {list()}
+                        {judeteComponent()}
                       </Form.Control>
                     </Form.Group>
                     <Form.Group controlId="codCaen" as={Col} md="6">

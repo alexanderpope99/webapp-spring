@@ -168,13 +168,8 @@ class Societati extends React.Component {
   }
 
   async deleteSocietate(id) {
-    // id = id.replace('"', '');
-    // console.log(id);
-    const response = axios
-      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
-      .then((response) => response.data)
+    axios.delete(`${server.address}/societate/${id}`, { headers: authHeader() })
       .then(() => {
-        console.log(response);
         // alert(`Deleted ${id}`);
         setSocSel(null);
         this.setState({ show: false });

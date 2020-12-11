@@ -6,18 +6,12 @@ retineri (doar avans merge)
 
 buton de 'show password' la schimba prola
 
+TODO:
+	CentruCostTabel.js: line:189 - inexistent endpoint
+											line:198 - incomplete function
+
 UPGRADES:
-	
-	Societate page is now edit page, can also edit in modal => add button to redirect in Societati.js modal
-		*Pagina de centru cost is integrated as collapsible in societate page:
-	
-	frontent - delete, edit, add, onRefresh function wihtout explicit button
-		-> can select adresa of societate
-		-> adresa must be { localitate, judet, adresa }
-	
-	In Societate.js -> confirm-modal add 2 buttons: Adauga societate noua, Către societăți,
-	
-	backend - CentruCost ManyToOne to Societate, 
+	backend - CentruCost ManyToOne to Societate, add CentruCost in SocietateDTO
 							should return full adresa instead of idadresa
 
 		- When creating angajat also create new user tied to it with random password, show passowrd on screen and tell the user to login and change it

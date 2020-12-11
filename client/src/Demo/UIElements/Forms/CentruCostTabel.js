@@ -1,21 +1,31 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Form, Modal } from 'react-bootstrap';
-import { Edit3, Trash2, RotateCw } from 'react-feather';
+import { Col, Table, Button, Form, Modal } from 'react-bootstrap';
+import { Edit3, Trash2, RotateCw, Plus } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
+import { judete, sectoare } from '../../Resources/judete';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../../services/auth-header';
+
+const judeteOptions = judete.map((judet, index) => {
+  return <option key={index}>{judet}</option>;
+});
+
+const sectoareOptions = sectoare.map((sector, index) => {
+  return <option key={index}>{sector}</option>;
+});
 
 class CentruCostTabel extends React.Component {
   constructor() {
     super();
 
     this.handleClose = this.handleClose.bind(this);
+    this.onChangeLocalitate = this.onChangeLocalitate.bind(this);
     this.fillTable = this.fillTable.bind(this);
     this.clearCC = this.clearCC.bind(this);
     this.deleteCC = this.deleteCC.bind(this);
@@ -36,7 +46,10 @@ class CentruCostTabel extends React.Component {
       // detalii centru cost
       id: 0,
       nume: '',
-      adresa: null, // of type: { adresa: '', localitate: '', judet: '' }
+      adresa: '',
+      localitate: '',
+      tipJudet: 'Județ',
+      judet: '',
     };
   }
 
@@ -47,6 +60,24 @@ class CentruCostTabel extends React.Component {
       nume: '',
       adresa: null,
     });
+  }
+
+  onChangeLocalitate(localitate) {
+    if (!localitate) return;
+    if (
+      localitate.toLowerCase() === 'bucuresti' ||
+      localitate.toLowerCase() === 'bucurești' ||
+      localitate.toLowerCase() === 'bucharest'
+    )
+      this.setState({
+        tipJudet: 'Sector',
+        localitate: localitate,
+      });
+    else
+      this.setState({
+        tipJudet: 'Județ',
+        localitate: localitate,
+      });
   }
 
   handleClose() {
@@ -64,7 +95,7 @@ class CentruCostTabel extends React.Component {
 
   renderTabel() {
     this.setState({
-      centreCostComponent: this.state.map((cc, index) => {
+      centreCostComponent: this.state.centreCost.map((cc, index) => {
         return (
           <tr>
             <th>{cc.nume}</th>
@@ -164,31 +195,49 @@ class CentruCostTabel extends React.Component {
     if (ok) this.fillTable();
   }
 
-	async updateCC() {
+  async updateCC() {
+		const centruCost = {
+      nume: this.state.nume,
+      adresa: this.state.adresa,
+    };
 
+    let ok = await axios
+      .put(`${server.address}/centrucost/${this.state.id}`, centruCost, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) this.fillTable();
 	}
 
   editCC(centruCost) {
     this.setState({
-			show: true,
-			isEdit: true,
-			
+      show: true,
+      isEdit: true,
+
       id: centruCost.id,
       nume: centruCost.nume,
       adresa: centruCost.adresa,
     });
-	}
+  }
 
   render() {
+    const judeteComponent = () => {
+      if (this.state.tipJudet === 'Județ') return judeteOptions;
+      return sectoareOptions;
+    };
+
     return (
       <React.Fragment>
+        {/* ADD/EDIT MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Centru cost</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group id="nume" as={Col} md="3">
+              <Form.Group id="nume" as={Col} md="12">
                 <Form.Label>Nume centru cost</Form.Label>
                 <Form.Control
                   required
@@ -198,7 +247,7 @@ class CentruCostTabel extends React.Component {
                 />
               </Form.Group>
 
-              <Form.Group id="adresa" as={Col} md="8">
+              <Form.Group id="adresa" as={Col} md="12">
                 <Form.Label>Adresa</Form.Label>
                 <Form.Control
                   required
@@ -207,20 +256,55 @@ class CentruCostTabel extends React.Component {
                   onChange={(e) => this.setState({ adresa: e.target.value })}
                 />
               </Form.Group>
-                <Button className="display-flex m-0" onClick={this.addCC}>
-                  +
-                </Button>
+              <Form.Group id="localitate" as={Col} md="12">
+                <Form.Label>Localitate</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  value={this.state.localitate}
+                  onChange={(e) => this.onChangeLocalitate(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group id="adresa" as={Col} md="12">
+                <Form.Label>{this.state.tipJudet}</Form.Label>
+                <Form.Control
+                  required
+                  as="select"
+                  value={this.state.judet}
+                  onChange={(e) => this.setState({ judet: e.target.value })}
+                >
+                  <option>-</option>
+                  {judeteComponent()}
+                </Form.Control>
+              </Form.Group>
             </Form>
+          </Modal.Body>
+          <Modal.Footer>
             <Button variant="primary" onClick={this.state.isEdit ? this.updateCC : this.addCC}>
               {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
             </Button>
-          </Modal.Body>
+          </Modal.Footer>
         </Modal>
 
         <Table responsive hover>
           <thead>
-            <th>Nume centru cost</th>
-            <th>Adresa, Localitate, Judet</th>
+            <tr>
+              <th>Nume centru cost</th>
+              <th>Adresa, Localitate, Judet</th>
+              <th>
+                <Button
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
+                  onClick={this.fillTable}
+                >
+                  <RotateCw size={20} />
+                  {/* ↺ */}
+                </Button>
+                <Button className="float-right" onClick={() => this.setState({ show: true })}>
+                  <Plus size={20} />
+                </Button>
+              </th>
+            </tr>
           </thead>
           <tbody>{this.state.centreCostComponent}</tbody>
         </Table>
