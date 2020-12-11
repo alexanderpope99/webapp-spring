@@ -2,7 +2,6 @@ package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
 
-import net.guides.springboot2.crud.model.Notificare;
 import net.guides.springboot2.crud.model.User;
 
 public class NotificareDTO {
