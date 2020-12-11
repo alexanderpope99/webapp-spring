@@ -48,6 +48,10 @@ public class User implements Serializable {
 	@Column(name = "gen")
 	private boolean gen;
 
+	@JsonBackReference(value = "user-notificari")
+	@OneToMany(mappedBy = "notificare")
+	private List<Notificare> notificari;
+
 	public User() {
 	}
 
@@ -125,5 +129,13 @@ public class User implements Serializable {
 
 	public void addSocietate(Societate newSocietate) {
 		this.societati.add(newSocietate);
+	}
+
+	public List<Notificare> getNotificari() {
+		return notificari;
+	}
+
+	public void setNotificari(List<Notificare> notificari) {
+		this.notificari = notificari;
 	}
 }
