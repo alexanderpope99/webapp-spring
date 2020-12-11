@@ -486,7 +486,7 @@ class FacturiOperatorTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Aprobare Facturi</Card.Title>
+                <Card.Title as="h5">Operare Facturi</Card.Title>
 
                 <Button
                   variant="outline-info"
