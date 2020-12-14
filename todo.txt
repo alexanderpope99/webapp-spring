@@ -4,7 +4,9 @@ alte retineri
 alte drepturi
 retineri (doar avans merge)
 
-buton de 'show password' la schimba prola
+buton de 'show password' la schimba parola
+
+Sarbatori.js: sa se vada si ziua saptamanii
 
 TODO:
 	CentruCostTabel.js: line:189 - inexistent endpoint
