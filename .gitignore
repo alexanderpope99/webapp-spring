@@ -5,5 +5,6 @@ server/pom.xml
 src/main/java/net/guides/springboot2/crud/downloads/
 server/src/main/java/net/guides/springboot2/crud/downloads/
 client/src/Demo/Resources/server-address.js
+client/debug.log
 client.rar
 webdb-data.tar
