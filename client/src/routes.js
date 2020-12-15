@@ -15,6 +15,7 @@ const UIBasicBadges = React.lazy(() => import('./Demo/UIElements/Basic/Badges'))
 const UIBasicBreadcrumbPagination = React.lazy(() =>
   import('./Demo/UIElements/Basic/BreadcrumbPagination')
 );
+const Notificari = React.lazy(() => import('./Demo/Other/Notificari'));
 
 const UIBasicCollapse = React.lazy(() => import('./Demo/UIElements/Basic/Collapse'));
 const UIBasicTabsPills = React.lazy(() => import('./Demo/UIElements/Basic/TabsPills'));
@@ -95,6 +96,12 @@ const routes = [
     exact: true,
     name: 'Basic Typography',
     component: UIBasicBasicTypography,
+  },
+  {
+    path: '/notificari',
+    exact: true,
+    name: 'Notificari',
+    component: Notificari,
   },
 
   // FORMS

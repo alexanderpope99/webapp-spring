@@ -51,6 +51,19 @@ public class NotificareController {
 		return notificariDTO;
 	}
 
+	@GetMapping("/userid/{id}")
+	public List<NotificareDTO> getNotificariByUserId(@PathVariable(value = "id") int userId) {
+		List<Notificare> notificari = notificareRepository.findByUser_Id(userId);
+		modelMapper.typeMap(Notificare.class, NotificareDTO.class).addMapping(Notificare::getUser,
+				NotificareDTO::setIduserObj);
+		List<NotificareDTO> notificariDTO = new ArrayList<>();
+		for (Notificare n : notificari) {
+			notificariDTO.add(modelMapper.map(n, NotificareDTO.class));
+		}
+
+		return notificariDTO;
+	}
+
 	@GetMapping("{id}")
 	public ResponseEntity<NotificareDTO> getNotificareByIdDTO(@PathVariable(value = "id") int notificareId)
 			throws ResourceNotFoundException {

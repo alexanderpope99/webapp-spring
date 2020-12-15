@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Button } from 'react-bootstrap';
 
 import Aux from '../../../../../hoc/_Aux';
 import DEMO from '../../../../../store/constant';
@@ -8,31 +8,43 @@ import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
 import Avatar3 from '../../../../../assets/images/user/avatar-3.jpg';
 
-import AuthService from '../../../../../services/auth.service';
+import { server } from '../../../../../Demo/Resources/server-address';
+import { getSocSel } from '../../../../../Demo/Resources/socsel';
+import axios from 'axios';
+import authHeader from '../../../../../../src/services/auth-header';
+
+import authService from '../../../../../../src/services/auth.service';
 
 class NavRight extends Component {
   constructor() {
     super();
+    this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
     this.state = {
       listOpen: false,
-      currentUser: undefined,
+      user: authService.getCurrentUser(),
+      notificariComponent: [],
     };
   }
 
   componentDidMount() {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
+    this.onRefresh();
   }
 
   logOut() {
-    AuthService.logout();
+    authService.logout();
     window.location.href = '/auth/signin-1';
+  }
+
+  async onRefresh() {
+    const notificari = await axios
+      .get(`${server.address}/notificare/userid/${this.state.user.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    this.setState({
+      notificariComponent: notificari,
+    });
   }
 
   getAvatarIcon() {
@@ -41,6 +53,47 @@ class NavRight extends Component {
 
   render() {
     const AvatarProp = this.getAvatarIcon();
+    function millisConverter(millis) {
+      switch (true) {
+        case millis < 60000:
+          return ((millis % 60000) / 1000).toFixed(0) + ' s';
+        case millis < 3600000:
+          return Math.floor(millis / 60000) + 'm ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
+        case millis < 86400000:
+          return (
+            Math.floor((millis / (1000 * 60 * 60)) % 24) +
+            'h ' +
+            Math.floor(millis / 60000) +
+            'm ' +
+            ((millis % 60000) / 1000).toFixed(0) +
+            ' s'
+          );
+        case millis < 604800000:
+          return Math.floor(millis / 86400000) + ' days';
+        default:
+          const data = Date(millis).split(' ');
+          return data[2] + ' ' + data[1] + ' ' + data[3];
+      }
+    }
+
+    var notificari = [];
+    if (this.state.notificariComponent.length > 0)
+      notificari = this.state.notificariComponent.map((notificare, index) => (
+        <li className="notification">
+          <div onClick={() => (window.location.href = notificare.hyperlink)} className="media">
+            <div className="media-body">
+              <p>
+                <strong>{notificare.titlu}</strong>
+                <span className="n-time text-muted">
+                  <i className="icon feather icon-clock m-r-10" />
+                  {millisConverter(Date.now() - Date.parse(notificare.timp))}
+                </span>
+              </p>
+              <p>{notificare.mesaj}</p>
+            </div>
+          </div>
+        </li>
+      ));
 
     return (
       <Aux>
@@ -52,69 +105,22 @@ class NavRight extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="notification">
                 <div className="noti-head">
-                  <h6 className="d-inline-block m-b-0">Notifications</h6>
+                  <h6 className="d-inline-block m-b-0">Notificări</h6>
                   <div className="float-right">
                     {/* <a href={DEMO.BLANK_LINK} className="m-r-10">
                       mark as read
-                    </a>
-                    <a href={DEMO.BLANK_LINK}>clear all</a> */}
+                    </a> */}
+                    <a href={DEMO.BLANK_LINK}>șterge tot</a>
                   </div>
                 </div>
                 <ul className="noti-body">
                   {/* <li className="n-title">
                     <p className="m-b-0">NEW</p>
                   </li> */}
-                  {/* <li className="notification">
-                    <div className="media">
-                      <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
-                      <div className="media-body">
-                        <p>
-                          <strong>John Doe</strong>
-                          <span className="n-time text-muted">
-                            <i className="icon feather icon-clock m-r-10" />
-                            30 min
-                          </span>
-                        </p>
-                        <p>New ticket Added</p>
-                      </div>
-                    </div>
-                  </li> */}
-                  {/* <li className="n-title">
-                    <p className="m-b-0">EARLIER</p>
-                  </li> */}
-                  {/* <li className="notification">
-                    <div className="media">
-                      <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
-                      <div className="media-body">
-                        <p>
-                          <strong>Joseph William</strong>
-                          <span className="n-time text-muted">
-                            <i className="icon feather icon-clock m-r-10" />
-                            30 min
-                          </span>
-                        </p>
-                        <p>Prchace New Theme and make payment</p>
-                      </div>
-                    </div>
-                  </li> */}
-                  {/* <li className="notification">
-                    <div className="media">
-                      <img className="img-radius" src={Avatar3} alt="Generic placeholder" />
-                      <div className="media-body">
-                        <p>
-                          <strong>Sara Soudein</strong>
-                          <span className="n-time text-muted">
-                            <i className="icon feather icon-clock m-r-10" />
-                            30 min
-                          </span>
-                        </p>
-                        <p>currently login</p>
-                      </div>
-                    </div>
-                  </li> */}
+                  {notificari}
                 </ul>
                 <div className="noti-footer">
-                  <a href={DEMO.BLANK_LINK}>show all</a>
+                  <a href={'/notificari'}>arată tot</a>
                 </div>
               </Dropdown.Menu>
             </Dropdown>
