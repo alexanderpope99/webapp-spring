@@ -52,7 +52,7 @@ public class SarbatoriService {
 		List<LocalDate> sarbatoriDates = new ArrayList<>();
 
 		List<Sarbatori> sarbatori = sarbatoriRepository.findByDelaBetween(dela, panala);
-		if(sarbatori == null || sarbatori.size() == 0)
+		if(sarbatori == null || sarbatori.isEmpty())
 			return sarbatoriDates;
 
 		for(Sarbatori sarbatoare : sarbatori) {

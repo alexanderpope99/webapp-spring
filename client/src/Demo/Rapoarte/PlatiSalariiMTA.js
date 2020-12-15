@@ -3,7 +3,7 @@ import { Row, Col, Card, Form, Button, FormControl } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
-import months from '../Resources/months';
+import { months } from '../Resources/months';
 import authService from '../../services/auth.service';
 
 class PlatiSalariiMTA extends React.Component {

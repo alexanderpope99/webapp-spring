@@ -8,14 +8,15 @@ import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
-import months from '../Resources/months';
+import { months } from '../Resources/months';
 import authHeader from '../../services/auth-header';
 import { Edit, PlusCircle } from 'react-feather';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import authService from '../../services/auth.service'
+import authService from '../../services/auth.service';
+
 class Societati extends React.Component {
   constructor() {
     super();
@@ -322,8 +323,8 @@ class Societati extends React.Component {
             <h3
               style={{
                 fontSize:
-                  key.length > 25
-                    ? (30 - Math.floor(key.length / 25) * 10).toString() + 'px'
+                  key.length > 20
+                    ? (30 - Math.floor(key.length / 20) * 10).toString() + 'px'
                     : '30px',
               }}
               className="d-flex justify-content-around"
