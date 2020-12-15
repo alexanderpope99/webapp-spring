@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CentruCost;
 import net.guides.springboot2.crud.repository.CentruCostRepository;
+import net.guides.springboot2.crud.services.CentruCostService;
+
 import org.springframework.data.domain.Sort;
 
 @RestController
@@ -25,6 +27,9 @@ import org.springframework.data.domain.Sort;
 public class CentruCostController {
 	@Autowired
 	private CentruCostRepository centruCostRepository;
+
+	@Autowired
+	private CentruCostService ccService;
 
 	@GetMapping
 	public List<CentruCost> getAllCentruCosts() {
@@ -44,20 +49,28 @@ public class CentruCostController {
 		return centruCostRepository.findCentreCostByIdsocietate(societateId);
 	}
 
-	@PostMapping
-	public CentruCost createCentruCost(@RequestBody CentruCost centruCost) {
-		return centruCostRepository.save(centruCost);
+	@PostMapping("/ids={ids}")
+	public ResponseEntity<CentruCost> createCentruCost(@PathVariable("ids") int ids,
+			@RequestBody CentruCost centruCost) throws ResourceNotFoundException {
+		return ResponseEntity.ok(ccService.save(centruCost, ids, false));
+	}
+
+	@PostMapping("/ids={ids}/adrsoc")
+	public ResponseEntity<CentruCost> createCentruCostAdresaSocietate(@PathVariable("ids") int ids,
+			@RequestBody CentruCost centruCost) throws ResourceNotFoundException {
+		return ResponseEntity.ok(ccService.save(centruCost, ids, true));
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CentruCost> updateCentruCost(@PathVariable(value = "id") int centruCostId,
-			@RequestBody CentruCost centruCostDetails) throws ResourceNotFoundException {
-		CentruCost centruCost = centruCostRepository.findById(centruCostId)
-				.orElseThrow(() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
+	public ResponseEntity<CentruCost> updateCentruCost(@PathVariable("id") int id, @RequestBody CentruCost newCentruCost)
+			throws ResourceNotFoundException {
+		return ResponseEntity.ok(ccService.update(newCentruCost, id, false));
+	}
 
-		centruCostDetails.setId(centruCost.getId());
-		final CentruCost updatedCentruCost = centruCostRepository.save(centruCost);
-		return ResponseEntity.ok(updatedCentruCost);
+	@PutMapping("{id}/adrsoc")
+	public ResponseEntity<CentruCost> updateCentruCostAdresaSocietate(@PathVariable("id") int id, @RequestBody CentruCost newCentruCost)
+			throws ResourceNotFoundException {
+		return ResponseEntity.ok(ccService.update(newCentruCost, id, true));
 	}
 
 	@DeleteMapping("{id}")

@@ -27,7 +27,6 @@ class AddSocietate extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.clearFields = this.clearFields.bind(this);
 
-    // see if editing current socsel or adding new soc from uri
     const urlParams = new URLSearchParams(window.location.search);
 
     this.state = {
@@ -46,7 +45,8 @@ class AddSocietate extends React.Component {
       idcaen: '',
       cif: '',
       capsoc: '',
-      regcom: '',
+			regcom: '',
+			idadresa: '',
       adresa: '',
       localitate: '',
       judet: '',
@@ -67,7 +67,8 @@ class AddSocietate extends React.Component {
       idcaen: '',
       cif: '',
       capsoc: '',
-      regcom: '',
+			regcom: '',
+			idadresa: '',
       adresa: '',
       localitate: '',
       judet: '',
@@ -82,40 +83,14 @@ class AddSocietate extends React.Component {
   }
 
   handleClose() {
-    this.setState({
-      show: false,
+    this.setState({ show: false }, () => {
+      if (!this.state.isEdit) this.clearFields();
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
     });
-  }
-
-  async getSocietateDetails() {
-    const societate = await axios
-      .get(`${server.address}/societate/${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-
-    if (societate.adresa)
-      this.setState(
-        {
-          id: societate.id,
-          nume: societate.nume,
-          idcaen: societate.idcaen,
-          cif: societate.cif,
-          capsoc: societate.capsoc,
-          regcom: societate.regcom,
-          // adresa
-          adresa: societate.adresa.adresa,
-          judet: societate.adresa.judet,
-
-          email: societate.email,
-          telefon: societate.telefon,
-          fax: societate.fax,
-        },
-        () => this.onChangeLocalitate(societate.adresa.localitate)
-      );
-  }
-
-  componentDidMount() {
-    if (this.state.isEdit) this.getSocietateDetails();
   }
 
   onChangeLocalitate(localitate) {
@@ -136,6 +111,40 @@ class AddSocietate extends React.Component {
       });
   }
 
+  async getSocietateDetails() {
+    if (!this.state.socsel) window.location.href = '/dashboard/societati';
+
+    const societate = await axios
+      .get(`${server.address}/societate/${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    if (societate.adresa)
+      this.setState(
+        {
+          id: societate.id,
+          nume: societate.nume,
+          idcaen: societate.idcaen || '',
+          cif: societate.cif,
+          capsoc: societate.capsoc,
+          regcom: societate.regcom,
+					// adresa
+					idadresa: societate.adresa.id,
+          adresa: societate.adresa.adresa,
+          judet: societate.adresa.judet,
+
+          email: societate.email,
+          telefon: societate.telefon,
+          fax: societate.fax,
+        },
+        () => this.onChangeLocalitate(societate.adresa.localitate)
+      );
+  }
+
+  componentDidMount() {
+    if (this.state.isEdit) this.getSocietateDetails();
+  }
+
   async onSubmit(e) {
     try {
       e.preventDefault();
@@ -144,6 +153,7 @@ class AddSocietate extends React.Component {
     }
 
     let adresa_body = {
+			id: this.state.idadresa || null,
       adresa: this.state.adresa || null,
       localitate: this.state.localitate || null,
       judet: this.state.judet || null,
@@ -190,11 +200,7 @@ class AddSocietate extends React.Component {
         show: true,
         modalMessage: this.state.isEdit ? 'Societate actualizată' : 'Societate adăugată cu succes!',
       });
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
+
       if (!this.state.isEdit) this.clearFields();
     }
   }
@@ -240,11 +246,7 @@ class AddSocietate extends React.Component {
                         type="text"
                         placeholder="Nume"
                         value={this.state.nume}
-                        onChange={(e) =>
-                          this.setState({
-                            nume: e.target.value,
-                          })
-                        }
+                        onChange={(e) => this.setState({ nume: e.target.value })}
                       />
                     </Form.Group>
 
@@ -400,7 +402,15 @@ class AddSocietate extends React.Component {
                       <Collapse in={this.state.showCentreCost}>
                         <div id="accordion1">
                           <Card.Body>
-                            <CentruCostTabel />
+                            <CentruCostTabel
+                              adresaSocietate={{
+                                id: this.state.idadresa,
+                                adresa: this.state.adresa,
+                                localitate: this.state.localitate,
+                                tipJudet: this.state.tipJudet,
+                                judet: this.state.judet,
+                              }}
+                            />
                           </Card.Body>
                         </div>
                       </Collapse>

@@ -61,7 +61,7 @@ public class CentruCost implements Serializable {
 		this.id = id;
 	}
 
-	public Adresa getIdadresa() {
+	public Adresa getAdresa() {
 		return adresa;
 	}
 

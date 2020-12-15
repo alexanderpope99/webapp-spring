@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "adresa")
 public class Adresa implements Serializable {
@@ -29,15 +31,15 @@ public class Adresa implements Serializable {
 	@Column(name = "tara")
 	private String tara;
 
+	@JsonBackReference(value = "adresa-societate")
 	@OneToOne(mappedBy = "adresa", fetch = FetchType.LAZY)
-	private Societate societate;
+	private Societate societati;
 
+	@JsonBackReference(value = "adresa-persoana")
 	@OneToOne(mappedBy = "adresa", fetch = FetchType.LAZY)
 	private Persoana persoane;
 
-	public Adresa() {
-
-	}
+	public Adresa() { }
 
 	public Adresa(String adresa, String localitate, String judet, String tara) {
 		this.adresa = adresa;
@@ -84,5 +86,19 @@ public class Adresa implements Serializable {
 
 	public void setTara(String tara) {
 		this.tara = tara;
+	}
+
+	public Persoana getPersoane() {
+		return persoane;
+	}
+	public Societate getSocietati() {
+		return societati;
+	}
+
+	public void setPersoane(Persoana persoane) {
+		this.persoane = persoane;
+	}
+	public void setSocietati(Societate societati) {
+		this.societati = societati;
 	}
 }

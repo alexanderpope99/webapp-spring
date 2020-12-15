@@ -132,7 +132,7 @@ public class BazacalculService {
 			salariuRealizat += bc.getSalariurealizat();
 		}
 
-		return salariuRealizat / nrZileLucrate;
+		return nrZileLucrate > 0 ? (salariuRealizat / nrZileLucrate) : 0;
 	}
 
 	public Bazacalcul saveBazacalcul(RealizariRetineri realizariRetineri) {

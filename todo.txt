@@ -9,7 +9,8 @@ buton de 'show password' la schimba parola
 unde pun superior pentru un angajat?
 
 TODO:
-	CentruCostTabel.js: line:189 - inexistent endpoint
+	make {this.state.idadresa === this.props.adresaSocietate.id} a variable
+	adresa societate
 
 UPGRADES:
 	backend - CentruCost ManyToOne to Societate

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Table, Button, Form, Modal } from 'react-bootstrap';
+import { Col, Row, Table, Button, Form, Modal, Toast } from 'react-bootstrap';
 import { Edit3, Trash2, RotateCw, Plus } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -21,7 +21,7 @@ const sectoareOptions = sectoare.map((sector, index) => {
 });
 
 class CentruCostTabel extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
 
     this.handleClose = this.handleClose.bind(this);
@@ -32,6 +32,7 @@ class CentruCostTabel extends React.Component {
     this.addCC = this.addCC.bind(this);
     this.updateCC = this.updateCC.bind(this);
     this.editCC = this.editCC.bind(this);
+    this.folosesteAdresaSocietatii = this.folosesteAdresaSocietatii.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -39,13 +40,19 @@ class CentruCostTabel extends React.Component {
       centreCost: [],
       centreCostComponent: null,
 
-      // ad/edit modal
+      // add/edit modal
       show: false,
       isEdit: false,
+
+      // info toast
+      showToast: false,
+      toastMessage: '',
 
       // detalii centru cost
       id: 0,
       nume: '',
+      adresaSocietatii: '', // used for endpoint only
+      idadresa: '',
       adresa: '',
       localitate: '',
       tipJudet: 'Județ',
@@ -58,12 +65,20 @@ class CentruCostTabel extends React.Component {
       // detalii centru cost
       id: 0,
       nume: '',
-      adresa: null,
+      adresaSocietatii: '', // used for endpoint only
+      adresa: '',
+      localitate: '',
+      tipJudet: 'Județ',
+      judet: '',
     });
   }
 
   onChangeLocalitate(localitate) {
-    if (!localitate) return;
+    if (!localitate) {
+      this.setState({ localitatte: '', tipJudet: 'Județ' });
+      return;
+    }
+
     if (
       localitate.toLowerCase() === 'bucuresti' ||
       localitate.toLowerCase() === 'bucurești' ||
@@ -89,7 +104,12 @@ class CentruCostTabel extends React.Component {
       // detalii centru cost
       id: 0,
       nume: '',
-      adresa: null, // of type: { adresa: '', localitate: '', judet: '' }
+      adresaSocietatii: '', // used for endpoint only
+      idadresa: '',
+      adresa: '',
+      localitate: '',
+      tipJudet: 'Județ',
+      judet: '',
     });
   }
 
@@ -97,66 +117,73 @@ class CentruCostTabel extends React.Component {
     this.setState({
       centreCostComponent: this.state.centreCost.map((cc) => {
         return (
-          <tr>
+          <tr key={cc.id}>
             <th>{cc.nume}</th>
-            <th>{`${cc.adresa.adresa}, ${cc.adresa.localitate}, ${cc.adresa.judet}`}</th>
-            {/* edit button below */}
-            <Button
-              variant="outline-secondary"
-              className="ml-2 p-1 rounded-circle border-0"
-              onClick={() => this.editCC(cc)}
-            >
-              <Edit3 size={20} />
-            </Button>
-            {/* delete button below */}
-            <th className="d-inline-flex flex-row justify-content-around">
-              <PopupState variant="popover" popupId="demo-popup-popover">
-                {(popupState) => (
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      className="m-0 p-1 rounded-circle border-0"
-                      {...bindTrigger(popupState)}
-                    >
-                      <Trash2 fontSize="small" />
-                    </Button>
-                    <Popover
-                      {...bindPopover(popupState)}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                      }}
-                    >
-                      <Box p={2}>
-                        <Typography>Confirmare ștergere</Typography>
-                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                        <br />
-                        <Button
-                          variant="outline-danger"
-                          onClick={() => {
-                            popupState.close();
-                            this.deleteCC(cc.id);
-                          }}
-                          className="mt-2 "
-                        >
-                          Da
-                        </Button>
-                        <Button
-                          variant="outline-persondary"
-                          onClick={popupState.close}
-                          className="mt-2"
-                        >
-                          Nu
-                        </Button>
-                      </Box>
-                    </Popover>
-                  </div>
-                )}
-              </PopupState>
+            <th>
+              {cc.adresa ? `${cc.adresa.adresa}, ${cc.adresa.localitate}, ${cc.adresa.judet}` : '-'}
+            </th>
+
+            <th>
+              <div className="d-flex">
+                {/* edit button below */}
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  size="sm"
+                  onClick={() => this.editCC(cc)}
+                >
+                  <Edit3 size={18} />
+                </Button>
+                {/* delete button below */}
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        size="sm"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 size={18} />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Confirmare ștergere</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteCC(cc.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </div>
             </th>
           </tr>
         );
@@ -164,12 +191,15 @@ class CentruCostTabel extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.fillTable();
+  }
+
   async fillTable() {
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
-			.catch((err) => console.error(err));
-		console.log(centreCost);
+      .catch((err) => console.error(err));
     this.setState({ centreCost: centreCost }, this.renderTabel);
   }
 
@@ -183,92 +213,176 @@ class CentruCostTabel extends React.Component {
   async addCC() {
     const centruCost = {
       nume: this.state.nume,
-      adresa: this.state.adresa,
+      adresa: {
+        adresa: this.state.adresa,
+        localitate: this.state.localitate,
+        judet: this.state.judet,
+      },
     };
 
     let ok = await axios
-      .post(`${server.address}/centrucost/ids=${this.state.socsel.id}`, centruCost, {
-        headers: authHeader(),
-      })
+      .post(
+        `${server.address}/centrucost/ids=${this.state.socsel.id}/${this.state.adresaSocietatii}`,
+        centruCost,
+        { headers: authHeader() }
+      )
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
-    if (ok) this.fillTable();
+    if (ok)
+      this.setState(
+        {
+          show: false,
+          isEdit: false,
+          showToast: true,
+          toastMessage: `Centru cost "${centruCost.nume}" adăugat!`,
+        },
+        this.fillTable
+      );
   }
 
   async updateCC() {
-		const centruCost = {
+    const centruCost = {
       nume: this.state.nume,
-      adresa: this.state.adresa,
+      adresa: {
+        id: this.state.idadresa,
+        adresa: this.state.adresa,
+        localitate: this.state.localitate,
+        judet: this.state.judet,
+      },
     };
+    if (this.state.adresaSocietatii) centruCost.adresa.id = this.state.idadresa;
 
     let ok = await axios
-      .put(`${server.address}/centrucost/${this.state.id}`, centruCost, {
-        headers: authHeader(),
-      })
+      .put(
+        `${server.address}/centrucost/${this.state.id}/${this.state.adresaSocietatii}`,
+        centruCost,
+        { headers: authHeader() }
+      )
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
-
-    if (ok) this.fillTable();
-	}
+    if (ok)
+      this.setState(
+        {
+          show: false,
+          isEdit: false,
+          showToast: true,
+          toastMessage: `Centru cost "${centruCost.nume}" actualizat!`,
+        },
+        this.fillTable
+      );
+  }
 
   editCC(centruCost) {
-    this.setState({
-      show: true,
-      isEdit: true,
+    if (centruCost.adresa)
+      this.setState(
+        {
+          show: true,
+          isEdit: true,
 
-      id: centruCost.id,
-      nume: centruCost.nume,
-      adresa: centruCost.adresa,
-    });
+          id: centruCost.id,
+          nume: centruCost.nume,
+
+          idadresa: centruCost.adresa.id,
+          adresa: centruCost.adresa.adresa,
+          judet: centruCost.adresa.judet,
+        },
+        () => this.onChangeLocalitate(centruCost.adresa.localitate)
+      );
+    else
+      this.setState({
+        show: true,
+        isEdit: true,
+        id: centruCost.id,
+        nume: centruCost.nume,
+      });
+  }
+
+  folosesteAdresaSocietatii() {
+    if (this.state.adresaSocietatii)
+      this.setState({
+        adresaSocietatii: null,
+        idadresa: '',
+        adresa: '',
+        tipJudet: 'Județ',
+        judet: '',
+        localitate: '',
+      });
+    else
+      this.setState({
+        adresaSocietatii: 'adrsoc', // used for endpoint only
+        idadresa: this.props.adresaSocietate.id,
+        adresa: this.props.adresaSocietate.adresa,
+        tipJudet: this.props.adresaSocietate.tipJudet,
+        judet: this.props.adresaSocietate.judet,
+        localitate: this.props.adresaSocietate.localitate,
+      });
   }
 
   render() {
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
-    };
+		};
 
     return (
       <React.Fragment>
+        {/* ON ADD/EDIT SUCCESS TOAST */}
+        <Toast
+          onClose={() => this.setState({ showToast: false, toastMessage: '' })}
+          show={this.state.showToast}
+          delay={2500}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Centru cost</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
+
         {/* ADD/EDIT MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Centru cost</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group id="nume" as={Col} md="12">
-                <Form.Label>Nume centru cost</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  value={this.state.nume}
-                  onChange={(e) => this.setState({ nume: e.target.value })}
-                />
-              </Form.Group>
+            <Form.Group id="nume" as={Col} md="12">
+              <Form.Label>Nume centru cost</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                value={this.state.nume}
+                onChange={(e) => this.setState({ nume: e.target.value })}
+              />
+            </Form.Group>
 
+            <Row className="border rounded pt-3 pb-3 m-3">
               <Form.Group id="adresa" as={Col} md="12">
                 <Form.Label>Adresa</Form.Label>
                 <Form.Control
+									disabled={this.state.idadresa === this.props.adresaSocietate.id}
                   required
                   type="text"
-                  value={this.state.adresa}
+                  value={this.state.adresa || ''}
                   onChange={(e) => this.setState({ adresa: e.target.value })}
                 />
               </Form.Group>
               <Form.Group id="localitate" as={Col} md="12">
                 <Form.Label>Localitate</Form.Label>
                 <Form.Control
+									disabled={this.state.idadresa === this.props.adresaSocietate.id}
                   required
                   type="text"
-                  value={this.state.localitate}
+                  value={this.state.localitate || ''}
                   onChange={(e) => this.onChangeLocalitate(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group id="adresa" as={Col} md="12">
+              <Form.Group id="judet" as={Col} md="12">
                 <Form.Label>{this.state.tipJudet}</Form.Label>
                 <Form.Control
+									disabled={this.state.idadresa === this.props.adresaSocietate.id}
                   required
                   as="select"
                   value={this.state.judet}
@@ -278,7 +392,17 @@ class CentruCostTabel extends React.Component {
                   {judeteComponent()}
                 </Form.Control>
               </Form.Group>
-            </Form>
+              <Form.Group id="automatic" as={Col} md="12">
+                <Form.Check
+                  custom
+                  type="checkbox"
+                  id="folosesteAdresaSocietatii"
+                  label="Folosește adresa societății"
+                  checked={this.state.idadresa === this.props.adresaSocietate.id}
+                  onChange={this.folosesteAdresaSocietatii}
+                />
+              </Form.Group>
+            </Row>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.state.isEdit ? this.updateCC : this.addCC}>
@@ -293,15 +417,15 @@ class CentruCostTabel extends React.Component {
               <th>Nume centru cost</th>
               <th>Adresa, Localitate, Judet</th>
               <th>
-                <Button
-									size="sm"
-									className="float-right"
-                  onClick={this.fillTable}
-                >
+                <Button size="sm" className="float-right" onClick={this.fillTable}>
                   <RotateCw size={20} />
                   {/* ↺ */}
                 </Button>
-                <Button size="sm" className="float-right" onClick={() => this.setState({ show: true })}>
+                <Button
+                  size="sm"
+                  className="float-right"
+                  onClick={() => this.setState({ show: true })}
+                >
                   <Plus size={20} />
                 </Button>
               </th>

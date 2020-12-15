@@ -758,7 +758,6 @@ class CMTabel extends React.Component {
                     value={this.state.codboala}
                     onChange={(e) => this.onChangeCodboala(e.target.value)}
                   >
-                    {/* <option>-</option> */}
                     {codBoalaComponent}
                   </Form.Control>
                 </Form.Group>
@@ -791,7 +790,6 @@ class CMTabel extends React.Component {
                     value={this.state.procent}
                     onChange={(e) => this.onChangeProcent(e.target.value)}
                   >
-                    {/* <option>-</option> */}
                     {procentComponent}
                   </Form.Control>
                 </Form.Group>
