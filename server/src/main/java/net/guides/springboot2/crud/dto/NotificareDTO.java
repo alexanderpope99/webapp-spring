@@ -13,17 +13,10 @@ public class NotificareDTO {
 
 	private boolean citit;
 
-	private User user;
+	private Integer iduser;
 
 	public Integer getIduser() {
-		if (user == null)
-			return null;
-		else
-			return user.getId();
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+		return iduser;
 	}
 
 	public LocalDate getData() {
@@ -56,5 +49,13 @@ public class NotificareDTO {
 
 	public void setCitit(boolean citit) {
 		this.citit = citit;
+	}
+
+	public void setIduser(int iduser) {
+		this.iduser = iduser;
+	}
+
+	public void setIduserObj(User user) {
+		this.iduser = user.getId();
 	}
 }

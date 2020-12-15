@@ -14,7 +14,9 @@ import net.guides.springboot2.crud.repository.UserRepository;
 @Service
 public class NotificareService {
 
+	@Autowired
 	private UserRepository userRepository;
+
 	@Autowired
 	private NotificareRepository notificareRepository;
 
@@ -22,11 +24,9 @@ public class NotificareService {
 	private ModelMapper modelMapper;
 
 	public Notificare save(NotificareDTO notificareDTO) throws ResourceNotFoundException {
+		User user = userRepository.findById(notificareDTO.getIduser()).orElseThrow(
+				() -> new ResourceNotFoundException("User not found for this user id :: " + notificareDTO.getIduser()));
 		Notificare notificare = modelMapper.map(notificareDTO, Notificare.class);
-
-		User user = userRepository.findById(notificareDTO.getIduser()).orElseThrow(() -> new ResourceNotFoundException(
-				"Notificare not found for this user id :: " + notificareDTO.getIduser()));
-
 		notificare.setUser(user);
 
 		notificare = notificareRepository.save(notificare);

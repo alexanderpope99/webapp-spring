@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.dto.NotificareDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Notificare;
+import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.NotificareRepository;
 import net.guides.springboot2.crud.services.NotificareService;
 
@@ -40,7 +41,8 @@ public class NotificareController {
 	@GetMapping
 	public List<NotificareDTO> getAllDTO() {
 		List<Notificare> notificari = notificareRepository.findAll(Sort.by(Sort.Direction.ASC, "user"));
-
+		modelMapper.typeMap(Notificare.class, NotificareDTO.class).addMapping(Notificare::getUser,
+				NotificareDTO::setIduserObj);
 		List<NotificareDTO> notificariDTO = new ArrayList<>();
 		for (Notificare n : notificari) {
 			notificariDTO.add(modelMapper.map(n, NotificareDTO.class));
@@ -52,6 +54,8 @@ public class NotificareController {
 	@GetMapping("{id}")
 	public ResponseEntity<NotificareDTO> getNotificareByIdDTO(@PathVariable(value = "id") int notificareId)
 			throws ResourceNotFoundException {
+		modelMapper.typeMap(Notificare.class, NotificareDTO.class).addMapping(Notificare::getUser,
+				NotificareDTO::setIduserObj);
 		Notificare notificare = notificareRepository.findById(notificareId).orElseThrow(
 				() -> new ResourceNotFoundException("Notificare not found for this id :: " + notificareId));
 
@@ -59,7 +63,7 @@ public class NotificareController {
 	}
 
 	@PostMapping
-	public Notificare createNotificareDTO(@RequestBody NotificareDTO notificareDTO) throws ResourceNotFoundException {
+	public Notificare createNotificare(@RequestBody NotificareDTO notificareDTO) throws ResourceNotFoundException {
 		return notificareService.save(notificareDTO);
 	}
 
@@ -72,6 +76,15 @@ public class NotificareController {
 		notificareDetails.setId(notificare.getId());
 		final Notificare updatedNotificare = notificareRepository.save(notificareDetails);
 		return ResponseEntity.ok(updatedNotificare);
+	}
+
+	@PutMapping("{id}/read")
+	public Notificare readNotificare(@PathVariable(value = "id") int notificareId) throws ResourceNotFoundException {
+		Notificare notificare = notificareRepository.findById(notificareId).orElseThrow(
+				() -> new ResourceNotFoundException("Notificare not found for this id :: " + notificareId));
+		notificare.setCitit(true);
+		notificareRepository.save(notificare);
+		return notificare;
 	}
 
 	@DeleteMapping("{id}")
