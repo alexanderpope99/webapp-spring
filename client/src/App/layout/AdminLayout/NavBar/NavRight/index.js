@@ -15,14 +15,17 @@ import authHeader from '../../../../../../src/services/auth-header';
 
 import authService from '../../../../../../src/services/auth.service';
 
-import { Circle } from 'react-feather';
+import { Circle, X } from 'react-feather';
 
 class NavRight extends Component {
   constructor() {
     super();
     this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.readNotification = this.readNotification.bind(this);
+    this.readAllNotifications = this.readAllNotifications.bind(this);
     this.state = {
+      time: Date.now(),
       listOpen: false,
       user: authService.getCurrentUser(),
       notificariComponent: [],
@@ -30,7 +33,11 @@ class NavRight extends Component {
   }
 
   componentDidMount() {
+    this.interval = setInterval(() => this.onRefresh(), 60000);
     this.onRefresh();
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   logOut() {
@@ -40,7 +47,9 @@ class NavRight extends Component {
 
   async onRefresh() {
     const notificari = await axios
-      .get(`${server.address}/notificare/userid/${this.state.user.id}`, { headers: authHeader() })
+      .get(`${server.address}/notificare/userid/${this.state.user.id}/unread`, {
+        headers: authHeader(),
+      })
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
@@ -49,8 +58,28 @@ class NavRight extends Component {
     });
   }
 
+  async readNotification(e) {
+    await axios
+      .get(`${server.address}/notificare/${e.id}/read`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+    this.onRefresh();
+  }
+
+  async readAllNotifications() {
+    await this.state.notificariComponent.forEach(async (noti) => {
+      console.log(`${server.address}/notificare/${noti.id}/read`);
+
+      axios
+        .get(`${server.address}/notificare/${noti.id}/read`, { headers: authHeader() })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
+      this.onRefresh();
+    });
+  }
+
   getAvatarIcon() {
-    return this.state.currentUser ? (this.state.currentUser.gen ? Avatar2 : Avatar1) : Avatar1;
+    return this.state.user ? (this.state.user.gen ? Avatar2 : Avatar1) : Avatar1;
   }
 
   render() {
@@ -58,18 +87,22 @@ class NavRight extends Component {
     function millisConverter(millis) {
       switch (true) {
         case millis < 60000:
-          return ((millis % 60000) / 1000).toFixed(0) + ' s';
+          return 'acum ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
         case millis < 3600000:
-          return Math.floor(millis / 60000) + 'm ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
-        case millis < 86400000:
           return (
-            Math.floor((millis / (1000 * 60 * 60)) % 24) +
-            'h ' +
+            'acum ' +
             Math.floor(millis / 60000) +
             'm ' +
             ((millis % 60000) / 1000).toFixed(0) +
             ' s'
           );
+        case millis < 86400000:
+          var minutes = Math.floor((millis / (1000 * 60)) % 60);
+          var hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+
+          hours = hours < 10 ? '0' + hours : hours;
+          minutes = minutes < 10 ? '0' + minutes : minutes;
+          return 'acum ' + hours + ' h ' + minutes + ' m ';
         case millis < 604800000:
           return Math.floor(millis / 86400000) + ' days';
         default:
@@ -82,17 +115,25 @@ class NavRight extends Component {
     if (this.state.notificariComponent.length > 0)
       notificari = this.state.notificariComponent.map((notificare, index) => (
         <li className="notification">
-          <div onClick={() => (window.location.href = notificare.hyperlink)} className="media">
+          <div className="media">
             <div className="media-body">
               <p>
-                <strong>{notificare.titlu}</strong>
-                <span className="n-time text-muted">
+                <strong onClick={() => (window.location.href = notificare.hyperlink)}>
+                  {notificare.titlu}
+                </strong>
+                <span
+                  onClick={() => (window.location.href = notificare.hyperlink)}
+                  className="n-time text-muted"
+                >
                   <i className="icon feather icon-clock m-r-10" />
                   {millisConverter(Date.now() - Date.parse(notificare.timp))}
                 </span>
               </p>
               <p>{notificare.mesaj}</p>
             </div>
+            <Button onClick={() => this.readNotification(notificare)}>
+              <X />
+            </Button>
           </div>
         </li>
       ));
@@ -117,7 +158,7 @@ class NavRight extends Component {
                     {/* <a href={DEMO.BLANK_LINK} className="m-r-10">
                       mark as read
                     </a> */}
-                    <a href={DEMO.BLANK_LINK}>șterge tot</a>
+                    <Button onClick={() => this.readAllNotifications()}>șterge tot</Button>
                   </div>
                 </div>
                 <ul className="noti-body">{notificari}</ul>
@@ -135,7 +176,7 @@ class NavRight extends Component {
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
                   <img src={AvatarProp} className="img-radius" alt="User Profile" />
-                  <span>{this.state.currentUser ? this.state.currentUser.username : ''}</span>
+                  <span>{this.state.user ? this.state.user.username : ''}</span>
                   <a
                     href={DEMO.BLANK_LINK}
                     className="dud-logout"
