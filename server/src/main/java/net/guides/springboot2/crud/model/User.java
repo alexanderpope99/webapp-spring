@@ -49,7 +49,7 @@ public class User implements Serializable {
 	private boolean gen;
 
 	@JsonBackReference(value = "user-notificari")
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Notificare> notificari;
 
 	public User() {

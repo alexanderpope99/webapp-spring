@@ -32,7 +32,7 @@ public class Notificare implements Serializable {
 	private boolean citit;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user")
+	@JoinColumn(name = "iduser")
 	private User user;
 
 	public Notificare() {
