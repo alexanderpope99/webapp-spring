@@ -13,4 +13,14 @@ const months = [
   'Decembrie',
 ];
 
-export default months;
+const zileSaptamana = [
+	'Duminică',
+	'Luni',
+	'Marți',
+	'Miercuri',
+	'Joi',
+	'Vineri',
+	'Sâmbătă',
+];
+
+export {months, zileSaptamana};

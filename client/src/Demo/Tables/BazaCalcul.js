@@ -10,7 +10,7 @@ import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel } from '../Resources/angajatsel';
-import months from '../Resources/months';
+import { months } from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 

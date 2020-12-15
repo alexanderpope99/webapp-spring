@@ -6,7 +6,7 @@ retineri (doar avans merge)
 
 buton de 'show password' la schimba parola
 
-Sarbatori.js: sa se vada si ziua saptamanii
+font in iban
 
 TODO:
 	CentruCostTabel.js: line:189 - inexistent endpoint

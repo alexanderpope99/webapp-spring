@@ -8,17 +8,18 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
+import { months, zileSaptamana } from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
 class SarbatoriTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
     this.resetModals = this.resetModals.bind(this);
-    this.addSarbatoare = this.addSarbatoare.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.deleteSarbatoare = this.deleteSarbatoare.bind(this);
     this.setCurrentYear = this.setCurrentYear.bind(this);
     this.formatDate = this.formatDate.bind(this);
@@ -47,7 +48,6 @@ class SarbatoriTabel extends React.Component {
   componentDidMount() {
     this.setCurrentYear();
     this.fillTable();
-    console.log(this.formatDate('2020-01-01'));
   }
 
   setCurrentYear() {
@@ -119,14 +119,15 @@ class SarbatoriTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async addSarbatoare() {
+  async onSubmit(e) {
+		e.preventDefault();
+		
     const sarbatoare_body = {
       dela: this.state.dela || null,
       panala: this.state.panala || null,
       nume: this.state.nume || null,
       // in DB also has sporuripermanente
     };
-
     let ok = false;
     if (this.state.isEdit) {
       ok = await axios
@@ -149,10 +150,10 @@ class SarbatoriTabel extends React.Component {
       this.setState({
         show_confirm: true,
         modalMessage:
-          'Sărbătoarea ' +
+          'Sărbătoare ' +
           this.state.nume +
           (this.state.isEdit ? ' actualizată' : ' adăugată') +
-          ' cu succes 💾',
+          ' 💾',
       });
 
       this.fillTable();
@@ -249,52 +250,16 @@ class SarbatoriTabel extends React.Component {
   }
 
   formatDate(date) {
+		let data = new Date(date.substring(0, 10));
+		let ziuaSaptamanii = zileSaptamana[data.getDay()];
+
     let luna = date.substring(5, 7);
     let ziua = date.substring(8, 10).match('[1-9][0-9]*');
 
-    switch (luna) {
-      case '01':
-        luna = 'Ianuarie';
-        break;
-      case '02':
-        luna = 'Februarie';
-        break;
-      case '03':
-        luna = 'Martie';
-        break;
-      case '04':
-        luna = 'Aprilie';
-        break;
-      case '05':
-        luna = 'Mai';
-        break;
-      case '06':
-        luna = 'Iunie';
-        break;
-      case '07':
-        luna = 'Iulie';
-        break;
-      case '08':
-        luna = 'August';
-        break;
-      case '09':
-        luna = 'Septembrie';
-        break;
-      case '10':
-        luna = 'Octombrie';
-        break;
-      case '11':
-        luna = 'Noiembrie';
-        break;
-      case '12':
-        luna = 'Decembrie';
-        break;
+		luna = months[Number(luna) - 1];
 
-      default:
-        break;
-    }
-
-    return ziua + ' ' + luna;
+    return `${ziua} ${luna}, ${ziuaSaptamanii}`;
+    // return ziuaSaptamanii + ', ' + ziua + ' ' + luna;
   }
 
   render() {
@@ -306,7 +271,7 @@ class SarbatoriTabel extends React.Component {
             <Modal.Title>Sărbătoare nouă</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={this.onSubmit}>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
@@ -342,7 +307,7 @@ class SarbatoriTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.addSarbatoare}>
+            <Button variant="primary" onClick={this.onSubmit}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>

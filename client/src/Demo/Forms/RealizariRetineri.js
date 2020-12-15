@@ -20,7 +20,7 @@ import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import months from '../Resources/months';
+import { months } from '../Resources/months';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel, setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
