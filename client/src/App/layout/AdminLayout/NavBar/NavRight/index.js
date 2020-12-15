@@ -15,6 +15,8 @@ import authHeader from '../../../../../../src/services/auth-header';
 
 import authService from '../../../../../../src/services/auth.service';
 
+import { Circle } from 'react-feather';
+
 class NavRight extends Component {
   constructor() {
     super();
@@ -101,6 +103,11 @@ class NavRight extends Component {
           <li>
             <Dropdown alignRight={!this.props.rtlLayout}>
               <Dropdown.Toggle variant={'link'} id="dropdown-basic">
+                {notificari.length > 0 ? (
+                  <Circle style={{ width: '7.5', height: '7.5' }} fill="red" />
+                ) : (
+                  ''
+                )}
                 <i className="icon feather icon-bell" />
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="notification">
@@ -113,12 +120,7 @@ class NavRight extends Component {
                     <a href={DEMO.BLANK_LINK}>șterge tot</a>
                   </div>
                 </div>
-                <ul className="noti-body">
-                  {/* <li className="n-title">
-                    <p className="m-b-0">NEW</p>
-                  </li> */}
-                  {notificari}
-                </ul>
+                <ul className="noti-body">{notificari}</ul>
                 <div className="noti-footer">
                   <a href={'/notificari'}>arată tot</a>
                 </div>
