@@ -628,8 +628,6 @@ class FacturiTabel extends React.Component {
                     <Dropzone
                       inputLabel="Trage fișierul"
                       onChangeStatus={handleChangeStatus}
-                      // getUploadParams={getUploadParams}
-                      // onSubmit={handleSubmit}
                       maxFiles={1}
                     />
                   )}
@@ -718,6 +716,7 @@ class FacturiTabel extends React.Component {
                       <th>Centru Cost</th>
                       <th>Data plății</th>
                       <th>Suma Achitată</th>
+                      <th>Fișier atașat</th>
                     </tr>
                   </thead>
                   <tbody>{this.state.facturaComponent}</tbody>

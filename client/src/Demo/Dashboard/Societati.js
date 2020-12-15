@@ -76,7 +76,7 @@ class Societati extends React.Component {
   }
 
   onChangeLocalitate(localitate) {
-		if(!localitate) return;
+    if (!localitate) return;
     if (
       localitate.toLowerCase() === 'bucuresti' ||
       localitate.toLowerCase() === 'bucurești' ||
@@ -95,10 +95,16 @@ class Societati extends React.Component {
 
   handleClose(confirmWindow) {
     if (confirmWindow)
-      this.setState({
-        show_confirm: false,
-        modalMessage: '',
-      }, () => {setSocSel(null); window.location.reload()});
+      this.setState(
+        {
+          show_confirm: false,
+          modalMessage: '',
+        },
+        () => {
+          setSocSel(null);
+          window.location.reload();
+        }
+      );
     else
       this.setState({
         show: false,
@@ -132,7 +138,7 @@ class Societati extends React.Component {
       .catch((err) => console.log(err));
 
     if (Array.isArray(societati_res)) {
-			var societati = this.state.societati;
+      var societati = this.state.societati;
       // var date_societati = this.state.date_societati;
       societati_res.forEach((societate) => {
         societati[societate.nume] = { opacity: '.3', ...societate };
@@ -169,7 +175,8 @@ class Societati extends React.Component {
   }
 
   async deleteSocietate(id) {
-    axios.delete(`${server.address}/societate/${id}`, { headers: authHeader() })
+    axios
+      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
       .then(() => {
         // alert(`Deleted ${id}`);
         setSocSel(null);
@@ -484,6 +491,7 @@ class Societati extends React.Component {
                     type="text"
                     placeholder="CIF"
                     value={this.state.cif || ''}
+                    style={{ fontFamily: 'Consolas, Courier New' }}
                     onChange={(e) =>
                       this.setState({
                         cif: e.target.value,
@@ -510,6 +518,7 @@ class Societati extends React.Component {
                     type="text"
                     placeholder="regcom"
                     value={this.state.regcom || ''}
+                    style={{ fontFamily: 'Consolas, Courier New' }}
                     onChange={(e) =>
                       this.setState({
                         regcom: e.target.value,
@@ -556,17 +565,25 @@ class Societati extends React.Component {
                     }
                   />
                 </Form.Group>
-								<Col>
-								<Button  href="/forms/add-societate?isEdit" variant="link" className="float-right mt-4">Mai multe</Button>
-								</Col>
+                <Form.Group as={Col} md="6">
+                  <Form.Label> </Form.Label>
+                  <Button href="/forms/add-societate?isEdit" variant="outline-primary" block>
+                    Mai multe detalii
+                  </Button>
+                </Form.Group>
               </Row>
             </Form>
-					</Modal.Body>
+          </Modal.Body>
           <Modal.Footer>
             <PopupState variant="popover" popupId="demo-popup-popover">
               {(popupState) => (
                 <div>
-                  <Button variant="outline-danger" size="sm" className="border-0" {...bindTrigger(popupState)}>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    className="border-0"
+                    {...bindTrigger(popupState)}
+                  >
                     Șterge Societatea
                   </Button>
                   <Popover

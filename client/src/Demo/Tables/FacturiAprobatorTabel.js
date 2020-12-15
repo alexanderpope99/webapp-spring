@@ -106,6 +106,8 @@ class FacturiAprobatorTabel extends React.Component {
       this.setState({
         showApprover: true,
         id: fact.id,
+        codproiect: fact.codproiect,
+        observatii: fact.observatii,
       });
     }
   }
@@ -120,6 +122,8 @@ class FacturiAprobatorTabel extends React.Component {
       this.setState({
         showRejecter: true,
         id: fact.id,
+        codproiect: fact.codproiect,
+        observatii: fact.observatii,
       });
     }
   }
@@ -135,6 +139,8 @@ class FacturiAprobatorTabel extends React.Component {
       this.setState({
         showApprover: true,
         id: fact.id,
+        codproiect: fact.codproiect,
+        observatii: fact.observatii,
       });
     }
   }
@@ -264,22 +270,22 @@ class FacturiAprobatorTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-			.catch((err) => console.error(err));
-			
+      .catch((err) => console.error(err));
+
     const aprobatori = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-			.catch((err) => console.error(err));
-			
+      .catch((err) => console.error(err));
+
     const fact = await axios
       .get(`${server.address}/factura/idsocuid/${this.state.socsel.id}&${this.state.user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-			.catch((err) => console.error(err));
-		console.log(fact);
+      .catch((err) => console.error(err));
+
     if (centreCost) {
       this.setState(
         {
@@ -406,7 +412,6 @@ class FacturiAprobatorTabel extends React.Component {
   }
 
   render() {
-
     return (
       <Aux>
         {/* confirm modal */}
@@ -428,26 +433,24 @@ class FacturiAprobatorTabel extends React.Component {
             <Modal.Title>Aprobator</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Row>
-                <Form.Group as={Col} md="12">
-                  <Form.Label>Cod Proiect</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.codproiect}
-                    onChange={(e) => this.setState({ codproiect: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} md="12">
-                  <Form.Label>Observații</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    value={this.state.observatii}
-                    onChange={(e) => this.setState({ observatii: e.target.value })}
-                  />
-                </Form.Group>
-              </Row>
-            </Form>
+            <Row>
+              <Form.Group as={Col} md="12">
+                <Form.Label>Cod Proiect</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.codproiect}
+                  onChange={(e) => this.setState({ codproiect: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group as={Col} md="12">
+                <Form.Label>Observații</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  value={this.state.observatii}
+                  onChange={(e) => this.setState({ observatii: e.target.value })}
+                />
+              </Form.Group>
+            </Row>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.handleCloseApprover}>
@@ -462,18 +465,16 @@ class FacturiAprobatorTabel extends React.Component {
             <Modal.Title>Aprobator</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Row>
-                <Form.Group as={Col} md="6">
-                  <Form.Label>Observații</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.observatii}
-                    onChange={(e) => this.setState({ observatii: e.target.value })}
-                  />
-                </Form.Group>
-              </Row>
-            </Form>
+            <Row>
+              <Form.Group as={Col} md="6">
+                <Form.Label>Observații</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.observatii}
+                  onChange={(e) => this.setState({ observatii: e.target.value })}
+                />
+              </Form.Group>
+            </Row>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.handleRejectApprover}>
@@ -534,6 +535,7 @@ class FacturiAprobatorTabel extends React.Component {
                       <th>Centru Cost</th>
                       <th>Data plății</th>
                       <th>Suma Achitată</th>
+                      <th>Fișier atașat</th>
                     </tr>
                   </thead>
                   <tbody>{this.state.facturaComponent}</tbody>

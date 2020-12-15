@@ -95,7 +95,7 @@ class CentruCostTabel extends React.Component {
 
   renderTabel() {
     this.setState({
-      centreCostComponent: this.state.centreCost.map((cc, index) => {
+      centreCostComponent: this.state.centreCost.map((cc) => {
         return (
           <tr>
             <th>{cc.nume}</th>
@@ -168,8 +168,9 @@ class CentruCostTabel extends React.Component {
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
-    this.setState({ entreCost: centreCost }, this.renderTabel);
+			.catch((err) => console.error(err));
+		console.log(centreCost);
+    this.setState({ centreCost: centreCost }, this.renderTabel);
   }
 
   async deleteCC(id) {
@@ -293,14 +294,14 @@ class CentruCostTabel extends React.Component {
               <th>Adresa, Localitate, Judet</th>
               <th>
                 <Button
-                  size="sm"
-                  style={{ fontSize: '1.25rem', float: 'right' }}
+									size="sm"
+									className="float-right"
                   onClick={this.fillTable}
                 >
                   <RotateCw size={20} />
                   {/* ↺ */}
                 </Button>
-                <Button className="float-right" onClick={() => this.setState({ show: true })}>
+                <Button size="sm" className="float-right" onClick={() => this.setState({ show: true })}>
                   <Plus size={20} />
                 </Button>
               </th>

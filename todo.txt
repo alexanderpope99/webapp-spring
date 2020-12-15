@@ -6,6 +6,8 @@ retineri (doar avans merge)
 
 buton de 'show password' la schimba parola
 
+unde pun superior pentru un angajat?
+
 TODO:
 	CentruCostTabel.js: line:189 - inexistent endpoint
 

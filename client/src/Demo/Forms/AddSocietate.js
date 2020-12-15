@@ -12,11 +12,11 @@ import authService from '../../services/auth.service';
 import CentruCostTabel from '../UIElements/Forms/CentruCostTabel';
 
 const judeteOptions = judete.map((judet, index) => {
-	return <option key={index}>{judet}</option>;
+  return <option key={index}>{judet}</option>;
 });
 
 const sectoareOptions = sectoare.map((sector, index) => {
-	return <option key={index}>{sector}</option>;
+  return <option key={index}>{sector}</option>;
 });
 
 class AddSocietate extends React.Component {
@@ -120,7 +120,6 @@ class AddSocietate extends React.Component {
 
   onChangeLocalitate(localitate) {
     if (!localitate) return;
-    console.log(localitate);
     if (
       localitate.toLowerCase() === 'bucuresti' ||
       localitate.toLowerCase() === 'bucurești' ||
@@ -201,8 +200,6 @@ class AddSocietate extends React.Component {
   }
 
   render() {
-
-
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
@@ -250,7 +247,7 @@ class AddSocietate extends React.Component {
                         }
                       />
                     </Form.Group>
-                    
+
                     <Form.Group controlId="localitate" as={Col} md="6">
                       <Form.Label>Localitate</Form.Label>
                       <Form.Control
@@ -275,7 +272,7 @@ class AddSocietate extends React.Component {
                         {judeteComponent()}
                       </Form.Control>
                     </Form.Group>
-										<Form.Group controlId="adresa" as={Col} md="6">
+                    <Form.Group controlId="adresa" as={Col} md="6">
                       <Form.Label>Adresă</Form.Label>
                       <Form.Control
                         type="text"
@@ -307,6 +304,7 @@ class AddSocietate extends React.Component {
                         type="text"
                         placeholder="CIF"
                         value={this.state.cif}
+                        style={{ fontFamily: 'Consolas, Courier New' }}
                         onChange={(e) =>
                           this.setState({
                             cif: e.target.value,
@@ -333,6 +331,7 @@ class AddSocietate extends React.Component {
                         type="text"
                         placeholder="regcom"
                         value={this.state.regcom}
+                        style={{ fontFamily: 'Consolas, Courier New' }}
                         onChange={(e) =>
                           this.setState({
                             regcom: e.target.value,

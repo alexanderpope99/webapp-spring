@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.dto.NotificareDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Notificare;
-import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.NotificareRepository;
 import net.guides.springboot2.crud.services.NotificareService;
 
