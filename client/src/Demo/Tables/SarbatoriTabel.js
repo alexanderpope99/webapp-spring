@@ -119,7 +119,9 @@ class SarbatoriTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  async onSubmit() {
+  async onSubmit(e) {
+		e.preventDefault();
+		
     const sarbatoare_body = {
       dela: this.state.dela || null,
       panala: this.state.panala || null,
@@ -269,7 +271,7 @@ class SarbatoriTabel extends React.Component {
             <Modal.Title>Sărbătoare nouă</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={this.onSubmit}>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
