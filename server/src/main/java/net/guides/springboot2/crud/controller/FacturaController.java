@@ -69,7 +69,7 @@ public class FacturaController {
 
 	@Transactional
 	@GetMapping("/idsoc/{ids}")
-	public List<Factura> getFacturaByIdSocietate(@PathVariable(value = "ids") int societateId) {
+	public List<Factura> getFacturaByIdSocietate(@PathVariable("ids") int societateId) {
 		return facturaRepository.findBySocietate_Id(societateId);
 	}
 

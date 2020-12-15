@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Entity
 @Table(name = "factura")
@@ -59,7 +58,7 @@ public class Factura implements Serializable {
 	private String status;
 
 	@Column(name = "data")
-	@DateTimeFormat(pattern = "yyyy-MM-dd", iso = ISO.DATE)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate data;
 
 	@Column(name = "termenscadenta")

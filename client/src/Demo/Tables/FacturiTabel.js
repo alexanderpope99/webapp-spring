@@ -236,112 +236,108 @@ class FacturiTabel extends React.Component {
 
     const facturi = this.state.factura.sort(compare);
     this.setState({
-      facturaComponent: await Promise.all(
-        facturi.map(async (fact, index) => {
-          return (
-            // TODO
-            <tr
-              style={{
-                backgroundColor: this.getStatusColor(fact.status),
-              }}
-              key={fact.id}
-            >
-              <th>
-                <div className="d-flex">
-                  <Button
-                    onClick={() => this.editFactura(fact)}
-                    variant="outline-secondary"
-                    className="m-1 p-1 rounded-circle border-0"
-                  >
-                    <Edit3 size={20} />
-                  </Button>
+      facturaComponent: facturi.map((fact, index) => {
+        return (
+          // TODO
+          <tr
+            style={{
+              backgroundColor: this.getStatusColor(fact.status),
+            }}
+            key={fact.id}
+          >
+            <th>
+              <div className="d-flex">
+                <Button
+                  onClick={() => this.editFactura(fact)}
+                  variant="outline-secondary"
+                  className="m-1 p-1 rounded-circle border-0"
+                >
+                  <Edit3 size={20} />
+                </Button>
 
-                  <PopupState variant="popover" popupId="demo-popup-popover">
-                    {(popupState) => (
-                      <div>
-                        <Button
-                          variant="outline-secondary"
-                          className="m-1 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
-                        >
-                          <Trash2 size={20} />
-                        </Button>
-                        <Popover
-                          {...bindPopover(popupState)}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                          }}
-                        >
-                          <Box p={2}>
-                            <Typography>
-                              Sigur ștergeți factura {fact.dela} {fact.panala}?
-                            </Typography>
-                            <Typography variant="caption">
-                              Datele nu mai pot fi recuperate
-                            </Typography>
-                            <br />
-                            <Button
-                              variant="outline-danger"
-                              onClick={() => {
-                                popupState.close();
-                                this.deleteFactura(fact.id);
-                              }}
-                              className="mt-2 "
-                            >
-                              Da
-                            </Button>
-                            <Button
-                              variant="outline-persondary"
-                              onClick={popupState.close}
-                              className="mt-2"
-                            >
-                              Nu
-                            </Button>
-                          </Box>
-                        </Popover>
-                      </div>
-                    )}
-                  </PopupState>
-                </div>
-              </th>
-              <th>{fact.status}</th>
-              <th>{fact.codproiect ? fact.codproiect : '-'}</th>
-              <th>{fact.observatii ? fact.observatii : '-'}</th>
-              <th>{fact.denumirefurnizor}</th>
-              <th>{fact.ciffurnizor}</th>
-              <th>{fact.nr}</th>
-              <th>{fact.data}</th>
-              <th>{fact.moneda}</th>
-              <th>{fact.sumafaratva}</th>
-              <th>{fact.termenscadenta}</th>
-              <th>{fact.tipachizitie}</th>
-              <th>{fact.descriereactivitati}</th>
-              <th>
-                {fact.aprobator
-                  ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
-                  : '-'}
-              </th>
-              <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
-              <th>{fact.dataplatii}</th>
-              <th>{fact.sumaachitata}</th>
-              <th>
-                {fact.numefisier ? (
-                  <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>
-                    {fact.numefisier}
-                  </Button>
-                ) : (
-                  'Niciun fișier încărcat'
-                )}
-              </th>
-            </tr>
-          );
-        })
-      ),
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-1 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 size={20} />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>
+                            Sigur ștergeți factura {fact.dela} {fact.panala}?
+                          </Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteFactura(fact.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </div>
+            </th>
+            <th>{fact.status}</th>
+            <th>{fact.codproiect ? fact.codproiect : '-'}</th>
+            <th>{fact.observatii ? fact.observatii : '-'}</th>
+            <th>{fact.denumirefurnizor}</th>
+            <th>{fact.ciffurnizor}</th>
+            <th>{fact.nr}</th>
+            <th>{fact.data}</th>
+            <th>{fact.moneda}</th>
+            <th>{fact.sumafaratva}</th>
+            <th>{fact.termenscadenta}</th>
+            <th>{fact.tipachizitie}</th>
+            <th>{fact.descriereactivitati}</th>
+            <th>
+              {fact.aprobator
+                ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+                : '-'}
+            </th>
+            <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
+            <th>{fact.dataplatii}</th>
+            <th>{fact.sumaachitata}</th>
+            <th>
+              {fact.numefisier ? (
+                <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>
+                  {fact.numefisier}
+                </Button>
+              ) : (
+                'Niciun fișier încărcat'
+              )}
+            </th>
+          </tr>
+        );
+      }),
     });
   }
 
@@ -475,14 +471,7 @@ class FacturiTabel extends React.Component {
         this.setState({ fisier: file, numefisier: file.name });
       }
     };
-    // const getUploadParams = ({file, meta}) => {
-    // 	this.setState({fisier: file});
-    // }
 
-    // const handleSubmit = (files, allFiles) => {
-    // 	console.log(files[0].meta);
-    // 	allFiles.forEach(f => f.remove());
-    // }
     return (
       <Aux>
         {/* add/edit modal */}

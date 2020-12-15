@@ -623,7 +623,7 @@ class Contract extends React.Component {
                     <Form.Control
                       type="text"
                       value={this.state.iban}
-                      style={{fontFamily: "Courier New"}}
+                      style={{fontFamily: "Consolas, Courier New"}}
                       onChange={(e) => {
                         this.setState({ iban: e.target.value });
                       }}

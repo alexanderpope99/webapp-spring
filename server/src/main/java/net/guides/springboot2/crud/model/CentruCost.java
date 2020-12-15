@@ -27,7 +27,7 @@ public class CentruCost implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idadresa", referencedColumnName = "id")
 	private Adresa adresa;
 
