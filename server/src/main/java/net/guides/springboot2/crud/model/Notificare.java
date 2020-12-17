@@ -1,7 +1,7 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,14 +22,20 @@ public class Notificare implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@Column(name = "titlu")
+	private String titlu;
+
 	@Column(name = "mesaj")
 	private String mesaj;
 
-	@Column(name = "data")
-	private LocalDate data;
+	@Column(name = "timp")
+	private LocalDateTime timp;
 
 	@Column(name = "citit")
 	private boolean citit;
+
+	@Column(name = "hyperlink")
+	private String hyperlink;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "iduser")
@@ -38,9 +44,9 @@ public class Notificare implements Serializable {
 	public Notificare() {
 	}
 
-	public Notificare(String mesaj, LocalDate data, boolean citit, User user) {
+	public Notificare(String mesaj, LocalDateTime timp, boolean citit, User user) {
 		this.mesaj = mesaj;
-		this.data = data;
+		this.timp = timp;
 		this.citit = citit;
 		this.user = user;
 	}
@@ -53,12 +59,20 @@ public class Notificare implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDate getData() {
-		return data;
+	public LocalDateTime getTimp() {
+		return timp;
 	}
 
-	public void setData(LocalDate data) {
-		this.data = data;
+	public void setTimp(LocalDateTime timp) {
+		this.timp = timp;
+	}
+
+	public String getTitlu() {
+		return titlu;
+	}
+
+	public void setTitlu(String titlu) {
+		this.titlu = titlu;
 	}
 
 	public String getMesaj() {
@@ -67,6 +81,14 @@ public class Notificare implements Serializable {
 
 	public void setMesaj(String mesaj) {
 		this.mesaj = mesaj;
+	}
+
+	public String getHyperlink() {
+		return hyperlink;
+	}
+
+	public void setHyperlink(String hyperlink) {
+		this.hyperlink = hyperlink;
 	}
 
 	public User getUser() {

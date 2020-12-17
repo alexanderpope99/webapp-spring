@@ -1,6 +1,6 @@
 package net.guides.springboot2.crud.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import net.guides.springboot2.crud.model.User;
 
@@ -9,7 +9,11 @@ public class NotificareDTO {
 
 	private String mesaj;
 
-	private LocalDate data;
+	private String titlu;
+
+	private String hyperlink;
+
+	private LocalDateTime timp;
 
 	private boolean citit;
 
@@ -19,12 +23,12 @@ public class NotificareDTO {
 		return iduser;
 	}
 
-	public LocalDate getData() {
-		return data;
+	public LocalDateTime getTimp() {
+		return timp;
 	}
 
-	public void setData(LocalDate data) {
-		this.data = data;
+	public void setTimp(LocalDateTime timp) {
+		this.timp = timp;
 	}
 
 	public int getId() {
@@ -35,12 +39,28 @@ public class NotificareDTO {
 		this.id = id;
 	}
 
+	public String getTitlu() {
+		return titlu;
+	}
+
+	public void setTitlu(String titlu) {
+		this.titlu = titlu;
+	}
+
 	public String getMesaj() {
 		return mesaj;
 	}
 
 	public void setMesaj(String mesaj) {
 		this.mesaj = mesaj;
+	}
+
+	public String getHyperlink() {
+		return hyperlink;
+	}
+
+	public void setHyperlink(String hyperlink) {
+		this.hyperlink = hyperlink;
 	}
 
 	public boolean isCitit() {
