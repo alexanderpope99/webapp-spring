@@ -9,6 +9,7 @@ buton de 'show password' la schimba parola
 unde pun superior pentru un angajat?
 
 TODO:
+	refix societati dashboard
 	verifica date craciun
 	multipart temporary file pentru rapoarte - se sterge dupa download
 
