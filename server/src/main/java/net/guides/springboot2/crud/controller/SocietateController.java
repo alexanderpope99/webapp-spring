@@ -86,10 +86,8 @@ public class SocietateController {
 
 	@PutMapping("{id}")
 	public ResponseEntity<Societate> updateSocietate(@PathVariable(value = "id") int id,
-			@RequestBody Societate newSocietate) throws ResourceNotFoundException {
-		Societate societate = societateRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
-		newSocietate.setId(societate.getId());
+			@RequestBody Societate newSocietate) {
+		newSocietate.setId(id);
 
 		final Societate updatedSocietate = societateRepository.save(newSocietate);
 

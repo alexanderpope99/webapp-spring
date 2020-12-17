@@ -1,4 +1,4 @@
-de mutat baza de date din aplicatie c# in aici
+de mutat baza de date din aplicatia c# in aici
 
 alte retineri
 alte drepturi
@@ -9,8 +9,8 @@ buton de 'show password' la schimba parola
 unde pun superior pentru un angajat?
 
 TODO:
-	make {this.state.idadresa === this.props.adresaSocietate.id} a variable
-	adresa societate
+	verifica date craciun
+	multipart temporary file pentru rapoarte - se sterge dupa download
 
 UPGRADES:
 	backend - CentruCost ManyToOne to Societate
@@ -31,7 +31,7 @@ UserTabel:
 
 *** INTREBARI: ***
 CONCEDIU DE ODIHNA:
-	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) DACA INCLUDE WEEKEND
+	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) - INCLUDE WEEKEND?
 
 _________________________________________
 

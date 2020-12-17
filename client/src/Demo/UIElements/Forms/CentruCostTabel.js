@@ -324,6 +324,7 @@ class CentruCostTabel extends React.Component {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
 		};
+		const isAdresaSocietatii = (this.state.idadresa === this.props.adresaSocietate.id);
 
     return (
       <React.Fragment>
@@ -362,7 +363,7 @@ class CentruCostTabel extends React.Component {
               <Form.Group id="adresa" as={Col} md="12">
                 <Form.Label>Adresa</Form.Label>
                 <Form.Control
-									disabled={this.state.idadresa === this.props.adresaSocietate.id}
+									disabled={isAdresaSocietatii}
                   required
                   type="text"
                   value={this.state.adresa || ''}
@@ -372,7 +373,7 @@ class CentruCostTabel extends React.Component {
               <Form.Group id="localitate" as={Col} md="12">
                 <Form.Label>Localitate</Form.Label>
                 <Form.Control
-									disabled={this.state.idadresa === this.props.adresaSocietate.id}
+									disabled={isAdresaSocietatii}
                   required
                   type="text"
                   value={this.state.localitate || ''}
@@ -382,7 +383,7 @@ class CentruCostTabel extends React.Component {
               <Form.Group id="judet" as={Col} md="12">
                 <Form.Label>{this.state.tipJudet}</Form.Label>
                 <Form.Control
-									disabled={this.state.idadresa === this.props.adresaSocietate.id}
+									disabled={isAdresaSocietatii}
                   required
                   as="select"
                   value={this.state.judet}
@@ -398,7 +399,7 @@ class CentruCostTabel extends React.Component {
                   type="checkbox"
                   id="folosesteAdresaSocietatii"
                   label="Folosește adresa societății"
-                  checked={this.state.idadresa === this.props.adresaSocietate.id}
+                  checked={isAdresaSocietatii}
                   onChange={this.folosesteAdresaSocietatii}
                 />
               </Form.Group>

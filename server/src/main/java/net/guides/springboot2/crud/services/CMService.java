@@ -59,7 +59,7 @@ public class CMService {
 	public int getZileCM(int luna, int an, int idcontract) {
 		// find all by idcontract
 		List<CM> concediiMedicale = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
-		if (concediiMedicale.size() == 0)
+		if (concediiMedicale.isEmpty())
 			return 0;
 
 		return zileC(luna, an, concediiMedicale);
@@ -68,7 +68,7 @@ public class CMService {
 	public int getZileCMLucratoare(int luna, int an, int idcontract) {
 		// find all by idcontract
 		List<CM> concediiMedicale = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
-		if (concediiMedicale.size() == 0)
+		if (concediiMedicale.isEmpty())
 			return 0;
 
 		return zileCLucratoare(luna, an, concediiMedicale);
@@ -135,9 +135,9 @@ public class CMService {
 
 			for (int i = 1; i <= nrZileLuna; ++i) {
 				day = LocalDate.of(an, luna, i);
-				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
-					if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
-						zileC++;
+				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0 && day.getDayOfWeek().getValue() != 6
+						&& day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
+					zileC++;
 			}
 		}
 		return zileC;

@@ -46,7 +46,7 @@ class AddSocietate extends React.Component {
       cif: '',
       capsoc: '',
 			regcom: '',
-			idadresa: '',
+			idadresa: null,
       adresa: '',
       localitate: '',
       judet: '',
@@ -68,7 +68,7 @@ class AddSocietate extends React.Component {
       cif: '',
       capsoc: '',
 			regcom: '',
-			idadresa: '',
+			idadresa: null,
       adresa: '',
       localitate: '',
       judet: '',
@@ -119,6 +119,7 @@ class AddSocietate extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
+			console.log(societate.adresa.id);
     if (societate.adresa)
       this.setState(
         {
@@ -151,14 +152,14 @@ class AddSocietate extends React.Component {
     } catch (err) {
       console.log(err);
     }
-
+		
     let adresa_body = {
-			id: this.state.idadresa || null,
+			id: this.state.idadresa,
       adresa: this.state.adresa || null,
       localitate: this.state.localitate || null,
       judet: this.state.judet || null,
       tara: null,
-    };
+		};
 
     // build societate for POST
     const societate_body = {
@@ -175,8 +176,8 @@ class AddSocietate extends React.Component {
       centreCost: null,
     };
 
-    const user = authService.getCurrentUser();
-
+		const user = authService.getCurrentUser();
+		
     var ok;
     if (this.state.isEdit) {
       // put
@@ -209,7 +210,7 @@ class AddSocietate extends React.Component {
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
-    };
+		};
 
     return (
       <Aux>
