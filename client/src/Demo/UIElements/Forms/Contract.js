@@ -74,8 +74,8 @@ class Contract extends React.Component {
       show: false,
       modalMessage: '', //text
 
-      superiori: [],
       angajat: null,
+      superiori: [],
     };
   }
 
@@ -119,9 +119,11 @@ class Contract extends React.Component {
 
       show: false,
       modalMessage: '', //text
+
+      angajat: null,
     });
-	}
-	
+  }
+
   handleClose() {
     this.setState(
       {
@@ -153,23 +155,40 @@ class Contract extends React.Component {
       default:
         break;
     }
-	}
-	
+  }
+
+  async getSuperiori() {
+    const superiori = await axios
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) =>
+        res.data.map((angajat) => ({
+          id: angajat.persoana.id,
+          numeintreg: angajat.persoana.nume + ' ' + angajat.persoana.prenume,
+        }))
+      )
+      .catch((err) => console.error(err));
+    console.log(superiori);
+  }
+
   async fillForm() {
-		const angajatsel = getAngajatSel();
+    this.getSuperiori();
+
+    const angajatsel = getAngajatSel();
     const angajat = await axios
       .get(`${server.address}/angajat/expand/${angajatsel.idpersoana}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-			.catch((err) => console.error(err));
+      .catch((err) => console.error(err));
 
     if (angajat.contract) {
       let contract = angajat.contract;
       this.setState(
         {
-					angajat: angajat,
-					angajatsel: getAngajatSel(),
+          angajat: angajat,
+          angajatsel: getAngajatSel(),
 
           id: contract.id,
           modelContract: contract.tip || '', //text
@@ -229,6 +248,9 @@ class Contract extends React.Component {
   }
 
   componentDidMount() {
+    // await get centre cost here
+    // ... //
+
     this.fillForm();
   }
 
@@ -338,8 +360,7 @@ class Contract extends React.Component {
     if (contract) {
       this.setState({
         show: true,
-        modalMessage:
-          this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat cu succes 📄',
+        modalMessage: this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat cu succes 📄',
         id: contract.id,
       });
     } else {
@@ -907,6 +928,20 @@ class Contract extends React.Component {
                     this.setState({ cor: e.target.value });
                   }}
                 />
+              </Form.Group>
+            </Col>
+
+            <Col md={6}>
+              <Form.Group id="superior">
+                <Form.Label>Superior</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.numeSuperior}
+                  onChange={this.onChangeSuperior}
+                >
+                  <option>-</option>
+                  {/* superioriComponent */}
+                </Form.Control>
               </Form.Group>
             </Col>
           </Row>
