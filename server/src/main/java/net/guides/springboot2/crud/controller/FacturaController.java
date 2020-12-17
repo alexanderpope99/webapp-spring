@@ -74,6 +74,12 @@ public class FacturaController {
 	}
 
 	@Transactional
+	@GetMapping("/idsoc/approved/{ids}")
+	public List<Factura> getApprovedFacturaByIdSocietate(@PathVariable("ids") int societateId) {
+		return facturaRepository.findBySocietate_IdAndStatus(societateId, "Aprobată");
+	}
+
+	@Transactional
 	@GetMapping("/{id}/respinge")
 	public ResponseEntity<String> rejectFacturaById(@PathVariable(value = "id") int facturaId)
 			throws ResourceNotFoundException {

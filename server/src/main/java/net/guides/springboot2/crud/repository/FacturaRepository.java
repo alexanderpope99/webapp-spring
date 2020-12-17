@@ -11,5 +11,7 @@ import net.guides.springboot2.crud.model.Factura;
 public interface FacturaRepository extends JpaRepository<Factura, Integer> {
 	List<Factura> findBySocietate_Id(int idsocietate);
 
+	List<Factura> findBySocietate_IdAndStatus(int idsocietate, String status);
+
 	List<Factura> findBySocietate_IdAndAprobator_User_Id(int idsocietate, int userID);
 }

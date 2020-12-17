@@ -136,7 +136,6 @@ class FacturiOperatorTabel extends React.Component {
           return (
             // TODO
             <tr style={{ backgroundColor: this.getStatusColor(fact.status) }} key={fact.id}>
-              <th>{fact.status}</th>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
@@ -192,7 +191,7 @@ class FacturiOperatorTabel extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
     const fact = await axios
-      .get(`${server.address}/factura/idsocida/${this.state.socsel.id}&${this.state.user.id}`, {
+      .get(`${server.address}/factura/idsoc/approved/${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -486,7 +485,7 @@ class FacturiOperatorTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Operare Facturi</Card.Title>
+                <Card.Title as="h5">Operare Facturi Aprobate</Card.Title>
 
                 <Button
                   variant="outline-info"
@@ -502,8 +501,6 @@ class FacturiOperatorTabel extends React.Component {
                 <Table responsive hover>
                   <thead>
                     <tr>
-                      <th></th>
-                      <th>Status</th>
                       <th
                         onClick={() => this.changeSortOrder('denumirefurnizor')}
                         style={{ cursor: 'pointer' }}
