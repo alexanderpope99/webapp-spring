@@ -23,8 +23,8 @@ class NavRight extends Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
     this.readNotification = this.readNotification.bind(this);
-		this.readAllNotifications = this.readAllNotifications.bind(this);
-		
+    this.readAllNotifications = this.readAllNotifications.bind(this);
+
     this.state = {
       time: Date.now(),
       listOpen: false,
@@ -78,38 +78,34 @@ class NavRight extends Component {
 
   getAvatarIcon() {
     return this.state.user ? (this.state.user.gen ? Avatar2 : Avatar1) : Avatar1;
-	}
-	
-	millisConverter(millis) {
-		switch (true) {
-			case millis < 60000:
-				return 'acum ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
-			case millis < 3600000:
-				return (
-					'acum ' +
-					Math.floor(millis / 60000) +
-					'm ' +
-					((millis % 60000) / 1000).toFixed(0) +
-					' s'
-				);
-			case millis < 86400000:
-				var minutes = Math.floor((millis / (1000 * 60)) % 60);
-				var hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+  }
 
-				hours = hours < 10 ? '0' + hours : hours;
-				minutes = minutes < 10 ? '0' + minutes : minutes;
-				return 'acum ' + hours + ' h ' + minutes + ' m ';
-			case millis < 604800000:
-				return Math.floor(millis / 86400000) + ' days';
-			default:
-				const data = Date(millis).split(' ');
-				return data[2] + ' ' + data[1] + ' ' + data[3];
-		}
-	}
+  millisConverter(millis) {
+    switch (true) {
+      case millis < 60000:
+        return 'acum ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
+      case millis < 3600000:
+        return (
+          'acum ' + Math.floor(millis / 60000) + 'm ' + ((millis % 60000) / 1000).toFixed(0) + ' s'
+        );
+      case millis < 86400000:
+        var minutes = Math.floor((millis / (1000 * 60)) % 60);
+        var hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        return 'acum ' + hours + ' h ' + minutes + ' m ';
+      case millis < 604800000:
+        return Math.floor(millis / 86400000) + ' days';
+      default:
+        const data = Date(millis).split(' ');
+        return data[2] + ' ' + data[1] + ' ' + data[3];
+    }
+  }
 
   render() {
     const AvatarProp = this.getAvatarIcon();
-    
+
     var notificari = [];
     if (this.state.notificari.length > 0)
       notificari = this.state.notificari.map((notificare, index) => (
@@ -141,14 +137,14 @@ class NavRight extends Component {
       <Aux>
         <ul className="navbar-nav ml-auto">
           <li>
-            <Dropdown>
+            <Dropdown onClick={(e) => e.stopPropagation()}>
               <Dropdown.Toggle variant="link" id="dropdown-basic">
                 {notificari.length > 0 ? (
                   <Circle style={{ width: '7.5', height: '7.5' }} fill="red" />
                 ) : (
                   ''
                 )}
-                <Bell size={15}/>
+                <Bell size={15} />
               </Dropdown.Toggle>
               <Dropdown.Menu className="notification">
                 <div className="noti-head">
@@ -170,9 +166,9 @@ class NavRight extends Component {
             </Dropdown>
           </li>
           <li>
-            <Dropdown className="drp-user">
+            <Dropdown onClick={(e) => e.stopPropagation()} className="drp-user">
               <Dropdown.Toggle variant={'link'} id="dropdown-basic">
-                <Settings size={15}/>
+                <Settings size={15} />
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">
