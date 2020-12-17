@@ -3,17 +3,13 @@ import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
-import { server } from '../Resources/server-address';
 import EditPersoana from '../Edit/EditPersoana';
 import Contract from '../UIElements/Forms/Contract';
 import ConcediiOdihna from '../Tables/ConcediiOdihna';
 import ConcediiMedicale from '../Tables/ConcediiMedicale';
-import axios from 'axios';
-import authHeader from '../../services/auth-header';
 import { getAngajatSel } from '../Resources/angajatsel';
 import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
 import BazaCalcul from '../Tables/BazaCalcul';
-import RealizariRetineri from './RealizariRetineri';
 
 /*
   ? how it works now:
