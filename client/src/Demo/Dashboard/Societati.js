@@ -17,6 +17,22 @@ import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import authService from '../../services/auth.service';
 
+const addSocietateComponent = (
+	<Col md={6} xl={4}>
+		<Card
+			style={{
+				opacity: 0.4,
+				cursor: 'pointer',
+			}}
+			onClick={() => (window.location.href = '/forms/add-societate')}
+		>
+			<Card.Body className="mt-2 d-flex justify-content-center align-items-center">
+				<PlusCircle style={{ width: '80px', height: '80px' }} />
+			</Card.Body>
+		</Card>
+	</Col>
+);
+
 class Societati extends React.Component {
   constructor() {
     super();
@@ -314,7 +330,7 @@ class Societati extends React.Component {
       <Col md={6} xl={4} key={key}>
         <Card
           style={{
-            maxBlockSize: 150,
+						flexGrow: '1',
             opacity: this.state.societati[key].opacity,
             cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
           }}
@@ -327,17 +343,7 @@ class Societati extends React.Component {
           }
         >
           <Card.Body>
-            <h3
-              style={{
-                fontSize:
-                  key.length > 20
-                    ? (30 - Math.floor(key.length / 20) * 10).toString() + 'px'
-                    : '30px',
-              }}
-              className="d-flex justify-content-around"
-            >
-              {key}
-            </h3>
+            <h3>{key}</h3>
             <div
               className="mt-4"
               visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
@@ -381,22 +387,6 @@ class Societati extends React.Component {
         </Card>
       </Col>
     ));
-
-    const addSocietateComponent = (
-      <Col md={6} xl={4}>
-        <Card
-          style={{
-            opacity: 0.4,
-            cursor: 'pointer',
-          }}
-          onClick={() => (window.location.href = '/forms/add-societate')}
-        >
-          <Card.Body className="mt-2 d-flex justify-content-center align-items-center">
-            <PlusCircle style={{ width: '80px', height: '80px' }} />
-          </Card.Body>
-        </Card>
-      </Col>
-    );
 
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
