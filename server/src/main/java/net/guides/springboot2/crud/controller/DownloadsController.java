@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +31,8 @@ public class DownloadsController {
 			IOUtils.copy(fileAsIS, response.getOutputStream());
 
 			response.getOutputStream().flush();
+
+			Files.deleteIfExists(Paths.get(myFile.getAbsolutePath()));
 		} catch (IOException ex) {
 			throw new RuntimeException("IOError writing file to output stream");
 		}

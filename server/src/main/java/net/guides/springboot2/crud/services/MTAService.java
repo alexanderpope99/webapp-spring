@@ -56,7 +56,6 @@ public class MTAService {
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet sheet = workbook.getSheetAt(0);
 
-		// ! WRITE FILE
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
 
