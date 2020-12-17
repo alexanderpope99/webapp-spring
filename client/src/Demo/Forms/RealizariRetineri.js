@@ -389,7 +389,6 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
 
 		let pb = this.state.primabruta;
-		console.log(pb);
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
