@@ -12,14 +12,14 @@ import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
-import { RotateCw, UserPlus, Edit3, Trash2, Clipboard } from 'react-feather';
+import { RotateCw, UserPlus, Trash2, Info, DollarSign } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
   constructor() {
     super();
 
-		this.onRefresh = this.onRefresh.bind(this);
-		this.deleteAngajat = this.deleteAngajat.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
+    this.deleteAngajat = this.deleteAngajat.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -51,122 +51,126 @@ class AngajatiTabel extends React.Component {
       angajatiComponent: this.state.angajati.map((ang, index) => {
         for (let key in ang) {
           if (!ang[key]) ang[key] = '-';
-				}
+        }
         return (
           <tr key={ang.persoana.id}>
-            <th>{index+1}</th>
+            <th>{index + 1}</th>
             <th>{ang.persoana.nume}</th>
             <th>{ang.persoana.prenume}</th>
             <th>{ang.contract.functie || '-'}</th>
-            <th>{ang.contract.salariutarifar ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu : 'lipsă contract'}</th>
-            {/* <th className="d-inline-flex"> */}
             <th>
-              <div className="d-inline-flex">
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="realizari-retineri" style={{ opacity: '.4' }}>
-                      Realizări / Rețineri
-                    </Tooltip>
-                  }
+              {ang.contract.salariutarifar
+                ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu
+                : 'lipsă contract'}
+            </th>
+            <th className="d-inline-flex">
+              {/* REALIZARI/RETINERI BUTTON */}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="realizari-retineri" style={{ opacity: '.4' }}>
+                    Realizări / Rețineri
+                  </Tooltip>
+                }
+              >
+                <Button
+                  disabled={!ang.contract.id}
+                  onClick={() => {
+                    setAngajatSel({
+                      idpersoana: ang.persoana.id,
+                      numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
+                    });
+                    window.location.href = `/forms/realizari-retineri`;
+                  }}
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
                 >
-                  <Button
-										disabled={!ang.contract.id}
-                    onClick={() => {
-                      setAngajatSel({
-                        idpersoana: ang.persoana.id,
-                        numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
-                      });
-                      window.location.href = `/forms/realizari-retineri`;
-                    }}
-                    variant="outline-secondary"
-                    className="ml-2 p-1 rounded-circle border-0"
-                  >
-                    <Clipboard size={20} />
-                  </Button>
-                </OverlayTrigger>
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="edit-button" style={{ opacity: '.4' }}>
-                      Editează
-                    </Tooltip>
-                  }
-                >
-                  <Button
-                    onClick={() => {
-                      setAngajatSel({
-                        idpersoana: ang.persoana.id,
-                        numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
-                      });
-                      window.location.href = `/forms/angajat`;
-                    }}
-                    variant="outline-secondary"
-                    className="ml-2 p-1 rounded-circle border-0"
-                  >
-                    <Edit3 size={20} />
-                  </Button>
-                </OverlayTrigger>
+                  <DollarSign size={20} />
+                </Button>
+              </OverlayTrigger>
 
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id="delete-button" style={{ opacity: '.4' }}>
-                            Șterge
-                          </Tooltip>
-                        }
+							{/* DATE PERSONALE BUTTON */}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="edit-button" style={{ opacity: '.4' }}>
+                    Date personale, contract, concedii, etc.
+                  </Tooltip>
+                }
+              >
+                <Button
+                  onClick={() => {
+                    setAngajatSel({
+                      idpersoana: ang.persoana.id,
+                      numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
+                    });
+                    window.location.href = `/forms/angajat`;
+                  }}
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                >
+                  <Info size={20} />
+                </Button>
+              </OverlayTrigger>
+
+              <PopupState variant="popover" popupId="demo-popup-popover">
+                {(popupState) => (
+                  <div>
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id="delete-button" style={{ opacity: '.4' }}>
+                          Șterge
+                        </Tooltip>
+                      }
+                    >
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
                       >
+                        <Trash2 size={20} />
+                      </Button>
+                    </OverlayTrigger>
+                    <Popover
+                      {...bindPopover(popupState)}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                    >
+                      <Box p={2}>
+                        <Typography>
+                          Sigur ștergeți angajatul {ang.nume} {ang.prenume}?
+                        </Typography>
+                        <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                        <br />
                         <Button
-                          variant="outline-secondary"
-                          className="m-0 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
+                          variant="outline-danger"
+                          onClick={() => {
+                            popupState.close();
+                            this.deleteAngajat(ang.persoana.id);
+                          }}
+                          className="mt-2 "
                         >
-                          <Trash2 size={20} />
+                          Da
                         </Button>
-                      </OverlayTrigger>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>
-                            Sigur ștergeți angajatul {ang.nume} {ang.prenume}?
-                          </Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteAngajat(ang.persoana.id);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
-              </div>
+                        <Button
+                          variant="outline-persondary"
+                          onClick={popupState.close}
+                          className="mt-2"
+                        >
+                          Nu
+                        </Button>
+                      </Box>
+                    </Popover>
+                  </div>
+                )}
+              </PopupState>
             </th>
           </tr>
         );

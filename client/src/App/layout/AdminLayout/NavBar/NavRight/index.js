@@ -15,7 +15,7 @@ import authHeader from '../../../../../../src/services/auth-header';
 
 import authService from '../../../../../../src/services/auth.service';
 
-import { Circle, X } from 'react-feather';
+import { Circle, X, Bell, Settings } from 'react-feather';
 
 class NavRight extends Component {
   constructor() {
@@ -23,12 +23,13 @@ class NavRight extends Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
     this.readNotification = this.readNotification.bind(this);
-    this.readAllNotifications = this.readAllNotifications.bind(this);
+		this.readAllNotifications = this.readAllNotifications.bind(this);
+		
     this.state = {
       time: Date.now(),
       listOpen: false,
       user: authService.getCurrentUser(),
-      notificariComponent: [],
+      notificari: [],
     };
   }
 
@@ -55,66 +56,63 @@ class NavRight extends Component {
 
     if (notificari)
       this.setState({
-        notificariComponent: notificari,
+        notificari: notificari,
       });
   }
 
   async readNotification(e) {
     await axios
       .get(`${server.address}/notificare/${e.id}/read`, { headers: authHeader() })
-      .then((res) => res.data)
+      .then(this.onRefresh)
       .catch((err) => console.error(err));
-    this.onRefresh();
   }
 
   async readAllNotifications() {
-    await this.state.notificariComponent.forEach(async (noti) => {
-      console.log(`${server.address}/notificare/${noti.id}/read`);
-
+    this.state.notificari.forEach(async (noti) => {
       axios
         .get(`${server.address}/notificare/${noti.id}/read`, { headers: authHeader() })
-        .then((res) => res.data)
+        .then(this.onRefresh)
         .catch((err) => console.error(err));
-      this.onRefresh();
     });
   }
 
   getAvatarIcon() {
     return this.state.user ? (this.state.user.gen ? Avatar2 : Avatar1) : Avatar1;
-  }
+	}
+	
+	millisConverter(millis) {
+		switch (true) {
+			case millis < 60000:
+				return 'acum ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
+			case millis < 3600000:
+				return (
+					'acum ' +
+					Math.floor(millis / 60000) +
+					'm ' +
+					((millis % 60000) / 1000).toFixed(0) +
+					' s'
+				);
+			case millis < 86400000:
+				var minutes = Math.floor((millis / (1000 * 60)) % 60);
+				var hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+
+				hours = hours < 10 ? '0' + hours : hours;
+				minutes = minutes < 10 ? '0' + minutes : minutes;
+				return 'acum ' + hours + ' h ' + minutes + ' m ';
+			case millis < 604800000:
+				return Math.floor(millis / 86400000) + ' days';
+			default:
+				const data = Date(millis).split(' ');
+				return data[2] + ' ' + data[1] + ' ' + data[3];
+		}
+	}
 
   render() {
     const AvatarProp = this.getAvatarIcon();
-    function millisConverter(millis) {
-      switch (true) {
-        case millis < 60000:
-          return 'acum ' + ((millis % 60000) / 1000).toFixed(0) + ' s';
-        case millis < 3600000:
-          return (
-            'acum ' +
-            Math.floor(millis / 60000) +
-            'm ' +
-            ((millis % 60000) / 1000).toFixed(0) +
-            ' s'
-          );
-        case millis < 86400000:
-          var minutes = Math.floor((millis / (1000 * 60)) % 60);
-          var hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
-
-          hours = hours < 10 ? '0' + hours : hours;
-          minutes = minutes < 10 ? '0' + minutes : minutes;
-          return 'acum ' + hours + ' h ' + minutes + ' m ';
-        case millis < 604800000:
-          return Math.floor(millis / 86400000) + ' days';
-        default:
-          const data = Date(millis).split(' ');
-          return data[2] + ' ' + data[1] + ' ' + data[3];
-      }
-    }
-
+    
     var notificari = [];
-    if (this.state.notificariComponent.length > 0)
-      notificari = this.state.notificariComponent.map((notificare, index) => (
+    if (this.state.notificari.length > 0)
+      notificari = this.state.notificari.map((notificare, index) => (
         <li className="notification">
           <div className="media">
             <div className="media-body">
@@ -127,7 +125,7 @@ class NavRight extends Component {
                   className="n-time text-muted"
                 >
                   <i className="icon feather icon-clock m-r-10" />
-                  {millisConverter(Date.now() - Date.parse(notificare.timp))}
+                  {this.millisConverter(Date.now() - Date.parse(notificare.timp))}
                 </span>
               </p>
               <p>{notificare.mesaj}</p>
@@ -143,38 +141,38 @@ class NavRight extends Component {
       <Aux>
         <ul className="navbar-nav ml-auto">
           <li>
-            <Dropdown alignRight={!this.props.rtlLayout}>
-              <Dropdown.Toggle variant={'link'} id="dropdown-basic">
+            <Dropdown>
+              <Dropdown.Toggle variant="link" id="dropdown-basic">
                 {notificari.length > 0 ? (
                   <Circle style={{ width: '7.5', height: '7.5' }} fill="red" />
                 ) : (
                   ''
                 )}
-                <i className="icon feather icon-bell" />
+                <Bell size={15}/>
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="notification">
                 <div className="noti-head">
                   <h6 className="d-inline-block m-b-0">Notificări</h6>
-                  <div className="float-right">
-                    {/* <a href={DEMO.BLANK_LINK} className="m-r-10">
+                  {/* <div className="float-right">
+                    <a href={DEMO.BLANK_LINK} className="m-r-10">
                       mark as read
-                    </a> */}
-                    {/* <Button onClick={() => this.readAllNotifications()} variant="outline-grey">
+                    </a>
+                    <Button onClick={() => this.readAllNotifications()} variant="outline-grey">
                       <X size={15}/>
-                    </Button> */}
-                  </div>
+                    </Button>
+                  </div> */}
                 </div>
                 <ul className="noti-body">{notificari}</ul>
-                <div className="noti-footer">
+                {/* <div className="noti-footer">
                   <a href={'/notificari'}>arată tot</a>
-                </div>
+                </div> */}
               </Dropdown.Menu>
             </Dropdown>
           </li>
           <li>
-            <Dropdown alignRight={!this.props.rtlLayout} className="drp-user">
+            <Dropdown className="drp-user">
               <Dropdown.Toggle variant={'link'} id="dropdown-basic">
-                <i className="icon feather icon-settings" />
+                <Settings size={15}/>
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">

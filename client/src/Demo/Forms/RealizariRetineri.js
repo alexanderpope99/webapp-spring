@@ -14,7 +14,7 @@ import {
   Collapse,
   Toast,
 } from 'react-bootstrap';
-import { Trash2, Plus, User } from 'react-feather';
+import { Trash2, Info } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
@@ -872,11 +872,11 @@ class RealizariRetineri extends React.Component {
                   }
                 >
                   <Button href="/forms/angajat" variant="outline-info" className="pb-0">
-                    <User size={20} className="m-0" />
+                    <Info size={20} className="m-0" />
                   </Button>
                 </OverlayTrigger>
               </InputGroup.Append>
-              <InputGroup.Append>
+              {/* <InputGroup.Append>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}
@@ -890,7 +890,7 @@ class RealizariRetineri extends React.Component {
                     <Plus size={20} className="m-0" />
                   </Button>
                 </OverlayTrigger>
-              </InputGroup.Append>
+              </InputGroup.Append> */}
             </InputGroup>
           </Card.Header>
 
