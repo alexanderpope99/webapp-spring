@@ -8,9 +8,14 @@ buton de 'show password' la schimba parola
 
 unde pun superior pentru un angajat?
 
+
 TODO:
+	* Sa ia in calcul retineri in backend
+	RealizariRetineri - OneToOne - Retinere
+	Retineri pe frontend din RealizariRetineri object
+
 	Contract.js:
-		1. Superiori
+		1. Superiori - Contract.js:287
 		2. Centre cost: 2.1: axios.get in component did mount, not in fillForm (centreCost se schimba doar cand schimbi societatea)
 
 UPGRADES:

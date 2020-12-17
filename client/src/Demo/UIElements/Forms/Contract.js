@@ -75,6 +75,7 @@ class Contract extends React.Component {
       modalMessage: '', //text
 
       angajat: null,
+      superior: null,
       superiori: [],
     };
   }
@@ -169,7 +170,8 @@ class Contract extends React.Component {
         }))
       )
       .catch((err) => console.error(err));
-    console.log(superiori);
+
+    if (superiori) this.setState({ superiori: superiori });
   }
 
   async fillForm() {
@@ -280,11 +282,16 @@ class Contract extends React.Component {
     }
 
     return true;
-  }
+	}
+	
+	// async updateSuperior() {
+	// 	// TODO CREATE THIS ENDPOINT
+	// 	const res = await axios
+	// 		.put(`${server.address}/angajat/superior/`)
+	// }
 
   async onSubmit(e) {
     e.preventDefault();
-    // console.log(idcontract, idangajat);
 
     if (!this.hasRequired()) return;
 
@@ -371,7 +378,19 @@ class Contract extends React.Component {
     }
   }
 
+  onChangeSuperior(e) {
+    const selectedIndex = e.target.options.selectedIndex;
+    const idsuperior = e.target.options[selectedIndex].getAttribute('data-key');
+    this.setState({ superior: { id: idsuperior, numeintreg: e.target.value } });
+  }
+
   render() {
+    const superioriComponent = this.state.superiori.map((superior) => (
+      <option key={superior.id} data-key={superior.id}>
+        {superior.numeintreg}
+      </option>
+    ));
+
     return (
       <React.Fragment>
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -936,11 +955,11 @@ class Contract extends React.Component {
                 <Form.Label>Superior</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.numeSuperior}
-                  onChange={this.onChangeSuperior}
+                  value={this.state.superior ? this.state.superior.numeintreg : '-'}
+                  onChange={(e) => this.onChangeSuperior(e)}
                 >
                   <option>-</option>
-                  {/* superioriComponent */}
+                  {superioriComponent}
                 </Form.Control>
               </Form.Group>
             </Col>

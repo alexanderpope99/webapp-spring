@@ -43,9 +43,7 @@ public class RetineriService {
 				realizariRetineri);
 		newRetinere.setId(oldRetinereID);
 
-		retineriRepository.save(newRetinere);
-
-		return newRetinere;
+		return retineriRepository.save(newRetinere);
 	}
 
 	public Retineri getRetinereByIdstat(int stat) {
