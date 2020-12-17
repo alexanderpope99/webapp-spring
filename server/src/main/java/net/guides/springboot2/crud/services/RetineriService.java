@@ -35,17 +35,15 @@ public class RetineriService {
 
 	public Retineri updateRetinere(int oldRetinereID, RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
 
-		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat()).orElseThrow(() -> new ResourceNotFoundException("RealizaiRetineri not found for this id"));
-		
-		Retineri newRetinere = new Retineri(
-			newRetinereDTO.getAvansnet(),
-			newRetinereDTO.getPensiefacultativa(),
-			newRetinereDTO.getPensiealimentara(),
-			newRetinereDTO.getPopriri(),
-			newRetinereDTO.getImprumuturi(),
-			realizariRetineri
-		);
+		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
+				.orElseThrow(() -> new ResourceNotFoundException("RealizaiRetineri not found for this id"));
+
+		Retineri newRetinere = new Retineri(newRetinereDTO.getAvansnet(), newRetinereDTO.getPensiefacultativa(),
+				newRetinereDTO.getPensiealimentara(), newRetinereDTO.getPopriri(), newRetinereDTO.getImprumuturi(),
+				realizariRetineri);
 		newRetinere.setId(oldRetinereID);
+
+		retineriRepository.save(newRetinere);
 
 		return newRetinere;
 	}

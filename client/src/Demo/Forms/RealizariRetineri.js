@@ -370,7 +370,7 @@ class RealizariRetineri extends React.Component {
     }
 
     // save retineri to DB
-    console.log('################');
+    console.log(this.state.avansnet);
     await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,
@@ -703,8 +703,8 @@ class RealizariRetineri extends React.Component {
       <option key={angajat.id} data-key={angajat.id}>
         {angajat.nume}
       </option>
-		));
-		
+    ));
+
     return (
       <Aux>
         <Toast
@@ -854,13 +854,13 @@ class RealizariRetineri extends React.Component {
                 aria-describedby="basic-addon2"
                 as="select"
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
-								onChange={(e) => this.onSelect(e)}
+                onChange={(e) => this.onSelect(e)}
               >
                 <option> - </option>
                 {/* lista_angajati mapped as <option> */}
                 {nume_persoane_opt}
               </FormControl>
-							<InputGroup.Append>
+              <InputGroup.Append>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}
@@ -1171,11 +1171,7 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           disabled
                           value={
-                            this.state.restplata
-                              ? this.numberWithCommas(
-                                  Number(this.state.restplata) - Number(this.state.avansnet)
-                                )
-                              : ''
+                            this.state.restplata ? this.numberWithCommas(this.state.restplata) : ''
                           }
                         />
                       </Form.Group>

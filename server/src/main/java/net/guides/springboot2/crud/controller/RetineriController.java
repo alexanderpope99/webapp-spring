@@ -46,7 +46,8 @@ public class RetineriController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Retineri> getRetineriById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public ResponseEntity<Retineri> getRetineriById(@PathVariable(value = "id") int id)
+			throws ResourceNotFoundException {
 		Retineri retineri = retineriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
 
@@ -59,12 +60,12 @@ public class RetineriController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Retineri> updateRetineri(@PathVariable(value = "id") int id,
-			@RequestBody RetineriDTO newRetineriDTO) throws ResourceNotFoundException {
+	public Retineri updateRetineri(@PathVariable(value = "id") int id, @RequestBody RetineriDTO newRetineriDTO)
+			throws ResourceNotFoundException {
 		newRetineriDTO.setId(id);
 		Retineri retineri = retineriService.updateRetinere(id, newRetineriDTO);
 
-		return ResponseEntity.ok(retineri);
+		return retineri;
 	}
 
 	@DeleteMapping("{id}")
