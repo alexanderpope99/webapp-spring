@@ -57,6 +57,10 @@ public class ContBancar implements Serializable {
 		this.contract = contract;
 	}
 
+	public Contract getContract() {
+		return contract;
+	}
+	
 	public String getIban() {
 		return iban;
 	}
@@ -72,5 +76,6 @@ public class ContBancar implements Serializable {
 	public void setNumebanca(String adresa) {
 		this.numebanca = adresa;
 	}
+
 
 }

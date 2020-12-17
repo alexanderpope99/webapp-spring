@@ -216,7 +216,7 @@ class Persoana extends React.Component {
       this.clearFields();
       this.setState({
         show: true,
-        modalMessage: 'Persoana adaugată cu succes 💾',
+        modalMessage: 'Persoană adaugată cu succes 💾',
       });
 
       console.log('idpersoana:', persoana.id);
@@ -246,6 +246,9 @@ class Persoana extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
+						<Button variant="primary" href="/tables/angajati">
+              Către angajatți
+            </Button>
             <Button variant="primary" onClick={this.handleClose}>
               OK
             </Button>
@@ -512,7 +515,7 @@ class Persoana extends React.Component {
             </Col>
           </Row>
 
-          {typeof this.props.asChild === 'undefined' ? (
+          {!this.props.asChild ? (
             <Row>
               <Col md={12}>
                 <Button variant="success" className="float-right m-0 pl-5 pr-5 mt-2" type="submit">

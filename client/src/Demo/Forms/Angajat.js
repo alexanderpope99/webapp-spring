@@ -88,50 +88,9 @@ class Angajat extends React.Component {
     });
   }
 
-  async getSelectedAngajatData() {
-    // get id of selected angajat
-    const angajatsel = getAngajatSel();
-    const idpersoana = angajatsel ? angajatsel.idpersoana : 0;
-    if (!idpersoana) {
-      this.contract.current.clearFields();
-      this.setState({ angajatsel: null });
-      return;
-    } else this.contract.current.setState({ buttonDisabled: false });
-
-    const angajat = await axios
-      .get(`${server.address}/angajat/${idpersoana}`, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-
-    this.setState({
-      angajatsel: angajatsel,
-      angajat: angajat,
-      idcontract: angajat.idcontract,
-      idpersoana: angajat.idpersoana,
-      idsocietate: angajat.idsocietate,
-    });
-
-    return angajat;
-  }
-
   async onFocusContract() {
-    const angajat = await this.getSelectedAngajatData();
-    if (!angajat) return;
-    // declared for typing convenience
-    let idcontract = angajat.idcontract;
-    let idpersoana = angajat.idpersoana;
-
-    var contract = null;
-    // if angajat has contract
-    if (idcontract) {
-      // fetch data from contract
-      contract = await axios
-        .get(`${server.address}/contract/${idcontract}`, { headers: authHeader() })
-        .then((res) => res.data)
-        .catch((err) => console.error(err));
-    }
-    //* FILL CONTRACT
-    this.contract.current.fillForm(contract, idpersoana);
+		await this.contract.current.fillForm();
+		this.setState({angajatsel: getAngajatSel()});
   }
 
   async onFocusCO() {

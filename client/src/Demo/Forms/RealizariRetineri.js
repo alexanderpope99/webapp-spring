@@ -342,8 +342,8 @@ class RealizariRetineri extends React.Component {
     if (selectedIndex === 0) setAngajatSel(null);
     else
       setAngajatSel({
-        numeintreg: e.target.value,
         idpersoana: idangajat,
+        numeintreg: e.target.value,
       });
 
     this.setState(
@@ -705,7 +705,6 @@ class RealizariRetineri extends React.Component {
       </option>
 		));
 		
-		console.log(this.props.asChild);
     return (
       <Aux>
         <Toast

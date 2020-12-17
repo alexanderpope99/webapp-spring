@@ -18,7 +18,6 @@ UPGRADES:
 
 
 ERORI:
-	!!!! dupa ce apare un modal nu mai poti intra la notificari/setari
 	baza calcul frontend cand editeaza bazacalcul -> date
 
 UserTabel:

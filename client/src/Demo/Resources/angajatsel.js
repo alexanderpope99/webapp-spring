@@ -2,7 +2,7 @@ const getAngajatSel = () => {
   return JSON.parse(sessionStorage.getItem('angajatsel'));
 }
 
-// param must be object of type {id, nume}
+// param must be object of type {idpersoana, numeintreg}
 const setAngajatSel = (angajat) => {
 	if(angajat)
 		sessionStorage.setItem('angajatsel', JSON.stringify(angajat));

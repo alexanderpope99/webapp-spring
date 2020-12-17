@@ -33,7 +33,8 @@ class EditPersoana extends React.Component {
     this.getNumeintregById = this.getNumeintregById.bind(this);
     this.fillForm = this.fillForm.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+		this.handleClose = this.handleClose.bind(this);
+		this.onChangeNume = this.onChangeNume.bind(this);
 
     let angajatSel = getAngajatSel();
     var idOfSelected = null;
@@ -352,6 +353,16 @@ class EditPersoana extends React.Component {
     return this.state.id;
   }
 
+  onChangeNume(e) {
+    this.setState(
+      {
+        selectednume: e.target.value || '-',
+        id: this.getIdByNumeintreg(e.target.value),
+      },
+      this.fillForm
+    );
+  }
+
   render() {
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
@@ -391,15 +402,7 @@ class EditPersoana extends React.Component {
                   <FormControl
                     as="select"
                     value={this.state.selectednume}
-                    onChange={(e) =>
-                      this.setState(
-                        {
-                          selectednume: e.target.value || '-',
-                          id: this.getIdByNumeintreg(e.target.value),
-                        },
-                        this.fillForm
-                      )
-                    }
+                    onChange={this.onChangeNume}
                   >
                     <option>-</option>
                     {listaNumeintreg}

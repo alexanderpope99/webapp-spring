@@ -17,18 +17,24 @@ import { getSocSel } from '../../Resources/socsel';
 import { case_de_sanatate, judete } from '../../Resources/judete';
 import axios from 'axios';
 import authHeader from '../../../services/auth-header';
+import { getAngajatSel } from '../../Resources/angajatsel';
+
+const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
+  <option key={index}>{casa}</option>
+));
 
 class Contract extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
     this.handleClose = this.handleClose.bind(this);
-    this.onChangeCentrucost = this.onChangeCentrucost.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
 
     this.state = {
       socsel: getSocSel(),
+      angajatsel: getAngajatSel(),
+
       id: 0,
       modelContract: 'Contract de munca', //text
       numărContract: '', //text
@@ -67,7 +73,9 @@ class Contract extends React.Component {
 
       show: false,
       modalMessage: '', //text
-      buttonDisabled: true,
+
+      superiori: [],
+      angajat: null,
     };
   }
 
@@ -112,6 +120,16 @@ class Contract extends React.Component {
       show: false,
       modalMessage: '', //text
     });
+	}
+	
+  handleClose() {
+    this.setState(
+      {
+        show: false,
+        modalMessage: '',
+      },
+      this.props.scrollToTopSmooth
+    );
   }
 
   getNumeNorma(nrOre) {
@@ -135,36 +153,24 @@ class Contract extends React.Component {
       default:
         break;
     }
-  }
+	}
+	
+  async fillForm() {
+		const angajatsel = getAngajatSel();
+    const angajat = await axios
+      .get(`${server.address}/angajat/expand/${angajatsel.idpersoana}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+			.catch((err) => console.error(err));
 
-  async fillForm(contract, idangajat) {
-    if (!contract) {
-      this.clearFields();
-      // get adresa
-      const adresa = await axios
-        .get(`${server.address}/adresa/idp=${idangajat}`, { headers: authHeader() })
-        .then((res) => res.data)
-        .catch((err) => console.error(err));
-      // get casa_de_sanatate
-      var cs = '-';
-      if (adresa.judet) {
-        // if judet is SECTOR => casa de sanatate = bucuresti
-        if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
-        else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
-      }
-
-      // use casa_de_sanatate[judet_index]
+    if (angajat.contract) {
+      let contract = angajat.contract;
       this.setState(
         {
-          idangajat: idangajat,
-          casăSănătate: cs,
-        },
-        () => console.log('idangajat:', idangajat, '\tidcontract:', null)
-      );
-    } else {
-      this.setState(
-        {
-          idangajat: idangajat,
+					angajat: angajat,
+					angajatsel: getAngajatSel(),
+
           id: contract.id,
           modelContract: contract.tip || '', //text
           numărContract: contract.nr || '', //text
@@ -200,26 +206,30 @@ class Contract extends React.Component {
           pensionar: contract.pensionar || false,
           spor: contract.spor || '',
         },
-        () => console.log('idangajat:', idangajat, '\tidcontract:', contract.id)
+        () => console.log('idangajat:', angajat.idpersoana, '\tidcontract:', contract.id)
       );
+    } else {
+      // nu are contract
+      this.clearFields();
+
+      // if has adresa -> preselect casa_sanatate
+      var adresa = angajat.persoana.adresa;
+      var cs = '-';
+      if (adresa) {
+        if (adresa.judet) {
+          if (adresa.judet.substring(0, 2) === 'SE') cs = case_de_sanatate[0];
+          else cs = case_de_sanatate[judete.indexOf(adresa.judet)];
+        }
+
+        this.setState({ angajat: angajat, casăSănătate: cs }, () =>
+          console.log('idangajat:', angajat.idpersoana, '\tidcontract:', null)
+        );
+      }
     }
   }
 
-  onChangeCentrucost(selected) {
-    if (typeof selected[0] !== 'undefined' || selected.length !== 0) {
-      if (typeof selected[0] === 'object') this.setState({ centruCost: selected[0].label });
-      else this.setState({ centruCost: selected[0] });
-    }
-  }
-
-  handleClose() {
-    this.setState(
-      {
-        show: false,
-        modalMessage: '',
-      },
-      this.props.scrollToTopSmooth
-    );
+  componentDidMount() {
+    this.fillForm();
   }
 
   hasRequired() {
@@ -250,18 +260,11 @@ class Contract extends React.Component {
     return true;
   }
 
-  async onSubmit(e, idcontract, idangajat) {
+  async onSubmit(e) {
     e.preventDefault();
     // console.log(idcontract, idangajat);
 
     if (!this.hasRequired()) return;
-
-    var method = 'PUT';
-    // if person is missing contract
-    if (!idcontract) {
-      method = 'POST';
-      idcontract = '';
-    }
 
     let contbancar_body;
     if (this.state.idcontbancar)
@@ -311,32 +314,32 @@ class Contract extends React.Component {
       spor: this.state.spor || null,
     };
 
-    let contract;
-    if (method === 'PUT')
+    let contract = null;
+    if (this.state.angajat.contract)
       contract = await axios
-        .put(`${server.address}/contract/${idcontract}`, contract_body, {
+        .put(`${server.address}/contract/${this.state.id}`, contract_body, {
           headers: authHeader(),
         })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) => {
           console.error(err.message);
         });
-    else if (method === 'POST')
+    else {
       contract = await axios
-        .post(`${server.address}/contract/${idangajat}`, contract_body, {
+        .post(`${server.address}/contract/${this.state.angajat.idpersoana}`, contract_body, {
           headers: authHeader(),
         })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) => {
           console.error(err.message);
         });
-
+    }
     // if recieved response from server
     if (contract) {
       this.setState({
         show: true,
         modalMessage:
-          method === 'POST' ? 'Contract adăugat cu succes 📄' : 'Contract actualizat 💾',
+          this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat cu succes 📄',
         id: contract.id,
       });
     } else {
@@ -348,10 +351,6 @@ class Contract extends React.Component {
   }
 
   render() {
-    const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
-      <option key={index}>{casa}</option>
-    ));
-
     return (
       <React.Fragment>
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -623,7 +622,7 @@ class Contract extends React.Component {
                     <Form.Control
                       type="text"
                       value={this.state.iban}
-                      style={{fontFamily: "Consolas, Courier New"}}
+                      style={{ fontFamily: 'Consolas, Courier New' }}
                       onChange={(e) => {
                         this.setState({ iban: e.target.value });
                       }}
@@ -663,14 +662,16 @@ class Contract extends React.Component {
             <Col md={6}>
               <Form.Group controlId="centrucost">
                 <Form.Label>Centre de cost</Form.Label>
-                <Typeahead
-                  id="optiune-centrucost"
-                  options={['centru test']}
-                  allowNew
-                  newSelectionPrefix="Adaugă"
-                  value={this.state.centruCost}
-                  onChange={this.onChangeCentrucost}
-                />
+                <Form.Control
+                  as="select"
+                  value={this.state.punctDeLucru}
+                  onChange={(e) => {
+                    this.setState({ punctDeLucru: e.target.value });
+                  }}
+                >
+                  <option>-</option>
+                  {/* centre cost fetched from db */}
+                </Form.Control>
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -913,9 +914,9 @@ class Contract extends React.Component {
           <Row>
             <Col md={6}>
               <Button
-                variant={this.state.buttonDisabled ? 'outline-dark' : 'outline-primary'}
-                onClick={(e) => this.onSubmit(e, this.state.id, this.state.idangajat)}
-                disabled={this.state.buttonDisabled}
+                variant={!this.state.angajatsel ? 'outline-dark' : 'outline-primary'}
+                onClick={(e) => this.onSubmit(e)}
+                disabled={!this.state.angajatsel}
               >
                 {this.state.id ? 'Actualizează contract' : 'Adaugă contract'}
               </Button>
