@@ -369,8 +369,7 @@ class RealizariRetineri extends React.Component {
       return;
     }
 
-    // save retineri to DB
-    console.log(this.state.avansnet);
+    //* 1. save retineri to DB
     await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,
@@ -389,10 +388,12 @@ class RealizariRetineri extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
-    let pb = this.state.primabruta;
+		let pb = this.state.primabruta;
+		console.log(pb);
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
+		//* 2. recalculate realizariRetineri
     const data = await axios
       .put(
         `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
@@ -404,8 +405,8 @@ class RealizariRetineri extends React.Component {
 
     console.log(data);
     if (!data) return;
-    // total
-    this.setState(
+
+		this.setState(
       {
         totaldrepturi: data.totaldrepturi,
         restplata: data.restplata,

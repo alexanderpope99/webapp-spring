@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -112,6 +113,7 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
 
+	@JsonBackReference(value = "stat-contract")
 	@ManyToOne
 	@JoinColumn(name = "idcontract", referencedColumnName = "id")
 	private Contract contract;
@@ -120,10 +122,8 @@ public class RealizariRetineri implements Serializable {
 	@OneToMany(mappedBy = "statsalariat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Oresuplimentare> oresuplimentare;
 
-
-	@JsonBackReference(value = "retineri-realizariretineri")
-	@OneToMany(mappedBy = "stat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Retineri> retineri;
+	@OneToOne(mappedBy = "stat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Retineri retineri;
 
 	public RealizariRetineri() {
 	}
@@ -338,6 +338,9 @@ public class RealizariRetineri implements Serializable {
 	public List<Oresuplimentare> getOresuplimentare() {
 		return oresuplimentare;
 	}
+	public Retineri getRetineri() {
+		return retineri;
+	}
 
 	// ! SETTERS
 	public void setNrtichete(Integer nrtichete) {
@@ -489,5 +492,8 @@ public class RealizariRetineri implements Serializable {
 	}
 	public void setOresuplimentare(List<Oresuplimentare> oresuplimentare) {
 		this.oresuplimentare = oresuplimentare;
+	}
+	public void setRetineri(Retineri retineri) {
+		this.retineri = retineri;
 	}
 }

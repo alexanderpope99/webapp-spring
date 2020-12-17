@@ -49,4 +49,8 @@ public class RetineriService {
 	public Retineri getRetinereByIdstat(int stat) {
 		return retineriRepository.findByStat_Id(stat);
 	}
+
+	public Retineri getRetinereByIdcontractAndLunaAndAn(int idcontract, int luna, int an) {
+		return retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idcontract, luna, an);
+	}
 }

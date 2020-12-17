@@ -13,6 +13,7 @@ TODO:
 	* Sa ia in calcul retineri in backend
 	RealizariRetineri - OneToOne - Retinere
 	Retineri pe frontend din RealizariRetineri object
+	Lipseste buton de recalculat/6luni
 
 	Contract.js:
 		1. Superiori - Contract.js:287

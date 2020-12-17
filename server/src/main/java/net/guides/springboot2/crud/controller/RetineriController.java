@@ -63,9 +63,7 @@ public class RetineriController {
 	public Retineri updateRetineri(@PathVariable(value = "id") int id, @RequestBody RetineriDTO newRetineriDTO)
 			throws ResourceNotFoundException {
 		newRetineriDTO.setId(id);
-		Retineri retineri = retineriService.updateRetinere(id, newRetineriDTO);
-
-		return retineri;
+		return retineriService.updateRetinere(id, newRetineriDTO);
 	}
 
 	@DeleteMapping("{id}")
