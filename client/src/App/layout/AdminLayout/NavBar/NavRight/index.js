@@ -150,7 +150,7 @@ class NavRight extends Component {
                 )}
                 <Bell size={15}/>
               </Dropdown.Toggle>
-              <Dropdown.Menu alignRight className="notification">
+              <Dropdown.Menu className="notification">
                 <div className="noti-head">
                   <h6 className="d-inline-block m-b-0">Notificări</h6>
                   {/* <div className="float-right">

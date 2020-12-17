@@ -12,7 +12,7 @@ import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
-import { RotateCw, UserPlus, Trash2, Info, DollarSign } from 'react-feather';
+import { RotateCw, UserPlus, Trash2, Info, FileText } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
   constructor() {
@@ -85,7 +85,7 @@ class AngajatiTabel extends React.Component {
                   variant="outline-secondary"
                   className="ml-2 p-1 rounded-circle border-0"
                 >
-                  <DollarSign size={20} />
+                  <FileText size={20} />
                 </Button>
               </OverlayTrigger>
 

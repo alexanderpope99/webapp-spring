@@ -333,7 +333,7 @@ class Societati extends React.Component {
 						flexGrow: '1',
             opacity: this.state.societati[key].opacity,
             cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
-          }}
+					}}
           onClick={
             this.state.societati[key].opacity === '.3'
               ? () => {
