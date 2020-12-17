@@ -9,6 +9,8 @@ buton de 'show password' la schimba parola
 unde pun superior pentru un angajat?
 
 TODO:
+	Lipseste buton de recalculat/6luni
+
 	Contract.js:
 		1. Superiori
 		2. Centre cost: 2.1: axios.get in component did mount, not in fillForm (centreCost se schimba doar cand schimbi societatea)

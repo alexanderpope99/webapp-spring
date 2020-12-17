@@ -8,8 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "retineri")
@@ -35,7 +37,8 @@ public class Retineri implements Serializable {
 	@Column(name = "imprumuturi")
 	private Integer imprumuturi;
 
-	@ManyToOne
+	@JsonBackReference(value = "retinere-stat")
+	@OneToOne
 	@JoinColumn(name = "idstat")
 	private RealizariRetineri stat;
 
