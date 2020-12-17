@@ -11,6 +11,7 @@ import authService from '../../services/auth.service';
 
 class Notificari extends React.Component {
   constructor() {
+		super();
     this.state = {
       socsel: getSocSel(),
       user: authService.getCurrentUser(),

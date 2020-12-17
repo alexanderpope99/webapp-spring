@@ -53,9 +53,10 @@ class NavRight extends Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
-    this.setState({
-      notificariComponent: notificari,
-    });
+    if (notificari)
+      this.setState({
+        notificariComponent: notificari,
+      });
   }
 
   async readNotification(e) {
@@ -158,7 +159,9 @@ class NavRight extends Component {
                     {/* <a href={DEMO.BLANK_LINK} className="m-r-10">
                       mark as read
                     </a> */}
-                    <Button onClick={() => this.readAllNotifications()}>șterge tot</Button>
+                    {/* <Button onClick={() => this.readAllNotifications()} variant="outline-grey">
+                      <X size={15}/>
+                    </Button> */}
                   </div>
                 </div>
                 <ul className="noti-body">{notificari}</ul>
