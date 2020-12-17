@@ -37,20 +37,18 @@ public class RealizariRetineriController {
 	private ModelMapper modelMapper;
 
 	@GetMapping("idc={id}&mo={luna}&y={an}")
-	public RealizariRetineriDTO getRealizariRetineriByIdcontract(@PathVariable(value = "id") int idcontract,
-			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) throws ResourceNotFoundException {
-		return modelMapper.map(realizariRetineriService.getRealizariRetineri(luna, an, idcontract),
-				RealizariRetineriDTO.class);
+	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") int idcontract,
+			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) {
+		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
 	@GetMapping("idp={id}&mo={luna}&y={an}")
-	public RealizariRetineriDTO getRealizariRetineriByIdpersoana(@PathVariable(value = "id") int idpersoana,
-			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
-			throws ResourceNotFoundException {
+	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value = "id") int idpersoana,
+			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an) {
 		// get contract of persoana
 		int idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
-		return modelMapper.map(realizariRetineriService.getRealizariRetineri(luna, an, idcontract),
-				RealizariRetineriDTO.class);
+		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
+				
 	}
 
 	// just a calculator
@@ -63,14 +61,14 @@ public class RealizariRetineriController {
 	}
 
 	@PostMapping("save/idc={id}&mo={luna}&y={an}")
-	public RealizariRetineriDTO saveRealizariRetineri(@PathVariable(value = "id") int idcontract,
+	public RealizariRetineri saveRealizariRetineri(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
 			throws ResourceNotFoundException {
-		return modelMapper.map(realizariRetineriService.saveRealizariRetineri(luna, an, idcontract), RealizariRetineriDTO.class);
+		return realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
 	}
 
 	@PutMapping("update/idc={idc}&mo={luna}&y={an}")
-	public RealizariRetineriDTO updateRealizariRetineri(@PathVariable(name = "luna") int luna,
+	public RealizariRetineri updateRealizariRetineri(@PathVariable(name = "luna") int luna,
 			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract,
 			@RequestBody RealizariRetineri newRealizariRetineri) {
 
@@ -82,11 +80,11 @@ public class RealizariRetineriController {
 
 		bazacalculService.updateBazacalcul(updatedRR);
 
-		return modelMapper.map(updatedRR, RealizariRetineriDTO.class);
+		return updatedRR;
 	}
 
 	@PutMapping("update/reset/idc={idc}&mo={luna}&y={an}")
-	public RealizariRetineriDTO recalcRealizariRetineri(@PathVariable(name = "luna") int luna,
+	public RealizariRetineri recalcRealizariRetineri(@PathVariable(name = "luna") int luna,
 			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract) throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
@@ -100,12 +98,12 @@ public class RealizariRetineriController {
 
 		bazacalculService.updateBazacalcul(updatedRR);
 
-		return modelMapper.map(updatedRR, RealizariRetineriDTO.class);
+		return updatedRR;
 	}
 
 	// * used by "Recalculează" button
 	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
-	public RealizariRetineriDTO calcThenUpdateRealizariRetineri(@PathVariable(value = "id") int idcontract,
+	public RealizariRetineri calcThenUpdateRealizariRetineri(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an,
 			@PathVariable(value = "pb") Integer primaBruta, @PathVariable(value = "nrt") Integer nrTichete,
 			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
@@ -119,8 +117,7 @@ public class RealizariRetineriController {
 
 		bazacalculService.updateBazacalcul(newRealizariRetineri);
 
-		final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
-		return modelMapper.map(updatedRR, RealizariRetineriDTO.class);
+		return realizariRetineriRepository.save(newRealizariRetineri);
 	}
 
 	@PutMapping("calc/ultimele6/idc={idc}&mo={luna}&y={an}")

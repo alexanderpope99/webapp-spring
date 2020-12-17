@@ -273,10 +273,13 @@ class RealizariRetineri extends React.Component {
     if (oresuplimentare.length > 0) {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
     }
-    const retineri = await axios
-      .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
+    // const retineri = await axios
+    //   .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
+    //   .then((res) => res.data)
+    //   .catch((err) => console.error(err));
+
+		const retineri = data.retineri;
+		console.log(retineri);
 
     // set states with data
     this.setState({
