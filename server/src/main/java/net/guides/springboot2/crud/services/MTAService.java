@@ -21,6 +21,7 @@ import org.apache.poi.ss.util.PropertyTemplate;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
@@ -130,6 +131,7 @@ public class MTAService {
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
+		// String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
