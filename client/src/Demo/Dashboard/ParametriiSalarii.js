@@ -10,6 +10,7 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Plus, RotateCw } from 'react-feather';
 
 class ParametriiSalarii extends React.Component {
   constructor() {
@@ -308,7 +309,7 @@ class ParametriiSalarii extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  ↺
+                  <RotateCw size="25" />
                 </Button>
                 <Button
                   onClick={() => this.setState({ date: this.getDate(), show: true })}
@@ -316,7 +317,7 @@ class ParametriiSalarii extends React.Component {
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  Edit
+                  <Plus size="25" />
                 </Button>
               </Card.Header>
               <Card.Body>
