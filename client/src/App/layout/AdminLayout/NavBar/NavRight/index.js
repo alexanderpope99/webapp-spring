@@ -6,10 +6,8 @@ import DEMO from '../../../../../store/constant';
 
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
-import Avatar3 from '../../../../../assets/images/user/avatar-3.jpg';
 
 import { server } from '../../../../../Demo/Resources/server-address';
-import { getSocSel } from '../../../../../Demo/Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../../../../../src/services/auth-header';
 
@@ -193,12 +191,13 @@ class NavRight extends Component {
                       <div className="media-body">
                         <p>
                           <strong
+														style={{cursor: "pointer"}}
                             onClick={() => (window.location.href = 'https://www.cursbnr.ro/')}
                           >
                             Curs Valutar BNR EUR/RON
                           </strong>
                         </p>
-                        <p>1 EUR={this.state.cursEURRON} RON</p>
+                        <p>1 EUR = {this.state.cursEURRON} RON</p>
                       </div>
                     </div>
                   </li>
