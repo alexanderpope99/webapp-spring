@@ -25,9 +25,6 @@ public class Retineri implements Serializable {
 	@Column(name = "avansnet")
 	private Integer avansnet;
 
-	@Column(name = "pensiefacultativa")
-	private Integer pensiefacultativa;
-
 	@Column(name = "pensiealimentara")
 	private Integer pensiealimentara;
 
@@ -36,6 +33,24 @@ public class Retineri implements Serializable {
 
 	@Column(name = "imprumuturi")
 	private Integer imprumuturi;
+
+	@Column(name = "curseurron")
+	private Float curseurron;
+
+	@Column(name = "pensiefacangajat")
+	private Integer pensiefacangajat;
+
+	@Column(name = "pensiefacangajator")
+	private Integer pensiefacangajator;
+
+	@Column(name = "pensiefacangajatretinuta")
+	private Integer pensiefacangajatretinuta;
+
+	@Column(name = "pensiefacangajatordeductibila")
+	private Integer pensiefacangajatordeductibila;
+
+	@Column(name = "pensiefacexcedent")
+	private Integer pensiefacexcedent;
 
 	@JsonBackReference(value = "retinere-stat")
 	@OneToOne
@@ -46,13 +61,20 @@ public class Retineri implements Serializable {
 	}
 
 	public Retineri(Integer avansnet, Integer pensiefacultativa, Integer pensiealimentara, Integer popriri,
-			Integer imprumuturi, RealizariRetineri stat) {
+			Integer imprumuturi, RealizariRetineri stat, Float curseurron, Integer pensiefacangajat,
+			Integer pensiefacangajator, Integer pensiefacangajatretinuta, Integer pensiefacangajatordeductibila,
+			Integer pensiefacexcedent) {
 		this.avansnet = avansnet;
-		this.pensiefacultativa = pensiefacultativa;
 		this.pensiealimentara = pensiealimentara;
 		this.popriri = popriri;
 		this.imprumuturi = imprumuturi;
 		this.stat = stat;
+		this.curseurron = curseurron;
+		this.pensiefacangajat = pensiefacangajat;
+		this.pensiefacangajator = pensiefacangajator;
+		this.pensiefacangajatretinuta = pensiefacangajatretinuta;
+		this.pensiefacangajatordeductibila = pensiefacangajatordeductibila;
+		this.pensiefacexcedent = pensiefacexcedent;
 	}
 
 	public int getId() {
@@ -63,53 +85,92 @@ public class Retineri implements Serializable {
 		this.id = id;
 	}
 
-	//! GETTERS
 	public RealizariRetineri getStat() {
 		return stat;
+	}
+
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
 	}
 
 	public Integer getAvansnet() {
 		return avansnet;
 	}
 
-	public Integer getImprumuturi() {
-		return imprumuturi;
-	}
-
-	public Integer getPensiealimentara() {
-		return pensiealimentara;
-	}
-
-	public Integer getPensiefacultativa() {
-		return pensiefacultativa;
-	}
-
-	public Integer getPopriri() {
-		return popriri;
-	}
-
-	//! SETTERS
-	public void setStat(RealizariRetineri stat) {
-		this.stat = stat;
-	}
-
 	public void setAvansnet(Integer avansnet) {
 		this.avansnet = avansnet;
+	}
+
+	public Integer getImprumuturi() {
+		return imprumuturi;
 	}
 
 	public void setImprumuturi(Integer imprumuturi) {
 		this.imprumuturi = imprumuturi;
 	}
 
+	public Integer getPensiealimentara() {
+		return pensiealimentara;
+	}
+
 	public void setPensiealimentara(Integer pensiealimentara) {
 		this.pensiealimentara = pensiealimentara;
 	}
 
-	public void setPensiefacultativa(Integer pensiefacultativa) {
-		this.pensiefacultativa = pensiefacultativa;
+	public Integer getPopriri() {
+		return popriri;
 	}
 
 	public void setPopriri(Integer popriri) {
 		this.popriri = popriri;
 	}
+
+	public Float getCurseurron() {
+		return curseurron;
+	}
+
+	public void setCurseurron(Float curseurron) {
+		this.curseurron = curseurron;
+	}
+
+	public Integer getPensiefacangajat() {
+		return pensiefacangajat;
+	}
+
+	public void setPensiefacangajat(Integer pensiefacangajat) {
+		this.pensiefacangajat = pensiefacangajat;
+	}
+
+	public Integer getPensiefacangajator() {
+		return pensiefacangajator;
+	}
+
+	public void setPensiefacangajator(Integer pensiefacangajator) {
+		this.pensiefacangajator = pensiefacangajator;
+	}
+
+	public Integer getPensiefacangajatordeductibila() {
+		return pensiefacangajatordeductibila;
+	}
+
+	public void setPensiefacangajatordeductibila(Integer pensiefacangajatordeductibila) {
+		this.pensiefacangajatordeductibila = pensiefacangajatordeductibila;
+	}
+
+	public Integer getPensiefacangajatretinuta() {
+		return pensiefacangajatretinuta;
+	}
+
+	public void setPensiefacangajatretinuta(Integer pensiefacangajatretinuta) {
+		this.pensiefacangajatretinuta = pensiefacangajatretinuta;
+	}
+
+	public Integer getPensiefacexcedent() {
+		return pensiefacexcedent;
+	}
+
+	public void setPensiefacexcedent(Integer pensiefacexcedent) {
+		this.pensiefacexcedent = pensiefacexcedent;
+	}
+
 }
