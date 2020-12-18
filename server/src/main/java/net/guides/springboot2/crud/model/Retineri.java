@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "retineri")
@@ -186,11 +187,13 @@ public class Retineri implements Serializable {
 		this.pensiefacexcedent = pensiefacexcedent;
 	}
 
+	@JsonIgnore
 	public int getTotalPensiiFacultativeRON() {
 		return pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
 				+ pensiefacexcedent;
 	}
 
+	@JsonIgnore
 	public float getTotalPensiiFacultativeEUR() {
 		return (pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
 				+ pensiefacexcedent) / curseurron;
