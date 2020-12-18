@@ -391,7 +391,7 @@ class RealizariRetineri extends React.Component {
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
-		//* 2. recalculate realizariRetineri
+		//* 2. recalculare realizariRetineri
     const data = await axios
       .put(
         `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,

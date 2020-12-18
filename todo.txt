@@ -9,10 +9,8 @@ buton de 'show password' la schimba parola
 unde pun superior pentru un angajat?
 
 
-TODO:
-	open in new tab
-	
-	Dupa adaugarea unui concediu, adauga buton in modal pt a recalcula salariul in luna cu acel concediu
+TODO [18 dec :: bogdanbis]:
+	Dupa adaugarea unui concediu, recalculeaza salariul in luna cu acel concediu
 
 	Contract.js:
 		1. Superiori - Contract.js:287
