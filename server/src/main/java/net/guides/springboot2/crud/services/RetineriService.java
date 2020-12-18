@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.services;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import net.guides.springboot2.crud.repository.RetineriRepository;
 
 @Service
 public class RetineriService {
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@Autowired
 	private RetineriRepository retineriRepository;
 
@@ -33,13 +37,13 @@ public class RetineriService {
 		return retineriRepository.save(newEmptyRetinere);
 	}
 
-	public Retineri updateRetinere(int oldRetinereID, RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
+	public Retineri updateRetinere(RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
 
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
 				.orElseThrow(() -> new ResourceNotFoundException("RealizaiRetineri not found for this id"));
 
-		Retineri newRetinere = new Retineri(realizariRetineri);
-		newRetinere.setId(oldRetinereID);
+		Retineri newRetinere = modelMapper.map(newRetinereDTO, Retineri.class);
+		newRetinere.setStat(realizariRetineri);
 
 		return retineriRepository.save(newRetinere);
 	}
