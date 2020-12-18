@@ -224,19 +224,9 @@ public class RealizariRetineriService {
 	// daca exista deja calculate, returneaza pe acelea, daca nu, calculeaza
 	public RealizariRetineri saveOrGetRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		if (realizariRetineriRepository.existsByLunaAndAnAndContract_Id(luna, an, idcontract))
-			return getRealizariRetineri(luna, an, idcontract);
-
-		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
-
-		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
-
-		// create and save baza calcul only if contract valid in month, year
-		bazacalculService.saveBazacalcul(realizariRetineri);
-
-		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
-		retineriService.saveRetinere(realizariRetineri);
-
-		return realizariRetineri;
+			return this.getRealizariRetineri(luna, an, idcontract);
+		else 
+			return this.saveRealizariRetineri(luna, an, idcontract);
 	} // saveOrGetRealizariRetineri
 
 	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract, int primaBruta, int nrTichete,
@@ -256,16 +246,16 @@ public class RealizariRetineriService {
 			totalOreSuplimentare = tmpRR.getTotaloresuplimentare();
 		}
 
-		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, primaBruta, nrTichete,-
-				totalOreSuplimentare);
+		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
+				idcontract);
 
-		// creeaza si salveaza baza calcul doar daca are contract in (luna, an)
-		bazacalculService.saveBazacalcul(realizariRetineri);
+		RealizariRetineri newRealizariRetineri = this.calcRealizariRetineri(idcontract, luna, an,
+				primaBruta, nrTichete, totalOreSuplimentare);
+		newRealizariRetineri.setId(oldRealizariRetineri.getId());
 
-		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
-		retineriService.saveRetinere(realizariRetineri);
+		bazacalculService.updateBazacalcul(newRealizariRetineri);
 
-		return realizariRetineri;
+		return realizariRetineriRepository.save(newRealizariRetineri);
 	}
 
 	// exclude (luna, an) din argument
@@ -279,15 +269,15 @@ public class RealizariRetineriService {
 
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
-				this.saveOrGetRealizariRetineri(i, an6, idcontract);
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
 			}
 
 			for (int i = 1; i < luna; ++i) {
-				this.saveOrGetRealizariRetineri(i, an, idcontract);
+				this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1);
 			}
 		} else {
 			for (int i = luna6; i < luna; ++i) {
-				this.saveOrGetRealizariRetineri(i, an, idcontract);
+				this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1);
 			}
 		}
 	}

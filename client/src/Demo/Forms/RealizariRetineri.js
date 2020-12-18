@@ -44,7 +44,8 @@ class RealizariRetineri extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.calcNrTichete = this.calcNrTichete.bind(this);
     this.getStatIndividual = this.getStatIndividual.bind(this);
-    this.creeazaStateUltimele6Luni = this.creeazaStateUltimele6Luni.bind(this);
+		this.creeazaStateUltimele6Luni = this.creeazaStateUltimele6Luni.bind(this);
+		this.recalcSocietate = this.recalcSocietate.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -271,14 +272,9 @@ class RealizariRetineri extends React.Component {
     let totaloresuplimentare = 0;
     if (oresuplimentare.length > 0) {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
-    }
-    // const retineri = await axios
-    //   .get(`${server.address}/retineri/ids=${data.id}`, { headers: authHeader() })
-    //   .then((res) => res.data)
-    //   .catch((err) => console.error(err));
-
+		}
+		
 		const retineri = data.retineri;
-		console.log(retineri);
 
     // set states with data
     this.setState({
@@ -434,16 +430,16 @@ class RealizariRetineri extends React.Component {
 
     const ok = await axios
       .put(
-        `${server.address}/realizariretineri/calc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
+        `${server.address}/realizariretineri/recalc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
         {},
         { headers: authHeader() }
       )
       .then((res) => res.status === 200)
-      .catch((err) => console.error('RealizariRetineri.js :: line: 422\n', err));
+      .catch((err) => console.error(err));
 
     if (ok) {
       alert(
-        `Statul de salarii calculat pe ultimele 6 luni incepand cu ${luna.nume}. Deasemenea, bazele de calcul au fost adaugate.`
+        `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. Deasemenea, bazele de calcul au fost adaugate.`
       );
       window.scrollTo({
         top: 0,
@@ -451,7 +447,37 @@ class RealizariRetineri extends React.Component {
         behavior: 'smooth',
       });
     }
-  }
+	}
+
+	async recalcSocietate() {
+		if (!this.state.selected_angajat.idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    let luna = this.state.luna;
+    let an = this.state.an;
+
+    const ok = await axios
+      .put(
+        `${server.address}/realizariretineri/recalc/societate/ids=${this.state.socsel.id}&mo=${luna.nr}&y=${an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      alert(
+        `Toate salariile din luna ${luna.nume} au fost recalculate pentru ${this.state.socsel.nume}`
+      );
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+	}
 
   async calcNrTichete() {
     if (!this.state.selected_angajat) return;
@@ -585,13 +611,13 @@ class RealizariRetineri extends React.Component {
           behavior: 'smooth',
         });
       });
-  }
+	}
 
   onSubmit(e) {
     e.preventDefault();
 
     this.recalculeaza();
-  }
+	}
 
   render() {
     const this_year = new Date().getFullYear();
@@ -1356,7 +1382,16 @@ class RealizariRetineri extends React.Component {
                   onClick={this.creeazaStateUltimele6Luni}
                   className="mb-3 mt-3"
                 >
-                  Creează ștate pe ultimele 6 luni
+                  Recalculeaza ultimele 6 luni
+                </Button>
+
+								<Button
+                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                  disabled={!this.state.selected_angajat}
+                  onClick={this.recalcSocietate}
+                  className="mb-3 mt-3"
+                >
+                  Recalculeaza toate salariile
                 </Button>
               </Row>
             </Form>

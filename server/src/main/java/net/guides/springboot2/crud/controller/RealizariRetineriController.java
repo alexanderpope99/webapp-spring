@@ -90,20 +90,24 @@ public class RealizariRetineriController {
 	// * butonul RealizariRetineri.js : "Recalculează"
 	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
 	public RealizariRetineri recalcRealizariRetineri(@PathVariable("id") int idcontract,
-			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an,
-			@PathVariable("pb") Integer primaBruta, @PathVariable("nrt") Integer nrTichete,
-			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
+			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an, @PathVariable("pb") Integer primaBruta,
+			@PathVariable("nrt") Integer nrTichete, @PathVariable(value = "tos") Integer totalOreSuplimentare)
+			throws ResourceNotFoundException {
 
-		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
-				idcontract);
+		return realizariRetineriService.recalcRealizariRetineri(luna, an, idcontract, primaBruta, nrTichete,
+				totalOreSuplimentare);
+		// RealizariRetineri oldRealizariRetineri =
+		// realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
+		// idcontract);
 
-		RealizariRetineri newRealizariRetineri = realizariRetineriService.calcRealizariRetineri(idcontract, luna, an,
-				primaBruta, nrTichete, totalOreSuplimentare);
-		newRealizariRetineri.setId(oldRealizariRetineri.getId());
+		// RealizariRetineri newRealizariRetineri =
+		// realizariRetineriService.calcRealizariRetineri(idcontract, luna, an,
+		// primaBruta, nrTichete, totalOreSuplimentare);
+		// newRealizariRetineri.setId(oldRealizariRetineri.getId());
 
-		bazacalculService.updateBazacalcul(newRealizariRetineri);
+		// bazacalculService.updateBazacalcul(newRealizariRetineri);
 
-		return realizariRetineriRepository.save(newRealizariRetineri);
+		// return realizariRetineriRepository.save(newRealizariRetineri);
 	}
 
 	// * CALCULEAZA pt un angajat, pe ultimele 6 luni, exclusiv (luna, an)
@@ -120,10 +124,8 @@ public class RealizariRetineriController {
 	// * RECALCULEAZA pt un angajat, pe ultimele 6 luni, exclusiv (luna, an)
 	// * butonul RealizariRetineri.js : "Recalculeaza ultimele 6 luni"
 	@PutMapping("recalc/ultimele6/idc={idc}&mo={luna}&y={an}")
-	public ResponseEntity<MessageResponse> recalcUltimele6Luni(
-			@PathVariable("idc") int idcontract,
-			@PathVariable("luna") int luna, 
-			@PathVariable("an") int an) throws ResourceNotFoundException {
+	public ResponseEntity<MessageResponse> recalcUltimele6Luni(@PathVariable("idc") int idcontract,
+			@PathVariable("luna") int luna, @PathVariable("an") int an) throws ResourceNotFoundException {
 
 		realizariRetineriService.recalcRealizariRetineriUltimele6Luni(luna, an, idcontract);
 
@@ -133,26 +135,23 @@ public class RealizariRetineriController {
 	// * recalculeaza pt o societate, pe o luna
 	// * butonul Societati.js : "Recalculeaza toate salariile"
 	@PutMapping("recalc/societate/ids={ids}&mo={luna}&y={an}")
-	public ResponseEntity<MessageResponse> recalcSocietate(
-			@PathVariable("ids") int idsocietate,
-			@PathVariable("luna") int luna,
-			@PathVariable("an") int an) throws ResourceNotFoundException {
-				
+	public ResponseEntity<MessageResponse> recalcSocietate(@PathVariable("ids") int idsocietate,
+			@PathVariable("luna") int luna, @PathVariable("an") int an) throws ResourceNotFoundException {
+
 		realizariRetineriService.recalcSocietate(luna, an, idsocietate);
-		
-		return ResponseEntity.ok(new MessageResponse("Salarii recalculate pe societatea " + idsocietate));
+
+		return ResponseEntity.ok(new MessageResponse("Salarii recalculate pentru societatea " + idsocietate));
 	}
 
 	// * recalculeaza pt o societate, pe ultimele 6 luni, exclusiv (luna, an)
 	// * butonul Societati.js : "Recalculeaza toate salariile ultimele 6 luni"
 	@PutMapping("recalc/societate/ultimele6/ids={ids}&mo={luna}&y={an}")
-	public ResponseEntity<MessageResponse> recalcSocietateUltimele6Luni(
-			@PathVariable("ids") int idsocietate,
-			@PathVariable("luna") int luna,
-			@PathVariable("an") int an) throws ResourceNotFoundException {
-				
+	public ResponseEntity<MessageResponse> recalcSocietateUltimele6Luni(@PathVariable("ids") int idsocietate,
+			@PathVariable("luna") int luna, @PathVariable("an") int an) throws ResourceNotFoundException {
+
 		realizariRetineriService.recalcSocietateUltimele6Luni(luna, an, idsocietate);
-		
-		return ResponseEntity.ok(new MessageResponse("Salarii recalculate pe societatea " + idsocietate));
+
+		return ResponseEntity
+				.ok(new MessageResponse("Salarii recalculate in ultimele 6 luni, pentru societatea " + idsocietate));
 	}
 }
