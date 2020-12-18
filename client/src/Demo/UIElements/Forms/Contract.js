@@ -651,7 +651,7 @@ class Contract extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Col>
-            <Col md={12} className="border rounded pt-3 pb-3 m-3">
+            <Col md={12} className="border rounded pt-3">
               <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
                 Cont bancar
               </Typography>
