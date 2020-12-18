@@ -180,7 +180,8 @@ public class RealizariRetineriService {
 		int nrPersoaneIntretinere = persoaneIntretinereService.getNrPersoaneIntretinere(contract.getId());
 
 		int restPlata = 0;
-		if (zileLucrate > 0)
+		int zilePlatite = norma - zileCFPLucratoare;
+		if (zilePlatite > 0)
 			restPlata = calcRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere);
 
 		float impozit = Math.round(this.impozitSalariu);
@@ -191,7 +192,6 @@ public class RealizariRetineriService {
 				(int) this.deducere, primaBruta, totalOreSuplimentare);
 
 		int nrOreSuplimentare = oresuplimentareRepository.getNrOreSuplimentareByIdstat(rr.getId());
-		int zilePlatite = norma - zileCFPLucratoare;
 
 		rr.setValcm(valCM);
 		rr.setZileplatite(zilePlatite);

@@ -148,8 +148,8 @@ class FacturiTabel extends React.Component {
       descriereactivitati: this.state.descriereactivitati || null,
       idaprobator: this.state.idaprobator || null,
       aprobat: this.state.aprobat || null,
-      observatii: null,
-      codproiect: null,
+      observatii: this.state.observatii || null,
+      codproiect: this.state.codproiect || null,
       idcentrucost: this.state.idcentrucost || null,
       dataplatii: this.state.dataplatii || null,
       sumaachitata: this.state.sumaachitata || null,
@@ -185,28 +185,28 @@ class FacturiTabel extends React.Component {
       show: true,
 
       id: fact.id,
-      denumirefurnizor: fact.denumirefurnizor,
-      ciffurnizor: fact.ciffurnizor,
-      nr: fact.nr,
+      denumirefurnizor: fact.denumirefurnizor || '',
+      ciffurnizor: fact.ciffurnizor || '',
+      nr: fact.nr || '',
       data: fact.data ? fact.data.substring(0, 10) : '',
-      moneda: fact.moneda,
-      sumafaratva: fact.sumafaratva,
-      termenscadenta: fact.termenscadenta,
-      tipachizitie: fact.tipachizitie,
-      descriereactivitati: fact.descriereactivitati,
+      moneda: fact.moneda || '',
+      sumafaratva: fact.sumafaratva || '',
+      termenscadenta: fact.termenscadenta || '',
+      tipachizitie: fact.tipachizitie || '',
+      descriereactivitati: fact.descriereactivitati || '',
       numeaprobator: fact.aprobator
         ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
         : '-',
       idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
       aprobat: fact.aprobat,
-      observatii: fact.observatii,
-      codproiect: fact.codproiect,
+      observatii: fact.observatii || '',
+      codproiect: fact.codproiect || '',
       centrucost: fact.centrucost ? fact.centrucost : '-',
       idcentrucost: fact.centrucost ? fact.centrucost.id : null,
-      dataplatii: fact.dataplatii,
-      sumaachitata: fact.sumaachitata,
+      dataplatii: fact.dataplatii || '',
+      sumaachitata: fact.sumaachitata || '',
 
-      numefisier: fact.numefisier,
+      numefisier: fact.numefisier || '',
       sterge: false,
     });
   }
@@ -349,7 +349,7 @@ class FacturiTabel extends React.Component {
 
   async onRefresh() {
     const centreCost = await axios
-      .get(`${server.address}/centrucost/idsoc/${this.state.socsel.id}`, {
+      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -558,11 +558,19 @@ class FacturiTabel extends React.Component {
                     onChange={(e) => this.setState({ descriereactivitati: e.target.value })}
                   />
                 </Form.Group>
+								<Form.Group as={Col} md="6">
+                  <Form.Label>Cod proiect</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.codproiect}
+                    onChange={(e) => this.setState({ codproiect: e.target.value })}
+                  />
+                </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Observații</Form.Label>
                   <Form.Control
                     type="text"
-                    value={this.state.observatii}
+                    value={this.state.observatii || ''}
                     onChange={(e) => this.setState({ observatii: e.target.value })}
                   />
                 </Form.Group>

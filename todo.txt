@@ -10,8 +10,6 @@ unde pun superior pentru un angajat?
 
 
 TODO [18 dec :: bogdanbis]:
-	Dupa adaugarea unui concediu, recalculeaza salariul in luna cu acel concediu
-
 	Contract.js:
 		1. Superiori - Contract.js:287
 		2. Centre cost: 2.1: axios.get in component did mount, not in fillForm (centreCost se schimba doar cand schimbi societatea)
@@ -33,6 +31,8 @@ UserTabel:
 
 
 *** INTREBARI: ***
+din ce se calculeaza CASS? din sal. realizat?
+
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) - INCLUDE WEEKEND?
 

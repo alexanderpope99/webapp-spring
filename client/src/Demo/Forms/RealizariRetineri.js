@@ -1159,7 +1159,7 @@ class RealizariRetineri extends React.Component {
                           value={
                             this.state.totaldrepturi
                               ? this.numberWithCommas(this.state.totaldrepturi)
-                              : ''
+                              : '0'
                           }
                         />
                       </Form.Group>
@@ -1171,7 +1171,7 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           disabled
                           value={
-                            this.state.restplata ? this.numberWithCommas(this.state.restplata) : ''
+                            this.state.restplata ? this.numberWithCommas(this.state.restplata) : '0'
                           }
                         />
                       </Form.Group>
@@ -1182,7 +1182,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : ''}
+                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : '0'}
                         />
                       </Form.Group>
                     </Col>
@@ -1192,7 +1192,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : ''}
+                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : '0'}
                         />
                       </Form.Group>
                     </Col>

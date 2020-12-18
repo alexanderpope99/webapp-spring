@@ -179,7 +179,7 @@ class FacturiOperatorTabel extends React.Component {
 
   async onRefresh() {
     const centreCost = await axios
-      .get(`${server.address}/centrucost/idsoc/${this.state.socsel.id}`, {
+      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
