@@ -108,7 +108,7 @@ public class RealizariRetineri implements Serializable {
 	private Integer primabruta;
 
 	@Column(name = "totaloresuplimentare")
-	private Float totaloresuplimentare;
+	private Integer totaloresuplimentare;
 
 	@Column(name = "nroresuplimentare")
 	private Integer nroresuplimentare;
@@ -139,7 +139,7 @@ public class RealizariRetineri implements Serializable {
 			Integer duratazilucru, Integer norma, Integer zilelucrate, Integer orelucrate, Integer totaldrepturi,
 			Float salariupezi, Float salariupeora, Float cas, Float cass, Float cam, Float impozit, Float valoareTichete,
 			Integer restplata, Integer nrpersoaneintretinere, Integer deducere, Integer primabruta,
-			Float totaloresuplimentare) {
+			Integer totaloresuplimentare) {
 		this.contract = contract;
 		this.luna = luna;
 		this.an = an;
@@ -299,7 +299,7 @@ public class RealizariRetineri implements Serializable {
 		return primabruta;
 	}
 
-	public Float getTotaloresuplimentare() {
+	public Integer getTotaloresuplimentare() {
 		return totaloresuplimentare == null ? 0 : totaloresuplimentare;
 	}
 
@@ -455,7 +455,7 @@ public class RealizariRetineri implements Serializable {
 		this.primabruta = primabruta;
 	}
 
-	public void setTotaloresuplimentare(Float totaloresuplimentare) {
+	public void setTotaloresuplimentare(Integer totaloresuplimentare) {
 		this.totaloresuplimentare = totaloresuplimentare;
 	}
 

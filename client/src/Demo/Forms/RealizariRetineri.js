@@ -36,7 +36,6 @@ class RealizariRetineri extends React.Component {
     this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.recalculeaza = this.recalculeaza.bind(this);
-    this.reseteazaCalculul = this.reseteazaCalculul.bind(this);
     this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
@@ -422,35 +421,6 @@ class RealizariRetineri extends React.Component {
       },
       this.fillForm
     );
-  }
-
-  async reseteazaCalculul() {
-    console.log('recalculez TOT...');
-
-    let an = this.state.an;
-    let luna = this.state.luna.nr;
-
-    if (!this.state.selected_angajat.idpersoana) {
-      this.clearForm();
-      return;
-    }
-
-    await axios
-      .put(
-        `${server.address}/realizariretineri/update/reset/idc=${this.state.idcontract}&mo=${luna}&y=${an}`,
-        {},
-        { headers: authHeader() }
-      )
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-
-    this.fillForm();
   }
 
   async creeazaStateUltimele6Luni() {

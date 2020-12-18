@@ -121,8 +121,8 @@ public class StatSalariiService {
 
 			nrContractStyle.setAlignment(HorizontalAlignment.RIGHT);
 
-			Cell salariuWriter = stat.getRow(0).getCell(0);
-			Cell functieWriter = stat.getRow(0).getCell(0);
+			Cell salariuWriter;
+			Cell functieWriter;
 
 			// * write date societate
 			Cell writerCell = stat.getRow(0).getCell(0);
@@ -158,7 +158,7 @@ public class StatSalariiService {
 
 				int idcontract = contract.getId();
 
-				RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
+				RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
 				Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 
 				impozitScutit += realizariRetineri.getImpozitscutit();
@@ -519,7 +519,6 @@ public class StatSalariiService {
 			formula = this.sumFormula('O', 16, nrAngajat);
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
-			;
 			writerCell = row3.createCell(14); // somaj 0.5%
 			formula = this.sumFormula('O', 17, nrAngajat);
 			writerCell.setCellFormula(formula);
@@ -980,8 +979,8 @@ public class StatSalariiService {
 
 			nrContractStyle.setAlignment(HorizontalAlignment.RIGHT);
 
-			Cell salariuWriter = stat.getRow(0).getCell(0);
-			Cell functieWriter = stat.getRow(0).getCell(0);
+			Cell salariuWriter;
+			Cell functieWriter;
 
 			// * write date societate
 			Cell writerCell = stat.getRow(0).getCell(0);
@@ -1005,7 +1004,7 @@ public class StatSalariiService {
 			int impozitScutit = 0;
 			int idcontract = contract.getId();
 
-			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
+			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 
 			impozitScutit += realizariRetineri.getImpozitscutit();

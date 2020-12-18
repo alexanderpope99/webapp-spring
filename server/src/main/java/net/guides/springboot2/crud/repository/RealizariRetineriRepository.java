@@ -14,8 +14,5 @@ public interface RealizariRetineriRepository extends JpaRepository<RealizariReti
 	@Query(value = "select sum(cas) as cas25, sum(cass) as cass10, sum(impozit) as impozit, sum(salariurealizat) as salariuDatorat, sum(valcm) as valCM, sum(cam) as cam from realizariretineri where luna = ?1 and an = ?2 and idcontract in (select id from contract where id in (select idcontract from angajat where idsocietate = ?3))", nativeQuery = true)
 	public NotaContabilaDTO getNotaContabilaByLunaAndAnAndIdsocietate(int luna, int an, int idsocietate);
 
-	@Query(value = "select exists (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract = ?3)", nativeQuery = true)
-	public boolean existsByLunaAndAnAndIdcontract(int luna, int an, int idcontract);
-
 	public boolean existsByLunaAndAnAndContract_Id(int luna, int an, int idcontract);
 }

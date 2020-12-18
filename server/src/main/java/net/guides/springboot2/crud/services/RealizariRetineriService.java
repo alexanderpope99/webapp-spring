@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,7 @@ import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
+import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
@@ -61,10 +64,6 @@ public class RealizariRetineriService {
 	// datele existente
 	public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) {
 		RealizariRetineri rv = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
-		// RealizariRetineri rv = realizariRetineriRepository.findAll().stream()
-		// .filter(r ->{return (r.getLuna() == luna && r.getAn() == an &&
-		// r.getContract().getId() == idcontract);})
-		// .collect(Collectors.toList()).get(0);
 
 		int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
 		boolean areBC = bazacalculRepository.existsByLunaAndAnAndAngajat_Idpersoana(luna, an, idangajat);
@@ -113,18 +112,15 @@ public class RealizariRetineriService {
 
 		// get Retineri here and subtract it
 		Retineri retineri = retineriService.getRetinereByIdcontractAndLunaAndAn(idcontract, luna, an);
-		restPlata -= (retineri.getAvansnet() + 
-			retineri.getPensiefacultativa() + 
-			retineri.getPensiealimentara() + 
-			retineri.getPopriri() + 
-			retineri.getImprumuturi());
-			
+		restPlata -= (retineri.getAvansnet() + retineri.getPensiefacultativa() + retineri.getPensiealimentara()
+				+ retineri.getPopriri() + retineri.getImprumuturi());
+
 		return Math.round(restPlata);
 	} // calcRestPlata
 
 	// just calc, doesnt affect DB
 	public RealizariRetineri calcRealizariRetineri(int idcontract, int luna, int an, int primaBruta, int nrTichete,
-			float totalOreSuplimentare) throws ResourceNotFoundException {
+			int totalOreSuplimentare) throws ResourceNotFoundException {
 		Contract contract = contractService.getContractById(idcontract);
 		impozitSalariu = 0;
 		deducere = 0;
@@ -170,6 +166,7 @@ public class RealizariRetineriService {
 
 		this.salariuRealizat = Math
 				.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta + totalOreSuplimentare);
+				
 		// zileCOLucratoare include zileCFPLucratoare
 		float valCO = (zileCOLucratoare - zileCFPLucratoare) * salariuPeZi;
 		totalDrepturi = Math.round(salariuRealizat + valCM - primaBruta);
@@ -209,11 +206,8 @@ public class RealizariRetineriService {
 		return rr;
 	} // calcRealizariRetineri
 
-	// daca exista deja calculate, le returneaza pe acelea, daca nu, calculeaza
+	// pur si simplu calculeaza apoi salveaza
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
-		if (realizariRetineriRepository.existsByLunaAndAnAndIdcontract(luna, an, idcontract))
-			return getRealizariRetineri(luna, an, idcontract);
-
 		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
 
 		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
@@ -227,6 +221,54 @@ public class RealizariRetineriService {
 		return realizariRetineri;
 	} // saveRealizariRetineri
 
+	// daca exista deja calculate, returneaza pe acelea, daca nu, calculeaza
+	public RealizariRetineri saveOrGetRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
+		if (realizariRetineriRepository.existsByLunaAndAnAndContract_Id(luna, an, idcontract))
+			return getRealizariRetineri(luna, an, idcontract);
+
+		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+
+		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
+
+		// create and save baza calcul only if contract valid in month, year
+		bazacalculService.saveBazacalcul(realizariRetineri);
+
+		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
+		retineriService.saveRetinere(realizariRetineri);
+
+		return realizariRetineri;
+	} // saveOrGetRealizariRetineri
+
+	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract, int primaBruta, int nrTichete,
+			int totalOreSuplimentare) throws ResourceNotFoundException {
+
+		// nu e calculat in (luna, an), calculeaza/creeaza => nu mai trebuie recalculat
+		if(!realizariRetineriRepository.existsByLunaAndAnAndContract_Id(luna, an, idcontract)) {
+			return this.saveRealizariRetineri(luna, an, idcontract);
+		}
+
+		// verifica daca trebuie folosite (primaBruta, nrTichete, totalOreSuplimentare) existente
+		// could also work with Integer and check if is null and not pass arguments when calling this function
+		if(primaBruta == -1 && nrTichete == -1 && totalOreSuplimentare == -1) {
+			RealizariRetineri tmpRR = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
+			primaBruta = tmpRR.getPrimabruta();
+			nrTichete = tmpRR.getNrtichete();
+			totalOreSuplimentare = tmpRR.getTotaloresuplimentare();
+		}
+
+		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, primaBruta, nrTichete,-
+				totalOreSuplimentare);
+
+		// creeaza si salveaza baza calcul doar daca are contract in (luna, an)
+		bazacalculService.saveBazacalcul(realizariRetineri);
+
+		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
+		retineriService.saveRetinere(realizariRetineri);
+
+		return realizariRetineri;
+	}
+
+	// exclude (luna, an) din argument
 	public void saveRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
@@ -237,38 +279,58 @@ public class RealizariRetineriService {
 
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
-				this.saveRealizariRetineri(i, an6, idcontract);
+				this.saveOrGetRealizariRetineri(i, an6, idcontract);
 			}
 
 			for (int i = 1; i < luna; ++i) {
-				this.saveRealizariRetineri(i, an, idcontract);
+				this.saveOrGetRealizariRetineri(i, an, idcontract);
 			}
 		} else {
 			for (int i = luna6; i < luna; ++i) {
-				this.saveRealizariRetineri(i, an, idcontract);
+				this.saveOrGetRealizariRetineri(i, an, idcontract);
 			}
 		}
 	}
 
-	public RealizariRetineri resetRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
+	// exclude (luna, an) din argument
+	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
+	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
+		int luna6 = 0, an6 = an;
+		if (luna <= 6) {
+			luna6 = 12 - (6 - luna);
+			an6--;
+		} else
+			luna6 = luna - 6;
 
-		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
-				idcontract);
+		// (..., -1, -1, -1) == foloseste (primaBruta, nrTichete, totalOreSuplimentare) existente
+		if (luna6 > luna && an6 < an) {
+			for (int i = luna6; i <= 12; ++i) {
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
+			}
 
-		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
+			for (int i = 1; i < luna; ++i) {
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
+			}
+		} else {
+			for (int i = luna6; i < luna; ++i) {
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
+			}
+		}
+	}
 
-		RealizariRetineri realizariRetineri = calcRealizariRetineri(idcontract, luna, an, 0, nrTichete, 0);
+	public void recalcSocietate(int luna, int an, int idsocietate) throws ResourceNotFoundException {
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
-		realizariRetineri.setId(oldRealizariRetineri.getId());
-		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
+		for(Angajat angajat : angajati) {
+			this.recalcRealizariRetineri(luna, an, angajat.getContract().getId(), -1, -1, -1);
+		}
+	}
 
-		// update baza calcul
-		bazacalculService.updateBazacalcul(realizariRetineri);
+	public void recalcSocietateUltimele6Luni(int luna, int an, int idsocietate) throws ResourceNotFoundException {
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
-		// empty retinere
-		Retineri oldRetinere = retineriService.getRetinereByIdstat(realizariRetineri.getId());
-		retineriService.emptyRetinere(oldRetinere, realizariRetineri);
-
-		return realizariRetineri;
-	} // resetRealizariRetineri
+		for(Angajat angajat : angajati) {
+			this.recalcRealizariRetineriUltimele6Luni(luna, an, angajat.getContract().getId());
+		}
+	}
 }

@@ -129,7 +129,7 @@ public class FoaiePontajService {
 			// * nr de marca ??
 
 			// if it doesn't exist, create it
-			RealizariRetineri realizariRetineri = realizariRetineriService.saveRealizariRetineri(luna, an, idcontract);
+			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
 
 			// get concediu odihna
 			List<CO> co = contract.getConcediiOdihna();
