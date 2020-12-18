@@ -67,7 +67,7 @@ public class Retineri implements Serializable {
 		this.pensiealimentara = 0;
 		this.popriri = 0;
 		this.imprumuturi = 0;
-		this.curseurron = 0;
+		this.curseurron = 0f;
 		this.pensiefacangajat = 0;
 		this.pensiefacangajator = 0;
 		this.pensiefacangajatretinuta = 0;
@@ -198,4 +198,5 @@ public class Retineri implements Serializable {
 		return (pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
 				+ pensiefacexcedent) / curseurron;
 	}
+
 }
