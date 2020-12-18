@@ -21,7 +21,8 @@ class NavRight extends Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
     this.readNotification = this.readNotification.bind(this);
-    this.readAllNotifications = this.readAllNotifications.bind(this);
+		this.readAllNotifications = this.readAllNotifications.bind(this);
+		this.openInNewTab = this.openInNewTab.bind(this);
 
     this.state = {
       time: Date.now(),
@@ -112,7 +113,12 @@ class NavRight extends Component {
         const data = Date(millis).split(' ');
         return data[2] + ' ' + data[1] + ' ' + data[3];
     }
-  }
+	}
+	
+	openInNewTab() {
+		var win = window.open('https://www.cursbnr.ro/', '_blank');
+		win.focus();
+	}
 
   render() {
     const AvatarProp = this.getAvatarIcon();
@@ -192,7 +198,7 @@ class NavRight extends Component {
                         <p>
                           <strong
 														style={{cursor: "pointer"}}
-                            onClick={() => (window.location.href = 'https://www.cursbnr.ro/')}
+                            onClick={this.openInNewTab}
                           >
                             Curs Valutar BNR EUR/RON
                           </strong>

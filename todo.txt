@@ -10,6 +10,8 @@ unde pun superior pentru un angajat?
 
 
 TODO:
+	open in new tab
+	
 	Dupa adaugarea unui concediu, adauga buton in modal pt a recalcula salariul in luna cu acel concediu
 
 	Contract.js:
