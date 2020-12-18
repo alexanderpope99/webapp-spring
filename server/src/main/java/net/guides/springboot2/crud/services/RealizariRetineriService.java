@@ -112,7 +112,7 @@ public class RealizariRetineriService {
 
 		// get Retineri here and subtract it
 		Retineri retineri = retineriService.getRetinereByIdcontractAndLunaAndAn(idcontract, luna, an);
-		restPlata -= (retineri.getAvansnet() + retineri.getPensiefacultativa() + retineri.getPensiealimentara()
+		restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON() + retineri.getPensiealimentara()
 				+ retineri.getPopriri() + retineri.getImprumuturi());
 
 		return Math.round(restPlata);

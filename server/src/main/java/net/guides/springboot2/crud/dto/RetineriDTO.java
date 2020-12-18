@@ -6,10 +6,8 @@ public class RetineriDTO {
 	private int id;
 
 	private int idstat;
-	
-	private Integer avansnet;
 
-	private Integer pensiefacultativa;
+	private Integer avansnet;
 
 	private Integer pensiealimentara;
 
@@ -18,6 +16,18 @@ public class RetineriDTO {
 	private Integer imprumuturi;
 
 	private RealizariRetineri stat;
+
+	private Float curseurron;
+
+	private Integer pensiefacangajat;
+
+	private Integer pensiefacangajator;
+
+	private Integer pensiefacangajatretinuta;
+
+	private Integer pensiefacangajatordeductibila;
+
+	private Integer pensiefacexcedent;
 
 	public Integer getAvansnet() {
 		return avansnet;
@@ -42,12 +52,36 @@ public class RetineriDTO {
 		return pensiealimentara;
 	}
 
-	public Integer getPensiefacultativa() {
-		return pensiefacultativa;
-	}
-
 	public Integer getPopriri() {
 		return popriri;
+	}
+
+	public Float getCurseurron() {
+		return curseurron;
+	}
+
+	public Integer getPensiefacangajat() {
+		return pensiefacangajat;
+	}
+
+	public Integer getPensiefacangajator() {
+		return pensiefacangajator;
+	}
+
+	public Integer getPensiefacangajatordeductibila() {
+		return pensiefacangajatordeductibila;
+	}
+
+	public Integer getPensiefacangajatretinuta() {
+		return pensiefacangajatretinuta;
+	}
+
+	public Integer getPensiefacexcedent() {
+		return pensiefacexcedent;
+	}
+
+	public RealizariRetineri getStat() {
+		return stat;
 	}
 
 	public void setAvansnet(Integer avansnet) {
@@ -70,11 +104,53 @@ public class RetineriDTO {
 		this.pensiealimentara = pensiealimentara;
 	}
 
-	public void setPensiefacultativa(Integer pensiefacultativa) {
-		this.pensiefacultativa = pensiefacultativa;
-	}
-
 	public void setPopriri(Integer popriri) {
 		this.popriri = popriri;
+	}
+
+	public void setCurseurron(Float curseurron) {
+		this.curseurron = curseurron;
+	}
+
+	public void setPensiefacangajat(Integer pensiefacangajat) {
+		this.pensiefacangajat = pensiefacangajat;
+	}
+
+	public void setPensiefacangajator(Integer pensiefacangajator) {
+		this.pensiefacangajator = pensiefacangajator;
+	}
+
+	public void setPensiefacangajatordeductibila(Integer pensiefacangajatordeductibila) {
+		this.pensiefacangajatordeductibila = pensiefacangajatordeductibila;
+	}
+
+	public void setPensiefacangajatretinuta(Integer pensiefacangajatretinuta) {
+		this.pensiefacangajatretinuta = pensiefacangajatretinuta;
+	}
+
+	public void setPensiefacexcedent(Integer pensiefacexcedent) {
+		this.pensiefacexcedent = pensiefacexcedent;
+	}
+
+	public void setStat(RealizariRetineri stat) {
+		this.stat = stat;
+	}
+
+	public int getTotalPensiiFacultativeRON() {
+		return 
+		pensiefacangajat
+		+ pensiefacangajator
+		+ pensiefacangajatretinuta
+		+ pensiefacangajatordeductibila
+		+ pensiefacexcedent;
+	}
+
+	public float getTotalPensiiFacultativeEUR() {
+		return 
+		(pensiefacangajat
+		+ pensiefacangajator
+		+ pensiefacangajatretinuta
+		+ pensiefacangajatordeductibila
+		+ pensiefacexcedent)/curseurron;
 	}
 }

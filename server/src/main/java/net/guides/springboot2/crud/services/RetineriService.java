@@ -19,7 +19,7 @@ public class RetineriService {
 	private RealizariRetineriRepository realizariRetineriRepository;
 
 	public Retineri saveRetinere(RealizariRetineri stat) {
-		Retineri emptyRetinere = new Retineri(0, 0, 0, 0, 0, stat);
+		Retineri emptyRetinere = new Retineri(stat);
 		return retineriRepository.save(emptyRetinere);
 	}
 
@@ -28,7 +28,7 @@ public class RetineriService {
 	}
 
 	public Retineri emptyRetinere(Retineri oldRetinere, RealizariRetineri stat) {
-		Retineri newEmptyRetinere = new Retineri(0, 0, 0, 0, 0, stat);
+		Retineri newEmptyRetinere = new Retineri(stat);
 		newEmptyRetinere.setId(oldRetinere.getId());
 		return retineriRepository.save(newEmptyRetinere);
 	}
@@ -38,9 +38,7 @@ public class RetineriService {
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
 				.orElseThrow(() -> new ResourceNotFoundException("RealizaiRetineri not found for this id"));
 
-		Retineri newRetinere = new Retineri(newRetinereDTO.getAvansnet(), newRetinereDTO.getPensiefacultativa(),
-				newRetinereDTO.getPensiealimentara(), newRetinereDTO.getPopriri(), newRetinereDTO.getImprumuturi(),
-				realizariRetineri);
+		Retineri newRetinere = new Retineri(realizariRetineri);
 		newRetinere.setId(oldRetinereID);
 
 		return retineriRepository.save(newRetinere);
