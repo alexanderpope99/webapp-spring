@@ -15,7 +15,7 @@ import authHeader from '../../../../../../src/services/auth-header';
 
 import authService from '../../../../../../src/services/auth.service';
 
-import { Circle, X, Bell, Settings } from 'react-feather';
+import { Circle, X, Bell, Settings, Info } from 'react-feather';
 
 class NavRight extends Component {
   constructor() {
@@ -30,6 +30,7 @@ class NavRight extends Component {
       listOpen: false,
       user: authService.getCurrentUser(),
       notificari: [],
+      cursEURRON: '',
     };
   }
 
@@ -57,6 +58,18 @@ class NavRight extends Component {
     if (notificari)
       this.setState({
         notificari: notificari,
+      });
+
+    const curs = await axios
+      .get(`${server.address}/cursvalutar`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    if (curs)
+      this.setState({
+        cursEURRON: curs,
       });
   }
 
@@ -162,6 +175,34 @@ class NavRight extends Component {
                 {/* <div className="noti-footer">
                   <a href={'/notificari'}>arată tot</a>
                 </div> */}
+              </Dropdown.Menu>
+            </Dropdown>
+          </li>
+          <li>
+            <Dropdown onClick={(e) => e.stopPropagation()}>
+              <Dropdown.Toggle variant="link" id="dropdown-basic">
+                <Info size={15} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="notification">
+                <div className="noti-head">
+                  <h6 className="d-inline-block m-b-0">Informații</h6>
+                </div>
+                <ul className="noti-body">
+                  <li className="notification">
+                    <div className="media">
+                      <div className="media-body">
+                        <p>
+                          <strong
+                            onClick={() => (window.location.href = 'https://www.cursbnr.ro/')}
+                          >
+                            Curs Valutar BNR EUR/RON
+                          </strong>
+                        </p>
+                        <p>1 EUR={this.state.cursEURRON} RON</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </Dropdown.Menu>
             </Dropdown>
           </li>
