@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Trash2, Edit3, RotateCw } from 'react-feather';
+import { Plus, Trash2, Edit3, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -120,8 +120,8 @@ class SarbatoriTabel extends React.Component {
   }
 
   async onSubmit(e) {
-		e.preventDefault();
-		
+    e.preventDefault();
+
     const sarbatoare_body = {
       dela: this.state.dela || null,
       panala: this.state.panala || null,
@@ -250,13 +250,13 @@ class SarbatoriTabel extends React.Component {
   }
 
   formatDate(date) {
-		let data = new Date(date.substring(0, 10));
-		let ziuaSaptamanii = zileSaptamana[data.getDay()];
+    let data = new Date(date.substring(0, 10));
+    let ziuaSaptamanii = zileSaptamana[data.getDay()];
 
     let luna = date.substring(5, 7);
     let ziua = date.substring(8, 10).match('[1-9][0-9]*');
 
-		luna = months[Number(luna) - 1];
+    luna = months[Number(luna) - 1];
 
     return `${ziua} ${luna}, ${ziuaSaptamanii}`;
     // return ziuaSaptamanii + ', ' + ziua + ' ' + luna;
@@ -331,23 +331,25 @@ class SarbatoriTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Sărbatori</Card.Title>
+                <Card.Title as="h5">Sărbători</Card.Title>
 
                 <Button
-                  variant="outline-primary"
+                  variant="outline-info"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.fillTable}
                 >
-                  <RotateCw className="m-0 p-0" />
+                  <RotateCw size="25" />
                 </Button>
 
                 <Button
-                  variant="outline-primary"
+                  variant="outline-info"
                   className="float-right"
                   onClick={() => this.setState({ show: true })}
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  Adaugă
+                  <Plus size="25" />
                 </Button>
               </Card.Header>
               <Card.Body>

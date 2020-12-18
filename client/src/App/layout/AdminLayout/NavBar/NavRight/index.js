@@ -157,7 +157,7 @@ class NavRight extends Component {
                 ) : (
                   ''
                 )}
-                <Bell size={15} />
+                <Bell size={20} />
               </Dropdown.Toggle>
               <Dropdown.Menu className="notification">
                 <div className="noti-head">
@@ -181,7 +181,7 @@ class NavRight extends Component {
           <li>
             <Dropdown onClick={(e) => e.stopPropagation()}>
               <Dropdown.Toggle variant="link" id="dropdown-basic">
-                <Info size={15} />
+                <Info size={20} />
               </Dropdown.Toggle>
               <Dropdown.Menu className="notification">
                 <div className="noti-head">
@@ -209,7 +209,7 @@ class NavRight extends Component {
           <li>
             <Dropdown onClick={(e) => e.stopPropagation()} className="drp-user">
               <Dropdown.Toggle variant={'link'} id="dropdown-basic">
-                <Settings size={15} />
+                <Settings size={20} />
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">

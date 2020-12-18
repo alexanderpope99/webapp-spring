@@ -153,7 +153,9 @@ class UserTabel extends React.Component {
     console.log('sent:', user);
 
     const ok = await axios
-      .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, { headers: authHeader() })
+      .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, {
+        headers: authHeader(),
+      })
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
     if (ok) {
@@ -412,7 +414,7 @@ class UserTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <RotateCw className="m-0 p-0" />
+                  <RotateCw size="25" />
                   {/* ↺ */}
                 </Button>
 
@@ -422,7 +424,7 @@ class UserTabel extends React.Component {
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  <Plus className="m-0 p-0" />
+                  <Plus size="25" />
                 </Button>
               </Card.Header>
               <Card.Body>

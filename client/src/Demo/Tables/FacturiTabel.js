@@ -667,7 +667,7 @@ class FacturiTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <RotateCw className="m-0 p-0" />
+                  <RotateCw size="25" />
                   {/* ↺ */}
                 </Button>
 
@@ -677,7 +677,7 @@ class FacturiTabel extends React.Component {
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
                 >
-                  <Plus className="m-0 p-0" />
+                  <Plus size="25" />
                 </Button>
               </Card.Header>
               <Card.Body>
