@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.repository.ParametriiSalariuRepository;
 
@@ -15,7 +14,7 @@ public class ParametriiSalariuService {
 	@Autowired
 	private ParametriiSalariuRepository parametriiSalariuRepository;
 
-	public ParametriiSalariu getParametriiSalariu() throws ResourceNotFoundException {
+	public ParametriiSalariu getParametriiSalariu() {
 		return parametriiSalariuRepository.findByDate(LocalDate.now());
 	}
 

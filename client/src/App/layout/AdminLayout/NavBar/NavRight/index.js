@@ -6,16 +6,14 @@ import DEMO from '../../../../../store/constant';
 
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
-import Avatar3 from '../../../../../assets/images/user/avatar-3.jpg';
 
 import { server } from '../../../../../Demo/Resources/server-address';
-import { getSocSel } from '../../../../../Demo/Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../../../../../src/services/auth-header';
 
 import authService from '../../../../../../src/services/auth.service';
 
-import { Circle, X, Bell, Settings } from 'react-feather';
+import { Circle, X, Bell, Settings, Info } from 'react-feather';
 
 class NavRight extends Component {
   constructor() {
@@ -23,13 +21,15 @@ class NavRight extends Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
     this.readNotification = this.readNotification.bind(this);
-    this.readAllNotifications = this.readAllNotifications.bind(this);
+		this.readAllNotifications = this.readAllNotifications.bind(this);
+		this.openInNewTab = this.openInNewTab.bind(this);
 
     this.state = {
       time: Date.now(),
       listOpen: false,
       user: authService.getCurrentUser(),
       notificari: [],
+      cursEURRON: '',
     };
   }
 
@@ -57,6 +57,18 @@ class NavRight extends Component {
     if (notificari)
       this.setState({
         notificari: notificari,
+      });
+
+    const curs = await axios
+      .get(`${server.address}/cursvalutar`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    if (curs)
+      this.setState({
+        cursEURRON: curs,
       });
   }
 
@@ -101,7 +113,12 @@ class NavRight extends Component {
         const data = Date(millis).split(' ');
         return data[2] + ' ' + data[1] + ' ' + data[3];
     }
-  }
+	}
+	
+	openInNewTab() {
+		var win = window.open('https://www.cursbnr.ro/', '_blank');
+		win.focus();
+	}
 
   render() {
     const AvatarProp = this.getAvatarIcon();
@@ -144,7 +161,7 @@ class NavRight extends Component {
                 ) : (
                   ''
                 )}
-                <Bell size={15} />
+                <Bell size={20} />
               </Dropdown.Toggle>
               <Dropdown.Menu className="notification">
                 <div className="noti-head">
@@ -166,9 +183,38 @@ class NavRight extends Component {
             </Dropdown>
           </li>
           <li>
+            <Dropdown onClick={(e) => e.stopPropagation()}>
+              <Dropdown.Toggle variant="link" id="dropdown-basic">
+                <Info size={20} />
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="notification">
+                <div className="noti-head">
+                  <h6 className="d-inline-block m-b-0">Informații</h6>
+                </div>
+                <ul className="noti-body">
+                  <li className="notification">
+                    <div className="media">
+                      <div className="media-body">
+                        <p>
+                          <strong
+														style={{cursor: "pointer"}}
+                            onClick={this.openInNewTab}
+                          >
+                            Curs Valutar BNR EUR/RON
+                          </strong>
+                        </p>
+                        <p>1 EUR = {this.state.cursEURRON} RON</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </Dropdown.Menu>
+            </Dropdown>
+          </li>
+          <li>
             <Dropdown onClick={(e) => e.stopPropagation()} className="drp-user">
               <Dropdown.Toggle variant={'link'} id="dropdown-basic">
-                <Settings size={15} />
+                <Settings size={20} />
               </Dropdown.Toggle>
               <Dropdown.Menu alignRight className="profile-notification">
                 <div className="pro-head">

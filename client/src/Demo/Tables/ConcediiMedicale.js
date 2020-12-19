@@ -990,8 +990,11 @@ class CMTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handleClose}>
-              OK
+            <Button variant="link" href="/forms/realizari-retineri">
+              Către realizări/rețineri
+            </Button>
+            <Button variant="outline-info" onClick={this.handleClose}>
+              Închide
             </Button>
           </Modal.Footer>
         </Modal>

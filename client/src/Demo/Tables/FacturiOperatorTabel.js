@@ -179,7 +179,7 @@ class FacturiOperatorTabel extends React.Component {
 
   async onRefresh() {
     const centreCost = await axios
-      .get(`${server.address}/centrucost/idsoc/${this.state.socsel.id}`, {
+      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -493,7 +493,7 @@ class FacturiOperatorTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <RotateCw className="m-0 p-0" />
+                  <RotateCw size="25" />
                   {/* ↺ */}
                 </Button>
               </Card.Header>

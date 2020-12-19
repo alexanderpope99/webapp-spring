@@ -31,6 +31,8 @@ public class CMService {
 	private SarbatoriService sarbatoriService;
 	@Autowired
 	private BazacalculService bazacalculService;
+	@Autowired
+	private RealizariRetineriService realizaiRetineriService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -45,6 +47,13 @@ public class CMService {
 
 		// save to DB
 		cm = cmRepository.save(cm);
+
+		// get luna, an from co.dela
+		int luna = cm.getDela().getMonthValue();
+		int an = cm.getDela().getYear();
+		
+		// update salariu
+		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
 
 		// return sent body with correct id
 		cmDTO.setId(cm.getId());
@@ -150,11 +159,10 @@ public class CMService {
 
 		int an = dela.getYear();
 		int luna = dela.getMonthValue();
-		int ziDela = dela.getDayOfMonth();
-		int zileC = panala.getDayOfMonth() - ziDela + 1;
+		int zileC = 0;
 
 		LocalDate day;
-		for (int i = ziDela; i < zileC; ++i) {
+		for (int i = dela.getDayOfMonth(); i <= panala.getDayOfMonth(); ++i) {
 			day = LocalDate.of(an, luna, i);
 			if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
 				zileC++;

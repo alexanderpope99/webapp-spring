@@ -106,8 +106,8 @@ class FacturiAprobatorTabel extends React.Component {
       this.setState({
         showApprover: true,
         id: fact.id,
-        codproiect: fact.codproiect,
-        observatii: fact.observatii,
+        codproiect: fact.codproiect || '',
+        observatii: fact.observatii || '',
       });
     }
   }
@@ -122,8 +122,8 @@ class FacturiAprobatorTabel extends React.Component {
       this.setState({
         showRejecter: true,
         id: fact.id,
-        codproiect: fact.codproiect,
-        observatii: fact.observatii,
+        codproiect: fact.codproiect || '',
+        observatii: fact.observatii || '',
       });
     }
   }
@@ -139,8 +139,8 @@ class FacturiAprobatorTabel extends React.Component {
       this.setState({
         showApprover: true,
         id: fact.id,
-        codproiect: fact.codproiect,
-        observatii: fact.observatii,
+        codproiect: fact.codproiect || '',
+        observatii: fact.observatii || '',
       });
     }
   }
@@ -266,7 +266,7 @@ class FacturiAprobatorTabel extends React.Component {
 
   async onRefresh() {
     const centreCost = await axios
-      .get(`${server.address}/centrucost/idsoc/${this.state.socsel.id}`, {
+      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -495,7 +495,7 @@ class FacturiAprobatorTabel extends React.Component {
                   style={{ fontSize: '1.25rem', float: 'right' }}
                   onClick={this.onRefresh}
                 >
-                  <RotateCw className="m-0 p-0" />
+                  <RotateCw size="25" />
                   {/* ↺ */}
                 </Button>
               </Card.Header>

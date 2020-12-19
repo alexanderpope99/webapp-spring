@@ -12,6 +12,7 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import { months } from '../Resources/months';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
+import { countWeekendDays } from '../Resources/cm';
 
 class COTabel extends React.Component {
   constructor() {
@@ -28,6 +29,7 @@ class COTabel extends React.Component {
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
     this.setNrZile = this.setNrZile.bind(this);
+    this.formatDate = this.formatDate.bind(this);
 
     this.state = {
       angajat: getAngajatSel(),
@@ -41,6 +43,7 @@ class COTabel extends React.Component {
       ani_cu_concediu: [],
       luni_cu_concediu: { '': [] }, // map months to years -> {an_cu_concediu: [...luni_cu_concediu]}
       nr_zile: 0,
+      nr_zile_weekend: 0,
 
       co: [],
       coComponent: null,
@@ -55,6 +58,7 @@ class COTabel extends React.Component {
 
       // succes modal:
       show_confirm: false,
+      modalTitle: '',
       modalMessage: '',
     };
   }
@@ -67,11 +71,8 @@ class COTabel extends React.Component {
       dela: '',
       panala: '',
       nr_zile: 0,
+      nr_zile_weekend: 0,
       tip: 'Concediu de odihnă',
-
-      // succes modal:
-      show_confirm: false,
-      modalMessage: '',
     });
   }
 
@@ -114,7 +115,7 @@ class COTabel extends React.Component {
     const selectedIndex = e.target.options.selectedIndex;
     this.setState(
       {
-				luna: {
+        luna: {
           nume: e.target.value,
           nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
         },
@@ -136,14 +137,17 @@ class COTabel extends React.Component {
     // calculate number of days between dates
   }
 
+  // TODO
   setNrZile() {
-    var nr_zile = 0;
+    var nr_zile = 0,
+      nr_zile_weekend = 0;
     if (this.state.dela && this.state.panala) {
       let date1 = new Date(this.state.dela);
       let date2 = new Date(this.state.panala);
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+      nr_zile_weekend = countWeekendDays(date1, date2);
     }
-    this.setState({ nr_zile: nr_zile });
+    this.setState({ nr_zile: nr_zile, nr_zile_weekend: nr_zile_weekend });
   }
 
   async fillTable() {
@@ -218,7 +222,8 @@ class COTabel extends React.Component {
       this.setState(
         {
           show_confirm: false,
-          modalMessage: '',
+					modalTitle: '',
+					modalMessage: '',
         },
         this.props.scrollToTopSmooth
       );
@@ -245,7 +250,7 @@ class COTabel extends React.Component {
     if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
-        modalMessage: 'Angajatul are nevoide de un contract de muncă',
+        modalTitle: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
     }
@@ -269,13 +274,18 @@ class COTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalMessage: this.state.tip + ' adăugat cu succes 💾',
+        modalTitle: this.state.tip + ' adăugat cu succes 💾',
       });
       this.fillTable();
     }
   }
 
   async updateCO() {
+    const dela = this.state.dela;
+    const panala = this.state.panala;
+    const nr_zile = this.state.nr_zile;
+    const nr_zile_weekend = this.state.nr_zile_weekend;
+
     var co_body = {
       id: this.state.id || null,
       dela: this.state.dela || null,
@@ -292,15 +302,25 @@ class COTabel extends React.Component {
       .catch((err) => console.error('err:', err));
 
     if (ok) {
+      console.log(`${dela} - ${panala}: ${nr_zile}`);
       // close add modal
       this.handleClose();
-      // open confirm modal <- closes on OK button
+      // open confirm modal
       this.setState({
         show_confirm: true,
-        modalMessage: 'Concediu medical actualizat ✔',
+        modalTitle: 'Concediu actualizat ✔',
+        modalMessage: (
+          <React.Fragment>
+            <p>
+              Concediu din {this.formatDate(dela)} pana in {this.formatDate(panala)}
+            </p>
+            <p>
+              {nr_zile} zile de concediu, din care {nr_zile_weekend} zile de weekend
+            </p>
+          </React.Fragment>
+        ),
       });
       this.fillTable();
-      this.clearCO();
     }
   }
 
@@ -308,7 +328,7 @@ class COTabel extends React.Component {
     if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
-        modalMessage: 'Angajatul are nevoide de un contract de muncă',
+        modalTitle: 'Angajatul are nevoide de un contract de muncă',
       });
       return;
     }
@@ -327,6 +347,10 @@ class COTabel extends React.Component {
       },
       this.setNrZile
     );
+  }
+
+  formatDate(date) {
+    return date.substring(0, 10).split('-').reverse().join('.');
   }
 
   // function to create react table rows with fetched data
@@ -348,8 +372,8 @@ class COTabel extends React.Component {
 
           return (
             <tr key={co.id}>
-              <th>{co.dela.substring(0, 10).split('-').reverse().join('.')}</th>
-              <th>{co.panala.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{this.formatDate(co.dela)}</th>
+              <th>{this.formatDate(co.panala)}</th>
               <th>{co.tip}</th>
               <th className="d-inline-flex flex-row justify-content-around">
                 <Button
@@ -357,7 +381,7 @@ class COTabel extends React.Component {
                   className="ml-2 p-1 rounded-circle border-0"
                   onClick={() => this.editCO(co)}
                 >
-                  <Edit3  size={20}/>
+                  <Edit3 size={20} />
                 </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
@@ -412,7 +436,7 @@ class COTabel extends React.Component {
         }
       }),
     });
-  }
+	}
 
   render() {
     var monthsComponent = [];
@@ -480,12 +504,10 @@ class COTabel extends React.Component {
 
               <Form.Group>
                 <Form.Label>
-                  {this.state.nr_zile === 0
-                    ? ''
-                    : this.state.nr_zile +
-                      (this.state.nr_zile > 1
-                        ? ' zile concediu (include weekend-uri și sărbători)'
-                        : ' zi concediu (include weekend și sărbători)')}
+                  {this.state.nr_zile +
+                    (this.state.nr_zile > 1
+                      ? ` zile concediu, din care ${this.state.nr_zile_weekend} in weekend (sărbători incluse)`
+                      : ` zi concediu, din care ${this.state.nr_zile_weekend} in weekend (sărbători incluse)`)}
                 </Form.Label>
               </Form.Group>
             </Form>
@@ -497,15 +519,19 @@ class COTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* CONFIRM Modal */}
+        {/* CONFIRM MODAL */}
         <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>{this.state.modalTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.handleClose}>
-              OK
+						<Button variant="link" href="/forms/realizari-retineri">
+							Către realizări/rețineri
+						</Button>
+
+            <Button variant="outline-info" onClick={this.handleClose}>
+              Închide
             </Button>
           </Modal.Footer>
         </Modal>
