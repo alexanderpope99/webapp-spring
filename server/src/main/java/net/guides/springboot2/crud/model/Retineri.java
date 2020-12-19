@@ -198,4 +198,5 @@ public class Retineri implements Serializable {
 		return (pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
 				+ pensiefacexcedent) / curseurron;
 	}
+
 }

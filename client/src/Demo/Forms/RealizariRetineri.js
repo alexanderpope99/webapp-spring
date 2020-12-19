@@ -125,7 +125,6 @@ class RealizariRetineri extends React.Component {
       venitnet: '',
       zilelucrate: '',
       zileplatite: '',
-
     };
   }
   clearForm() {
@@ -399,8 +398,8 @@ class RealizariRetineri extends React.Component {
         `${server.address}/retineri/${this.state.idretineri}`,
         {
           idstat: this.state.idstat,
-					avansnet: this.state.avansnet,
-					curseurron: this.state.cursValutar,
+          avansnet: this.state.avansnet,
+          curseurron: this.state.cursValutar,
           pensiealimentara: this.state.pensiealimentara,
           pensiefacangajat: this.state.pensiefacangajat,
           pensiefacangajator: this.state.pensiefacangajator,
@@ -421,7 +420,7 @@ class RealizariRetineri extends React.Component {
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
-		//* 2. recalculare realizariRetineri
+    //* 2. recalculare realizariRetineri
     const data = await axios
       .put(
         `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
@@ -890,64 +889,114 @@ class RealizariRetineri extends React.Component {
               <Col md={12}>
                 <Form.Group id="pensiefacangajat">
                   <Form.Label>Pensie facultativă angajat</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    onChange={(e) => {
-                      this.setState({ pensiefacangajat: e.target.value });
-                    }}
-                    value={this.state.pensiefacangajat}
-                  />
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajat: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajat}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+                        {this.state.cursValutar !== 0
+                          ? this.state.pensiefacangajat / this.state.cursValutar
+                          : '-'}
+                        EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
               </Col>
               <Col md={12}>
                 <Form.Group id="pensiefacangajator">
                   <Form.Label>Pensie facultativă angajator</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    onChange={(e) => {
-                      this.setState({ pensiefacangajator: e.target.value });
-                    }}
-                    value={this.state.pensiefacangajator}
-                  />
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajator: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajator}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+                        {this.state.cursValutar !== 0
+                          ? this.state.pensiefacangajator / this.state.cursValutar
+                          : '-'}{' '}
+                        EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
               </Col>
               <Col md={12}>
                 <Form.Group id="pensiefacangajatretinuta">
                   <Form.Label>Pensie facultativă angajat reținută de angajator</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    onChange={(e) => {
-                      this.setState({ pensiefacangajatretinuta: e.target.value });
-                    }}
-                    value={this.state.pensiefacangajatretinuta}
-                  />
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajatretinuta: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajatretinuta}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+                        {this.state.cursValutar !== 0
+                          ? this.state.pensiefacangajatretinuta / this.state.cursValutar
+                          : '-'}{' '}
+                        EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
               </Col>
               <Col md={12}>
                 <Form.Group id="pensiefacangajatordeductibila">
                   <Form.Label>Pensie facultativă angajator deductibilă CAS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    onChange={(e) => {
-                      this.setState({ pensiefacangajatordeductibila: e.target.value });
-                    }}
-                    value={this.state.pensiefacangajatordeductibila}
-                  />
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajatordeductibila: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajatordeductibila}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+                        {this.state.cursValutar !== 0
+                          ? this.state.pensiefacangajatordeductibila / this.state.cursValutar
+                          : '-'}{' '}
+                        EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
               </Col>
               <Col md={12}>
                 <Form.Group id="pensiefacexcedent">
                   <Form.Label>Pensie facultativă excedent</Form.Label>
-                  <Form.Control
-                    disabled
-                    type="number"
-                    min="0"
-                    value={this.state.pensiefacexcedent}
-                  />
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      disabled
+                      type="number"
+                      min="0"
+                      value={this.state.pensiefacexcedent}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+                        {this.state.cursValutar !== 0
+                          ? this.state.pensiefacangajat / this.state.cursValutar
+                          : '-'}{' '}
+                        EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
                 <Form.Label> </Form.Label>
                 <Button className="mb-3 float-right" onClick={() => {}}>
