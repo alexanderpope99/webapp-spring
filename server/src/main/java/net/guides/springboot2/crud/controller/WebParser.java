@@ -2,20 +2,25 @@ package net.guides.springboot2.crud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import net.guides.springboot2.crud.services.CursValutarService;
+import net.guides.springboot2.crud.services.WebParserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("cursvalutar")
-public class CursValutarController {
+@RequestMapping("webparse")
+public class WebParser {
 	@Autowired
-	public CursValutarService cursValutarService;
+	public WebParserService webParserService;
 
-	@GetMapping
+	@GetMapping("/cursbnr")
 	public String returnCursValutar() {
-		return cursValutarService.getCursValutarFromBNR();
+		return webParserService.getCursValutarFromBNR();
+	}
+
+	@GetMapping("/wikipedia")
+	public String returnWikipedia() {
+		return webParserService.getWikipediaArticle();
 	}
 }

@@ -21,8 +21,8 @@ class NavRight extends Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.logOut = this.logOut.bind(this);
     this.readNotification = this.readNotification.bind(this);
-		this.readAllNotifications = this.readAllNotifications.bind(this);
-		this.openInNewTab = this.openInNewTab.bind(this);
+    this.readAllNotifications = this.readAllNotifications.bind(this);
+    this.openInNewTab = this.openInNewTab.bind(this);
 
     this.state = {
       time: Date.now(),
@@ -60,7 +60,7 @@ class NavRight extends Component {
       });
 
     const curs = await axios
-      .get(`${server.address}/cursvalutar`, {
+      .get(`${server.address}/webparse/cursbnr`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -113,12 +113,12 @@ class NavRight extends Component {
         const data = Date(millis).split(' ');
         return data[2] + ' ' + data[1] + ' ' + data[3];
     }
-	}
-	
-	openInNewTab() {
-		var win = window.open('https://www.cursbnr.ro/', '_blank');
-		win.focus();
-	}
+  }
+
+  openInNewTab() {
+    var win = window.open('https://www.cursbnr.ro/', '_blank');
+    win.focus();
+  }
 
   render() {
     const AvatarProp = this.getAvatarIcon();
@@ -196,10 +196,7 @@ class NavRight extends Component {
                     <div className="media">
                       <div className="media-body">
                         <p>
-                          <strong
-														style={{cursor: "pointer"}}
-                            onClick={this.openInNewTab}
-                          >
+                          <strong style={{ cursor: 'pointer' }} onClick={this.openInNewTab}>
                             Curs Valutar BNR EUR/RON
                           </strong>
                         </p>
