@@ -270,7 +270,7 @@ class RealizariRetineri extends React.Component {
     console.log('contract:', contract);
     if (!contract) return;
 
-    // if already calculated, gets existing data, if idstat does not exist for idc, mo, y => calc => saves to DB
+    // if already calculated, gets existing data, if idstat does not exist for (idc, mo, y) => calc => saves to DB
     const data = await axios
       .post(
         `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
@@ -393,7 +393,7 @@ class RealizariRetineri extends React.Component {
     }
 
     //* 1. save retineri to DB
-    await axios
+    const ok = await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,
         {
@@ -413,8 +413,11 @@ class RealizariRetineri extends React.Component {
           headers: authHeader(),
         }
       )
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .then((res) => res.status === 200)
+			.catch((err) => console.error(err));
+		if(!ok) {
+			console.log("Retineri nu exista, se va initializa");
+		}
 
 		let pb = this.state.primabruta;
     let nrt = this.state.nrtichete;
@@ -684,7 +687,6 @@ class RealizariRetineri extends React.Component {
     // eslint-disable-next-line eqeqeq
     if (this.state.an == this.state.an_inceput_contract) {
       luni = luni.slice(Number(this.state.luna_inceput_contract) - 1);
-      console.log('sliced to', Number(this.state.luna_inceput_contract));
     }
 
     const tabel_ore = this.state.oresuplimentare.map((ora, index) => {
@@ -1614,7 +1616,7 @@ class RealizariRetineri extends React.Component {
                   onClick={this.recalcSocietate}
                   className="mb-3 mt-3"
                 >
-                  Recalculeaza toate salariile
+                  Recalculeaza pentru toți angajații
                 </Button>
               </Row>
             </Form>

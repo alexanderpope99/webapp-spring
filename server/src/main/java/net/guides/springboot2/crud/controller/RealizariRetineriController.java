@@ -96,18 +96,6 @@ public class RealizariRetineriController {
 
 		return realizariRetineriService.recalcRealizariRetineri(luna, an, idcontract, primaBruta, nrTichete,
 				totalOreSuplimentare);
-		// RealizariRetineri oldRealizariRetineri =
-		// realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
-		// idcontract);
-
-		// RealizariRetineri newRealizariRetineri =
-		// realizariRetineriService.calcRealizariRetineri(idcontract, luna, an,
-		// primaBruta, nrTichete, totalOreSuplimentare);
-		// newRealizariRetineri.setId(oldRealizariRetineri.getId());
-
-		// bazacalculService.updateBazacalcul(newRealizariRetineri);
-
-		// return realizariRetineriRepository.save(newRealizariRetineri);
 	}
 
 	// * CALCULEAZA pt un angajat, pe ultimele 6 luni, exclusiv (luna, an)
