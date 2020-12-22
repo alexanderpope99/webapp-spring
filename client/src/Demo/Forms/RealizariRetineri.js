@@ -404,8 +404,8 @@ class RealizariRetineri extends React.Component {
           pensiefacangajat: this.state.pensiefacangajat,
           pensiefacangajator: this.state.pensiefacangajator,
           pensiefacangajatretinuta: this.state.pensiefacangajatretinuta,
-          pensiefacangajatordeductibila: this.pensiefacangajatordeductibila,
-          pensiefacexcedent: this.pensiefacexcedent,
+          pensiefacangajatordeductibila: this.state.pensiefacangajatordeductibila,
+          pensiefacexcedent: this.state.pensiefacexcedent,
           popriri: this.state.popriri,
           imprumuturi: this.state.imprumuturi,
         },
@@ -416,8 +416,7 @@ class RealizariRetineri extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
-    let pb = this.state.primabruta;
-    console.log(pb);
+		let pb = this.state.primabruta;
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 

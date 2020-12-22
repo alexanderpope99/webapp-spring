@@ -2,12 +2,8 @@ de mutat baza de date din aplicatia c# in aici
 
 alte retineri
 alte drepturi
-retineri (doar avans merge)
 
 buton de 'show password' la schimba parola
-
-unde pun superior pentru un angajat?
-
 
 TODO [18 dec :: bogdanbis]:
 	Contract.js:
@@ -15,7 +11,7 @@ TODO [18 dec :: bogdanbis]:
 		2. Centre cost: 2.1: axios.get in component did mount, not in fillForm (centreCost se schimba doar cand schimbi societatea)
 
 UPGRADES:
-	add paginations
+	add breadcrumbs
 
 	- When creating angajat also create new user tied to it with random password, 
 			show the temp. passowrd on screen and tell the user to login and change it
