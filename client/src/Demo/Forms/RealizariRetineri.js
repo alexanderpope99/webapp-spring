@@ -528,7 +528,7 @@ class RealizariRetineri extends React.Component {
 
   async preiaCursCurent() {
     let curs = await axios
-      .get(`${server.address}/cursvalutar`, { headers: authHeader() })
+      .get(`${server.address}/webparse/cursbnr`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
