@@ -108,6 +108,8 @@ class RealizariRetineri extends React.Component {
       imprumuturi: 0,
       deducere: 0,
       nrpersoaneintretinere: 0,
+      totalpensiefacultativa: 0,
+      impozitdedus: 0,
 
       // total
       totaldrepturi: '',
@@ -171,7 +173,7 @@ class RealizariRetineri extends React.Component {
       imprumuturi: 0,
       deducere: 0,
       nrpersoaneintretinere: 0,
-      totalpensiefacultativa: 0,
+      impozitdedus: 0,
 
       // total
       totaldrepturi: '',
@@ -200,6 +202,7 @@ class RealizariRetineri extends React.Component {
       zilelibere: 0,
 
       avansnet: 0,
+      cursValutar: 0,
       pensiefacangajat: 0,
       pensiefacangajator: 0,
       pensiefacangajatretinuta: 0,
@@ -248,6 +251,19 @@ class RealizariRetineri extends React.Component {
       lista_angajati.push({ nume: persoana.nume + ' ' + persoana.prenume, id: persoana.id });
     }
     this.setState({ lista_angajati: lista_angajati });
+  }
+
+  async getTotalPensie() {
+    const totalpensiefacan = await axios
+      .get(`${server.address}/retineri/${this.state.idcontract}/pensiefac/${this.state.an}`, {
+        headers: authHeader(),
+      })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+
+    this.setState({
+      totalpensiefacultativa: totalpensiefacan,
+    });
   }
 
   async fillForm() {
@@ -299,65 +315,69 @@ class RealizariRetineri extends React.Component {
     console.log('retineri:', retineri);
 
     // set states with data
-    this.setState({
-      //* realizari
-      an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
-      luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
-      functie: contract.functie || 0,
-      duratazilucru: contract.normalucru || 0,
-      normalucru: data.norma || 0, // zile lucratoare in luna respectiva
-      salariubrut: contract.salariutarifar || 0,
-      orelucrate: data.orelucrate || 0,
-      salariupezi: data.salariupezi || 0,
-      salariupeora: data.salariupeora || 0,
-      nrtichete: data.nrtichete || 0,
-      zilecm: data.zilecm || 0,
-      valcm: data.valcm || 0,
-      zilecmlucratoare: data.zilecmlucratoare || 0,
-      zileco: data.zileco || 0,
-      zilecolucratoare: data.zilecolucratoare || 0,
-      zilecfp: data.zilecfp || 0,
-      zilecfplucratoare: data.zilecfplucratoare || 0,
-      zilec: data.zilec || 0,
+    this.setState(
+      {
+        //* realizari
+        an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
+        luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
+        functie: contract.functie || 0,
+        duratazilucru: contract.normalucru || 0,
+        normalucru: data.norma || 0, // zile lucratoare in luna respectiva
+        salariubrut: contract.salariutarifar || 0,
+        orelucrate: data.orelucrate || 0,
+        salariupezi: data.salariupezi || 0,
+        salariupeora: data.salariupeora || 0,
+        nrtichete: data.nrtichete || 0,
+        zilecm: data.zilecm || 0,
+        valcm: data.valcm || 0,
+        zilecmlucratoare: data.zilecmlucratoare || 0,
+        zileco: data.zileco || 0,
+        zilecolucratoare: data.zilecolucratoare || 0,
+        zilecfp: data.zilecfp || 0,
+        zilecfplucratoare: data.zilecfplucratoare || 0,
+        zilec: data.zilec || 0,
 
-      //* retineri
-      idretineri: retineri.id || 0,
-      avansnet: retineri.avansnet || 0,
-      pensiefacangajat: retineri.pensiefacangajat || 0,
-      pensiefacangajator: retineri.pensiefacangajator || 0,
-      pensiefacangajatretinuta: retineri.pensiefacangajatretinuta || 0,
-      pensiefacangajatordeductibila: retineri.pensiefacangajatordeductibila || 0,
-      pensiefacexcedent: retineri.pensiefacexcedent || 0,
-      pensiealimentara: retineri.pensiealimentara || 0,
-      popriri: retineri.popriri || 0,
-      imprumuturi: retineri.imprumuturi || 0,
-      deducere: data.deducere || 0,
-      nrpersoaneintretinere: data.nrpersoaneintretinere || 0,
+        //* retineri
+        idretineri: retineri.id || 0,
+        avansnet: retineri.avansnet || 0,
+        cursValutar: retineri.curseurron || 0,
+        pensiefacangajat: retineri.pensiefacangajat || 0,
+        pensiefacangajator: retineri.pensiefacangajator || 0,
+        pensiefacangajatretinuta: retineri.pensiefacangajatretinuta || 0,
+        pensiefacangajatordeductibila: retineri.pensiefacangajatordeductibila || 0,
+        pensiefacexcedent: retineri.pensiefacexcedent || 0,
+        pensiealimentara: retineri.pensiealimentara || 0,
+        popriri: retineri.popriri || 0,
+        imprumuturi: retineri.imprumuturi || 0,
+        deducere: data.deducere || 0,
+        nrpersoaneintretinere: data.nrpersoaneintretinere || 0,
 
-      //* total
-      totaldrepturi: data.totaldrepturi || 0,
-      cas: data.cas || 0,
-      cass: data.cass || 0,
-      valoaretichete: data.valoaretichete || 0,
-      impozit: data.impozit || 0,
-      restplata: data.restplata || 0,
-      cam: data.cam || 0,
+        //* total
+        totaldrepturi: data.totaldrepturi || 0,
+        cas: data.cas || 0,
+        cass: data.cass || 0,
+        valoaretichete: data.valoaretichete || 0,
+        impozit: data.impozit || 0,
+        restplata: data.restplata || 0,
+        cam: data.cam || 0,
 
-      //* detalii
-      bazaimpozit: data.bazaimpozit || 0,
-      impozitscutit: data.impozitscutit || 0,
-      salariurealizat: data.salariurealizat || 0,
-      venitnet: data.venitnet || 0,
-      zilelucrate: data.zilelucrate || 0,
-      zileplatite: data.zileplatite || 0,
+        //* detalii
+        bazaimpozit: data.bazaimpozit || 0,
+        impozitscutit: data.impozitscutit || 0,
+        salariurealizat: data.salariurealizat || 0,
+        venitnet: data.venitnet || 0,
+        zilelucrate: data.zilelucrate || 0,
+        zileplatite: data.zileplatite || 0,
 
-      //
-      idstat: data.id || 0,
-      idcontract: contract.id || 0,
-      oresuplimentare: oresuplimentare || 0,
-      totaloresuplimentare: totaloresuplimentare || 0,
-      primabruta: data.primabruta || 0,
-    });
+        //
+        idstat: data.id || 0,
+        idcontract: contract.id || 0,
+        oresuplimentare: oresuplimentare || 0,
+        totaloresuplimentare: totaloresuplimentare || 0,
+        primabruta: data.primabruta || 0,
+      },
+      this.getTotalPensie
+    );
   }
 
   onSelect(e) {
@@ -472,7 +492,7 @@ class RealizariRetineri extends React.Component {
 
     if (ok) {
       alert(
-        `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. Deasemenea, bazele de calcul au fost adaugate.`
+        `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. De asemenea, bazele de calcul au fost adaugate.`
       );
       window.scrollTo({
         top: 0,
@@ -559,7 +579,7 @@ class RealizariRetineri extends React.Component {
     });
   }
 
-  veziPensieFacultativa() {
+  async veziPensieFacultativa() {
     this.setState({
       showPensie: true,
     });
@@ -607,10 +627,13 @@ class RealizariRetineri extends React.Component {
     this.setState({
       show: false,
       showPensie: false,
+      cursValutar: 0,
+      pensiefacangajat: 0,
       modalMessage: '',
       nrore: 0,
       procent: 100,
     });
+    this.fillForm();
   }
 
   async getStatIndividual() {
@@ -668,13 +691,12 @@ class RealizariRetineri extends React.Component {
     e.preventDefault();
 
     this.recalculeaza();
-	}
-	
-	convertCurrency(from, curs) {
-		if(curs && from)
-			return Number(from / curs).toFixed(4);
-		else return 0;
-	}
+  }
+
+  convertCurrency(from, curs) {
+    if (curs && from) return Number(from / curs).toFixed(4);
+    else return 0;
+  }
 
   render() {
     const this_year = new Date().getFullYear();
@@ -779,7 +801,7 @@ class RealizariRetineri extends React.Component {
           </Toast.Body>
         </Toast>
 
-				{/* ORE SUPLIMENTARE */}
+        {/* ORE SUPLIMENTARE */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Ore suplimentare</Modal.Title>
@@ -858,7 +880,7 @@ class RealizariRetineri extends React.Component {
           </Modal.Body>
         </Modal>
 
-				{/* PENSIE FACULTATIVA */}
+        {/* PENSIE FACULTATIVA */}
         <Modal show={this.state.showPensie} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Pensie facultativă</Modal.Title>
@@ -909,13 +931,14 @@ class RealizariRetineri extends React.Component {
                     />
                     <InputGroup.Append>
                       <InputGroup.Text id="basic-addon2">
-												{this.convertCurrency(this.state.pensiefacangajat, this.state.cursValutar)} EUR
+                        {this.convertCurrency(this.state.pensiefacangajat, this.state.cursValutar)}{' '}
+                        EUR
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
                 </Form.Group>
               </Col>
-              <Col md={12}>
+              {/* <Col md={12}>
                 <Form.Group id="pensiefacangajator">
                   <Form.Label>Pensie facultativă angajator</Form.Label>
                   <InputGroup className="mb-3">
@@ -974,9 +997,9 @@ class RealizariRetineri extends React.Component {
                     </InputGroup.Append>
                   </InputGroup>
                 </Form.Group>
-              </Col>
+              </Col> */}
               <Col md={12}>
-                <Form.Group id="pensiefacexcedent">
+                {/* <Form.Group id="pensiefacexcedent">
                   <Form.Label>Pensie facultativă excedent</Form.Label>
                   <InputGroup className="mb-3">
                     <Form.Control
@@ -991,14 +1014,39 @@ class RealizariRetineri extends React.Component {
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
+                </Form.Group> */}
+                <Form.Group id="totalpensiefacan">
+                  <Form.Label>Total Pensie Facultativă an curent</Form.Label>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      disabled
+                      type="number"
+                      min="0"
+                      value={this.state.totalpensiefacultativa}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">EUR</InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
+
+                {/* <Form.Group id="impozitdeduspensie">
+                  <Form.Label>Impozit Dedus</Form.Label>
+                  <Form.Control disabled type="number" min="0" value={this.state.impozitdedus} />
+                </Form.Group> */}
+
                 <Form.Label> </Form.Label>
-                <Button className="mb-3 float-right" onClick={() => {}}>
+                <Button
+                  className="mb-3 float-right"
+                  onClick={() => {
+                    this.setState({ showPensie: false });
+                  }}
+                >
                   Adaugă
                 </Button>
-                <Button className="mb-3 float-right" onClick={() => {}}>
+                {/* <Button className="mb-3 float-right" onClick={() => {}}>
                   Calculează
-                </Button>
+                </Button> */}
               </Col>
             </Row>
           </Modal.Body>
@@ -1171,7 +1219,7 @@ class RealizariRetineri extends React.Component {
                               }
                               disabled={this.state.selected_angajat ? false : true}
                             >
-                              Caclulează
+                              Calculează
                               <br />
                               automat
                             </Button>
@@ -1298,9 +1346,9 @@ class RealizariRetineri extends React.Component {
                             type="number"
                             min="0"
                             disabled
-                            value={this.state.totalpensiefacultativa}
+                            value={this.state.pensiefacangajat}
                             onChange={(e) =>
-                              this.setState({ totalpensiefacultativa: e.target.value || 0 })
+                              this.setState({ pensiefacangajat: e.target.value || 0 })
                             }
                           />
                           <InputGroup.Append>
@@ -1459,9 +1507,9 @@ class RealizariRetineri extends React.Component {
                     Recalculează
                   </Button>
                 </Col>
-                
-								{/* DETALII */}
-								<Col md={12}>
+
+                {/* DETALII */}
+                <Col md={12}>
                   <Card className="mt-2">
                     <Card.Header
                       style={{ cursor: 'pointer' }}

@@ -137,20 +137,12 @@ public class RetineriDTO {
 	}
 
 	public int getTotalPensiiFacultativeRON() {
-		return 
-		pensiefacangajat
-		+ pensiefacangajator
-		+ pensiefacangajatretinuta
-		+ pensiefacangajatordeductibila
-		+ pensiefacexcedent;
+		return pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
+				+ pensiefacexcedent;
 	}
 
 	public float getTotalPensiiFacultativeEUR() {
-		return 
-		(pensiefacangajat
-		+ pensiefacangajator
-		+ pensiefacangajatretinuta
-		+ pensiefacangajatordeductibila
-		+ pensiefacexcedent)/curseurron;
+		return (pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
+				+ pensiefacexcedent) / curseurron;
 	}
 }
