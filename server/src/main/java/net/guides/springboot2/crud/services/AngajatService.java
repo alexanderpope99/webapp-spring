@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.services;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,5 +60,23 @@ public class AngajatService {
 
 		angajat = angajatRepository.save(angajat);
 		return angajat;
+	}
+
+	public Angajat setSuperior(int idangajat, int idsuperior) throws ResourceNotFoundException {
+		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
+			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
+		Angajat superior = angajatRepository.findById(idsuperior).orElseThrow(
+			() -> new ResourceNotFoundException("Superior (class Angajat) not found for this id :: " + idsuperior));
+		
+		angajat.setSuperior(superior);
+
+		return angajatRepository.save(angajat);
+	}
+
+	public List<Angajat> getSubalterni(int idangajat) throws ResourceNotFoundException {
+		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
+			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
+		
+		return angajat.getSubalterni();
 	}
 }

@@ -5,16 +5,16 @@ alte drepturi
 
 buton de 'show password' la schimba parola
 
-TODO [18 dec :: bogdanbis]:
-	Contract.js:
-		1. Superiori - Contract.js:287
-		2. Centre cost: 2.1: axios.get in component did mount, not in fillForm (centreCost se schimba doar cand schimbi societatea)
+TODO: {
+}
 
-UPGRADES:
+
+UPGRADES: {
 	add breadcrumbs
 
 	- When creating angajat also create new user tied to it with random password, 
-			show the temp. passowrd on screen and tell the user to login and change it
+			show the temp. passowrd on screen and tell the user to login and change it	
+}
 
 
 ERORI:
