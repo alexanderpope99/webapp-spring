@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,21 @@ public class AngajatService {
 			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
 		
 		return angajat.getSubalterni();
+	}
+
+	public List<Angajat> getSuperioriPosibili(int idangajat) throws ResourceNotFoundException {
+		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
+			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
+		
+		// List<Integer> subalterni = angajat.getSubalterni().stream().map(ang -> ang.getIdpersoana()).collect(Collectors.toList());
+		List<Integer> subalterni = angajat.getSubalterni().stream().map(Angajat::getIdpersoana).collect(Collectors.toList());
+		if(subalterni.isEmpty()) {
+			return angajatRepository.findBySocietate_IdAndIdpersoanaNot(angajat.getSocietate().getId(), idangajat);
+		}
+		else{
+			return angajatRepository.findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(angajat.getSocietate().getId(),
+					idangajat, subalterni);
+		}
+		
 	}
 }

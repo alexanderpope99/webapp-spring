@@ -1,18 +1,12 @@
-de mutat baza de date din aplicatia c# in aici
+########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 TODO: {
-	- When creating angajat also create new user tied to it with random temporary password, 
-		show the temporary passowrd on screen and tell the user to login and change it	
+	tabel useri sterge parola
 }
-
 
 UPGRADES: {
 	add breadcrumbs
 }
-
-
-ERORI:
-	baza calcul frontend cand editeaza bazacalcul -> date
 
 UserTabel:
 	✔ can edit Roles

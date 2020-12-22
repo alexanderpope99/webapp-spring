@@ -165,14 +165,19 @@ class Contract extends React.Component {
 
   async getSuperiori() {
     const superiori = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) =>
-        res.data.map((angajat) => ({
-          id: angajat.persoana.id,
-          numeintreg: angajat.persoana.nume + ' ' + angajat.persoana.prenume,
-        }))
+        res.data
+          .map((angajat) => ({
+            id: angajat.persoana.id,
+            numeintreg: angajat.persoana.nume + ' ' + angajat.persoana.prenume,
+          }))
+          .filter((angajat) => angajat.id !== this.state.angajatsel.idpersoana)
       )
       .catch((err) => console.error(err));
 

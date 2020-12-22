@@ -64,12 +64,10 @@ public class AngajatController {
 	}
 
 	@GetMapping("/expand/{id}")
-	public ResponseEntity<Angajat> getAngajatById(@PathVariable("id") int angajatId)
+	public Angajat getAngajatById(@PathVariable("id") int angajatId)
 			throws ResourceNotFoundException {
-		Angajat angajat = angajatRepository.findById(angajatId)
+		return angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
-
-		return ResponseEntity.ok().body(angajat);
 	}
 
 	@GetMapping("/c")
@@ -100,6 +98,12 @@ public class AngajatController {
 	@GetMapping("/ids={ids}/count")
 	public int countAngajatiByIdsocietate(@PathVariable( "ids") int idsocietate) {
 		return angajatRepository.countBySocietate_Id(idsocietate);
+	}
+
+	@GetMapping("/superiori-posibili/{id}")
+	public List<Angajat> findSuperioriPosibiliOfAngajat(@PathVariable("id") int idangajat)
+			throws ResourceNotFoundException {
+		return angajatService.getSuperioriPosibili(idangajat);
 	}
 
 	@GetMapping("subalterni/{id}")
