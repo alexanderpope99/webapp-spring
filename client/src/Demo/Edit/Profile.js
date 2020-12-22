@@ -136,8 +136,6 @@ export default class Profile extends React.Component {
       return;
     }
 
-    console.log(parolaActuala, parolaNoua);
-
     // update password
     const ok = await AuthService.changePassword(this.state.id, parolaActuala, parolaNoua);
 

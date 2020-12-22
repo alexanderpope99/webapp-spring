@@ -1,17 +1,12 @@
-de mutat baza de date din aplicatia c# in aici
+########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 TODO: {
-	- check if prevState != currentState
+	tabel useri sterge parola
 }
-
 
 UPGRADES: {
 	add breadcrumbs
 }
-
-
-ERORI:
-	baza calcul frontend cand editeaza bazacalcul -> date
 
 UserTabel:
 	✔ can edit Roles
