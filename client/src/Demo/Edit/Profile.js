@@ -271,9 +271,9 @@ export default class Profile extends React.Component {
                   </Button>
                 </Card.Header>
                 <Card.Body className="pl-5 pr-5">
-                  <Col md={9}>
+                  <Col md={12}>
                     <Form.Group as={Row}>
-                      <Form.Label column sm="2">
+                      <Form.Label column sm="4">
                         Username
                       </Form.Label>
                       <Col sm={8}>
@@ -286,7 +286,7 @@ export default class Profile extends React.Component {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                      <Form.Label column sm="2">
+                      <Form.Label column sm="4">
                         e-mail
                       </Form.Label>
                       <Col sm={8}>
@@ -299,37 +299,39 @@ export default class Profile extends React.Component {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                      <Form.Label as="legend" column sm={3}>
+                      <Form.Label as="legend" column sm={5}>
                         Icon
                         <br />
                         NEFUNCTIONAL
                       </Form.Label>
-                      <Row>
-                        <Form.Check
-                          custom
-                          type="radio"
-                          disabled={!this.state.isEdit}
-                          checked={!this.state.gen}
-                          onChange={() => this.setState({ gen: !this.state.gen })}
-                          label={
-                            <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
-                          }
-                          name="icons"
-                          id="icon1"
-                        />
-                        <Form.Check
-                          custom
-                          type="radio"
-                          disabled={!this.state.isEdit}
-                          checked={this.state.gen}
-                          onChange={() => this.setState({ gen: !this.state.gen })}
-                          label={
-                            <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
-                          }
-                          name="icons"
-                          id="icon2"
-                        />
-                      </Row>
+                      <Col sm={7}>
+                        <Row>
+                          <Form.Check
+                            custom
+                            type="radio"
+                            disabled={!this.state.isEdit}
+                            checked={!this.state.gen}
+                            onChange={() => this.setState({ gen: !this.state.gen })}
+                            label={
+                              <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
+                            }
+                            name="icons"
+                            id="icon1"
+                          />
+                          <Form.Check
+                            custom
+                            type="radio"
+                            disabled={!this.state.isEdit}
+                            checked={this.state.gen}
+                            onChange={() => this.setState({ gen: !this.state.gen })}
+                            label={
+                              <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
+                            }
+                            name="icons"
+                            id="icon2"
+                          />
+                        </Row>
+                      </Col>
                     </Form.Group>
                     <Button
                       variant={this.state.isEdit ? 'success' : 'link'}
