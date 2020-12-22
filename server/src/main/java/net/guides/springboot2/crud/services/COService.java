@@ -1,7 +1,9 @@
 package net.guides.springboot2.crud.services;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import net.guides.springboot2.crud.repository.ContractRepository;
 public class COService {
 	COService() {
 	}
-	
+
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -34,20 +36,20 @@ public class COService {
 
 	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
 		CO co = modelMapper.map(coDTO, CO.class);
-		
+
 		Contract contract = contractRepository.findById(coDTO.getIdcontract())
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
 
 		co.setContract(contract);
 		coRepository.save(co);
-		
+
 		// get luna, an from co.dela
 		int luna = co.getDela().getMonthValue();
 		int an = co.getDela().getYear();
-		
+
 		// update salariu
 		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
-		
+
 		coDTO.setId(co.getId());
 		return coDTO;
 	}
@@ -55,6 +57,20 @@ public class COService {
 	public CODTO update(int coID, CODTO newCoDTO) throws ResourceNotFoundException {
 		newCoDTO.setId(coID);
 		return save(newCoDTO);
+	}
+
+	public Map<String, Boolean> delete(int coId) throws ResourceNotFoundException {
+		CO co = coRepository.findById(coId)
+				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
+
+		coRepository.delete(co);
+
+		realizaiRetineriService.recalcRealizariRetineri(co.getDela().getMonthValue(), co.getDela().getYear(),
+				co.getContract().getId(), -1, -1, -1);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
 	}
 
 	public int getZileCFP(int luna, int an, int idcontract) {
@@ -100,7 +116,8 @@ public class COService {
 	}
 
 	private int zileC(int luna, int an, List<CO> concedii) {
-		if(concedii.isEmpty()) return 0;
+		if (concedii.isEmpty())
+			return 0;
 
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
@@ -122,7 +139,8 @@ public class COService {
 	}
 
 	private int zileCLucratoare(int luna, int an, List<CO> concedii) {
-		if(concedii.isEmpty())return 0;
+		if (concedii.isEmpty())
+			return 0;
 
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
@@ -138,9 +156,9 @@ public class COService {
 
 			for (int i = 1; i <= nrZileLuna; ++i) {
 				day = LocalDate.of(an, luna, i);
-				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0)
-					if (day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
-						zileC++;
+				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0 && day.getDayOfWeek().getValue() != 6
+						&& day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
+					zileC++;
 			}
 		}
 		return zileC;

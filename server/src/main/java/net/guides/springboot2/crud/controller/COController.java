@@ -1,7 +1,6 @@
 package net.guides.springboot2.crud.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,12 +82,6 @@ public class COController {
 
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> deleteCO(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
-		CO co = coRepository.findById(coId)
-				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
-
-		coRepository.delete(co);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
+		return coService.delete(coId);
 	}
 }
