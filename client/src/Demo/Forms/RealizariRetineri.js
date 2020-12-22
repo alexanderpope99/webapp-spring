@@ -309,10 +309,7 @@ class RealizariRetineri extends React.Component {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
     }
 
-    // let totalpensiefacultativa = 0;
-
     const retineri = data.retineri;
-    console.log('retineri:', retineri);
 
     // set states with data
     this.setState(

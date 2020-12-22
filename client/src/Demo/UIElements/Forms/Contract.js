@@ -314,8 +314,6 @@ class Contract extends React.Component {
   }
 
   getCentruCostById(centruCost) {
-    console.log(this.state.centreCost);
-    console.log(centruCost);
     if (centruCost) return this.state.centreCost.find((cc) => cc.id === centruCost.id);
     else return null;
   }

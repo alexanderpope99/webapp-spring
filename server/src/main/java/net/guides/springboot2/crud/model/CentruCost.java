@@ -43,6 +43,10 @@ public class CentruCost implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<Factura> facturi;
 
+	@JsonBackReference(value = "contract-centrucost")
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<Contract> contracte;
+
 	public CentruCost() {
 
 	}
@@ -91,5 +95,12 @@ public class CentruCost implements Serializable {
 
 	public void setFacturi(List<Factura> facturi) {
 		this.facturi = facturi;
+	}
+
+	public List<Contract> getContracte() {
+		return contracte;
+	}
+	public void setContracte(List<Contract> contracte) {
+		this.contracte = contracte;
 	}
 }
