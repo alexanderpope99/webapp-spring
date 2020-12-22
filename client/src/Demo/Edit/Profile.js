@@ -301,8 +301,6 @@ export default class Profile extends React.Component {
                     <Form.Group as={Row}>
                       <Form.Label as="legend" column sm={5}>
                         Icon
-                        <br />
-                        NEFUNCTIONAL
                       </Form.Label>
                       <Col sm={7}>
                         <Row>
