@@ -19,6 +19,8 @@ import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 import { getAngajatSel } from '../../Resources/angajatsel';
 
+import Switch from '@material-ui/core/switch';
+
 const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
   <option key={index}>{casa}</option>
 ));
@@ -165,12 +167,9 @@ class Contract extends React.Component {
 
   async getSuperiori() {
     const superiori = await axios
-      .get(
-        `${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`,
-        {
-          headers: authHeader(),
-        }
-      )
+      .get(`${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`, {
+        headers: authHeader(),
+      })
       .then((res) =>
         res.data
           .map((angajat) => ({
@@ -561,23 +560,33 @@ class Contract extends React.Component {
             </Col>
             <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
               <Form.Group id="functiedabaza">
-                <Form.Check
-                  custom
-                  type="checkbox"
-                  id="functieDeBazaCheck"
-                  label="Funcție de bază"
-                  checked={this.state.functieBaza}
-                  onChange={(e) => {
-                    this.setState({ functieBaza: e.target.checked });
-                  }}
-                />
+                
+                <Form.Label>
+									{/* <Switch
+										color="primary"
+                    checked={this.state.functieBaza}
+										onChange={(e) => this.setState({ functieBaza: e.target.checked })}
+                  />
+                  Funcție de bază */}
+                  <Form.Check
+                    custom
+                    type="switch"
+                    id="functieDeBazaCheck"
+                    label="Funcție de bază"
+                    checked={this.state.functieBaza}
+                    onChange={(e) => {
+                      this.setState({ functieBaza: e.target.checked });
+                    }}
+                    size="sm"
+                  />
+                </Form.Label>
               </Form.Group>
             </Col>
             <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
               <Form.Group controlId="calculdeduceri">
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="deduceriCheck"
                   label="Calcul deduceri"
                   checked={this.state.calculdeduceri}
@@ -591,7 +600,7 @@ class Contract extends React.Component {
               <Form.Group controlId="studiisuperioare">
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="studiiSuperioareCheck"
                   label="Studii superioare"
                   checked={this.state.studiiSuperioare}
@@ -607,7 +616,7 @@ class Contract extends React.Component {
               <Form.Group id="pensionar">
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="pensionarCheck"
                   label="Pensionar"
                   checked={this.state.pensionar}
@@ -815,7 +824,7 @@ class Contract extends React.Component {
               <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="sindicatCheck"
                   label="Sindicat"
                   checked={this.state.sindicat}
@@ -847,7 +856,7 @@ class Contract extends React.Component {
               >
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="pensiePrivataCheck"
                   label="Pensie privată"
                   checked={this.state.pensiePrivată}
