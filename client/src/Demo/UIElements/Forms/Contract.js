@@ -121,7 +121,8 @@ class Contract extends React.Component {
       show: false,
       modalMessage: '', //text
 
-      angajat: null,
+			angajat: null,
+			superior: null,
     });
   }
 
@@ -186,7 +187,8 @@ class Contract extends React.Component {
       .catch((err) => console.error(err));
 
     if (angajat.contract) {
-      let contract = angajat.contract;
+			this.clearFields();
+			let contract = angajat.contract;
       this.setState(
         {
           angajat: angajat,
@@ -283,12 +285,6 @@ class Contract extends React.Component {
 
     return true;
 	}
-	
-	// async updateSuperior() {
-	// 	// TODO CREATE THIS ENDPOINT
-	// 	const res = await axios
-	// 		.put(`${server.address}/angajat/superior/`)
-	// }
 
   async onSubmit(e) {
     e.preventDefault();
@@ -341,10 +337,10 @@ class Contract extends React.Component {
       cor: this.state.cor || null,
       pensionar: this.state.pensionar,
       spor: this.state.spor || null,
-    };
+		};
 
     let contract = null;
-    if (this.state.angajat.contract)
+    if (this.state.angajat.contract) {
       contract = await axios
         .put(`${server.address}/contract/${this.state.id}`, contract_body, {
           headers: authHeader(),
@@ -353,6 +349,7 @@ class Contract extends React.Component {
         .catch((err) => {
           console.error(err.message);
         });
+		}
     else {
       contract = await axios
         .post(`${server.address}/contract/${this.state.angajat.idpersoana}`, contract_body, {
@@ -365,6 +362,9 @@ class Contract extends React.Component {
     }
     // if recieved response from server
     if (contract) {
+			// update superior
+			const ok = await axios.put(`${server.address}/`)
+
       this.setState({
         show: true,
         modalMessage: this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat cu succes 📄',

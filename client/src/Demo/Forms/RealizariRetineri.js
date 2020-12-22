@@ -220,7 +220,8 @@ class RealizariRetineri extends React.Component {
   }
 
   numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    else return 0;
   }
 
   async setCurrentYearMonth() {
@@ -292,9 +293,10 @@ class RealizariRetineri extends React.Component {
       for (let ora of oresuplimentare) totaloresuplimentare += ora.total;
     }
 
-    let totalpensiefacultativa = 0;
+    // let totalpensiefacultativa = 0;
 
     const retineri = data.retineri;
+    console.log('retineri:', retineri);
 
     // set states with data
     this.setState({
@@ -331,7 +333,6 @@ class RealizariRetineri extends React.Component {
       imprumuturi: retineri.imprumuturi || 0,
       deducere: data.deducere || 0,
       nrpersoaneintretinere: data.nrpersoaneintretinere || 0,
-      totalpensiefacultativa: totalpensiefacultativa || 0,
 
       //* total
       totaldrepturi: data.totaldrepturi || 0,
@@ -414,12 +415,12 @@ class RealizariRetineri extends React.Component {
         }
       )
       .then((res) => res.status === 200)
-			.catch((err) => console.error(err));
-		if(!ok) {
-			console.log("Retineri nu exista, se va initializa");
-		}
+      .catch((err) => console.error(err));
+    if (!ok) {
+      console.log('Retineri nu exista, se va initializa');
+    }
 
-		let pb = this.state.primabruta;
+    let pb = this.state.primabruta;
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
@@ -559,8 +560,6 @@ class RealizariRetineri extends React.Component {
   }
 
   veziPensieFacultativa() {
-    console.log('editez pensiefacultativa');
-
     this.setState({
       showPensie: true,
     });
@@ -669,7 +668,13 @@ class RealizariRetineri extends React.Component {
     e.preventDefault();
 
     this.recalculeaza();
-  }
+	}
+	
+	convertCurrency(from, curs) {
+		if(curs && from)
+			return Number(from / curs).toFixed(4);
+		else return 0;
+	}
 
   render() {
     const this_year = new Date().getFullYear();
@@ -774,6 +779,7 @@ class RealizariRetineri extends React.Component {
           </Toast.Body>
         </Toast>
 
+				{/* ORE SUPLIMENTARE */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Ore suplimentare</Modal.Title>
@@ -852,6 +858,7 @@ class RealizariRetineri extends React.Component {
           </Modal.Body>
         </Modal>
 
+				{/* PENSIE FACULTATIVA */}
         <Modal show={this.state.showPensie} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Pensie facultativă</Modal.Title>
@@ -869,7 +876,7 @@ class RealizariRetineri extends React.Component {
                       min="0"
                       step="0.0001"
                       onChange={(e) => {
-                        this.setState({ cursValutar: e.target.value });
+                        this.setState({ cursValutar: Number(e.target.value).toFixed(4) });
                       }}
                       value={this.state.cursValutar}
                     />
@@ -902,10 +909,7 @@ class RealizariRetineri extends React.Component {
                     />
                     <InputGroup.Append>
                       <InputGroup.Text id="basic-addon2">
-                        {this.state.cursValutar !== 0
-                          ? this.state.pensiefacangajat / this.state.cursValutar
-                          : '-'}
-                        EUR
+												{this.convertCurrency(this.state.pensiefacangajat, this.state.cursValutar)} EUR
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
@@ -925,10 +929,7 @@ class RealizariRetineri extends React.Component {
                     />
                     <InputGroup.Append>
                       <InputGroup.Text id="basic-addon2">
-                        {this.state.cursValutar !== 0
-                          ? this.state.pensiefacangajator / this.state.cursValutar
-                          : '-'}{' '}
-                        EUR
+												{this.convertCurrency(this.state.pensiefacangajator, this.state.cursValutar)} EUR
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
@@ -948,10 +949,7 @@ class RealizariRetineri extends React.Component {
                     />
                     <InputGroup.Append>
                       <InputGroup.Text id="basic-addon2">
-                        {this.state.cursValutar !== 0
-                          ? this.state.pensiefacangajatretinuta / this.state.cursValutar
-                          : '-'}{' '}
-                        EUR
+												{this.convertCurrency(this.state.pensiefacangajatretinuta, this.state.cursValutar)} EUR
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
@@ -971,10 +969,7 @@ class RealizariRetineri extends React.Component {
                     />
                     <InputGroup.Append>
                       <InputGroup.Text id="basic-addon2">
-                        {this.state.cursValutar !== 0
-                          ? this.state.pensiefacangajatordeductibila / this.state.cursValutar
-                          : '-'}{' '}
-                        EUR
+												{this.convertCurrency(this.state.pensiefacangajatordeductibila, this.state.cursValutar)} EUR
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
@@ -992,10 +987,7 @@ class RealizariRetineri extends React.Component {
                     />
                     <InputGroup.Append>
                       <InputGroup.Text id="basic-addon2">
-                        {this.state.cursValutar !== 0
-                          ? this.state.pensiefacangajat / this.state.cursValutar
-                          : '-'}{' '}
-                        EUR
+												{this.convertCurrency(this.state.pensiefacangajat, this.state.cursValutar)} EUR
                       </InputGroup.Text>
                     </InputGroup.Append>
                   </InputGroup>
@@ -1141,11 +1133,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.salariubrut
-                              ? this.numberWithCommas(this.state.salariubrut)
-                              : ''
-                          }
+                          value={this.numberWithCommas(this.state.salariubrut)}
                         />
                       </Form.Group>
                     </Col>
@@ -1311,7 +1299,9 @@ class RealizariRetineri extends React.Component {
                             min="0"
                             disabled
                             value={this.state.totalpensiefacultativa}
-                            onChange={(e) => this.setState({ pensiefacultativa: e.target.value })}
+                            onChange={(e) =>
+                              this.setState({ totalpensiefacultativa: e.target.value || 0 })
+                            }
                           />
                           <InputGroup.Append>
                             <Button
@@ -1381,11 +1371,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.totaldrepturi
-                              ? this.numberWithCommas(this.state.totaldrepturi)
-                              : '0'
-                          }
+                          value={this.numberWithCommas(this.state.totaldrepturi)}
                         />
                       </Form.Group>
                     </Col>
@@ -1395,9 +1381,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.restplata ? this.numberWithCommas(this.state.restplata) : '0'
-                          }
+                          value={this.numberWithCommas(this.state.restplata)}
                         />
                       </Form.Group>
                     </Col>
@@ -1407,7 +1391,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.cas ? this.numberWithCommas(this.state.cas) : '0'}
+                          value={this.numberWithCommas(this.state.cas)}
                         />
                       </Form.Group>
                     </Col>
@@ -1417,7 +1401,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.cass ? this.numberWithCommas(this.state.cass) : '0'}
+                          value={this.numberWithCommas(this.state.cass)}
                         />
                       </Form.Group>
                     </Col>
@@ -1437,7 +1421,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.impozit ? this.numberWithCommas(this.state.impozit) : 0}
+                          value={this.numberWithCommas(this.state.impozit)}
                         />
                       </Form.Group>
                     </Col>
@@ -1448,7 +1432,7 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={this.state.cam ? this.numberWithCommas(this.state.cam) : ''}
+                          value={this.numberWithCommas(this.state.cam)}
                         />
                       </Form.Group>
                     </Col>
@@ -1459,13 +1443,9 @@ class RealizariRetineri extends React.Component {
                         <Form.Control
                           type="text"
                           disabled
-                          value={
-                            this.state.cam
-                              ? this.numberWithCommas(
-                                  Number(this.state.cam) + Number(this.state.totaldrepturi)
-                                )
-                              : ''
-                          }
+                          value={this.numberWithCommas(
+                            Number(this.state.cam) + Number(this.state.totaldrepturi)
+                          )}
                         />
                       </Form.Group>
                     </Col>
@@ -1479,7 +1459,9 @@ class RealizariRetineri extends React.Component {
                     Recalculează
                   </Button>
                 </Col>
-                <Col md={12}>
+                
+								{/* DETALII */}
+								<Col md={12}>
                   <Card className="mt-2">
                     <Card.Header
                       style={{ cursor: 'pointer' }}

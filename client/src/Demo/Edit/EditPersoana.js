@@ -180,10 +180,11 @@ class EditPersoana extends React.Component {
   }
 
   onChangeLocalitate(localitate) {
-    this.setState({
-      tipJudet: this.getTipJudet(localitate),
-      localitate: localitate,
-    });
+		if(localitate)
+			this.setState({
+				tipJudet: this.getTipJudet(localitate),
+				localitate: localitate,
+			});
   }
 
   getDatanasteriiByCNP(cnp) {
@@ -254,7 +255,7 @@ class EditPersoana extends React.Component {
       this.setState(
         {
           idadresa: persoana.adresa.id,
-          judet: persoana.adresa.judet,
+          judet: persoana.adresa.judet || '',
           adresacompleta: persoana.adresa.adresa || '',
         },
         () => this.onChangeLocalitate(persoana.adresa.localitate)

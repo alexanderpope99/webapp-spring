@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("webparse")
-public class WebParser {
+public class WebParserController {
 	@Autowired
 	public WebParserService webParserService;
 
