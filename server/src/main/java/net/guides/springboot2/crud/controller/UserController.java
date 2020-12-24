@@ -99,6 +99,11 @@ public class UserController {
 		return userRepository.getRolesByUserId(usrid);
 	}
 
+	@PostMapping
+	public UserDTO saveUser(@RequestBody UserDTO newUser) throws ResourceNotFoundException {
+		return userService.save(newUser);
+	}
+
 	@PutMapping("{id}/ids={ids}")
 	public UserDTO updateUser(@PathVariable("id") int id, @PathVariable("ids") int idsocietate, @RequestBody UserDTO newUserDTO)
 			throws ResourceNotFoundException {

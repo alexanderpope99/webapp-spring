@@ -55,9 +55,9 @@ class UserTabel extends React.Component {
       socs: [],
 
       // for select/multiselect components
-      all_roles: [], // array of {key: role.id, label: role.name}  object - multiselect
-      all_societati: [], // array of {key: soc.id, label: soc.nume} objects - multiselect
-      all_angajati_of_socsel: [], // array of Persoana objects - simple select
+      all_roles: [], // array of {key: role.id, label: role.name}  object - used in multiselect
+      all_societati: [], // array of {key: soc.id, label: soc.nume} objects - used in multiselect
+      all_angajati_of_socsel: [], // array of Angajat - used in select
     };
   }
 
@@ -75,7 +75,7 @@ class UserTabel extends React.Component {
     });
   }
 
-  async componentDidMount() {
+  async init() {
     // get all societati
     var all_societati = await axios
       .get(`${server.address}/societate`, { headers: authHeader() })
@@ -105,6 +105,12 @@ class UserTabel extends React.Component {
     window.scrollTo(0, 0);
   }
 
+  componentDidMount() {
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+
+    this.init();
+  }
+
   onChangeAngajat(e) {
     const selectedIndex = e.target.options.selectedIndex;
     const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
@@ -114,10 +120,83 @@ class UserTabel extends React.Component {
     });
   }
 
-  async addUser() {}
+  async submitUser(user, method) {
+    if (method === 'put') {
+      const ok = await axios
+        .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error(err));
+      if (ok) {
+        this.setState(
+          {
+            show: false,
+            showConfirm: true,
+            modalMessage: 'Utilizator actualizat',
+          },
+          this.onRefresh
+        );
+      }
+    } else if(method === 'post') {
+      const ok = await axios
+        .post(`${server.address}/user`, user, { headers: authHeader() })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error(err));
+      if (ok) {
+        this.setState(
+          {
+            show: false,
+            showConfirm: true,
+            modalMessage: 'Utilizator adăugat',
+          },
+          this.onRefresh
+        );
+      }
+    }
+  }
+
+  async addUser() {
+    if (!this.state.roles || !this.state.societati) return;
+
+    // rebuild user.roles
+    const user_roles = [
+      ...this.state.roles.map((idrole) => ({
+        id: Number(idrole),
+        name: this.state.all_roles.find((role) => role.key == idrole).label,
+      })),
+    ];
+
+    // rebuild user.societati
+    const user_societati = [
+      ...this.state.societati.map((idsoc) => ({
+        id: Number(idsoc),
+        nume: this.state.all_societati.find((soc) => soc.key == idsoc).label,
+      })),
+    ];
+
+    // angajat
+    var angajat = null;
+    if (this.state.idAngajat) {
+      angajat = this.state.all_angajati_of_socsel.find(
+        (ang) => ang.idpersoana == this.state.idAngajat
+      );
+    }
+
+    // build user
+    const user = {
+      username: this.state.username,
+      email: this.state.email,
+      angajati: [angajat],
+      roles: user_roles,
+      societati: user_societati,
+		};
+		
+		this.submitUser(user, 'post');
+  }
 
   async updateUser() {
-    if (!this.state.roles || !this.state.user) return;
+    if (!this.state.roles || !this.state.societati || !this.state.user) return;
 
     var user = this.state.user;
     const user_roles = [
@@ -128,7 +207,7 @@ class UserTabel extends React.Component {
     ];
     user.roles = user_roles;
 
-    // rebuild user.societati as it was recieved for compatibility convenience
+    // rebuild user.societati as it was recieved | for compatibility convenience
     const user_societati = [
       ...this.state.societati.map((idsoc) => ({
         id: Number(idsoc),
@@ -150,28 +229,11 @@ class UserTabel extends React.Component {
       else user.angajati = [angajat];
     }
 
-    console.log('sent:', user);
-
-    const ok = await axios
-      .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-    if (ok) {
-      this.setState(
-        {
-          show: false,
-          showConfirm: true,
-          modalMessage: 'Utilizator actualizat',
-        },
-        this.onRefresh
-      );
-    }
+    // console.log(user);
+    this.submitUser(user, 'put');
   }
 
   async editUser(user) {
-    console.log(user);
     // filter user.angajati to only keep the angajat from socsel
     let angajat = user.angajati.find((ang) => ang.societate.id === this.state.socsel.id);
     // let angajati = user.angajati.filter((angajat) => console.log(angajat));
@@ -351,7 +413,10 @@ class UserTabel extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
-                  <Form.Label>Angajat al {this.state.socsel.nume} asociat cu acest user</Form.Label>
+                  <Form.Label>
+                    Angajat al {this.state.socsel ? this.state.socsel.nume : null} asociat cu acest
+                    user
+                  </Form.Label>
                   <Form.Control
                     as="select"
                     value={this.state.numeAngajat || ''}
@@ -406,7 +471,9 @@ class UserTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">{this.state.socsel.nume} - Useri</Card.Title>
+                <Card.Title as="h5">
+                  {this.state.socsel ? this.state.socsel.nume : null} - Useri
+                </Card.Title>
 
                 <Button
                   variant="outline-info"

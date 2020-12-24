@@ -1,7 +1,10 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 TODO: {
-	4-> backup baza de date
+	1 -> UserTabel.js :: addUser
+		-> lista de angajati trebuie sa excluda angajatii cu user daca se adauga, 
+			-> dar sa includa angajatul curent daca modalul editeaza un user
+	2 -> verifica ce vede un angajat normal
 }
 
 UPGRADES: {
