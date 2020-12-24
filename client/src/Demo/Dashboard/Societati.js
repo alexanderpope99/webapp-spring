@@ -10,7 +10,7 @@ import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
 import { months } from '../Resources/months';
 import authHeader from '../../services/auth-header';
-import { Edit, PlusCircle } from 'react-feather';
+import { Edit, PlusCircle, Users } from 'react-feather';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Popover from '@material-ui/core/Popover';
@@ -353,6 +353,12 @@ class Societati extends React.Component {
                 visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
                 style={{ cursor: 'pointer' }}
                 onClick={() => this.editSocietate(this.state.societati[key])}
+              />
+							<Users
+                className="d-flex justify-content-around float float-right mr-2"
+                visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
+								style={{ cursor: 'pointer' }}
+								onClick={() => window.location.href="/tables/angajati"}
               />
 
               <Button

@@ -1,6 +1,6 @@
 import React from 'react';
-// import axios from 'axios';
-import { Row, Col, Card, Form, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, Modal, InputGroup } from 'react-bootstrap';
+import { Eye, EyeOff } from 'react-feather';
 
 // import { server } from '../Resources/server-address';
 import AuthService from '../../services/auth.service';
@@ -12,7 +12,6 @@ import Aux from '../../hoc/_Aux';
 import authService from '../../services/auth.service';
 
 export default class Profile extends React.Component {
-  4;
   /*
    *	user can change his email or password
    * schimbare parola:
@@ -34,8 +33,8 @@ export default class Profile extends React.Component {
       id: null,
       username: '',
       email: '',
-			roles: [],
-			gen: false,
+      roles: [],
+      gen: false,
       isEdit: false,
 
       // modal:
@@ -67,19 +66,24 @@ export default class Profile extends React.Component {
       parolaNouaCheck: '',
       validated: true,
       errorMessage: 'Parolele nu coincid',
+
+      // modal hide/show password
+      hideParolaActuala: true,
+      hideParolaNoua: true,
+      hideParolaNouaCheck: true,
     });
   }
 
+  async updateProfile() {
+    AuthService.updateProfile(this.state.id, this.state.email, this.state.gen);
+  }
+
   changeEdit() {
-		if(this.state.isEdit) {
-			this.updateProfile();
-		}
+    if (this.state.isEdit) {
+      this.updateProfile();
+    }
     this.setState({ isEdit: !this.state.isEdit });
-	}
-	
-	async updateProfile() {
-		AuthService.updateProfile(this.state.id, this.state.email, this.state.gen);
-	}
+  }
 
   handleClose() {
     this.setState({
@@ -132,8 +136,6 @@ export default class Profile extends React.Component {
       return;
     }
 
-    console.log(parolaActuala, parolaNoua);
-
     // update password
     const ok = await AuthService.changePassword(this.state.id, parolaActuala, parolaNoua);
 
@@ -162,24 +164,36 @@ export default class Profile extends React.Component {
               <Modal.Title>Mesaj</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form.Group>
-                <Form.Label>Parola actuală</Form.Label>
+              <Form.Label>Parola actuală</Form.Label>
+              <InputGroup>
                 <Form.Control
                   required
-                  type="password"
+                  type={this.state.hideParolaActuala ? 'password' : 'text'}
                   value={this.state.parolaActuala}
                   onChange={(e) =>
                     this.setState({ parolaActuala: e.target.value, validated: true })
                   }
                   className={this.state.validated ? 'form-control' : 'form-control is-invalid'}
                 />
+                <InputGroup.Append>
+                  <Button
+                    variant="link"
+                    className="border"
+                    checked={this.state.hideParolaActuala}
+                    onClick={() =>
+                      this.setState({ hideParolaActuala: !this.state.hideParolaActuala })
+                    }
+                  >
+                    {this.state.hideParolaActuala ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </Button>
+                </InputGroup.Append>
                 <Form.Control.Feedback type="invalid">Parola incorectă</Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Parola nouă | 6 - 40 caractere</Form.Label>
+              </InputGroup>
+              <Form.Label>Parola nouă | 6 - 40 caractere</Form.Label>
+              <InputGroup>
                 <Form.Control
                   required
-                  type="password"
+                  type={this.state.hideParolaNoua ? 'password' : 'text'}
                   value={this.state.parolaNoua}
                   onChange={(e) => this.setState({ parolaNoua: e.target.value })}
                   className={
@@ -190,15 +204,25 @@ export default class Profile extends React.Component {
                       : 'form-control'
                   }
                 />
+                <InputGroup.Append>
+                  <Button
+                    variant="link"
+                    className="border"
+                    checked={this.state.hideParolaNoua}
+                    onClick={() => this.setState({ hideParolaNoua: !this.state.hideParolaNoua })}
+                  >
+                    {this.state.hideParolaNoua ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </Button>
+                </InputGroup.Append>
                 <Form.Control.Feedback type="invalid">
                   Parola nouă trebuie să fie diferită de cea actuală
                 </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Rescrie parola nouă</Form.Label>
+              </InputGroup>
+              <Form.Label>Rescrie parola nouă</Form.Label>
+              <InputGroup>
                 <Form.Control
                   required
-                  type="password"
+                  type={this.state.hideParolaNouaCheck ? 'password' : 'text'}
                   value={this.state.parolaNouaCheck}
                   onChange={(e) => this.setState({ parolaNouaCheck: e.target.value })}
                   className={
@@ -209,10 +233,22 @@ export default class Profile extends React.Component {
                       : 'form-control is-invalid'
                   }
                 />
+                <InputGroup.Append>
+                  <Button
+                    variant="link"
+                    className="border"
+                    checked={this.state.hideParolaNouaCheck}
+                    onClick={() =>
+                      this.setState({ hideParolaNouaCheck: !this.state.hideParolaNouaCheck })
+                    }
+                  >
+                    {this.state.hideParolaNouaCheck ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </Button>
+                </InputGroup.Append>
                 <Form.Control.Feedback type="invalid">
                   {this.state.errorMessage}
                 </Form.Control.Feedback>
-              </Form.Group>
+              </InputGroup>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="primary" type="submit">
@@ -233,9 +269,9 @@ export default class Profile extends React.Component {
                   </Button>
                 </Card.Header>
                 <Card.Body className="pl-5 pr-5">
-                  <Col md={9}>
+                  <Col md={12}>
                     <Form.Group as={Row}>
-                      <Form.Label column sm="2">
+                      <Form.Label column sm="4">
                         Username
                       </Form.Label>
                       <Col sm={8}>
@@ -248,7 +284,7 @@ export default class Profile extends React.Component {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                      <Form.Label column sm="2">
+                      <Form.Label column sm="4">
                         e-mail
                       </Form.Label>
                       <Col sm={8}>
@@ -261,41 +297,41 @@ export default class Profile extends React.Component {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                      <Form.Label as="legend" column sm={3}>
+                      <Form.Label as="legend" column sm={5}>
                         Icon
-                        <br />
-                        NEFUNCTIONAL
                       </Form.Label>
-                      <Row>
-                        <Form.Check
-                          custom
-													type="radio"
-													disabled={!this.state.isEdit}
-													checked={!this.state.gen}
-													onChange={() => this.setState({gen: !this.state.gen})}
-                          label={
-                            <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
-                          }
-                          name="icons"
-                          id="icon1"
-                        />
-                        <Form.Check
-                          custom
-													type="radio"
-													disabled={!this.state.isEdit}
-													checked={this.state.gen}
-													onChange={() => this.setState({gen: !this.state.gen})}
-                          label={
-                            <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
-                          }
-                          name="icons"
-                          id="icon2"
-                        />
-                      </Row>
+                      <Col sm={7}>
+                        <Row>
+                          <Form.Check
+                            custom
+                            type="radio"
+                            disabled={!this.state.isEdit}
+                            checked={!this.state.gen}
+                            onChange={() => this.setState({ gen: !this.state.gen })}
+                            label={
+                              <img className="img-radius" src={Avatar1} alt="Generic placeholder" />
+                            }
+                            name="icons"
+                            id="icon1"
+                          />
+                          <Form.Check
+                            custom
+                            type="radio"
+                            disabled={!this.state.isEdit}
+                            checked={this.state.gen}
+                            onChange={() => this.setState({ gen: !this.state.gen })}
+                            label={
+                              <img className="img-radius" src={Avatar2} alt="Generic placeholder" />
+                            }
+                            name="icons"
+                            id="icon2"
+                          />
+                        </Row>
+                      </Col>
                     </Form.Group>
                     <Button
-											variant={this.state.isEdit ? 'success' : 'link'}
-											className="p-2 pl-3 pr-3"
+                      variant={this.state.isEdit ? 'success' : 'link'}
+                      className="p-2 pl-3 pr-3"
                       onClick={this.changeEdit}
                     >
                       {this.state.isEdit ? 'Salvează' : 'Editează'}

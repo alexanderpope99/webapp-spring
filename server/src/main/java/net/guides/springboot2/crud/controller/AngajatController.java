@@ -55,7 +55,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<AngajatDTO> getAngajatByIdDTO(@PathVariable(value = "id") int angajatId)
+	public ResponseEntity<AngajatDTO> getAngajatByIdDTO(@PathVariable("id") int angajatId)
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
@@ -64,12 +64,10 @@ public class AngajatController {
 	}
 
 	@GetMapping("/expand/{id}")
-	public ResponseEntity<Angajat> getAngajatById(@PathVariable(value = "id") int angajatId)
+	public Angajat getAngajatById(@PathVariable("id") int angajatId)
 			throws ResourceNotFoundException {
-		Angajat angajat = angajatRepository.findById(angajatId)
+		return angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
-
-		return ResponseEntity.ok().body(angajat);
 	}
 
 	@GetMapping("/c")
@@ -78,28 +76,39 @@ public class AngajatController {
 	}
 
 	@GetMapping("/userid/{id}")
-	public int getAngajatIdByUserId(@PathVariable(value = "id") int userId) {
+	public int getAngajatIdByUserId(@PathVariable("id") int userId) {
 		return angajatRepository.findPersoanaIdByUserId(userId);
 	}
 
 	@GetMapping("/ids={ids}")
-	public List<Angajat> findAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+	public List<Angajat> findAngajatiByIdsocietate(@PathVariable("ids") int idsocietate) {
 		return angajatRepository.findBySocietate_Id(idsocietate);
 	}
 
 	@GetMapping("/ids={ids}&c")
-	public List<Angajat> findAngajatiWithContractByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+	public List<Angajat> findAngajatiWithContractByIdsocietate(@PathVariable("ids") int idsocietate) {
 		return angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 	}
 
 	@GetMapping("/ids={ids}&u")
-	public List<Angajat> findAngajatiWithUserAndAccessByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+	public List<Angajat> findAngajatiWithUserAndAccessByIdsocietate(@PathVariable("ids") int idsocietate) {
 		return angajatRepository.findBySocietate_IdAndContract_IdNotNullWithUserAndAccess(idsocietate);
 	}
 
 	@GetMapping("/ids={ids}/count")
-	public int countAngajatiByIdsocietate(@PathVariable(name = "ids") int idsocietate) {
+	public int countAngajatiByIdsocietate(@PathVariable( "ids") int idsocietate) {
 		return angajatRepository.countBySocietate_Id(idsocietate);
+	}
+
+	@GetMapping("/superiori-posibili/{id}")
+	public List<Angajat> findSuperioriPosibiliOfAngajat(@PathVariable("id") int idangajat)
+			throws ResourceNotFoundException {
+		return angajatService.getSuperioriPosibili(idangajat);
+	}
+
+	@GetMapping("subalterni/{id}")
+	public List<Angajat> getSubalterni(@PathVariable("id") int idangajat) throws ResourceNotFoundException {
+		return angajatService.getSubalterni(idangajat);
 	}
 
 	@PostMapping("/expand")
@@ -127,6 +136,12 @@ public class AngajatController {
 		angajatDetails.setPersoana(angajat.getPersoana());
 		final Angajat updatedAngajat = angajatRepository.save(angajatDetails);
 		return ResponseEntity.ok(updatedAngajat);
+	}
+
+	@PutMapping("/superior/{id}&{idsuperior}")
+	public Angajat setSuperior(@PathVariable("id") int id, @PathVariable("idsuperior") int idsuperior)
+			throws ResourceNotFoundException {
+		return angajatService.setSuperior(id, idsuperior);
 	}
 
 	@DeleteMapping("{id}")

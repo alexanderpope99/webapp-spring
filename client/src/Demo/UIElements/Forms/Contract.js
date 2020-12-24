@@ -19,6 +19,8 @@ import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 import { getAngajatSel } from '../../Resources/angajatsel';
 
+import Switch from '@material-ui/core/switch';
+
 const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
   <option key={index}>{casa}</option>
 ));
@@ -40,7 +42,6 @@ class Contract extends React.Component {
       numărContract: '', //text
       marca: '', //text
       punctDeLucru: '', //text
-      centruCost: '', //text
       echipa: '', //text,
       departament: '',
       calculdeduceri: true,
@@ -49,6 +50,57 @@ class Contract extends React.Component {
       normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
       salariu: '',
       monedăSalariu: 'RON', //text
+      idcontbancar: null,
+      iban: '',
+      numebanca: '',
+      condițiiMuncă: 'Normale', //text
+      sindicat: false,
+      cotizațieSindicat: '',
+      pensiePrivată: false,
+      cotizațiePensie: '',
+      spor: 0,
+      avans: 0,
+      monedăAvans: 'RON', //text
+      zileCOan: 21,
+      casăSănătate: '', //text
+      gradInvalid: 'valid', //text
+      funcție: '', //text
+      nivelStudii: '', //text
+      cor: '',
+      dataIncepere: '',
+      dataContract: '',
+      ultimaZiLucru: '',
+      pensionar: false,
+
+      show: false,
+      modalMessage: '', //text
+
+      // superior
+      angajat: null,
+      superior: null,
+      superiori: [],
+
+      // centrucost
+      centruCost: null,
+      centreCost: [],
+    };
+  }
+
+  clearFields() {
+    this.setState({
+      id: 0,
+      modelContract: 'Contract de munca', //text
+      numărContract: '', //text
+      marca: '', //text
+      punctDeLucru: '',
+      echipa: '', //text,
+      departament: '',
+      calculdeduceri: true,
+      studiiSuperioare: false,
+      functieBaza: true,
+      normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
+      monedăSalariu: 'RON', //text
+      salariu: '',
       idcontbancar: null,
       iban: '',
       numebanca: '',
@@ -76,52 +128,7 @@ class Contract extends React.Component {
 
       angajat: null,
       superior: null,
-      superiori: [],
-    };
-  }
-
-  clearFields() {
-    this.setState({
-      id: 0,
-      modelContract: 'Contract de munca', //text
-      numărContract: '', //text
-      marca: '', //text
-      punctDeLucru: '', //text
-      centruCost: '', //text
-      echipa: '', //text,
-      departament: '',
-      calculdeduceri: true,
-      studiiSuperioare: false,
-      functieBaza: true,
-      normăLucru: { nrOre: 8, nume: 'Normă întreagă' }, //text
-      monedăSalariu: 'RON', //text
-      salariu: '',
-      idcontbancar: null,
-      iban: '',
-      numebanca: '',
-      condițiiMuncă: 'Normale', //text
-      sindicat: false,
-      cotizațieSindicat: '',
-      pensiePrivată: false,
-      cotizațiePensie: '',
-      spor: 0,
-      avans: 0,
-      monedăAvans: 'RON', //text
-      zileCOan: 21,
-      casăSănătate: '', //text
-      gradInvalid: 'valid', //text
-      funcție: '', //text
-      nivelStudii: '', //text
-      cor: '',
-      dataIncepere: '',
-      dataContract: '',
-      ultimaZiLucru: '',
-      pensionar: false,
-
-      show: false,
-      modalMessage: '', //text
-
-      angajat: null,
+      centruCost: null,
     });
   }
 
@@ -160,22 +167,36 @@ class Contract extends React.Component {
 
   async getSuperiori() {
     const superiori = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, {
+      .get(`${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`, {
         headers: authHeader(),
       })
       .then((res) =>
-        res.data.map((angajat) => ({
-          id: angajat.persoana.id,
-          numeintreg: angajat.persoana.nume + ' ' + angajat.persoana.prenume,
-        }))
+        res.data
+          .map((angajat) => ({
+            id: angajat.persoana.id,
+            numeintreg: angajat.persoana.nume + ' ' + angajat.persoana.prenume,
+          }))
+          .filter((angajat) => angajat.id !== this.state.angajatsel.idpersoana)
       )
       .catch((err) => console.error(err));
 
     if (superiori) this.setState({ superiori: superiori });
   }
 
+  async getCentreCost() {
+    const centreCost = await axios
+      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+
+    if (centreCost) this.setState({ centreCost: centreCost });
+  }
+
   async fillForm() {
     this.getSuperiori();
+    this.getCentreCost();
 
     const angajatsel = getAngajatSel();
     const angajat = await axios
@@ -186,10 +207,22 @@ class Contract extends React.Component {
       .catch((err) => console.error(err));
 
     if (angajat.contract) {
+      this.clearFields();
       let contract = angajat.contract;
+      let superior = angajat.superior
+        ? {
+            id: angajat.superior.persoana.id,
+            numeintreg: angajat.superior.persoana.nume + ' ' + angajat.superior.persoana.prenume,
+          }
+        : null;
+      let centruCost = contract.centrucost
+        ? { id: contract.centrucost.id, nume: contract.centrucost.nume }
+        : null;
+
       this.setState(
         {
           angajat: angajat,
+          superior: superior,
           angajatsel: getAngajatSel(),
 
           id: contract.id,
@@ -199,7 +232,7 @@ class Contract extends React.Component {
           dataContract: contract.data ? contract.data.substring(0, 10) : '',
           dataIncepere: contract.dataincepere ? contract.dataincepere.substring(0, 10) : '',
           punctDeLucru: contract.idpunctdelucru || '',
-          centruCost: contract.idcentrucost || '',
+          centruCost: centruCost,
           echipa: contract.idechipa || '',
           departament: contract.iddepartament || '',
           functieBaza: contract.functiedebaza || false,
@@ -282,13 +315,12 @@ class Contract extends React.Component {
     }
 
     return true;
-	}
-	
-	// async updateSuperior() {
-	// 	// TODO CREATE THIS ENDPOINT
-	// 	const res = await axios
-	// 		.put(`${server.address}/angajat/superior/`)
-	// }
+  }
+
+  getCentruCostById(centruCost) {
+    if (centruCost) return this.state.centreCost.find((cc) => cc.id === centruCost.id);
+    else return null;
+  }
 
   async onSubmit(e) {
     e.preventDefault();
@@ -308,14 +340,16 @@ class Contract extends React.Component {
         numebanca: this.state.numebanca,
       };
 
+    let centrucost_body = this.getCentruCostById(this.state.centruCost);
+
     const contract_body = {
       tip: this.state.modelContract || null,
       nr: this.state.numărContract || null,
       marca: this.state.marca || null,
       data: this.state.dataContract || null,
       dataincepere: this.state.dataIncepere || null,
-      idpunctlucru: null, //punctlucru.id,  // null or in || nullt
-      idcentrucost: null, //centrucost.id || null,
+      // punctdelucru: null, //punctlucru.id,  // null or in || null
+      centrucost: centrucost_body, //centrucost.id || null,
       idechipa: null, //echipa.id || null,
       iddepartament: null, //departament.id || null,
       functiedebaza: this.state.functieBaza,
@@ -344,7 +378,7 @@ class Contract extends React.Component {
     };
 
     let contract = null;
-    if (this.state.angajat.contract)
+    if (this.state.angajat.contract) {
       contract = await axios
         .put(`${server.address}/contract/${this.state.id}`, contract_body, {
           headers: authHeader(),
@@ -353,7 +387,7 @@ class Contract extends React.Component {
         .catch((err) => {
           console.error(err.message);
         });
-    else {
+    } else {
       contract = await axios
         .post(`${server.address}/contract/${this.state.angajat.idpersoana}`, contract_body, {
           headers: authHeader(),
@@ -365,6 +399,18 @@ class Contract extends React.Component {
     }
     // if recieved response from server
     if (contract) {
+      // update superior
+      if (this.state.superior) {
+        await axios
+          .put(
+            `${server.address}/angajat/superior/${this.state.angajat.idpersoana}&${this.state.superior.id}`,
+            {},
+            { headers: authHeader() }
+          )
+          .then((res) => res.status === 200)
+          .catch((err) => console.error(err));
+      }
+
       this.setState({
         show: true,
         modalMessage: this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat cu succes 📄',
@@ -379,15 +425,35 @@ class Contract extends React.Component {
   }
 
   onChangeSuperior(e) {
+    if (e.target.value === '-') {
+      this.setState({ superior: null });
+      return;
+    }
     const selectedIndex = e.target.options.selectedIndex;
     const idsuperior = e.target.options[selectedIndex].getAttribute('data-key');
-    this.setState({ superior: { id: idsuperior, numeintreg: e.target.value } });
+    this.setState({ superior: { id: Number(idsuperior), numeintreg: e.target.value } });
+  }
+
+  onChangeCentruCost(e) {
+    if (e.target.value === '-') {
+      this.setState({ centruCost: null });
+      return;
+    }
+    const selectedIndex = e.target.options.selectedIndex;
+    const idcentrucost = e.target.options[selectedIndex].getAttribute('data-key');
+    this.setState({ centruCost: { id: Number(idcentrucost), nume: e.target.value } });
   }
 
   render() {
     const superioriComponent = this.state.superiori.map((superior) => (
       <option key={superior.id} data-key={superior.id}>
         {superior.numeintreg}
+      </option>
+    ));
+
+    const centreCostComponent = this.state.centreCost.map((centruCost) => (
+      <option key={centruCost.id} data-key={centruCost.id}>
+        {centruCost.nume}
       </option>
     ));
 
@@ -494,23 +560,33 @@ class Contract extends React.Component {
             </Col>
             <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
               <Form.Group id="functiedabaza">
-                <Form.Check
-                  custom
-                  type="checkbox"
-                  id="functieDeBazaCheck"
-                  label="Funcție de bază"
-                  checked={this.state.functieBaza}
-                  onChange={(e) => {
-                    this.setState({ functieBaza: e.target.checked });
-                  }}
-                />
+                
+                <Form.Label>
+									{/* <Switch
+										color="primary"
+                    checked={this.state.functieBaza}
+										onChange={(e) => this.setState({ functieBaza: e.target.checked })}
+                  />
+                  Funcție de bază */}
+                  <Form.Check
+                    custom
+                    type="switch"
+                    id="functieDeBazaCheck"
+                    label="Funcție de bază"
+                    checked={this.state.functieBaza}
+                    onChange={(e) => {
+                      this.setState({ functieBaza: e.target.checked });
+                    }}
+                    size="sm"
+                  />
+                </Form.Label>
               </Form.Group>
             </Col>
             <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
               <Form.Group controlId="calculdeduceri">
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="deduceriCheck"
                   label="Calcul deduceri"
                   checked={this.state.calculdeduceri}
@@ -524,7 +600,7 @@ class Contract extends React.Component {
               <Form.Group controlId="studiisuperioare">
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="studiiSuperioareCheck"
                   label="Studii superioare"
                   checked={this.state.studiiSuperioare}
@@ -540,7 +616,7 @@ class Contract extends React.Component {
               <Form.Group id="pensionar">
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="pensionarCheck"
                   label="Pensionar"
                   checked={this.state.pensionar}
@@ -704,13 +780,11 @@ class Contract extends React.Component {
                 <Form.Label>Centre de cost</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.punctDeLucru}
-                  onChange={(e) => {
-                    this.setState({ punctDeLucru: e.target.value });
-                  }}
+                  value={this.state.centruCost ? this.state.centruCost.nume : '-'}
+                  onChange={(e) => this.onChangeCentruCost(e)}
                 >
                   <option>-</option>
-                  {/* centre cost fetched from db */}
+                  {centreCostComponent}
                 </Form.Control>
               </Form.Group>
             </Col>
@@ -750,7 +824,7 @@ class Contract extends React.Component {
               <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="sindicatCheck"
                   label="Sindicat"
                   checked={this.state.sindicat}
@@ -782,7 +856,7 @@ class Contract extends React.Component {
               >
                 <Form.Check
                   custom
-                  type="checkbox"
+                  type="switch"
                   id="pensiePrivataCheck"
                   label="Pensie privată"
                   checked={this.state.pensiePrivată}

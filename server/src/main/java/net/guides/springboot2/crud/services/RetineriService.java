@@ -40,7 +40,7 @@ public class RetineriService {
 	public Retineri updateRetinere(RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
 
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
-				.orElseThrow(() -> new ResourceNotFoundException("RealizaiRetineri not found for this id"));
+				.orElseThrow(() -> new ResourceNotFoundException("RealizariRetineri not found for this id"));
 
 		Retineri newRetinere = modelMapper.map(newRetinereDTO, Retineri.class);
 		newRetinere.setStat(realizariRetineri);

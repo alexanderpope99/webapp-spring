@@ -255,12 +255,10 @@ function getProcente(cod) {
     case '06':
       return ['100'];
     case '07':
-      return ['75'];
+      return ['100'];
     case '08':
       return ['85'];
     case '09':
-      return ['85'];
-    case '91':
       return ['85'];
     case '10':
       return ['25'];
@@ -273,7 +271,7 @@ function getProcente(cod) {
     case '14':
       return ['100'];
     case '15':
-      return ['75'];
+			return ['75'];
 
     default:
       return ['100'];

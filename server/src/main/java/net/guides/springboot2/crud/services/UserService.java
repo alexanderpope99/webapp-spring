@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.UserDTO;
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
@@ -50,16 +51,20 @@ public class UserService {
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
 	}
 
-	public UserDTO update(UserDTO newUserDTO, int idsocietate) {
+	public UserDTO update(UserDTO newUserDTO, int idsocietate) throws ResourceNotFoundException {
 		// unassign angajat.user
-		userRepository.findById(newUserDTO.getId()).ifPresent(user -> user.getAngajati().forEach(angajat -> {
+		User oldUser = userRepository.findById(newUserDTO.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + newUserDTO.getId()));
+
+		oldUser.getAngajati().forEach(angajat -> {
 			if (angajat.getSocietate().getId() == idsocietate) {
 				angajat.setUser(null);
 				angajatRepository.save(angajat);
 			}
-		}));
+		});
 
 		User newUser = modelMapper.map(newUserDTO, User.class);
+		newUser.setPassword(oldUser.getPassword());
 
 		// * keep angajati connected to user <- on frontend: angajati.user is null
 		// page making this request will not change angajat content, but can change the

@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class CursValutarService {
+public class WebParserService {
 
 	public String getCursValutarFromBNR() {
 		Document doc;
 		try {
-			doc = Jsoup.connect("https://www.cursbnr.ro/").get();
+			doc = Jsoup.connect("https://www.cursbnr.ro/").proxy("192.168.2.21", 3128).get();
 		} catch (IOException e) {
 			return "Eroare la conexiunea la site-ul BNR";
 		}
@@ -24,14 +24,14 @@ public class CursValutarService {
 	public String getWikipediaArticle() {
 		Document doc;
 		try {
-			doc = Jsoup.connect("https://en.wikipedia.org/").get();
+			doc = Jsoup.connect("https://en.wikipedia.org/").proxy("192.168.2.21", 3128).get();
 		} catch (IOException e) {
 			return "Eroare la conexiunea la site";
 		}
 		Elements newsHeadlines = doc.select("#mp-itn b a");
 		String result = "";
 		for (Element headline : newsHeadlines) {
-			result += (headline.attr("title") + "\n" + headline.absUrl("href"));
+			result += (headline.attr("title") + "\n" + headline.absUrl("href")) + "\n\n";
 		}
 		return result;
 	}

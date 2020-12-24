@@ -15,11 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "realizariretineri")
+@Table(name = "realizariretineri", uniqueConstraints = {@UniqueConstraint(columnNames = {"luna", "an", "idcontract"})})
 public class RealizariRetineri implements Serializable {
 	private static final long serialVersionUID = 1L;
 

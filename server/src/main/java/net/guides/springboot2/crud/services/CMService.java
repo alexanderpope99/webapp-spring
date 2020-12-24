@@ -1,7 +1,9 @@
 package net.guides.springboot2.crud.services;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class CMService {
 	@Autowired
 	private BazacalculService bazacalculService;
 	@Autowired
-	private RealizariRetineriService realizaiRetineriService;
+	private RealizariRetineriService realizariRetineriService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -51,9 +53,9 @@ public class CMService {
 		// get luna, an from co.dela
 		int luna = cm.getDela().getMonthValue();
 		int an = cm.getDela().getYear();
-		
+
 		// update salariu
-		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
+		realizariRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
 
 		// return sent body with correct id
 		cmDTO.setId(cm.getId());
@@ -63,6 +65,20 @@ public class CMService {
 	public CMDTO update(int cmID, CMDTO newCmDTO) throws ResourceNotFoundException {
 		newCmDTO.setId(cmID);
 		return save(newCmDTO);
+	}
+
+	public Map<String, Boolean> delete(int cmId) throws ResourceNotFoundException {
+		CM cm = cmRepository.findById(cmId)
+				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
+
+		cmRepository.delete(cm);
+
+		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(),
+				cm.getContract().getId(), -1, -1, -1);
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
 	}
 
 	public int getZileCM(int luna, int an, int idcontract) {

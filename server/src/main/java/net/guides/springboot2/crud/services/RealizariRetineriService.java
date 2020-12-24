@@ -112,9 +112,11 @@ public class RealizariRetineriService {
 
 		// get Retineri here and subtract it
 		Retineri retineri = retineriService.getRetinereByIdcontractAndLunaAndAn(idcontract, luna, an);
-		restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON() + retineri.getPensiealimentara()
-				+ retineri.getPopriri() + retineri.getImprumuturi());
-
+		if(retineri != null) {
+			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON() + retineri.getPensiealimentara()
+			+ retineri.getPopriri() + retineri.getImprumuturi());
+		}
+	
 		return Math.round(restPlata);
 	} // calcRestPlata
 
@@ -232,7 +234,7 @@ public class RealizariRetineriService {
 	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract, int primaBruta, int nrTichete,
 			int totalOreSuplimentare) throws ResourceNotFoundException {
 
-		// nu e calculat in (luna, an), calculeaza/creeaza => nu mai trebuie recalculat
+		// nu e calculat in (luna, an) => calculeaza/creeaza <=> nu mai trebuie recalculat
 		if(!realizariRetineriRepository.existsByLunaAndAnAndContract_Id(luna, an, idcontract)) {
 			return this.saveRealizariRetineri(luna, an, idcontract);
 		}
