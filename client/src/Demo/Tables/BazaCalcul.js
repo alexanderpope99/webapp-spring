@@ -10,7 +10,7 @@ import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel } from '../Resources/angajatsel';
-import { months } from '../Resources/months';
+import { luni }from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -142,7 +142,7 @@ class BazaCalcul extends React.Component {
       id: bc.id,
       idangajat: bc.idangajat,
       an: bc.an,
-      luna: { nume: months[bc.luna - 1], nr: bc.luna },
+      luna: { nume: luni[bc.luna - 1], nr: bc.luna },
       salariurealizat: bc.salariurealizat,
       zilelucrate: bc.zilelucrate,
     });
@@ -166,7 +166,7 @@ class BazaCalcul extends React.Component {
           return (
             <tr key={bc.id}>
               <th>{bc.an}</th>
-              <th>{months[bc.luna - 1]}</th>
+              <th>{luni[bc.luna - 1]}</th>
               <th>{bc.zilelucrate}</th>
               <th>{bc.salariurealizat}</th>
               <th>
@@ -341,7 +341,7 @@ class BazaCalcul extends React.Component {
     if (this.state.luni_fara_baza && this.state.luni_fara_baza[this.state.an_sel])
       luniFaraBazaComponent = this.state.luni_fara_baza[this.state.an_sel].map((luna) => (
         <option key={luna} data-key={luna}>
-          {months[luna - 1]}
+          {luni[luna - 1]}
         </option>
       ));
 

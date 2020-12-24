@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getAngajatSel } from '../Resources/angajatsel';
-import { months } from '../Resources/months';
+import { luni }from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import {
@@ -641,7 +641,7 @@ class CMTabel extends React.Component {
     if (this.state.luni_cu_concediu[this.state.an]) {
       monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
         <option key={index} data-key={Number(luna)}>
-          {months[luna - 1]}
+          {luni[luna - 1]}
         </option>
       ));
     }

@@ -3,7 +3,7 @@ import { Row, Col, Card, Form, Button, FormControl } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
-import { months } from '../Resources/months';
+import { luni } from '../Resources/calendar';
 import { download } from '../Resources/download';
 import authService from '../../services/auth.service';
 
@@ -31,7 +31,7 @@ class Pontaj extends React.Component {
 
   setCurrentYearMonth() {
     let today = new Date();
-    let luna = months[today.getMonth()];
+    let luna = luni[today.getMonth()];
     let an = today.getFullYear();
 
     this.setState({
@@ -66,7 +66,7 @@ class Pontaj extends React.Component {
   }
 
   render() {
-    const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
+    const luniComponent = luni.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
     return (
       <Card>
@@ -87,7 +87,7 @@ class Pontaj extends React.Component {
                     })
                   }
                 >
-                  {luni}
+                  {luniComponent}
                 </Form.Control>
               </Col>
               {/* AN */}
