@@ -19,8 +19,6 @@ import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 import { getAngajatSel } from '../../Resources/angajatsel';
 
-import Switch from '@material-ui/core/switch';
-
 const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
   <option key={index}>{casa}</option>
 ));
@@ -166,6 +164,8 @@ class Contract extends React.Component {
   }
 
   async getSuperiori() {
+		if(!this.state.angajatsel) return;
+
     const superiori = await axios
       .get(`${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`, {
         headers: authHeader(),
@@ -198,7 +198,9 @@ class Contract extends React.Component {
     this.getSuperiori();
     this.getCentreCost();
 
-    const angajatsel = getAngajatSel();
+		const angajatsel = getAngajatSel();
+		if(!angajatsel) return;
+		
     const angajat = await axios
       .get(`${server.address}/angajat/expand/${angajatsel.idpersoana}`, {
         headers: authHeader(),

@@ -38,6 +38,7 @@ class COTabel extends React.Component {
       today: '',
       an: '',
       luna: { nume: '-', nr: '-' },
+      zile_co_disponibile: 21,
 
       ultimul_an: '',
       ani_cu_concediu: [],
@@ -78,19 +79,32 @@ class COTabel extends React.Component {
 
   async updateAngajatSel() {
     let angajatSel = getAngajatSel();
+
     if (angajatSel) {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) => console.error(err));
-      if (angajat)
-        this.setState(
-          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
-          this.fillTable
-        );
+      // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
+      if (angajat) {
+        this.setState({ angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } }, () => {
+          this.fillTable();
+          this.getZileCoDisponibile();
+        });
+      }
     } else {
       this.setState({ angajat: null }, this.fillTable);
     }
+  }
+
+  async getZileCoDisponibile() {
+    await axios
+      .get(
+        `${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}&y=${this.state.an}`,
+        { headers: authHeader() }
+      )
+      .then((res) => this.setState({ zile_co_disponibile: res.data }))
+      .catch((err) => console.error(err));
   }
 
   componentDidMount() {
@@ -137,7 +151,6 @@ class COTabel extends React.Component {
     // calculate number of days between dates
   }
 
-  // TODO
   setNrZile() {
     var nr_zile = 0,
       nr_zile_weekend = 0;
@@ -160,7 +173,6 @@ class COTabel extends React.Component {
       return;
     }
 
-    //? fetch must be with idcontract
     const co = await axios
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
@@ -222,8 +234,8 @@ class COTabel extends React.Component {
       this.setState(
         {
           show_confirm: false,
-					modalTitle: '',
-					modalMessage: '',
+          modalTitle: '',
+          modalMessage: '',
         },
         this.props.scrollToTopSmooth
       );
@@ -436,7 +448,7 @@ class COTabel extends React.Component {
         }
       }),
     });
-	}
+  }
 
   render() {
     var monthsComponent = [];
@@ -463,6 +475,11 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
+              <Form.Group id="zilecodisponibile">
+                <Form.Label>
+                  {this.state.zile_co_disponibile} zile concediu de odihnă disponibile
+                </Form.Label>
+              </Form.Group>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
@@ -526,9 +543,9 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-						<Button variant="link" href="/forms/realizari-retineri">
-							Către realizări/rețineri
-						</Button>
+            <Button variant="link" href="/forms/realizari-retineri">
+              Către realizări/rețineri
+            </Button>
 
             <Button variant="outline-info" onClick={this.handleClose}>
               Închide

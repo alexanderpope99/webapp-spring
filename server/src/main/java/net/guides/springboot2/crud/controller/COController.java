@@ -47,14 +47,14 @@ public class COController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CO> getCOById(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
+	public ResponseEntity<CO> getCOById(@PathVariable("id") int coId) throws ResourceNotFoundException {
 		CO co = coRepository.findById(coId)
 				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
 		return ResponseEntity.ok().body(co);
 	}
 
 	@GetMapping("idc={id}")
-	public ResponseEntity<List<CODTO>> getCOByIdcontract(@PathVariable(value = "id") int idcontract) {
+	public ResponseEntity<List<CODTO>> getCOByIdcontract(@PathVariable("id") int idcontract) {
 		List<CO> co = coRepository.findByContract_IdOrderByDelaDesc(idcontract);
 
 		List<CODTO> coDTO = new ArrayList<>();
@@ -64,9 +64,15 @@ public class COController {
 	}
 
 	@GetMapping("fp&idc={id}")
-	public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable(value = "id") int idcontract) {
+	public ResponseEntity<List<CO>> getCOByIdcontractWhereNeplatit(@PathVariable("id") int idcontract) {
 		List<CO> co = coRepository.findByContract_IdAndTipOrderByDelaDesc(idcontract, "Concediu fără plată");
 		return ResponseEntity.ok().body(co);
+	}
+
+	@GetMapping("zilecodisponibile/idc={id}&y={an}")
+	public ResponseEntity<Integer> getZileCODisponibile(@PathVariable("id") int idcontract, @PathVariable("an") int an)
+			throws ResourceNotFoundException {
+		return ResponseEntity.ok().body(coService.getZileCODisponibile(an, idcontract));
 	}
 
 	@PostMapping
@@ -75,13 +81,13 @@ public class COController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CODTO> updateCO(@PathVariable(value = "id") int coId, @RequestBody CODTO coDetails)
+	public ResponseEntity<CODTO> updateCO(@PathVariable("id") int coId, @RequestBody CODTO coDetails)
 			throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(coService.update(coId, coDetails));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteCO(@PathVariable(value = "id") int coId) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteCO(@PathVariable("id") int coId) throws ResourceNotFoundException {
 		return coService.delete(coId);
 	}
 }

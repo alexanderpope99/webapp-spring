@@ -136,13 +136,18 @@ class CMTabel extends React.Component {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  componentDidMount() {
-    this.setCurrentYear();
-    this.updateAngajatSel();
+  setCurrentYear() {
+    let today = new Date();
+
+    this.setState({
+      an: today.getFullYear(),
+      today: today.toISOString().substring(0, 10),
+    });
   }
 
   async updateAngajatSel() {
     let angajatSel = getAngajatSel();
+
     if (angajatSel) {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
@@ -159,13 +164,9 @@ class CMTabel extends React.Component {
     }
   }
 
-  setCurrentYear() {
-    let today = new Date();
-
-    this.setState({
-      an: today.getFullYear(),
-      today: today.toISOString().substring(0, 10),
-    });
+  componentDidMount() {
+    this.setCurrentYear();
+    this.updateAngajatSel();
   }
 
   onChangeAn(an) {

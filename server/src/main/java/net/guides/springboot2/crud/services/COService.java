@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.services;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,30 @@ public class COService {
 		return response;
 	}
 
+	public int getZileCODisponibile(int an, int idcontract) throws ResourceNotFoundException {
+		// get contract -> zilecoan
+		Contract contract = contractRepository.findById(idcontract)
+			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
+
+		int zilecodisponibile = 0;
+		// get concedii odihna (cu plata)
+		List<CO> concedii = coRepository.findByContract_IdAndTip(idcontract, "Concediu de odihnă");
+		
+		int zilecoan = contract.getZilecoan();
+		float zilecopeluna = (float)zilecoan / 12;
+
+		//* calculeaza cate zile are in primul an de activitate (cel mai probabil nu are 21)
+		LocalDate dataincepere = contract.getDataincepere();
+		// exclude luna in care a inceput activitatea
+		zilecodisponibile = Math.round((12 - dataincepere.getMonthValue()) * zilecopeluna);
+
+		//* calculeaza in restul anilor
+		if(dataincepere.getYear() + 1 <= an)
+			zilecodisponibile += zilecoan * (an - dataincepere.getYear());
+
+		return zilecodisponibile - this.zileC(concedii);
+	}
+
 	public int getZileCFP(int luna, int an, int idcontract) {
 		List<CO> concediiOdihnaNeplatite = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
 
@@ -113,6 +138,20 @@ public class COService {
 		List<CO> st = coRepository.findByContract_IdAndTip(idcontract, "Concediu de odihnă");
 
 		return zileC(luna, an, st);
+	}
+
+	private int zileC(List<CO> concedii) {
+		if(concedii.isEmpty()) return 0;
+
+		LocalDate dela, panala;
+		int zileC = 0;
+		for (CO concediu : concedii) {
+			dela = concediu.getDela();
+			panala = concediu.getPanala();
+
+			zileC += ChronoUnit.DAYS.between(dela, panala) + 1;
+		}
+		return zileC;
 	}
 
 	private int zileC(int luna, int an, List<CO> concedii) {
