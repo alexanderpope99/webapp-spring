@@ -1,15 +1,6 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 TODO: {
-	0-> scoate proxy din curs bnr, apoi: {
-			-> adauga in .gitignore
-			-> rm -rf server/src/main/java/net/guides/springboot2/crud/services/WebParserService.java
-		}
-
-	2-> afiseaza zile/concediu in tabel
-	3-> in modalul de adauga concediu afiseaza nr zile concediu disponibile
-		-> campurile dela/panala rosii daca se depasesc acele zile
-
 	4-> backup baza de date
 }
 
