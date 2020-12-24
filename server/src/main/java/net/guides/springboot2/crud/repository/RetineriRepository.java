@@ -14,4 +14,7 @@ public interface RetineriRepository extends JpaRepository<Retineri, Integer> {
 
 	@Query(value = "select sum(avansnet) from retineri where idstat in (select id from realizariretineri where luna = ?1 and an = ?2 and idcontract in (select id from contract where id in (select idcontract from angajat where idsocietate = ?3)))", nativeQuery = true)
 	public long getAvansByLunaAndAnByIdsocietate(int luna, int an, int idsocietate);
+
+	@Query(value = "SELECT SUM(pensiefacangajat/curseurron) from retineri where curseurron!=0 and idstat in (select id from realizariretineri where idcontract=?1 and an=?2)", nativeQuery = true)
+	public float getTotalPensieFacByYear(int idc, int an);
 }

@@ -197,10 +197,7 @@ class AngajatiTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">
-                  Angajați
-                  {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
-                </Card.Title>
+                <Card.Title as="h5">Angajați</Card.Title>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}

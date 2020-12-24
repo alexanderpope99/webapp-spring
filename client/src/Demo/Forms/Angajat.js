@@ -85,8 +85,8 @@ class Angajat extends React.Component {
   }
 
   async onFocusContract() {
-		await this.contract.current.fillForm();
-		this.setState({angajatsel: getAngajatSel()});
+    await this.contract.current.fillForm();
+    this.setState({ angajatsel: getAngajatSel() });
   }
 
   async onFocusCO() {
@@ -133,7 +133,9 @@ class Angajat extends React.Component {
                 : this.state.key !== 'date-personale'
                 ? ' *niciun angajat selectat'
                 : ''}
-								<Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">Realizări/Rețineri</Button>
+              <Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">
+                Realizări/Rețineri
+              </Button>
             </h5>
 
             <hr />

@@ -10,6 +10,7 @@ import {
   FormControl,
   OverlayTrigger,
   Tooltip,
+  Breadcrumb,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { UserPlus, FileText } from 'react-feather';
@@ -33,8 +34,8 @@ class EditPersoana extends React.Component {
     this.getNumeintregById = this.getNumeintregById.bind(this);
     this.fillForm = this.fillForm.bind(this);
     this.getDatanasteriiByCNP = this.getDatanasteriiByCNP.bind(this);
-		this.handleClose = this.handleClose.bind(this);
-		this.onChangeNume = this.onChangeNume.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.onChangeNume = this.onChangeNume.bind(this);
 
     let angajatSel = getAngajatSel();
     var idOfSelected = null;
@@ -180,11 +181,11 @@ class EditPersoana extends React.Component {
   }
 
   onChangeLocalitate(localitate) {
-		if(localitate)
-			this.setState({
-				tipJudet: this.getTipJudet(localitate),
-				localitate: localitate,
-			});
+    if (localitate)
+      this.setState({
+        tipJudet: this.getTipJudet(localitate),
+        localitate: localitate,
+      });
   }
 
   getDatanasteriiByCNP(cnp) {
@@ -382,6 +383,10 @@ class EditPersoana extends React.Component {
 
     return (
       <Aux>
+        <Breadcrumb>
+          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+        </Breadcrumb>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
