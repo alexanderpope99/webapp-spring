@@ -38,6 +38,7 @@ class COTabel extends React.Component {
       today: '',
       an: '',
       luna: { nume: '-', nr: '-' },
+      zile_co_disponibile: 21,
 
       ultimul_an: '',
       ani_cu_concediu: [],
@@ -78,19 +79,32 @@ class COTabel extends React.Component {
 
   async updateAngajatSel() {
     let angajatSel = getAngajatSel();
+
     if (angajatSel) {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) => console.error(err));
-      if (angajat)
+      // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
+      if (angajat) {
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
           this.fillTable
         );
+      }
     } else {
       this.setState({ angajat: null }, this.fillTable);
     }
+  }
+
+  async getZileCoDisponibile() {
+    await axios
+      .get(
+        `${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}&y=${this.state.an}`,
+        { headers: authHeader() }
+      )
+      .then((res) => this.setState({ zile_co_disponibile: res.data }))
+      .catch((err) => console.error(err));
   }
 
   componentDidMount() {
@@ -137,7 +151,6 @@ class COTabel extends React.Component {
     // calculate number of days between dates
   }
 
-  // TODO
   setNrZile() {
     var nr_zile = 0,
       nr_zile_weekend = 0;
@@ -160,19 +173,18 @@ class COTabel extends React.Component {
       return;
     }
 
-    //? fetch must be with idcontract
-    const co = await axios
+    const concedii = await axios
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) => console.error('err', err));
 
-    if (co) {
+    if (concedii) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
       var an;
       // add ani_cu_concediu
-      for (let c of co) {
+      for (let c of concedii) {
         if (c.dela) {
           // an = c.dela.substring(0, 4);
           ani_cu_concediu.add(Number(c.dela.substring(0, 4)));
@@ -186,7 +198,7 @@ class COTabel extends React.Component {
         luni_cu_concediu[_an] = new Set();
       }
       // add luni in luni_cu_concediu
-      for (let c of co) {
+      for (let c of concedii) {
         if (c.dela) {
           an = c.dela.substring(0, 4);
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
@@ -197,9 +209,11 @@ class COTabel extends React.Component {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
 
+      this.getZileCoDisponibile();
+
       this.setState(
         {
-          co: co,
+          co: concedii,
           ani_cu_concediu: [...ani_cu_concediu],
           luni_cu_concediu: luni_cu_concediu,
         },
@@ -222,8 +236,8 @@ class COTabel extends React.Component {
       this.setState(
         {
           show_confirm: false,
-					modalTitle: '',
-					modalMessage: '',
+          modalTitle: '',
+          modalMessage: '',
         },
         this.props.scrollToTopSmooth
       );
@@ -302,7 +316,6 @@ class COTabel extends React.Component {
       .catch((err) => console.error('err:', err));
 
     if (ok) {
-      console.log(`${dela} - ${panala}: ${nr_zile}`);
       // close add modal
       this.handleClose();
       // open confirm modal
@@ -436,7 +449,7 @@ class COTabel extends React.Component {
         }
       }),
     });
-	}
+  }
 
   render() {
     var monthsComponent = [];
@@ -463,6 +476,11 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
+              <Form.Group id="zilecodisponibile">
+                <Form.Label>
+                  {this.state.zile_co_disponibile} zile concediu de odihnă disponibile
+                </Form.Label>
+              </Form.Group>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
@@ -526,9 +544,9 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-						<Button variant="link" href="/forms/realizari-retineri">
-							Către realizări/rețineri
-						</Button>
+            <Button variant="link" href="/forms/realizari-retineri">
+              Către realizări/rețineri
+            </Button>
 
             <Button variant="outline-info" onClick={this.handleClose}>
               Închide
