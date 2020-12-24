@@ -2,9 +2,15 @@
 
 TODO: {
 	1 -> UserTabel.js :: addUser
-		-> lista de angajati trebuie sa excluda angajatii cu user daca se adauga, 
-			-> dar sa includa angajatul curent daca modalul editeaza un user
+		-> lista de angajati trebuie sa excluda angajatii cu user, daca se adauga, 
+			-> dar sa includa angajatul curent, daca modalul editeaza un user
+		-> buton de foloseste datele angajatului (emailul, username de genul "nume.prenume")
 	2 -> verifica ce vede un angajat normal
+
+	*-> add sorting to tables on frontend 
+
+	--> numele societatii sus in stanga == nu mai apare pe fiecare pagina in parte
+	--> breadcrumbs pe fiecare 
 }
 
 UPGRADES: {

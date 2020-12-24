@@ -49,8 +49,9 @@ public class UserService {
 	}
 
 	public List<UserDTO> findByIdsocietate(int idsocietate) {
+		List<User> users = userRepository.findBySocietati_IdOrderByUsernameAsc(idsocietate);
+
 		modelMapper.typeMap(User.class, UserDTO.class).addMapping(User::getSocietati, UserDTO::setSocietatiClass);
-		List<User> users = userRepository.findBySocietati_Id(idsocietate);
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
 	}
 
@@ -69,9 +70,7 @@ public class UserService {
 		// set basic password cripted from "parola" :: this needs to be changed by user
 		newUser.setPassword(encoder.encode("parola"));
 
-		// * keep angajati connected to user :: on frontend, angajati.user is null
-		// page making this request will not change angajat content
-		// make new List<Angajat> from request -> containis list of id's
+		// set angajat
 		List<Angajat> newAngajati = new ArrayList<>();
 		newUserDTO.getAngajati().forEach(angajatOpt -> {
 			// get from db and push to list
@@ -135,8 +134,18 @@ public class UserService {
 				.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
 		newUser.setSocietati(newSocietati);
 
+		// save to db
 		userRepository.save(newUser);
 
 		return newUserDTO;
 	} // update
+
+	public void delete(int userId) throws ResourceNotFoundException {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+		
+		user.getAngajati().forEach(angajat -> angajat.setUser(null));
+
+		userRepository.delete(user);
+	}
 }

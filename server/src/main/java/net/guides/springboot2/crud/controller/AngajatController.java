@@ -95,6 +95,11 @@ public class AngajatController {
 		return angajatRepository.findBySocietate_IdAndContract_IdNotNullWithUserAndAccess(idsocietate);
 	}
 
+	@GetMapping("/ids={ids}&nu")
+	public List<Angajat> findAngajatiNoUserAndAccessByIdsocietate(@PathVariable("ids") int idsocietate) {
+		return angajatRepository.findBySocietate_IdAndUserIsNull(idsocietate);
+	}
+
 	@GetMapping("/ids={ids}/count")
 	public int countAngajatiByIdsocietate(@PathVariable( "ids") int idsocietate) {
 		return angajatRepository.countBySocietate_Id(idsocietate);
