@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
-import { months, zileSaptamana } from '../Resources/months';
+import { formatDate } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -22,7 +22,6 @@ class SarbatoriTabel extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.deleteSarbatoare = this.deleteSarbatoare.bind(this);
     this.setCurrentYear = this.setCurrentYear.bind(this);
-    this.formatDate = this.formatDate.bind(this);
 
     this.state = {
       isEdit: false,
@@ -183,8 +182,8 @@ class SarbatoriTabel extends React.Component {
         if (sarbatoare.dela.includes(this.state.an)) {
           return (
             <tr key={sarbatoare.id}>
-              <th>{this.formatDate(sarbatoare.dela.substring(0, 10))}</th>
-              <th>{this.formatDate(sarbatoare.panala.substring(0, 10))}</th>
+              <th>{formatDate(sarbatoare.dela.substring(0, 10))}</th>
+              <th>{formatDate(sarbatoare.panala.substring(0, 10))}</th>
               <th>{sarbatoare.nume}</th>
               <th className="d-inline-flex flex-row justify-content-around">
                 <Button
@@ -247,19 +246,6 @@ class SarbatoriTabel extends React.Component {
         }
       }),
     });
-  }
-
-  formatDate(date) {
-    let data = new Date(date.substring(0, 10));
-    let ziuaSaptamanii = zileSaptamana[data.getDay()];
-
-    let luna = date.substring(5, 7);
-    let ziua = date.substring(8, 10).match('[1-9][0-9]*');
-
-    luna = months[Number(luna) - 1];
-
-    return `${ziua} ${luna}, ${ziuaSaptamanii}`;
-    // return ziuaSaptamanii + ', ' + ziua + ' ' + luna;
   }
 
   render() {

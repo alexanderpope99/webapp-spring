@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getAngajatSel } from '../Resources/angajatsel';
-import { months } from '../Resources/months';
+import { luni, formatDate } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import { countWeekendDays } from '../Resources/cm';
@@ -29,7 +29,6 @@ class COTabel extends React.Component {
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
     this.setNrZile = this.setNrZile.bind(this);
-    this.formatDate = this.formatDate.bind(this);
 
     this.state = {
       angajat: getAngajatSel(),
@@ -118,6 +117,91 @@ class COTabel extends React.Component {
     this.setState({
       an: today.getFullYear(),
       today: today.toISOString().substring(0, 10),
+    });
+  }
+
+  // function to create react table rows with fetched data
+  renderCO() {
+    this.setState({
+      // eslint-disable-next-line array-callback-return
+      coComponent: this.state.co.map((co, index) => {
+        if (
+          co.dela
+            ? co.dela.includes(this.state.an) &&
+              (this.state.luna.nume !== '-'
+                ? Number(co.dela.substring(5, 7)) === this.state.luna.nr
+                : true)
+            : true
+        ) {
+          for (let key in co) {
+            if (!co[key]) co[key] = '-';
+          }
+
+          return (
+            <tr key={co.id}>
+              <th>{formatDate(co.dela)}</th>
+              <th>{formatDate(co.panala)}</th>
+              <th>{co.tip}</th>
+              <th className="d-inline-flex flex-row justify-content-around">
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  onClick={() => this.editCO(co)}
+                >
+                  <Edit3 size={20} />
+                </Button>
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 fontSize="small" />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Sigur ștergeți concediul?</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteCO(co.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </th>
+            </tr>
+          );
+        }
+      }),
     });
   }
 
@@ -325,7 +409,7 @@ class COTabel extends React.Component {
         modalMessage: (
           <React.Fragment>
             <p>
-              Concediu din {this.formatDate(dela)} pana in {this.formatDate(panala)}
+              Concediu din {formatDate(dela)} pana in {formatDate(panala)}
             </p>
             <p>
               {nr_zile} zile de concediu, din care {nr_zile_weekend} zile de weekend
@@ -362,101 +446,12 @@ class COTabel extends React.Component {
     );
   }
 
-  formatDate(date) {
-    return date.substring(0, 10).split('-').reverse().join('.');
-  }
-
-  // function to create react table rows with fetched data
-  renderCO() {
-    this.setState({
-      // eslint-disable-next-line array-callback-return
-      coComponent: this.state.co.map((co, index) => {
-        if (
-          co.dela
-            ? co.dela.includes(this.state.an) &&
-              (this.state.luna.nume !== '-'
-                ? Number(co.dela.substring(5, 7)) === this.state.luna.nr
-                : true)
-            : true
-        ) {
-          for (let key in co) {
-            if (!co[key]) co[key] = '-';
-          }
-
-          return (
-            <tr key={co.id}>
-              <th>{this.formatDate(co.dela)}</th>
-              <th>{this.formatDate(co.panala)}</th>
-              <th>{co.tip}</th>
-              <th className="d-inline-flex flex-row justify-content-around">
-                <Button
-                  variant="outline-secondary"
-                  className="ml-2 p-1 rounded-circle border-0"
-                  onClick={() => this.editCO(co)}
-                >
-                  <Edit3 size={20} />
-                </Button>
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-0 p-1 rounded-circle border-0"
-                        {...bindTrigger(popupState)}
-                      >
-                        <Trash2 fontSize="small" />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>Sigur ștergeți concediul?</Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteCO(co.id);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
-              </th>
-            </tr>
-          );
-        }
-      }),
-    });
-  }
-
   render() {
     var monthsComponent = [];
     if (this.state.luni_cu_concediu[this.state.an]) {
       monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
         <option key={index} data-key={Number(luna)}>
-          {months[luna - 1]}
+          {luni[luna - 1]}
         </option>
       ));
     }

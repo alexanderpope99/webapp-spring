@@ -80,6 +80,12 @@ public class CM implements Serializable {
 	@Column(name = "indemnizatiefnuass")
 	private Float indemnizatiefnuass;
 
+	@Column(name = "zilefaambp")
+	private Integer zilefaamb;
+
+	@Column(name = "indemnizatiefaambp")
+	private Float indemnizatiefaambp;
+
 	@Column(name = "locprescriere")
 	private String locprescriere;
 
@@ -108,8 +114,8 @@ public class CM implements Serializable {
 
 	public CM(LocalDate dela, LocalDate panala, Boolean continuare, LocalDate datainceput, String serie, String nr,
 			LocalDate dataeliberare, String codurgenta, Float procent, String codboalainfcont, Float bazacalcul,
-			Float bazacalculplafonata, Integer zilebazacalcul, Float mediezilnica, Integer zilefirma,
-			Float indemnizatiefirma, Integer zilefnuass, Float indemnizatiefnuass, String locprescriere,
+			Float bazacalculplafonata, Integer zilebazacalcul, Float mediezilnica, Integer zilefirma, Float indemnizatiefirma,
+			Integer zilefnuass, Float indemnizatiefnuass, Integer zilefaambp, Float indemnizatiefaambp, String locprescriere,
 			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract, String cnpcopil,
 			String codindemnizatie) {
 		this.dela = dela;
@@ -130,6 +136,8 @@ public class CM implements Serializable {
 		this.indemnizatiefirma = indemnizatiefirma;
 		this.zilefnuass = zilefnuass;
 		this.indemnizatiefnuass = indemnizatiefnuass;
+		this.zilefaamb = zilefaambp;
+		this.indemnizatiefaambp = indemnizatiefaambp;
 		this.locprescriere = locprescriere;
 		this.nravizmedic = nravizmedic;
 		this.codboala = codboala;
@@ -298,6 +306,22 @@ public class CM implements Serializable {
 
 	public void setIndemnizatiefnuass(Float indemnizatiefnuass) {
 		this.indemnizatiefnuass = indemnizatiefnuass;
+	}
+
+	public Integer getZilefaamb() {
+		return zilefaamb;
+	}
+
+	public void setZilefaamb(Integer zilefaamb) {
+		this.zilefaamb = zilefaamb;
+	}
+
+	public Float getIndemnizatiefaambp() {
+		return indemnizatiefaambp;
+	}
+
+	public void setIndemnizatiefaambp(Float indemnizatiefaambp) {
+		this.indemnizatiefaambp = indemnizatiefaambp;
 	}
 
 	public String getLocprescriere() {

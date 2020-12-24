@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getAngajatSel } from '../Resources/angajatsel';
-import { months } from '../Resources/months';
+import { luni, formatDate } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import {
@@ -214,7 +214,6 @@ class CMTabel extends React.Component {
       let date2 = new Date(panala);
       nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
       nr_zile_weekend = countWeekendDays(date1, date2);
-      console.log(this.state.codboala.substring(0, 2));
       [zilefirma, zilefnuass, zilefaambp] = getZileFirma(
         date1,
         date2,
@@ -349,12 +348,37 @@ class CMTabel extends React.Component {
       return;
     }
 
-    let { angajat, cm, cmComponent, show, show_confirm, modalMessage, ...cm_body } = this.state;
-    cm_body.idcontract = this.state.angajat.idcontract;
-    cm_body.codboala = cm_body.codboala.substring(0, 2);
-    for (let key in cm_body) {
-      cm_body[key] = cm_body[key] === '' ? null : cm_body[key]; //skips 0 values
-    }
+    const cm_body = {
+      id: this.state.id,
+      idcontract: this.state.angajat.idcontract,
+      dela: this.state.dela,
+      panala: this.state.panala,
+      continuare: this.state.continuare || false,
+      datainceput: this.state.datainceput,
+      serie: this.state.serie,
+      nr: this.state.nr,
+      cnpcopil: this.state.cnpcopil,
+      dataeliberare: this.state.dataeliberare,
+      codurgenta: this.state.codurgenta,
+      procent: this.state.procent,
+      codboalainfcont: this.state.codboalainfcont,
+      bazacalcul: this.state.bazacalcul,
+      bazacalculplafonata: this.state.bazacalculplafonata,
+      zilebazacalcul: this.state.zilebazacalcul,
+      mediezilnica: this.state.mediezilnica,
+      zilefirma: this.state.zilefirma,
+      indemnizatiefirma: this.state.indemnizatiefirma,
+      zilefnuass: this.state.zilefnuass,
+      indemnizatiefnuass: this.state.indemnizatiefnuass,
+      zilefaambp: this.state.zilefaambp,
+      indemnizatiefaambp: this.state.indemnizatiefaambp,
+      locprescriere: this.state.locprescriere,
+      nravizmedic: this.state.nravizmedic,
+      codboala: this.state.codboala,
+      urgenta: this.state.urgenta || false,
+      conditii: this.state.conditii,
+      codindemnizatie: this.state.codindemnizatie,
+    };
 
     let ok = await axios
       .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
@@ -378,26 +402,37 @@ class CMTabel extends React.Component {
   }
 
   async updateCM() {
-    let {
-      angajat,
-      cm,
-      cmComponent,
-      show,
-      show_confirm,
-      modalMessage,
-      id,
-      isEdit,
-      procente,
-      ...cm_body
-    } = this.state;
-    cm_body.idcontract = this.state.angajat.idcontract;
-    cm_body.codboala = cm_body.codboala.substring(0, 2);
-
-    for (let key in cm_body) {
-      cm_body[key] = cm_body[key] || null;
-    }
-    // console.log(cm_body);
-    // return;
+    const cm_body = {
+			id: this.state.id,
+      idcontract: this.state.angajat.idcontract,
+      dela: this.state.dela,
+      panala: this.state.panala,
+      continuare: this.state.continuare || false,
+      datainceput: this.state.datainceput,
+      serie: this.state.serie,
+      nr: this.state.nr,
+      cnpcopil: this.state.cnpcopil,
+      dataeliberare: this.state.dataeliberare,
+      codurgenta: this.state.codurgenta,
+      procent: this.state.procent,
+      codboalainfcont: this.state.codboalainfcont,
+      bazacalcul: this.state.bazacalcul,
+      bazacalculplafonata: this.state.bazacalculplafonata,
+      zilebazacalcul: this.state.zilebazacalcul,
+      mediezilnica: this.state.mediezilnica,
+      zilefirma: this.state.zilefirma,
+      indemnizatiefirma: this.state.indemnizatiefirma,
+      zilefnuass: this.state.zilefnuass,
+      indemnizatiefnuass: this.state.indemnizatiefnuass,
+      zilefaambp: this.state.zilefaambp,
+      indemnizatiefaambp: this.state.indemnizatiefaambp,
+      locprescriere: this.state.locprescriere,
+      nravizmedic: this.state.nravizmedic,
+      codboala: this.state.codboala,
+      urgenta: this.state.urgenta || false,
+      conditii: this.state.conditii,
+      codindemnizatie: this.state.codindemnizatie,
+		};
 
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
@@ -436,7 +471,7 @@ class CMTabel extends React.Component {
         id: cm.id,
         dela: cm.dela.substring(0, 10),
         panala: cm.panala.substring(0, 10),
-        continuare: cm.continuare,
+        continuare: cm.continuare || false,
         datainceput: cm.datainceput.substring(0, 10),
         serie: cm.serie,
         nr: cm.nr,
@@ -456,11 +491,11 @@ class CMTabel extends React.Component {
         zilefnuass: cm.zilefnuass,
         indemnizatiefnuass: cm.indemnizatiefnuass,
         zilefaambp: cm.zilefaambp,
-        indemnizatiefaambp: cm.zilefaambp,
+        indemnizatiefaambp: cm.indemnizatiefaambp,
         locprescriere: cm.locprescriere,
         nravizmedic: cm.nravizmedic,
         codboala: cm.codboala,
-        urgenta: cm.urgenta,
+        urgenta: cm.urgenta || false,
         conditii: cm.conditii,
         idcontract: cm.idcontract,
 
@@ -558,13 +593,13 @@ class CMTabel extends React.Component {
                   )}
                 </PopupState>
               </th>
-              <th>{cm.dela.substring(0, 10).split('-').reverse().join('.')}</th>
-              <th>{cm.panala.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{formatDate(cm.dela)}</th>
+              <th>{formatDate(cm.panala)}</th>
               <th>{cm.continuare === '-' ? 'Nu' : 'Da'}</th>
-              <th>{cm.datainceput.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{formatDate(cm.datainceput)}</th>
               <th>{cm.serie}</th>
               <th>{cm.nr}</th>
-              <th>{cm.dataeliberare.substring(0, 10).split('-').reverse().join('.')}</th>
+              <th>{formatDate(cm.dataeliberare)}</th>
               <th>{cm.codboala}</th>
               <th>{cm.codurgenta}</th>
               <th>{cm.codboalainfcont}</th>
@@ -582,7 +617,7 @@ class CMTabel extends React.Component {
               <th>{cm.indemnizatiefaambp}</th>
               <th>{cm.nravizmedic}</th>
               <th>{cm.locprescriere}</th>
-              <th>{cm.urgenta ? 'Da' : 'Nu'}</th>
+              <th>{cm.urgenta === '-' ? 'Nu' : 'Da'}</th>
               <th>{cm.conditii}</th>
               <th>{cm.cnpcopil}</th>
             </tr>
@@ -641,7 +676,7 @@ class CMTabel extends React.Component {
     if (this.state.luni_cu_concediu[this.state.an]) {
       monthsComponent = this.state.luni_cu_concediu[this.state.an].map((luna, index) => (
         <option key={index} data-key={Number(luna)}>
-          {months[luna - 1]}
+          {luni[luna - 1]}
         </option>
       ));
     }
@@ -701,11 +736,10 @@ class CMTabel extends React.Component {
                 <Form.Group id="continuare" as={Col} md="2" className="mt-4">
                   <Form.Check
                     custom
-                    type="checkbox"
+                    type="switch"
                     id="continuareCheck"
                     label="Continuare"
                     checked={this.state.continuare}
-                    value={this.state.continuare}
                     onChange={(e) => {
                       this.setState({ continuare: e.target.checked });
                     }}
@@ -944,11 +978,10 @@ class CMTabel extends React.Component {
                 <Form.Group id="urgenta" as={Col} md="6" className="mt-4">
                   <Form.Check
                     custom
-                    type="checkbox"
+                    type="switch"
                     id="urgentaCheck"
                     label="Urgență"
                     checked={this.state.urgenta}
-                    value={this.state.urgenta}
                     onChange={(e) => {
                       this.setState({ urgenta: e.target.checked });
                     }}

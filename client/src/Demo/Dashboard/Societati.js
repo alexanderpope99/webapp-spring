@@ -8,7 +8,7 @@ import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
-import { months } from '../Resources/months';
+import { luni }from '../Resources/calendar';
 import authHeader from '../../services/auth-header';
 import { Edit, PlusCircle, Users } from 'react-feather';
 import Box from '@material-ui/core/Box';
@@ -240,7 +240,7 @@ class Societati extends React.Component {
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
-    if (created) download(`Stat Salarii - ${socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
+    if (created) download(`Stat Salarii - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
   }
 
   async dec112() {
@@ -261,7 +261,7 @@ class Societati extends React.Component {
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
-    if (created) download(`Declaratia 112 - ${socsel.nume} - ${months[luna]} ${an}.pdf`, user.id);
+    if (created) download(`Declaratia 112 - ${socsel.nume} - ${luni[luna]} ${an}.pdf`, user.id);
   }
 
   async mta() {
@@ -277,7 +277,7 @@ class Societati extends React.Component {
       .then((res) => res.status === 200)
       .catch((err) => console.error(err));
 
-    if (created) download(`FisierMTA - ${socsel.nume} - ${months[luna]} ${an}.xlsx`, user.id);
+    if (created) download(`FisierMTA - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
   }
 
   async onSubmit(e) {

@@ -20,7 +20,7 @@ import Aux from '../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import { months } from '../Resources/months';
+import { luni } from '../Resources/calendar';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel, setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
@@ -229,7 +229,7 @@ class RealizariRetineri extends React.Component {
 
   async setCurrentYearMonth() {
     let today = new Date();
-    let luna = months[today.getMonth()];
+    let luna = luni[today.getMonth()];
     let an = today.getFullYear();
 
     this.setState({
@@ -703,14 +703,14 @@ class RealizariRetineri extends React.Component {
       ani.push(<option key={i}>{i}</option>);
     }
 
-    var luni = months.map((luna_nume, index) => (
+    var luniComponent = luni.map((luna_nume, index) => (
       <option key={index} data-key={index + 1}>
         {luna_nume}
       </option>
     ));
     // eslint-disable-next-line eqeqeq
     if (this.state.an == this.state.an_inceput_contract) {
-      luni = luni.slice(Number(this.state.luna_inceput_contract) - 1);
+      luniComponent = luniComponent.slice(Number(this.state.luna_inceput_contract) - 1);
     }
 
     const tabel_ore = this.state.oresuplimentare.map((ora, index) => {
@@ -1071,7 +1071,7 @@ class RealizariRetineri extends React.Component {
                     );
                   }}
                 >
-                  {luni}
+                  {luniComponent}
                 </FormControl>
               </Col>
               {/* AN */}
