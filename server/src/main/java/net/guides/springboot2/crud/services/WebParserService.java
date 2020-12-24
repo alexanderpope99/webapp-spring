@@ -14,7 +14,7 @@ public class WebParserService {
 	public String getCursValutarFromBNR() {
 		Document doc;
 		try {
-			doc = Jsoup.connect("https://www.cursbnr.ro/").proxy("192.168.2.21", 3128).get();
+			doc = Jsoup.connect("https://www.cursbnr.ro/").get();
 		} catch (IOException e) {
 			return "Eroare la conexiunea la site-ul BNR";
 		}
@@ -24,7 +24,7 @@ public class WebParserService {
 	public String getWikipediaArticle() {
 		Document doc;
 		try {
-			doc = Jsoup.connect("https://en.wikipedia.org/").proxy("192.168.2.21", 3128).get();
+			doc = Jsoup.connect("https://en.wikipedia.org/").get();
 		} catch (IOException e) {
 			return "Eroare la conexiunea la site";
 		}

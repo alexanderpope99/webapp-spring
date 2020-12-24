@@ -24,6 +24,8 @@ const zileSaptamana = [
 ];
 
 function formatDate(date) {
+	if(!date || date === '-') return '-';
+	
 	let data = new Date(date.substring(0, 10));
 	let ziuaSaptamanii = zileSaptamana[data.getDay()];
 

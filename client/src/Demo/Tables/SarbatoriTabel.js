@@ -22,7 +22,6 @@ class SarbatoriTabel extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.deleteSarbatoare = this.deleteSarbatoare.bind(this);
     this.setCurrentYear = this.setCurrentYear.bind(this);
-    this.formatDate = this.formatDate.bind(this);
 
     this.state = {
       isEdit: false,
