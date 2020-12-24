@@ -18,19 +18,19 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import authService from '../../services/auth.service';
 
 const addSocietateComponent = (
-	<Col md={6} xl={4}>
-		<Card
-			style={{
-				opacity: 0.4,
-				cursor: 'pointer',
-			}}
-			onClick={() => (window.location.href = '/forms/add-societate')}
-		>
-			<Card.Body className="mt-2 d-flex justify-content-center align-items-center">
-				<PlusCircle style={{ width: '80px', height: '80px' }} />
-			</Card.Body>
-		</Card>
-	</Col>
+  <Col md={6} xl={4}>
+    <Card
+      style={{
+        opacity: 0.4,
+        cursor: 'pointer',
+      }}
+      onClick={() => (window.location.href = '/forms/add-societate')}
+    >
+      <Card.Body className="mt-2 d-flex justify-content-center align-items-center">
+        <PlusCircle style={{ width: '80px', height: '80px' }} />
+      </Card.Body>
+    </Card>
+  </Col>
 );
 
 class Societati extends React.Component {
@@ -330,10 +330,10 @@ class Societati extends React.Component {
       <Col md={6} xl={4} key={key}>
         <Card
           style={{
-						flexGrow: '1',
+            flexGrow: '1',
             opacity: this.state.societati[key].opacity,
             cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
-					}}
+          }}
           onClick={
             this.state.societati[key].opacity === '.3'
               ? () => {
@@ -354,11 +354,11 @@ class Societati extends React.Component {
                 style={{ cursor: 'pointer' }}
                 onClick={() => this.editSocietate(this.state.societati[key])}
               />
-							<Users
+              <Users
                 className="d-flex justify-content-around float float-right mr-2"
                 visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-								style={{ cursor: 'pointer' }}
-								onClick={() => window.location.href="/tables/angajati"}
+                style={{ cursor: 'pointer' }}
+                onClick={() => (window.location.href = '/tables/angajati')}
               />
 
               <Button

@@ -406,7 +406,7 @@ class UserTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">{this.state.socsel.nume} - Useri</Card.Title>
+                <Card.Title as="h5">Useri</Card.Title>
 
                 <Button
                   variant="outline-info"

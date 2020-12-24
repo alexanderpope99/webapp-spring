@@ -21,11 +21,6 @@ class Rapoarte extends React.Component {
   render() {
     return (
       <Aux>
-        <Card className="border">
-          <Card.Header>
-            <Typography variant="h6">{this.state.socsel.nume}</Typography>
-          </Card.Header>
-        </Card>
         <Stat />
         <NotaContabila />
         <Pontaj />

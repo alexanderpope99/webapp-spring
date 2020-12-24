@@ -152,6 +152,9 @@ class NavRight extends Component {
 
     return (
       <Aux>
+        <div className="navbar-nav" style={{ marginTop: '25px', marginLeft: '30px' }}>
+          <h4>Societate</h4>
+        </div>
         <ul className="navbar-nav ml-auto">
           <li>
             <Dropdown onClick={(e) => e.stopPropagation()}>
