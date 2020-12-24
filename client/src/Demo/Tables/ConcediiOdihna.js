@@ -87,10 +87,10 @@ class COTabel extends React.Component {
         .catch((err) => console.error(err));
       // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
       if (angajat) {
-        this.setState({ angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } }, () => {
-          this.fillTable();
-          this.getZileCoDisponibile();
-        });
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
       }
     } else {
       this.setState({ angajat: null }, this.fillTable);
@@ -173,18 +173,18 @@ class COTabel extends React.Component {
       return;
     }
 
-    const co = await axios
+    const concedii = await axios
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) => console.error('err', err));
 
-    if (co) {
+    if (concedii) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
       var an;
       // add ani_cu_concediu
-      for (let c of co) {
+      for (let c of concedii) {
         if (c.dela) {
           // an = c.dela.substring(0, 4);
           ani_cu_concediu.add(Number(c.dela.substring(0, 4)));
@@ -198,7 +198,7 @@ class COTabel extends React.Component {
         luni_cu_concediu[_an] = new Set();
       }
       // add luni in luni_cu_concediu
-      for (let c of co) {
+      for (let c of concedii) {
         if (c.dela) {
           an = c.dela.substring(0, 4);
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
@@ -209,9 +209,11 @@ class COTabel extends React.Component {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
 
+      this.getZileCoDisponibile();
+
       this.setState(
         {
-          co: co,
+          co: concedii,
           ani_cu_concediu: [...ani_cu_concediu],
           luni_cu_concediu: luni_cu_concediu,
         },
@@ -314,7 +316,6 @@ class COTabel extends React.Component {
       .catch((err) => console.error('err:', err));
 
     if (ok) {
-      console.log(`${dela} - ${panala}: ${nr_zile}`);
       // close add modal
       this.handleClose();
       // open confirm modal

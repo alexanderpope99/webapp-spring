@@ -27,7 +27,7 @@ UserTabel:
 din ce se calculeaza CASS? din sal. realizat?
 
 CONCEDIU DE ODIHNA:
-	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) - INCLUDE WEEKEND?
+	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) -> INCLUDE WEEKEND?
 
 _________________________________________
 
