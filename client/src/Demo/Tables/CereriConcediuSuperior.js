@@ -7,7 +7,6 @@ import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import authService from '../../services/auth.service';
 
 class CereriConcediuSuperiorTabel extends React.Component {
   constructor(props) {
@@ -21,10 +20,6 @@ class CereriConcediuSuperiorTabel extends React.Component {
       socsel: getSocSel(),
       cereriConcediu: [],
       cereriConcediuComponent: null,
-
-      // confirm modal
-
-      // add/edit modal
     };
   }
 
@@ -186,7 +181,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
 
     if (!cereriConcediu) return;
 
-    if (cereriConcediu) {
+    else {
       this.setState(
         {
           cereriConcediu: cereriConcediu,

@@ -14,7 +14,6 @@ import net.guides.springboot2.crud.model.CereriConcediu;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CORepository;
 import net.guides.springboot2.crud.repository.CereriConcediuRepository;
-import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
 
@@ -70,12 +69,12 @@ public class CereriConcediuService {
 				.findBySocietate_IdAndUser_Id(cerereConcediu.getSocietate().getId(), cerereConcediu.getUser().getId())
 				.getContract().getId();
 
-		if (status == "Aprobat") {
+		if (status.equals("Aprobat")) {
 			CODTO co = new CODTO(cerereConcediu.getTip(), cerereConcediu.getDela(), cerereConcediu.getPanala(),
 					idcontract);
 			coService.save(co);
 
-		} else if (status == "Respins") {
+		} else if (status.equals("Respins")) {
 			CO co = coRepository.findByTipAndDelaAndPanalaAndContract_Id(cerereConcediu.getTip(),
 					cerereConcediu.getDela(), cerereConcediu.getPanala(), idcontract);
 			if (co != null)

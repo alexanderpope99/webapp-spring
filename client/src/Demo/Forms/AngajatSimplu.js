@@ -5,8 +5,8 @@ import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import ViewPersoana from '../Edit/ViewPersoana';
 import ContractView from '../UIElements/Forms/ContractView';
-// import ConcediiOdihnaView from '../Tables/ConcediiOdihnaView';
-// import ConcediiMedicaleView from '../Tables/ConcediiMedicaleView';
+import ConcediiOdihnaView from '../Tables/ConcediiOdihnaView';
+import ConcediiMedicaleView from '../Tables/ConcediiMedicaleView';
 // import BazaCalculView from '../Tables/BazaCalculView';
 // import PersoaneIntretinereTabelView from '../Tables/PersoaneIntretinereView';
 import { getAngajatSel } from '../Resources/angajatsel';
@@ -165,6 +165,15 @@ class AngajatSimplu extends React.Component {
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
+
+							<Tab eventKey="co" title="C.O.">
+                <ConcediiOdihnaView ref={this.co} scrollToTopSmooth={this.scrollToTopSmooth} />
+              </Tab>
+
+							<Tab eventKey="cm" title="C.M.">
+                <ConcediiMedicaleView ref={this.cm} scrollToTopSmooth={this.scrollToTopSmooth} />
+              </Tab>
+
             </Tabs>
             <Button
               onClick={() =>

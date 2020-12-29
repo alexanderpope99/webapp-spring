@@ -1,7 +1,6 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 LAST-UPDATE : {
-	*-> added breadcrumbs
 }
 
 TODO: {

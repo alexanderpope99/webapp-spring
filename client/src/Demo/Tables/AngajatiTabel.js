@@ -41,7 +41,6 @@ class AngajatiTabel extends React.Component {
   }
 
   componentDidMount() {
-    const user = this.state.user;
     if (!getSocSel() || authService.isAngajatSimplu()) window.location.href = '/dashboard/societati';
 
     this.onRefresh();
