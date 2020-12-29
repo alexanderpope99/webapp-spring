@@ -51,7 +51,8 @@ class Societati extends React.Component {
       modalMessage: '',
       isEdit: false,
       show_confirm: false,
-      socsel: getSocSel(),
+			socsel: getSocSel(),
+      user: authService.getCurrentUser(),
 
       today: new Date(),
 
@@ -126,7 +127,21 @@ class Societati extends React.Component {
         show: false,
         isEdit: false,
       });
-  }
+	}
+	
+	getAdaugaSocietatePermission() {
+		const user = this.state.user;
+		if(!user) return;
+
+		if(user.roles.find(role => ['ROLE_DIRECTOR', 'ROLE_CONTABIL'].indexOf(role) !== -1)) {
+			console.log('can add societate')
+			return true;
+		}
+		else {
+			console.log('can not add');
+			return false;
+		};
+	}
 
   async componentDidMount() {
     await this.getSocietati();
@@ -134,8 +149,9 @@ class Societati extends React.Component {
     this.setState({
       today: today,
       luna: today.getMonth(),
-      an: today.getFullYear(),
-      user: authService.getCurrentUser(),
+			an: today.getFullYear(),
+			addSocietate: this.getAdaugaSocietatePermission(),
+      // user: authService.getCurrentUser(),
     });
   }
 
@@ -278,7 +294,7 @@ class Societati extends React.Component {
       .catch((err) => console.error(err));
 
     if (created) download(`FisierMTA - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
-  }
+	}
 
   async onSubmit(e) {
     try {
@@ -323,7 +339,7 @@ class Societati extends React.Component {
         );
       })
       .catch((err) => console.error(err));
-  }
+	}
 
   render() {
     const societatiComponent = Object.keys(this.state.societati).map((key) => (
@@ -639,7 +655,7 @@ class Societati extends React.Component {
 
         <Row>
           {societatiComponent}
-          {addSocietateComponent}
+          {this.state.addSocietate ? addSocietateComponent : null}
         </Row>
       </Aux>
     );
