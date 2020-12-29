@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -21,11 +23,6 @@ public class CereriConcediu implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	// @JsonManagedReference(value = "cerereconcediu-angajat")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pentru")
-	private Angajat pentru;
 
 	@Column(name = "dela")
 	private LocalDate dela;
@@ -42,23 +39,28 @@ public class CereriConcediu implements Serializable {
 	@Column(name = "status")
 	private String status;
 
-	// @JsonManagedReference(value = "cerericoncediu-societate")
+	@JsonBackReference(value = "cerericoncediu-societate")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idsocietate")
 	private Societate societate;
 
+	@JsonBackReference(value = "cerericoncediu-user")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "iduser")
+	private User user;
+
 	public CereriConcediu() {
 	}
 
-	public CereriConcediu(Angajat pentru, LocalDate dela, LocalDate panala, String tip, String motiv, String status,
-			Societate societate) {
-		this.pentru = pentru;
+	public CereriConcediu(LocalDate dela, LocalDate panala, String tip, String motiv, String status,
+			Societate societate, User user) {
 		this.dela = dela;
 		this.panala = panala;
 		this.tip = tip;
 		this.motiv = motiv;
 		this.status = status;
 		this.societate = societate;
+		this.user = user;
 	}
 
 	public int getId() {
@@ -67,14 +69,6 @@ public class CereriConcediu implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Angajat getPentru() {
-		return pentru;
-	}
-
-	public void setPentru(Angajat pentru) {
-		this.pentru = pentru;
 	}
 
 	public LocalDate getDela() {
@@ -123,6 +117,14 @@ public class CereriConcediu implements Serializable {
 
 	public void setSocietate(Societate societate) {
 		this.societate = societate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

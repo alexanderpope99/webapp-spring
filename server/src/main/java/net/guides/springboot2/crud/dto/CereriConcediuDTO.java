@@ -2,13 +2,8 @@ package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
 
-import net.guides.springboot2.crud.model.Angajat;
-import net.guides.springboot2.crud.model.Societate;
-
 public class CereriConcediuDTO {
 	private int id;
-
-	private Angajat pentru;
 
 	private LocalDate dela;
 
@@ -20,7 +15,9 @@ public class CereriConcediuDTO {
 
 	private String status;
 
-	private Societate societate;
+	private int idsocietate;
+
+	private int iduser;
 
 	public LocalDate getDela() {
 		return dela;
@@ -54,26 +51,12 @@ public class CereriConcediuDTO {
 		this.panala = panala;
 	}
 
-	public Integer getPentru() {
-		if (pentru == null)
-			return null;
-		else
-			return pentru.getPersoana().getId();
+	public int getIdsocietate() {
+		return idsocietate;
 	}
 
-	public void setPentru(Angajat pentru) {
-		this.pentru = pentru;
-	}
-
-	public Integer getIdsocietate() {
-		if (societate == null)
-			return null;
-		else
-			return societate.getId();
-	}
-
-	public void setSocietate(Societate societate) {
-		this.societate = societate;
+	public void setIdsocietate(int idsocietate) {
+		this.idsocietate = idsocietate;
 	}
 
 	public String getStatus() {
@@ -90,5 +73,13 @@ public class CereriConcediuDTO {
 
 	public void setTip(String tip) {
 		this.tip = tip;
+	}
+
+	public int getIduser() {
+		return iduser;
+	}
+
+	public void setIduser(int iduser) {
+		this.iduser = iduser;
 	}
 }

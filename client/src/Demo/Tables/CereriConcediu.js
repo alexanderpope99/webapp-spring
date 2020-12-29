@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
+import { countWeekendDays } from '../Resources/cm';
+
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import authService from '../../services/auth.service';
@@ -29,13 +31,21 @@ class CereriConcediuTabel extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.renderModal = this.renderModal.bind(this);
+    this.setNrZile = this.setNrZile.bind(this);
 
     this.state = {
       socsel: getSocSel(),
+      user: authService.getCurrentUser(),
       cereriConcediu: [],
       cereriConcediuComponent: null,
 
       isEdit: false,
+      an: '',
+
+      zile_co_disponibile: 21,
+      nr_zile: '',
+      nr_zile_weekend: '',
 
       // confirm modal
       showConfirm: false,
@@ -45,35 +55,35 @@ class CereriConcediuTabel extends React.Component {
       id: '',
       dela: '',
       panala: '',
-      tip: '',
+      tip: 'Concediu de odihnă',
       motiv: '',
       status: '',
       show: false,
+
+      today: '',
+      angajat: '',
     };
   }
 
   componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
+    let today = new Date();
+    this.setState({
+      today: today.toISOString().substring(0, 10),
+    });
     this.onRefresh();
     window.scrollTo(0, 0);
   }
 
   async addCerereConcediu() {
-    let pentruId = await axios
-      .get(`${server.address}/angajat/userid/${authService.getCurrentUser().id}`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-
     const cerereConcediu_body = {
-      pentru: pentruId || null,
       dela: this.state.dela || null,
       panala: this.state.panala || null,
       tip: this.state.tip || null,
       motiv: this.state.motiv || null,
-      societate: getSocSel().id,
+      idsocietate: this.state.socsel.id,
+      iduser: this.state.user.id,
       status: 'Propus',
     };
 
@@ -94,20 +104,13 @@ class CereriConcediuTabel extends React.Component {
   }
 
   async updateCerereConcediu(idcerere) {
-    let pentruId = await axios
-      .get(`${server.address}/angajat/userid/${authService.getCurrentUser().id}`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-
     const cerereConcediu_body = {
-      pentru: pentruId,
       dela: this.state.dela,
       panala: this.state.panala,
       tip: this.state.tip,
       motiv: this.state.motiv,
-      societate: getSocSel().id,
+      idsocietate: this.state.socsel.id,
+      iduser: this.state.user.id,
       status: 'Propus (Modificat)',
     };
 
@@ -130,19 +133,55 @@ class CereriConcediuTabel extends React.Component {
     }
   }
 
+  async getZileCoDisponibile() {
+    const angajat = await axios
+      .get(`${server.address}/angajat/socid=${this.state.socsel.id}/usrid=${this.state.user.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+    this.setState({
+      angajat: angajat,
+    });
+    await axios
+      .get(
+        `${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}&y=${
+          this.state.dela.split('-')[0]
+        }`,
+        { headers: authHeader() }
+      )
+      .then((res) => this.setState({ zile_co_disponibile: res.data }))
+      .catch((err) => console.error(err));
+  }
+
+  setNrZile() {
+    var nr_zile = 0,
+      nr_zile_weekend = 0;
+    if (this.state.dela && this.state.panala) {
+      let date1 = new Date(this.state.dela);
+      let date2 = new Date(this.state.panala);
+      nr_zile = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24) + 1;
+      nr_zile_weekend = countWeekendDays(date1, date2);
+    }
+    this.setState({ nr_zile: nr_zile, nr_zile_weekend: nr_zile_weekend });
+  }
+
   async editCerereConcediu(cer) {
     console.log(cer);
-    this.setState({
-      isEdit: true,
-      show: true,
+    this.setState(
+      {
+        isEdit: true,
+        show: true,
 
-      id: cer.id,
-      pentru: cer.pentru,
-      tip: cer.tip,
-      motiv: cer.motiv,
-      dela: cer.dela ? cer.dela.substring(0, 10) : '',
-      panala: cer.panala ? cer.panala.substring(0, 10) : '',
-    });
+        id: cer.id,
+        pentru: cer.pentru,
+        tip: cer.tip,
+        motiv: cer.motiv,
+        dela: cer.dela ? cer.dela.substring(0, 10) : '',
+        panala: cer.panala ? cer.panala.substring(0, 10) : '',
+      },
+      this.setNrZile
+    );
   }
 
   async deleteCerere(id) {
@@ -173,17 +212,6 @@ class CereriConcediuTabel extends React.Component {
               </th>
               <th>{cer.dela || '-'}</th>
               <th>{cer.panala}</th>
-              <th>
-                {
-                  await axios
-                    .get(
-                      `${server.address}/cerericoncediu/zilelucratoareintre?date1=${cer.dela}&date2=${cer.panala}`,
-                      { headers: authHeader() }
-                    )
-                    .then((response) => response.data)
-                    .catch((err) => console.error(err))
-                }
-              </th>
               <th>{cer.tip}</th>
               <th>{cer.motiv}</th>
               <th>
@@ -261,9 +289,7 @@ class CereriConcediuTabel extends React.Component {
   async onRefresh() {
     const cereriConcediu = await axios
       .get(
-        `${server.address}/cerericoncediu/usersoc/${authService.getCurrentUser().id}&${
-          getSocSel().id
-        }`,
+        `${server.address}/cerericoncediu/usersoc/${this.state.user.id}&${this.state.socsel.id}`,
         {
           headers: authHeader(),
         }
@@ -293,9 +319,24 @@ class CereriConcediuTabel extends React.Component {
       pentru: '',
       dela: '',
       panala: '',
-      tip: '',
+      tip: 'Concediu de odihnă',
       motiv: '',
     });
+  }
+
+  renderModal() {
+    this.setState(
+      {
+        isEdit: false,
+        show: true,
+        dela: this.state.today,
+        panala: this.state.today,
+      },
+      () => {
+        this.getZileCoDisponibile();
+        this.setNrZile();
+      }
+    );
   }
 
   handleCloseConfirm() {
@@ -315,22 +356,31 @@ class CereriConcediuTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addCerereConcediu}>
+              <Form.Group id="zilecodisponibile">
+                <Form.Label>
+                  {this.state.zile_co_disponibile} zile concediu de odihnă disponibile
+                </Form.Label>
+              </Form.Group>
               <Row>
                 <Col md={12}>
                   <Form.Group>
-                    <Form.Label>De la</Form.Label>
+                    <Form.Label>Începând cu</Form.Label>
                     <Form.Control
+                      required
                       type="date"
                       value={this.state.dela}
-                      onChange={(e) => this.setState({ dela: e.target.value })}
+                      max={this.state.panala === this.state.dela ? null : this.state.panala}
+                      onChange={(e) => this.setState({ dela: e.target.value }, this.setNrZile)}
                     />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Până la</Form.Label>
                     <Form.Control
                       type="date"
+                      required
                       value={this.state.panala}
-                      onChange={(e) => this.setState({ panala: e.target.value })}
+                      min={this.state.dela}
+                      onChange={(e) => this.setState({ panala: e.target.value }, this.setNrZile)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -353,6 +403,14 @@ class CereriConcediuTabel extends React.Component {
                   </Form.Group>
                 </Col>
               </Row>
+              <Form.Group>
+                <Form.Label>
+                  {this.state.nr_zile +
+                    (this.state.nr_zile > 1
+                      ? ` zile concediu, din care ${this.state.nr_zile_weekend} in weekend (sărbători incluse)`
+                      : ` zi concediu, din care ${this.state.nr_zile_weekend} in weekend (sărbători incluse)`)}
+                </Form.Label>
+              </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -392,7 +450,7 @@ class CereriConcediuTabel extends React.Component {
                 </Button>
 
                 <Button
-                  onClick={() => this.setState({ isEdit: false, show: true })}
+                  onClick={this.renderModal}
                   variant="outline-info"
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
@@ -407,7 +465,6 @@ class CereriConcediuTabel extends React.Component {
                       <th>Status</th>
                       <th>De la</th>
                       <th>Până la</th>
-                      <th>Zile</th>
                       <th>Tip</th>
                       <th>Motiv</th>
                       <th></th>

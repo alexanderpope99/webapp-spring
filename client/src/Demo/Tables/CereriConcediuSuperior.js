@@ -120,14 +120,9 @@ class CereriConcediuSuperiorTabel extends React.Component {
 
   async onRefresh() {
     let cereriConcediu = await axios
-      .get(
-        `${server.address}/cerericoncediu/supsoc/${authService.getCurrentUser().id}&${
-          getSocSel().id
-        }`,
-        {
-          headers: authHeader(),
-        }
-      )
+      .get(`${server.address}/cerericoncediu/soc/${this.state.socsel.id}`, {
+        headers: authHeader(),
+      })
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
