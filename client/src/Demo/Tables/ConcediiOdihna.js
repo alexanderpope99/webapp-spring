@@ -14,6 +14,10 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import { countWeekendDays } from '../Resources/cm';
 
+import { tip_concedii } from '../../Demo/Resources/tip-concedii';
+
+const tip_concedii_component = tip_concedii.map((tip, index) => <option key={index}>{tip}</option>);
+
 class COTabel extends React.Component {
   constructor() {
     super();
@@ -508,10 +512,7 @@ class COTabel extends React.Component {
                     this.setState({ tip: e.target.value });
                   }}
                 >
-                  <option>Concediu de odihnă</option>
-                  <option>Concediu fără plată</option>
-                  <option>Concediu pentru situații speciale</option>
-                  <option>Concediu pentru studii</option>
+                  {tip_concedii_component}
                 </Form.Control>
               </Form.Group>
 
