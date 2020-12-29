@@ -21,7 +21,6 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import authService from '../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
-import Dropzone from 'react-dropzone-uploader';
 
 class FacturiAprobatorTabel extends React.Component {
   constructor() {

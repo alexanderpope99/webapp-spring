@@ -5,13 +5,11 @@ import {
   Card,
   Table,
   Button,
-  OverlayTrigger,
-  Tooltip,
   Modal,
   Form,
   Breadcrumb,
 } from 'react-bootstrap';
-import { X, Check, Clock, RotateCw } from 'react-feather';
+import { RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';

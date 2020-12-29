@@ -1,7 +1,6 @@
 import React from 'react';
 import Aux from '../../hoc/_Aux';
-import { Card, Breadcrumb } from 'react-bootstrap';
-import Typography from '@material-ui/core/Typography/Typography';
+import { Breadcrumb } from 'react-bootstrap';
 import { getSocSel } from '../Resources/socsel';
 import PlatiSalariiMTA from './PlatiSalariiMTA.js';
 import Dec112 from './Dec112.js';

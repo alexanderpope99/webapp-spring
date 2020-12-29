@@ -1,16 +1,16 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 LAST-UPDATE : {
-	1*-> TOAST pt toate recalc, scroll to top pentru 'recalc per societate', dropdown ONLY button
+	*-> added breadcrumbs
 }
 
 TODO: {
 	0 -> cereri concediu (alex)
+	1.1 -> mi-am uitat parola
+	1.2 -> reseteaza parola din panou utilizatori
 	2 -> verifica ce vede un angajat normal
 
 	*-> add sorting to tables on frontend 
-
-	--> breadcrumbs pe fiecare 
 }
 
 UPGRADES: {
