@@ -3,13 +3,14 @@ import { Row, Col, Tabs, Tab, Button, Modal, Breadcrumb } from 'react-bootstrap'
 
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
-import EditPersoana from '../Edit/EditPersoana';
-import Contract from '../UIElements/Forms/Contract';
-import ConcediiOdihna from '../Tables/ConcediiOdihna';
-import ConcediiMedicale from '../Tables/ConcediiMedicale';
+import ViewPersoana from '../Edit/ViewPersoana';
+import ContractView from '../UIElements/Forms/ContractView';
+// import ConcediiOdihnaView from '../Tables/ConcediiOdihnaView';
+// import ConcediiMedicaleView from '../Tables/ConcediiMedicaleView';
+// import BazaCalculView from '../Tables/BazaCalculView';
+// import PersoaneIntretinereTabelView from '../Tables/PersoaneIntretinereView';
 import { getAngajatSel } from '../Resources/angajatsel';
-import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
-import BazaCalcul from '../Tables/BazaCalcul';
+import authService from '../../services/auth.service';
 
 /*
   ? how it works now:
@@ -17,11 +18,11 @@ import BazaCalcul from '../Tables/BazaCalcul';
 	* * * * *
   * fetch data when focusing tabs
   * * * * *
-	* in EditPersoana -> selecting angajat calls setAngajatSel
+	* in ViewPersoana -> selecting angajat calls setAngajatSel
 	* * * * *
 */
 
-class Angajat extends React.Component {
+class AngajatSimplu extends React.Component {
   constructor() {
     super();
 
@@ -42,6 +43,8 @@ class Angajat extends React.Component {
     this.state = {
       socsel: getSocSel(),
       angajatsel: getAngajatSel(),
+      user: authService.getCurrentUser(),
+      userIsAngajatSimplu: authService.isAngajatSimplu(),
 
       angajat: null,
       idpersoana: null,
@@ -148,33 +151,17 @@ class Angajat extends React.Component {
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
-                <EditPersoana ref={this.persoana} scrollToTopSmooth={this.scrollToTopSmooth} />
-              </Tab>
-
-              <Tab eventKey="contract" title="Contract de munca">
-                <Contract
-                  ref={this.contract}
-                  idcontract={this.state.idcontract}
-                  idangajat={this.state.idangajat}
+                <ViewPersoana
+                  ref={this.persoana}
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
 
-              <Tab eventKey="co" title="C.O.">
-                <ConcediiOdihna ref={this.co} scrollToTopSmooth={this.scrollToTopSmooth} />
-              </Tab>
-
-              <Tab eventKey="cm" title="C.M.">
-                <ConcediiMedicale ref={this.cm} scrollToTopSmooth={this.scrollToTopSmooth} />
-              </Tab>
-
-              <Tab eventKey="bc" title="Bază calcul">
-                <BazaCalcul ref={this.bc} scrollToTopSmooth={this.scrollToTopSmooth} />
-              </Tab>
-
-              <Tab eventKey="pi" title="Pers. într.">
-                <PersoaneIntretinereTabel
-                  ref={this.persoaneintretinere}
+              <Tab eventKey="contract" title="Contract de munca">
+                <ContractView
+                  ref={this.contract}
+                  idcontract={this.state.idcontract}
+                  idangajat={this.state.idangajat}
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
@@ -198,4 +185,4 @@ class Angajat extends React.Component {
   }
 }
 
-export default Angajat;
+export default AngajatSimplu;

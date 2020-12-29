@@ -60,9 +60,28 @@ class AuthService {
     return JSON.parse(sessionStorage.getItem('user'));
 	}
 	
-	setUser(user) {
-		sessionStorage.setItem('user', JSON.stringify(user));
+	isAdmin() {
+		const user = this.getCurrentUser();
+		return user.roles.includes('ROLE_ADMIN');
 	}
+
+  isDirectorOrContabil() {
+    const user = this.getCurrentUser();
+    return user.roles.includes('ROLE_DIRECTOR') || user.roles.includes('ROLE_CONTABIL');
+  }
+
+  isAngajatSimplu() {
+    const user = this.getCurrentUser();
+    return !(
+      user.roles.includes('ROLE_ADMIN') ||
+      user.roles.includes('ROLE_DIRECTOR') ||
+      user.roles.includes('ROLE_CONTABIL')
+    );
+  }
+
+  setUser(user) {
+    sessionStorage.setItem('user', JSON.stringify(user));
+  }
 }
 
 export default new AuthService();

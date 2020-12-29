@@ -21,6 +21,8 @@ import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
+
 import { RotateCw, UserPlus, Trash2, Info, FileText } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
@@ -32,13 +34,15 @@ class AngajatiTabel extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
+      user: authService.getCurrentUser(),
       angajati: [],
       angajatiComponent: null,
     };
   }
 
   componentDidMount() {
-    if (!getSocSel()) window.location.href = '/dashboard/societati';
+    const user = this.state.user;
+    if (!getSocSel() || authService.isAngajatSimplu()) window.location.href = '/dashboard/societati';
 
     this.onRefresh();
     window.scrollTo(0, 0);

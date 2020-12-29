@@ -26,6 +26,7 @@ const FormsElements = React.lazy(() => import('./Demo/Forms/FormsElements'));
 const AddSocietate = React.lazy(() => import('./Demo/Forms/AddSocietate'));
 const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
+const AngajatSimplu = React.lazy(() => import('./Demo/Forms/AngajatSimplu'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
 
 // RAPOARTE
@@ -108,7 +109,9 @@ const routes = [
   { path: '/forms/form-basic', exact: true, name: 'Forms Elements', component: FormsElements },
   { path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: AddSocietate },
   { path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
-  { path: '/forms/angajat', exact: true, name: 'Angajat', component: Angajat },
+	{ path: '/forms/angajat', exact: true, name: 'Angajat', component: Angajat },
+	{ path: '/forms/angajat-simplu', exact: true, name: 'Angajat', component: AngajatSimplu },
+
   {
     path: '/forms/realizari-retineri',
     exact: true,
