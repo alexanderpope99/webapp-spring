@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Tabs, Tab, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Tabs, Tab, Button, Modal, Breadcrumb } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
@@ -15,17 +15,9 @@ import BazaCalcul from '../Tables/BazaCalcul';
   ? how it works now:
 	*	Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
 	* * * * *
-  * fetch date contract when focusing tab 'contract'
+  * fetch data when focusing tabs
   * * * * *
-  * when focusing 'contract' check if person has contract:
-  *   |> has contract: 1. method = 'PUT'
-  *                    2. populate form with contract data
-	* 											\ if persoana has adresa.judet != SECTOR -> preselect casa_sanatate
-  *
-  *   |>  no contract: 1. method = 'POST'
-  *                    2. clearFields()
-	* * * * *
-	* in EditPersoana -> when selecting angajat, remember selectednume in sessionstorage
+	* in EditPersoana -> selecting angajat calls setAngajatSel
 	* * * * *
 */
 
@@ -126,6 +118,9 @@ class Angajat extends React.Component {
 
         <Row>
           <Col>
+            <Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">
+              Realizări/Rețineri
+            </Button>
             <h5 className="mb-3">
               {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
               {this.state.angajatsel && this.state.key !== 'date-personale'
@@ -133,11 +128,12 @@ class Angajat extends React.Component {
                 : this.state.key !== 'date-personale'
                 ? ' *niciun angajat selectat'
                 : ''}
-              <Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">
-                Realizări/Rețineri
-              </Button>
             </h5>
-
+            <Breadcrumb>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+              <Breadcrumb.Item active>Detalii angajat</Breadcrumb.Item>
+            </Breadcrumb>
             <hr />
             <Tabs
               variant="pills"

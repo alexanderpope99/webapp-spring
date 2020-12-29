@@ -1,15 +1,11 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 LAST-UPDATE : {
-	1 -> UserTabel.js :: addUser
-		-> lista de angajati trebuie sa excluda angajatii cu user, daca se adauga, 
-			-> dar sa includa angajatul curent, daca modalul editeaza un user
-		-> buton de foloseste datele angajatului (emailul, username de genul "nume.prenume")
+	1*-> TOAST pt toate recalc, scroll to top pentru 'recalc per societate', dropdown ONLY button
 }
 
 TODO: {
 	0 -> cereri concediu (alex)
-	1*-> TOAST pt toate recalc, scroll to top pentru 'recalc per societate', dropdown ONLY button
 	2 -> verifica ce vede un angajat normal
 
 	*-> add sorting to tables on frontend 

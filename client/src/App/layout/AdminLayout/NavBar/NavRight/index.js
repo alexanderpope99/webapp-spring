@@ -39,12 +39,6 @@ class NavRight extends Component {
     this.interval = setInterval(() => this.onRefresh(), 60000);
     this.onRefresh();
 	}
-	componentDidUpdate(prevProps, prevState) {
-		if(this.state.socsel !== prevState.socsel)
-			this.setState({
-				socsel: getSocSel(),
-			})
-	}
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -160,9 +154,6 @@ class NavRight extends Component {
 
     return (
       <Aux>
-        <div className="navbar-nav" style={{ marginTop: '25px', marginLeft: '30px' }}>
-          <h4>{this.state.socsel ? this.state.socsel.nume : ''}</h4>
-        </div>
         <ul className="navbar-nav ml-auto">
           <li>
             <Dropdown onClick={(e) => e.stopPropagation()}>

@@ -13,6 +13,8 @@ import {
   Table,
   Collapse,
   Toast,
+  Dropdown,
+  DropdownButton,
 } from 'react-bootstrap';
 import { Trash2, Info } from 'react-feather';
 
@@ -57,6 +59,7 @@ class RealizariRetineri extends React.Component {
       showPensie: false,
       modalMessage: '',
       showToast: false,
+      toastMessage: '',
 
       an: '',
       luna: '',
@@ -402,6 +405,7 @@ class RealizariRetineri extends React.Component {
     // get an, luna from select components
     let an = this.state.an;
     let luna = this.state.luna.nr;
+    let luna_nume = this.state.luna.nume;
 
     // get idpersoana from select component
     const idpersoana = this.state.selected_angajat ? this.state.selected_angajat.idpersoana : null;
@@ -441,8 +445,8 @@ class RealizariRetineri extends React.Component {
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
-		//* 2. recalculare realizariRetineri
-		console.log(this.state.idcontract);
+    //* 2. recalculare realizariRetineri
+    console.log(this.state.idcontract);
     const data = await axios
       .put(
         `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
@@ -463,7 +467,9 @@ class RealizariRetineri extends React.Component {
         cam: data.cam,
         impozit: data.impozit,
         valoaretichete: data.valoaretichete,
+
         showToast: true,
+        toastMessage: `Realizari/Retineri recalculate in ${luna_nume} ${an}`,
       },
       this.fillForm
     );
@@ -488,13 +494,9 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
 
     if (ok) {
-      alert(
-        `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. De asemenea, bazele de calcul au fost adaugate.`
-      );
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
+      this.setState({
+        showToast: true,
+        toastMessage: `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. De asemenea, bazele de calcul au fost adaugate.`,
       });
     }
   }
@@ -518,9 +520,10 @@ class RealizariRetineri extends React.Component {
       .catch((err) => console.error(err));
 
     if (ok) {
-      alert(
-        `Toate salariile din luna ${luna.nume} au fost recalculate pentru ${this.state.socsel.nume}`
-      );
+      this.setState({
+        showToast: true,
+        toastMessage: `Toate salariile din luna ${luna.nume} au fost recalculate pentru ${this.state.socsel.nume}`,
+      });
       window.scrollTo({
         top: 0,
         left: 0,
@@ -621,18 +624,21 @@ class RealizariRetineri extends React.Component {
   }
 
   handleClose() {
-    this.setState({
-      show: false,
-      showPensie: false,
-      cursValutar: 0,
-      pensiefacangajat: 0,
-      modalMessage: '',
-      nrore: 0,
-      procent: 100,
-    }, this.fillForm);
-	}
-	
-	async downloadStatIndividual(numeintreg, luna, an) {
+    this.setState(
+      {
+        show: false,
+        showPensie: false,
+        cursValutar: 0,
+        pensiefacangajat: 0,
+        modalMessage: '',
+        nrore: 0,
+        procent: 100,
+      },
+      this.fillForm
+    );
+  }
+
+  async downloadStatIndividual(numeintreg, luna, an) {
     const user = authService.getCurrentUser();
     console.log('trying to download...');
     await fetch(
@@ -784,7 +790,7 @@ class RealizariRetineri extends React.Component {
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
-          delay={2500}
+          delay={4000}
           autohide
           className="position-fixed"
           style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
@@ -792,9 +798,7 @@ class RealizariRetineri extends React.Component {
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Recalculat!</strong>
           </Toast.Header>
-          <Toast.Body>
-            Realizari/Retineri recalculate in {this.state.luna.nume} {this.state.an}
-          </Toast.Body>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
 
         {/* ORE SUPLIMENTARE */}
@@ -1494,13 +1498,30 @@ class RealizariRetineri extends React.Component {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Button
+                  <DropdownButton
+                    title="Recalculează"
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat}
-                    type="submit"
                     className="mb-3 float-right"
                   >
-                    Recalculează
+                    <Dropdown.Item eventKey="1" onClick={this.onSubmit}>
+                      Luna selectată
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey="2" onClick={this.creeazaStateUltimele6Luni}>
+                      Ultimele 6 luni
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item eventKey="3" onClick={this.recalcSocietate}>
+                      Toți angajații
+                    </Dropdown.Item>
+                  </DropdownButton>
+									<Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    onClick={this.getStatIndividual}
+                    className="float-right mb-3"
+                  >
+                    Stat salariat individual
                   </Button>
                 </Col>
 
@@ -1618,32 +1639,7 @@ class RealizariRetineri extends React.Component {
                   </Card>
                 </Col>
 
-                <Button
-                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                  disabled={!this.state.selected_angajat}
-                  onClick={this.getStatIndividual}
-                  className="mb-3 mt-3"
-                >
-                  Stat salariat individual
-                </Button>
-
-                <Button
-                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                  disabled={!this.state.selected_angajat}
-                  onClick={this.creeazaStateUltimele6Luni}
-                  className="mb-3 mt-3"
-                >
-                  Recalculeaza ultimele 6 luni
-                </Button>
-
-                <Button
-                  variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                  disabled={!this.state.selected_angajat}
-                  onClick={this.recalcSocietate}
-                  className="mb-3 mt-3"
-                >
-                  Recalculeaza pentru toți angajații
-                </Button>
+                <Col></Col>
               </Row>
             </Form>
           </Card.Body>

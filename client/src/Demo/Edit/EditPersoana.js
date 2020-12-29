@@ -10,7 +10,6 @@ import {
   FormControl,
   OverlayTrigger,
   Tooltip,
-  Breadcrumb,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { UserPlus, FileText } from 'react-feather';
@@ -383,10 +382,6 @@ class EditPersoana extends React.Component {
 
     return (
       <Aux>
-        <Breadcrumb>
-          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
-          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
-        </Breadcrumb>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>

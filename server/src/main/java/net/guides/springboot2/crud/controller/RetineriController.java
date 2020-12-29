@@ -56,7 +56,7 @@ public class RetineriController {
 
 	@GetMapping("{idc}/pensiefac/{an}")
 	public ResponseEntity<Float> getTotalPensieFacByYear(@PathVariable(value = "idc") int idc,
-			@PathVariable(value = "an") int an) throws ResourceNotFoundException {
+			@PathVariable(value = "an") int an) {
 		Float totalPensieFac = retineriRepository.getTotalPensieFacByYear(idc, an);
 		if(totalPensieFac == null)
 				return ResponseEntity.ok().body(0f);
