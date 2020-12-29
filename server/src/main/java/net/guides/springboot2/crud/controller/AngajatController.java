@@ -117,7 +117,7 @@ public class AngajatController {
 
 	@GetMapping("/socid={ids}/usrid={idu}")
 	public Angajat getAngajatBySocietateIdAndUserId(@PathVariable("ids") int idsocietate,
-			@PathVariable("idu") int iduser) throws ResourceNotFoundException {
+			@PathVariable("idu") int iduser) {
 		return angajatRepository.findBySocietate_IdAndUser_Id(idsocietate, iduser);
 	}
 

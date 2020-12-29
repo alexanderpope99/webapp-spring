@@ -123,7 +123,7 @@ class AngajatSimplu extends React.Component {
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
               <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
-              <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+              <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
               <Breadcrumb.Item active>Detalii angajat</Breadcrumb.Item>
             </Breadcrumb>
             <h5 className="m-0">
