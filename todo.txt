@@ -5,10 +5,22 @@ LAST-UPDATE : {
 }
 
 TODO: {
-	0 -> cereri concediu (alex)
+	2 -> verifica ce vede un angajat normal
+		-> 2.1: menu-items.js: {
+				Angajat.js:{
+					[date_personale, contract, baza_calcul]  - all disabled,
+					[co, cm, persoane_intretinere] - can click edit for details, all disabled,
+				},
+				2.2: RealizariRetineri.js: {
+					will not recalculate,
+					arata doar lunile calculate,
+					buttons disabled,
+					all fields disabled,
+				},
+				2.3: cereri_concediu,
+			}
 	1.1 -> mi-am uitat parola
 	1.2 -> reseteaza parola din panou utilizatori
-	2 -> verifica ce vede un angajat normal
 
 	*-> add sorting to tables on frontend 
 }

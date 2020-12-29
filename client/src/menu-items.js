@@ -41,6 +41,23 @@ var items = [
         icon: 'feather icon-calendar',
       },
     ],
+	},
+	{
+    id: 'general',
+    title: 'GENERAL',
+    type: 'group',
+    icon: 'icon-group',
+    show:
+      user.roles.includes('ROLE_ANGAJAT'),
+    children: [
+      {
+        id: 'cereri-concediu',
+        title: 'Cereri Concediu',
+        type: 'item',
+        url: '/tables/cereri-concediu',
+        icon: 'feather icon-briefcase',
+      },
+    ],
   },
   {
     id: 'general',

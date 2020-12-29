@@ -8,7 +8,7 @@ import { judete, sectoare } from '../Resources/judete';
 import { server } from '../Resources/server-address';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
-import { luni }from '../Resources/calendar';
+import { luni } from '../Resources/calendar';
 import authHeader from '../../services/auth-header';
 import { Edit, PlusCircle, Users } from 'react-feather';
 import Box from '@material-ui/core/Box';
@@ -51,7 +51,7 @@ class Societati extends React.Component {
       modalMessage: '',
       isEdit: false,
       show_confirm: false,
-			socsel: getSocSel(),
+      socsel: getSocSel(),
       user: authService.getCurrentUser(),
 
       today: new Date(),
@@ -127,21 +127,16 @@ class Societati extends React.Component {
         show: false,
         isEdit: false,
       });
-	}
-	
-	getAdaugaSocietatePermission() {
-		const user = this.state.user;
-		if(!user) return;
+  }
 
-		if(user.roles.find(role => ['ROLE_DIRECTOR', 'ROLE_CONTABIL'].indexOf(role) !== -1)) {
-			console.log('can add societate')
-			return true;
-		}
-		else {
-			console.log('can not add');
-			return false;
-		};
-	}
+  getAdaugaSocietatePermission() {
+    const user = this.state.user;
+    if (!user) return;
+
+    if (user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR'))
+      return true;
+    return false;
+  }
 
   async componentDidMount() {
     await this.getSocietati();
@@ -149,8 +144,8 @@ class Societati extends React.Component {
     this.setState({
       today: today,
       luna: today.getMonth(),
-			an: today.getFullYear(),
-			addSocietate: this.getAdaugaSocietatePermission(),
+      an: today.getFullYear(),
+      addSocietate: this.getAdaugaSocietatePermission(),
       // user: authService.getCurrentUser(),
     });
   }
@@ -294,7 +289,7 @@ class Societati extends React.Component {
       .catch((err) => console.error(err));
 
     if (created) download(`FisierMTA - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
-	}
+  }
 
   async onSubmit(e) {
     try {
@@ -339,76 +334,76 @@ class Societati extends React.Component {
         );
       })
       .catch((err) => console.error(err));
-	}
+  }
 
   render() {
-    const societatiComponent = Object.keys(this.state.societati).map((key) => (
-      <Col md={6} xl={4} key={key}>
-        <Card
-          style={{
-            flexGrow: '1',
-            opacity: this.state.societati[key].opacity,
-            cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
-          }}
-          onClick={
-            this.state.societati[key].opacity === '.3'
-              ? () => {
-                  this.select(key);
-                }
-              : null
-          }
-        >
-          <Card.Body>
-            <h3>{key}</h3>
-            <div
-              className="mt-4"
-              visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-            >
-              <Edit
-                className="d-flex justify-content-around float float-right"
-                visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-                style={{ cursor: 'pointer' }}
-                onClick={() => this.editSocietate(this.state.societati[key])}
-              />
-              <Users
-                className="d-flex justify-content-around float float-right mr-2"
-                visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-                style={{ cursor: 'pointer' }}
-                onClick={() => (window.location.href = '/tables/angajati')}
-              />
+    const societatiComponent = Object.keys(this.state.societati).map((key) => {
+      const showButtons = this.state.societati[key].opacity === '1' && this.state.addSocietate;
+      return (
+        <Col md={6} xl={4} key={key}>
+          <Card
+            style={{
+              flexGrow: '1',
+              opacity: this.state.societati[key].opacity,
+              cursor: this.state.societati[key].opacity === '1' ? '' : 'pointer',
+            }}
+            onClick={
+              this.state.societati[key].opacity === '.3'
+                ? () => {
+                    this.select(key);
+                  }
+                : null
+            }
+          >
+            <Card.Body>
+              <h3>{key}</h3>
+              {showButtons ? (
+                <div
+                  className="mt-4"
+                  visibility={
+                    this.state.societati[key].opacity === '1' && this.state.addSocietate
+                      ? 'visible'
+                      : 'hidden'
+                  }
+                >
+                  <Edit
+                    className="d-flex justify-content-around float float-right"
+                    visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => this.editSocietate(this.state.societati[key])}
+                  />
+                  <Users
+                    className="d-flex justify-content-around float float-right mr-2"
+                    visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => (window.location.href = '/tables/angajati')}
+                  />
 
-              <Button
-                size="sm"
-                onClick={this.statSalarii}
-                style={{
-                  visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
-                }}
-              >
-                Stat salarii
-              </Button>
-              <Button
-                size="sm"
-                onClick={this.dec112}
-                style={{
-                  visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
-                }}
-              >
-                Dec.112
-              </Button>
-              <Button
-                size="sm"
-                onClick={this.mta}
-                style={{
-                  visibility: this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible',
-                }}
-              >
-                MTA
-              </Button>
-            </div>
-          </Card.Body>
-        </Card>
-      </Col>
-    ));
+                  <Button
+                    size="sm"
+                    onClick={this.statSalarii}
+                  >
+                    Stat salarii
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={this.dec112}
+                  >
+                    Dec.112
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={this.mta}
+                  >
+                    MTA
+                  </Button>
+                </div>
+              ) : null}
+            </Card.Body>
+          </Card>
+        </Col>
+      );
+    });
 
     const judeteObj = judete.map((judet, index) => {
       return <option key={index}>{judet}</option>;
