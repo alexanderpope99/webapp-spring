@@ -50,7 +50,7 @@ public class RetineriService {
 
 	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) {
 		Float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
-		if (totalPensie > 400)
+		if (totalPensie == null || totalPensie > 400)
 			return 0;
 		else
 			return retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idc, luna, an).getPensiefacangajat();
