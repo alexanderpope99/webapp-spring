@@ -118,22 +118,23 @@ class Angajat extends React.Component {
 
         <Row>
           <Col>
-            <Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">
+            {/* <Button variant="link" className="float-right bb-5" href="/forms/realizari-retineri">
               Realizări/Rețineri
-            </Button>
-            <h5 className="mb-3">
-              {this.state.socsel.nume ? this.state.socsel.nume : ''} - Date angajat
+            </Button> */}
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+              <Breadcrumb.Item active>Detalii angajat</Breadcrumb.Item>
+            </Breadcrumb>
+            <h5 className="m-0">
+              {this.state.socsel.nume ? this.state.socsel.nume : ''} - Detalii angajat
               {this.state.angajatsel && this.state.key !== 'date-personale'
                 ? ' - ' + this.state.angajatsel.numeintreg
                 : this.state.key !== 'date-personale'
                 ? ' *niciun angajat selectat'
                 : ''}
             </h5>
-            <Breadcrumb>
-              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
-              <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
-              <Breadcrumb.Item active>Detalii angajat</Breadcrumb.Item>
-            </Breadcrumb>
+
             <hr />
             <Tabs
               variant="pills"

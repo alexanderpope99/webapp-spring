@@ -9,6 +9,7 @@ import {
   Tooltip,
   Modal,
   Form,
+  Breadcrumb,
 } from 'react-bootstrap';
 import { X, Check, Clock, RotateCw } from 'react-feather';
 
@@ -483,6 +484,10 @@ class FacturiOperatorTabel extends React.Component {
 
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Operare Facturi</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Operare Facturi Aprobate</Card.Title>

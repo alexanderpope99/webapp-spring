@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -176,8 +176,8 @@ class UserTabel extends React.Component {
       !this.state.username ||
       !this.state.email
     )
-			return;
-			
+      return;
+
     // rebuild user.roles
     const user_roles = [
       ...this.state.roles.map((idrole) => ({
@@ -252,9 +252,9 @@ class UserTabel extends React.Component {
 
     // console.log(user);
     this.submitUser(user, 'put');
-	}
-	
-	async onSubmit(e) {
+  }
+
+  async onSubmit(e) {
     e.preventDefault();
     if (this.state.isEdit) this.updateUser();
     else this.addUser();
@@ -384,8 +384,8 @@ class UserTabel extends React.Component {
         );
       }),
     });
-	}
-	
+  }
+
   async handleClose() {
     this.setState(
       {
@@ -406,17 +406,23 @@ class UserTabel extends React.Component {
   }
 
   folosesteDateleAngajatului() {
-		const idAngajatSel = Number(this.state.idAngajat);
-		if(!idAngajatSel) return;
+    const idAngajatSel = Number(this.state.idAngajat);
+    if (!idAngajatSel) return;
 
-		const angajatSel = this.state.all_angajati_of_socsel_nouser.find(angajat => angajat.idpersoana === idAngajatSel);
-		const username = (angajatSel.persoana.nume + '.' + angajatSel.persoana.prenume.split(/-| /)[0]).toLowerCase();
-		const email = angajatSel.persoana.email || '';
-		this.setState({
-			username: username,
-			email: email,
-		});
-	}
+    const angajatSel = this.state.all_angajati_of_socsel_nouser.find(
+      (angajat) => angajat.idpersoana === idAngajatSel
+    );
+    const username = (
+      angajatSel.persoana.nume +
+      '.' +
+      angajatSel.persoana.prenume.split(/-| /)[0]
+    ).toLowerCase();
+    const email = angajatSel.persoana.email || '';
+    this.setState({
+      username: username,
+      email: email,
+    });
+  }
 
   render() {
     var angajati = [];
@@ -535,6 +541,10 @@ class UserTabel extends React.Component {
         {/* PAGE CONTENTS */}
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Utilizatori</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">

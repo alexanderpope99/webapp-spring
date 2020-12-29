@@ -10,7 +10,6 @@ TODO: {
 
 	*-> add sorting to tables on frontend 
 
-	--> numele societatii sus in stanga == nu mai apare pe fiecare pagina in parte
 	--> breadcrumbs pe fiecare 
 }
 

@@ -1,5 +1,14 @@
 import React from 'react';
-import { Row, Col, Card, Button, Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Table,
+  OverlayTrigger,
+  Tooltip,
+  Breadcrumb,
+} from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import axios from 'axios';
 import Popover from '@material-ui/core/Popover';
@@ -195,6 +204,10 @@ class AngajatiTabel extends React.Component {
       <Aux>
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Angajați</Card.Title>

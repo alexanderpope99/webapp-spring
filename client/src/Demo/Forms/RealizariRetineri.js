@@ -15,6 +15,7 @@ import {
   Toast,
   Dropdown,
   DropdownButton,
+  Breadcrumb,
 } from 'react-bootstrap';
 import { Trash2, Info } from 'react-feather';
 
@@ -1052,6 +1053,11 @@ class RealizariRetineri extends React.Component {
           </Modal.Body>
         </Modal>
 
+        <Breadcrumb style={{fontSize: "12px"}}>
+          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+          <Breadcrumb.Item active>Realizări & Rețineri</Breadcrumb.Item>
+        </Breadcrumb>
         <Card>
           {/* SELECT LUNA + AN */}
           <Card.Header>
@@ -1515,7 +1521,7 @@ class RealizariRetineri extends React.Component {
                       Toți angajații
                     </Dropdown.Item>
                   </DropdownButton>
-									<Button
+                  <Button
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat}
                     onClick={this.getStatIndividual}

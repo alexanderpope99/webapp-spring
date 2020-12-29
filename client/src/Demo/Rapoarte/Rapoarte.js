@@ -1,6 +1,6 @@
 import React from 'react';
 import Aux from '../../hoc/_Aux';
-import { Card } from 'react-bootstrap';
+import { Card, Breadcrumb } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { getSocSel } from '../Resources/socsel';
 import PlatiSalariiMTA from './PlatiSalariiMTA.js';
@@ -21,6 +21,10 @@ class Rapoarte extends React.Component {
   render() {
     return (
       <Aux>
+        <Breadcrumb style={{ fontSize: '12px' }}>
+          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+          <Breadcrumb.Item active>Rapoarte</Breadcrumb.Item>
+        </Breadcrumb>
         <Stat />
         <NotaContabila />
         <Pontaj />

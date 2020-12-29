@@ -8,7 +8,8 @@ import {
   OverlayTrigger,
   Tooltip,
   Modal,
-  Form,
+	Form,
+	Breadcrumb
 } from 'react-bootstrap';
 import { X, Check, Clock, RotateCw } from 'react-feather';
 
@@ -485,6 +486,10 @@ class FacturiAprobatorTabel extends React.Component {
 
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Aprobare Facturi</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Aprobare Facturi</Card.Title>
