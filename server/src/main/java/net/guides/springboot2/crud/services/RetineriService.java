@@ -48,8 +48,8 @@ public class RetineriService {
 		return retineriRepository.save(newRetinere);
 	}
 
-	public float calculeazaPensieDeductibila(int idc, int an, int luna) {
-		float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
+	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) {
+		Float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
 		if (totalPensie > 400)
 			return 0;
 		else

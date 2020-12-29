@@ -99,9 +99,9 @@ public class RealizariRetineriService {
 		float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
 		this.venitNet = restPlata + valoareTichete;
 
-		float deducerePensieFacultativa = 0;
-
-		deducerePensieFacultativa = retineriService.calculeazaPensieDeductibila(idcontract, an, luna);
+		Integer deducerePensieFacultativa = retineriService.calculeazaPensieDeductibila(idcontract, an, luna);
+		if(deducerePensieFacultativa == null)
+				deducerePensieFacultativa = 0;
 
 		this.bazaImpozit = (restPlata + valoareTichete - deducere - deducerePensieFacultativa);
 

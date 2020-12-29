@@ -441,7 +441,8 @@ class RealizariRetineri extends React.Component {
     let nrt = this.state.nrtichete;
     let tos = this.state.totaloresuplimentare;
 
-    //* 2. recalculare realizariRetineri
+		//* 2. recalculare realizariRetineri
+		console.log(this.state.idcontract);
     const data = await axios
       .put(
         `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
@@ -451,7 +452,6 @@ class RealizariRetineri extends React.Component {
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-    console.log(data);
     if (!data) return;
 
     this.setState(
@@ -629,31 +629,10 @@ class RealizariRetineri extends React.Component {
       modalMessage: '',
       nrore: 0,
       procent: 100,
-    });
-    this.fillForm();
-  }
-
-  async getStatIndividual() {
-    const idangajat = this.state.selected_angajat.idpersoana;
-    const luna = this.state.luna;
-    const an = this.state.an;
-    const user = authService.getCurrentUser();
-
-    const ok = await axios
-      .get(
-        `${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
-        { headers: authHeader() }
-      )
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-
-    if (ok) {
-      let numeintreg = this.state.selected_angajat.numeintreg;
-      this.downloadStatIndividual(numeintreg, luna, an);
-    }
-  }
-
-  async downloadStatIndividual(numeintreg, luna, an) {
+    }, this.fillForm);
+	}
+	
+	async downloadStatIndividual(numeintreg, luna, an) {
     const user = authService.getCurrentUser();
     console.log('trying to download...');
     await fetch(
@@ -682,6 +661,26 @@ class RealizariRetineri extends React.Component {
           behavior: 'smooth',
         });
       });
+  }
+
+  async getStatIndividual() {
+    const idangajat = this.state.selected_angajat.idpersoana;
+    const luna = this.state.luna;
+    const an = this.state.an;
+    const user = authService.getCurrentUser();
+
+    const ok = await axios
+      .get(
+        `${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      let numeintreg = this.state.selected_angajat.numeintreg;
+      this.downloadStatIndividual(numeintreg, luna, an);
+    }
   }
 
   onSubmit(e) {

@@ -8,6 +8,7 @@ import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../../../../assets/images/user/avatar-2.jpg';
 
 import { server } from '../../../../../Demo/Resources/server-address';
+import { getSocSel } from '../../../../../Demo/Resources/socsel';
 import axios from 'axios';
 import authHeader from '../../../../../../src/services/auth-header';
 
@@ -27,7 +28,8 @@ class NavRight extends Component {
     this.state = {
       time: Date.now(),
       listOpen: false,
-      user: authService.getCurrentUser(),
+			user: authService.getCurrentUser(),
+			socsel: getSocSel(),
       notificari: [],
       cursEURRON: '',
     };
@@ -36,7 +38,13 @@ class NavRight extends Component {
   componentDidMount() {
     this.interval = setInterval(() => this.onRefresh(), 60000);
     this.onRefresh();
-  }
+	}
+	componentDidUpdate(prevProps, prevState) {
+		if(this.state.socsel !== prevState.socsel)
+			this.setState({
+				socsel: getSocSel(),
+			})
+	}
   componentWillUnmount() {
     clearInterval(this.interval);
   }
@@ -153,7 +161,7 @@ class NavRight extends Component {
     return (
       <Aux>
         <div className="navbar-nav" style={{ marginTop: '25px', marginLeft: '30px' }}>
-          <h4>Societate</h4>
+          <h4>{this.state.socsel ? this.state.socsel.nume : ''}</h4>
         </div>
         <ul className="navbar-nav ml-auto">
           <li>
