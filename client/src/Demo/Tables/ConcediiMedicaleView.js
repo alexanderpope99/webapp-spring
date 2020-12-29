@@ -9,9 +9,6 @@ import { luni, formatDate } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import {
-  cod_boala,
-  cod_urgenta,
-  cod_boala_infect,
   getProcente,
   getZileFirma,
   countWeekendDays,
@@ -470,21 +467,11 @@ class ConcediiMedicaleView extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-    const codBoalaComponent = cod_boala.map((cod, index) => <option key={index}>{cod}</option>);
-    const codUrgentaComponent = cod_urgenta.map((cod, index) => <option key={index}>{cod}</option>);
-
-    const codBoalaInfectComponent = cod_boala_infect.map((cod, index) => (
-      <option key={index}>{cod}</option>
-    ));
-    const procentComponent = this.state.procente.map((p, index) => (
-      <option key={index}>{p}</option>
-    ));
-
     let exists = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
-        {/* C.M. MODAL */}
+        {/* VIEW MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Concediu medical</Modal.Title>

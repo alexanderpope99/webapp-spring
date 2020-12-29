@@ -213,7 +213,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
   render() {
     return (
       <Aux>
-        {/* add/edit modal */}
+        {/* VIEW MODAL */}
         <Row>
           <Col>
             <Card>

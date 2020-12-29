@@ -30,7 +30,6 @@ class ConcediiOdihnaView extends React.Component {
       today: '',
       an: '',
       luna: { nume: '-', nr: '-' },
-      zile_co_disponibile: 21,
 
       ultimul_an: '',
       ani_cu_concediu: [],
@@ -87,16 +86,6 @@ class ConcediiOdihnaView extends React.Component {
     } else {
       this.setState({ angajat: null }, this.fillTable);
     }
-  }
-
-  async getZileCoDisponibile() {
-    await axios
-      .get(
-        `${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}&y=${this.state.an}`,
-        { headers: authHeader() }
-      )
-      .then((res) => this.setState({ zile_co_disponibile: res.data }))
-      .catch((err) => console.error(err));
   }
 
   componentDidMount() {
@@ -239,8 +228,6 @@ class ConcediiOdihnaView extends React.Component {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
 
-      this.getZileCoDisponibile();
-
       this.setState(
         {
           co: concedii,
@@ -332,11 +319,6 @@ class ConcediiOdihnaView extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group id="zilecodisponibile">
-                <Form.Label>
-                  {this.state.zile_co_disponibile} zile concediu de odihnă disponibile
-                </Form.Label>
-              </Form.Group>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control

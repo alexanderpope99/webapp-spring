@@ -7,19 +7,17 @@ import ViewPersoana from '../Edit/ViewPersoana';
 import ContractView from '../UIElements/Forms/ContractView';
 import ConcediiOdihnaView from '../Tables/ConcediiOdihnaView';
 import ConcediiMedicaleView from '../Tables/ConcediiMedicaleView';
-// import BazaCalculView from '../Tables/BazaCalculView';
-// import PersoaneIntretinereTabelView from '../Tables/PersoaneIntretinereView';
+import BazaCalculView from '../Tables/BazaCalculView';
+import PersoaneIntretinereView from '../Tables/PersoaneIntretinereView';
+
 import { getAngajatSel } from '../Resources/angajatsel';
 import authService from '../../services/auth.service';
 
 /*
   ? how it works now:
-	*	Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
 	* * * * *
   * fetch data when focusing tabs
   * * * * *
-	* in ViewPersoana -> selecting angajat calls setAngajatSel
-	* * * * *
 */
 
 class AngajatSimplu extends React.Component {
@@ -146,8 +144,8 @@ class AngajatSimplu extends React.Component {
                 if (key === 'contract') this.onFocusContract();
                 else if (key === 'co') this.onFocusCO();
                 else if (key === 'cm') this.onFocusCM();
-                else if (key === 'pi') this.onFocusPI();
                 else if (key === 'bc') this.onFocusBC();
+                else if (key === 'pi') this.onFocusPI();
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
@@ -172,6 +170,17 @@ class AngajatSimplu extends React.Component {
 
 							<Tab eventKey="cm" title="C.M.">
                 <ConcediiMedicaleView ref={this.cm} scrollToTopSmooth={this.scrollToTopSmooth} />
+              </Tab>
+
+							<Tab eventKey="bc" title="Bază calcul">
+                <BazaCalculView ref={this.bc} scrollToTopSmooth={this.scrollToTopSmooth} />
+              </Tab>
+
+							<Tab eventKey="pi" title="Pers. într.">
+                <PersoaneIntretinereView
+                  ref={this.persoaneintretinere}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
+                />
               </Tab>
 
             </Tabs>
