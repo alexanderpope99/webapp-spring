@@ -74,43 +74,101 @@ class CereriConcediuSuperiorTabel extends React.Component {
             <th>{cer.tip}</th>
             <th>{cer.motiv}</th>
             <th>
-              <Row>
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
-                  overlay={
-                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                      Acceptă
-                    </Tooltip>
-                  }
-                >
+              {cer.status === 'Propus' || cer.status === 'Propus (Modificat)' ? (
+                <Row>
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                        Acceptă
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() => this.approveCerereConcediu(cer)}
+                      variant="outline-success"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <Check size={20} />
+                    </Button>
+                  </OverlayTrigger>
+
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                        Respinge
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() => this.rejectCerereConcediu(cer)}
+                      variant="outline-danger"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <X size={20} />
+                    </Button>
+                  </OverlayTrigger>
+                </Row>
+              ) : cer.status === 'Aprobat' ? (
+                <Row>
                   <Button
+                    disabled
                     onClick={() => this.approveCerereConcediu(cer)}
                     variant="outline-success"
                     className="m-1 p-1 rounded-circle border-0"
                   >
                     <Check size={20} />
                   </Button>
-                </OverlayTrigger>
-
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
-                  overlay={
-                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                      Respinge
-                    </Tooltip>
-                  }
-                >
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                        Respinge
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() => this.rejectCerereConcediu(cer)}
+                      variant="outline-danger"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <X size={20} />
+                    </Button>
+                  </OverlayTrigger>
+                </Row>
+              ) : (
+                <Row>
+                  <OverlayTrigger
+                    placement="bottom"
+                    delay={{ show: 250, hide: 250 }}
+                    overlay={
+                      <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                        Acceptă
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      onClick={() => this.approveCerereConcediu(cer)}
+                      variant="outline-success"
+                      className="m-1 p-1 rounded-circle border-0"
+                    >
+                      <Check size={20} />
+                    </Button>
+                  </OverlayTrigger>
                   <Button
+                    disabled
                     onClick={() => this.rejectCerereConcediu(cer)}
                     variant="outline-danger"
                     className="m-1 p-1 rounded-circle border-0"
                   >
                     <X size={20} />
                   </Button>
-                </OverlayTrigger>
-              </Row>
+                </Row>
+              )}
             </th>
           </tr>
         );
@@ -127,20 +185,6 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) => console.error(err));
 
     if (!cereriConcediu) return;
-
-    cereriConcediu = await Promise.all(
-      cereriConcediu.map(async (v) => ({
-        ...v,
-        nume: await axios
-          .get(`${server.address}/persoana/${v.pentru}`, {
-            headers: authHeader(),
-          })
-          .then((res) => res.data.nume + ' ' + res.data.prenume)
-          .catch((err) => console.error(err)),
-      }))
-    );
-
-    console.log(cereriConcediu);
 
     if (cereriConcediu) {
       this.setState(

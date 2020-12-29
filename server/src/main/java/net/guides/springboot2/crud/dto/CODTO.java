@@ -16,7 +16,19 @@ public class CODTO {
 	private Boolean sporuripermanente;
 
 	private int idcontract;
+
 	private Contract contract;
+
+	public CODTO() {
+
+	}
+
+	public CODTO(String tip, LocalDate dela, LocalDate panala, int idcontract) {
+		this.tip = tip;
+		this.dela = dela;
+		this.panala = panala;
+		this.idcontract = idcontract;
+	}
 
 	public LocalDate getDela() {
 		return dela;

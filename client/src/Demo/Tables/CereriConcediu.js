@@ -174,7 +174,6 @@ class CereriConcediuTabel extends React.Component {
         show: true,
 
         id: cer.id,
-        pentru: cer.pentru,
         tip: cer.tip,
         motiv: cer.motiv,
         dela: cer.dela ? cer.dela.substring(0, 10) : '',
