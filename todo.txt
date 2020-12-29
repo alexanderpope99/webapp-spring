@@ -8,7 +8,8 @@ LAST-UPDATE : {
 }
 
 TODO: {
-	
+	0 -> cereri concediu (alex)
+	1*-> TOAST pt toate recalc, scroll to top pentru 'recalc per societate', dropdown ONLY button
 	2 -> verifica ce vede un angajat normal
 
 	*-> add sorting to tables on frontend 
@@ -18,7 +19,6 @@ TODO: {
 }
 
 UPGRADES: {
-	add breadcrumbs
 }
 
 UserTabel:
