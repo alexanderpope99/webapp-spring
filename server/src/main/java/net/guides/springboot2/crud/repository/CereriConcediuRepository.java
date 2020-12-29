@@ -14,9 +14,4 @@ public interface CereriConcediuRepository extends JpaRepository<CereriConcediu, 
 
 	List<CereriConcediu> findBySocietate_Id(int socId);
 
-	@Query(value = "UPDATE cerericoncediu SET status='Aprobat' WHERE id = ?1 RETURNING *", nativeQuery = true)
-	CereriConcediu approveStatus(int cereriConcediuId);
-
-	@Query(value = "UPDATE cerericoncediu SET status='Respins' WHERE id = ?1 RETURNING *", nativeQuery = true)
-	CereriConcediu rejectStatus(int cereriConcediuId);
 }
