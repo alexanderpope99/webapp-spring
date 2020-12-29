@@ -64,8 +64,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("/expand/{id}")
-	public Angajat getAngajatById(@PathVariable("id") int angajatId)
-			throws ResourceNotFoundException {
+	public Angajat getAngajatById(@PathVariable("id") int angajatId) throws ResourceNotFoundException {
 		return angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
 	}
@@ -101,7 +100,7 @@ public class AngajatController {
 	}
 
 	@GetMapping("/ids={ids}/count")
-	public int countAngajatiByIdsocietate(@PathVariable( "ids") int idsocietate) {
+	public int countAngajatiByIdsocietate(@PathVariable("ids") int idsocietate) {
 		return angajatRepository.countBySocietate_Id(idsocietate);
 	}
 
@@ -114,6 +113,12 @@ public class AngajatController {
 	@GetMapping("subalterni/{id}")
 	public List<Angajat> getSubalterni(@PathVariable("id") int idangajat) throws ResourceNotFoundException {
 		return angajatService.getSubalterni(idangajat);
+	}
+
+	@GetMapping("/socid={ids}/usrid={idu}")
+	public Angajat getAngajatBySocietateIdAndUserId(@PathVariable("ids") int idsocietate,
+			@PathVariable("idu") int iduser) throws ResourceNotFoundException {
+		return angajatRepository.findBySocietate_IdAndUser_Id(idsocietate, iduser);
 	}
 
 	@PostMapping("/expand")
