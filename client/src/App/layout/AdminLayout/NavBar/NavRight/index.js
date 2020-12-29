@@ -126,7 +126,7 @@ class NavRight extends Component {
     var notificari = [];
     if (this.state.notificari.length > 0)
       notificari = this.state.notificari.map((notificare, index) => (
-        <li className="notification">
+        <li key={index} className="notification">
           <div className="media">
             <div className="media-body">
               <p>

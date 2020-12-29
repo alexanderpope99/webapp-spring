@@ -13,6 +13,10 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import authService from '../../services/auth.service';
 
+import { tip_concedii } from '../../Demo/Resources/tip-concedii';
+
+const tip_concedii_component = tip_concedii.map((tip, index) => <option key={index}>{tip}</option>);
+
 class CereriConcediuTabel extends React.Component {
   constructor(props) {
     super();
@@ -332,10 +336,12 @@ class CereriConcediuTabel extends React.Component {
                   <Form.Group>
                     <Form.Label>Tip</Form.Label>
                     <Form.Control
-                      type="text"
+                      as="select"
                       value={this.state.tip}
                       onChange={(e) => this.setState({ tip: e.target.value })}
-                    />
+                    >
+                      {tip_concedii_component}
+                    </Form.Control>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Motiv</Form.Label>
