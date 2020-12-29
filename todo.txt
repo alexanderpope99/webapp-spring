@@ -5,10 +5,35 @@ LAST-UPDATE : {
 }
 
 TODO: {
-	0 -> cereri concediu (alex)
+	2 -> pentru un angajat normal
+		->  2.1: menu-items.js: {
+					Angajat.js: {
+						[date_personale, contract, baza_calcul] - all disabled: {
+							EditPersoanaAngajat.js: {
+								all fields disabled
+								adauga persoana button does not exist
+								actualizeaza datele does not exist
+							}
+							Contract.js: {
+								all fields disabled
+								actualizeaza contract does not exist
+							}
+
+						}
+						[co, cm, persoane_intretinere] - can click edit for details, all disabled,
+					},
+					2.2: RealizariRetineri.js: {
+						will not recalculate,
+						arata doar lunile calculate,
+						buttons disabled,
+						all fields disabled,
+					},
+					2.3: cereri_concediu,
+				}
+		-> !! scrie if-ul AngajatiTabel.js:45 pentru toate la care nu are acces !!
+		-> fix controller PutMappings
 	1.1 -> mi-am uitat parola
 	1.2 -> reseteaza parola din panou utilizatori
-	2 -> verifica ce vede un angajat normal
 
 	*-> add sorting to tables on frontend 
 }
@@ -17,6 +42,7 @@ UPGRADES: {
 }
 
 UserTabel:
+	✔ can add User
 	✔ can edit Roles
 	✔ can edit Societati
 	✔ can edit Angajati
