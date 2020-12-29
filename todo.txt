@@ -1,12 +1,7 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 LAST-UPDATE : {
-}
-
-TODO: {
-	2 -> pentru un angajat normal
-		->  2.1: menu-items.js: {
-					Angajat.js: {
+	Angajat.js: {
 						[date_personale, contract, baza_calcul] - all disabled: {
 							EditPersoanaAngajat.js: {
 								all fields disabled
@@ -21,6 +16,11 @@ TODO: {
 						}
 						[co, cm, persoane_intretinere] - can click edit for details, all disabled,
 					},
+}
+
+TODO: {
+	2 -> pentru un angajat normal
+		->  2.1: menu-items.js: {
 					2.2: RealizariRetineri.js: {
 						will not recalculate,
 						arata doar lunile calculate,

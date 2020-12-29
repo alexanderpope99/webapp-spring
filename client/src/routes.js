@@ -1,9 +1,12 @@
 import React from 'react';
+import authService from './services/auth.service';
 import $ from 'jquery';
 
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
+
+const isAngajatSimplu = authService.isAngajatSimplu();
 
 const DashboardDefault = React.lazy(() => import('./Demo/Dashboard/Default'));
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
@@ -28,6 +31,7 @@ const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const AngajatSimplu = React.lazy(() => import('./Demo/Forms/AngajatSimplu'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
+const RealizariRetineriView = React.lazy(() => import('./Demo/Forms/RealizariRetineriView'));
 
 // RAPOARTE
 const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
@@ -116,7 +120,7 @@ const routes = [
     path: '/forms/realizari-retineri',
     exact: true,
     name: 'Realizari / Retineri',
-    component: RealizariRetineri,
+    component: isAngajatSimplu ? RealizariRetineriView : RealizariRetineri,
   },
 
   // RAPOARTE
