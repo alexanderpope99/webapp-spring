@@ -102,10 +102,9 @@ class COTabel extends React.Component {
 
   async getZileCoDisponibile() {
     await axios
-      .get(
-        `${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}&y=${this.state.an}`,
-        { headers: authHeader() }
-      )
+      .get(`${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}`, {
+        headers: authHeader(),
+      })
       .then((res) => this.setState({ zile_co_disponibile: res.data }))
       .catch((err) => console.error(err));
   }
@@ -222,10 +221,7 @@ class COTabel extends React.Component {
           nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
         },
       },
-      () => {
-        this.renderCO();
-        console.log(this.state.luna);
-      }
+      this.renderCO
     );
   }
 
@@ -280,7 +276,7 @@ class COTabel extends React.Component {
         if (c.panala) {
           ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
         }
-      }
+			}
       // add ani in luni_cu_concediu
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = new Set();
@@ -291,14 +287,18 @@ class COTabel extends React.Component {
           an = c.dela.substring(0, 4);
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
         }
-      }
+			}
+			// add current year even if if doesn't have co
+			// ani_cu_concediu.add(2021);
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-      }
+			}
 
       this.getZileCoDisponibile();
 
+			let thisYear = new Date().getFullYear();
+			ani_cu_concediu.add(thisYear);
       this.setState(
         {
           co: concedii,

@@ -309,8 +309,11 @@ class CMTabel extends React.Component {
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-      }
-
+			}
+			
+			let thisYear = new Date().getFullYear();
+			ani_cu_concediu.add(thisYear);
+			
       this.setState(
         {
           cm: cm,
