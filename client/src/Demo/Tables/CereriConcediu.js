@@ -302,6 +302,9 @@ class CereriConcediuTabel extends React.Component {
   }
 
   render() {
+
+		const concediuIsValid = this.state.dela && (this.state.panala > this.state.dela);
+
     return (
       <Aux>
         {/* add/edit modal */}
@@ -350,7 +353,7 @@ class CereriConcediuTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.onSubmit} type="submit">
+            <Button variant="primary" onClick={this.onSubmit} type="submit" disabled={!concediuIsValid}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>

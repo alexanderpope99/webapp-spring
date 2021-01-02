@@ -82,7 +82,7 @@ public class AngajatController {
 
 	@GetMapping("/ids={ids}")
 	public List<Angajat> findAngajatiByIdsocietate(@PathVariable("ids") int idsocietate) {
-		return angajatRepository.findBySocietate_Id(idsocietate);
+		return angajatRepository.findBySocietate_IdOrderByPersoana_NumeAsc(idsocietate);
 	}
 
 	@GetMapping("/ids={ids}&c")

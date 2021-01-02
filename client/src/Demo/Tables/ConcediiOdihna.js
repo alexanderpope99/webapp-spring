@@ -452,7 +452,9 @@ class COTabel extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-    let exists = this.state.angajat && this.state.angajat.idcontract;
+		const exists = this.state.angajat && this.state.angajat.idcontract;
+		
+		const concediuIsValid = this.state.dela && (this.state.dela < this.state.panala);
 
     return (
       <Aux>
@@ -513,7 +515,7 @@ class COTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO}>
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO} disabled={!concediuIsValid}>
               {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>

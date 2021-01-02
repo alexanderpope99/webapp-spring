@@ -19,8 +19,6 @@ import axios from 'axios';
 import authHeader from '../../../services/auth-header';
 import { getAngajatSel } from '../../Resources/angajatsel';
 
-import Switch from '@material-ui/core/switch';
-
 const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
   <option key={index}>{casa}</option>
 ));
