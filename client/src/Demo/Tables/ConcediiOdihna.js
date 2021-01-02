@@ -466,7 +466,7 @@ class COTabel extends React.Component {
 
 		const exists = this.state.angajat && this.state.angajat.idcontract;
 		
-		const concediuIsValid = this.state.dela && (this.state.dela < this.state.panala);
+		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
 
     return (
       <Aux>

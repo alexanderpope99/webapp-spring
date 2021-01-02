@@ -347,7 +347,7 @@ class CereriConcediuTabel extends React.Component {
 
   render() {
 
-		const concediuIsValid = this.state.dela && (this.state.panala > this.state.dela);
+		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
 
     return (
       <Aux>

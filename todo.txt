@@ -11,6 +11,7 @@ LAST-UPDATE : {
 }
 
 TODO: {
+	?? zile concediu disponibile depinde de concediile fara plata?
 	2 -> pentru un angajat normal
 		
 		-> !! scrie if-ul AngajatiTabel.js:45 pentru toate la care nu are acces !!

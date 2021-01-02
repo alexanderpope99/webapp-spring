@@ -309,11 +309,11 @@ class CMTabel extends React.Component {
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-			}
-			
-			let thisYear = new Date().getFullYear();
-			ani_cu_concediu.add(thisYear);
-			
+      }
+
+      let thisYear = new Date().getFullYear();
+      ani_cu_concediu.add(thisYear);
+
       this.setState(
         {
           cm: cm,
@@ -406,7 +406,7 @@ class CMTabel extends React.Component {
 
   async updateCM() {
     const cm_body = {
-			id: this.state.id,
+      id: this.state.id,
       idcontract: this.state.angajat.idcontract,
       dela: this.state.dela,
       panala: this.state.panala,
@@ -435,7 +435,7 @@ class CMTabel extends React.Component {
       urgenta: this.state.urgenta || false,
       conditii: this.state.conditii,
       codindemnizatie: this.state.codindemnizatie,
-		};
+    };
 
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
@@ -699,6 +699,7 @@ class CMTabel extends React.Component {
     ));
 
     let exists = this.state.angajat && this.state.angajat.idcontract;
+    const concediuIsValid = this.state.dela && this.state.dela <= this.state.panala;
 
     return (
       <Aux>
@@ -1014,7 +1015,11 @@ class CMTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateCM : this.addCM}>
+            <Button
+              variant="primary"
+              onClick={this.state.isEdit ? this.updateCM : this.addCM}
+              disabled={!concediuIsValid}
+            >
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
