@@ -17,8 +17,11 @@ TODO: {
 		-> !! scrie if-ul AngajatiTabel.js:45 pentru toate la care nu are acces !!
 		-> fix controller PutMappings
 
-	1.1 -> mi-am uitat parola
-	1.2 -> reseteaza parola din panou utilizatori
+	3.1 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
+	3.2 -> pune data by-default la facturi etc
+
+	4.1 -> mi-am uitat parola
+	4.2 -> reseteaza parola din panou utilizatori
 
 	*-> add sorting to tables on frontend 
 }

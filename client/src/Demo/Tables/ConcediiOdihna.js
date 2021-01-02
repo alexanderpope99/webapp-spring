@@ -464,7 +464,7 @@ class COTabel extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-		const exists = this.state.angajat && this.state.angajat.idcontract;
+		const angajatContract = this.state.angajat && this.state.angajat.idcontract;
 		
 		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
 
@@ -559,9 +559,9 @@ class COTabel extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
-                  variant={exists ? 'outline-primary' : 'outline-dark'}
+                  variant={angajatContract ? 'outline-primary' : 'outline-dark'}
                   className="float-right"
-                  disabled={!exists}
+                  disabled={!angajatContract}
                   onClick={() =>
                     this.setState(
                       { show: true, dela: this.state.today, panala: this.state.today },
@@ -573,10 +573,10 @@ class COTabel extends React.Component {
                 </Button>
 
                 <Button
-                  variant={exists ? 'outline-primary' : 'outline-dark'}
+                  variant={angajatContract ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  disabled={!exists}
+                  disabled={!angajatContract}
                   onClick={this.fillTable}
                 >
                   <RotateCw className="m-0 p-0" />
