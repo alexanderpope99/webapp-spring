@@ -1,8 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Edit3, Plus, RotateCw, Trash2 } from 'react-feather';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Eye, RotateCw } from 'react-feather';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 
@@ -14,19 +12,13 @@ import { luni }from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
-class BazaCalcul extends React.Component {
+class BazaCalculView extends React.Component {
   constructor() {
     super();
 
     this.fillTable = this.fillTable.bind(this);
-    this.addBazaCalcul = this.addBazaCalcul.bind(this);
-    this.updateBazaCalcul = this.updateBazaCalcul.bind(this);
-    this.editBazaCalcul = this.editBazaCalcul.bind(this);
-    this.deleteBazaCalcul = this.deleteBazaCalcul.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.renderBazaCalcul = this.renderBazaCalcul.bind(this);
-    this.openModalAdd = this.openModalAdd.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
@@ -82,80 +74,6 @@ class BazaCalcul extends React.Component {
     }
   }
 
-  async addBazaCalcul() {
-    const bazacalcul_body = {
-      idangajat: this.state.angajat.idpersoana,
-      an: this.state.an || null,
-      luna: this.state.luna.nr || null,
-      salariurealizat: this.state.salariurealizat || null,
-      zilelucrate: this.state.zilelucrate || null,
-    };
-
-    let ok = await axios
-      .post(`${server.address}/bazacalcul`, bazacalcul_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-
-    if (ok) {
-      await this.handleClose();
-      this.setState(
-        {
-          showConfirm: true,
-          modalMessage: 'Bază calcul adaugată pentru ' + this.state.angajat.numeintreg,
-        },
-        this.fillTable
-      );
-    }
-  }
-
-  async updateBazaCalcul(idbazacalcul) {
-    const bazacalcul_body = {
-      idangajat: this.state.angajat.idpersoana,
-      an: this.state.an || null,
-      luna: this.state.luna.nr || null,
-      salariurealizat: this.state.salariurealizat || null,
-      zilelucrate: this.state.zilelucrate || null,
-    };
-
-    const ok = await axios
-      .put(`${server.address}/bazacalcul/${idbazacalcul}`, bazacalcul_body, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-
-    if (ok) {
-      this.fillTable();
-      await this.handleClose();
-      this.setState({
-        showConfirm: true,
-        modalMessage: 'Bază calcul actualizată',
-      });
-    }
-  }
-
-  async editBazaCalcul(bc) {
-    this.setState({
-      isEdit: true,
-      show: true,
-
-      id: bc.id,
-      idangajat: bc.idangajat,
-      an: bc.an,
-      luna: { nume: luni[bc.luna - 1], nr: bc.luna },
-      salariurealizat: bc.salariurealizat,
-      zilelucrate: bc.zilelucrate,
-    });
-  }
-
-  async deleteBazaCalcul(idbazacalcul) {
-    axios
-      .delete(`${server.address}/bazacalcul/${idbazacalcul}`, { headers: authHeader() })
-      .then((response) => response.data)
-      .then(this.fillTable)
-      .catch((err) => console.error(err));
-  }
-
   // function to create react component with fetched data
   renderBazaCalcul() {
     this.setState({
@@ -169,67 +87,6 @@ class BazaCalcul extends React.Component {
               <th>{luni[bc.luna - 1]}</th>
               <th>{bc.zilelucrate}</th>
               <th>{bc.salariurealizat}</th>
-              <th>
-                <Row>
-                  <Button
-                    onClick={() => this.editBazaCalcul(bc)}
-                    variant="outline-secondary"
-                    className="m-1 p-1 rounded-circle border-0"
-                  >
-                    <Edit3 size={20} />
-                  </Button>
-
-                  <PopupState variant="popover" popupId="demo-popup-popover">
-                    {(popupState) => (
-                      <div>
-                        <Button
-                          variant="outline-secondary"
-                          className="m-1 p-1 rounded-circle border-0"
-                          {...bindTrigger(popupState)}
-                        >
-                          <Trash2 size={20} />
-                        </Button>
-                        <Popover
-                          {...bindPopover(popupState)}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                          }}
-                        >
-                          <Box p={2}>
-                            <Typography>Confirmare ștergere</Typography>
-                            <Typography variant="caption">
-                              Datele nu mai pot fi recuperate
-                            </Typography>
-                            <br />
-                            <Button
-                              variant="outline-danger"
-                              onClick={() => {
-                                popupState.close();
-                                this.deleteBazaCalcul(bc.id);
-                              }}
-                              className="mt-2 "
-                            >
-                              Da
-                            </Button>
-                            <Button
-                              variant="outline-persondary"
-                              onClick={popupState.close}
-                              className="mt-2"
-                            >
-                              Nu
-                            </Button>
-                          </Box>
-                        </Popover>
-                      </div>
-                    )}
-                  </PopupState>
-                </Row>
-              </th>
             </tr>
           );
       }),
@@ -337,17 +194,9 @@ class BazaCalcul extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-    var luniFaraBazaComponent = null;
-    if (this.state.luni_fara_baza && this.state.luni_fara_baza[this.state.an_sel])
-      luniFaraBazaComponent = this.state.luni_fara_baza[this.state.an_sel].map((luna) => (
-        <option key={luna} data-key={luna}>
-          {luni[luna - 1]}
-        </option>
-      ));
-
     return (
       <Aux>
-        {/* add/edit modal */}
+        {/* VIEW MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Bază calcul</Modal.Title>
@@ -359,68 +208,40 @@ class BazaCalcul extends React.Component {
                   <Form.Group>
                     <Form.Label>An</Form.Label>
                     <Form.Control
-                      disabled={this.state.an_sel !== '-'}
+                      disabled
                       type="number"
                       value={this.state.an}
-                      onChange={(e) => this.setState({ an: e.target.value })}
                     />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
-                      as="select"
+											disabled
+                      type="text"
                       value={this.state.luna.nume}
                       onChange={(e) => this.onChangeMonth(e)}
-                    >
-                      <option>-</option>
-                      {this.state.isEdit
-                        ? [
-                            ...luniFaraBazaComponent,
-                            <option key={this.state.luna.nr} data-key={this.state.luna.nr}>
-                              {this.state.luna.nume}
-                            </option>,
-                          ]
-                        : luniFaraBazaComponent}
-                    </Form.Control>
+                    />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Zile Lucrate</Form.Label>
                     <Form.Control
+										disabled
                       type="number"
                       value={this.state.zilelucrate}
-                      onChange={(e) => this.setState({ zilelucrate: e.target.value })}
                     />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Salariu realizat</Form.Label>
                     <Form.Control
-                      type="number"
+										disabled
+										type="number"
                       value={this.state.salariurealizat}
-                      onChange={(e) => this.setState({ salariurealizat: e.target.value })}
                     />
                   </Form.Group>
                 </Col>
               </Row>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.onSubmit} type="submit">
-              {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* confirm modal */}
-        <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
-          <Modal.Header closeButton>
-            <Modal.Title>Bază calcul</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.handleCloseConfirm}>
-              OK
-            </Button>
-          </Modal.Footer>
         </Modal>
 
         <Row>
@@ -438,16 +259,6 @@ class BazaCalcul extends React.Component {
                 >
                   <RotateCw className="m-0 p-0" />
                   {/* ↺ */}
-                </Button>
-
-                <Button
-                  variant={this.state.angajat ? 'outline-primary' : 'outline-dark'}
-                  size="sm"
-                  style={{ fontSize: '1.25rem', float: 'right' }}
-                  disabled={!this.state.angajat}
-                  onClick={this.openModalAdd}
-                >
-                  <Plus className="m-0 p-0" />
                 </Button>
                 <Row>
                   <Form.Group as={Col} sm="3" className="mt-3">
@@ -473,7 +284,6 @@ class BazaCalcul extends React.Component {
                       <th>Luna</th>
                       <th>Zile Lucrate</th>
                       <th>Salariu realizat</th>
-                      <th></th>
                     </tr>
                   </thead>
                   <tbody>{this.state.bazacalculComponent}</tbody>
@@ -487,4 +297,4 @@ class BazaCalcul extends React.Component {
   }
 }
 
-export default BazaCalcul;
+export default BazaCalculView;

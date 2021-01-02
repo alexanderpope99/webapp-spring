@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -558,7 +558,7 @@ class FacturiTabel extends React.Component {
                     onChange={(e) => this.setState({ descriereactivitati: e.target.value })}
                   />
                 </Form.Group>
-								<Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="6">
                   <Form.Label>Cod proiect</Form.Label>
                   <Form.Control
                     type="text"
@@ -665,6 +665,10 @@ class FacturiTabel extends React.Component {
 
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Facturi</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Facturi</Card.Title>

@@ -54,6 +54,15 @@ public class RetineriController {
 		return ResponseEntity.ok().body(retineri);
 	}
 
+	@GetMapping("{idc}/pensiefac/{an}")
+	public ResponseEntity<Float> getTotalPensieFacByYear(@PathVariable(value = "idc") int idc,
+			@PathVariable(value = "an") int an) {
+		Float totalPensieFac = retineriRepository.getTotalPensieFacByYear(idc, an);
+		if(totalPensieFac == null)
+				return ResponseEntity.ok().body(0f);
+		else return ResponseEntity.ok().body(totalPensieFac);
+	}
+
 	@PostMapping
 	public Retineri createRetineri(@RequestBody Retineri retineri) {
 		return retineriRepository.save(retineri);

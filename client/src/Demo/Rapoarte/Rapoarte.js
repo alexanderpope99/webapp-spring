@@ -1,7 +1,6 @@
 import React from 'react';
 import Aux from '../../hoc/_Aux';
-import { Card } from 'react-bootstrap';
-import Typography from '@material-ui/core/Typography/Typography';
+import { Breadcrumb } from 'react-bootstrap';
 import { getSocSel } from '../Resources/socsel';
 import PlatiSalariiMTA from './PlatiSalariiMTA.js';
 import Dec112 from './Dec112.js';
@@ -21,11 +20,10 @@ class Rapoarte extends React.Component {
   render() {
     return (
       <Aux>
-        <Card className="border">
-          <Card.Header>
-            <Typography variant="h6">{this.state.socsel.nume}</Typography>
-          </Card.Header>
-        </Card>
+        <Breadcrumb style={{ fontSize: '12px' }}>
+          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+          <Breadcrumb.Item active>Rapoarte</Breadcrumb.Item>
+        </Breadcrumb>
         <Stat />
         <NotaContabila />
         <Pontaj />

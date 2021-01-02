@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CereriConcediu;
+import net.guides.springboot2.crud.dto.CereriConcediuDTO;
 import net.guides.springboot2.crud.repository.CereriConcediuRepository;
+import net.guides.springboot2.crud.services.CereriConcediuService;
 import net.guides.springboot2.crud.services.ZileService;
 
 import org.springframework.data.domain.Sort;
@@ -33,6 +35,9 @@ public class CereriConcediuController {
 
 	@Autowired
 	private ZileService zileService;
+
+	@Autowired
+	private CereriConcediuService cereriConcediuService;
 
 	@PutMapping("/zilelucratoareintre")
 	public long getZileLucratoareBetween(@RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
@@ -54,43 +59,40 @@ public class CereriConcediuController {
 	}
 
 	@GetMapping("/usersoc/{usrid}&{socid}")
-	public List<CereriConcediu> getCerereConcediuByUserIdAndSocietyId(@PathVariable(value = "usrid") int usrId,
+	public List<CereriConcediu> getCereriConcediuByUserIdAndSocietyId(@PathVariable(value = "usrid") int usrId,
 			@PathVariable(value = "socid") int socId) throws ResourceNotFoundException {
-		return cereriConcediuRepository.findCerereConcediuByUserIdAndSocietyId(usrId, socId);
+		return cereriConcediuRepository.findByUser_IdAndSocietate_Id(usrId, socId);
 	}
 
-	@GetMapping("/supsoc/{supid}&{socid}")
-	public List<CereriConcediu> getCerereConcediuBySuperiorIdAndSocietyId(@PathVariable(value = "supid") int supId,
-			@PathVariable(value = "socid") int socId) throws ResourceNotFoundException {
-		return cereriConcediuRepository.findCerereConcediuBySuperiorIdAndSocietyId(supId, socId);
+	@GetMapping("/soc/{socid}")
+	public List<CereriConcediu> getCerereConcediuBySocietyId(@PathVariable(value = "socid") int socId)
+			throws ResourceNotFoundException {
+		return cereriConcediuRepository.findBySocietate_Id(socId);
 	}
 
 	@PostMapping
-	public CereriConcediu createCereriConcediu(@RequestBody CereriConcediu cereriConcediu) {
-		return cereriConcediuRepository.save(cereriConcediu);
+	public CereriConcediuDTO createCereriConcediu(@RequestBody CereriConcediuDTO cereriConcediu)
+			throws ResourceNotFoundException {
+		return cereriConcediuService.save(cereriConcediu);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CereriConcediu> updateCereriConcediu(@PathVariable(value = "id") int cereriConcediuId,
-			@RequestBody CereriConcediu cereriConcediuDetails) throws ResourceNotFoundException {
-		CereriConcediu cereriConcediu = cereriConcediuRepository.findById(cereriConcediuId).orElseThrow(
-				() -> new ResourceNotFoundException("CentruCost not found for this id :: " + cereriConcediuId));
-
-		cereriConcediuDetails.setId(cereriConcediu.getId());
-		final CereriConcediu updatedCereriConcediu = cereriConcediuRepository.save(cereriConcediuDetails);
-		return ResponseEntity.ok(updatedCereriConcediu);
+	public CereriConcediuDTO updateCereriConcediu(@PathVariable(value = "id") int cereriConcediuId,
+			@RequestBody CereriConcediuDTO cereriConcediuDTODetails) throws ResourceNotFoundException {
+		cereriConcediuDTODetails.setId(cereriConcediuId);
+		return cereriConcediuService.save(cereriConcediuDTODetails);
 	}
 
 	@PutMapping("/statusappr/{id}")
 	public CereriConcediu approveStatus(@PathVariable(value = "id") int cereriConcediuId)
 			throws ResourceNotFoundException {
-		return cereriConcediuRepository.approveStatus(cereriConcediuId);
+		return cereriConcediuService.setStatus(cereriConcediuId, "Aprobat");
 	}
 
 	@PutMapping("/statusrej/{id}")
 	public CereriConcediu rejectStatus(@PathVariable(value = "id") int cereriConcediuId)
 			throws ResourceNotFoundException {
-		return cereriConcediuRepository.rejectStatus(cereriConcediuId);
+		return cereriConcediuService.setStatus(cereriConcediuId, "Respins");
 	}
 
 	@DeleteMapping("{id}")

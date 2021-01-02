@@ -50,31 +50,31 @@ class AdminLayout extends Component {
 
     return (
       <Aux>
-          <Navigation />
-          <NavBar />
-          <div className="pcoded-main-container" onClick={() => this.mobileOutClickHandler}>
-            <div className="pcoded-wrapper">
-              <div className="pcoded-content">
-                <div className="pcoded-inner-content">
-                  <Breadcrumb />
-                  <div className="main-body">
-                    <div className="page-wrapper">
-                      <Suspense fallback={<Loader />}>
-                        <Switch>
-                          {sessionStorage.getItem('user') === null ? (
-                            <Redirect to="/auth/signin-1" />
-                          ) : (
-                            menu
-                          )}
-                          <Redirect from="/" to={this.props.defaultPath} />
-                        </Switch>
-                      </Suspense>
-                    </div>
+        <Navigation />
+        <NavBar />
+        <div className="pcoded-main-container" onClick={() => this.mobileOutClickHandler}>
+          <div className="pcoded-wrapper">
+            <div className="pcoded-content">
+              <div className="pcoded-inner-content">
+                <Breadcrumb />
+                <div className="main-body">
+                  <div className="page-wrapper">
+                    <Suspense fallback={<Loader />}>
+                      <Switch>
+                        {sessionStorage.getItem('user') === null ? (
+                          <Redirect to="/auth/signin-1" />
+                        ) : (
+                          menu
+                        )}
+                        <Redirect from="/" to={this.props.defaultPath} />
+                      </Switch>
+                    </Suspense>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </Aux>
     );
   }

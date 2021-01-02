@@ -1,5 +1,14 @@
 import React from 'react';
-import { Row, Col, Card, Button, Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Table,
+  OverlayTrigger,
+  Tooltip,
+  Breadcrumb,
+} from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import axios from 'axios';
 import Popover from '@material-ui/core/Popover';
@@ -12,6 +21,8 @@ import { getSocSel } from '../Resources/socsel';
 import { setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
 import authHeader from '../../services/auth-header';
+import authService from '../../services/auth.service';
+
 import { RotateCw, UserPlus, Trash2, Info, FileText } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
@@ -23,13 +34,14 @@ class AngajatiTabel extends React.Component {
 
     this.state = {
       socsel: getSocSel(),
+      user: authService.getCurrentUser(),
       angajati: [],
       angajatiComponent: null,
     };
   }
 
   componentDidMount() {
-    if (!getSocSel()) window.location.href = '/dashboard/societati';
+    if (!getSocSel() || authService.isAngajatSimplu()) window.location.href = '/dashboard/societati';
 
     this.onRefresh();
     window.scrollTo(0, 0);
@@ -195,12 +207,13 @@ class AngajatiTabel extends React.Component {
       <Aux>
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">
-                  Angajați
-                  {this.state.socsel ? ' - ' + this.state.socsel.nume : ''}
-                </Card.Title>
+                <Card.Title as="h5">Angajați</Card.Title>
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 250 }}

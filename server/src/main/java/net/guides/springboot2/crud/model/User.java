@@ -32,7 +32,7 @@ public class User implements Serializable {
 	@Size(max = 120)
 	private String password;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	private List<Angajat> angajati;
 
 	@JsonBackReference(value = "user-role")

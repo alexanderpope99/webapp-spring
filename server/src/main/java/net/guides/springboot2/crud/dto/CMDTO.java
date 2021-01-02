@@ -7,8 +7,6 @@ import net.guides.springboot2.crud.model.Contract;
 public class CMDTO {
 	private int id;
 
-	private int idcontract;
-
 	private LocalDate dela;
 
 	private LocalDate panala;
@@ -27,25 +25,29 @@ public class CMDTO {
 
 	private String codurgenta;
 
-	private Double procent;
+	private Float procent;
 
 	private String codboalainfcont;
 
-	private Double bazacalcul;
+	private Float bazacalcul;
 
-	private Double bazacalculplafonata;
+	private Float bazacalculplafonata;
 
 	private Integer zilebazacalcul;
 
-	private Double mediezilnica;
+	private Float mediezilnica;
 
 	private Integer zilefirma;
 
-	private Double indemnizatiefirma;
+	private Float indemnizatiefirma;
 
 	private Integer zilefnuass;
 
-	private Double indemnizatiefnuass;
+	private Float indemnizatiefnuass;
+
+	private Integer zilefaambp;
+
+	private Float indemnizatiefaambp;
 
 	private String locprescriere;
 
@@ -57,15 +59,17 @@ public class CMDTO {
 
 	private String conditii;
 
+	private int idcontract;
+
 	private Contract contract;
 
 	private String codindemnizatie;
 
-	public Double getBazacalcul() {
+	public Float getBazacalcul() {
 		return bazacalcul;
 	}
 
-	public Double getBazacalculplafonata() {
+	public Float getBazacalculplafonata() {
 		return bazacalculplafonata;
 	}
 
@@ -105,17 +109,17 @@ public class CMDTO {
 		return id;
 	}
 
-	public Integer getIdontract() {
+	public Integer getIdcontract() {
 		if (contract == null)
 			return idcontract;
 		return contract.getId();
 	}
 
-	public Double getIndemnizatiefirma() {
+	public Float getIndemnizatiefirma() {
 		return indemnizatiefirma;
 	}
 
-	public Double getIndemnizatiefnuass() {
+	public Float getIndemnizatiefnuass() {
 		return indemnizatiefnuass;
 	}
 
@@ -123,7 +127,7 @@ public class CMDTO {
 		return locprescriere;
 	}
 
-	public Double getMediezilnica() {
+	public Float getMediezilnica() {
 		return mediezilnica;
 	}
 
@@ -135,7 +139,7 @@ public class CMDTO {
 		return panala;
 	}
 
-	public Double getProcent() {
+	public Float getProcent() {
 		return procent;
 	}
 
@@ -159,11 +163,11 @@ public class CMDTO {
 		return codindemnizatie;
 	}
 
-	public void setBazacalcul(Double bazacalcul) {
+	public void setBazacalcul(Float bazacalcul) {
 		this.bazacalcul = bazacalcul;
 	}
 
-	public void setBazacalculplafonata(Double bazacalculplafonata) {
+	public void setBazacalculplafonata(Float bazacalculplafonata) {
 		this.bazacalculplafonata = bazacalculplafonata;
 	}
 
@@ -207,19 +211,19 @@ public class CMDTO {
 		this.contract = contract;
 	}
 
+	public void setIdcontract(int idcontract) {
+		this.idcontract = idcontract;
+	}
+	
 	public void setIdcontract(Contract contract) {
 		this.idcontract = contract.getId();
 	}
 
-	public void setIdcontract(int idcontract) {
-		this.idcontract = idcontract;
-	}
-
-	public void setIndemnizatiefirma(Double indemnizatiefirma) {
+	public void setIndemnizatiefirma(Float indemnizatiefirma) {
 		this.indemnizatiefirma = indemnizatiefirma;
 	}
 
-	public void setIndemnizatiefnuass(Double indemnizatiefnuass) {
+	public void setIndemnizatiefnuass(Float indemnizatiefnuass) {
 		this.indemnizatiefnuass = indemnizatiefnuass;
 	}
 
@@ -227,7 +231,7 @@ public class CMDTO {
 		this.locprescriere = locprescriere;
 	}
 
-	public void setMediezilnica(Double mediezilnica) {
+	public void setMediezilnica(Float mediezilnica) {
 		this.mediezilnica = mediezilnica;
 	}
 
@@ -239,7 +243,7 @@ public class CMDTO {
 		this.panala = panala;
 	}
 
-	public void setProcent(Double procent) {
+	public void setProcent(Float procent) {
 		this.procent = procent;
 	}
 
@@ -285,5 +289,21 @@ public class CMDTO {
 
 	public void setCodindemnizatie(String codindemnizatie) {
 		this.codindemnizatie = codindemnizatie;
+	}
+
+	public Integer getZilefaambp() {
+		return zilefaambp;
+	}
+
+	public void setZilefaambp(Integer zilefaambp) {
+		this.zilefaambp = zilefaambp;
+	}
+
+	public Float getIndemnizatiefaambp() {
+		return indemnizatiefaambp;
+	}
+
+	public void setIndemnizatiefaambp(Float indemnizatiefaambp) {
+		this.indemnizatiefaambp = indemnizatiefaambp;
 	}
 }

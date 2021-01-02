@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { download } from '../Resources/download';
-import { months } from '../Resources/months';
+import { luni }from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import authService from '../../services/auth.service';
@@ -35,7 +35,7 @@ class Stat extends React.Component {
 
   setCurrentYearMonth() {
     let today = new Date();
-    let luna = months[today.getMonth()];
+    let luna = luni[today.getMonth()];
     let an = today.getFullYear();
 
     this.setState({
@@ -67,7 +67,7 @@ class Stat extends React.Component {
   }
 
   render() {
-    const luni = months.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
+    const luniComponent = luni.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
     return (
       <React.Fragment>
@@ -89,7 +89,7 @@ class Stat extends React.Component {
                       })
                     }
                   >
-                    {luni}
+                    {luniComponent}
                   </Form.Control>
                 </Col>
                 {/* AN */}

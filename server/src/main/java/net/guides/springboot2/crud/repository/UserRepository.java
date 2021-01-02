@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	List<User> findBySocietati_Id(int idsocietate);
 
+	List<User> findBySocietati_IdOrderByUsernameAsc(int idsocietate);
+
 	@Query(value = "select roles.id as \"id\",roles.name as \"name\" from users LEFT JOIN user_roles on user_roles.user_id=users.id LEFT JOIN roles on user_roles.role_id=roles.id where users.id=?1", nativeQuery = true)
 	List<RoleDTO> getRolesByUserId(int id);
 

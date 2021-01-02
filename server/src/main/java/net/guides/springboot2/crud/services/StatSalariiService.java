@@ -931,7 +931,7 @@ public class StatSalariiService {
 		}
 	} // ! createStatSalarii per societate
 
-	public boolean createStatIndividual(int luna, int an, int idangajat, int idsocietate, int userID)
+	public boolean createStatIndividual(int luna, int an, int idangajat, int idsocietate, int userID, Boolean recalc)
 			throws ResourceNotFoundException {
 		try {
 			Societate societate = societateRepository.findById(idsocietate)
@@ -943,6 +943,17 @@ public class StatSalariiService {
 
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
+
+			int idcontract = contract.getId();
+			RealizariRetineri realizariRetineri;
+			if(recalc == null || !recalc)
+				realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
+			else
+				realizariRetineri = realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
+				
+			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
+
+
 
 			String statTemplateLocation = homeLocation + "/templates";
 			FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatIndividual.xlsx"));
@@ -1002,10 +1013,6 @@ public class StatSalariiService {
 
 			// * write date angajat
 			int impozitScutit = 0;
-			int idcontract = contract.getId();
-
-			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
-			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 
 			impozitScutit += realizariRetineri.getImpozitscutit();
 

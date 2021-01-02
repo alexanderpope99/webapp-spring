@@ -49,10 +49,6 @@ public class Angajat implements Serializable {
 	@OneToMany(mappedBy = "superior")
 	private List<Angajat> subalterni;
 
-	@JsonBackReference(value = "cerereconcediu-angajat")
-	@OneToMany(mappedBy = "pentru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<CereriConcediu> cereriConcediu;
-
 	@JsonBackReference(value = "persoanaintretinere-angajat")
 	@OneToMany(mappedBy = "angajat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PersoanaIntretinere> persoaneintretinere;
@@ -101,6 +97,7 @@ public class Angajat implements Serializable {
 	public Angajat getSuperior() {
 		return superior;
 	}
+
 	public void setSuperior(Angajat superior) {
 		this.superior = superior;
 	}
@@ -108,21 +105,23 @@ public class Angajat implements Serializable {
 	public List<Bazacalcul> getBazaCalcul() {
 		return bazaCalcul;
 	}
-	public List<CereriConcediu> getCereriConcediu() {
-		return cereriConcediu;
-	}
+
 	public List<Factura> getFacturi() {
 		return facturi;
 	}
+
 	public int getIdpersoana() {
 		return idpersoana;
 	}
+
 	public List<PersoanaIntretinere> getPersoaneintretinere() {
 		return persoaneintretinere;
 	}
+
 	public List<Angajat> getSubalterni() {
 		return subalterni;
 	}
+
 	public User getUser() {
 		return user;
 	}
@@ -130,21 +129,23 @@ public class Angajat implements Serializable {
 	public void setBazaCalcul(List<Bazacalcul> bazaCalcul) {
 		this.bazaCalcul = bazaCalcul;
 	}
-	public void setCereriConcediu(List<CereriConcediu> cereriConcediu) {
-		this.cereriConcediu = cereriConcediu;
-	}
+
 	public void setFacturi(List<Factura> facturi) {
 		this.facturi = facturi;
 	}
+
 	public void setIdpersoana(int idpersoana) {
 		this.idpersoana = idpersoana;
 	}
+
 	public void setPersoaneintretinere(List<PersoanaIntretinere> persoaneintretinere) {
 		this.persoaneintretinere = persoaneintretinere;
 	}
+
 	public void setSubalterni(List<Angajat> subalterni) {
 		this.subalterni = subalterni;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}

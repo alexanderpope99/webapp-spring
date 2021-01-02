@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -27,6 +27,7 @@ class UserTabel extends React.Component {
     this.deleteUser = this.deleteUser.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
+    this.folosesteDateleAngajatului = this.folosesteDateleAngajatului.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
@@ -38,6 +39,7 @@ class UserTabel extends React.Component {
       user: null,
       username: '',
       email: '',
+      gen: false,
       idAngajat: '',
       numeAngajat: '',
       roles: [], // [...id's as strings] selected in multiselect-dropdown
@@ -55,9 +57,10 @@ class UserTabel extends React.Component {
       socs: [],
 
       // for select/multiselect components
-      all_roles: [], // array of {key: role.id, label: role.name}  object - multiselect
-      all_societati: [], // array of {key: soc.id, label: soc.nume} objects - multiselect
-      all_angajati_of_socsel: [], // array of Persoana objects - simple select
+      all_roles: [], // array of {key: role.id, label: role.name}  object - used in multiselect
+      all_societati: [], // array of {key: soc.id, label: soc.nume} objects - used in multiselect
+      all_angajati_of_socsel: [], // array of Angajat - used in ?
+      all_angajati_of_socsel_nouser: [], // array of Angajat with User=null- user in select
     };
   }
 
@@ -66,6 +69,7 @@ class UserTabel extends React.Component {
       user: null,
       username: '',
       email: '',
+      gen: false,
       idAngajat: '',
       numeAngajat: '',
       roles: [],
@@ -75,7 +79,14 @@ class UserTabel extends React.Component {
     });
   }
 
-  async componentDidMount() {
+  async getAngajatiFaraUser() {
+    return await axios
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&nu`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+  }
+
+  async init() {
     // get all societati
     var all_societati = await axios
       .get(`${server.address}/societate`, { headers: authHeader() })
@@ -94,15 +105,23 @@ class UserTabel extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
+    var all_angajati_of_socsel_nouser = await this.getAngajatiFaraUser();
+
     this.setState(
       {
         all_roles: all_roles,
         all_societati: all_societati,
         all_angajati_of_socsel: all_angajati_of_socsel,
+        all_angajati_of_socsel_nouser: all_angajati_of_socsel_nouser,
       },
       this.onRefresh
     );
     window.scrollTo(0, 0);
+  }
+
+  componentDidMount() {
+    if (!getSocSel()) window.location.href = '/dashboard/societati';
+    else this.init();
   }
 
   onChangeAngajat(e) {
@@ -114,10 +133,90 @@ class UserTabel extends React.Component {
     });
   }
 
-  async addUser() {}
+  async submitUser(user, method) {
+    if (method === 'put') {
+      const ok = await axios
+        .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error(err));
+      if (ok) {
+        this.setState(
+          {
+            show: false,
+            showConfirm: true,
+            modalMessage: 'Utilizator actualizat',
+          },
+          this.onRefresh
+        );
+      }
+    } else if (method === 'post') {
+      const ok = await axios
+        .post(`${server.address}/user`, user, { headers: authHeader() })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error(err));
+      if (ok) {
+        this.setState(
+          {
+            show: false,
+            showConfirm: true,
+            modalMessage: 'Utilizator adăugat',
+          },
+          this.onRefresh
+        );
+      }
+    }
+  }
+
+  async addUser() {
+    if (
+      this.state.roles.length === 0 ||
+      this.state.societati.length === 0 ||
+      !this.state.username ||
+      !this.state.email
+    )
+      return;
+
+    // rebuild user.roles
+    const user_roles = [
+      ...this.state.roles.map((idrole) => ({
+        id: Number(idrole),
+        name: this.state.all_roles.find((role) => role.key == idrole).label,
+      })),
+    ];
+
+    // rebuild user.societati
+    const user_societati = [
+      ...this.state.societati.map((idsoc) => ({
+        id: Number(idsoc),
+        nume: this.state.all_societati.find((soc) => soc.key == idsoc).label,
+      })),
+    ];
+
+    // angajat
+    var angajat = null;
+    if (this.state.idAngajat) {
+      angajat = this.state.all_angajati_of_socsel.find(
+        (ang) => ang.idpersoana == this.state.idAngajat
+      );
+    }
+
+    // build user
+    const user = {
+      username: this.state.username,
+      email: this.state.email,
+      gen: this.state.gen,
+      angajati: [angajat],
+      roles: user_roles,
+      societati: user_societati,
+    };
+
+    this.submitUser(user, 'post');
+  }
 
   async updateUser() {
-    if (!this.state.roles || !this.state.user) return;
+    if (!this.state.roles || !this.state.societati || !this.state.user) return;
 
     var user = this.state.user;
     const user_roles = [
@@ -128,7 +227,7 @@ class UserTabel extends React.Component {
     ];
     user.roles = user_roles;
 
-    // rebuild user.societati as it was recieved for compatibility convenience
+    // rebuild user.societati as it was recieved | for compatibility convenience
     const user_societati = [
       ...this.state.societati.map((idsoc) => ({
         id: Number(idsoc),
@@ -149,33 +248,24 @@ class UserTabel extends React.Component {
       if (Array.isArray(user.angajati)) user.angajati.push(angajat);
       else user.angajati = [angajat];
     }
+    user.gen = this.state.gen;
 
-    console.log('sent:', user);
+    // console.log(user);
+    this.submitUser(user, 'put');
+  }
 
-    const ok = await axios
-      .put(`${server.address}/user/${user.id}/ids=${this.state.socsel.id}`, user, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
-    if (ok) {
-      this.setState(
-        {
-          show: false,
-          showConfirm: true,
-          modalMessage: 'Utilizator actualizat',
-        },
-        this.onRefresh
-      );
-    }
+  async onSubmit(e) {
+    e.preventDefault();
+    if (this.state.isEdit) this.updateUser();
+    else this.addUser();
   }
 
   async editUser(user) {
-    console.log(user);
     // filter user.angajati to only keep the angajat from socsel
     let angajat = user.angajati.find((ang) => ang.societate.id === this.state.socsel.id);
     // let angajati = user.angajati.filter((angajat) => console.log(angajat));
 
+    // console.log(user);
     this.setState({
       isEdit: true,
       show: true,
@@ -183,6 +273,7 @@ class UserTabel extends React.Component {
       user: user,
       username: user.username,
       email: user.email,
+      gen: user.gen,
       idAngajat: angajat ? angajat.idpersoana : '',
       numeAngajat: angajat ? angajat.persoana.nume + ' ' + angajat.persoana.prenume : '',
       roles: user.roles.map((role) => String(role.id)),
@@ -204,9 +295,16 @@ class UserTabel extends React.Component {
       .get(`${server.address}/user/ids=${socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
+    const all_angajati_of_socsel_nouser = await this.getAngajatiFaraUser();
     // render table
     if (users) {
-      this.setState({ users: users }, this.renderUsers);
+      this.setState(
+        {
+          users: users,
+          all_angajati_of_socsel_nouser: all_angajati_of_socsel_nouser,
+        },
+        this.renderUsers
+      );
     }
   }
 
@@ -262,7 +360,7 @@ class UserTabel extends React.Component {
                             variant="outline-danger"
                             onClick={() => {
                               popupState.close();
-                              this.deleteSocietate(user.id);
+                              this.deleteUser(user.id);
                             }}
                             className="mt-2"
                           >
@@ -288,12 +386,6 @@ class UserTabel extends React.Component {
     });
   }
 
-  async onSubmit(e) {
-    e.preventDefault();
-    if (this.state.isEdit) this.updateUser(this.state.id);
-    else this.addUser();
-  }
-
   async handleClose() {
     this.setState(
       {
@@ -313,24 +405,57 @@ class UserTabel extends React.Component {
     );
   }
 
+  folosesteDateleAngajatului() {
+    const idAngajatSel = Number(this.state.idAngajat);
+    if (!idAngajatSel) return;
+
+    const angajatSel = this.state.all_angajati_of_socsel_nouser.find(
+      (angajat) => angajat.idpersoana === idAngajatSel
+    );
+    const username = (
+      angajatSel.persoana.nume +
+      '.' +
+      angajatSel.persoana.prenume.split(/-| /)[0]
+    ).toLowerCase();
+    const email = angajatSel.persoana.email || '';
+    this.setState({
+      username: username,
+      email: email,
+    });
+  }
+
   render() {
     var angajati = [];
-    if (this.state.all_angajati_of_socsel.length > 0)
-      angajati = this.state.all_angajati_of_socsel.map((angajat, index) => (
-        <option key={index} data-key={angajat.persoana.id}>
-          {angajat.persoana.nume + ' ' + angajat.persoana.prenume}
-        </option>
-      ));
+    if (this.state.all_angajati_of_socsel_nouser.length > 0) {
+      if (this.state.isEdit && this.state.user.angajati.length > 0) {
+        let angajatSel = this.state.all_angajati_of_socsel.find(
+          (angajat) => angajat.idpersoana === Number(this.state.user.angajati[0].idpersoana)
+        );
+        angajati.unshift(
+          <option key={angajatSel.persoana.id} data-key={angajatSel.persoana.id}>
+            {angajatSel.persoana.nume + ' ' + angajatSel.persoana.prenume}
+          </option>
+        );
+      }
+
+      this.state.all_angajati_of_socsel_nouser.map((angajat) =>
+        angajati.push(
+          <option key={angajat.persoana.id} data-key={angajat.persoana.id}>
+            {angajat.persoana.nume + ' ' + angajat.persoana.prenume}
+          </option>
+        )
+      );
+    }
 
     return (
       <Aux>
-        {/* add/edit modal */}
+        {/* ADD/EDIT MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={this.addCerereConcediu}>
+            <Form onSubmit={this.onSubmit}>
               <Row>
                 <Form.Group as={Col} lg="6">
                   <Form.Label>Username</Form.Label>
@@ -343,6 +468,14 @@ class UserTabel extends React.Component {
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
                   <Form.Label>Email</Form.Label>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="float float-right m-0 p-0"
+                    onClick={this.folosesteDateleAngajatului}
+                  >
+                    {this.state.isEdit ? '' : 'Folosește datele angajatului'}
+                  </Button>
                   <Form.Control
                     type="text"
                     disabled={this.state.isEdit}
@@ -351,7 +484,10 @@ class UserTabel extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group as={Col} lg="6">
-                  <Form.Label>Angajat al {this.state.socsel.nume} asociat cu acest user</Form.Label>
+                  <Form.Label>
+                    Angajat al {this.state.socsel ? this.state.socsel.nume : null} asociat cu acest
+                    user
+                  </Form.Label>
                   <Form.Control
                     as="select"
                     value={this.state.numeAngajat || ''}
@@ -389,7 +525,7 @@ class UserTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* confirm modal */}
+        {/* CONFIRM MODAL */}
         <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -402,11 +538,18 @@ class UserTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
+        {/* PAGE CONTENTS */}
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item active>Utilizatori</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">{this.state.socsel.nume} - Useri</Card.Title>
+                <Card.Title as="h5">
+                  {this.state.socsel ? this.state.socsel.nume : null} - Useri
+                </Card.Title>
 
                 <Button
                   variant="outline-info"

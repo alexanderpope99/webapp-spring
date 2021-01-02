@@ -104,8 +104,6 @@ public class AuthController {
 
         User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
-        // String reqPassword = encoder.encode(changePasswordRequest.getPassword());
-
         if (!encoder.matches(changePasswordRequest.getPassword(), user.getPassword()))
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Parolă actuală incorectă!"));
 

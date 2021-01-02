@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.UserDTO;
@@ -21,6 +22,8 @@ import net.guides.springboot2.crud.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	PasswordEncoder encoder;
 
 	@Autowired
 	private SocietateRepository societateRepository;
@@ -46,16 +49,62 @@ public class UserService {
 	}
 
 	public List<UserDTO> findByIdsocietate(int idsocietate) {
+		List<User> users = userRepository.findBySocietati_IdOrderByUsernameAsc(idsocietate);
+
 		modelMapper.typeMap(User.class, UserDTO.class).addMapping(User::getSocietati, UserDTO::setSocietatiClass);
-		List<User> users = userRepository.findBySocietati_Id(idsocietate);
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
 	}
+
+	public UserDTO save(UserDTO newUserDTO) throws ResourceNotFoundException {
+		if (userRepository.existsByUsername(newUserDTO.getUsername())) {
+			throw new ResourceNotFoundException("Error: Username is already in use!");
+		}
+
+		if (userRepository.existsByEmail(newUserDTO.getEmail())) {
+			throw new ResourceNotFoundException("Error: Email is already in use!");
+		}
+
+		// convert from dto to model :: sets Roles
+		User newUser = modelMapper.map(newUserDTO, User.class);
+
+		// set basic password cripted from "parola" :: this needs to be changed by user
+		newUser.setPassword(encoder.encode("parola"));
+
+		// set angajat
+		List<Angajat> newAngajati = new ArrayList<>();
+		newUserDTO.getAngajati().forEach(angajatOpt -> {
+			// get from db and push to list
+			Angajat tmpAngajat = angajatRepository.findById(angajatOpt.getIdpersoana()).get();
+
+			// angajat needs to point to this user
+			tmpAngajat.setUser(newUser);
+
+			newAngajati.add(tmpAngajat);
+		});
+		// set newUser with complete Angajati list
+		newUser.setAngajati(newAngajati);
+
+		// convert from UserDTO.SocietateJSON to User.Societate
+		List<Societate> newSocietati = new ArrayList<>();
+		newUserDTO.getSocietati()
+				.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
+		newUser.setSocietati(newSocietati);
+
+		int newUserId = userRepository.save(newUser).getId();
+		newUserDTO.setId(newUserId);
+		return newUserDTO;
+	} // save
 
 	public UserDTO update(UserDTO newUserDTO, int idsocietate) throws ResourceNotFoundException {
 		// unassign angajat.user
 		User oldUser = userRepository.findById(newUserDTO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + newUserDTO.getId()));
 
+		// keep old password :: newUserDTO doesn't have password
+		User newUser = modelMapper.map(newUserDTO, User.class);
+		newUser.setPassword(oldUser.getPassword());
+
+		// remove angajat from current societate
 		oldUser.getAngajati().forEach(angajat -> {
 			if (angajat.getSocietate().getId() == idsocietate) {
 				angajat.setUser(null);
@@ -63,24 +112,20 @@ public class UserService {
 			}
 		});
 
-		User newUser = modelMapper.map(newUserDTO, User.class);
-		newUser.setPassword(oldUser.getPassword());
-
-		// * keep angajati connected to user <- on frontend: angajati.user is null
-		// page making this request will not change angajat content, but can change the
-		// list
+		// * keep angajati connected to user :: on frontend, angajati.user is null
+		// page making this request will not change angajat content
 		// make new List of angajati with id's from request list
 		List<Angajat> newAngajati = new ArrayList<>();
 		newUserDTO.getAngajati().forEach(angajatOpt -> {
 			// get from db and push to list
 			Angajat tmpAngajat = angajatRepository.findById(angajatOpt.getIdpersoana()).get();
 
-			// each angajat needs to point to this user
+			// angajat needs to point to this user
 			tmpAngajat.setUser(newUser);
 
 			newAngajati.add(tmpAngajat);
 		});
-		// set newUser with complete Angajati data
+		// set newUser with complete Angajati list
 		newUser.setAngajati(newAngajati);
 
 		// set societati
@@ -89,8 +134,18 @@ public class UserService {
 				.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
 		newUser.setSocietati(newSocietati);
 
+		// save to db
 		userRepository.save(newUser);
 
 		return newUserDTO;
+	} // update
+
+	public void delete(int userId) throws ResourceNotFoundException {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+		
+		user.getAngajati().forEach(angajat -> angajat.setUser(null));
+
+		userRepository.delete(user);
 	}
 }

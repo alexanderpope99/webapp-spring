@@ -99,6 +99,11 @@ public class UserController {
 		return userRepository.getRolesByUserId(usrid);
 	}
 
+	@PostMapping
+	public UserDTO saveUser(@RequestBody UserDTO newUser) throws ResourceNotFoundException {
+		return userService.save(newUser);
+	}
+
 	@PutMapping("{id}/ids={ids}")
 	public UserDTO updateUser(@PathVariable("id") int id, @PathVariable("ids") int idsocietate, @RequestBody UserDTO newUserDTO)
 			throws ResourceNotFoundException {
@@ -107,10 +112,11 @@ public class UserController {
 
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+		// User user = userRepository.findById(id)
+		// 		.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 
-		userRepository.delete(user);
+		// userRepository.delete(user);
+		userService.delete(id);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

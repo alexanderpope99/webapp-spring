@@ -43,8 +43,8 @@ public class CMService {
 		// convert from DTO to Entity
 		CM cm = modelMapper.map(cmDTO, CM.class);
 
-		Contract contract = contractRepository.findById(cmDTO.getIdontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + cmDTO.getIdontract()));
+		Contract contract = contractRepository.findById(cmDTO.getIdcontract())
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + cmDTO.getIdcontract()));
 		cm.setContract(contract);
 
 		// save to DB

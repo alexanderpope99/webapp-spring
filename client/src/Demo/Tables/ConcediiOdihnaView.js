@@ -1,10 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Edit3, Trash2, RotateCw } from 'react-feather';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
+import { Eye, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -14,21 +10,14 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import { countWeekendDays } from '../Resources/cm';
 
-import { tip_concedii } from '../../Demo/Resources/tip-concedii';
-
-const tip_concedii_component = tip_concedii.map((tip, index) => <option key={index}>{tip}</option>);
-
-class COTabel extends React.Component {
+class ConcediiOdihnaView extends React.Component {
   constructor() {
     super();
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
-    this.clearCO = this.clearCO.bind(this);
-    this.deleteCO = this.deleteCO.bind(this);
-    this.addCO = this.addCO.bind(this);
-    this.updateCO = this.updateCO.bind(this);
-    this.editCO = this.editCO.bind(this);
+		this.clearCO = this.clearCO.bind(this);
+		this.viewCO = this.viewCO.bind(this);
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
@@ -41,7 +30,6 @@ class COTabel extends React.Component {
       today: '',
       an: '',
       luna: { nume: '-', nr: '-' },
-      zile_co_disponibile: 21,
 
       ultimul_an: '',
       ani_cu_concediu: [],
@@ -100,15 +88,6 @@ class COTabel extends React.Component {
     }
   }
 
-  async getZileCoDisponibile() {
-    await axios
-      .get(`${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}`, {
-        headers: authHeader(),
-      })
-      .then((res) => this.setState({ zile_co_disponibile: res.data }))
-      .catch((err) => console.error(err));
-  }
-
   componentDidMount() {
     this.setCurrentYear();
     this.updateAngajatSel();
@@ -149,57 +128,10 @@ class COTabel extends React.Component {
                 <Button
                   variant="outline-secondary"
                   className="ml-2 p-1 rounded-circle border-0"
-                  onClick={() => this.editCO(co)}
+                  onClick={() => this.viewCO(co)}
                 >
-                  <Edit3 size={20} />
+                  <Eye size={20} />
                 </Button>
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-0 p-1 rounded-circle border-0"
-                        {...bindTrigger(popupState)}
-                      >
-                        <Trash2 fontSize="small" />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>Sigur ștergeți concediul?</Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
-                          <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteCO(co.id);
-                            }}
-                            className="mt-2 "
-                          >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
               </th>
             </tr>
           );
@@ -221,7 +153,10 @@ class COTabel extends React.Component {
           nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
         },
       },
-      this.renderCO
+      () => {
+        this.renderCO();
+        console.log(this.state.luna);
+      }
     );
   }
 
@@ -276,7 +211,7 @@ class COTabel extends React.Component {
         if (c.panala) {
           ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
         }
-			}
+      }
       // add ani in luni_cu_concediu
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = new Set();
@@ -287,18 +222,15 @@ class COTabel extends React.Component {
           an = c.dela.substring(0, 4);
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
         }
-			}
-			// add current year even if if doesn't have co
-			// ani_cu_concediu.add(2021);
+      }
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-			}
-
-      this.getZileCoDisponibile();
-
+      }
+			
 			let thisYear = new Date().getFullYear();
 			ani_cu_concediu.add(thisYear);
+			
       this.setState(
         {
           co: concedii,
@@ -338,94 +270,9 @@ class COTabel extends React.Component {
         panala: '',
         tip: 'Concediu de odihnă',
       });
-  }
-
-  async deleteCO(id) {
-    await axios
-      .delete(`${server.address}/co/${id}`, { headers: authHeader() })
-      .then(this.fillTable)
-      .catch((err) => console.error(err));
-  }
-
-  async addCO() {
-    if (!this.state.angajat) return;
-    if (!this.state.angajat.idcontract) {
-      this.setState({
-        show_confirm: true,
-        modalTitle: 'Angajatul are nevoide de un contract de muncă',
-      });
-      return;
-    }
-
-    const co_body = {
-      dela: this.state.dela || null,
-      panala: this.state.panala || null,
-      tip: this.state.tip || null,
-      idcontract: this.state.angajat.idcontract,
-    };
-
-    let ok = await axios
-      .post(`${server.address}/co`, co_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error('err:', err));
-
-    console.log(ok);
-    if (ok) {
-      // close add modal
-      this.handleClose();
-      // open confirm modal <- closes on OK button
-      this.setState({
-        show_confirm: true,
-        modalTitle: this.state.tip + ' adăugat cu succes 💾',
-      });
-      this.fillTable();
-    }
-  }
-
-  async updateCO() {
-    const dela = this.state.dela;
-    const panala = this.state.panala;
-    const nr_zile = this.state.nr_zile;
-    const nr_zile_weekend = this.state.nr_zile_weekend;
-
-    var co_body = {
-      id: this.state.id || null,
-      dela: this.state.dela || null,
-      panala: this.state.panala || null,
-      tip: this.state.tip || null,
-      idcontract: this.state.angajat.idcontract,
-    };
-
-    let ok = await axios
-      .put(`${server.address}/co/${this.state.id}`, co_body, {
-        headers: authHeader(),
-      })
-      .then((res) => res.status === 200)
-      .catch((err) => console.error('err:', err));
-
-    if (ok) {
-      // close add modal
-      this.handleClose();
-      // open confirm modal
-      this.setState({
-        show_confirm: true,
-        modalTitle: 'Concediu actualizat ✔',
-        modalMessage: (
-          <React.Fragment>
-            <p>
-              Concediu din {formatDate(dela)} pana in {formatDate(panala)}
-            </p>
-            <p>
-              {nr_zile} zile de concediu, din care {nr_zile_weekend} zile de weekend
-            </p>
-          </React.Fragment>
-        ),
-      });
-      this.fillTable();
-    }
-  }
-
-  editCO(co) {
+	}
+	
+  viewCO(co) {
     if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
@@ -464,9 +311,7 @@ class COTabel extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-		const exists = this.state.angajat && this.state.angajat.idcontract;
-		
-		const concediuIsValid = this.state.dela && (this.state.dela < this.state.panala);
+    let exists = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
@@ -477,45 +322,36 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group id="zilecodisponibile">
-                <Form.Label>
-                  {this.state.zile_co_disponibile} zile concediu de odihnă disponibile
-                </Form.Label>
-              </Form.Group>
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
+									disabled
                   required
                   type="date"
                   value={this.state.dela}
                   max={this.state.panala === this.state.dela ? null : this.state.panala}
-                  onChange={(e) => this.onChangeDela(e.target.value)}
                 />
               </Form.Group>
 
               <Form.Group id="panala">
                 <Form.Label>Până la (inclusiv)</Form.Label>
                 <Form.Control
+									disabled
                   required
                   type="date"
                   min={this.state.dela}
                   value={this.state.panala}
-                  onChange={(e) => this.onChangePanala(e.target.value)}
                 />
               </Form.Group>
 
               <Form.Group id="tip">
                 <Form.Label>Tip</Form.Label>
                 <Form.Control
+									disabled
                   required
-                  as="select"
+                  type="text"
                   value={this.state.tip}
-                  onChange={(e) => {
-                    this.setState({ tip: e.target.value });
-                  }}
-                >
-                  {tip_concedii_component}
-                </Form.Control>
+                />
               </Form.Group>
 
               <Form.Group>
@@ -528,28 +364,6 @@ class COTabel extends React.Component {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO} disabled={!concediuIsValid}>
-              {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* CONFIRM MODAL */}
-        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
-          <Modal.Header closeButton>
-            <Modal.Title>{this.state.modalTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="link" href="/forms/realizari-retineri">
-              Către realizări/rețineri
-            </Button>
-
-            <Button variant="outline-info" onClick={this.handleClose}>
-              Închide
-            </Button>
-          </Modal.Footer>
         </Modal>
 
         {/* PAGE CONTENTS */}
@@ -558,20 +372,6 @@ class COTabel extends React.Component {
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
-                <Button
-                  variant={exists ? 'outline-primary' : 'outline-dark'}
-                  className="float-right"
-                  disabled={!exists}
-                  onClick={() =>
-                    this.setState(
-                      { show: true, dela: this.state.today, panala: this.state.today },
-                      this.setNrZile
-                    )
-                  }
-                >
-                  Adaugă concediu
-                </Button>
-
                 <Button
                   variant={exists ? 'outline-primary' : 'outline-dark'}
                   size="sm"
@@ -628,4 +428,4 @@ class COTabel extends React.Component {
   }
 }
 
-export default COTabel;
+export default ConcediiOdihnaView;

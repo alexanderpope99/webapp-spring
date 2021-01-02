@@ -1,14 +1,32 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
+LAST-UPDATE : {
+->  2.1: menu-items.js: {
+					2.2: RealizariRetineri.js: {
+						all fields disabled,
+						get stat will not recalc salariu <- add flag in endpoint
+					},
+					2.3: cereri_concediu,
+				}
+}
+
 TODO: {
-	tabel useri sterge parola
+	2 -> pentru un angajat normal
+		
+		-> !! scrie if-ul AngajatiTabel.js:45 pentru toate la care nu are acces !!
+		-> fix controller PutMappings
+
+	1.1 -> mi-am uitat parola
+	1.2 -> reseteaza parola din panou utilizatori
+
+	*-> add sorting to tables on frontend 
 }
 
 UPGRADES: {
-	add breadcrumbs
 }
 
 UserTabel:
+	✔ can add User
 	✔ can edit Roles
 	✔ can edit Societati
 	✔ can edit Angajati
@@ -18,7 +36,7 @@ UserTabel:
 din ce se calculeaza CASS? din sal. realizat?
 
 CONCEDIU DE ODIHNA:
-	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) - INCLUDE WEEKEND?
+	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) -> INCLUDE WEEKEND?
 
 _________________________________________
 
