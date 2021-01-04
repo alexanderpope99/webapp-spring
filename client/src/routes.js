@@ -113,8 +113,7 @@ const routes = [
   { path: '/forms/form-basic', exact: true, name: 'Forms Elements', component: FormsElements },
   { path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: AddSocietate },
   { path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
-	{ path: '/forms/angajat', exact: true, name: 'Angajat', component: Angajat },
-	{ path: '/forms/angajat-simplu', exact: true, name: 'Angajat', component: AngajatSimplu },
+	{ path: '/forms/angajat', exact: true, name: 'Angajat', component: isAngajatSimplu ? AngajatSimplu : Angajat },
 
   {
     path: '/forms/realizari-retineri',

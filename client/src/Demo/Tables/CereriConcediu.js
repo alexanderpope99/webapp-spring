@@ -145,9 +145,7 @@ class CereriConcediuTabel extends React.Component {
     });
     await axios
       .get(
-        `${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}&y=${
-          this.state.dela.split('-')[0]
-        }`,
+        `${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}`,
         { headers: authHeader() }
       )
       .then((res) => this.setState({ zile_co_disponibile: res.data }))

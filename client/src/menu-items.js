@@ -89,7 +89,7 @@ var items = [
         id: 'angajati-tabel',
         title: 'Detalii angajat',
         type: 'item',
-        url: '/forms/angajat-simplu',
+        url: '/forms/angajat',
         icon: 'feather icon-users',
       },
     ],

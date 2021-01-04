@@ -250,7 +250,7 @@ class RealizariRetineriView extends React.Component {
     const contract = this.state.contract;
     console.log();
 
-    // if already calculated, gets existing data, if idstat does not exist for (idc, mo, y) => calc => saves to DB
+    // get data
     const data = await axios
       .get(`${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`, {
         headers: authHeader(),
@@ -625,7 +625,7 @@ class RealizariRetineriView extends React.Component {
 
         <Breadcrumb style={{ fontSize: '12px' }}>
           <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
-          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+          <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
           <Breadcrumb.Item active>Realizări & Rețineri</Breadcrumb.Item>
         </Breadcrumb>
 

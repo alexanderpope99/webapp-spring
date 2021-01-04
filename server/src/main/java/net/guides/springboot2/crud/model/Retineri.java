@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,7 +55,7 @@ public class Retineri implements Serializable {
 	private Integer pensiefacexcedent = 0;
 
 	@JsonBackReference(value = "retinere-stat")
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idstat")
 	private RealizariRetineri stat;
 
@@ -68,6 +69,7 @@ public class Retineri implements Serializable {
 		this.popriri = 0;
 		this.imprumuturi = 0;
 		this.curseurron = 0f;
+
 		this.pensiefacangajat = 0;
 		this.pensiefacangajator = 0;
 		this.pensiefacangajatretinuta = 0;
