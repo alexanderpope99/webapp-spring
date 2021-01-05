@@ -436,7 +436,9 @@ class CereriConcediuTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">{this.state.socsel ? this.state.socsel.nume+' - ' : ''}Cereri Concediu</Card.Title>
+                <Card.Title as="h5">
+                  {this.state.socsel ? this.state.socsel.nume + ' - ' : ''}Cereri Concediu
+                </Card.Title>
 
                 <Button
                   variant="outline-info"
