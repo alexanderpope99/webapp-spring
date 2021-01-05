@@ -72,7 +72,8 @@ LAST-UPDATE : {
 
 
 TODO: {
-	?? zile concediu disponibile depinde de concediile fara plata?
+    verifica persoane intretinere
+
 	2 -> pentru un angajat normal {
 		RealizariRetineri.js: {
 			* sa apara doar lunile in care sunt calculate salariile

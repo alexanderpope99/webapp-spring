@@ -142,6 +142,18 @@ create table cm_psql(
 	idcontract int
 );
 
+create table persoanaintretinere_psql(
+	id int not null identity(1, 1) primary key,
+	nume nvarchar(50),
+	prenume nvarchar(50),
+	cnp varchar(13),
+	grad nvarchar(50),
+	valid bit,
+	intretinut bit,
+	coasigurat bit,
+	idangajat int
+);
+
 insert into adresa_psql(adresa, localitate, judet, denumiresocietate) select strada, localitate, judet, denumire from societati;
 insert into adresa_psql(adresa, localitate, judet, cnp) select adresa, localitate, judet, cnp from personal;
 
@@ -250,3 +262,16 @@ insert into cm_psql(
 		cnpcopil,
 		(select id from contract_psql c where c.cnppersonal = certificatmedical.cnppersonal)
 	from certificatmedical;
+
+insert into persoanaintretinere_psql
+	(nume, prenume, cnp, grad, valid, intretinut, coasigurat, idangajat)
+	select 
+		nume,
+		prenume,
+		cnp,
+		gradrudenie,
+		validitate,
+		intretinut,
+		coasigurat,
+		(select id from persoana_psql p where p.cnppersonal = cnppersonal)
+	from coasigurati;
