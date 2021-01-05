@@ -1,5 +1,8 @@
 package net.guides.springboot2.crud.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.model.CereriConcediu;
+import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CORepository;
 import net.guides.springboot2.crud.repository.CereriConcediuRepository;
@@ -82,6 +86,22 @@ public class CereriConcediuService {
 		}
 		cereriConcediuRepository.save(cerereConcediu);
 		return cerereConcediu;
+	}
+
+	public List<CereriConcediuDTO> getCereriConcediuWithNumeUserBySocId(int socId) {
+		List<CereriConcediu> cereri = cereriConcediuRepository.findBySocietate_Id(socId);
+		List<CereriConcediuDTO> cereriDTO = new ArrayList<>();
+		for (CereriConcediu cerere : cereri) {
+			CereriConcediuDTO cerereDTO = modelMapper.map(cerere, CereriConcediuDTO.class);
+			Persoana persoana = angajatRepository.findBySocietate_IdAndUser_Id(socId, cerere.getUser().getId())
+					.getPersoana();
+			String nume = persoana.getNume() + " " + persoana.getPrenume();
+			cerereDTO.setIdsocietate(cerere.getSocietate().getId());
+			cerereDTO.setIduser(cerere.getUser().getId());
+			cerereDTO.setNumeuser(nume);
+			cereriDTO.add(cerereDTO);
+		}
+		return cereriDTO;
 	}
 
 }
