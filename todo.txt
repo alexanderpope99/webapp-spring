@@ -1,12 +1,13 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 {
 	include:
-		1. adrese
-		2. societati
-		3. angajati
-		4. persoane
-		5. contracte munca
-		6. concedii
+		1.✔ adrese
+		2.✔ societati
+		3.✔ persoane
+		4.✔ cont bancar
+		5.✔ contracte munca
+        6.✔ angajati
+		7.x concedii
 	conversion:
 	{
         Described like this:
@@ -26,7 +27,7 @@
                 datanasterii: extras din codnumericpersonal, 
                 // eliberatde: , 
                 dataeliberarii: eliberatla, 
-                // loculnasterii: 
+                // loculnasterii:
 			},
             adresa <- personal: {
                 adresa: adresa,
@@ -68,9 +69,6 @@ LAST-UPDATE : {
 	}
 	* fixed retineri is null in json reposnse when saving RealizariRetineri
 }
-
-IN CERERI CONCEDIU NU APARE CINE A FACUT CEREREA =)))))
-IN CERERI CONCEDIU NU APARE CINE A FACUT CEREREA =)))))
 
 
 TODO: {
