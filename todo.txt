@@ -1,4 +1,17 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
+{
+	include:
+		1. adrese
+		2. societati
+		3. angajati
+		4. persoane
+		5. contracte munca
+		6. concedii
+	how to do:
+		1. export data from sql server as .csv
+		2. write and execute queries for each table to enter data in postgresql
+		3. 
+}
 
 LAST-UPDATE : {
 	2 -> pentru un angajat normal {
