@@ -227,7 +227,10 @@ class ConcediiOdihnaView extends React.Component {
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
-
+			
+			let thisYear = new Date().getFullYear();
+			ani_cu_concediu.add(thisYear);
+			
       this.setState(
         {
           co: concedii,
@@ -308,7 +311,7 @@ class ConcediiOdihnaView extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-    let exists = this.state.angajat && this.state.angajat.idcontract;
+    let angajatContract = this.state.angajat && this.state.angajat.idcontract;
 
     return (
       <Aux>
@@ -370,10 +373,10 @@ class ConcediiOdihnaView extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
-                  variant={exists ? 'outline-primary' : 'outline-dark'}
+                  variant={angajatContract ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  disabled={!exists}
+                  disabled={!angajatContract}
                   onClick={this.fillTable}
                 >
                   <RotateCw className="m-0 p-0" />

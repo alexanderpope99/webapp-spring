@@ -1,39 +1,30 @@
 ########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
 
 LAST-UPDATE : {
+	2 -> pentru un angajat normal {
+		[RealizariRetineriView and AngajatSimplu] rendered instead of [RealizariRetineri and Angajat]
+	}
+	* fixed retineri is null in json reposnse when saving RealizariRetineri
 }
 
+IN CERERI CONCEDIU NU APARE CINE A FACUT CEREREA =)))))
+IN CERERI CONCEDIU NU APARE CINE A FACUT CEREREA =)))))
+
+
 TODO: {
-	2 -> pentru un angajat normal
-		->  2.1: menu-items.js: {
-					Angajat.js: {
-						[date_personale, contract, baza_calcul] - all disabled: {
-							EditPersoanaAngajat.js: {
-								all fields disabled
-								adauga persoana button does not exist
-								actualizeaza datele does not exist
-							}
-							Contract.js: {
-								all fields disabled
-								actualizeaza contract does not exist
-							}
+	?? zile concediu disponibile depinde de concediile fara plata?
+	2 -> pentru un angajat normal {
+		RealizariRetineri.js: {
+			* sa apara doar lunile in care sunt calculate salariile
+				-< alt endpoint care trebuie apelat in componentDidMount()
+		}
+	}
 
-						}
-						[co, cm, persoane_intretinere] - can click edit for details, all disabled,
-					},
-					2.2: RealizariRetineri.js: {
-						will not recalculate,
-						arata doar lunile calculate,
-						buttons disabled,
-						all fields disabled,
-					},
-					2.3: cereri_concediu,
-				}
-		-> !! scrie if-ul AngajatiTabel.js:45 pentru toate la care nu are acces !!
-		-> fix controller PutMappings
+	3.1 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
+	3.2 -> pune data by-default la facturi etc
 
-	1.1 -> mi-am uitat parola
-	1.2 -> reseteaza parola din panou utilizatori
+	4.1 -> mi-am uitat parola
+	4.2 -> reseteaza parola din panou utilizatori
 
 	*-> add sorting to tables on frontend 
 }

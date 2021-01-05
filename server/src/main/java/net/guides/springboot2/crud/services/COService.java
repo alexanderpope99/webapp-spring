@@ -74,7 +74,7 @@ public class COService {
 		return response;
 	}
 
-	public int getZileCODisponibile(int an, int idcontract) throws ResourceNotFoundException {
+	public int getZileCODisponibile(int idcontract) throws ResourceNotFoundException {
 		// get contract -> zilecoan
 		Contract contract = contractRepository.findById(idcontract)
 			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
@@ -82,20 +82,20 @@ public class COService {
 		int zilecodisponibile = 0;
 		// get concedii odihna (cu plata)
 		List<CO> concedii = coRepository.findByContract_IdAndTip(idcontract, "Concediu de odihnă");
+
+		LocalDate today = LocalDate.now();
+
+		long luniLucrate = ChronoUnit.MONTHS.between(contract.getDataincepere(), today) - 1;
 		
 		int zilecoan = contract.getZilecoan();
 		float zilecopeluna = (float)zilecoan / 12;
 
 		//* calculeaza cate zile are in primul an de activitate (cel mai probabil nu are 21)
-		LocalDate dataincepere = contract.getDataincepere();
 		// exclude luna in care a inceput activitatea
-		zilecodisponibile = Math.round((12 - dataincepere.getMonthValue()) * zilecopeluna);
+		int zileconcediu = this.zileC(concedii);
+		zilecodisponibile = Math.round(luniLucrate * zilecopeluna) - zileconcediu;
 
-		//* calculeaza in restul anilor
-		if(dataincepere.getYear() + 1 <= an)
-			zilecodisponibile += zilecoan * (an - dataincepere.getYear());
-
-		return zilecodisponibile - this.zileC(concedii);
+		return zilecodisponibile;
 	}
 
 	public int getZileCFP(int luna, int an, int idcontract) {

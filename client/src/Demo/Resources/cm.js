@@ -279,6 +279,8 @@ function getProcente(cod) {
 }
 
 function getZileFirma(dela, panala, cod) {
+	if (dela > panala) return '** Dată început > Dată sfârșit **';
+	
   let nr_zile = (panala.getTime() - dela.getTime()) / (1000 * 3600 * 24) + 1;
   let zilefirma = 0;
   let zilefnuass = 0;

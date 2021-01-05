@@ -221,8 +221,10 @@ public class RealizariRetineriService {
 		// create and save baza calcul only if contract valid in month, year
 		bazacalculService.saveBazacalcul(realizariRetineri);
 
+		Retineri retineri = retineriService.saveRetinere(realizariRetineri);
+		realizariRetineri.setRetineri(retineri);
+		
 		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
-		retineriService.saveRetinere(realizariRetineri);
 
 		return realizariRetineri;
 	} // saveRealizariRetineri

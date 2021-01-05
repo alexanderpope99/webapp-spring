@@ -103,10 +103,9 @@ class COTabel extends React.Component {
 
   async getZileCoDisponibile() {
     await axios
-      .get(
-        `${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}&y=${this.state.an}`,
-        { headers: authHeader() }
-      )
+      .get(`${server.address}/co/zilecodisponibile/idc=${this.state.angajat.idcontract}`, {
+        headers: authHeader(),
+      })
       .then((res) => this.setState({ zile_co_disponibile: res.data }))
       .catch((err) => console.error(err));
   }
@@ -223,10 +222,7 @@ class COTabel extends React.Component {
           nr: Number(e.target.options[selectedIndex].getAttribute('data-key')),
         },
       },
-      () => {
-        this.renderCO();
-        console.log(this.state.luna);
-      }
+      this.renderCO
     );
   }
 
@@ -289,7 +285,7 @@ class COTabel extends React.Component {
         if (c.panala) {
           ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
         }
-      }
+			}
       // add ani in luni_cu_concediu
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = new Set();
@@ -300,14 +296,18 @@ class COTabel extends React.Component {
           an = c.dela.substring(0, 4);
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
         }
-      }
+			}
+			// add current year even if if doesn't have co
+			// ani_cu_concediu.add(2021);
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-      }
+			}
 
       this.getZileCoDisponibile();
 
+			let thisYear = new Date().getFullYear();
+			ani_cu_concediu.add(thisYear);
       this.setState(
         {
           co: concedii,
@@ -473,7 +473,9 @@ class COTabel extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-    let exists = this.state.angajat && this.state.angajat.idcontract;
+		const angajatContract = this.state.angajat && this.state.angajat.idcontract;
+		
+		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
 
     return (
       <Aux>
@@ -536,7 +538,7 @@ class COTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO}>
+            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO} disabled={!concediuIsValid}>
               {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>
@@ -566,9 +568,9 @@ class COTabel extends React.Component {
               <Card.Header className="border-0">
                 <Card.Title as="h5">Concedii de odihnă</Card.Title>
                 <Button
-                  variant={exists ? 'outline-primary' : 'outline-dark'}
+                  variant={angajatContract ? 'outline-primary' : 'outline-dark'}
                   className="float-right"
-                  disabled={!exists}
+                  disabled={!angajatContract}
                   onClick={() =>
                     this.setState(
                       { show: true, dela: this.state.today, panala: this.state.today },
@@ -580,10 +582,10 @@ class COTabel extends React.Component {
                 </Button>
 
                 <Button
-                  variant={exists ? 'outline-primary' : 'outline-dark'}
+                  variant={angajatContract ? 'outline-primary' : 'outline-dark'}
                   size="sm"
                   style={{ fontSize: '1.25rem', float: 'right' }}
-                  disabled={!exists}
+                  disabled={!angajatContract}
                   onClick={this.fillTable}
                 >
                   <RotateCw className="m-0 p-0" />

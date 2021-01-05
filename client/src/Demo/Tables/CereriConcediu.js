@@ -145,9 +145,7 @@ class CereriConcediuTabel extends React.Component {
     });
     await axios
       .get(
-        `${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}&y=${
-          this.state.dela.split('-')[0]
-        }`,
+        `${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}`,
         { headers: authHeader() }
       )
       .then((res) => this.setState({ zile_co_disponibile: res.data }))
@@ -346,6 +344,9 @@ class CereriConcediuTabel extends React.Component {
   }
 
   render() {
+
+		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
+
     return (
       <Aux>
         {/* add/edit modal */}
@@ -413,7 +414,7 @@ class CereriConcediuTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.onSubmit} type="submit">
+            <Button variant="primary" onClick={this.onSubmit} type="submit" disabled={!concediuIsValid}>
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>

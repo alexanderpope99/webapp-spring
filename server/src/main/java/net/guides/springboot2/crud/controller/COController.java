@@ -69,10 +69,10 @@ public class COController {
 		return ResponseEntity.ok().body(co);
 	}
 
-	@GetMapping("zilecodisponibile/idc={id}&y={an}")
-	public ResponseEntity<Integer> getZileCODisponibile(@PathVariable("id") int idcontract, @PathVariable("an") int an)
+	@GetMapping("zilecodisponibile/idc={id}")
+	public ResponseEntity<Integer> getZileCODisponibile(@PathVariable("id") int idcontract)
 			throws ResourceNotFoundException {
-		return ResponseEntity.ok().body(coService.getZileCODisponibile(an, idcontract));
+		return ResponseEntity.ok().body(coService.getZileCODisponibile(idcontract));
 	}
 
 	@PostMapping
