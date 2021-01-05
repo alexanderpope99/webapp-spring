@@ -1,4 +1,7 @@
-drop table adresa_psql, societate_psql, actidentitate_psql, persoana_psql,contbancar_psql,contract_psql,angajat_psql, co_psql, cm_psql;
+drop table adresa_psql, societate_psql, actidentitate_psql, 
+		persoana_psql,contbancar_psql, contract_psql, 
+		angajat_psql, co_psql, cm_psql,
+		persoanaintretinere_psql;
 
 create table adresa_psql (
 	id	int not null identity(1,1) primary key,
@@ -30,6 +33,7 @@ create table actidentitate_psql (
 	numar varchar(10),
 	datanasterii date,
 	eliberatde varchar(2), -- will be null
+	dataeliberarii date, -- null
 	loculnasterii varchar(2), -- will be null
 	cnppersonal nvarchar(100)
 );
@@ -263,8 +267,7 @@ insert into cm_psql(
 		(select id from contract_psql c where c.cnppersonal = certificatmedical.cnppersonal)
 	from certificatmedical;
 
-insert into persoanaintretinere_psql
-	(nume, prenume, cnp, grad, valid, intretinut, coasigurat, idangajat)
+insert into persoanaintretinere_psql(nume, prenume, cnp, grad, valid, intretinut, coasigurat, idangajat)
 	select 
 		nume,
 		prenume,

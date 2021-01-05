@@ -1,0 +1,43 @@
+-- NU UITA SA ADAUGI HEADER: Tools -> Options -> Query Results -> SQL Server -> Results to grid
+--select id, adresa, localitate, judet from adresa_psql;
+--select * from societate_psql;
+--select id, cnp, tip, serie, numar, datanasterii, eliberatde, dataeliberarii, loculnasterii from actidentitate_psql;
+--select id, gen, nume, prenume, idactidentitate, idadresa, starecivila, telefon, cnp from persoana_psql
+--select id, iban from contbancar_psql;
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT [id]
+      ,[tip]
+      ,[nr]
+      ,[marca]
+      ,[dindata]
+      ,[dataincepere]
+      ,[idpunctlucru]
+      ,[idcentrucost]
+      ,[idechipa]
+      ,[iddepartament]
+      ,[functiedebaza]
+      ,[calculdeduceri]
+      ,[studiisuperioare]
+      ,[normalucru]
+      ,[salariutarifar]
+      ,[monedasalariu]
+      ,[conditiimunca]
+      ,[pensieprivata]
+      ,[cotizatiepensieprivata]
+      ,[avans]
+      ,[monedaavans]
+      ,[zilecoan]
+      ,[ultimazilucru]
+      ,[casasanatate]
+      ,[gradinvaliditate]
+      ,[functie]
+      ,[nivelstudii]
+      ,[cor]
+      ,[sindicat]
+      ,[cotizatiesindicat]
+      ,[spor]
+      ,[pensionar]
+      ,[echipa]
+      ,[modplata]
+      ,[idcontbancar]
+  FROM [Salarizare123].[dbo].[contract_psql]
