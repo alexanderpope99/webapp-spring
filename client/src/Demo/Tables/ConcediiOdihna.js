@@ -33,6 +33,7 @@ class COTabel extends React.Component {
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
     this.setNrZile = this.setNrZile.bind(this);
+    this.checkDela = this.checkDela.bind(this);
 
     this.state = {
       angajat: getAngajatSel(),
@@ -225,10 +226,18 @@ class COTabel extends React.Component {
     );
   }
 
+  checkDela() {
+    const val = this.state.co.map((val, index) => {
+      return val.dela > this.state.dela;
+    });
+    console.log(val);
+    this.setNrZile();
+  }
+
   onChangeDela(dela) {
     if (!this.state.dela || dela > this.state.panala)
-      this.setState({ dela: dela, panala: dela }, this.setNrZile);
-    else this.setState({ dela: dela }, this.setNrZile);
+      this.setState({ dela: dela, panala: dela }, this.checkDela);
+    else this.setState({ dela: dela }, this.checkDela);
   }
   onChangePanala(panala) {
     this.setState({ panala: panala }, this.setNrZile);
@@ -352,7 +361,7 @@ class COTabel extends React.Component {
     if (!this.state.angajat.idcontract) {
       this.setState({
         show_confirm: true,
-        modalTitle: 'Angajatul are nevoide de un contract de muncă',
+        modalTitle: 'Angajatul are nevoie de un contract de muncă',
       });
       return;
     }
