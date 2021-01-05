@@ -7,6 +7,55 @@
 		4. persoane
 		5. contracte munca
 		6. concedii
+	conversion:
+	{
+        Described like this:
+		psql.table <- sql_server.table: {
+            psql_table_column: sql_server_table_column
+        }
+        _________________________________________
+		persoana <- personal: {
+			gen: cnp[0],
+			nume: nume,
+			prenume: prenume,
+			actidentitate <- personal: {
+				cnp: codnumericpersonal, 
+                tip: tipactidentitate, 
+                // serie: , 
+                numar: nractidentitate, 
+                datanasterii: extras din codnumericpersonal, 
+                // eliberatde: , 
+                dataeliberarii: eliberatla, 
+                // loculnasterii: 
+			},
+            adresa <- personal: {
+                adresa: adresa,
+                localitate: localitate, 
+                judet: judet (nu va avea judet)
+            },
+            starecivila: casatorit, 
+            email: email,
+            telefon: telefon,
+            cnp: codnumericpersonal
+		}
+
+        societate <- societati: {
+            nume: denumire,
+            idcaen: caen,
+            cif: cif,
+            capsoc: capitalsocial,
+            regcom: regcom
+            adresa <- societati: {
+                adresa: strada,
+                localitate: localitate,
+                judet: judet,
+            }
+            email: email,
+            telefon: telefon,
+            fax: fax
+
+        }
+	}
 	how to do:
 		1. export data from sql server as .csv
 		2. write and execute queries for each table to enter data in postgresql
