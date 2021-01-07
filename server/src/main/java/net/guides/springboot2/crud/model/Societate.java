@@ -55,11 +55,11 @@ public class Societate implements Serializable {
 	@Column(name = "fax")
 	private String fax;
 
-	@OneToMany(mappedBy = "societate")
+	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
 	private List<ContBancar> contbancar;
 
 	@JsonBackReference(value = "angajat-societate")
-	@OneToMany(mappedBy = "societate")
+	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
 	private List<Angajat> angajati;
 
 	@JsonBackReference(value = "factura-societate")
@@ -67,11 +67,11 @@ public class Societate implements Serializable {
 	private List<Factura> facturi;
 
 	@JsonBackReference(value = "user-societate")
-	@ManyToMany(mappedBy = "societati", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "societati", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<User> useri;
 
 	@JsonBackReference(value = "centrucost-societate")
-	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CentruCost> centreCost;
 
 	public Societate() {
