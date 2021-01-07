@@ -85,7 +85,6 @@ public class AngajatService {
 		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
 			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
 		
-		// List<Integer> subalterni = angajat.getSubalterni().stream().map(ang -> ang.getIdpersoana()).collect(Collectors.toList());
 		List<Integer> subalterni = angajat.getSubalterni().stream().map(Angajat::getIdpersoana).collect(Collectors.toList());
 		if(subalterni.isEmpty()) {
 			return angajatRepository.findBySocietate_IdAndIdpersoanaNot(angajat.getSocietate().getId(), idangajat);

@@ -111,19 +111,18 @@ create table co_psql(
 	tip nvarchar(100),
 	dela date,
 	panala date,
-	idcontract int, -- cu contract_psql.cnppersonal
+	sporuripermanente bit default 0,
+	idcontract int
 );
 
 create table cm_psql(
-	id int not null identity(1, 1) primary key,
 	dela date,
 	panala date,
 	continuare bit,
 	datainceput date,
-	codindemnizatie nvarchar(2),
-	procent float,
 	dataeliberare date,
 	codurgenta nvarchar(100),
+	procent float,
 	codboalainfcont nvarchar(100),
 	bazacalcul float,
 	bazacalculplafonata float,
@@ -138,12 +137,14 @@ create table cm_psql(
 	codboala nvarchar(100),
 	urgenta bit DEFAULT 0,
 	conditii nvarchar(100),
+	idcontract int,
+	id int not null identity(1, 1) primary key,
+	cnpcopil nvarchar(50),
+	codindemnizatie nvarchar(2),
 	nr nvarchar(100),
 	serie nvarchar(100),
-	zilefaambp int,
 	indemnizatiefaambp float,
-	cnpcopil nvarchar(50),
-	idcontract int
+	zilefaambp int
 );
 
 create table persoanaintretinere_psql(
@@ -151,6 +152,7 @@ create table persoanaintretinere_psql(
 	nume nvarchar(50),
 	prenume nvarchar(50),
 	cnp varchar(13),
+	datanasterii date,
 	grad nvarchar(50),
 	valid bit,
 	intretinut bit,
@@ -267,14 +269,15 @@ insert into cm_psql(
 		(select id from contract_psql c where c.cnppersonal = certificatmedical.cnppersonal)
 	from certificatmedical;
 
-insert into persoanaintretinere_psql(nume, prenume, cnp, grad, valid, intretinut, coasigurat, idangajat)
+insert into persoanaintretinere_psql(nume, prenume, cnp, datanasterii, grad, valid, intretinut, coasigurat, idangajat)
 	select 
-		nume,
-		prenume,
-		cnp,
-		gradrudenie,
-		validitate,
-		intretinut,
-		coasigurat,
-		(select id from persoana_psql p where p.cnppersonal = cnppersonal)
-	from coasigurati;
+		c.nume, 
+		c.prenume, 
+		c.cnp, 
+		concat('19', substring(c.cnp, 2, 2),'-', substring(c.cnp, 4, 2),'-',substring(c.cnp, 6, 2)) as 'datanasterii',
+		c.gradrudenie, 
+		c.validitate, 
+		c.intretinut, 
+		c.coasigurat, 
+		p.id as idangajat 
+	from coasigurati c join persoana_psql p on c.cnppersonal = p.cnppersonal;

@@ -359,7 +359,7 @@ class Contract extends React.Component {
       studiisuperioare: this.state.studiiSuperioare,
       normalucru: this.state.normăLucru.nrOre || null,
       salariutarifar: this.state.salariu || null,
-      monedasalariu: this.state.monedăSalariu || null,
+      monedasalariu: this.state.monedăSalariu || 'RON',
       contbancar: contbancar_body,
       conditiimunca: this.state.condițiiMuncă || null,
       sindicat: this.state.sindicat,
@@ -367,7 +367,7 @@ class Contract extends React.Component {
       pensieprivata: this.state.pensiePrivată,
       cotizatiepensieprivata: this.state.cotizațiePensie || null,
       avans: this.state.avans || null,
-      monedaavans: this.state.monedăAvans || null,
+      monedaavans: this.state.monedăAvans || 'RON',
       zilecoan: this.state.zileCOan || 21,
       ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru || null,
       casasanatate: this.state.casăSănătate || null,
@@ -399,9 +399,9 @@ class Contract extends React.Component {
           console.error(err.message);
         });
     }
-    // if recieved response from server
-    if (contract) {
-      // update superior
+
+		if (contract) {
+      // update superior -> angajatul are superior, nu tine de contract
       if (this.state.superior) {
         await axios
           .put(
