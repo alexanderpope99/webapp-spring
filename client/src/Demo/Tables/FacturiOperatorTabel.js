@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Card,
-  Table,
-  Button,
-  Modal,
-  Form,
-  Breadcrumb,
-} from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb } from 'react-bootstrap';
 import { RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
@@ -134,7 +125,7 @@ class FacturiOperatorTabel extends React.Component {
         facturi.map(async (fact, index) => {
           return (
             // TODO
-            <tr style={{ backgroundColor: this.getStatusColor(fact.status) }} key={fact.id}>
+            <tr key={fact.id}>
               <th>{fact.denumirefurnizor}</th>
               <th>{fact.ciffurnizor}</th>
               <th>{fact.nr}</th>
