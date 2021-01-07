@@ -26,12 +26,18 @@ public class InitController {
 	private RoleService roleService;
 
 	@GetMapping
-	public String globalInit() {
+	public String globalInitNoRoles() {
 		deduceriService.init();
 		parametriiSalariuService.init();
 		sarbatoriService.initializeKnown();
+
+		return "Initialized: deduceri, parametrii-salariu, sarbatori (2019-2021, fara paște)";
+	}
+
+	@GetMapping("/roles")
+	public String initRoles() {
 		roleService.init();
 
-		return "Initialized: deduceri, parametrii-salariu, sarbatori (2019-2021, fara paste), roluri";
+		return "Initialized roles: admin: 1, director: 2, contabil: 3, angajat: 4";
 	}
 }
