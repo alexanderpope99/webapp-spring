@@ -42,15 +42,14 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	2 -> pentru un angajat normal {
-		[RealizariRetineriView and AngajatSimplu] rendered instead of [RealizariRetineri and Angajat]
-	}
-	* fixed retineri is null in json reposnse when saving RealizariRetineri
+	fixed societate
 }
 
 
 TODO: {
     verifica persoane intretinere
+
+	1 -> SocietateService -> deleteSocietate: set everything to null
 
 	2 -> pentru un angajat normal {
 		RealizariRetineri.js: {
