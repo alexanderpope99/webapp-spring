@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.services.DeduceriService;
 import net.guides.springboot2.crud.services.ParametriiSalariuService;
+import net.guides.springboot2.crud.services.RoleService;
 import net.guides.springboot2.crud.services.SarbatoriService;
 
 @RestController
@@ -21,10 +22,16 @@ public class InitController {
 	@Autowired
 	private SarbatoriService sarbatoriService;
 
+	@Autowired
+	private RoleService roleService;
+
 	@GetMapping
-	public void globalInit() {
+	public String globalInit() {
 		deduceriService.init();
 		parametriiSalariuService.init();
 		sarbatoriService.initializeKnown();
+		roleService.init();
+
+		return "Initialized: deduceri, parametrii-salariu, sarbatori (2019-2021, fara paste), roluri";
 	}
 }
