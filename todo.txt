@@ -1,17 +1,46 @@
 ########### DE MUTAT BAZA DE DATE DIN SQL SERVER IN POSTGRES ###########
 Pasi de urmat:
+	0. In SQL Server -> Tools -> Option -> Query Results -> SQL Server -> Results to grid -> ☑ Include column headers...
+
 	1. Ruleaza script-ul 'createnewtables.sql' in sql server:
 			New Query -> paste createnewtables.sql
+
 	2. Ruleaza script-ul 'createcsv.sql' (de preferat cate un select pe rand) in sql server
 		2.1 Click dreapta pe fereastra cu tabel pentru export in csv
-	3. Sterge toate valorile 'NULL' din csv-urile create
-	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile
+
+	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile: {
+		[
+			!! PENTRU TOATE TABELELE:
+			Import/Export: Import
+			Select .csv
+			Miscellaneous
+				Header: Yes,
+				Delimiter: ;
+		]
+		
+		4.1: Adrese -> verifica ca tabelul din postgres nu are coloana tara
+		4.2: Societati -> -
+		4.3: Acte de identitate -> sterge NULL din .csv
+		4.4: Persoane -> in postgres->import->columns :: fara email
+		4.5: Cont bancar -> in postgres->import->columns :: doar [id, iban]
+		4.6: Contracte -> sterge NULL din .csv
+		4.7: Angajati -> in postgres->import->columns :: doar [idpersoana, idcontract, idsocietate]
+		4.8: Concedii odihna -> -
+		4.9: Concedii medicale -> sterge NULL din .csv
+		4.10: Pers. intretinere -> -
+	}
+
 	5. Baza de date trebuie sa nu aiba alte inregistrari in tabelele care se importa pentru ca se insereaza id-uri
+	
 	6. Inainte de a rula aplicatia e nevoie de:
 		- un utilizator cu rolul admin si/sau director 
 		- parametrii salarii <- un post fara body la `/parametriisalariu/init`
 		- sarbatori <- un post fara body la `/sarbatori/init`
 		- deduceri <- un post fara body la `/deduceri/init`
+
+
+
+
 
 LAST-UPDATE : {
 	2 -> pentru un angajat normal {

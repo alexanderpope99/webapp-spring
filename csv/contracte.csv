@@ -1,8 +1,0 @@
-﻿id;tip;nr;marca;dindata;dataincepere;idpunctlucru;idcentrucost;idechipa;iddepartament;functiedebaza;calculdeduceri;studiisuperioare;normalucru;salariutarifar;monedasalariu;conditiimunca;pensieprivata;cotizatiepensieprivata;avans;monedaavans;zilecoan;ultimazilucru;casasanatate;gradinvaliditate;functie;nivelstudii;cor;sindicat;cotizatiesindicat;spor;pensionar;echipa;modplata;idcontbancar
-1;Contract de munca;4;;2020-07-09;2020-07-09;;;;;0;1;0;2;1197;RON;Normale;0;0;0;;21;2020-07-09;BUCURESTI - CAS_B;valid;Paznic;;123;0;0;0;0;;;1
-2;;2;;2020-07-09;2020-07-09;;;;;1;1;0;8;21213;RON;Normale;0;0;0;;21;2020-07-09;BUCURESTI - CAS_B;valid;Director;;;0;0;0;0;;;6
-3;;3;;2020-07-09;2020-07-09;;;;;1;0;0;8;5000;RON;Normale;0;0;0;;0;2020-07-09;BUCURESTI - CAS_B;valid;Programator;;123;0;0;0;0;;;2
-4;Contract de munca;5;;2020-07-09;2020-07-09;;;;;1;1;0;8;5454;RON;Normale;0;0;0;;21;2020-07-09;BUCURESTI - CAS_B;valid;Tehnician;;123;0;0;0;0;;;4
-5;Contract de munca;15;;2020-07-09;2020-07-09;;;;;1;1;0;8;5454;RON;Normale;0;0;0;;21;2020-07-09;;valid;Tehnician;;;0;0;0;;;;
-6;Contract de munca;6;;2020-07-09;2020-07-09;;;;;1;0;0;8;3000;RON;Normale;0;0;0;;21;2020-07-09;BUCURESTI - CAS_B;valid;Programator;;;0;0;0;0;;;3
-7;Contract de munca;1;;2020-07-09;2020-07-09;;;;;1;1;0;8;2508;RON;Normale;0;0;0;;21;2020-07-09;BUCURESTI - CAS_B;valid;Economist;;123;0;0;0;0;;;5
