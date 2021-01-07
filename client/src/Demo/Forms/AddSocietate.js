@@ -119,7 +119,7 @@ class AddSocietate extends React.Component {
 			.then((res) => res.data)
 			.catch((err) => console.error(err));
 
-		console.log(societate.adresa.id);
+		// console.log(societate.adresa.id);
 		if (societate.adresa)
 			this.setState(
 				{
