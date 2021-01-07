@@ -34,9 +34,8 @@ Pasi de urmat:
 	
 	6. Inainte de a rula aplicatia e nevoie de:
 		- un utilizator cu rolul admin si/sau director 
-		- parametrii salarii <- un post fara body la `/parametriisalariu/init`
-		- sarbatori <- un post fara body la `/sarbatori/init`
-		- deduceri <- un post fara body la `/deduceri/init`
+		- parametrii salarii, sarbatori, deduceri = get request la `/init`
+		- roles la `/init/roles`
 
 
 

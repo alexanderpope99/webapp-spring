@@ -130,7 +130,7 @@ class AddSocietate extends React.Component {
 					capsoc: societate.capsoc || '',
 					regcom: societate.regcom || '',
 					// adresa
-					idadresa: societate.adresa.id || '',
+					idadresa: societate.adresa.id,
 					adresa: societate.adresa.adresa || '',
 					judet: societate.adresa.judet || '',
 					//
@@ -140,6 +140,19 @@ class AddSocietate extends React.Component {
 				},
 				() => this.onChangeLocalitate(societate.adresa.localitate)
 			);
+		else {
+			this.setState({
+				id: societate.id,
+				nume: societate.nume || '',
+				idcaen: societate.idcaen || '',
+				cif: societate.cif || '',
+				capsoc: societate.capsoc || '',
+				regcom: societate.regcom || '',
+				email: societate.email || '',
+				telefon: societate.telefon || '',
+				fax: societate.fax || '',
+			})
+		}
 	}
 
 	componentDidMount() {
@@ -392,7 +405,7 @@ class AddSocietate extends React.Component {
 																showCentreCost: !this.state.showCentreCost,
 															})
 														}
-														>
+													>
 														<Card.Title
 															as="h5"
 															aria-controls="accordion1"
@@ -418,7 +431,7 @@ class AddSocietate extends React.Component {
 														</div>
 													</Collapse>
 												</Card>
-											</Col> 
+											</Col>
 											: null
 									}
 									<Row>
