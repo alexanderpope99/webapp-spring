@@ -55,7 +55,7 @@ public class ParametriiSalariuController {
 		return parametriiSalariuRepository.save(parametriiSalariu);
 	}
 
-	@PostMapping("/init")
+	@PostMapping("init")
 	public String init() {
 		parametriiSalariuService.init();
 		return "Parametrii initializati";

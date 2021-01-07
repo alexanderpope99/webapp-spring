@@ -1,4 +1,5 @@
 -- NU UITA SA ADAUGI HEADER: Tools -> Options -> Query Results -> SQL Server -> Results to grid
+
 -- ADRESE
 --select id, adresa, localitate, judet from adresa_psql;
 

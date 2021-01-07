@@ -82,19 +82,19 @@ public class Contract implements Serializable {
 	@Column(name = "pensionar")
 	private Boolean pensionar;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "idcentrucost")
 	private CentruCost centrucost;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "idpunctlucru")
 	private PunctDeLucru punctdelucru;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "idechipa")
 	private Echipa echipa;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "iddepartament")
 	private Departament departament;
 

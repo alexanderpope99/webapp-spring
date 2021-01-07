@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
+import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.repository.AdresaRepository;
 import net.guides.springboot2.crud.repository.PersoanaRepository;
 
@@ -43,9 +44,9 @@ public class AdresaController {
 	}
 
 	@GetMapping("idp={idp}")
-	public Adresa getAddressByIdpersoana(@PathVariable("idp") int idp) {
-		Adresa adresa = persoanaRepository.findById(idp).get().getAdresa();
-		return adresa;
+	public Adresa getAddressByIdpersoana(@PathVariable("idp") int idp) throws ResourceNotFoundException {
+		Persoana persoana = persoanaRepository.findById(idp).orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + idp));
+		return persoana.getAdresa();
 	}
 
 	@PostMapping
