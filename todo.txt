@@ -47,9 +47,10 @@ LAST-UPDATE : {
 
 
 TODO: {
-    verifica persoane intretinere
+	verifica persoane intretinere
 
-	1 -> SocietateService -> deleteSocietate: set everything to null
+	1 -> SocietateService -> 
+		deleteSocietate: set all foreign keys pointing to societate null, delete only societate, societate.adresa
 
 	2 -> pentru un angajat normal {
 		RealizariRetineri.js: {
