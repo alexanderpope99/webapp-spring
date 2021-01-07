@@ -196,11 +196,15 @@ class CentruCostTabel extends React.Component {
   }
 
   async fillTable() {
+		if(!this.state.socsel) return;
+
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
-    this.setState({ centreCost: centreCost }, this.renderTabel);
+			.catch((err) => console.error(err));
+			
+		if(centreCost)
+			this.setState({ centreCost: centreCost }, this.renderTabel);
   }
 
   async deleteCC(id) {
