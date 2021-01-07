@@ -1,14 +1,17 @@
 ########### DE MUTAT BAZA DE DATE DIN SQL SERVER IN POSTGRES ###########
 Pasi de urmat:
+	0. In SQL Server -> Tools -> Option -> Query Results -> SQL Server -> Results to grid -> ☑ Include column headers...
+
 	1. Ruleaza script-ul 'createnewtables.sql' in sql server:
 			New Query -> paste createnewtables.sql
+
 	2. Ruleaza script-ul 'createcsv.sql' (de preferat cate un select pe rand) in sql server
 		2.1 Click dreapta pe fereastra cu tabel pentru export in csv
-	3. Sterge toate valorile 'NULL' din csv-urile create
+
 	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile: {
 		[
 			!! PENTRU TOATE TABELELE:
-			Impoer/Export: Import
+			Import/Export: Import
 			Select .csv
 			Miscellaneous
 				Header: Yes,
