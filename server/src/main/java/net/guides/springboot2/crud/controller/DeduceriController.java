@@ -46,8 +46,9 @@ public class DeduceriController {
 		return deduceriRepository.save(deduceri);
 	}
 
-	@PostMapping("/all")
-	public void createAllDeduceri(@RequestBody Deduceri deducere) {
+	@PostMapping("/init")
+	public void initDeduceri() {
+		Deduceri deducere = new Deduceri(1, 1950, 510, 670, 830, 990, 1310);
 		deduceriRepository.save(deducere);
 		int zero = 495, una = 655, doua = 815, trei = 975, patru = 1295;
 		for (int i = 1951; i <= 3600; i += 50) {

@@ -1,4 +1,4 @@
-drop table adresa_psql, societate_psql, actidentitate_psql, 
+﻿drop table adresa_psql, societate_psql, actidentitate_psql, 
 		persoana_psql,contbancar_psql, contract_psql, 
 		angajat_psql, co_psql, cm_psql,
 		persoanaintretinere_psql;
@@ -28,7 +28,7 @@ create table societate_psql (
 create table actidentitate_psql (
 	id int not null identity(1, 1) primary key,
 	cnp varchar(20),
-	tip nvarchar(80),
+	tip nvarchar(80) default 'Carte de identitate',
 	serie varchar(5), -- will be null
 	numar varchar(10),
 	datanasterii date,
@@ -40,12 +40,12 @@ create table actidentitate_psql (
 
 create table persoana_psql (
 	id int not null identity(1, 1) primary key,
-	gen bit,
+	gen nvarchar(10),
 	nume nvarchar(50),
 	prenume nvarchar(50),
 	idactidentitate int,
 	idadresa int,
-	starecivila bit,
+	starecivila nvarchar(50),
 	email nvarchar(50),
 	telefon nvarchar(50),
 	cnp nvarchar(50),
@@ -154,7 +154,7 @@ create table persoanaintretinere_psql(
 	cnp varchar(13),
 	datanasterii date,
 	grad nvarchar(50),
-	valid bit,
+	valid nvarchar(20) default 'valid',
 	intretinut bit,
 	coasigurat bit,
 	idangajat int
@@ -167,20 +167,20 @@ insert into societate_psql(nume, idcaen, cif, capsoc, regcom, idadresa, email, t
 	select denumire, caen, cif, capitalsocial, regcom, (select id from adresa_psql ap where ap.denumiresocietate=societati.denumire), email, telefon, fax
 		from societati
 
-insert into actidentitate_psql(cnp, tip, numar, datanasterii, cnppersonal) 
-	select codnumericpersonal, tipactidentitate, nractidentitate,  
+insert into actidentitate_psql(cnp, numar, datanasterii, cnppersonal) 
+	select codnumericpersonal, nractidentitate,  
 		concat('19', substring(codnumericpersonal, 2, 2),'-', substring(codnumericpersonal, 4, 2),'-',substring(codnumericpersonal, 6, 2)) as 'datanasterii',
 		cnp
 		from personal;
 
 insert into persoana_psql(gen, nume, prenume, idactidentitate, idadresa, starecivila, telefon, cnp, cnppersonal, denumiresocietate)
 	select
-		(case when substring(cnp, 1, 1) = '1' then 1 else 0 end), 
+		(case when substring(cnp, 1, 1) = '1' then 'Dl.' else 'Dna.' end), 
 		nume, 
 		prenume,
 		(select id from actidentitate_psql act where act.cnppersonal=personal.cnp),
 		(select id from adresa_psql adr where adr.cnp=personal.cnp),
-		casatorit,
+		(case when casatorit = 1 then 'Căsătorit' else 'Necăsătorit' end),
 		telefon,
 		codnumericpersonal,
 		cnp,
@@ -269,14 +269,13 @@ insert into cm_psql(
 		(select id from contract_psql c where c.cnppersonal = certificatmedical.cnppersonal)
 	from certificatmedical;
 
-insert into persoanaintretinere_psql(nume, prenume, cnp, datanasterii, grad, valid, intretinut, coasigurat, idangajat)
+insert into persoanaintretinere_psql(nume, prenume, cnp, datanasterii, grad, intretinut, coasigurat, idangajat)
 	select 
 		c.nume, 
 		c.prenume, 
 		c.cnp, 
 		concat('19', substring(c.cnp, 2, 2),'-', substring(c.cnp, 4, 2),'-',substring(c.cnp, 6, 2)) as 'datanasterii',
 		c.gradrudenie, 
-		c.validitate, 
 		c.intretinut, 
 		c.coasigurat, 
 		p.id as idangajat 

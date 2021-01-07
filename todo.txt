@@ -6,6 +6,12 @@ Pasi de urmat:
 		2.1 Click dreapta pe fereastra cu tabel pentru export in csv
 	3. Sterge toate valorile 'NULL' din csv-urile create
 	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile
+	5. Baza de date trebuie sa nu aiba alte inregistrari in tabelele care se importa pentru ca se insereaza id-uri
+	6. Inainte de a rula aplicatia e nevoie de:
+		- un utilizator cu rolul admin si/sau director 
+		- parametrii salarii <- un post fara body la `/parametriisalariu/init`
+		- sarbatori <- un post fara body la `/sarbatori/init`
+		- deduceri <- un post fara body la `/deduceri/init`
 
 LAST-UPDATE : {
 	2 -> pentru un angajat normal {
