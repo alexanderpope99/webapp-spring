@@ -42,7 +42,7 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	verificat persoane intretinere
+	adaugat sarbatori cunoscute pana in 2024 - se pot edita pe frontend
 }
 
 
