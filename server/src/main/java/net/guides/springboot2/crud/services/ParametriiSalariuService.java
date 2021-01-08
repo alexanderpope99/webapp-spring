@@ -19,6 +19,8 @@ public class ParametriiSalariuService {
 	}
 
 	public void init() {
+		if(parametriiSalariuRepository.count() > 0) return;
+
 		parametriiSalariuRepository.save(
 			new ParametriiSalariu(2230, 22350, 5429, (float)10, (float)25, (float)10, (float)2.25, (float)10, LocalDate.parse("1994-01-01"))
 		);

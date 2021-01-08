@@ -30,6 +30,8 @@ public class DeduceriService {
 	}
 
 	public void init() {
+		if(deduceriRepository.count() > 0) return;
+		
 		Deduceri deducere = new Deduceri(1, 1950, 510, 670, 830, 990, 1310);
 		deduceriRepository.save(deducere);
 		int zero = 495, una = 655, doua = 815, trei = 975, patru = 1295;

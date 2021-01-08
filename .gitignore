@@ -3,6 +3,7 @@ target/
 
 server/target
 server/pom.xml
+server/src/main/resources/application.properties
 server/src/main/java/net/guides/springboot2/crud/downloads/
 server/src/main/java/net/guides/springboot2/crud/downloads/
 server/src/main/java/net/guides/springboot2/crud/services/WebParserService.java

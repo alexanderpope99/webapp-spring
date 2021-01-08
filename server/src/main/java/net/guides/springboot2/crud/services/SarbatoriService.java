@@ -87,6 +87,8 @@ public class SarbatoriService {
 	}
 
 	public void initializeKnown() {
+		if(sarbatoriRepository.count() > 0) return;
+
 		initialize(2019);
 		initialize(2020);
 		initialize(2021);

@@ -54,6 +54,11 @@ public class SarbatoriController {
 		return sarbatoriRepository.findAllByOrderByDelaAsc();
 	}
 
+	@PostMapping("init/{an}")
+	public void initializeAn(@PathVariable("id") int an) {
+		sarbatoriService.initialize(an);
+	}
+
 	@PutMapping("{id}")
 	public ResponseEntity<Sarbatori> updateSarbatori(@PathVariable(value = "id") Long id,
 			@RequestBody Sarbatori newSarbatori) throws ResourceNotFoundException {
