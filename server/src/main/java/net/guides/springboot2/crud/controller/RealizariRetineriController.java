@@ -38,7 +38,7 @@ public class RealizariRetineriController {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@GetMapping("idc={id}&mo={luna}&y={an}")
+	@GetMapping("get/idc={id}&mo={luna}&y={an}")
 	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") int idcontract,
 			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);

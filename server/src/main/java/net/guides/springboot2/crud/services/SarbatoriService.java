@@ -75,8 +75,8 @@ public class SarbatoriService {
 		return sarbatoriDates;
 	}
 	
-	public void initialize(int an) {
-		if(this.existsInAn(an)) return;
+	public boolean initialize(int an) {
+		if(this.existsInAn(an)) return false;
 
 		sarbatoriRepository.save(new Sarbatori(an+"-01-01", an+"-01-02", "Anul Nou"));
 
@@ -93,6 +93,8 @@ public class SarbatoriService {
 		sarbatoriRepository.save(new Sarbatori(an+"-12-01", an+"-12-01", "Ziua Națională a României"));
 
 		sarbatoriRepository.save(new Sarbatori(an+"-12-25", an+"-12-26", "Crăciunul"));
+
+		return true;
 	}
 
 	public void initializeKnown() {
