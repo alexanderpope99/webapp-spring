@@ -30,6 +30,7 @@ public class DeduceriService {
 	}
 
 	public void init() {
+		// daca deja exista nu face nimic
 		if(deduceriRepository.count() > 0) return;
 		
 		Deduceri deducere = new Deduceri(1, 1950, 510, 670, 830, 990, 1310);

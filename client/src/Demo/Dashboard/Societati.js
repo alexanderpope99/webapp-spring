@@ -10,7 +10,7 @@ import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
 import { luni } from '../Resources/calendar';
 import authHeader from '../../services/auth-header';
-import { Edit, PlusCircle, Users } from 'react-feather';
+import { Edit, FileText, PlusCircle, Users } from 'react-feather';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Popover from '@material-ui/core/Popover';
@@ -133,8 +133,7 @@ class Societati extends React.Component {
     const user = this.state.user;
     if (!user) return;
 
-    if (user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR'))
-      return true;
+    if (user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR')) return true;
     return false;
   }
 
@@ -145,7 +144,7 @@ class Societati extends React.Component {
       today: today,
       luna: today.getMonth(),
       an: today.getFullYear(),
-      addSocietate: this.getAdaugaSocietatePermission(),
+      canAddSocietate: this.getAdaugaSocietatePermission(),
       // user: authService.getCurrentUser(),
     });
   }
@@ -338,7 +337,7 @@ class Societati extends React.Component {
 
   render() {
     const societatiComponent = Object.keys(this.state.societati).map((key) => {
-      const showButtons = this.state.societati[key].opacity === '1' && this.state.addSocietate;
+      const showButtons = this.state.societati[key].opacity === '1' && this.state.canAddSocietate;
       return (
         <Col md={6} xl={4} key={key}>
           <Card
@@ -357,48 +356,35 @@ class Societati extends React.Component {
           >
             <Card.Body>
               <h3>{key}</h3>
-              {showButtons ? (
-                <div
-                  className="mt-4"
-                  visibility={
-                    this.state.societati[key].opacity === '1' && this.state.addSocietate
-                      ? 'visible'
-                      : 'hidden'
-                  }
-                >
-                  <Edit
-                    className="d-flex justify-content-around float float-right"
-                    visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => this.editSocietate(this.state.societati[key])}
-                  />
-                  <Users
-                    className="d-flex justify-content-around float float-right mr-2"
-                    visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => (window.location.href = '/tables/angajati')}
-                  />
+              <div
+                className="mt-4"
+                visibility={
+                  showButtons
+                    ? 'visible'
+                    : 'hidden'
+                }
+              >
+                    <Edit
+                      className="d-flex justify-content-around float float-left m-2"
+                      visibility={showButtons ? 'visible' : 'hidden'}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => this.editSocietate(this.state.societati[key])}
+                    />
 
-                  <Button
-                    size="sm"
-                    onClick={this.statSalarii}
-                  >
-                    Stat salarii
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={this.dec112}
-                  >
-                    Dec.112
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={this.mta}
-                  >
-                    MTA
-                  </Button>
-                </div>
-              ) : null}
+                    <Users
+                      className="d-flex justify-content-around float float-right m-2"
+                      visibility={showButtons ? 'visible' : 'hidden'}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => (window.location.href = '/tables/angajati')}
+                    />
+
+                    <FileText
+                      className="d-flex justify-content-around float float-right m-2"
+                      visibility={showButtons ? 'visible' : 'hidden'}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => (window.location.href = '/rapoarte')}
+                    />
+              </div>
             </Card.Body>
           </Card>
         </Col>
@@ -650,7 +636,7 @@ class Societati extends React.Component {
 
         <Row>
           {societatiComponent}
-          {this.state.addSocietate ? addSocietateComponent : null}
+          {this.state.canAddSocietate ? addSocietateComponent : null}
         </Row>
       </Aux>
     );

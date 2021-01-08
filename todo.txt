@@ -42,17 +42,16 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	SarbatoriTabel.js: adauga sarbatori pe un an, arata care sunt
-		se vor adauga doar daca nu exista nicio sarbatoare in anul respectiv
+	la sign-up, daca e singurul user sa il faca admin+director+contabil
 }
 
 
 TODO: {
-	verifica persoane intretinere
+	- sa poti intra la table useri daca nu e nicio societate selectata
+	- verifica persoane intretinere
 
-	buton de adauga utilizatori pt toti angajatii
-	la sign-up, daca e singurul user sa il faca admin+director+contabil
-	sa poti intra la table useri daca nu e nicio societate selectata
+
+	1 -> buton de adauga utilizatori pt toti angajatii
 
 	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 

@@ -13,9 +13,11 @@ public class RoleService {
 	private RoleRepository roleRepository;
 
 	public void init() {
-		roleRepository.save(new Role(ERole.ROLE_ADMIN));
-		roleRepository.save(new Role(ERole.ROLE_DIRECTOR));
-		roleRepository.save(new Role(ERole.ROLE_CONTABIL));
-		roleRepository.save(new Role(ERole.ROLE_ANGAJAT));
+		if (roleRepository.count() == 0) {
+			roleRepository.save(new Role(ERole.ROLE_ADMIN));
+			roleRepository.save(new Role(ERole.ROLE_DIRECTOR));
+			roleRepository.save(new Role(ERole.ROLE_CONTABIL));
+			roleRepository.save(new Role(ERole.ROLE_ANGAJAT));
+		}
 	}
 }

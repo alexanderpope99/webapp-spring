@@ -16,7 +16,7 @@ class SignUp1 extends React.Component {
       email: '',
       password: '',
       confirmPassword: '',
-      gen: false,
+      gen: true,
       message: '',
       show: false,
       options: [
@@ -48,29 +48,31 @@ class SignUp1 extends React.Component {
               message: 'Utilizator adăugat cu succes',
             });
         })
-        .catch((error) => {
+        .catch(() => {
           this.setState({
             show: true,
-            message: this.state.username + ' ' + this.state.email + ' ' + this.state.password,
+            message: 'A apărut o eroare ❌',
           });
         });
     }
   }
   render() {
-    if (sessionStorage.getItem('user') !== null) return <Redirect to="/auth/signin-1" />;
+    if (sessionStorage.getItem('user')) return <Redirect to="/auth/signin-1" />;
     else
       return (
         <Aux>
+					{/* CONFIRM MODAL */}
           <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
             <Modal.Header closeButton>
               <Modal.Title>{this.state.message}</Modal.Title>
             </Modal.Header>
             <Modal.Footer>
-              <Button variant="primary" onClick={() => this.setState({ show: false })}>
+              <Button variant="primary" onClick={() => this.setState({ show: false }, ()=>window.location.href="/")}>
                 OK
               </Button>
             </Modal.Footer>
           </Modal>
+
           <Form onSubmit={(e) => this.handleRegister(e)}>
             <div className="auth-wrapper">
               <div className="auth-content">
@@ -145,7 +147,7 @@ class SignUp1 extends React.Component {
                               custom
                               type="radio"
                               label="Dl."
-                              checked={!this.state.gen}
+                              checked={this.state.gen}
                               onChange={() => this.setState({ gen: !this.state.gen })}
                               name="gen"
                               id="dl"
@@ -156,7 +158,7 @@ class SignUp1 extends React.Component {
                               custom
                               type="radio"
                               label="Dna."
-                              checked={this.state.gen}
+                              checked={!this.state.gen}
                               onChange={() => this.setState({ gen: !this.state.gen })}
                               name="gen"
                               id="dna"

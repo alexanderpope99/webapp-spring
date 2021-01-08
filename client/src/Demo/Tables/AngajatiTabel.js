@@ -205,7 +205,7 @@ class AngajatiTabel extends React.Component {
   render() {
     return (
       <Aux>
-        <Row>
+        <Row> 
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
               <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
@@ -216,7 +216,7 @@ class AngajatiTabel extends React.Component {
                 <Card.Title as="h5">Angajați</Card.Title>
                 <OverlayTrigger
                   placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
+                  delay={{ show: 250 }}
                   overlay={
                     <Tooltip id="refresh-button" style={{ opacity: '.4' }}>
                       Refresh
@@ -236,7 +236,7 @@ class AngajatiTabel extends React.Component {
 
                 <OverlayTrigger
                   placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
+                  delay={{ show: 250 }}
                   overlay={
                     <Tooltip id="add-button" style={{ opacity: '.4' }}>
                       Adaugă o persoană nouă
