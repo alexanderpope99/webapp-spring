@@ -42,8 +42,8 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	1 -> SocietateService -> 
-		deleteSocietate: set all foreign keys pointing to societate to null, delete only societate & societate.adresa
+	SarbatoriTabel.js: adauga sarbatori pe un an, arata care sunt
+		se vor adauga doar daca nu exista nicio sarbatoare in anul respectiv
 }
 
 
@@ -68,8 +68,6 @@ TODO: {
 }
 
 UPGRADES: {
-	SarbatoriTabel.js: adauga sarbatori pe un an, arata care sunt
-		se vor adauga doar daca nu exista nicio sarbatoare in anul respectiv
 }
 
 *** INTREBARI: ***
