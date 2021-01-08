@@ -18,9 +18,7 @@ public class SocietateService {
 			.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 		
 		societate.setAngajati(null);
-		societate.setContbancar(null);
 		societate.setFacturi(null);
-		societate.setCentreCost(null);
 		societate.setUseri(null);
 		
 		societateRepository.delete(societate);
