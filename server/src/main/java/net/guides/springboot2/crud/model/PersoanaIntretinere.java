@@ -1,7 +1,7 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "persoanaintretinere")
@@ -31,7 +33,7 @@ public class PersoanaIntretinere implements Serializable {
 	private String cnp;
 
 	@Column(name = "datanasterii")
-	private Date datanasterii;
+	private LocalDate datanasterii;
 
 	@Column(name = "grad")
 	private String grad;
@@ -45,7 +47,7 @@ public class PersoanaIntretinere implements Serializable {
 	@Column(name = "coasigurat")
 	private Boolean coasigurat;
 
-
+	@JsonBackReference("persoanaintretinere-angajat")
 	@ManyToOne
 	@JoinColumn(name = "idangajat")
 	private Angajat angajat;
@@ -53,7 +55,7 @@ public class PersoanaIntretinere implements Serializable {
 	public PersoanaIntretinere() {
 	}
 
-	public PersoanaIntretinere(String nume, String prenume, String cnp, Date datanasterii, String grad,
+	public PersoanaIntretinere(String nume, String prenume, String cnp, LocalDate datanasterii, String grad,
 			String gradinvaliditate, Boolean intretinut, Boolean coasigurat, Angajat angajat) {
 		this.nume = nume;
 		this.prenume = prenume;
@@ -82,7 +84,7 @@ public class PersoanaIntretinere implements Serializable {
 		return coasigurat;
 	}
 
-	public Date getDatanasterii() {
+	public LocalDate getDatanasterii() {
 		return datanasterii;
 	}
 
@@ -125,7 +127,7 @@ public class PersoanaIntretinere implements Serializable {
 		this.coasigurat = coasigurat;
 	}
 
-	public void setDatanasterii(Date datanasterii) {
+	public void setDatanasterii(LocalDate datanasterii) {
 		this.datanasterii = datanasterii;
 	}
 

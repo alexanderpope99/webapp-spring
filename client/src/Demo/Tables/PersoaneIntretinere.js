@@ -45,7 +45,7 @@ class PersoaneIntretinereTabel extends React.Component {
       prenume: '',
       cnp: '',
       datanasterii: '',
-      grad: '',
+      grad: 'Soț/Soție',
       gradinvaliditate: 'valid',
       intretinut: false,
       coasigurat: false,
@@ -85,8 +85,8 @@ class PersoaneIntretinereTabel extends React.Component {
       datanasterii: this.state.datanasterii || null,
       grad: this.state.grad || null,
       gradinvaliditate: this.state.gradinvaliditate.toLowerCase() || null,
-      coasigurat: this.state.coasigurat || null,
-      intretinut: this.state.intretinut || null,
+      coasigurat: this.state.coasigurat,
+      intretinut: this.state.intretinut,
       idangajat: this.state.angajat.idpersoana,
     };
 
@@ -114,8 +114,8 @@ class PersoaneIntretinereTabel extends React.Component {
       datanasterii: this.state.datanasterii || null,
       grad: this.state.grad || null,
       gradinvaliditate: this.state.gradinvaliditate.toLowerCase() || null,
-      coasigurat: this.state.coasigurat || null,
-      intretinut: this.state.intretinut || null,
+      coasigurat: this.state.coasigurat,
+      intretinut: this.state.intretinut,
       idangajat: this.state.angajat.idpersoana || null,
     };
 
@@ -137,7 +137,6 @@ class PersoaneIntretinereTabel extends React.Component {
   }
 
   async editPersoanaIntretinere(pers) {
-    console.log(pers);
     this.setState({
       isEdit: true,
       show: true,
@@ -145,7 +144,7 @@ class PersoaneIntretinereTabel extends React.Component {
       id: pers.id,
       nume: pers.nume,
       prenume: pers.prenume,
-      cnp: pers.cnp,
+      cnp: pers.cnp || '',
       datanasterii: pers.datanasterii ? pers.datanasterii.substring(0, 10) : '',
       grad: pers.grad,
       gradinvaliditate: pers.gradinvaliditate,
@@ -163,13 +162,6 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) => console.error(err));
   }
 
-  onChangeCnp(e) {
-    const cnp = e.target.value;
-    this.setState({
-      cnp: cnp,
-      datanasterii: this.getDatanasteriiByCNP(cnp),
-    });
-  }
   getDatanasteriiByCNP(cnp) {
     // console.log('getDatanasteriiByCNP called |', cnp);
     if (!cnp) return '';
@@ -183,8 +175,15 @@ class PersoaneIntretinereTabel extends React.Component {
     } else return '';
   }
 
-  // function to create react component with fetched data
+  onChangeCnp(e) {
+    const cnp = e.target.value;
+    this.setState({
+      cnp: cnp,
+      datanasterii: this.getDatanasteriiByCNP(cnp),
+    });
+  }
 
+  // function to create react component with fetched data
   async fillTable() {
     if (this.state.angajat) {
       const persoane = await axios
@@ -245,7 +244,7 @@ class PersoaneIntretinereTabel extends React.Component {
           <tr key={pers.id}>
             <th>{pers.nume || '-'}</th>
             <th>{pers.prenume || '-'}</th>
-            <th>{pers.cnp}</th>
+            <th>{pers.cnp || '-'}</th>
             <th>{pers.grad}</th>
             <th>{pers.gradinvaliditate}</th>
             <th>{pers.coasigurat ? 'DA' : 'NU'}</th>
@@ -394,7 +393,7 @@ class PersoaneIntretinereTabel extends React.Component {
                       <Form.Group className="ml-3">
                         <Form.Check
                           custom
-                          type="checkbox"
+                          type="switch"
                           id="coasiguratCheck"
                           label="Coasigurat"
                           checked={this.state.coasigurat}
@@ -406,7 +405,7 @@ class PersoaneIntretinereTabel extends React.Component {
                       <Form.Group className="ml-3">
                         <Form.Check
                           custom
-                          type="checkbox"
+                          type="switch"
                           id="intretinutCheck"
                           label="Intretinut"
                           checked={this.state.intretinut}

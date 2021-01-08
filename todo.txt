@@ -42,13 +42,14 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	la sign-up, daca e singurul user sa il faca admin+director+contabil
+	verificat persoane intretinere
 }
 
 
 TODO: {
+	- verifica rolurile
 	- sa poti intra la table useri daca nu e nicio societate selectata
-	- verifica persoane intretinere
+		+ solutie: alta pagina care arata doar userii fara datele specifice societatilor
 
 
 	1 -> buton de adauga utilizatori pt toti angajatii
