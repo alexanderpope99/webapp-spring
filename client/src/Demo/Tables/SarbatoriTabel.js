@@ -27,7 +27,6 @@ class SarbatoriTabel extends React.Component {
       isEdit: false,
 
 			sarbatori: [],
-			ani_cu_sarbatori: [],
       sarbatoriComponent: null,
 
       an: '',
@@ -77,7 +76,6 @@ class SarbatoriTabel extends React.Component {
       this.setState(
         {
 					sarbatori: sarbatori,
-					ani_cu_sarbatori: [],
         },
         this.renderSarbatori
       );
