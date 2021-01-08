@@ -42,25 +42,22 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	fixed societate
+	1 -> SocietateService -> 
+		deleteSocietate: set all foreign keys pointing to societate to null, delete only societate & societate.adresa
 }
 
 
 TODO: {
 	verifica persoane intretinere
 
-	1 -> SocietateService -> 
-		deleteSocietate: set all foreign keys pointing to societate null, delete only societate, societate.adresa
-
 	2 -> pentru un angajat normal {
-		RealizariRetineri.js: {
+		RealizariRetineriView.js: {
 			* sa apara doar lunile in care sunt calculate salariile
 				-< alt endpoint care trebuie apelat in componentDidMount()
 		}
 	}
 
-	3.1 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
-	3.2 -> pune data by-default la facturi etc
+	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori
@@ -71,14 +68,9 @@ TODO: {
 }
 
 UPGRADES: {
+	SarbatoriTabel.js: adauga sarbatori pe un an, arata care sunt
+		se vor adauga doar daca nu exista nicio sarbatoare in anul respectiv
 }
-
-UserTabel:
-	✔ can add User
-	✔ can edit Roles
-	✔ can edit Societati
-	✔ can edit Angajati
-
 
 *** INTREBARI: ***
 din ce se calculeaza CASS? din sal. realizat?
