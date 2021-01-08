@@ -122,7 +122,7 @@ class RealizariRetineriView extends React.Component {
   }
   clearForm() {
     this.setState({
-			idstat: 0,
+      idstat: 0,
       // realizari
       functie: '',
       duratazilucru: '',
@@ -251,6 +251,7 @@ class RealizariRetineriView extends React.Component {
     console.log();
 
     // get data
+    console.log(`${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`);
     const data = await axios
       .get(`${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`, {
         headers: authHeader(),
@@ -475,10 +476,10 @@ class RealizariRetineriView extends React.Component {
     const idangajat = this.state.selected_angajat.idpersoana;
     const luna = this.state.luna;
     const an = this.state.an;
-		const user = authService.getCurrentUser();
-		
-		// check if realizariretineri exist in (luna, an)
-		if(!this.state.idstat) return;
+    const user = authService.getCurrentUser();
+
+    // check if realizariretineri exist in (luna, an)
+    if (!this.state.idstat) return;
 
     const ok = await axios
       .get(

@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.controller;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,11 @@ public class RealizariRetineriController {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
+	@GetMapping("idc={id}")
+	public List<String> getAllRealizariRetineriByIdContract(@PathVariable(value = "id") int idcontract) {
+		return realizariRetineriService.getAllRealizariRetineriByIdContract(idcontract);
+	}
+
 	@GetMapping("idp={id}&mo={luna}&y={an}")
 	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value = "id") int idpersoana,
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an) {
@@ -57,8 +64,8 @@ public class RealizariRetineriController {
 			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an,
 			@PathVariable(value = "pb") Integer primabruta, @PathVariable(value = "nrt") Integer nrTichete,
 			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
-		return modelMapper.map(realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primabruta, nrTichete,
-				totalOreSuplimentare), RealizariRetineriDTO.class);
+		return modelMapper.map(realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primabruta,
+				nrTichete, totalOreSuplimentare), RealizariRetineriDTO.class);
 	}
 
 	// classic PUT
