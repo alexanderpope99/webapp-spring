@@ -62,7 +62,9 @@ TODO: {
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori
 
-	*-> add sorting to tables on frontend 
+	5 -> angajat normal nu trebuie sa aiba acces la parametrii salarii si sarbatori
+
+	*-> add sorting and filtering to tables on frontend 
 }
 
 UPGRADES: {
