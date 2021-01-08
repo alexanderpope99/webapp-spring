@@ -77,5 +77,12 @@ public class ContBancar implements Serializable {
 		this.numebanca = adresa;
 	}
 
+	public Societate getSocietate() {
+		return societate;
+	}
+
+	public void setSocietate(Societate societate) {
+		this.societate = societate;
+	}
 
 }

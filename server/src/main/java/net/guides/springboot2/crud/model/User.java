@@ -65,6 +65,13 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	//* methods
+	public List<Societate> removeSocietate(Societate societate) {
+		societati.remove(societate);
+		return societati;
+	}
+
+	// ID
 	public int getId() {
 		return id;
 	}
@@ -73,7 +80,7 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	// GETTERS
+	//! GETTERS
 	public String getEmail() {
 		return email;
 	}
@@ -102,7 +109,7 @@ public class User implements Serializable {
 		return gen;
 	}
 
-	// SETTERS
+	//! SETTERS
 	public void setEmail(String email) {
 		this.email = email;
 	}

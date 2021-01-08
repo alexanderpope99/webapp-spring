@@ -31,7 +31,7 @@ public class InitController {
 		parametriiSalariuService.init();
 		sarbatoriService.initializeKnown();
 
-		return "Initialized: deduceri, parametrii-salariu, sarbatori (2019-2021, fara paște)";
+		return "Initialized: deduceri, parametrii-salariu, sarbatori (2019-2021, cu paște)";
 	}
 
 	@GetMapping("/roles")
