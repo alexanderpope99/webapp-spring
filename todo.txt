@@ -36,7 +36,7 @@ Pasi de urmat:
 		- un utilizator cu rolul admin si/sau director 
 		- parametrii salarii, sarbatori, deduceri = get request la `/init`
 		- roles la `/init/roles`
-
+#################################################################################
 
 
 
@@ -50,12 +50,9 @@ LAST-UPDATE : {
 TODO: {
 	verifica persoane intretinere
 
-	2 -> pentru un angajat normal {
-		RealizariRetineriView.js: {
-			* sa apara doar lunile in care sunt calculate salariile
-				-< alt endpoint care trebuie apelat in componentDidMount()
-		}
-	}
+	buton de adauga utilizatori pt toti angajatii
+	la sign-up, daca e singurul user sa il faca admin+director+contabil
+	sa poti intra la table useri daca nu e nicio societate selectata
 
 	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 
