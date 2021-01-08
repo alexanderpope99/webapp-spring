@@ -22,6 +22,13 @@ public class SarbatoriService {
 	@Autowired
 	private SarbatoriRepository sarbatoriRepository;
 
+	public boolean existsInAn(int an) {
+		for(int i = 1; i <= 12; ++i) {
+			if(!this.getZileSarbatoareInLunaAnul(i, an).isEmpty()) return true;
+		}
+		return false;
+	}
+
 	public int getNrZileSarbatoareInLunaAnul(int luna, int an) {
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = YearMonth.of(an, luna).lengthOfMonth();
@@ -69,6 +76,8 @@ public class SarbatoriService {
 	}
 	
 	public void initialize(int an) {
+		if(this.existsInAn(an)) return;
+
 		sarbatoriRepository.save(new Sarbatori(an+"-01-01", an+"-01-02", "Anul Nou"));
 
 		sarbatoriRepository.save(new Sarbatori(an+"-01-24", an+"-01-24", "Ziua Unirii Principatelor Române"));
