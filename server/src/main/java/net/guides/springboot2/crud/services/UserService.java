@@ -12,9 +12,13 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.dto.UserDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.ERole;
+import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
+import net.guides.springboot2.crud.payload.request.SignupRequest;
 import net.guides.springboot2.crud.repository.AngajatRepository;
+import net.guides.springboot2.crud.repository.RoleRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
 
@@ -31,6 +35,11 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
+	private InitService initService;
 
 	UserService() {
 	}
@@ -53,6 +62,21 @@ public class UserService {
 
 		modelMapper.typeMap(User.class, UserDTO.class).addMapping(User::getSocietati, UserDTO::setSocietatiClass);
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
+	}
+
+	public void createNewUser(SignupRequest signUpRequest) {
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()));
+		user.setGen(signUpRequest.isGen());
+
+		List<Role> roles = new ArrayList<>();
+
+		Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
+				.orElseThrow(() -> new RuntimeException("Error: ROLE_ANGAJAT not in database"));
+		roles.add(angajatRole);
+
+		user.setRoles(roles);
+		userRepository.save(user);
 	}
 
 	public UserDTO save(UserDTO newUserDTO) throws ResourceNotFoundException {
@@ -142,10 +166,39 @@ public class UserService {
 
 	public void delete(int userId) throws ResourceNotFoundException {
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
-		
+				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+
 		user.getAngajati().forEach(angajat -> angajat.setUser(null));
 
 		userRepository.delete(user);
+	}
+
+	public void init(SignupRequest signUpRequest) {
+		if (userRepository.count() > 0)
+			return;
+
+		// init database
+		initService.init();
+
+		// Create new user with roles admin, director, contabil
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()));
+		user.setGen(signUpRequest.isGen());
+
+		List<Role> roles = new ArrayList<>();
+
+		Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+				.orElseThrow(() -> new RuntimeException("Error: ROLE_ADMIN not in database"));
+		Role directorRole = roleRepository.findByName(ERole.ROLE_DIRECTOR)
+				.orElseThrow(() -> new RuntimeException("Error: ROLE_DIRECTOR not in database"));
+		Role contabilRole = roleRepository.findByName(ERole.ROLE_CONTABIL)
+				.orElseThrow(() -> new RuntimeException("Error: ROLE_CONTABIL not in database"));
+
+		roles.add(adminRole);
+		roles.add(directorRole);
+		roles.add(contabilRole);
+
+		user.setRoles(roles);
+		userRepository.save(user);
 	}
 }

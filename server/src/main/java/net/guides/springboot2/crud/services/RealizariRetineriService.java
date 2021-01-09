@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.services;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,8 +101,8 @@ public class RealizariRetineriService {
 		this.venitNet = restPlata + valoareTichete;
 
 		Integer deducerePensieFacultativa = retineriService.calculeazaPensieDeductibila(idcontract, an, luna);
-		if(deducerePensieFacultativa == null)
-				deducerePensieFacultativa = 0;
+		if (deducerePensieFacultativa == null)
+			deducerePensieFacultativa = 0;
 
 		this.bazaImpozit = (restPlata + valoareTichete - deducere - deducerePensieFacultativa);
 
@@ -117,8 +118,8 @@ public class RealizariRetineriService {
 		// get Retineri here and subtract it
 		Retineri retineri = retineriService.getRetinereByIdcontractAndLunaAndAn(idcontract, luna, an);
 		if (retineri != null) {
-			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON()
-					+ retineri.getPensiealimentara() + retineri.getPopriri() + retineri.getImprumuturi());
+			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON() + retineri.getPensiealimentara()
+					+ retineri.getPopriri() + retineri.getImprumuturi());
 		}
 
 		return Math.round(restPlata);
@@ -170,8 +171,8 @@ public class RealizariRetineriService {
 		float salariuPeZi = totalDrepturi / norma;
 		float salariuPeOra = totalDrepturi / norma / duratazilucru;
 
-		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare)
-				+ primaBruta + totalOreSuplimentare);
+		this.salariuRealizat = Math
+				.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta + totalOreSuplimentare);
 
 		// zileCOLucratoare include zileCFPLucratoare
 		float valCO = (zileCOLucratoare - zileCFPLucratoare) * salariuPeZi;
@@ -212,6 +213,14 @@ public class RealizariRetineriService {
 		return rr;
 	} // calcRealizariRetineri
 
+	public List<String> getAllRealizariRetineriByIdContract(int id) {
+		List<RealizariRetineri> rv = realizariRetineriRepository.findByContract_Id(id);
+		List<String> lunaan = new ArrayList<>();
+		for (RealizariRetineri rr : rv)
+			lunaan.add(rr.getLuna() + "-" + rr.getAn());
+		return lunaan;
+	}
+
 	// pur si simplu calculeaza apoi salveaza
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
@@ -223,7 +232,7 @@ public class RealizariRetineriService {
 
 		Retineri retineri = retineriService.saveRetinere(realizariRetineri);
 		realizariRetineri.setRetineri(retineri);
-		
+
 		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
 
 		return realizariRetineri;
@@ -296,8 +305,7 @@ public class RealizariRetineriService {
 
 	// exclude (luna, an) din argument
 	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
-	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract)
-			throws ResourceNotFoundException {
+	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);

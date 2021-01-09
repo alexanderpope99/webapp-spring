@@ -23,6 +23,7 @@ import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
+import net.guides.springboot2.crud.services.SocietateService;
 
 import org.springframework.data.domain.Sort;
 
@@ -30,12 +31,15 @@ import org.springframework.data.domain.Sort;
 @RequestMapping("/societate")
 public class SocietateController {
 	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
 	private SocietateRepository societateRepository;
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private ModelMapper modelMapper;
+	private SocietateService societateService;
 
 	@GetMapping
 	public List<SocietateDTO> getAll() {
@@ -96,10 +100,11 @@ public class SocietateController {
 
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> deleteSocietate(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
-		Societate societate = societateRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+		// Societate societate = societateRepository.findById(id)
+		// 		.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 
-		societateRepository.delete(societate);
+		// societateRepository.delete(societate);
+		societateService.delete(id);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;

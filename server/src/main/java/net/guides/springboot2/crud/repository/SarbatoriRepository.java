@@ -11,7 +11,6 @@ import net.guides.springboot2.crud.model.Sarbatori;
 
 @Repository
 public interface SarbatoriRepository extends JpaRepository<Sarbatori, Long> {
-
 	@Query(value = "select * from sarbatori where dela between ?1 and ?2", nativeQuery = true)
 	public List<Sarbatori> findByDelaBetween(LocalDate dela, LocalDate panala);
 

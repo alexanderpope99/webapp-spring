@@ -28,8 +28,6 @@ public class Adresa implements Serializable {
 	private String localitate;
 	@Column(name = "judet")
 	private String judet;
-	@Column(name = "tara")
-	private String tara;
 
 	@JsonBackReference(value = "adresa-societate")
 	@OneToOne(mappedBy = "adresa", fetch = FetchType.LAZY)
@@ -41,11 +39,10 @@ public class Adresa implements Serializable {
 
 	public Adresa() { }
 
-	public Adresa(String adresa, String localitate, String judet, String tara) {
+	public Adresa(String adresa, String localitate, String judet) {
 		this.adresa = adresa;
 		this.localitate = localitate;
 		this.judet = judet;
-		this.tara = tara;
 	}
 
 	public Integer getId() {
@@ -78,14 +75,6 @@ public class Adresa implements Serializable {
 
 	public void setJudet(String judet) {
 		this.judet = judet;
-	}
-
-	public String getTara() {
-		return tara;
-	}
-
-	public void setTara(String tara) {
-		this.tara = tara;
 	}
 
 	public Persoana getPersoane() {

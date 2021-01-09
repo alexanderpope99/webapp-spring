@@ -65,9 +65,9 @@ public class CereriConcediuController {
 	}
 
 	@GetMapping("/soc/{socid}")
-	public List<CereriConcediu> getCerereConcediuBySocietyId(@PathVariable(value = "socid") int socId)
+	public List<CereriConcediuDTO> getCerereConcediuBySocietyId(@PathVariable(value = "socid") int socId)
 			throws ResourceNotFoundException {
-		return cereriConcediuRepository.findBySocietate_Id(socId);
+		return cereriConcediuService.getCereriConcediuWithNumeUserBySocId(socId);
 	}
 
 	@PostMapping

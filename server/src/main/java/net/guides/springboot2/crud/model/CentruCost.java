@@ -40,11 +40,11 @@ public class CentruCost implements Serializable {
 	private String nume;
 
 	@JsonBackReference(value = "factura-centrucost")
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "centrucost", fetch = FetchType.LAZY)
 	private List<Factura> facturi;
 
 	@JsonBackReference(value = "contract-centrucost")
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="centrucost", fetch = FetchType.LAZY)
 	private List<Contract> contracte;
 
 	public CentruCost() {

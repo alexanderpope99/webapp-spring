@@ -26,8 +26,7 @@ public class NotificareService {
 	public Notificare save(NotificareDTO notificareDTO) throws ResourceNotFoundException {
 		User user = userRepository.findById(notificareDTO.getIduser()).orElseThrow(
 				() -> new ResourceNotFoundException("User not found for this user id :: " + notificareDTO.getIduser()));
-		Notificare notificare = new Notificare();
-		notificare = modelMapper.map(notificareDTO, Notificare.class);
+		Notificare notificare = modelMapper.map(notificareDTO, Notificare.class);
 		notificare.setUser(user);
 
 		notificare = notificareRepository.save(notificare);

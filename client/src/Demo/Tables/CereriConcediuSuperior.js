@@ -63,7 +63,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
               )}
               {cer.status}
             </th>
-            <th>{cer.nume || '-'}</th>
+            <th>{cer.numeuser || '-'}</th>
             <th>{cer.dela || '-'}</th>
             <th>{cer.panala}</th>
             <th>{cer.tip}</th>
@@ -180,7 +180,6 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) => console.error(err));
 
     if (!cereriConcediu) return;
-
     else {
       this.setState(
         {

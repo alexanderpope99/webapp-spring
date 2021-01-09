@@ -239,12 +239,7 @@ class FacturiTabel extends React.Component {
       facturaComponent: facturi.map((fact, index) => {
         return (
           // TODO
-          <tr
-            style={{
-              backgroundColor: this.getStatusColor(fact.status),
-            }}
-            key={fact.id}
-          >
+          <tr key={fact.id}>
             <th>
               <div className="d-flex">
                 <Button
@@ -306,7 +301,18 @@ class FacturiTabel extends React.Component {
                 </PopupState>
               </div>
             </th>
-            <th>{fact.status}</th>
+            <th>
+              {fact.status === 'În așteptare' ? (
+                <i className="fa fa-circle text-c-gray f-10 mr-2" />
+              ) : fact.status === 'Aprobată' ? (
+                <i className="fa fa-circle text-c-green f-10 mr-2" />
+              ) : fact.status === 'Respinsă' ? (
+                <i className="fa fa-circle text-c-red f-10 mr-2" />
+              ) : (
+                <i className="fa fa-circle text-c-yellow f-10 mr-2" />
+              )}
+              {fact.status}
+            </th>
             <th>{fact.codproiect ? fact.codproiect : '-'}</th>
             <th>{fact.observatii ? fact.observatii : '-'}</th>
             <th>{fact.denumirefurnizor}</th>

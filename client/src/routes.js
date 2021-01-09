@@ -10,7 +10,9 @@ const isAngajatSimplu = authService.isAngajatSimplu();
 
 const DashboardDefault = React.lazy(() => import('./Demo/Dashboard/Default'));
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
+const SocietatiView = React.lazy(() => import('./Demo/Dashboard/SocietatiView'));
 const ParametriiSalarii = React.lazy(() => import('./Demo/Dashboard/ParametriiSalarii'));
+const ParametriiSalariiView = React.lazy(() => import('./Demo/Dashboard/ParametriiSalariiView'));
 const Setari = React.lazy(() => import('./Demo/Edit/Setari'));
 
 const UIBasicButton = React.lazy(() => import('./Demo/UIElements/Basic/Button'));
@@ -49,10 +51,12 @@ const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
 const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
 const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
+const SarbatoriTabelView = React.lazy(() => import('./Demo/Tables/SarbatoriTabelView'));
 const FacturiTabel = React.lazy(() => import('./Demo/Tables/FacturiTabel'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
 const FacturiOperatorTabel = React.lazy(() => import('./Demo/Tables/FacturiOperatorTabel'));
 const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
+const AngajatiTabelView = React.lazy(() => import('./Demo/Tables/AngajatiTabelView'));
 
 // EDIT
 const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
@@ -67,12 +71,17 @@ const routes = [
   // LOGIN?
 
   // CARDS
-  { path: '/dashboard/societati', exact: true, name: 'Societati', component: Societati },
+  {
+    path: '/dashboard/societati',
+    exact: true,
+    name: 'Societati',
+    component: isAngajatSimplu ? SocietatiView : Societati,
+  },
   {
     path: '/parametriisalarii',
     exact: true,
     name: 'Parametrii Salarii',
-    component: ParametriiSalarii,
+    component: isAngajatSimplu ? ParametriiSalariiView : ParametriiSalarii,
   },
   {
     path: '/edit/setari',
@@ -111,9 +120,19 @@ const routes = [
 
   // FORMS
   { path: '/forms/form-basic', exact: true, name: 'Forms Elements', component: FormsElements },
-  { path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: AddSocietate },
+  {
+    path: '/forms/add-societate',
+    exact: true,
+    name: 'Adauga Societate',
+    component: isAngajatSimplu ? null : AddSocietate,
+  },
   { path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
-	{ path: '/forms/angajat', exact: true, name: 'Angajat', component: isAngajatSimplu ? AngajatSimplu : Angajat },
+  {
+    path: '/forms/angajat',
+    exact: true,
+    name: 'Angajat',
+    component: isAngajatSimplu ? AngajatSimplu : Angajat,
+  },
 
   {
     path: '/forms/realizari-retineri',
@@ -166,7 +185,7 @@ const routes = [
     path: '/sarbatori',
     exact: true,
     name: 'Sărbători',
-    component: SarbatoriTabel,
+    component: isAngajatSimplu ? SarbatoriTabelView : SarbatoriTabel,
   },
   {
     path: '/facturi',
@@ -190,7 +209,7 @@ const routes = [
     path: '/tables/angajati',
     exact: true,
     name: 'Tabel Angajați',
-    component: AngajatiTabel,
+    component: isAngajatSimplu ? AngajatiTabelView : AngajatiTabel,
   },
   // EDIT
   { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },

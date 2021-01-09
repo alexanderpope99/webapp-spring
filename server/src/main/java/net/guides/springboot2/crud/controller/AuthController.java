@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.guides.springboot2.crud.model.ERole;
-import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.payload.request.ChangePasswordRequest;
 import net.guides.springboot2.crud.payload.request.LoginRequest;
@@ -34,86 +31,83 @@ import net.guides.springboot2.crud.repository.RoleRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
 import net.guides.springboot2.crud.security.jwt.JwtUtils;
 import net.guides.springboot2.crud.security.services.UserDetailsImpl;
+import net.guides.springboot2.crud.services.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
+	@Autowired
+	AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+	@Autowired
+	RoleRepository roleRepository;
 
-    @Autowired
-    PasswordEncoder encoder;
+	@Autowired
+	PasswordEncoder encoder;
 
-    @Autowired
-    JwtUtils jwtUtils;
+	@Autowired
+	JwtUtils jwtUtils;
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	@Autowired
+	private UserService userService;
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
 
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail(), roles, userDetails.isGen()));
-    }
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+				.collect(Collectors.toList());
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-        }
+		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
+				userDetails.getEmail(), roles, userDetails.isGen()));
+	}
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        }
+	@PostMapping("/signup")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+		}
 
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-        user.setGen(signUpRequest.isGen());
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+		}
 
-        List<Role> roles = new ArrayList<>();
-
-        Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
-                .orElseThrow(() -> new RuntimeException("Error: ROLE_ANGAJAT not in database"));
-        roles.add(angajatRole);
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
+		if (userRepository.count() == 0) {
+			userService.init(signUpRequest);
+			return ResponseEntity.ok(new MessageResponse("First user registered successfully!"));
+		} else {
+			// Create new user's account
+			userService.createNewUser(signUpRequest);
+			return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		}
+	}
 
 	@PutMapping("/change-password/{uid}")
 	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
 			@PathVariable("uid") int uid) {
 
-        User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
-        if (!encoder.matches(changePasswordRequest.getPassword(), user.getPassword()))
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Parolă actuală incorectă!"));
+		if (!encoder.matches(changePasswordRequest.getPassword(), user.getPassword()))
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Parolă actuală incorectă!"));
 
-        String newPassword = encoder.encode(changePasswordRequest.getNewpassword());
-        user.setPassword(newPassword);
+		String newPassword = encoder.encode(changePasswordRequest.getNewpassword());
+		user.setPassword(newPassword);
 
-        userRepository.save(user);
+		userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("Password changed!"));
-    }
+		return ResponseEntity.ok(new MessageResponse("Password changed!"));
+	}
 
 	@PutMapping("update-profile/{uid}")
 	public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileReq,
@@ -122,8 +116,8 @@ public class AuthController {
 		user.setEmail(updateProfileReq.getEmail());
 		user.setGen(updateProfileReq.isGen());
 
-        userRepository.save(user);
+		userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("Updated profile!"));
-    }
+		return ResponseEntity.ok(new MessageResponse("Updated profile!"));
+	}
 }

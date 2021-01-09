@@ -52,6 +52,10 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Notificare> notificari;
 
+	@JsonBackReference(value = "user-cerericoncediu")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<CereriConcediu> cereriConcedius;
+
 	public User() {
 	}
 
@@ -61,6 +65,13 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	//* methods
+	public List<Societate> removeSocietate(Societate societate) {
+		societati.remove(societate);
+		return societati;
+	}
+
+	// ID
 	public int getId() {
 		return id;
 	}
@@ -69,7 +80,7 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	// GETTERS
+	//! GETTERS
 	public String getEmail() {
 		return email;
 	}
@@ -98,7 +109,7 @@ public class User implements Serializable {
 		return gen;
 	}
 
-	// SETTERS
+	//! SETTERS
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -137,5 +148,13 @@ public class User implements Serializable {
 
 	public void setNotificari(List<Notificare> notificari) {
 		this.notificari = notificari;
+	}
+
+	public List<CereriConcediu> getCereriConcedius() {
+		return cereriConcedius;
+	}
+
+	public void setCereriConcedius(List<CereriConcediu> cereriConcedius) {
+		this.cereriConcedius = cereriConcedius;
 	}
 }

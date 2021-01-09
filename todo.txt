@@ -1,43 +1,71 @@
-########### DE MUTAT BAZA DE DATE DIN APLICATIA C# IN AICI ###########
+########### DE MUTAT BAZA DE DATE DIN SQL SERVER IN POSTGRES ###########
+Pasi de urmat:
+	0. In SQL Server -> Tools -> Option -> Query Results -> SQL Server -> Results to grid -> ☑ Include column headers...
+
+	1. Ruleaza script-ul 'createnewtables.sql' in sql server:
+			New Query -> paste createnewtables.sql
+
+	2. Ruleaza script-ul 'createcsv.sql' (de preferat cate un select pe rand) in sql server
+		2.1 Click dreapta pe fereastra cu tabel pentru export in csv
+
+	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile: {
+		[
+			!! PENTRU TOATE TABELELE:
+			Import/Export: Import
+			Select .csv
+			Miscellaneous
+				Header: Yes,
+				Delimiter: ;
+		]
+		
+		4.1: Adrese -> verifica ca tabelul din postgres nu are coloana tara
+		4.2: Societati -> -
+		4.3: Acte de identitate -> sterge NULL din .csv
+		4.4: Persoane -> in postgres->import->columns :: fara email
+		4.5: Cont bancar -> in postgres->import->columns :: doar [id, iban]
+		4.6: Contracte -> sterge NULL din .csv
+		4.7: Angajati -> in postgres->import->columns :: doar [idpersoana, idcontract, idsocietate]
+		4.8: Concedii odihna -> -
+		4.9: Concedii medicale -> sterge NULL din .csv
+		4.10: Pers. intretinere -> -
+	}
+
+	5. Baza de date trebuie sa nu aiba alte inregistrari in tabelele care se importa pentru ca se insereaza id-uri
+	
+	6. Inainte de a rula aplicatia e nevoie de:
+		- un utilizator cu rolul admin si/sau director 
+		- parametrii salarii, sarbatori, deduceri = get request la `/init`
+		- roles la `/init/roles`
+#################################################################################
+
+
+
 
 LAST-UPDATE : {
-	2 -> pentru un angajat normal {
-		[RealizariRetineriView and AngajatSimplu] rendered instead of [RealizariRetineri and Angajat]
-	}
-	* fixed retineri is null in json reposnse when saving RealizariRetineri
+	adaugat sarbatori cunoscute pana in 2024 - se pot edita pe frontend
 }
-
-IN CERERI CONCEDIU NU APARE CINE A FACUT CEREREA =)))))
-IN CERERI CONCEDIU NU APARE CINE A FACUT CEREREA =)))))
 
 
 TODO: {
-	?? zile concediu disponibile depinde de concediile fara plata?
-	2 -> pentru un angajat normal {
-		RealizariRetineri.js: {
-			* sa apara doar lunile in care sunt calculate salariile
-				-< alt endpoint care trebuie apelat in componentDidMount()
-		}
-	}
+	- verifica rolurile
+	- sa poti intra la table useri daca nu e nicio societate selectata
+		+ solutie: alta pagina care arata doar userii fara datele specifice societatilor
 
-	3.1 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
-	3.2 -> pune data by-default la facturi etc
+
+	1 -> buton de adauga utilizatori pt toti angajatii
+
+	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori
 
-	*-> add sorting to tables on frontend 
+	5 -> angajat normal nu trebuie sa aiba acces la parametrii salarii si sarbatori
+
+	*-> add sorting and filtering to tables on frontend 
 }
 
 UPGRADES: {
 }
-
-UserTabel:
-	✔ can add User
-	✔ can edit Roles
-	✔ can edit Societati
-	✔ can edit Angajati
-
 
 *** INTREBARI: ***
 din ce se calculeaza CASS? din sal. realizat?

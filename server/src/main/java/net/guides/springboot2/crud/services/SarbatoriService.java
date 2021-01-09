@@ -22,6 +22,13 @@ public class SarbatoriService {
 	@Autowired
 	private SarbatoriRepository sarbatoriRepository;
 
+	public boolean existsInAn(int an) {
+		for(int i = 1; i <= 12; ++i) {
+			if(!this.getZileSarbatoareInLunaAnul(i, an).isEmpty()) return true;
+		}
+		return false;
+	}
+
 	public int getNrZileSarbatoareInLunaAnul(int luna, int an) {
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = YearMonth.of(an, luna).lengthOfMonth();
@@ -68,7 +75,9 @@ public class SarbatoriService {
 		return sarbatoriDates;
 	}
 	
-	public void initialize(int an) {
+	public boolean initialize(int an) {
+		if(this.existsInAn(an)) return false;
+
 		sarbatoriRepository.save(new Sarbatori(an+"-01-01", an+"-01-02", "Anul Nou"));
 
 		sarbatoriRepository.save(new Sarbatori(an+"-01-24", an+"-01-24", "Ziua Unirii Principatelor Române"));
@@ -84,12 +93,19 @@ public class SarbatoriService {
 		sarbatoriRepository.save(new Sarbatori(an+"-12-01", an+"-12-01", "Ziua Națională a României"));
 
 		sarbatoriRepository.save(new Sarbatori(an+"-12-25", an+"-12-26", "Crăciunul"));
+
+		return true;
 	}
 
 	public void initializeKnown() {
+		if(sarbatoriRepository.count() > 0) return;
+
 		initialize(2019);
 		initialize(2020);
 		initialize(2021);
+		initialize(2022);
+		initialize(2023);
+		initialize(2024);
 
 		sarbatoriRepository.save(new Sarbatori("2019-04-26", "2019-04-26", "Vinerea mare"));
 		sarbatoriRepository.save(new Sarbatori("2019-04-28", "2019-04-29", "Paște ortodox"));
@@ -102,5 +118,17 @@ public class SarbatoriService {
 		sarbatoriRepository.save(new Sarbatori("2021-04-30", "2021-04-30", "Vinerea mare"));
 		sarbatoriRepository.save(new Sarbatori("2021-05-02", "2021-05-03", "Paște ortodox"));
 		sarbatoriRepository.save(new Sarbatori("2021-06-20", "2021-06-21", "Rusalii"));
+
+		sarbatoriRepository.save(new Sarbatori("2022-04-22", "2022-04-22", "Vinerea mare"));
+		sarbatoriRepository.save(new Sarbatori("2022-04-24", "2022-04-25", "Paște ortodox"));
+		sarbatoriRepository.save(new Sarbatori("2022-06-12", "2022-06-13", "Rusalii"));
+
+		sarbatoriRepository.save(new Sarbatori("2023-04-14", "2023-04-14", "Vinerea mare"));
+		sarbatoriRepository.save(new Sarbatori("2023-04-16", "2023-04-17", "Paște ortodox"));
+		sarbatoriRepository.save(new Sarbatori("2023-06-04", "2023-06-05", "Rusalii"));
+
+		sarbatoriRepository.save(new Sarbatori("2024-05-03", "2024-05-03", "Vinerea mare"));
+		sarbatoriRepository.save(new Sarbatori("2024-05-05", "2024-05-06", "Paște ortodox"));
+		sarbatoriRepository.save(new Sarbatori("2024-06-23", "2024-06-24", "Rusalii"));
 	}
 }

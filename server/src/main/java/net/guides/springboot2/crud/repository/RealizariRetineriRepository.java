@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,4 +17,6 @@ public interface RealizariRetineriRepository extends JpaRepository<RealizariReti
 	public NotaContabilaDTO getNotaContabilaByLunaAndAnAndIdsocietate(int luna, int an, int idsocietate);
 
 	public boolean existsByLunaAndAnAndContract_Id(int luna, int an, int idcontract);
+
+	public List<RealizariRetineri> findByContract_Id(int idcontract);
 }

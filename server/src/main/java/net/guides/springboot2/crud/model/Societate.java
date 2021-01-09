@@ -55,24 +55,24 @@ public class Societate implements Serializable {
 	@Column(name = "fax")
 	private String fax;
 
-	@OneToMany(mappedBy = "societate")
+	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
 	private List<ContBancar> contbancar;
 
 	@JsonBackReference(value = "angajat-societate")
-	@OneToMany(mappedBy = "societate")
+	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
 	private List<Angajat> angajati;
 
 	@JsonBackReference(value = "factura-societate")
 	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
 	private List<Factura> facturi;
 
-	@JsonBackReference(value = "user-societate")
-	@ManyToMany(mappedBy = "societati", fetch = FetchType.LAZY)
-	private List<User> useri;
-
 	@JsonBackReference(value = "centrucost-societate")
-	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CentruCost> centreCost;
+
+	@JsonBackReference(value = "user-societate")
+	@ManyToMany(mappedBy = "societati", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<User> useri;
 
 	public Societate() {
 	}
@@ -139,6 +139,18 @@ public class Societate implements Serializable {
 		return angajati;
 	}
 
+	public List<CentruCost> getCentreCost() {
+		return centreCost;
+	}
+
+	public List<Factura> getFacturi() {
+		return facturi;
+	}
+
+	public List<User> getUseri() {
+		return useri;
+	}
+
 	// ! SETTERS
 	public void setCapsoc(Double capsoc) {
 		this.capsoc = capsoc;
@@ -186,5 +198,15 @@ public class Societate implements Serializable {
 
 	public void setContbancar(List<ContBancar> contbancar) {
 		this.contbancar = contbancar;
+	}
+
+	public void setCentreCost(List<CentruCost> centreCost) {
+		this.centreCost = centreCost;
+	}
+	public void setFacturi(List<Factura> facturi) {
+		this.facturi = facturi;
+	}
+	public void setUseri(List<User> useri) {
+		this.useri = useri;
 	}
 }

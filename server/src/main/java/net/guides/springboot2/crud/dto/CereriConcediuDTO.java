@@ -19,6 +19,8 @@ public class CereriConcediuDTO {
 
 	private int iduser;
 
+	private String numeuser;
+
 	public LocalDate getDela() {
 		return dela;
 	}
@@ -81,5 +83,13 @@ public class CereriConcediuDTO {
 
 	public void setIduser(int iduser) {
 		this.iduser = iduser;
+	}
+
+	public String getNumeuser() {
+		return numeuser;
+	}
+
+	public void setNumeuser(String numeuser) {
+		this.numeuser = numeuser;
 	}
 }

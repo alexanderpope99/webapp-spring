@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Deduceri;
 import net.guides.springboot2.crud.repository.DeduceriRepository;
+import net.guides.springboot2.crud.services.DeduceriService;
 
 import org.springframework.data.domain.Sort;
 
@@ -26,6 +27,9 @@ import org.springframework.data.domain.Sort;
 public class DeduceriController {
 	@Autowired
 	private DeduceriRepository deduceriRepository;
+
+	@Autowired
+	private DeduceriService deduceriService;
 
 	@GetMapping
 	public List<Deduceri> getAllPersoane() {
@@ -46,28 +50,16 @@ public class DeduceriController {
 		return deduceriRepository.save(deduceri);
 	}
 
-	@PostMapping("/all")
-	public void createAllDeduceri(@RequestBody Deduceri deducere) {
-		deduceriRepository.save(deducere);
-		int zero = 495, una = 655, doua = 815, trei = 975, patru = 1295;
-		for (int i = 1951; i <= 3600; i += 50) {
-			deducere = new Deduceri(i, i + 49, zero, una, doua, trei, patru);
-			deduceriRepository.save(deducere);
-			zero -= 15;
-			una -= 15;
-			doua -= 15;
-			trei -= 15;
-			patru -= 15;
-		}
+	@PostMapping("init")
+	public String initDeduceri() {
+		deduceriService.init();
+		return "Initialized deduceri";
 	}
 
 	@PutMapping("{id}")
 	public ResponseEntity<Deduceri> updateDeduceri(@PathVariable(value = "id") int id,
 			@RequestBody Deduceri newDeduceri) throws ResourceNotFoundException {
-		Deduceri deduceri = deduceriRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Deduceri not found for this id :: " + id));
-
-		newDeduceri.setId(deduceri.getId());
+		newDeduceri.setId(id);
 		final Deduceri updatedDeduceri = deduceriRepository.save(newDeduceri);
 		return ResponseEntity.ok(updatedDeduceri);
 	}
