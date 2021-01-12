@@ -38,6 +38,7 @@ class RealizariRetineriView extends React.Component {
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
     this.renderTabelore = this.renderTabelore.bind(this);
     this.getStatIndividual = this.getStatIndividual.bind(this);
+    this.onChangeAn = this.onChangeAn.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -51,7 +52,8 @@ class RealizariRetineriView extends React.Component {
 
       an: '',
       luna: '',
-      lunaan: '',
+      lunaan: [],
+      luni: [],
 
       selected_angajat: getAngajatSel(),
       lista_angajati: [], // object: {nume, id}
@@ -216,22 +218,20 @@ class RealizariRetineriView extends React.Component {
   async setYearsAndMonths() {
     const rr = await axios
       .get(
-        `${server.address}/realizariretineri/ids=${this.state.socsel.id}&idu=${this.state.user.id}`,
+        `${server.address}/realizariretineri/luni-ani/ids=${this.state.socsel.id}&idu=${this.state.user.id}`,
         { headers: authHeader() }
       )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
-    this.setState(
-      {
-        lunaan: rr,
-        an: rr[0].an,
-        luna: { nume: luni[rr[0].luna], nr: rr[0].luna },
+    this.setState({
+      lunaan: rr,
+      an: rr[rr.length - 1].an,
+      luna: {
+        nume: luni[rr[rr.length - 1].luna[rr[rr.length - 1].luna.length - 1]],
+        nr: rr[rr.length - 1].luna[rr[rr.length - 1].luna.length - 1],
       },
-      () => {
-        console.log(this.state.lunaan);
-      }
-    );
+    });
   }
 
   async setPersoane() {
@@ -274,7 +274,7 @@ class RealizariRetineriView extends React.Component {
 
     // if already calculated, gets existing data, if idstat does not exist for (idc, mo, y) => calc => saves to DB
     const data = await axios
-      .get(`${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`, {
+      .get(`${server.address}/realizariretineri/get/idc=${contract.id}&mo=${luna}&y=${an}`, {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
@@ -505,6 +505,26 @@ class RealizariRetineriView extends React.Component {
     }
   }
 
+  onChangeAn(e) {
+    var luniArray = [];
+
+    if (e.target.value) {
+      console.log('M-a apelat');
+      this.state.lunaan.forEach((value) => {
+        if (e.target.value === value.an) {
+          luniArray = value.luna;
+        }
+      });
+      this.setState(
+        {
+          luni: luniArray,
+          an: e.target.value,
+        },
+        this.fillForm
+      );
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -517,7 +537,6 @@ class RealizariRetineriView extends React.Component {
   }
 
   render() {
-    const this_year = new Date().getFullYear();
     // console.log(this.state.lunaan);
     // this.state.lunaan.forEach((value, index) => {
     //   ani.push(<option key={value.an}>{value.an}</option>);
@@ -527,12 +546,17 @@ class RealizariRetineriView extends React.Component {
       ani = this.state.lunaan.map((value) => <option key={value.an}>{value.an}</option>);
     }
 
-    var luniComponent = [];
-    // var luniComponent = luni.map((luna_nume, index) => (
-    //   <option key={index} data-key={index + 1}>
-    //     {luna_nume}
-    //   </option>
-    // ));
+    var luniComponent = this.state.luni.map((value) => (
+      <option key={value} data-key={value + 1}>
+        {luni[value - 1]}
+      </option>
+    ));
+
+    // if(this.state.an){var luniComponent = this.state.an.map((luna_nume, index) => (
+    //    <option key={index} data-key={index + 1}>
+    //      {luna_nume}
+    //    </option>
+    //  ));
     // // eslint-disable-next-line eqeqeq
     // if (this.state.an == this.state.an_inceput_contract) {
     //   luniComponent = luniComponent.slice(Number(this.state.luna_inceput_contract) - 1);
@@ -671,18 +695,7 @@ class RealizariRetineriView extends React.Component {
               </Col>
               {/* AN */}
               <Col md={6}>
-                <FormControl
-                  as="select"
-                  value={this.state.an}
-                  onChange={(e) =>
-                    this.setState(
-                      {
-                        an: e.target.value,
-                      },
-                      this.fillForm
-                    )
-                  }
-                >
+                <FormControl as="select" value={this.state.an} onChange={(e) => this.onChangeAn(e)}>
                   {ani}
                 </FormControl>
               </Col>

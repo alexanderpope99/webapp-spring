@@ -45,7 +45,7 @@ public class RealizariRetineriController {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
-	@GetMapping("ids={ids}&idu={idu}")
+	@GetMapping("/luni-ani/ids={ids}&idu={idu}")
 	public List<LuniCuSalarii> getAllRealizariRetineriByIdSocAndIdUser(@PathVariable(value = "ids") int idsocietate,
 			@PathVariable(value = "idu") int iduser) {
 		return realizariRetineriService.getAllRealizariRetineriByIdSocietateAndIdUser(idsocietate, iduser);
