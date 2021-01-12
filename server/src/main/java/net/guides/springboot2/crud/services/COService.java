@@ -35,6 +35,10 @@ public class COService {
 	@Autowired
 	private ContractRepository contractRepository;
 
+	public boolean checkOverlap(CO concediu) {
+
+	}
+
 	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
 		CO co = modelMapper.map(coDTO, CO.class);
 
@@ -52,7 +56,7 @@ public class COService {
 		LocalDate dela = co.getDela();
 		LocalDate panala = co.getPanala();
 
-		List<CO> concediiExistente = coRepository.findAll();
+		List<CO> concediiExistente = coRepository.findByContract_Id(co.getId());
 		for(CO concediu : concediiExistente) {
 			// suprapune + este inclus intr-un concediu existent
 			if((concediu.getDela().compareTo(dela) <= 0 && dela.compareTo(concediu.getPanala()) >= 0)
