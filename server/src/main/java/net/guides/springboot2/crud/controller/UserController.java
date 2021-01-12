@@ -52,6 +52,11 @@ public class UserController {
 		return userService.findByIdsocietate(idsocietate);
 	}
 
+	@GetMapping("nos")
+	public List<UserDTO> getByNoSocietate() {
+		return userService.findByNoSocietate();
+	}
+
 	@GetMapping("/roles/{usrid}")
 	public List<RoleDTO> getRolesByUserId(@PathVariable("usrid") int usrid) {
 		return userRepository.getRolesByUserId(usrid);
@@ -104,8 +109,14 @@ public class UserController {
 		return userService.save(newUser);
 	}
 
+	@PutMapping("{id}")
+	public UserDTO updateUser(@PathVariable("id") int id, @RequestBody UserDTO newUserDTO)
+			throws ResourceNotFoundException {
+		return userService.update(newUserDTO, -1);
+	}
+
 	@PutMapping("{id}/ids={ids}")
-	public UserDTO updateUser(@PathVariable("id") int id, @PathVariable("ids") int idsocietate, @RequestBody UserDTO newUserDTO)
+	public UserDTO updateUserOfSocietate(@PathVariable("id") int id, @PathVariable("ids") int idsocietate, @RequestBody UserDTO newUserDTO)
 			throws ResourceNotFoundException {
 		return userService.update(newUserDTO, idsocietate);
 	}

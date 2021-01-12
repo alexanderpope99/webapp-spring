@@ -64,6 +64,13 @@ public class UserService {
 		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
 	}
 
+	public List<UserDTO> findByNoSocietate() {
+		List<User> users = userRepository.findBySocietati_idIsNull();
+
+		modelMapper.typeMap(User.class, UserDTO.class).addMapping(User::getSocietati, UserDTO::setSocietatiClass);
+		return users.stream().map(user -> modelMapper.map(user, UserDTO.class)).collect(Collectors.toList());
+	}
+
 	public void createNewUser(SignupRequest signUpRequest) {
 		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
 				encoder.encode(signUpRequest.getPassword()));
@@ -153,10 +160,12 @@ public class UserService {
 		newUser.setAngajati(newAngajati);
 
 		// set societati
-		List<Societate> newSocietati = new ArrayList<>();
-		newUserDTO.getSocietati()
-				.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
-		newUser.setSocietati(newSocietati);
+		if(idsocietate > 0) {
+			List<Societate> newSocietati = new ArrayList<>();
+			newUserDTO.getSocietati()
+					.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
+			newUser.setSocietati(newSocietati);
+		}
 
 		// save to db
 		userRepository.save(newUser);
