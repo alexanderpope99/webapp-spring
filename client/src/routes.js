@@ -7,13 +7,14 @@ window.$ = $;
 global.jQuery = $;
 
 const isAngajatSimplu = authService.isAngajatSimplu();
+const isAdmin = authService.isAdmin();
+const isDirectorContabil = authService.isDirectorOrContabil();
 
 const DashboardDefault = React.lazy(() => import('./Demo/Dashboard/Default'));
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
 const SocietatiView = React.lazy(() => import('./Demo/Dashboard/SocietatiView'));
 const ParametriiSalarii = React.lazy(() => import('./Demo/Dashboard/ParametriiSalarii'));
 const ParametriiSalariiView = React.lazy(() => import('./Demo/Dashboard/ParametriiSalariiView'));
-const Setari = React.lazy(() => import('./Demo/Edit/Setari'));
 
 const UIBasicButton = React.lazy(() => import('./Demo/UIElements/Basic/Button'));
 const UIBasicBadges = React.lazy(() => import('./Demo/UIElements/Basic/Badges'));
@@ -37,10 +38,6 @@ const RealizariRetineriView = React.lazy(() => import('./Demo/Forms/RealizariRet
 
 // RAPOARTE
 const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
-const Stat = React.lazy(() => import('./Demo/Rapoarte/Stat'));
-const Pontaj = React.lazy(() => import('./Demo/Rapoarte/Pontaj'));
-const Dec112 = React.lazy(() => import('./Demo/Rapoarte/Dec112'));
-const PlatiSalariiMTA = React.lazy(() => import('./Demo/Rapoarte/PlatiSalariiMTA'));
 
 // TABLES
 const BootstrapTable = React.lazy(() => import('./Demo/Tables/BootstrapTable'));
@@ -82,12 +79,6 @@ const routes = [
     exact: true,
     name: 'Parametrii Salarii',
     component: isAngajatSimplu ? ParametriiSalariiView : ParametriiSalarii,
-  },
-  {
-    path: '/edit/setari',
-    exact: true,
-    name: 'Setari',
-    component: Setari,
   },
   { path: '/dashboard/default', exact: true, name: 'Default', component: DashboardDefault },
   { path: '/basic/button', exact: true, name: 'Basic Button', component: UIBasicButton },
@@ -142,11 +133,7 @@ const routes = [
   },
 
   // RAPOARTE
-  { path: '/rapoarte', exact: true, name: 'Rapoarte', component: Rapoarte },
-  { path: '/state-salarii', exact: true, name: 'Stat salarii', component: Stat },
-  { path: '/pontaj', exact: true, name: 'Foaie pontaj', component: Pontaj },
-  { path: '/dec112', exact: true, name: 'Declarația 112', component: Dec112 },
-  { path: '/mta', exact: true, name: 'Plăți Salarii Mta', component: PlatiSalariiMTA },
+  { path: '/rapoarte', exact: true, name: 'Rapoarte', component: isDirectorContabil ? Rapoarte : null },
 
   // TABLES
   { path: '/tables/bootstrap', exact: true, name: 'Bootstrap Table', component: BootstrapTable },
@@ -160,7 +147,7 @@ const routes = [
     path: '/tables/user-tabel',
     exact: true,
     name: 'Tabel Useri',
-    component: UserTabel,
+    component: isAdmin ? UserTabel : null,
   },
   { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
   {
@@ -179,7 +166,7 @@ const routes = [
     path: '/tables/cereri-concediu-director',
     exact: true,
     name: 'Cereri Concediu',
-    component: CereriConcediuSuperior,
+    component: isDirectorContabil ? CereriConcediuSuperior : null,
   },
   {
     path: '/sarbatori',

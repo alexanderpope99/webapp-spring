@@ -41,8 +41,14 @@ public class RetineriService {
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
 				.orElseThrow(() -> new ResourceNotFoundException("RealizariRetineri not found for this id"));
 
+		Retineri oldRetinere = retineriRepository.findById(newRetinereDTO.getIdstat())
+				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id"));
+		
 		Retineri newRetinere = modelMapper.map(newRetinereDTO, Retineri.class);
 		newRetinere.setStat(realizariRetineri);
+
+		if(oldRetinere.isSame(newRetinere))
+			return null;
 
 		return retineriRepository.save(newRetinere);
 	}
