@@ -55,7 +55,7 @@ public class Retineri implements Serializable {
 	private Integer pensiefacexcedent = 0;
 
 	@JsonBackReference(value = "retinere-stat")
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "idstat")
 	private RealizariRetineri stat;
 
@@ -92,23 +92,6 @@ public class Retineri implements Serializable {
 		this.pensiefacangajatordeductibila = pensiefacangajatordeductibila;
 		this.pensiefacexcedent = pensiefacexcedent;
 	}
-
-	public boolean isSame(Retineri obj) {
-		return
-			obj.getId() == this.getId()
-			&& obj.getAvansnet().equals(this.getAvansnet())
-			&& obj.getPensiealimentara().equals(this.getPensiealimentara())
-			&& obj.getPopriri().equals(this.getPopriri())
-			&& obj.getImprumuturi().equals(this.getImprumuturi())
-			&& obj.getCurseurron().equals(this.getCurseurron())
-			&& obj.getPensiefacangajat().equals(this.getPensiefacangajat())
-			&& obj.getPensiefacangajator().equals(this.getPensiefacangajator())
-			&& obj.getPensiefacangajatretinuta().equals(this.getPensiefacangajatretinuta())
-			&& obj.getPensiefacangajatordeductibila().equals(this.getPensiefacangajatordeductibila())
-			&& obj.getPensiefacexcedent().equals(this.getPensiefacexcedent())
-			&& obj.getStat().getId() == this.getStat().getId();
-	}
-	
 
 	public int getId() {
 		return id;
