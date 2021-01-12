@@ -231,6 +231,7 @@ class RealizariRetineriView extends React.Component {
         nume: luni[rr[rr.length - 1].luna[rr[rr.length - 1].luna.length - 1]],
         nr: rr[rr.length - 1].luna[rr[rr.length - 1].luna.length - 1],
       },
+      luni: rr[rr.length - 1].luna,
     });
   }
 
@@ -279,8 +280,6 @@ class RealizariRetineriView extends React.Component {
       })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
-
-    console.log('data:', data);
     if (!data) {
       this.clearForm();
       return;
@@ -509,16 +508,20 @@ class RealizariRetineriView extends React.Component {
     var luniArray = [];
 
     if (e.target.value) {
-      console.log('M-a apelat');
       this.state.lunaan.forEach((value) => {
-        if (e.target.value === value.an) {
+        if (e.target.value == value.an) {
           luniArray = value.luna;
         }
       });
+      console.log(luniArray);
       this.setState(
         {
           luni: luniArray,
           an: e.target.value,
+          luna: {
+            nume: luni[luniArray[0] - 1],
+            nr: luniArray[0],
+          },
         },
         this.fillForm
       );
@@ -547,7 +550,7 @@ class RealizariRetineriView extends React.Component {
     }
 
     var luniComponent = this.state.luni.map((value) => (
-      <option key={value} data-key={value + 1}>
+      <option key={value} data-key={value}>
         {luni[value - 1]}
       </option>
     ));
