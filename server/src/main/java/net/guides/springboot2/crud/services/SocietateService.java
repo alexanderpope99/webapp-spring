@@ -17,8 +17,12 @@ public class SocietateService {
 		Societate societate = societateRepository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 		
+		societate.setAdresa(null);
 		societate.setAngajati(null);
 		societate.setFacturi(null);
+		societate.setCentreCost(null);
+
+		societate.getUseri().forEach(user -> user.removeSocietate(societate));
 		societate.setUseri(null);
 		
 		societateRepository.delete(societate);

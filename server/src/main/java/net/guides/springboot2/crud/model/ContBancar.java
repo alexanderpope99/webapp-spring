@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +36,7 @@ public class ContBancar implements Serializable {
 	private Contract contract;
 
 	@JsonBackReference(value = "societate-contbancar")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Societate societate;
 
 	public ContBancar() {}

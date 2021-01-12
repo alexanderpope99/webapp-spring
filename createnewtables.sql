@@ -223,14 +223,13 @@ insert into contract_psql(
 		salariu,
 		nrzileco,
 		datasfarsit,
-		(SELECT casasanatate from personal where personal.numecontract=contractemunca.nume),
+		p.casasanatate,
 		functia,
 		cor,
-		(SELECT pensionar from personal where personal.numecontract=contractemunca.nume),
-		(SELECT id from contbancar_psql cb where cb.cnp in(select cnp from personal where contractemunca.nume=personal.numecontract)),
-		
-		(SELECT cnp from personal where personal.numecontract=contractemunca.nume)
-	from contractemunca;
+		p.pensionar,
+		(select id from contbancar_psql where p.cnp=cnp) as idcontbancar,
+		p.cnp
+	from contractemunca c left join personal p on c.nume=p.numecontract;
 
 INSERT INTO angajat_psql(idpersoana,idcontract,idsocietate)
 	select p.id as 'idpersoana', c.id as 'idcontract', s.id as 'idsocietate'

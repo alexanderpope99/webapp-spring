@@ -55,8 +55,8 @@ public class SarbatoriController {
 	}
 
 	@PostMapping("init/{an}")
-	public void initializeAn(@PathVariable("an") int an) {
-		sarbatoriService.initialize(an);
+	public boolean initializeAn(@PathVariable("an") int an) {
+		return sarbatoriService.initialize(an);
 	}
 
 	@GetMapping("exists/{an}")

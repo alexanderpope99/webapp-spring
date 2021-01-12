@@ -49,7 +49,16 @@ class SarbatoriTabelView extends React.Component {
     let an = today.getFullYear();
 
     this.setState({ an: an });
-  }
+	}
+	
+	getAniCuSarbatori(sarbatori) {
+		var ani_cu_sarbatori = new Set();
+		sarbatori.forEach((sarbatoare) => {
+			ani_cu_sarbatori.add(sarbatoare.dela.substring(0, 4))
+			// console.log(sarbatoare);
+		});
+		return [...ani_cu_sarbatori];
+	}
 
   async fillTable() {
     //? fetch must be with idcontract
@@ -188,6 +197,9 @@ class SarbatoriTabelView extends React.Component {
   }
 
   render() {
+
+		const aniCuSarbatori = this.getAniCuSarbatori(this.state.sarbatori).map(an => <option key={an}>{an}</option>);
+
     return (
       <Aux>
         {/* ADD/EDIT MODAL */}
@@ -265,9 +277,7 @@ class SarbatoriTabelView extends React.Component {
                     value={this.state.an}
                     onChange={(e) => this.onChangeAn(e.target.value)}
                   >
-                    <option>2019</option>
-                    <option>2020</option>
-                    <option>2021</option>
+									{aniCuSarbatori}
                   </Form.Control>
                 </Form.Group>
                 <Table responsive hover>

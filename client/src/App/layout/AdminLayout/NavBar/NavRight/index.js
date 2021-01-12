@@ -234,14 +234,9 @@ class NavRight extends Component {
                       <i className="feather icon-user" /> Profil
                     </a>
                   </li>
-                  <li>
+                  {/* <li>
                     <a href="/edit/setari" className="dropdown-item">
                       <i className="feather icon-settings" /> Setări
-                    </a>
-                  </li>
-                  {/* <li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-mail" /> Mesaje
                     </a>
                   </li> */}
                 </ul>

@@ -118,8 +118,8 @@ public class RealizariRetineriService {
 		// get Retineri here and subtract it
 		Retineri retineri = retineriService.getRetinereByIdcontractAndLunaAndAn(idcontract, luna, an);
 		if (retineri != null) {
-			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON()
-					+ retineri.getPensiealimentara() + retineri.getPopriri() + retineri.getImprumuturi());
+			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON() + retineri.getPensiealimentara()
+					+ retineri.getPopriri() + retineri.getImprumuturi());
 		}
 
 		return Math.round(restPlata);
@@ -171,8 +171,8 @@ public class RealizariRetineriService {
 		float salariuPeZi = totalDrepturi / norma;
 		float salariuPeOra = totalDrepturi / norma / duratazilucru;
 
-		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare)
-				+ primaBruta + totalOreSuplimentare);
+		this.salariuRealizat = Math
+				.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta + totalOreSuplimentare);
 
 		// zileCOLucratoare include zileCFPLucratoare
 		float valCO = (zileCOLucratoare - zileCFPLucratoare) * salariuPeZi;
@@ -305,8 +305,7 @@ public class RealizariRetineriService {
 
 	// exclude (luna, an) din argument
 	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
-	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract)
-			throws ResourceNotFoundException {
+	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);

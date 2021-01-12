@@ -36,26 +36,23 @@ Pasi de urmat:
 		- un utilizator cu rolul admin si/sau director 
 		- parametrii salarii, sarbatori, deduceri = get request la `/init`
 		- roles la `/init/roles`
-
+#################################################################################
 
 
 
 
 LAST-UPDATE : {
-	1 -> SocietateService -> 
-		deleteSocietate: set all foreign keys pointing to societate to null, delete only societate & societate.adresa
+	adaugat sarbatori cunoscute pana in 2024 - se pot edita pe frontend
 }
 
 
 TODO: {
-	verifica persoane intretinere
+	- verifica rolurile
+	- sa poti intra la table useri daca nu e nicio societate selectata
+		+ solutie: alta pagina care arata doar userii fara datele specifice societatilor
 
-	2 -> pentru un angajat normal {
-		RealizariRetineriView.js: {
-			* sa apara doar lunile in care sunt calculate salariile
-				-< alt endpoint care trebuie apelat in componentDidMount()
-		}
-	}
+
+	1 -> buton de adauga utilizatori pt toti angajatii
 
 	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 
@@ -68,8 +65,6 @@ TODO: {
 }
 
 UPGRADES: {
-	SarbatoriTabel.js: adauga sarbatori pe un an, arata care sunt
-		se vor adauga doar daca nu exista nicio sarbatoare in anul respectiv
 }
 
 *** INTREBARI: ***

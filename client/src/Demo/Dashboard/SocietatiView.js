@@ -10,7 +10,7 @@ import { setAngajatSel } from '../Resources/angajatsel';
 import { download } from '../Resources/download';
 import { luni } from '../Resources/calendar';
 import authHeader from '../../services/auth-header';
-import { Edit, PlusCircle, Users } from 'react-feather';
+import { Eye, PlusCircle, Users } from 'react-feather';
 import authService from '../../services/auth.service';
 
 const addSocietateComponent = (
@@ -359,7 +359,7 @@ class SocietatiView extends React.Component {
                       : 'hidden'
                   }
                 >
-                  <Edit
+                  <Eye
                     className="d-flex justify-content-around float float-right"
                     visibility={this.state.societati[key].opacity === '.3' ? 'hidden' : 'visible'}
                     style={{ cursor: 'pointer' }}

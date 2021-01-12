@@ -20,7 +20,7 @@ import { tip_concedii } from '../../Demo/Resources/tip-concedii';
 const tip_concedii_component = tip_concedii.map((tip, index) => <option key={index}>{tip}</option>);
 
 class CereriConcediuTabel extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);

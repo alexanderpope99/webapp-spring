@@ -22,6 +22,7 @@ public class InitService {
 		deduceriService.init();
 		parametriiSalariuService.init();
 		sarbatoriService.initializeKnown();
+		roleService.init();
 
 		return "Initialized: deduceri, parametrii-salariu, sarbatori (2019-2021, cu paște)";
 	}
