@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import NavRight from './NavRight';
 import Aux from '../../../../hoc/_Aux';
+import DEMO from '../../../../store/constant';
+
 import * as actionTypes from '../../../../store/actions';
 
 class NavBar extends Component {
@@ -21,7 +23,7 @@ class NavBar extends Component {
     return (
       <Aux>
         <header className={headerClass.join(' ')}>
-          {/* <div className="m-header">
+          <div className="m-header">
             <a
               className={toggleClass.join(' ')}
               id="mobile-collapse1"
@@ -36,10 +38,10 @@ class NavBar extends Component {
               </div>
               <span className="b-title">Salarizare</span>
             </a>
-          </div> */}
-          {/* <a className="mobile-menu" id="mobile-header" href={DEMO.BLANK_LINK}>
+          </div>
+          <a className="mobile-menu" id="mobile-header" href={DEMO.BLANK_LINK}>
             <i className="feather icon-more-horizontal" />
-          </a> */}
+          </a>
           <div className="collapse navbar-collapse">
             {/* <NavLeft/> */}
             <NavRight rtlLayout={this.props.rtlLayout} />

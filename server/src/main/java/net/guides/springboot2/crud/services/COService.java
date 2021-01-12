@@ -48,6 +48,21 @@ public class COService {
 		int luna = co.getDela().getMonthValue();
 		int an = co.getDela().getYear();
 
+		// verifica ca nu se suprapune cu alt concediu
+		LocalDate dela = co.getDela();
+		LocalDate panala = co.getPanala();
+
+		List<CO> concediiExistente = coRepository.findAll();
+		for(CO concediu : concediiExistente) {
+			// suprapune + este inclus intr-un concediu existent
+			if((concediu.getDela().compareTo(dela) <= 0 && dela.compareTo(concediu.getPanala()) >= 0)
+				|| (concediu.getDela().compareTo(panala) <= 0 && panala.compareTo(concediu.getPanala()) >= 0))
+				return null;
+			// include un concediu existent
+			if(concediu.getDela().compareTo(dela) <= 0 && dela.compareTo(concediu.getPanala()) >= 0)
+				return null;
+		}
+
 		// update salariu
 		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
 

@@ -717,7 +717,6 @@ class RealizariRetineri extends React.Component {
 
 	onChangeAn(e) {
 		const an = e.target.value;
-
 		// eslint-disable-next-line eqeqeq
 		if (an == this.state.an_inceput_contract) {
 			const luni_contract = luni.slice(Number(this.state.luna_inceput_contract) - 1);
