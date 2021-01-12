@@ -87,7 +87,7 @@ var items = [
     children: [
       {
         id: 'angajati-tabel',
-        title: 'Detalii angajat',
+        title: 'Date personale',
         type: 'item',
         url: '/forms/angajat',
         icon: 'feather icon-users',

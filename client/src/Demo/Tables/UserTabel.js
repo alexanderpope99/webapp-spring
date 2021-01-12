@@ -403,7 +403,15 @@ class UserTabel extends React.Component {
       },
       this.clearInput
     );
-  }
+	}
+	
+	scoateDiacritice(str) {
+		str = str.replace(/[ăâĂÂ]/, "a");
+		str = str.replace(/[îÎ]/, "i");
+		str = str.replace(/[șȘ]/, "s");
+		str = str.replace(/[țȚ]/, "t");
+		return str;
+	}
 
   folosesteDateleAngajatului() {
     const idAngajatSel = Number(this.state.idAngajat);
@@ -413,10 +421,10 @@ class UserTabel extends React.Component {
       (angajat) => angajat.idpersoana === idAngajatSel
     );
     const username = (
-      angajatSel.persoana.nume +
+      this.scoateDiacritice(angajatSel.persoana.nume) +
       '.' +
-      angajatSel.persoana.prenume.split(/-| /)[0]
-    ).toLowerCase();
+      this.scoateDiacritice(angajatSel.persoana.prenume.split(/-| /)[0])
+		).toLowerCase();
     const email = angajatSel.persoana.email || '';
     this.setState({
       username: username,
