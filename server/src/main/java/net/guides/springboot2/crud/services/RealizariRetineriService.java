@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
+import net.guides.springboot2.crud.repository.RetineriRepository;
 
 @Service
 public class RealizariRetineriService {
@@ -253,7 +254,10 @@ public class RealizariRetineriService {
 		// create and save baza calcul only if contract valid in month, year
 		bazacalculService.saveBazacalcul(realizariRetineri);
 
+		realizariRetineriRepository.save(realizariRetineri);
+
 		Retineri retineri = retineriService.saveRetinere(realizariRetineri);
+	
 		realizariRetineri.setRetineri(retineri);
 
 		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);

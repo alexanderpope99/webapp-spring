@@ -123,7 +123,7 @@ public class RealizariRetineri implements Serializable {
 	@OneToMany(mappedBy = "statsalariat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Oresuplimentare> oresuplimentare;
 
-	@OneToOne(mappedBy = "stat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "stat", fetch = FetchType.LAZY)
 	private Retineri retineri;
 
 	public RealizariRetineri() {

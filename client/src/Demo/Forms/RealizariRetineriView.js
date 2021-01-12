@@ -509,6 +509,7 @@ class RealizariRetineriView extends React.Component {
 
     if (e.target.value) {
       this.state.lunaan.forEach((value) => {
+        // eslint-disable-next-line eqeqeq
         if (e.target.value == value.an) {
           luniArray = value.luna;
         }
