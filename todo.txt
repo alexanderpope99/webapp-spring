@@ -42,12 +42,13 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	poti intra la table useri daca nu e nicio societate selectata
-		+ solutie: alta pagina care arata doar userii fara datele specifice societatilor
+	verificare suprapunere la concedii odihna
 }
 
 
 TODO: {
+	* -> https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
+
 	1 -> buton de adauga utilizatori pt toti angajatii
 
 	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
@@ -57,7 +58,7 @@ TODO: {
 
 	5 -> angajat normal nu trebuie sa aiba acces la parametrii salarii si sarbatori
 
-	*-> add sorting and filtering to tables on frontend 
+	* -> add sorting and filtering to tables on frontend 
 }
 
 *** INTREBARI: ***

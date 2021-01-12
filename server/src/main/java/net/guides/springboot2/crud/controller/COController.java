@@ -75,6 +75,11 @@ public class COController {
 		return ResponseEntity.ok().body(coService.getZileCODisponibile(idcontract));
 	}
 
+	@PostMapping("/check-overlap")
+	public CODTO checkIfOverlapsWithExisting(@RequestBody CODTO co) {
+		return coService.overlapsResponse(co);
+	}
+
 	@PostMapping
 	public CODTO createCO(@RequestBody CODTO co) throws ResourceNotFoundException {
 		return coService.save(co);

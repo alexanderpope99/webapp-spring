@@ -375,7 +375,7 @@ class Societati extends React.Component {
                       className="d-flex justify-content-around float float-right m-2"
                       visibility={showButtons ? 'visible' : 'hidden'}
                       style={{ cursor: 'pointer' }}
-                      onClick={() => (window.location.href = '/tables/angajati')}
+											onClick={() => (window.location.href = '/tables/angajati')}
                     />
 
                     <FileText

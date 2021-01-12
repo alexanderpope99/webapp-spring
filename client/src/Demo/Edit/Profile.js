@@ -2,7 +2,6 @@ import React from 'react';
 import { Row, Col, Card, Form, Button, Modal, InputGroup } from 'react-bootstrap';
 import { Eye, EyeOff } from 'react-feather';
 
-// import { server } from '../Resources/server-address';
 import AuthService from '../../services/auth.service';
 import Avatar1 from '../../assets/images/user/avatar-1.jpg';
 import Avatar2 from '../../assets/images/user/avatar-2.jpg';
