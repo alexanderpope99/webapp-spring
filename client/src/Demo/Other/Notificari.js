@@ -11,7 +11,7 @@ import authService from '../../services/auth.service';
 
 class Notificari extends React.Component {
   constructor() {
-		super();
+    super();
     this.state = {
       socsel: getSocSel(),
       user: authService.getCurrentUser(),
@@ -19,6 +19,7 @@ class Notificari extends React.Component {
   }
 
   async onRefresh() {
+    // eslint-disable-next-line no-unused-vars
     const notificari = await axios
       .get(`${server.address}/notificare/userid/${this.state.user.id}`, { headers: authHeader() })
       .then((res) => res.data)

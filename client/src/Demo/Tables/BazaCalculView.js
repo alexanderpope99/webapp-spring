@@ -1,14 +1,12 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Eye, RotateCw } from 'react-feather';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
+import { RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel } from '../Resources/angajatsel';
-import { luni }from '../Resources/calendar';
+import { luni } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -207,16 +205,12 @@ class BazaCalculView extends React.Component {
                 <Col md={12}>
                   <Form.Group>
                     <Form.Label>An</Form.Label>
-                    <Form.Control
-                      disabled
-                      type="number"
-                      value={this.state.an}
-                    />
+                    <Form.Control disabled type="number" value={this.state.an} />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
-											disabled
+                      disabled
                       type="text"
                       value={this.state.luna.nume}
                       onChange={(e) => this.onChangeMonth(e)}
@@ -224,19 +218,11 @@ class BazaCalculView extends React.Component {
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Zile Lucrate</Form.Label>
-                    <Form.Control
-										disabled
-                      type="number"
-                      value={this.state.zilelucrate}
-                    />
+                    <Form.Control disabled type="number" value={this.state.zilelucrate} />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Salariu realizat</Form.Label>
-                    <Form.Control
-										disabled
-										type="number"
-                      value={this.state.salariurealizat}
-                    />
+                    <Form.Control disabled type="number" value={this.state.salariurealizat} />
                   </Form.Group>
                 </Col>
               </Row>

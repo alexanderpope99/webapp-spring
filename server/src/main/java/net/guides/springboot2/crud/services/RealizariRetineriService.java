@@ -217,7 +217,7 @@ public class RealizariRetineriService {
 		List<RealizariRetineri> rv = realizariRetineriRepository.findByContract_Id(id);
 		List<String> lunaan = new ArrayList<>();
 		for (RealizariRetineri rr : rv)
-			lunaan.add(rr.getLuna() + "-" + rr.getAn());
+			lunaan.add(zileService.getNumeLunaByNr(rr.getLuna()) + ";" + rr.getLuna() + ";" + rr.getAn());
 		return lunaan;
 	}
 

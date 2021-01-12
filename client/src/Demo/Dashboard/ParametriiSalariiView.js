@@ -1,16 +1,10 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Trash2 } from 'react-feather';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import { Plus, RotateCw } from 'react-feather';
 
 class ParametriiSalariiView extends React.Component {
   constructor() {

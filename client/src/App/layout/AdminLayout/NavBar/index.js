@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import NavLeft from './NavLeft';
 import NavRight from './NavRight';
 import Aux from '../../../../hoc/_Aux';
-import DEMO from '../../../../store/constant';
 import * as actionTypes from '../../../../store/actions';
 
 class NavBar extends Component {
@@ -16,6 +14,7 @@ class NavBar extends Component {
 
     let toggleClass = ['mobile-menu'];
     if (this.props.collapseMenu) {
+      // eslint-disable-next-line no-unused-vars
       toggleClass = [...toggleClass, 'on'];
     }
 

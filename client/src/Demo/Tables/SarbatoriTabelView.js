@@ -1,10 +1,5 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
-import { Plus, Trash2, Edit3, RotateCw } from 'react-feather';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';

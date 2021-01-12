@@ -11,10 +11,6 @@ import { download } from '../Resources/download';
 import { luni } from '../Resources/calendar';
 import authHeader from '../../services/auth-header';
 import { Edit, PlusCircle, Users } from 'react-feather';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography/Typography';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindPopover } from 'material-ui-popup-state';
 import authService from '../../services/auth.service';
 
 const addSocietateComponent = (

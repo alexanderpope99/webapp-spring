@@ -12,12 +12,17 @@ import {
   Tooltip,
   Table,
   Collapse,
+  Toast,
+  Dropdown,
+  DropdownButton,
   Breadcrumb,
 } from 'react-bootstrap';
-import { Info } from 'react-feather';
+import { Trash2, Info } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
-import { luni } from '../Resources/calendar';
+import Box from '@material-ui/core/Box';
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel, setAngajatSel } from '../Resources/angajatsel';
 import { server } from '../Resources/server-address';
@@ -30,18 +35,25 @@ class RealizariRetineriView extends React.Component {
   constructor() {
     super();
 
-    this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
+    this.setLastYearMonth = this.setLastYearMonth.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
+    this.recalculeaza = this.recalculeaza.bind(this);
     this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
     this.veziPensieFacultativa = this.veziPensieFacultativa.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.getOresuplimentare = this.getOresuplimentare.bind(this);
+    this.addOrasuplimentara = this.addOrasuplimentara.bind(this);
     this.renderTabelore = this.renderTabelore.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.calcNrTichete = this.calcNrTichete.bind(this);
     this.getStatIndividual = this.getStatIndividual.bind(this);
+    this.creeazaStateUltimele6Luni = this.creeazaStateUltimele6Luni.bind(this);
+    this.recalcSocietate = this.recalcSocietate.bind(this);
+    this.preiaCursCurent = this.preiaCursCurent.bind(this);
 
     this.state = {
       socsel: getSocSel(),
-      user: authService.getCurrentUser(),
+      // angajatsel: getAngajatSel(),
       detaliiAccordion: false,
       show: false,
       showPensie: false,
@@ -51,10 +63,11 @@ class RealizariRetineriView extends React.Component {
 
       an: '',
       luna: '',
+      lunaan: [],
 
       selected_angajat: getAngajatSel(),
       lista_angajati: [], // object: {nume, id}
-      contract: null,
+      idcontract: '',
       idstat: '',
 
       // realizari
@@ -122,7 +135,8 @@ class RealizariRetineriView extends React.Component {
   }
   clearForm() {
     this.setState({
-      idstat: 0,
+      idcontract: '',
+
       // realizari
       functie: '',
       duratazilucru: '',
@@ -207,31 +221,73 @@ class RealizariRetineriView extends React.Component {
   async componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    await this.setCurrentYearMonth(); // modifies state.an, state.luna
-    await this.setPersoane(); // date personale, also fills lista_angajati
+    this.setLastYearMonth(); // modifies state.an, state.luna
+    this.setPersoane(); // date personale, also fills lista_angajati
     this.fillForm();
   }
 
-  async setPersoane() {
-    // va fi un array de 1 element
-    const angajati = await axios
-      .get(
-        `${server.address}/angajat/socid=${this.state.socsel.id}/usrid=${this.state.user.id}&c`,
-        { headers: authHeader() }
-      )
-      .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
-    if (!angajati) return;
+  numberWithCommas(x) {
+    if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    else return 0;
+  }
 
-    let lista_angajati = [];
-    for (let angajat of angajati) {
-      lista_angajati.push({
-        nume: angajat.persoana.nume + ' ' + angajat.persoana.prenume,
-        id: angajat.persoana.id,
-      });
+  async setLastYearMonth() {
+    const idpersoana = this.state.selected_angajat ? this.state.selected_angajat.idpersoana : null;
+    if (!idpersoana) {
+      this.clearForm();
+      return;
     }
 
-    this.setState({ lista_angajati: lista_angajati, contract: angajati[0].contract });
+    // get contract by idpersoana :: contract body needed for 4 fields
+    const contract = await axios
+      .get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+    if (!contract) return;
+
+    const lunisiani = await axios
+      .get(`${server.address}/realizariretineri/idc=${contract.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+
+    this.setState({
+      lunaan: lunisiani,
+      an: lunisiani[lunisiani.length - 1].split(';')[2],
+      luna: {
+        nume: lunisiani[lunisiani.length - 1].split(';')[0],
+        nr: lunisiani[lunisiani.length - 1].split(';')[1],
+      },
+    });
+  }
+
+  async setPersoane() {
+    //* only people with contract <- &c flag
+    const persoane = await axios
+      .get(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, { headers: authHeader() })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+    if (!persoane) return;
+    //* set lista_angajati
+    let lista_angajati = [];
+    for (let persoana of persoane) {
+      lista_angajati.push({ nume: persoana.nume + ' ' + persoana.prenume, id: persoana.id });
+    }
+    this.setState({ lista_angajati: lista_angajati });
+  }
+
+  async getTotalPensie() {
+    const totalpensiefacan = await axios
+      .get(`${server.address}/retineri/${this.state.idcontract}/pensiefac/${this.state.an}`, {
+        headers: authHeader(),
+      })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+
+    this.setState({
+      totalpensiefacultativa: totalpensiefacan,
+    });
   }
 
   async fillForm() {
@@ -247,25 +303,30 @@ class RealizariRetineriView extends React.Component {
       return;
     }
 
-    const contract = this.state.contract;
-    console.log();
+    // get contract by idpersoana :: contract body needed for 4 fields
+    const contract = await axios
+      .get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+    console.log('contract:', contract);
+    if (!contract) return;
 
-    // get data
-    console.log(`${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`);
+    // if already calculated, gets existing data, if idstat does not exist for (idc, mo, y) => calc => saves to DB
     const data = await axios
-      .get(`${server.address}/realizariretineri/idc=${contract.id}&mo=${luna}&y=${an}`, {
-        headers: authHeader(),
-      })
+      .post(
+        `${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
+        { body: null },
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) => console.error(err));
 
     console.log('data:', data);
-    if (!data) {
-      this.clearForm();
-      return;
-    }
+    if (!data) return;
 
-    // get ore suplimentare by contract.id, luna, an
+    // get ore suplimentare by idcontract, luna, an
     const oresuplimentare = await this.getOresuplimentare(contract.id, luna, an);
     let totaloresuplimentare = 0;
     if (oresuplimentare.length > 0) {
@@ -331,41 +392,13 @@ class RealizariRetineriView extends React.Component {
 
         //
         idstat: data.id || 0,
+        idcontract: contract.id || 0,
         oresuplimentare: oresuplimentare || 0,
         totaloresuplimentare: totaloresuplimentare || 0,
         primabruta: data.primabruta || 0,
       },
       this.getTotalPensie
     );
-  }
-
-  async getTotalPensie() {
-    const totalpensiefacan = await axios
-      .get(`${server.address}/retineri/${this.state.contract.id}/pensiefac/${this.state.an}`, {
-        headers: authHeader(),
-      })
-      .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
-
-    this.setState({
-      totalpensiefacultativa: totalpensiefacan,
-    });
-  }
-
-  numberWithCommas(x) {
-    if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    else return 0;
-  }
-
-  async setCurrentYearMonth() {
-    let today = new Date();
-    let luna = luni[today.getMonth()];
-    let an = today.getFullYear();
-
-    this.setState({
-      an: an,
-      luna: { nume: luna, nr: today.getMonth() + 1 },
-    });
   }
 
   onSelect(e) {
@@ -384,6 +417,168 @@ class RealizariRetineriView extends React.Component {
       },
       this.fillForm
     );
+  }
+
+  // recalculeaza doar total
+  async recalculeaza() {
+    console.log('recalculez...');
+
+    // get an, luna from select components
+    let an = this.state.an;
+    let luna = this.state.luna.nr;
+    let luna_nume = this.state.luna.nume;
+
+    // get idpersoana from select component
+    const idpersoana = this.state.selected_angajat ? this.state.selected_angajat.idpersoana : null;
+    if (!idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    //* 1. save retineri to DB
+    const ok = await axios
+      .put(
+        `${server.address}/retineri/${this.state.idretineri}`,
+        {
+          idstat: this.state.idstat,
+          avansnet: this.state.avansnet,
+          curseurron: this.state.cursValutar,
+          pensiealimentara: this.state.pensiealimentara,
+          pensiefacangajat: this.state.pensiefacangajat,
+          pensiefacangajator: this.state.pensiefacangajator,
+          pensiefacangajatretinuta: this.state.pensiefacangajatretinuta,
+          pensiefacangajatordeductibila: this.state.pensiefacangajatordeductibila,
+          pensiefacexcedent: this.state.pensiefacexcedent,
+          popriri: this.state.popriri,
+          imprumuturi: this.state.imprumuturi,
+        },
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+    if (!ok) {
+      console.log('Retineri nu exista, se va initializa');
+    }
+
+    let pb = this.state.primabruta;
+    let nrt = this.state.nrtichete;
+    let tos = this.state.totaloresuplimentare;
+
+    //* 2. recalculare realizariRetineri
+    console.log(this.state.idcontract);
+    const data = await axios
+      .put(
+        `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+
+    if (!data) return;
+
+    this.setState(
+      {
+        totaldrepturi: data.totaldrepturi,
+        restplata: data.restplata,
+        cas: data.cas,
+        cass: data.cass,
+        cam: data.cam,
+        impozit: data.impozit,
+        valoaretichete: data.valoaretichete,
+
+        showToast: true,
+        toastMessage: `Realizari/Retineri recalculate in ${luna_nume} ${an}`,
+      },
+      this.fillForm
+    );
+  }
+
+  async creeazaStateUltimele6Luni() {
+    if (!this.state.selected_angajat.idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    let luna = this.state.luna;
+    let an = this.state.an;
+
+    const ok = await axios
+      .put(
+        `${server.address}/realizariretineri/recalc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      this.setState({
+        showToast: true,
+        toastMessage: `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. De asemenea, bazele de calcul au fost adaugate.`,
+      });
+    }
+  }
+
+  async recalcSocietate() {
+    if (!this.state.selected_angajat.idpersoana) {
+      this.clearForm();
+      return;
+    }
+
+    let luna = this.state.luna;
+    let an = this.state.an;
+
+    const ok = await axios
+      .put(
+        `${server.address}/realizariretineri/recalc/societate/ids=${this.state.socsel.id}&mo=${luna.nr}&y=${an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) => console.error(err));
+
+    if (ok) {
+      this.setState({
+        showToast: true,
+        toastMessage: `Toate salariile din luna ${luna.nume} au fost recalculate pentru ${this.state.socsel.nume}`,
+      });
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+  }
+
+  async calcNrTichete() {
+    if (!this.state.selected_angajat) return;
+
+    let idc = this.state.idcontract;
+    let luna = this.state.luna.nr;
+    let an = this.state.an;
+    let nrTichete = await axios
+      .get(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    console.log(nrTichete);
+    this.setState({
+      nrtichete: nrTichete,
+    });
+  }
+
+  async preiaCursCurent() {
+    let curs = await axios
+      .get(`${server.address}/webparse/cursbnr`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+
+    this.setState({
+      cursValutar: curs,
+    });
   }
 
   async getOresuplimentare(idc, luna, an) {
@@ -411,9 +606,32 @@ class RealizariRetineriView extends React.Component {
     });
   }
 
+  async addOrasuplimentara(n, p, t) {
+    const ore_body = {
+      idstatsalariat: this.state.idstat,
+      nr: n || null,
+      procent: p || null,
+      total: t.toFixed(0),
+    };
+
+    await axios
+      .post(`${server.address}/oresuplimentare`, ore_body, {
+        headers: authHeader(),
+      })
+      .then(this.renderTabelore)
+      .catch((err) => console.error(err));
+  }
+
+  async deleteOra(id) {
+    await axios
+      .delete(`${server.address}/oresuplimentare/${id}`, { headers: authHeader() })
+      .then(this.renderTabelore)
+      .catch((err) => console.error(err));
+  }
+
   async renderTabelore() {
     let oreSuplimentare = await this.getOresuplimentare(
-      this.state.contract.id,
+      this.state.idcontract,
       this.state.luna.nr,
       this.state.an
     );
@@ -478,12 +696,9 @@ class RealizariRetineriView extends React.Component {
     const an = this.state.an;
     const user = authService.getCurrentUser();
 
-    // check if realizariretineri exist in (luna, an)
-    if (!this.state.idstat) return;
-
     const ok = await axios
       .get(
-        `${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}/get`,
+        `${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
         { headers: authHeader() }
       )
       .then((res) => res.status === 200)
@@ -507,22 +722,29 @@ class RealizariRetineriView extends React.Component {
   }
 
   render() {
-    const this_year = new Date().getFullYear();
-
     var ani = [];
-    for (let i = this.state.an_inceput_contract; i <= this_year + 1; ++i) {
-      ani.push(<option key={i}>{i}</option>);
-    }
+    this.state.lunaan.forEach(function (el) {
+      ani.push(<option key={el.split(';')[2]}>{el.split(';')[2]}</option>);
+    });
 
-    var luniComponent = luni.map((luna_nume, index) => (
-      <option key={index} data-key={index + 1}>
-        {luna_nume}
-      </option>
-    ));
+    var luniComponent = [];
+    this.state.lunaan.forEach(function (el) {
+      if (el.split(';')[1] === this.state.an)
+        luniComponent.push(
+          <option key={el.split(';')[0]} data-key={el.split(';')[0] + 1}>
+            {el.split(';')[0]}
+          </option>
+        );
+    });
+    // var luniComponent = luni.map((luna_nume, index) => (
+    //   <option key={index} data-key={index + 1}>
+    //     {luna_nume}
+    //   </option>
+    // ));
     // eslint-disable-next-line eqeqeq
-    if (this.state.an == this.state.an_inceput_contract) {
-      luniComponent = luniComponent.slice(Number(this.state.luna_inceput_contract) - 1);
-    }
+    // if (this.state.an == this.state.an_inceput_contract) {
+    //   luniComponent = luniComponent.slice(Number(this.state.luna_inceput_contract) - 1);
+    // }
 
     const tabel_ore = this.state.oresuplimentare.map((ora, index) => {
       for (let key in ora) if (!ora[key]) ora[key] = '-';
@@ -532,6 +754,55 @@ class RealizariRetineriView extends React.Component {
           <th>{ora.nr} ore</th>
           <th>{ora.procent}%</th>
           <th>{ora.total} RON</th>
+          <th className="d-inline-flex flex-row justify-content-around">
+            <PopupState variant="popover" popupId="demo-popup-popover">
+              {(popupState) => (
+                <div>
+                  <Button
+                    variant="outline-secondary"
+                    className="m-0 p-1 rounded-circle border-0"
+                    {...bindTrigger(popupState)}
+                  >
+                    <Trash2 fontSize="small" />
+                  </Button>
+                  <Popover
+                    {...bindPopover(popupState)}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                  >
+                    <Box p={2}>
+                      <Typography>Confirmare ștergere</Typography>
+                      <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                      <br />
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => {
+                          popupState.close();
+                          this.deleteOra(ora.id);
+                        }}
+                        className="mt-2 "
+                      >
+                        Da
+                      </Button>
+                      <Button
+                        variant="outline-persondary"
+                        onClick={popupState.close}
+                        className="mt-2"
+                      >
+                        Nu
+                      </Button>
+                    </Box>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
+          </th>
         </tr>
       );
     });
@@ -544,12 +815,85 @@ class RealizariRetineriView extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Recalculat!</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
+
         {/* ORE SUPLIMENTARE */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Ore suplimentare</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <Row>
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label>Nr. ore</Form.Label>
+                  <Form.Control
+                    type="number"
+                    min="0"
+                    value={this.state.nrore}
+                    onChange={(e) => this.setState({ nrore: e.target.value })}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label>Procent</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.procent}
+                    onChange={(e) => this.setState({ procent: e.target.value })}
+                  >
+                    <option>100</option>
+                    <option>150</option>
+                    <option>175</option>
+                    <option>200</option>
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group>
+                  <Form.Label>Suma</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={(
+                      Number(this.state.nrore) *
+                      (Number(this.state.procent) / 100) *
+                      Number(this.state.salariupeora)
+                    ).toFixed(0)}
+                    disabled
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={1}>
+                <Form.Label> </Form.Label>
+                <Button
+                  className="display-flex m-0"
+                  onClick={async () =>
+                    await this.addOrasuplimentara(
+                      this.state.nrore,
+                      this.state.procent,
+                      Number(this.state.nrore) *
+                        (Number(this.state.procent) / 100) *
+                        Number(this.state.salariupeora)
+                    )
+                  }
+                >
+                  +
+                </Button>
+              </Col>
+            </Row>
             <Table responsive hover>
               <thead>
                 <tr>
@@ -576,13 +920,29 @@ class RealizariRetineriView extends React.Component {
                   <Form.Label>
                     Curs BNR EUR/RON Final {this.state.luna.nume} {this.state.an}
                   </Form.Label>
-                  <Form.Control
-                    disabled
-                    type="number"
-                    min="0"
-                    step="0.0001"
-                    value={this.state.cursValutar}
-                  />
+                  <InputGroup>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      step="0.0001"
+                      onChange={(e) => {
+                        this.setState({ cursValutar: Number(e.target.value).toFixed(4) });
+                      }}
+                      value={this.state.cursValutar}
+                    />
+                    <InputGroup.Append>
+                      <Button
+                        onClick={this.preiaCursCurent}
+                        size="sm"
+                        className="p-0 pl-2 pr-2"
+                        variant="outline-info"
+                      >
+                        Preia curs
+                        <br />
+                        curent
+                      </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
               </Col>
               <Col md={12}>
@@ -590,9 +950,11 @@ class RealizariRetineriView extends React.Component {
                   <Form.Label>Pensie facultativă angajat</Form.Label>
                   <InputGroup className="mb-3">
                     <Form.Control
-                      disabled
                       type="number"
                       min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajat: e.target.value });
+                      }}
                       value={this.state.pensiefacangajat}
                     />
                     <InputGroup.Append>
@@ -604,7 +966,83 @@ class RealizariRetineriView extends React.Component {
                   </InputGroup>
                 </Form.Group>
               </Col>
+              {/* <Col md={12}>
+                <Form.Group id="pensiefacangajator">
+                  <Form.Label>Pensie facultativă angajator</Form.Label>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajator: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajator}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+												{this.convertCurrency(this.state.pensiefacangajator, this.state.cursValutar)} EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
               <Col md={12}>
+                <Form.Group id="pensiefacangajatretinuta">
+                  <Form.Label>Pensie facultativă angajat reținută de angajator</Form.Label>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajatretinuta: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajatretinuta}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+												{this.convertCurrency(this.state.pensiefacangajatretinuta, this.state.cursValutar)} EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+              <Col md={12}>
+                <Form.Group id="pensiefacangajatordeductibila">
+                  <Form.Label>Pensie facultativă angajator deductibilă CAS</Form.Label>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      onChange={(e) => {
+                        this.setState({ pensiefacangajatordeductibila: e.target.value });
+                      }}
+                      value={this.state.pensiefacangajatordeductibila}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+												{this.convertCurrency(this.state.pensiefacangajatordeductibila, this.state.cursValutar)} EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Form.Group>
+              </Col> */}
+              <Col md={12}>
+                {/* <Form.Group id="pensiefacexcedent">
+                  <Form.Label>Pensie facultativă excedent</Form.Label>
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      disabled
+                      type="number"
+                      min="0"
+                      value={this.state.pensiefacexcedent}
+                    />
+                    <InputGroup.Append>
+                      <InputGroup.Text id="basic-addon2">
+												{this.convertCurrency(this.state.pensiefacangajat, this.state.cursValutar)} EUR
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Form.Group> */}
                 <Form.Group id="totalpensiefacan">
                   <Form.Label>Total Pensie Facultativă an curent</Form.Label>
                   <InputGroup className="mb-3">
@@ -619,6 +1057,24 @@ class RealizariRetineriView extends React.Component {
                     </InputGroup.Append>
                   </InputGroup>
                 </Form.Group>
+
+                {/* <Form.Group id="impozitdeduspensie">
+                  <Form.Label>Impozit Dedus</Form.Label>
+                  <Form.Control disabled type="number" min="0" value={this.state.impozitdedus} />
+                </Form.Group> */}
+
+                <Form.Label> </Form.Label>
+                <Button
+                  className="mb-3 float-right"
+                  onClick={() => {
+                    this.setState({ showPensie: false });
+                  }}
+                >
+                  Adaugă
+                </Button>
+                {/* <Button className="mb-3 float-right" onClick={() => {}}>
+                  Calculează
+                </Button> */}
               </Col>
             </Row>
           </Modal.Body>
@@ -626,10 +1082,9 @@ class RealizariRetineriView extends React.Component {
 
         <Breadcrumb style={{ fontSize: '12px' }}>
           <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
-          <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
+          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
           <Breadcrumb.Item active>Realizări & Rețineri</Breadcrumb.Item>
         </Breadcrumb>
-
         <Card>
           {/* SELECT LUNA + AN */}
           <Card.Header>
@@ -680,11 +1135,12 @@ class RealizariRetineriView extends React.Component {
             <InputGroup className="mb-3">
               {/* NUMELE ANGAJATILOR CU CONTRACT */}
               <FormControl
-                disabled
                 aria-describedby="basic-addon2"
                 as="select"
                 value={this.state.selected_angajat ? this.state.selected_angajat.numeintreg : ''}
+                onChange={(e) => this.onSelect(e)}
               >
+                <option> - </option>
                 {/* lista_angajati mapped as <option> */}
                 {nume_persoane_opt}
               </FormControl>
@@ -703,11 +1159,26 @@ class RealizariRetineriView extends React.Component {
                   </Button>
                 </OverlayTrigger>
               </InputGroup.Append>
+              {/* <InputGroup.Append>
+                <OverlayTrigger
+                  placement="bottom"
+                  delay={{ show: 250, hide: 250 }}
+                  overlay={
+                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                      Adaugă angajat
+                    </Tooltip>
+                  }
+                >
+                  <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
+                    <Plus size={20} className="m-0" />
+                  </Button>
+                </OverlayTrigger>
+              </InputGroup.Append> */}
             </InputGroup>
           </Card.Header>
 
           <Card.Body>
-            <Form>
+            <Form onSubmit={this.onSubmit}>
               <Row>
                 {/* REALIZARI = LEFT TOP */}
                 <Col md={8} className="border rounded pt-3">
@@ -725,8 +1196,8 @@ class RealizariRetineriView extends React.Component {
                       <Form.Group id="duratailucru">
                         <Form.Label>Durată zi lucru</Form.Label>
                         <Form.Control
-                          disabled
                           type="number"
+                          disabled
                           value={this.state.duratazilucru || ''}
                         />
                       </Form.Group>
@@ -734,15 +1205,15 @@ class RealizariRetineriView extends React.Component {
                     <Col md={6}>
                       <Form.Group id="normazilucru">
                         <Form.Label>Normă lucru</Form.Label>
-                        <Form.Control disabled type="text" value={this.state.normalucru || ''} />
+                        <Form.Control type="text" disabled value={this.state.normalucru || ''} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group id="salariubrut">
                         <Form.Label>Salariu brut</Form.Label>
                         <Form.Control
-                          disabled
                           type="text"
+                          disabled
                           value={this.numberWithCommas(this.state.salariubrut)}
                         />
                       </Form.Group>
@@ -764,7 +1235,29 @@ class RealizariRetineriView extends React.Component {
                     <Col md={6}>
                       <Form.Group id="tichete">
                         <Form.Label>Nr. Tichete</Form.Label>
-                        <Form.Control disabled type="number" min="0" value={this.state.nrtichete} />
+                        <InputGroup>
+                          <Form.Control
+                            type="number"
+                            min="0"
+                            value={this.state.nrtichete}
+                            onChange={(e) => this.setState({ nrtichete: e.target.value })}
+                          />
+                          <InputGroup.Append>
+                            <Button
+                              onClick={this.calcNrTichete}
+                              size="sm"
+                              className="p-0 pl-2 pr-2"
+                              variant={
+                                this.state.selected_angajat ? 'outline-info' : 'outline-dark'
+                              }
+                              disabled={this.state.selected_angajat ? false : true}
+                            >
+                              Calculează
+                              <br />
+                              automat
+                            </Button>
+                          </InputGroup.Append>
+                        </InputGroup>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -805,10 +1298,10 @@ class RealizariRetineriView extends React.Component {
                       <Form.Group id="zilecfp">
                         <Form.Label>Zile libere</Form.Label>
                         <Form.Control
-                          disabled
                           type="number"
                           min="0"
                           value={this.state.zilelibere}
+                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -816,10 +1309,10 @@ class RealizariRetineriView extends React.Component {
                       <Form.Group id="zileinvoire">
                         <Form.Label>Zile învoire</Form.Label>
                         <Form.Control
-                          disabled
                           type="number"
                           min="0"
                           value={this.state.zileinvoire}
+                          onChange={(e) => this.setState({ zileinvoire: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -851,10 +1344,10 @@ class RealizariRetineriView extends React.Component {
                       <Form.Group id="primabruta">
                         <Form.Label>Primă brută</Form.Label>
                         <Form.Control
-                          disabled
                           type="number"
                           min="0"
                           value={this.state.primabruta}
+                          onChange={(e) => this.setState({ primabruta: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -870,7 +1363,12 @@ class RealizariRetineriView extends React.Component {
                     <Col md={12}>
                       <Form.Group id="avansnet">
                         <Form.Label>Avans</Form.Label>
-                        <Form.Control disabled type="number" min="0" value={this.state.avansnet} />
+                        <Form.Control
+                          type="number"
+                          min="0"
+                          value={this.state.avansnet}
+                          onChange={(e) => this.setState({ avansnet: e.target.value })}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
@@ -878,10 +1376,13 @@ class RealizariRetineriView extends React.Component {
                         <Form.Label>Pensie facultativă</Form.Label>
                         <InputGroup>
                           <Form.Control
-                            disabled
                             type="number"
                             min="0"
+                            disabled
                             value={this.state.pensiefacangajat}
+                            onChange={(e) =>
+                              this.setState({ pensiefacangajat: e.target.value || 0 })
+                            }
                           />
                           <InputGroup.Append>
                             <Button
@@ -901,27 +1402,32 @@ class RealizariRetineriView extends React.Component {
                       <Form.Group id="pensiealimentara">
                         <Form.Label>Pensie alimentară</Form.Label>
                         <Form.Control
-                          disabled
                           type="number"
                           min="0"
                           value={this.state.pensiealimentara}
+                          onChange={(e) => this.setState({ pensiealimentara: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="popriri">
                         <Form.Label>Popriri</Form.Label>
-                        <Form.Control disabled type="number" min="0" value={this.state.popriri} />
+                        <Form.Control
+                          type="number"
+                          min="0"
+                          value={this.state.popriri}
+                          onChange={(e) => this.setState({ popriri: e.target.value })}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group id="imprumuturi">
                         <Form.Label>Împrumuturi</Form.Label>
                         <Form.Control
-                          disabled
                           type="number"
                           min="0"
                           value={this.state.imprumuturi}
+                          onChange={(e) => this.setState({ imprumuturi: e.target.value })}
                         />
                       </Form.Group>
                     </Col>
@@ -1025,9 +1531,26 @@ class RealizariRetineriView extends React.Component {
                       </Form.Group>
                     </Col>
                   </Row>
+                  <DropdownButton
+                    title="Recalculează"
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    className="mb-3 float-right"
+                  >
+                    <Dropdown.Item eventKey="1" onClick={this.onSubmit}>
+                      Luna selectată
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey="2" onClick={this.creeazaStateUltimele6Luni}>
+                      Ultimele 6 luni
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item eventKey="3" onClick={this.recalcSocietate}>
+                      Toți angajații
+                    </Dropdown.Item>
+                  </DropdownButton>
                   <Button
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                    disabled={!this.state.idstat}
+                    disabled={!this.state.selected_angajat}
                     onClick={this.getStatIndividual}
                     className="float-right mb-3"
                   >
