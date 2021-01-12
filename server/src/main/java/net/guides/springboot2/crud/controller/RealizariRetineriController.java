@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.guides.springboot2.crud.dto.LuniCuSalarii;
 import net.guides.springboot2.crud.dto.RealizariRetineriDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
@@ -44,9 +45,10 @@ public class RealizariRetineriController {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
-	@GetMapping("idc={id}")
-	public List<String> getAllRealizariRetineriByIdContract(@PathVariable(value = "id") int idcontract) {
-		return realizariRetineriService.getAllRealizariRetineriByIdContract(idcontract);
+	@GetMapping("ids={ids}&idu={idu}")
+	public List<LuniCuSalarii> getAllRealizariRetineriByIdSocAndIdUser(@PathVariable(value = "ids") int idsocietate,
+			@PathVariable(value = "idu") int iduser) {
+		return realizariRetineriService.getAllRealizariRetineriByIdSocietateAndIdUser(idsocietate, iduser);
 	}
 
 	@GetMapping("idp={id}&mo={luna}&y={an}")

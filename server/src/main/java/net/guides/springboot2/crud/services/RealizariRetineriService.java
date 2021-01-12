@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.dto.LuniCuSalarii;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
@@ -118,8 +119,8 @@ public class RealizariRetineriService {
 		// get Retineri here and subtract it
 		Retineri retineri = retineriService.getRetinereByIdcontractAndLunaAndAn(idcontract, luna, an);
 		if (retineri != null) {
-			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON() + retineri.getPensiealimentara()
-					+ retineri.getPopriri() + retineri.getImprumuturi());
+			restPlata -= (retineri.getAvansnet() + retineri.getTotalPensiiFacultativeRON()
+					+ retineri.getPensiealimentara() + retineri.getPopriri() + retineri.getImprumuturi());
 		}
 
 		return Math.round(restPlata);
@@ -171,8 +172,8 @@ public class RealizariRetineriService {
 		float salariuPeZi = totalDrepturi / norma;
 		float salariuPeOra = totalDrepturi / norma / duratazilucru;
 
-		this.salariuRealizat = Math
-				.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta + totalOreSuplimentare);
+		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare)
+				+ primaBruta + totalOreSuplimentare);
 
 		// zileCOLucratoare include zileCFPLucratoare
 		float valCO = (zileCOLucratoare - zileCFPLucratoare) * salariuPeZi;
@@ -213,11 +214,24 @@ public class RealizariRetineriService {
 		return rr;
 	} // calcRealizariRetineri
 
-	public List<String> getAllRealizariRetineriByIdContract(int id) {
-		List<RealizariRetineri> rv = realizariRetineriRepository.findByContract_Id(id);
-		List<String> lunaan = new ArrayList<>();
-		for (RealizariRetineri rr : rv)
-			lunaan.add(zileService.getNumeLunaByNr(rr.getLuna()) + ";" + rr.getLuna() + ";" + rr.getAn());
+	public List<LuniCuSalarii> getAllRealizariRetineriByIdSocietateAndIdUser(int ids, int idu) {
+		Angajat ang = angajatRepository.findBySocietate_IdAndUser_Id(ids, idu);
+		List<RealizariRetineri> rrl = realizariRetineriRepository
+				.findAnByContract_IdOrderByAnDesc(ang.getContract().getId());
+		List<Integer> ani = new ArrayList<>();
+		for (RealizariRetineri rr : rrl) {
+			if (!ani.contains(rr.getAn()))
+				ani.add(rr.getAn());
+		}
+		List<LuniCuSalarii> lunaan = new ArrayList<>();
+		for (int an : ani) {
+			LuniCuSalarii luna = new LuniCuSalarii(an);
+			List<RealizariRetineri> rrs = realizariRetineriRepository.findLunaByAnAndContract_IdOrderByLunaAsc(an,
+					ang.getContract().getId());
+			for (RealizariRetineri rr : rrs)
+				luna.addLuna(rr.getLuna());
+			lunaan.add(luna);
+		}
 		return lunaan;
 	}
 
@@ -305,7 +319,8 @@ public class RealizariRetineriService {
 
 	// exclude (luna, an) din argument
 	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
-	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
+	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract)
+			throws ResourceNotFoundException {
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);

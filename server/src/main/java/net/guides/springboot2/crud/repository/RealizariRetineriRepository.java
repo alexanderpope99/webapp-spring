@@ -19,4 +19,11 @@ public interface RealizariRetineriRepository extends JpaRepository<RealizariReti
 	public boolean existsByLunaAndAnAndContract_Id(int luna, int an, int idcontract);
 
 	public List<RealizariRetineri> findByContract_Id(int idcontract);
+
+	public List<RealizariRetineri> findByContract_IdOrderByAnDescLunaDesc(int idcontract);
+
+	public List<RealizariRetineri> findAnByContract_IdOrderByAnDesc(int idcontract);
+
+	public List<RealizariRetineri> findLunaByAnAndContract_IdOrderByLunaAsc(int an, int idcontract);
+
 }

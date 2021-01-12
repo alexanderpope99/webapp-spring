@@ -30,7 +30,7 @@ class RealizariRetineriView extends React.Component {
   constructor() {
     super();
 
-    this.setCurrentYearMonth = this.setCurrentYearMonth.bind(this);
+    this.setYearsAndMonths = this.setYearsAndMonths.bind(this);
     this.numberWithCommas = this.numberWithCommas.bind(this);
     this.veziOreSuplimentare = this.veziOreSuplimentare.bind(this);
     this.veziPensieFacultativa = this.veziPensieFacultativa.bind(this);
@@ -51,6 +51,7 @@ class RealizariRetineriView extends React.Component {
 
       an: '',
       luna: '',
+      lunaan: '',
 
       selected_angajat: getAngajatSel(),
       lista_angajati: [], // object: {nume, id}
@@ -122,7 +123,7 @@ class RealizariRetineriView extends React.Component {
   }
   clearForm() {
     this.setState({
-			idstat: 0,
+      idstat: 0,
       // realizari
       functie: '',
       duratazilucru: '',
@@ -207,9 +208,30 @@ class RealizariRetineriView extends React.Component {
   async componentDidMount() {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    await this.setCurrentYearMonth(); // modifies state.an, state.luna
+    await this.setYearsAndMonths(); // modifies state.an, state.luna
     await this.setPersoane(); // date personale, also fills lista_angajati
     this.fillForm();
+  }
+
+  async setYearsAndMonths() {
+    const rr = await axios
+      .get(
+        `${server.address}/realizariretineri/ids=${this.state.socsel.id}&idu=${this.state.user.id}`,
+        { headers: authHeader() }
+      )
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) => console.error(err));
+
+    this.setState(
+      {
+        lunaan: rr,
+        an: rr[0].an,
+        luna: { nume: luni[rr[0].luna], nr: rr[0].luna },
+      },
+      () => {
+        console.log(this.state.lunaan);
+      }
+    );
   }
 
   async setPersoane() {
@@ -356,17 +378,6 @@ class RealizariRetineriView extends React.Component {
     else return 0;
   }
 
-  async setCurrentYearMonth() {
-    let today = new Date();
-    let luna = luni[today.getMonth()];
-    let an = today.getFullYear();
-
-    this.setState({
-      an: an,
-      luna: { nume: luna, nr: today.getMonth() + 1 },
-    });
-  }
-
   onSelect(e) {
     const selectedIndex = e.target.options.selectedIndex;
     const idangajat = e.target.options[selectedIndex].getAttribute('data-key');
@@ -475,10 +486,10 @@ class RealizariRetineriView extends React.Component {
     const idangajat = this.state.selected_angajat.idpersoana;
     const luna = this.state.luna;
     const an = this.state.an;
-		const user = authService.getCurrentUser();
-		
-		// check if realizariretineri exist in (luna, an)
-		if(!this.state.idstat) return;
+    const user = authService.getCurrentUser();
+
+    // check if realizariretineri exist in (luna, an)
+    if (!this.state.idstat) return;
 
     const ok = await axios
       .get(
@@ -507,21 +518,25 @@ class RealizariRetineriView extends React.Component {
 
   render() {
     const this_year = new Date().getFullYear();
-
+    // console.log(this.state.lunaan);
+    // this.state.lunaan.forEach((value, index) => {
+    //   ani.push(<option key={value.an}>{value.an}</option>);
+    // });
     var ani = [];
-    for (let i = this.state.an_inceput_contract; i <= this_year + 1; ++i) {
-      ani.push(<option key={i}>{i}</option>);
+    if (this.state.lunaan) {
+      ani = this.state.lunaan.map((value) => <option key={value.an}>{value.an}</option>);
     }
 
-    var luniComponent = luni.map((luna_nume, index) => (
-      <option key={index} data-key={index + 1}>
-        {luna_nume}
-      </option>
-    ));
-    // eslint-disable-next-line eqeqeq
-    if (this.state.an == this.state.an_inceput_contract) {
-      luniComponent = luniComponent.slice(Number(this.state.luna_inceput_contract) - 1);
-    }
+    var luniComponent = [];
+    // var luniComponent = luni.map((luna_nume, index) => (
+    //   <option key={index} data-key={index + 1}>
+    //     {luna_nume}
+    //   </option>
+    // ));
+    // // eslint-disable-next-line eqeqeq
+    // if (this.state.an == this.state.an_inceput_contract) {
+    //   luniComponent = luniComponent.slice(Number(this.state.luna_inceput_contract) - 1);
+    // }
 
     const tabel_ore = this.state.oresuplimentare.map((ora, index) => {
       for (let key in ora) if (!ora[key]) ora[key] = '-';
