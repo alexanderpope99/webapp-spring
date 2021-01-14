@@ -30,10 +30,10 @@ public class Bazacalcul implements Serializable {
 	private int an;
 
 	@Column(name = "zilelucrate")
-	private int zilelucrate;
+	private int zilelucrate = 0;
 
 	@Column(name = "salariurealizat")
-	private int salariurealizat;
+	private int salariurealizat = 0;
 
 	@ManyToOne
 	@JoinColumn(name = "idangajat")

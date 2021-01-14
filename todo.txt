@@ -47,7 +47,6 @@ LAST-UPDATE : {
 
 
 TODO: {
-	* -> https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
 
 	1 -> buton de adauga utilizatori pt toti angajatii
 
@@ -56,8 +55,7 @@ TODO: {
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori
 
-	5 -> angajat normal nu trebuie sa aiba acces la parametrii salarii si sarbatori
-
+	* -> https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
 	* -> add sorting and filtering to tables on frontend 
 }
 

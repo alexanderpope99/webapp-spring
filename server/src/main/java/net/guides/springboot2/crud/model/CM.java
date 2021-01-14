@@ -2,32 +2,14 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cm")
-public class CM implements Serializable {
+public class CM extends Concediu{
 	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@Column(name = "dela")
-	private LocalDate dela;
-
-	@Column(name = "panala")
-	private LocalDate panala;
 
 	@Column(name = "continuare")
 	private Boolean continuare;
@@ -104,11 +86,6 @@ public class CM implements Serializable {
 	@Column(name = "conditii")
 	private String conditii;
 
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idcontract")
-	private Contract contract;
-
 	public CM() {
 	}
 
@@ -118,8 +95,8 @@ public class CM implements Serializable {
 			Integer zilefnuass, Float indemnizatiefnuass, Integer zilefaambp, Float indemnizatiefaambp, String locprescriere,
 			String nravizmedic, String codboala, Boolean urgenta, String conditii, Contract contract, String cnpcopil,
 			String codindemnizatie) {
-		this.dela = dela;
-		this.panala = panala;
+
+		super(dela, panala, contract);
 		this.continuare = continuare;
 		this.datainceput = datainceput;
 		this.serie = serie;
@@ -143,33 +120,8 @@ public class CM implements Serializable {
 		this.codboala = codboala;
 		this.urgenta = urgenta;
 		this.conditii = conditii;
-		this.contract = contract;
 		this.cnpcopil = cnpcopil;
 		this.codindemnizatie = codindemnizatie;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public LocalDate getDela() {
-		return dela;
-	}
-
-	public void setDela(LocalDate dela) {
-		this.dela = dela;
-	}
-
-	public LocalDate getPanala() {
-		return panala;
-	}
-
-	public void setPanala(LocalDate panala) {
-		this.panala = panala;
 	}
 
 	public Boolean isContinuare() {
@@ -362,14 +314,6 @@ public class CM implements Serializable {
 
 	public void setConditii(String conditii) {
 		this.conditii = conditii;
-	}
-
-	public Contract getContract() {
-		return contract;
-	}
-
-	public void setContract(Contract contract) {
-		this.contract = contract;
 	}
 
 	public String getCodindemnizatie() {
