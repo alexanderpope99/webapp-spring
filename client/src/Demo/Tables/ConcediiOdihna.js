@@ -33,7 +33,6 @@ class COTabel extends React.Component {
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
     this.setNrZile = this.setNrZile.bind(this);
-    this.checkDela = this.checkDela.bind(this);
 
     this.state = {
       angajat: getAngajatSel(),
@@ -56,6 +55,7 @@ class COTabel extends React.Component {
       // add modal:
       show: false,
       isEdit: false,
+      validated: true,
       // detalii co
       dela: '',
       panala: '',
@@ -226,22 +226,13 @@ class COTabel extends React.Component {
     );
   }
 
-  checkDela() {
-    const val = this.state.co.map((val, index) => {
-      return val.dela > this.state.dela;
-    });
-    console.log(val);
-    this.setNrZile();
-  }
-
   onChangeDela(dela) {
     if (!this.state.dela || dela > this.state.panala)
-      this.setState({ dela: dela, panala: dela }, this.checkDela);
-    else this.setState({ dela: dela }, this.checkDela);
+      this.setState({ dela: dela, panala: dela, validated: true });
+    else this.setState({ dela: dela, validated: true });
   }
   onChangePanala(panala) {
-    this.setState({ panala: panala }, this.setNrZile);
-    // calculate number of days between dates
+    this.setState({ panala: panala, validated: true }, this.setNrZile);
   }
 
   setNrZile() {
@@ -285,7 +276,7 @@ class COTabel extends React.Component {
         if (c.panala) {
           ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
         }
-			}
+      }
       // add ani in luni_cu_concediu
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = new Set();
@@ -296,18 +287,18 @@ class COTabel extends React.Component {
           an = c.dela.substring(0, 4);
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
         }
-			}
-			// add current year even if if doesn't have co
-			// ani_cu_concediu.add(2021);
+      }
+      // add current year even if if doesn't have co
+      // ani_cu_concediu.add(2021);
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-			}
+      }
 
       this.getZileCoDisponibile();
 
-			let thisYear = new Date().getFullYear();
-			ani_cu_concediu.add(thisYear);
+      let thisYear = new Date().getFullYear();
+      ani_cu_concediu.add(thisYear);
       this.setState(
         {
           co: concedii,
@@ -335,6 +326,7 @@ class COTabel extends React.Component {
           show_confirm: false,
           modalTitle: '',
           modalMessage: '',
+          validated: true,
         },
         this.props.scrollToTopSmooth
       );
@@ -346,6 +338,7 @@ class COTabel extends React.Component {
         dela: '',
         panala: '',
         tip: 'Concediu de odihnă',
+        validated: true,
       });
   }
 
@@ -375,7 +368,7 @@ class COTabel extends React.Component {
 
     let ok = await axios
       .post(`${server.address}/co`, co_body, { headers: authHeader() })
-      .then((res) => res.status === 200)
+      .then((res) => res.data)
       .catch((err) => console.error('err:', err));
 
     console.log(ok);
@@ -385,9 +378,11 @@ class COTabel extends React.Component {
       // open confirm modal <- closes on OK button
       this.setState({
         show_confirm: true,
-        modalTitle: this.state.tip + ' adăugat cu succes 💾',
+        modalTitle: this.state.tip + ' adăugat 💾',
       });
       this.fillTable();
+    } else {
+      this.setState({ validated: false });
     }
   }
 
@@ -409,7 +404,7 @@ class COTabel extends React.Component {
       .put(`${server.address}/co/${this.state.id}`, co_body, {
         headers: authHeader(),
       })
-      .then((res) => res.status === 200)
+      .then((res) => res.data)
       .catch((err) => console.error('err:', err));
 
     if (ok) {
@@ -431,6 +426,8 @@ class COTabel extends React.Component {
         ),
       });
       this.fillTable();
+    } else {
+      this.setState({ validated: false });
     }
   }
 
@@ -454,6 +451,7 @@ class COTabel extends React.Component {
 
         isEdit: true,
         show: true,
+        validated: true,
       },
       this.setNrZile
     );
@@ -473,9 +471,9 @@ class COTabel extends React.Component {
       <option key={index}>{an}</option>
     ));
 
-		const angajatContract = this.state.angajat && this.state.angajat.idcontract;
-		
-		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
+    const angajatContract = this.state.angajat && this.state.angajat.idcontract;
+
+    const concediuIsValid = this.state.dela && this.state.dela <= this.state.panala;
 
     return (
       <Aux>
@@ -485,12 +483,15 @@ class COTabel extends React.Component {
             <Modal.Title>Concediu de odihnă</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form noValidate onSubmit={this.state.isEdit ? this.updateCO : this.addCO}>
               <Form.Group id="zilecodisponibile">
                 <Form.Label>
-                  {this.state.zile_co_disponibile} zile concediu de odihnă disponibile
+                  {this.state.validated
+                    ? `${this.state.zile_co_disponibile} zile concediu de odihnă disponibile`
+                    : `Concediul se suprapune cu unul existent`}
                 </Form.Label>
               </Form.Group>
+
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
@@ -499,7 +500,11 @@ class COTabel extends React.Component {
                   value={this.state.dela}
                   max={this.state.panala === this.state.dela ? null : this.state.panala}
                   onChange={(e) => this.onChangeDela(e.target.value)}
+                  className={this.state.validated ? 'form-control' : 'form-control is-invalid'}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Concediul se suprapune cu unul existent
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group id="panala">
@@ -538,7 +543,11 @@ class COTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.state.isEdit ? this.updateCO : this.addCO} disabled={!concediuIsValid}>
+            <Button
+              variant="primary"
+              onClick={this.state.isEdit ? this.updateCO : this.addCO}
+              disabled={!concediuIsValid}
+            >
               {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>

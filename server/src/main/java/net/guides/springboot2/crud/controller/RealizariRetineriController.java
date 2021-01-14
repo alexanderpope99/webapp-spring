@@ -107,17 +107,6 @@ public class RealizariRetineriController {
 				totalOreSuplimentare);
 	}
 
-	// * CALCULEAZA pt un angajat, pe ultimele 6 luni, exclusiv (luna, an)
-	// * butonul RealizariRetineri.js : "Recalculeaza ultimele 6 luni"
-	@PutMapping("calc/ultimele6/idc={idc}&mo={luna}&y={an}")
-	public ResponseEntity<MessageResponse> calcUltimele6Luni(@PathVariable("idc") int idcontract,
-			@PathVariable("luna") int luna, @PathVariable("an") int an) throws ResourceNotFoundException {
-
-		realizariRetineriService.saveRealizariRetineriUltimele6Luni(luna, an, idcontract);
-
-		return ResponseEntity.ok(new MessageResponse("Ultimele 6 luni calculate!"));
-	}
-
 	// * RECALCULEAZA pt un angajat, pe ultimele 6 luni, exclusiv (luna, an)
 	// * butonul RealizariRetineri.js : "Recalculeaza ultimele 6 luni"
 	@PutMapping("recalc/ultimele6/idc={idc}&mo={luna}&y={an}")

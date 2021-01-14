@@ -26,4 +26,10 @@ public interface CORepository extends JpaRepository<CO, Integer> {
 	CO findByTipAndDelaAndPanalaAndContract_Id(String tip, LocalDate dela, LocalDate panala, int idcontract);
 
 	List<CO> findAllByOrderByDelaAsc();
+
+	@Query(value = "SELECT c FROM CO c WHERE YEAR(c.dela) = ?1 AND MONTH(c.dela) = ?2")
+	List<CO> findByAnAndLuna(int an, int luna);
+
+	@Query(value = "SELECT c FROM CO c WHERE YEAR(c.dela) = ?1")
+	List<CO> findByAn(int an);
 }

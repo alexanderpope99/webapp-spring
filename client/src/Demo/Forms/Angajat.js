@@ -130,6 +130,7 @@ class Angajat extends React.Component {
                 : this.state.key !== 'date-personale'
                 ? ' *niciun angajat selectat'
                 : ''}
+						<Button variant="link" size="sm" className="float-right m-0" href="/forms/realizari-retineri">Realizări / Rețineri</Button>
             </h5>
 
             <hr />

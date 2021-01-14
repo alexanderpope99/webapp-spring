@@ -35,18 +35,77 @@ public class COService {
 	@Autowired
 	private ContractRepository contractRepository;
 
+	public CO overlaps(CO co, List<CO> concedii) {
+		concedii.removeIf(c -> c.getId() == co.getId());
+		LocalDate dela = co.getDela();
+		LocalDate panala = co.getPanala();
+
+		// scrise separat pentru lizibilitate
+		for (CO concediu : concedii) {
+			// co includes concediu.dela: co.dela < concediu.dela < co.panala
+			if (dela.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getDela()) <= 0)
+				return concediu;
+
+			// co includes concediu.panala: co.dela < concediu.dela < co.panala
+			if (dela.compareTo(concediu.getPanala()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0)
+				return concediu;
+
+			// overlaps - co.dela inside concediu: concediu.dela < co.dela < concediu.panala
+			if (dela.compareTo(concediu.getDela()) >= 0 && dela.compareTo(concediu.getPanala()) <= 0) {
+				return concediu;
+			}
+
+			// overlaps co.panala inside concediu: concediu.dela < co.panala < concediu.panla
+			if (panala.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0) {
+				return concediu;
+			}
+		}
+
+		return null;
+	}
+
+	public CODTO overlapsResponse(CO co) {
+		List<CO> concediiExistente = coRepository.findByContract_Id(co.getContract().getId());
+
+		CO concediuOverlapped = this.overlaps(co, concediiExistente);
+
+		if (concediuOverlapped != null)
+			return modelMapper.map(concediuOverlapped, CODTO.class);
+		else
+			return null;
+	}
+
+	public CODTO overlapsResponse(CODTO coDTO) {
+		List<CO> concediiExistente = coRepository.findByContract_Id(coDTO.getIdcontract());
+
+		CO co = modelMapper.map(coDTO, CO.class);
+
+		CO concediuOverlapped = this.overlaps(co, concediiExistente);
+
+		if (concediuOverlapped != null)
+			return modelMapper.map(concediuOverlapped, CODTO.class);
+		else
+			return null;
+	}
+
 	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
 		CO co = modelMapper.map(coDTO, CO.class);
+
+		// get luna, an from co.dela
+		int luna = co.getDela().getMonthValue();
+		int an = co.getDela().getYear();
+
+		// verifica ca nu se suprapune cu alt concediu
+		CODTO concediuOverlappedDTO = this.overlapsResponse(coDTO);
+
+		if (concediuOverlappedDTO != null)
+			return null;
 
 		Contract contract = contractRepository.findById(coDTO.getIdcontract())
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
 
 		co.setContract(contract);
 		coRepository.save(co);
-
-		// get luna, an from co.dela
-		int luna = co.getDela().getMonthValue();
-		int an = co.getDela().getYear();
 
 		// update salariu
 		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
@@ -77,7 +136,7 @@ public class COService {
 	public int getZileCODisponibile(int idcontract) throws ResourceNotFoundException {
 		// get contract -> zilecoan
 		Contract contract = contractRepository.findById(idcontract)
-			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
+				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
 
 		int zilecodisponibile = 0;
 		// get concedii odihna (cu plata)
@@ -86,11 +145,12 @@ public class COService {
 		LocalDate today = LocalDate.now();
 
 		long luniLucrate = ChronoUnit.MONTHS.between(contract.getDataincepere(), today) - 1;
-		
-		int zilecoan = contract.getZilecoan();
-		float zilecopeluna = (float)zilecoan / 12;
 
-		//* calculeaza cate zile are in primul an de activitate (cel mai probabil nu are 21)
+		int zilecoan = contract.getZilecoan();
+		float zilecopeluna = (float) zilecoan / 12;
+
+		// * calculeaza cate zile are in primul an de activitate (cel mai probabil nu
+		// are 21)
 		// exclude luna in care a inceput activitatea
 		int zileconcediu = this.zileC(concedii);
 		zilecodisponibile = Math.round(luniLucrate * zilecopeluna) - zileconcediu;
@@ -141,7 +201,8 @@ public class COService {
 	}
 
 	private int zileC(List<CO> concedii) {
-		if(concedii.isEmpty()) return 0;
+		if (concedii.isEmpty())
+			return 0;
 
 		LocalDate dela, panala;
 		int zileC = 0;
