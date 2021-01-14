@@ -48,6 +48,8 @@ LAST-UPDATE : {
 
 TODO: {
 
+	toast cand selectez soc
+
 	1 -> buton de adauga utilizatori pt toti angajatii
 
 	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Modal, Form, Toast } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import axios from 'axios';
 
@@ -52,7 +52,10 @@ class Societati extends React.Component {
       isEdit: false,
       show_confirm: false,
       socsel: getSocSel(),
-      user: authService.getCurrentUser(),
+			user: authService.getCurrentUser(),
+			
+			showToast: false,
+			toastMessage: 'Nicio societate selectată',
 
       today: new Date(),
 
@@ -194,9 +197,15 @@ class Societati extends React.Component {
       societati[nume_soc].opacity = '1';
 
       setSocSel({ id: societati[nume_soc].id, nume: nume_soc });
-      console.log(getSocSel());
+			const socsel = getSocSel();
+			console.log(socsel);
 
-      this.setState({ societati: societati, socsel: getSocSel() });
+      this.setState({ 
+				societati: societati, 
+				socsel: getSocSel(),
+				showToast:true,
+				toastMessage: `Societate ${socsel.nume} selectată`,
+			});
     }
   }
 
@@ -406,6 +415,20 @@ class Societati extends React.Component {
 
     return (
       <Aux>
+				<Toast
+					onClose={() => this.setState({ showToast: false })}
+					show={this.state.showToast}
+					delay={4000}
+					autohide
+					className="position-fixed"
+					style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
+				>
+					<Toast.Header className="pr-2">
+						<strong className="mr-auto">Societate selectată</strong>
+					</Toast.Header>
+					<Toast.Body>{this.state.toastMessage}</Toast.Body>
+				</Toast>
+
         {/* EDIT SOCIETATE MODAL HERE */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
           <Modal.Header closeButton>
