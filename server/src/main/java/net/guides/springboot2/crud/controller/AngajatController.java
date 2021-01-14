@@ -96,7 +96,7 @@ public class AngajatController {
 
 	@GetMapping("/ids={ids}&nu")
 	public List<Angajat> findAngajatiNoUserAndAccessByIdsocietate(@PathVariable("ids") int idsocietate) {
-		return angajatRepository.findBySocietate_IdAndUserIsNull(idsocietate);
+		return angajatRepository.findBySocietate_IdAndUserIsNullOrderByPersoana_NumeAsc(idsocietate);
 	}
 
 	@GetMapping("/ids={ids}/count")
