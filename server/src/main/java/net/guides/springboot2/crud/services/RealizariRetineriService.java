@@ -306,30 +306,6 @@ public class RealizariRetineriService {
 	}
 
 	// exclude (luna, an) din argument
-	public void saveRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
-		int luna6 = 0, an6 = an;
-		if (luna <= 6) {
-			luna6 = 12 - (6 - luna);
-			an6--;
-		} else
-			luna6 = luna - 6;
-
-		if (luna6 > luna && an6 < an) {
-			for (int i = luna6; i <= 12; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
-			}
-
-			for (int i = 1; i < luna; ++i) {
-				this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1);
-			}
-		} else {
-			for (int i = luna6; i < luna; ++i) {
-				this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1);
-			}
-		}
-	}
-
-	// exclude (luna, an) din argument
 	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
 	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		int luna6 = 0, an6 = an;
@@ -339,18 +315,17 @@ public class RealizariRetineriService {
 		} else
 			luna6 = luna - 6;
 
-		// (..., -1, -1, -1) == foloseste (primaBruta, nrTichete, totalOreSuplimentare)
-		// existente
+		// ( -1, -1, -1) == foloseste (primaBruta, nrTichete, totalOreSuplimentare) existente
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
 				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
 			}
 
-			for (int i = 1; i < luna; ++i) {
+			for (int i = 1; i <= luna; ++i) {
 				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
 			}
 		} else {
-			for (int i = luna6; i < luna; ++i) {
+			for (int i = luna6; i <= luna; ++i) {
 				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1);
 			}
 		}
