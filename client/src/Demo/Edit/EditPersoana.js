@@ -255,7 +255,8 @@ class EditPersoana extends React.Component {
       this.setState(
         {
           idadresa: persoana.adresa.id,
-          judet: persoana.adresa.judet || '',
+					localitate: persoana.adresa.localitate || '',
+					judet: persoana.adresa.judet || '',
           adresacompleta: persoana.adresa.adresa || '',
         },
         () => this.onChangeLocalitate(persoana.adresa.localitate)
@@ -274,16 +275,16 @@ class EditPersoana extends React.Component {
         loculnasterii: persoana.actidentitate.loculnasterii || '',
         eliberatde: persoana.actidentitate.eliberatde || '',
         dataeliberarii: persoana.actidentitate.dataeliberarii || '',
-        starecivila: persoana.actidentitate.starecivila || '',
+        starecivila: persoana.actidentitate.starecivila || 'Necăsătorit',
       });
     }
 
     this.setState({
       id: persoana.id,
-      email: persoana.email || '',
-      gen: persoana.gen || '',
+      gen: persoana.gen || 'Dl.',
       nume: persoana.nume || '',
       prenume: persoana.prenume || '',
+      email: persoana.email || '',
       telefon: persoana.telefon || '',
 
       selectednume: this.getNumeintregById(id),
@@ -478,7 +479,7 @@ class EditPersoana extends React.Component {
                               required
                               type="text"
                               placeholder="eg. Popescu"
-                              value={this.state.nume}
+                              value={this.state.nume || ''}
                               onChange={(e) => {
                                 this.setState({
                                   nume: e.target.value,
@@ -494,7 +495,7 @@ class EditPersoana extends React.Component {
                               required
                               type="text"
                               placeholder="eg. Ion"
-                              value={this.state.prenume}
+                              value={this.state.prenume || ''}
                               onChange={(e) => {
                                 this.setState({
                                   prenume: e.target.value,
@@ -517,7 +518,7 @@ class EditPersoana extends React.Component {
                             <Form.Label>Tip act</Form.Label>
                             <Form.Control
                               as="select"
-                              value={this.state.tipact}
+                              value={this.state.tipact || 'Carte de identitate'}
                               onChange={(e) => {
                                 this.setState({
                                   tipact: e.target.value,
@@ -538,7 +539,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="Serie CI"
-                              value={this.state.serie}
+                              value={this.state.serie || ''}
                               onChange={(e) => {
                                 this.setState({
                                   serie: e.target.value,
@@ -553,7 +554,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="Număr"
-                              value={this.state.numar}
+                              value={this.state.numar || ''}
                               onChange={(e) => {
                                 this.setState({
                                   numar: e.target.value,
@@ -568,7 +569,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="CNP"
-                              value={this.state.cnp}
+                              value={this.state.cnp || ''}
                               onChange={(e) => this.onChangeCnp(e)}
                             />
                           </Form.Group>
@@ -576,7 +577,7 @@ class EditPersoana extends React.Component {
                         <Col md={6}>
                           <Form.Group id="datanasterii">
                             <Form.Label>Data nașterii</Form.Label>
-                            <Form.Control type="date" value={this.state.datanasterii} disabled />
+                            <Form.Control type="date" value={this.state.datanasterii || ''} disabled />
                           </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -585,7 +586,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="Eliberat de"
-                              value={this.state.eliberatde}
+                              value={this.state.eliberatde || ''}
                               onChange={(e) => {
                                 this.setState({
                                   eliberatde: e.target.value,
@@ -599,7 +600,7 @@ class EditPersoana extends React.Component {
                             <Form.Label>Data eliberării</Form.Label>
                             <Form.Control
                               type="date"
-                              value={this.state.dataeliberarii}
+                              value={this.state.dataeliberarii || ''}
                               onChange={(e) => {
                                 this.setState({
                                   dataeliberarii: e.target.value,
@@ -615,7 +616,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="Locul nașterii"
-                              value={this.state.loculnasterii}
+                              value={this.state.loculnasterii || ''}
                               onChange={(e) => {
                                 this.setState({
                                   loculnasterii: e.target.value,
@@ -629,7 +630,7 @@ class EditPersoana extends React.Component {
                             <Form.Label>Stare civilă</Form.Label>
                             <Form.Control
                               as="select"
-                              value={this.state.starecivila}
+                              value={this.state.starecivila || 'Necăsătorit'}
                               onChange={(e) => {
                                 this.setState({
                                   starecivila: e.target.value,
@@ -655,7 +656,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="Localitate"
-                              value={this.state.localitate}
+                              value={this.state.localitate || ''}
                               onChange={(e) => this.onChangeLocalitate(e.target.value)}
                             />
                           </Form.Group>
@@ -665,7 +666,7 @@ class EditPersoana extends React.Component {
                             <Form.Label>{this.state.tipJudet}</Form.Label>
                             <Form.Control
                               as="select"
-                              value={this.state.judet}
+                              value={this.state.judet || '-'}
                               onChange={(e) => {
                                 this.setState({
                                   judet: e.target.value,
@@ -683,7 +684,7 @@ class EditPersoana extends React.Component {
                             <Form.Control
                               type="text"
                               placeholder="eg. Str. nr., bl. sc. ap. etc."
-                              value={this.state.adresacompleta}
+                              value={this.state.adresacompleta || ''}
                               onChange={(e) =>
                                 this.setState({
                                   adresacompleta: e.target.value,
@@ -702,7 +703,7 @@ class EditPersoana extends React.Component {
                             <Form.Label>Număr telefon</Form.Label>
                             <Form.Control
                               type="text"
-                              value={this.state.telefon}
+                              value={this.state.telefon || ''}
                               onChange={(e) =>
                                 this.setState({
                                   telefon: e.target.value,
@@ -717,7 +718,7 @@ class EditPersoana extends React.Component {
                             <Form.Label>E-mail</Form.Label>
                             <Form.Control
                               type="email"
-                              value={this.state.email}
+                              value={this.state.email || ''}
                               onChange={(e) =>
                                 this.setState({
                                   email: e.target.value,

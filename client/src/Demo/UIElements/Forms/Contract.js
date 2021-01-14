@@ -285,9 +285,6 @@ class Contract extends React.Component {
   }
 
   componentDidMount() {
-    // await get centre cost here
-    // ... //
-
     this.fillForm();
   }
 
@@ -480,7 +477,7 @@ class Contract extends React.Component {
                 <Form.Label>Funcție</Form.Label>
                 <Form.Control
                   placeholder="functia"
-                  value={this.state.funcție}
+                  value={this.state.funcție || ''}
                   onChange={(e) => {
                     this.setState({ funcție: e.target.value });
                   }}
@@ -513,7 +510,7 @@ class Contract extends React.Component {
                   required
                   type="text"
                   placeholder="Număr contract"
-                  value={this.state.numărContract}
+                  value={this.state.numărContract || ''}
                   onChange={(e) => {
                     this.setState({ numărContract: e.target.value });
                   }}
@@ -527,7 +524,7 @@ class Contract extends React.Component {
                 <Form.Control
                   type="text"
                   placeholder="Marca"
-                  value={this.state.marca}
+                  value={this.state.marca || ''}
                   onChange={(e) => {
                     this.setState({ marca: e.target.value });
                   }}
@@ -540,7 +537,7 @@ class Contract extends React.Component {
                 <Form.Label>Data începere activitate</Form.Label>
                 <Form.Control
                   type="date"
-                  value={this.state.dataIncepere}
+                  value={this.state.dataIncepere || ''}
                   onChange={(e) => {
                     this.setState({ dataIncepere: e.target.value });
                   }}
@@ -552,7 +549,7 @@ class Contract extends React.Component {
                 <Form.Label>Data contract</Form.Label>
                 <Form.Control
                   type="date"
-                  value={this.state.dataContract}
+                  value={this.state.dataContract || ''}
                   selected={this.state.dataContract}
                   onChange={(e) => {
                     this.setState({ dataContract: e.target.value });
@@ -575,7 +572,7 @@ class Contract extends React.Component {
                     type="switch"
                     id="functieDeBazaCheck"
                     label="Funcție de bază"
-                    checked={this.state.functieBaza}
+                    checked={this.state.functieBaza || false}
                     onChange={(e) => {
                       this.setState({ functieBaza: e.target.checked });
                     }}
@@ -591,7 +588,7 @@ class Contract extends React.Component {
                   type="switch"
                   id="deduceriCheck"
                   label="Calcul deduceri"
-                  checked={this.state.calculdeduceri}
+                  checked={this.state.calculdeduceri || false}
                   onChange={(e) => {
                     this.setState({ calculdeduceri: e.target.checked });
                   }}
@@ -605,7 +602,7 @@ class Contract extends React.Component {
                   type="switch"
                   id="studiiSuperioareCheck"
                   label="Studii superioare"
-                  checked={this.state.studiiSuperioare}
+                  checked={this.state.studiiSuperioare || false}
                   onChange={(e) => {
                     this.setState({
                       studiiSuperioare: e.target.checked,
@@ -621,7 +618,7 @@ class Contract extends React.Component {
                   type="switch"
                   id="pensionarCheck"
                   label="Pensionar"
-                  checked={this.state.pensionar}
+                  checked={this.state.pensionar || false}
                   onChange={(e) => {
                     this.setState({ pensionar: e.target.checked });
                   }}
@@ -635,7 +632,7 @@ class Contract extends React.Component {
                 <Form.Label>Normă de lucru</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.normăLucru.nume}
+                  value={this.state.normăLucru.nume || 'Normă întreagă'}
                   onChange={(e) => {
                     this.setState(
                       {
@@ -665,7 +662,7 @@ class Contract extends React.Component {
                 <Form.Control
                   placeholder="0"
                   type="number"
-                  value={this.state.zileCOan}
+                  value={this.state.zileCOan || 0}
                   onChange={(e) => {
                     this.setState({ zileCOan: e.target.value });
                   }}
@@ -683,13 +680,13 @@ class Contract extends React.Component {
                     placeholder="Salariu"
                     aria-label="Salariu"
                     aria-describedby="basic-addon2"
-                    value={this.state.salariu}
+                    value={this.state.salariu || 0}
                     onChange={(e) => this.setState({ salariu: e.target.value })}
                   />
 
                   <DropdownButton
                     as={InputGroup.Append}
-                    title={this.state.monedăSalariu}
+                    title={this.state.monedăSalariu || 'RON'}
                     id="monedasalariu"
                   >
                     <Dropdown.Item
@@ -719,7 +716,7 @@ class Contract extends React.Component {
                 <Form.Label>Condiții de muncă</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.condițiiMuncă}
+                  value={this.state.condițiiMuncă || 'Normale'}
                   onChange={(e) => {
                     this.setState({ condițiiMuncă: e.target.value });
                   }}
@@ -739,7 +736,7 @@ class Contract extends React.Component {
                     <Form.Label>IBAN</Form.Label>
                     <Form.Control
                       type="text"
-                      value={this.state.iban}
+                      value={this.state.iban || ''}
                       style={{ fontFamily: 'Consolas, Courier New' }}
                       onChange={(e) => {
                         this.setState({ iban: e.target.value });
@@ -752,7 +749,7 @@ class Contract extends React.Component {
                     <Form.Label>Nume bancă</Form.Label>
                     <Form.Control
                       type="text"
-                      value={this.state.numebanca}
+                      value={this.state.numebanca || ''}
                       onChange={(e) => {
                         this.setState({ numebanca: e.target.value });
                       }}
@@ -766,7 +763,7 @@ class Contract extends React.Component {
                 <Form.Label>Punct de lucru</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.punctDeLucru}
+                  value={this.state.punctDeLucru || '-'}
                   onChange={(e) => {
                     this.setState({ punctDeLucru: e.target.value });
                   }}
@@ -790,7 +787,7 @@ class Contract extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Col>
-            <Col md={6}>
+            {/* <Col md={6}>
               <Form.Group controlId="echipa">
                 <Form.Label>Echipa</Form.Label>
                 <Typeahead
@@ -798,7 +795,7 @@ class Contract extends React.Component {
                   options={['echipa test']}
                   allowNew
                   newSelectionPrefix="Adaugă"
-                  value={this.state.echipa}
+                  value={this.state.echipa || ''}
                   onChange={(selected) => {
                     this.setState({ echipa: selected });
                   }}
@@ -819,7 +816,7 @@ class Contract extends React.Component {
                   }}
                 />
               </Form.Group>
-            </Col>
+            </Col> */}
 
             <Col md={12} />
             <Col md={1}>

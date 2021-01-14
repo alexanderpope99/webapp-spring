@@ -608,7 +608,7 @@ class COTabel extends React.Component {
                       value={this.state.an}
                       onChange={(e) => this.onChangeAn(e.target.value)}
                     >
-                      <option>-</option>
+                      {/* <option>-</option> */}
                       {yearsComponent}
                     </Form.Control>
                   </Form.Group>
@@ -619,7 +619,7 @@ class COTabel extends React.Component {
                       value={this.state.luna.nume}
                       onChange={(e) => this.onChangeMonth(e)}
                     >
-                      <option>-</option>
+                      <option>Toate</option>
                       {monthsComponent}
                     </Form.Control>
                   </Form.Group>
