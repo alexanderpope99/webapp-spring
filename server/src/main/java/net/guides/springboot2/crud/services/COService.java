@@ -158,28 +158,22 @@ public class COService {
 		return zilecodisponibile;
 	}
 
-	public int getZileCFP(int luna, int an, int idcontract) {
-		List<CO> concediiOdihnaNeplatite = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
-
-		return zileC(luna, an, concediiOdihnaNeplatite);
-	}
-
-	public int getZileCFPLucratoare(int luna, int an, int idcontract) {
-		List<CO> concediiOdihnaNeplatite = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
-
-		return zileCLucratoare(luna, an, concediiOdihnaNeplatite);
-	}
-
 	public int getZileCOTotal(int luna, int an, int idcontract) {
 		List<CO> concediiOdihna = coRepository.findByContract_Id(idcontract);
 
 		return zileC(luna, an, concediiOdihna);
 	}
 
-	public int getZileCOLucratoare(int luna, int an, int idcontract) {
-		List<CO> concediiOdihna = coRepository.findByContract_Id(idcontract);
+	public int getZileCFP(int luna, int an, int idcontract) {
+		List<CO> concediiOdihnaFaraPlata = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
 
-		return zileCLucratoare(luna, an, concediiOdihna);
+		return zileC(luna, an, concediiOdihnaFaraPlata);
+	}
+
+	public int getZileCFPLucratoare(int luna, int an, int idcontract) {
+		List<CO> concediiOdihnaFaraPlata = coRepository.findByContract_IdAndTip(idcontract, "Concediu fără plată");
+
+		return zileCLucratoare(luna, an, concediiOdihnaFaraPlata);
 	}
 
 	public int getZileCS(int luna, int an, int idcontract) {
@@ -200,6 +194,12 @@ public class COService {
 		return zileC(luna, an, st);
 	}
 
+	public int getZileCOLucratoare(int luna, int an, int idcontract) {
+		List<CO> concediiOdihna = coRepository.findByContract_IdAndTip(idcontract, "Concediu de odihnă");
+
+		return zileCLucratoare(luna, an, concediiOdihna);
+	}
+
 	private int zileC(List<CO> concedii) {
 		if (concedii.isEmpty())
 			return 0;
@@ -212,6 +212,7 @@ public class COService {
 
 			zileC += ChronoUnit.DAYS.between(dela, panala) + 1;
 		}
+		
 		return zileC;
 	}
 

@@ -149,9 +149,12 @@ public class RealizariRetineriService {
 
 		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 
-		int zileCO = coService.getZileCOTotal(luna, an, idcontract);
-		int zileCOLucratoare = 0, zileCFP = 0, zileCFPLucratoare = 0;
-		if (zileCO != 0) {
+		int zileCOTotal = coService.getZileCOTotal(luna, an, idcontract);
+
+		int zileCO = 0, zileCOLucratoare = 0;
+		int zileCFP = 0, zileCFPLucratoare = 0;
+		if (zileCOTotal != 0) {
+			zileCO = coService.getZileCO(luna, an, idcontract);
 			zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
 			zileCFP = coService.getZileCFP(luna, an, idcontract);
 			zileCFPLucratoare = coService.getZileCFPLucratoare(luna, an, idcontract);
@@ -166,7 +169,7 @@ public class RealizariRetineriService {
 		int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
 		int duratazilucru = contract.getNormalucru();
 
-		int zileLucrate = zileContract - zileCOLucratoare - zileCMLucratoare;
+		int zileLucrate = zileContract - zileCOLucratoare - zileCMLucratoare - zileCFPLucratoare;
 		int oreLucrate = zileLucrate * duratazilucru;
 
 		float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
@@ -197,7 +200,7 @@ public class RealizariRetineriService {
 		float impozit = Math.round(this.impozitSalariu);
 
 		RealizariRetineri rr = new RealizariRetineri(contract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM,
-				zileCMLucratoare, zileCFP, zileCFP, duratazilucru, norma, zileLucrate, oreLucrate, (int) totalDrepturi,
+				zileCMLucratoare, zileCFP, zileCFPLucratoare, duratazilucru, norma, zileLucrate, oreLucrate, (int) totalDrepturi,
 				salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata, nrPersoaneIntretinere,
 				(int) this.deducere, primaBruta, totalOreSuplimentare);
 

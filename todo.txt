@@ -56,6 +56,7 @@ TODO: {
 	4.2 -> reseteaza parola din panou utilizatori
 
 	* -> https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
+	* -> https://vladmihalcea.com/the-best-way-to-map-an-enum-type-with-jpa-and-hibernate/
 	* -> add sorting and filtering to tables on frontend 
 }
 
