@@ -18,6 +18,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+
 @Entity
 @Table(name = "societate")
 public class Societate implements Serializable {
@@ -203,10 +205,17 @@ public class Societate implements Serializable {
 	public void setCentreCost(List<CentruCost> centreCost) {
 		this.centreCost = centreCost;
 	}
+
 	public void setFacturi(List<Factura> facturi) {
 		this.facturi = facturi;
 	}
+
 	public void setUseri(List<User> useri) {
 		this.useri = useri;
+	}
+
+	public void checkData() throws ResourceNotFoundException {
+		if (nume.equals("Predoana"))
+			throw new ResourceNotFoundException("predoana");
 	}
 }

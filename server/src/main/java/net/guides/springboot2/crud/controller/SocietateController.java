@@ -30,6 +30,7 @@ import org.springframework.data.domain.Sort;
 @RestController
 @RequestMapping("/societate")
 public class SocietateController {
+
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -44,8 +45,9 @@ public class SocietateController {
 	@GetMapping
 	public List<SocietateDTO> getAll() {
 		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
-		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class)).collect(Collectors.toList());
-		for(int i=0; i < societati.size(); ++i) {
+		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class))
+				.collect(Collectors.toList());
+		for (int i = 0; i < societati.size(); ++i) {
 			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati());
 		}
 		return societatiDTO;
@@ -64,20 +66,24 @@ public class SocietateController {
 	@GetMapping("/user/{id}")
 	public List<SocietateDTO> getSocietateByUserId(@PathVariable(value = "id") Integer id) {
 		List<Societate> societati = societateRepository.findByUserId(id);
-		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class)).collect(Collectors.toList());
-		for(int i=0; i < societati.size(); ++i) {
+		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class))
+				.collect(Collectors.toList());
+		for (int i = 0; i < societati.size(); ++i) {
 			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati().size());
 		}
 		return societatiDTO;
 	}
 
 	@PostMapping
-	public Societate createSocietate(@RequestBody Societate societate) {
+	public Societate createSocietate(@RequestBody Societate societate) throws ResourceNotFoundException {
+		societate.checkData();
 		return societateRepository.save(societate);
 	}
 
 	@PostMapping("/{uid}")
-	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") int uid) {
+	public Societate createSocietate(@RequestBody Societate societate, @PathVariable("uid") int uid)
+			throws ResourceNotFoundException {
+		societate.checkData();
 		Societate newSoc = societateRepository.save(societate);
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error"));
 		List<Societate> societati = user.getSocietati();
@@ -101,7 +107,8 @@ public class SocietateController {
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> deleteSocietate(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
 		// Societate societate = societateRepository.findById(id)
-		// 		.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+		// .orElseThrow(() -> new ResourceNotFoundException("Societate not found for
+		// this id :: " + id));
 
 		// societateRepository.delete(societate);
 		societateService.delete(id);
