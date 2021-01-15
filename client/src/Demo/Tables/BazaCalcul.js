@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Edit3, Plus, RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -10,7 +10,7 @@ import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
 import { getAngajatSel } from '../Resources/angajatsel';
-import { luni }from '../Resources/calendar';
+import { luni } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
@@ -55,6 +55,9 @@ class BazaCalcul extends React.Component {
       luna: { nume: '-', nr: '-' },
       salariurealizat: '',
       zilelucrate: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -71,7 +74,12 @@ class BazaCalcul extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+          })
+        );
       if (angajat)
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
@@ -94,7 +102,12 @@ class BazaCalcul extends React.Component {
     let ok = await axios
       .post(`${server.address}/bazacalcul`, bazacalcul_body, { headers: authHeader() })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga bază calcul\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       await this.handleClose();
@@ -122,7 +135,12 @@ class BazaCalcul extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza baza calcul\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       this.fillTable();
@@ -153,7 +171,12 @@ class BazaCalcul extends React.Component {
       .delete(`${server.address}/bazacalcul/${idbazacalcul}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.fillTable)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge baza calcul\n' + err.response.data.message,
+        })
+      );
   }
 
   // function to create react component with fetched data
@@ -243,7 +266,12 @@ class BazaCalcul extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua baza calcul\n' + err.response.data.message,
+          })
+        );
       if (bazacalcul) {
         const luni_nr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         var ani_cu_baza = new Set();
@@ -347,6 +375,19 @@ class BazaCalcul extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

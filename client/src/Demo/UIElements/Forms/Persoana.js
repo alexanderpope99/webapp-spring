@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Form, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Form, Button, Modal, Toast } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 
 import { judete, sectoare } from '../../Resources/judete';
@@ -50,6 +50,9 @@ class Persoana extends React.Component {
 
       telefon: '',
       email: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -210,7 +213,12 @@ class Persoana extends React.Component {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error('error:', err.message));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga angajatul\n' + err.response.data.message,
+        })
+      );
 
     if (persoana) {
       this.clearFields();
@@ -220,7 +228,6 @@ class Persoana extends React.Component {
       });
 
       console.log('idpersoana:', persoana.id);
-
     } else return;
   }
 
@@ -240,13 +247,26 @@ class Persoana extends React.Component {
 
     return (
       <React.Fragment>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-						<Button variant="primary" href="/tables/angajati">
+            <Button variant="primary" href="/tables/angajati">
               Către angajatți
             </Button>
             <Button variant="primary" onClick={this.handleClose}>

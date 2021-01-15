@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
@@ -45,6 +45,9 @@ class BazaCalculView extends React.Component {
       luna: { nume: '-', nr: '-' },
       salariurealizat: '',
       zilelucrate: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -61,7 +64,12 @@ class BazaCalculView extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am prelua angajatul\n' + err.response.data.message,
+          })
+        );
       if (angajat)
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
@@ -98,7 +106,12 @@ class BazaCalculView extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua baza calcul\n' + err.response.data.message,
+          })
+        );
       if (bazacalcul) {
         const luni_nr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         var ani_cu_baza = new Set();
@@ -194,6 +207,19 @@ class BazaCalculView extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* VIEW MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

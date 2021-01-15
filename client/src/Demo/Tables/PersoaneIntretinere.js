@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -50,6 +50,9 @@ class PersoaneIntretinereTabel extends React.Component {
       intretinut: false,
       coasigurat: false,
       idangajat: null,
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -66,7 +69,12 @@ class PersoaneIntretinereTabel extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am prelua angajatul\n' + err.response.data.message,
+          })
+        );
       if (angajat)
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
@@ -93,7 +101,12 @@ class PersoaneIntretinereTabel extends React.Component {
     let ok = await axios
       .post(`${server.address}/persoanaintretinere`, persoana_body, { headers: authHeader() })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga persoana întreținere\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       await this.handleClose();
       this.setState(
@@ -124,7 +137,12 @@ class PersoaneIntretinereTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut modifica persoana întreținere\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       this.fillTable();
@@ -159,7 +177,12 @@ class PersoaneIntretinereTabel extends React.Component {
       .delete(`${server.address}/persoanaintretinere/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.fillTable)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge persoana întreținere\n' + err.response.data.message,
+        })
+      );
   }
 
   getDatanasteriiByCNP(cnp) {
@@ -191,7 +214,12 @@ class PersoaneIntretinereTabel extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua persoanele întreținere\n' + err.response.data.message,
+          })
+        );
       if (persoane) {
         this.setState(
           {
@@ -319,6 +347,19 @@ class PersoaneIntretinereTabel extends React.Component {
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

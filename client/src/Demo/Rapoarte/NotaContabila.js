@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Form, Button, FormControl } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, FormControl, Toast } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
@@ -23,6 +23,8 @@ class NotaContabila extends React.Component {
       an: '',
       intocmitDe: '',
       user: authService.getCurrentUser(),
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -54,10 +56,18 @@ class NotaContabila extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea nota contabilă\n' + err.response.data.message,
+        })
+      );
 
     if (created)
-      download(`Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`, this.state.user.id);
+      download(
+        `Nota Contabila - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
+        this.state.user.id
+      );
   }
 
   render() {
@@ -65,6 +75,19 @@ class NotaContabila extends React.Component {
 
     return (
       <React.Fragment>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Card className="border">
           <Card.Header>
             <Typography variant="h5">Notă Contabilă</Typography>

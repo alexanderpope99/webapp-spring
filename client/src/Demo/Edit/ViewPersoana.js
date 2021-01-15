@@ -9,6 +9,7 @@ import {
   FormControl,
   OverlayTrigger,
   Tooltip,
+  Toast,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { FileText } from 'react-feather';
@@ -80,6 +81,9 @@ class ViewPersoana extends React.Component {
 
       telefon: '',
       email: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -118,14 +122,23 @@ class ViewPersoana extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.log(err));
-	}
-	
-	async fillForm() {
-		this.clearFields();
-		
-		const angajat = await this.getAngajat();
-		const persoana = angajat.persoana;
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua angajatul cu userid-ul ' +
+            this.state.user.id +
+            '\n' +
+            err.response.data.message,
+        })
+      );
+  }
+
+  async fillForm() {
+    this.clearFields();
+
+    const angajat = await this.getAngajat();
+    const persoana = angajat.persoana;
 
     setAngajatSel({
       idpersoana: persoana.id,
@@ -171,8 +184,8 @@ class ViewPersoana extends React.Component {
 
   componentDidMount() {
     this.fillForm();
-	}
-	
+  }
+
   getTipJudet(tipJudet) {
     if (typeof tipJudet !== 'string') {
       return 'Județ';
@@ -212,11 +225,24 @@ class ViewPersoana extends React.Component {
       cnp: cnp,
       datanasterii: this.getDatanasteriiByCNP(e.target.value),
     });
-	}
+  }
 
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Row>
           <Col>
             <Card>
@@ -224,7 +250,7 @@ class ViewPersoana extends React.Component {
                 <Card.Title as="h4">Persoana</Card.Title>
                 <InputGroup className="mb-3">
                   <FormControl
-										disabled
+                    disabled
                     type="text"
                     value={this.state.nume + ' ' + this.state.prenume}
                   />

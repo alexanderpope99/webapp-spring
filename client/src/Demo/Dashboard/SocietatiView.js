@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Modal, Form, Toast } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import axios from 'axios';
 
@@ -67,6 +67,9 @@ class SocietatiView extends React.Component {
       email: '',
       telefon: '',
       fax: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
   clearFields() {
@@ -156,7 +159,13 @@ class SocietatiView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua societățile din baza de date\n' + err.response.data.message,
+        })
+      );
 
     if (Array.isArray(societati_res)) {
       var societati = this.state.societati;
@@ -204,7 +213,12 @@ class SocietatiView extends React.Component {
         this.setState({ show: false });
         window.location.reload();
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge societatea\n' + err.response.data.message,
+        })
+      );
   }
 
   editSocietate(societate) {
@@ -243,7 +257,12 @@ class SocietatiView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea ștat salarii\n' + err.response.data.message,
+        })
+      );
 
     if (created) download(`Stat Salarii - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
   }
@@ -264,7 +283,12 @@ class SocietatiView extends React.Component {
         }
       )
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea Declarația 112\n' + err.response.data.message,
+        })
+      );
 
     if (created) download(`Declaratia 112 - ${socsel.nume} - ${luni[luna]} ${an}.pdf`, user.id);
   }
@@ -280,7 +304,12 @@ class SocietatiView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea MTA\n' + err.response.data.message,
+        })
+      );
 
     if (created) download(`FisierMTA - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
   }
@@ -327,7 +356,12 @@ class SocietatiView extends React.Component {
           this.getSocietati
         );
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza societatea\n' + err.response.data.message,
+        })
+      );
   }
 
   render() {
@@ -394,6 +428,19 @@ class SocietatiView extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* EDIT SOCIETATE MODAL HERE */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
           <Modal.Header closeButton>

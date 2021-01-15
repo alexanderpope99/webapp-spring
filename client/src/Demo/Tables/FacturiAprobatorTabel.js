@@ -10,6 +10,7 @@ import {
   Modal,
   Form,
   Breadcrumb,
+  Toast,
 } from 'react-bootstrap';
 import { X, Check, Clock, RotateCw } from 'react-feather';
 
@@ -86,6 +87,9 @@ class FacturiAprobatorTabel extends React.Component {
 
       fisier: null,
       numefisier: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -100,7 +104,12 @@ class FacturiAprobatorTabel extends React.Component {
     const ok = await axios
       .get(`${server.address}/factura/${fact.id}/aproba`, { headers: authHeader() })
       .then((response) => response.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut aproba factura\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       this.onRefresh();
       this.setState({
@@ -116,7 +125,12 @@ class FacturiAprobatorTabel extends React.Component {
     const ok = await axios
       .get(`${server.address}/factura/${fact.id}/respinge`, { headers: authHeader() })
       .then((response) => response.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut rejecta factura\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       this.onRefresh();
       this.setState({
@@ -133,7 +147,12 @@ class FacturiAprobatorTabel extends React.Component {
     const ok = await axios
       .get(`${server.address}/factura/${fact.id}/amana`, { headers: authHeader() })
       .then((response) => response.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut amâna factura\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       this.onRefresh();
       this.setState({
@@ -281,21 +300,36 @@ class FacturiAprobatorTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+        })
+      );
 
     const aprobatori = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua aprobatorii\n' + err.response.data.message,
+        })
+      );
 
     const fact = await axios
       .get(`${server.address}/factura/idsocuid/${this.state.socsel.id}&${this.state.user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua facturile\n' + err.response.data.message,
+        })
+      );
 
     if (centreCost) {
       this.setState(
@@ -346,7 +380,13 @@ class FacturiAprobatorTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut introduce observații și cod proiect\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       this.onRefresh();
       this.setState({
@@ -367,7 +407,13 @@ class FacturiAprobatorTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut introduce observații și cod proiect PDF\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       this.onRefresh();
       this.setState({
@@ -425,6 +471,19 @@ class FacturiAprobatorTabel extends React.Component {
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* confirm modal */}
         <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
           <Modal.Header closeButton>

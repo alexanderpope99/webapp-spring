@@ -10,6 +10,7 @@ import {
   FormControl,
   OverlayTrigger,
   Tooltip,
+  Toast,
 } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { UserPlus, FileText } from 'react-feather';
@@ -138,7 +139,13 @@ class EditPersoana extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua persoanele din baza de date\n' + err.response.data.message,
+        })
+      );
 
     this.setState({
       numeintreg: persoane.map((pers, index) => ({
@@ -244,7 +251,12 @@ class EditPersoana extends React.Component {
     const persoana = await axios
       .get(`${server.address}/persoana/${id}`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => console.log('err'));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua persoana \n' + err.response.data.message,
+        })
+      );
 
     setAngajatSel({
       idpersoana: persoana.id,
@@ -255,8 +267,8 @@ class EditPersoana extends React.Component {
       this.setState(
         {
           idadresa: persoana.adresa.id,
-					localitate: persoana.adresa.localitate || '',
-					judet: persoana.adresa.judet || '',
+          localitate: persoana.adresa.localitate || '',
+          judet: persoana.adresa.judet || '',
           adresacompleta: persoana.adresa.adresa || '',
         },
         () => this.onChangeLocalitate(persoana.adresa.localitate)
@@ -383,6 +395,19 @@ class EditPersoana extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -577,7 +602,11 @@ class EditPersoana extends React.Component {
                         <Col md={6}>
                           <Form.Group id="datanasterii">
                             <Form.Label>Data nașterii</Form.Label>
-                            <Form.Control type="date" value={this.state.datanasterii || ''} disabled />
+                            <Form.Control
+                              type="date"
+                              value={this.state.datanasterii || ''}
+                              disabled
+                            />
                           </Form.Group>
                         </Col>
                         <Col md={6}>

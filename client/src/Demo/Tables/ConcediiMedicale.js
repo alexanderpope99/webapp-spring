@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Edit3, RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -90,6 +90,9 @@ class CMTabel extends React.Component {
       // succes modal:
       show_confirm: false,
       modalMessage: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -152,7 +155,12 @@ class CMTabel extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+          })
+        );
       if (angajat) {
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
@@ -280,7 +288,12 @@ class CMTabel extends React.Component {
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
-      .catch((err) => console.error('err', err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelau concediile medicale\n' + err.response.data.message,
+        })
+      );
     if (cm) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
@@ -338,7 +351,12 @@ class CMTabel extends React.Component {
     await axios
       .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
       .then(this.fillTable)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge concediul medical\n' + err.response.data.message,
+        })
+      );
   }
 
   async addCM() {
@@ -389,7 +407,12 @@ class CMTabel extends React.Component {
         console.log(res.data);
         return res.status === 200;
       })
-      .catch((err) => console.error('err:', err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga concediul\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       // close add modal
@@ -442,7 +465,12 @@ class CMTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error('err:', err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza concediul\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       // close add modal
@@ -647,7 +675,14 @@ class CMTabel extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua baza calcul, nr zile și media zilnică\n' +
+            err.response.data.message,
+        })
+      );
 
     if (baza_calcul) {
       console.log(Math.round(baza_calcul.mediezilnica));
@@ -703,6 +738,19 @@ class CMTabel extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* C.M. MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
           <Modal.Header closeButton>

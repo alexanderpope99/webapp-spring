@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Form, Button, FormControl, Modal } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, FormControl, Modal, Toast } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
@@ -29,8 +29,8 @@ class Dec112 extends React.Component {
       prenumeDeclarant: '',
       functieDeclarant: '',
       user: authService.getCurrentUser(),
-      show: false,
-      errorMessage: '',
+      showToast: false,
+      ToastMessage: '',
     };
   }
 
@@ -76,7 +76,13 @@ class Dec112 extends React.Component {
         a.click();
         a.remove(); //afterwards we remove the element again
         console.log('downloaded');
-      });
+      })
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut descărca declarația XML\n' + err.response.data.message,
+        })
+      );
   }
 
   async downloadPDF(luna, an) {
@@ -103,7 +109,13 @@ class Dec112 extends React.Component {
         a.click();
         a.remove(); //afterwards we remove the element again
         console.log('downloaded');
-      });
+      })
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut descărca declarația PDF\n' + err.response.data.message,
+        })
+      );
   }
 
   async creeazaDec112XML(e) {
@@ -124,8 +136,12 @@ class Dec112 extends React.Component {
         }
       )
       .then((res) => res.status === 200)
-      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
-
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea declarația XML\n' + err.response.data.message,
+        })
+      );
     if (created) this.downloadXML(luna, an);
   }
 
@@ -147,8 +163,12 @@ class Dec112 extends React.Component {
         }
       )
       .then((res) => res.status === 200)
-      .catch((err) => this.setState({ show: true, errorMessage: err.response.data.message }));
-
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea declarația PDF\n' + err.response.data.message,
+        })
+      );
     if (created) this.downloadPDF(luna, an);
   }
 
@@ -162,26 +182,24 @@ class Dec112 extends React.Component {
 
     return (
       <Card>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Card.Header>
           <Typography variant="h5">Declarația 112</Typography>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={this.creeazaDec112}>
-            <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
-              <Modal.Header closeButton>
-                <Modal.Title>Eroare</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                {this.state.errorMessage === null
-                  ? 'Eroare'
-                  : this.state.errorMessage.split('\n').map((item, i) => <p key={i}>{item}</p>)}
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="primary" onClick={() => this.setState({ show: false })}>
-                  OK
-                </Button>
-              </Modal.Footer>
-            </Modal>
             <Row>
               {/* LUNA */}
               <Col md={4}>

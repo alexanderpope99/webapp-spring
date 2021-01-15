@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip, Toast } from 'react-bootstrap';
 import { X, Check, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
@@ -20,6 +20,8 @@ class CereriConcediuSuperiorTabel extends React.Component {
       socsel: getSocSel(),
       cereriConcediu: [],
       cereriConcediuComponent: null,
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -35,7 +37,12 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .put(`${server.address}/cerericoncediu/statusappr/${cer.id}`, {}, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.onRefresh)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut aproba cererea de concediu\n' + err.response.data.message,
+        })
+      );
   }
 
   async rejectCerereConcediu(cer) {
@@ -43,7 +50,12 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .put(`${server.address}/cerericoncediu/statusrej/${cer.id}`, {}, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.onRefresh)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut respinge cererea de concediu\n' + err.response.data.message,
+        })
+      );
   }
 
   // function to create react component with fetched data
@@ -177,7 +189,12 @@ class CereriConcediuSuperiorTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua cererile de concediu\n' + err.response.data.message,
+        })
+      );
 
     if (!cereriConcediu) return;
     else {
@@ -212,6 +229,19 @@ class CereriConcediuSuperiorTabel extends React.Component {
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* VIEW MODAL */}
         <Row>
           <Col>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Form, FormControl } from 'react-bootstrap';
+import { Row, Col, Form, FormControl, Toast } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../../Resources/server-address';
@@ -66,6 +66,9 @@ class ContractView extends React.Component {
       // centrucost
       centruCost: null,
       centreCost: [],
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -163,7 +166,13 @@ class ContractView extends React.Component {
           }))
           .filter((angajat) => angajat.id !== this.state.angajatsel.idpersoana)
       )
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua angajații superiori posibili\n' + err.response.data.message,
+        })
+      );
 
     if (superiori) this.setState({ superiori: superiori });
   }
@@ -174,7 +183,12 @@ class ContractView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+        })
+      );
 
     if (centreCost) this.setState({ centreCost: centreCost });
   }
@@ -191,7 +205,12 @@ class ContractView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua angajații\n' + err.response.data.message,
+        })
+      );
 
     if (angajat.contract) {
       this.clearFields();
@@ -304,8 +323,8 @@ class ContractView extends React.Component {
   getCentruCostById(centruCost) {
     if (centruCost) return this.state.centreCost.find((cc) => cc.id === centruCost.id);
     else return null;
-	}
-	
+  }
+
   onChangeSuperior(e) {
     if (e.target.value === '-') {
       this.setState({ superior: null });
@@ -327,29 +346,33 @@ class ContractView extends React.Component {
   }
 
   render() {
-
     return (
       <React.Fragment>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Form onSubmit={(e) => e.preventDefault()}>
           <Row>
             <Col md={12}>
               <Form.Group controlId="functia">
                 <Form.Label>Funcție</Form.Label>
-                <Form.Control
-                  disabled
-                  placeholder="functia"
-                  value={this.state.funcție}
-                />
+                <Form.Control disabled placeholder="functia" value={this.state.funcție} />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group controlId="tip">
                 <Form.Label>Model Contract</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.modelContract}
-                />
+                <Form.Control disabled type="text" value={this.state.modelContract} />
               </Form.Group>
             </Col>
             {/* <Col md={12} /> */}
@@ -368,23 +391,14 @@ class ContractView extends React.Component {
             <Col md={3}>
               <Form.Group controlId="marca">
                 <Form.Label>Marca</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  placeholder="Marca"
-                  value={this.state.marca}
-                />
+                <Form.Control disabled type="text" placeholder="Marca" value={this.state.marca} />
               </Form.Group>
             </Col>
 
             <Col md={6}>
               <Form.Group controlId="dataincepere">
                 <Form.Label>Data începere activitate</Form.Label>
-                <Form.Control
-                  disabled
-                  type="date"
-                  value={this.state.dataIncepere}
-                />
+                <Form.Control disabled type="date" value={this.state.dataIncepere} />
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -454,22 +468,13 @@ class ContractView extends React.Component {
             <Col md={6}>
               <Form.Group id="normalucru">
                 <Form.Label>Normă de lucru</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.normăLucru.nume}
-                />
+                <Form.Control disabled type="text" value={this.state.normăLucru.nume} />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group id="zilecoan">
                 <Form.Label>Zile CO/an</Form.Label>
-                <Form.Control
-                  disabled
-                  placeholder="0"
-                  type="number"
-                  value={this.state.zileCOan}
-                />
+                <Form.Control disabled placeholder="0" type="number" value={this.state.zileCOan} />
               </Form.Group>
             </Col>
 
@@ -490,11 +495,7 @@ class ContractView extends React.Component {
             <Col md={6}>
               <Form.Group id="conditiidemunca">
                 <Form.Label>Condiții de muncă</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.condițiiMuncă}
-                />
+                <Form.Control disabled type="text" value={this.state.condițiiMuncă} />
               </Form.Group>
             </Col>
             <Col md={12} className="border rounded pt-3">
@@ -516,11 +517,7 @@ class ContractView extends React.Component {
                 <Col md={6}>
                   <Form.Group id="numebanca">
                     <Form.Label>Nume bancă</Form.Label>
-                    <Form.Control
-                      disabled
-                      type="text"
-                      value={this.state.numebanca}
-                    />
+                    <Form.Control disabled type="text" value={this.state.numebanca} />
                   </Form.Group>
                 </Col>
               </Row>
@@ -528,11 +525,7 @@ class ContractView extends React.Component {
             <Col md={6}>
               <Form.Group controlId="punctdelucru">
                 <Form.Label>Punct de lucru</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.punctDeLucru || '-'}
-                />
+                <Form.Control disabled type="text" value={this.state.punctDeLucru || '-'} />
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -561,35 +554,21 @@ class ContractView extends React.Component {
             <Col md={6}>
               <Form.Group controlId="departament">
                 <Form.Label>Departament</Form.Label>
-								<Form.Control 
-									disabled
-									type="text"
-									value={this.state.departament || '-'}
-								/>
+                <Form.Control disabled type="text" value={this.state.departament || '-'} />
               </Form.Group>
             </Col>
 
             <Col md={12} />
             <Col md={1}>
               <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
-                <Form.Check
-                  disabled
-                  custom
-                  type="switch"
-                  id="sindicatCheck"
-                  label="Sindicat"
-                />
+                <Form.Check disabled custom type="switch" id="sindicatCheck" label="Sindicat" />
               </Form.Group>
             </Col>
             {this.state.sindicat ? (
               <Col md={3}>
                 <Form.Group id="cotizatiesindicat">
                   <Form.Label>Cotizație sindicat</Form.Label>
-                  <Form.Control
-                    disabled
-                    placeholder="0"
-                    value={this.state.cotizațieSindicat}
-                  />
+                  <Form.Control disabled placeholder="0" value={this.state.cotizațieSindicat} />
                 </Form.Group>
               </Col>
             ) : null}
@@ -613,11 +592,7 @@ class ContractView extends React.Component {
               <Col md={3}>
                 <Form.Group id="cotizatiepensieprivata">
                   <Form.Label>Cotizație pensie privată</Form.Label>
-                  <Form.Control
-                    disabled
-                    placeholder="0"
-                    value={this.state.cotizațiePensie}
-                  />
+                  <Form.Control disabled placeholder="0" value={this.state.cotizațiePensie} />
                 </Form.Group>
               </Col>
             ) : null}
@@ -626,11 +601,7 @@ class ContractView extends React.Component {
             <Col md={6}>
               <Form.Group id="sporuri">
                 <Form.Label>Sporuri permanente</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.spor}
-                />
+                <Form.Control disabled type="text" value={this.state.spor} />
               </Form.Group>
             </Col>
 
@@ -667,44 +638,27 @@ class ContractView extends React.Component {
             <Col md={6}>
               <Form.Group id="casasanatate">
                 <Form.Label>Casa de sănătate</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.casăSănătate}
-                />
+                <Form.Control disabled type="text" value={this.state.casăSănătate} />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group id="gradinvaliditate">
                 <Form.Label>Grad invaliditate</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.gradInvalid}
-                />
+                <Form.Control disabled type="text" value={this.state.gradInvalid} />
               </Form.Group>
             </Col>
 
             <Col md={6}>
               <Form.Group id="nivelstudii">
                 <Form.Label>Nivel studii</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  value={this.state.nivelStudii}
-                />
+                <Form.Control disabled type="text" value={this.state.nivelStudii} />
               </Form.Group>
             </Col>
 
             <Col md={6}>
               <Form.Group id="cor">
                 <Form.Label>Cod COR</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  placeholder="cod COR"
-                  value={this.state.cor}
-                />
+                <Form.Control disabled type="text" placeholder="cod COR" value={this.state.cor} />
               </Form.Group>
             </Col>
 
