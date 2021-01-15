@@ -386,10 +386,7 @@ class CMTabel extends React.Component {
 
 		let ok = await axios
 			.post(`${server.address}/cm`, cm_body, { headers: authHeader() })
-			.then((res) => {
-				console.log(res.data);
-				return res.status === 200;
-			})
+			.then((res) => res.data)
 			.catch((err) => console.error('err:', err));
 
 		if (ok) {
@@ -402,7 +399,9 @@ class CMTabel extends React.Component {
 			});
 			this.fillTable();
 			this.clearCM();
-		}
+		} else {
+      this.setState({ validated: false });
+    }
 	}
 
 	async updateCM() {
@@ -442,7 +441,7 @@ class CMTabel extends React.Component {
 			.put(`${server.address}/cm/${this.state.id}`, cm_body, {
 				headers: authHeader(),
 			})
-			.then((res) => res.status === 200)
+			.then((res) => res.data)
 			.catch((err) => console.error('err:', err));
 
 		if (ok) {
@@ -455,7 +454,9 @@ class CMTabel extends React.Component {
 			});
 			this.fillTable();
 			this.clearCM();
-		}
+		} else {
+      this.setState({ validated: false }, window.scrollTo(0, 0));
+    }
 	}
 
 	async editCM(cm) {

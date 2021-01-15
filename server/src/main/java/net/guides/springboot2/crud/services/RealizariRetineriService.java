@@ -247,7 +247,7 @@ public class RealizariRetineriService {
 		return lunaan;
 	}
 
-	// pur si simplu calculeaza apoi salveaza
+	// calculeaza apoi salveaza
 	public RealizariRetineri saveRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		int nrTichete = ticheteService.getNrTichete(luna, an, idcontract);
 
