@@ -44,11 +44,11 @@ public class CMService {
 		CM cm = modelMapper.map(cmDTO, CM.class);
 
 		Contract contract = contractRepository.findById(cmDTO.getIdcontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + cmDTO.getIdcontract()));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + cmDTO.getIdcontract()));
 		cm.setContract(contract);
 
 		// check if overlaps with existing concedii (odihna + medicale)
-		if(cm.overlaps())
+		if (cm.overlaps())
 			return null;
 
 		// save to DB
@@ -73,7 +73,7 @@ public class CMService {
 
 	public Map<String, Boolean> delete(int cmId) throws ResourceNotFoundException {
 		CM cm = cmRepository.findById(cmId)
-				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există CM cu id: " + cmId));
 
 		cmRepository.delete(cm);
 

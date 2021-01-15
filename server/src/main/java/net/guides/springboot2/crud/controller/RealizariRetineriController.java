@@ -41,19 +41,21 @@ public class RealizariRetineriController {
 
 	@GetMapping("get/idc={id}&mo={luna}&y={an}")
 	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") int idcontract,
-			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) {
+			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an)
+			throws ResourceNotFoundException {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
 	@GetMapping("/luni-ani/ids={ids}&idu={idu}")
 	public List<LuniCuSalarii> getAllRealizariRetineriByIdSocAndIdUser(@PathVariable(value = "ids") int idsocietate,
-			@PathVariable(value = "idu") int iduser) {
+			@PathVariable(value = "idu") int iduser) throws ResourceNotFoundException {
 		return realizariRetineriService.getAllRealizariRetineriByIdSocietateAndIdUser(idsocietate, iduser);
 	}
 
 	@GetMapping("idp={id}&mo={luna}&y={an}")
 	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value = "id") int idpersoana,
-			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an) {
+			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
+			throws ResourceNotFoundException {
 		// get contract of persoana
 		int idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);

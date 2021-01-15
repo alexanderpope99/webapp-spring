@@ -33,7 +33,7 @@ public class RealizariRetineriService {
 	@Autowired
 	private CMService cmService;
 	@Autowired
-	private PersoaneIntretinereService persoaneIntretinereService;
+	private PersoanaIntretinereService persoaneIntretinereService;
 	@Autowired
 	private DeduceriService deduceriService;
 	@Autowired

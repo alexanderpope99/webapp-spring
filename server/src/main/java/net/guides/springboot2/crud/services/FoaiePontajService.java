@@ -59,7 +59,7 @@ public class FoaiePontajService {
 	public boolean createFoaiePontaj(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id :: " + idsocietate));
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
@@ -129,7 +129,8 @@ public class FoaiePontajService {
 			// * nr de marca ??
 
 			// if it doesn't exist, create it
-			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
+			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an,
+					idcontract);
 
 			// get concediu odihna
 			List<CO> co = contract.getConcediiOdihna();
@@ -192,8 +193,7 @@ public class FoaiePontajService {
 				if (ziLibera[i]) {
 					writerCell.setCellStyle(greyed);
 					writerCell.setCellValue(0);
-				}
-				else
+				} else
 					writerCell.setCellValue(oreInZiua[i]);
 			}
 			// * Total 1-15 = formula
@@ -206,8 +206,7 @@ public class FoaiePontajService {
 				if (ziLibera[i]) {
 					writerCell.setCellStyle(greyed);
 					writerCell.setCellValue(0);
-				}
-				else
+				} else
 					writerCell.setCellValue(oreInZiua[i]);
 			}
 			// * Total ore lucrate
@@ -238,7 +237,8 @@ public class FoaiePontajService {
 			int norma = realizariRetineri.getDuratazilucru();
 			// * ore nelucrate
 			writerCell = row.createCell(43);
-			int nrZileNelucrate = zileService.getZileLucratoareInLunaAnul(luna, an) - realizariRetineri.getZilelucrate();
+			int nrZileNelucrate = zileService.getZileLucratoareInLunaAnul(luna, an)
+					- realizariRetineri.getZilelucrate();
 			writerCell.setCellValue(nrZileNelucrate * norma);
 
 			// * ore Intr
@@ -314,8 +314,8 @@ public class FoaiePontajService {
 		} // ! for loop end
 
 		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
-		String newFileLocation = String.format("%s\\downloads\\%d\\Foaie Pontaj - %s - %s %d.xlsx", homeLocation, userID,
-				societate.getNume(), lunaNume, an);
+		String newFileLocation = String.format("%s\\downloads\\%d\\Foaie Pontaj - %s - %s %d.xlsx", homeLocation,
+				userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

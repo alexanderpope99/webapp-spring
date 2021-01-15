@@ -44,9 +44,9 @@ public class NotaContabilaService {
 			throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById((int) idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(
-				() -> new ResourceNotFoundException("Adresa not found for this societate :: " + societate.getNume()));
+				() -> new ResourceNotFoundException("Nu există adresă pentru societatea: " + societate.getNume()));
 
 		String statTemplateLocation = homeLocation + "\\templates";
 
@@ -76,6 +76,11 @@ public class NotaContabilaService {
 
 		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an,
 				idSocietate);
+		if (notaContabila == null) {
+			workbook.close();
+			throw new ResourceNotFoundException(
+					"Nu este salariul calculat pentru idsocietate " + idSocietate + " în " + luna + "/" + an);
+		}
 
 		// * Concedii medicale din fonduri
 		writerCell = stat.getRow(14).getCell(5);

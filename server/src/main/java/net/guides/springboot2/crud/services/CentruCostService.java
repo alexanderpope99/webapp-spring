@@ -17,22 +17,24 @@ public class CentruCostService {
 	@Autowired
 	private SocietateRepository societateRepository;
 
-	public CentruCost save(CentruCost newCentruCost, int idsocietate, boolean adresaSocietatii) throws ResourceNotFoundException {
+	public CentruCost save(CentruCost newCentruCost, int idsocietate, boolean adresaSocietatii)
+			throws ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 
 		newCentruCost.setSocietate(societate);
 
-		if(adresaSocietatii)
+		if (adresaSocietatii)
 			newCentruCost.setAdresa(societate.getAdresa());
 
 		return centruCostRepository.save(newCentruCost);
 	}
 
-	public CentruCost update(CentruCost newCentruCost, int id, boolean adresaSocietatii) throws ResourceNotFoundException {
+	public CentruCost update(CentruCost newCentruCost, int id, boolean adresaSocietatii)
+			throws ResourceNotFoundException {
 		// get centrucost.societate.id
 		CentruCost oldCentruCost = centruCostRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("CentruCost not found for this id :: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există centru cost cu id: " + id));
 
 		newCentruCost.setId(id);
 		return this.save(newCentruCost, oldCentruCost.getSocietate().getId(), adresaSocietatii);

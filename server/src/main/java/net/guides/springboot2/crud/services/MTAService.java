@@ -46,8 +46,8 @@ public class MTAService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean createMTA(int idsocietate, int luna, int an, int userID) throws IOException,
-			ResourceNotFoundException {
+	public boolean createMTA(int idsocietate, int luna, int an, int userID)
+			throws IOException, ResourceNotFoundException {
 
 		// * READ THE FILE
 		String templateLocation = homeLocation + "/templates";
@@ -56,7 +56,8 @@ public class MTAService {
 		Sheet sheet = workbook.getSheetAt(0);
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
-		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+		Societate societate = societateRepository.findById(idsocietate)
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 
 		Font arial10 = workbook.createFont();
 		arial10.setFontHeightInPoints((short) 10);
@@ -76,6 +77,11 @@ public class MTAService {
 
 			RealizariRetineri realizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 					contract.getId());
+			if (realizariRetineri == null) {
+				workbook.close();
+				throw new ResourceNotFoundException("Salariatul cu idcontract " + contract.getId()
+						+ " nu are salariul calculat pe " + luna + "/" + an);
+			}
 
 			int rowNr = 2 + nrAngajat;
 			Row row = sheet.createRow(rowNr);
@@ -128,8 +134,10 @@ public class MTAService {
 		// * OUTPUT THE FILE
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
 		String lunaNume = zileService.getNumeLunaByNr(luna);
-		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
-		// String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
+		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID,
+				societate.getNume(), lunaNume, an);
+		// String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s
+		// %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

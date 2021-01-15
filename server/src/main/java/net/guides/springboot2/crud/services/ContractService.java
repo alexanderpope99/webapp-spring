@@ -18,13 +18,13 @@ public class ContractService {
 
 	public Contract getContractById(int idcontract) throws ResourceNotFoundException {
 		return contractRepository.findById(idcontract)
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + idcontract));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idcontract));
 	}
 
 	public Contract saveForAngajat(Contract contract, int idangajat) throws ResourceNotFoundException {
 		contract = contractRepository.save(contract);
 		Angajat angajat = angajatRepository.findById(idangajat)
-			.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + idangajat));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idangajat));
 		angajat.setContract(contract);
 		angajatRepository.save(angajat);
 

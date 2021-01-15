@@ -25,12 +25,13 @@ public class OresuplimentareService {
 		Oresuplimentare os = modelMapper.map(osDTO, Oresuplimentare.class);
 
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(osDTO.getIdstatsalariat())
-		.orElseThrow(() -> new ResourceNotFoundException("RealizariRetineri not found for this id :: " + osDTO.getIdstatsalariat()));
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Nu există realizară rețineri cu id: " + osDTO.getIdstatsalariat()));
 
 		os.setStatsalariat(realizariRetineri);
 		os = oresuplimentareRepository.save(os);
 		os.setId(os.getId());
-		return osDTO;	
+		return osDTO;
 	}
 
 	public OresuplimentareDTO update(int osID, OresuplimentareDTO newOsDTO) throws ResourceNotFoundException {

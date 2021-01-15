@@ -90,8 +90,8 @@ public class COService {
 	}
 
 	// public boolean overlapsWith(Concediu concediu) {
-	// 	return concediu.overlaps(concediu.getContract().getConcediiOdihna())
-	// 			|| concediu.overlaps(concediu.getContract().getConcediiMedicale());
+	// return concediu.overlaps(concediu.getContract().getConcediiOdihna())
+	// || concediu.overlaps(concediu.getContract().getConcediiMedicale());
 	// }
 
 	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
@@ -101,15 +101,14 @@ public class COService {
 		int luna = co.getDela().getMonthValue();
 		int an = co.getDela().getYear();
 
-
 		Contract contract = contractRepository.findById(coDTO.getIdcontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id:" + coDTO.getIdcontract()));
 
 		co.setContract(contract);
 		// verifica ca nu se suprapune cu alt concediu
-		if(co.overlaps())
+		if (co.overlaps())
 			return null;
-			
+
 		coRepository.save(co);
 
 		// update salariu
@@ -126,7 +125,7 @@ public class COService {
 
 	public Map<String, Boolean> delete(int coId) throws ResourceNotFoundException {
 		CO co = coRepository.findById(coId)
-				.orElseThrow(() -> new ResourceNotFoundException("CO not found for this id :: " + coId));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există CO cu id: " + coId));
 
 		coRepository.delete(co);
 
@@ -141,7 +140,7 @@ public class COService {
 	public int getZileCODisponibile(int idcontract) throws ResourceNotFoundException {
 		// get contract -> zilecoan
 		Contract contract = contractRepository.findById(idcontract)
-				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id " + idcontract));
 
 		int zilecodisponibile = 0;
 		// get concedii odihna (cu plata)

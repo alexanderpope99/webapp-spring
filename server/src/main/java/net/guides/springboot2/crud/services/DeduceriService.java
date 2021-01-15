@@ -15,7 +15,7 @@ public class DeduceriService {
 	public float getDeducereBySalariu(int salariu, int nrNrPersoaneIntretinere) throws ResourceNotFoundException {
 		Deduceri deduceri = deduceriRepository.getDeducereBySalariu(salariu);
 		if (deduceri == null)
-			throw new ResourceNotFoundException("Nu există deduceri");
+			throw new ResourceNotFoundException("Nu există deduceri pentru salariul " + salariu);
 		switch (nrNrPersoaneIntretinere) {
 			case 0:
 				return deduceri.getZero();
