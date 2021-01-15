@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -62,6 +62,9 @@ class CereriConcediuTabel extends React.Component {
 
       today: '',
       angajat: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -90,7 +93,13 @@ class CereriConcediuTabel extends React.Component {
     let ok = await axios
       .post(`${server.address}/cerericoncediu`, cerereConcediu_body, { headers: authHeader() })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((res) => res.status === 200)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga cereri concediu\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       await this.handleClose();
       this.setState(
@@ -121,7 +130,13 @@ class CereriConcediuTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((res) => res.status === 200)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza cereri concediu\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       this.onRefresh();
@@ -139,17 +154,27 @@ class CereriConcediuTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+        })
+      );
     this.setState({
       angajat: angajat,
     });
     await axios
-      .get(
-        `${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}`,
-        { headers: authHeader() }
-      )
+      .get(`${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}`, {
+        headers: authHeader(),
+      })
       .then((res) => this.setState({ zile_co_disponibile: res.data }))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua zilele de concediu disponibile\n' + err.response.data.message,
+        })
+      );
   }
 
   setNrZile() {
@@ -186,7 +211,13 @@ class CereriConcediuTabel extends React.Component {
       .delete(`${server.address}/cerericoncediu/${id}`, { headers: authHeader() })
       .then((response) => response.data)
       .then(this.onRefresh)
-      .catch((err) => console.error(err));
+      .catch((res) => res.status === 200)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge cererea\n' + err.response.data.message,
+        })
+      );
   }
 
   // function to create react component with fetched data
@@ -292,7 +323,12 @@ class CereriConcediuTabel extends React.Component {
         }
       )
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua cererile de concediu\n' + err.response.data.message,
+        })
+      );
     if (cereriConcediu) {
       this.setState(
         {
@@ -344,11 +380,23 @@ class CereriConcediuTabel extends React.Component {
   }
 
   render() {
-
-		const concediuIsValid = this.state.dela && (this.state.dela <= this.state.panala);
+    const concediuIsValid = this.state.dela && this.state.dela <= this.state.panala;
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
@@ -414,7 +462,12 @@ class CereriConcediuTabel extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.onSubmit} type="submit" disabled={!concediuIsValid}>
+            <Button
+              variant="primary"
+              onClick={this.onSubmit}
+              type="submit"
+              disabled={!concediuIsValid}
+            >
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
           </Modal.Footer>

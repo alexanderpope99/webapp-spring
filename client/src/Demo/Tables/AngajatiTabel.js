@@ -8,6 +8,7 @@ import {
   OverlayTrigger,
   Tooltip,
   Breadcrumb,
+  Toast,
 } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import axios from 'axios';
@@ -37,11 +38,15 @@ class AngajatiTabel extends React.Component {
       user: authService.getCurrentUser(),
       angajati: [],
       angajatiComponent: null,
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
   componentDidMount() {
-    if (!getSocSel() || authService.isAngajatSimplu()) window.location.href = '/dashboard/societati';
+    if (!getSocSel() || authService.isAngajatSimplu())
+      window.location.href = '/dashboard/societati';
 
     this.onRefresh();
     window.scrollTo(0, 0);
@@ -54,7 +59,13 @@ class AngajatiTabel extends React.Component {
       .then(() => {
         // console.log(response);
         this.onRefresh();
-      });
+      })
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge angajatul PDF\n' + err.response.data.message,
+        })
+      );
   }
 
   // function to create react component with fetched data
@@ -193,7 +204,13 @@ class AngajatiTabel extends React.Component {
   async onRefresh() {
     const angajati = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua lista de angajați\n' + err.response.data.message,
+        })
+      );
 
     this.setState({
       angajati: angajati,
@@ -205,7 +222,20 @@ class AngajatiTabel extends React.Component {
   render() {
     return (
       <Aux>
-        <Row> 
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
+        <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
               <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>

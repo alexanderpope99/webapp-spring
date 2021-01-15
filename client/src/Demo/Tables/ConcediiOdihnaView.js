@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Eye, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
@@ -16,8 +16,8 @@ class ConcediiOdihnaView extends React.Component {
 
     this.handleClose = this.handleClose.bind(this);
     this.fillTable = this.fillTable.bind(this);
-		this.clearCO = this.clearCO.bind(this);
-		this.viewCO = this.viewCO.bind(this);
+    this.clearCO = this.clearCO.bind(this);
+    this.viewCO = this.viewCO.bind(this);
     this.onChangeAn = this.onChangeAn.bind(this);
     this.onChangeMonth = this.onChangeMonth.bind(this);
     this.onChangePanala = this.onChangePanala.bind(this);
@@ -52,6 +52,9 @@ class ConcediiOdihnaView extends React.Component {
       show_confirm: false,
       modalTitle: '',
       modalMessage: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
   clearCO() {
@@ -75,7 +78,12 @@ class ConcediiOdihnaView extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+          })
+        );
       // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
       if (angajat) {
         this.setState(
@@ -196,7 +204,12 @@ class ConcediiOdihnaView extends React.Component {
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
-      .catch((err) => console.error('err', err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua concediile de odihnă\n' + err.response.data.message,
+        })
+      );
 
     if (concedii) {
       var ani_cu_concediu = new Set();
@@ -227,10 +240,10 @@ class ConcediiOdihnaView extends React.Component {
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
-			
-			let thisYear = new Date().getFullYear();
-			ani_cu_concediu.add(thisYear);
-			
+
+      let thisYear = new Date().getFullYear();
+      ani_cu_concediu.add(thisYear);
+
       this.setState(
         {
           co: concedii,
@@ -270,8 +283,8 @@ class ConcediiOdihnaView extends React.Component {
         panala: '',
         tip: 'Concediu de odihnă',
       });
-	}
-	
+  }
+
   viewCO(co) {
     if (!this.state.angajat.idcontract) {
       this.setState({
@@ -315,6 +328,19 @@ class ConcediiOdihnaView extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* // CO MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
@@ -325,7 +351,7 @@ class ConcediiOdihnaView extends React.Component {
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
-									disabled
+                  disabled
                   required
                   type="date"
                   value={this.state.dela}
@@ -336,7 +362,7 @@ class ConcediiOdihnaView extends React.Component {
               <Form.Group id="panala">
                 <Form.Label>Până la (inclusiv)</Form.Label>
                 <Form.Control
-									disabled
+                  disabled
                   required
                   type="date"
                   min={this.state.dela}
@@ -346,12 +372,7 @@ class ConcediiOdihnaView extends React.Component {
 
               <Form.Group id="tip">
                 <Form.Label>Tip</Form.Label>
-                <Form.Control
-									disabled
-                  required
-                  type="text"
-                  value={this.state.tip}
-                />
+                <Form.Control disabled required type="text" value={this.state.tip} />
               </Form.Group>
 
               <Form.Group>

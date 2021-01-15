@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Eye, RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
@@ -8,11 +8,7 @@ import { getAngajatSel } from '../Resources/angajatsel';
 import { luni, formatDate } from '../Resources/calendar';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import {
-  getProcente,
-  getZileFirma,
-  countWeekendDays,
-} from '../Resources/cm.js';
+import { getProcente, getZileFirma, countWeekendDays } from '../Resources/cm.js';
 
 class ConcediiMedicaleView extends React.Component {
   constructor() {
@@ -79,6 +75,9 @@ class ConcediiMedicaleView extends React.Component {
       // succes modal:
       show_confirm: false,
       modalMessage: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -141,7 +140,12 @@ class ConcediiMedicaleView extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+          })
+        );
       if (angajat) {
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
@@ -269,7 +273,12 @@ class ConcediiMedicaleView extends React.Component {
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
-      .catch((err) => console.error('err', err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua concediile medicale\n' + err.response.data.message,
+        })
+      );
     if (cm) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
@@ -299,10 +308,10 @@ class ConcediiMedicaleView extends React.Component {
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
       }
-			
-			let thisYear = new Date().getFullYear();
-			ani_cu_concediu.add(thisYear);
-			
+
+      let thisYear = new Date().getFullYear();
+      ani_cu_concediu.add(thisYear);
+
       this.setState(
         {
           cm: cm,
@@ -327,7 +336,12 @@ class ConcediiMedicaleView extends React.Component {
     await axios
       .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
       .then(this.fillTable)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge concediul medical\n' + err.response.data.message,
+        })
+      );
   }
 
   async viewCM(cm) {
@@ -474,6 +488,19 @@ class ConcediiMedicaleView extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* VIEW MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
           <Modal.Header closeButton>
@@ -485,7 +512,7 @@ class ConcediiMedicaleView extends React.Component {
                 <Form.Group id="dela" as={Col} md="6">
                   <Form.Label>Începând cu (inclusiv)</Form.Label>
                   <Form.Control
-										disabled
+                    disabled
                     type="date"
                     value={this.state.dela}
                     max={this.state.panala}
@@ -494,7 +521,7 @@ class ConcediiMedicaleView extends React.Component {
                 <Form.Group id="panala" as={Col} md="6">
                   <Form.Label>Până la (inclusiv)</Form.Label>
                   <Form.Control
-										disabled
+                    disabled
                     type="date"
                     value={this.state.panala}
                     min={this.state.dela}
@@ -510,7 +537,7 @@ class ConcediiMedicaleView extends React.Component {
                 </Form.Group>
                 <Form.Group id="continuare" as={Col} md="2" className="mt-4">
                   <Form.Check
-										disabled
+                    disabled
                     custom
                     type="switch"
                     id="continuareCheck"
@@ -520,177 +547,97 @@ class ConcediiMedicaleView extends React.Component {
                 </Form.Group>
                 <Form.Group id="datainceput" as={Col} md="4">
                   <Form.Label>Dată început</Form.Label>
-                  <Form.Control
-										disabled
-                    type="date"
-                    value={this.state.datainceput}
-                  />
+                  <Form.Control disabled type="date" value={this.state.datainceput} />
                 </Form.Group>
                 <Form.Group id="dataeliberare" as={Col} md="6">
                   <Form.Label>Dată eliberare</Form.Label>
-                  <Form.Control
-										disabled
-                    type="date"
-                    value={this.state.dataeliberare}
-                  />
+                  <Form.Control disabled type="date" value={this.state.dataeliberare} />
                 </Form.Group>
                 <Form.Group id="seriecertificat" as={Col} md="6">
                   <Form.Label>Serie certificat</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.serie}
-                  />
+                  <Form.Control disabled type="text" value={this.state.serie} />
                 </Form.Group>
                 <Form.Group id="nrcertificat" as={Col} md="6">
                   <Form.Label>Număr certificat</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.nr}
-                  />
+                  <Form.Control disabled type="text" value={this.state.nr} />
                 </Form.Group>
                 <Form.Group id="codboala" as={Col} md="6">
                   <Form.Label>Cod boală</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.codboala}
-                  />
+                  <Form.Control disabled type="text" value={this.state.codboala} />
                 </Form.Group>
                 <Form.Group id="codurgenta" as={Col} md="6">
                   <Form.Label>Cod urgență</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.codurgenta}
-                  />
+                  <Form.Control disabled type="text" value={this.state.codurgenta} />
                 </Form.Group>
                 <Form.Group id="codboalainfcont" as={Col} md="6">
                   <Form.Label>Cod boală infecțioasă/contagioasă</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.codboalainfcont}
-                  />
+                  <Form.Control disabled type="text" value={this.state.codboalainfcont} />
                 </Form.Group>
                 <Form.Group id="procent" as={Col} md="6">
                   <Form.Label>Procent %</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.procent}
-                  />
+                  <Form.Control disabled type="text" value={this.state.procent} />
                 </Form.Group>
                 <Row className="border rounded pt-3 pb-3 m-3">
                   <Form.Group id="bazacalcul" as={Col} md="6">
                     <Form.Label>Bază calcul (RON)</Form.Label>
                     <Form.Control
-										disabled
-										type="text"
-										value={this.numberWithCommas(this.state.bazacalcul)}
+                      disabled
+                      type="text"
+                      value={this.numberWithCommas(this.state.bazacalcul)}
                     />
                   </Form.Group>
                   <Form.Group id="bazacalculplafonata" as={Col} md="6">
                     <Form.Label>Bază calcul plafonată (RON)</Form.Label>
-                    <Form.Control
-											disabled
-											type="text"
-                      value={this.state.bazacalculplafonata}
-                    />
+                    <Form.Control disabled type="text" value={this.state.bazacalculplafonata} />
                   </Form.Group>
                   <Form.Group id="zilebazacalcul" as={Col} md="6">
                     <Form.Label>Zile bază calcul</Form.Label>
-                    <Form.Control
-										disabled
-										type="text"
-                      value={this.state.zilebazacalcul}
-                    />
+                    <Form.Control disabled type="text" value={this.state.zilebazacalcul} />
                   </Form.Group>
                   <Form.Group id="mediezilnica" as={Col} md="6">
                     <Form.Label>Medie zilnică (RON)</Form.Label>
-                    <Form.Control
-										disabled
-										type="text"
-										value={this.state.mediezilnica}
-                    />
+                    <Form.Control disabled type="text" value={this.state.mediezilnica} />
                   </Form.Group>
                 </Row>
                 <Form.Group id="zilefirma" as={Col} md="6">
                   <Form.Label>Zile suportate de firmă</Form.Label>
-                  <Form.Control
-										disabled
-                    type="number"
-                    value={this.state.zilefirma}
-                  />
+                  <Form.Control disabled type="number" value={this.state.zilefirma} />
                 </Form.Group>
                 <Form.Group id="indemnizatiefirma" as={Col} md="6">
                   <Form.Label>Indemnizație firmă</Form.Label>
-                  <Form.Control
-										disabled
-                    type="number"
-                    value={this.state.indemnizatiefirma}
-                  />
+                  <Form.Control disabled type="number" value={this.state.indemnizatiefirma} />
                 </Form.Group>
                 <Form.Group id="zilefnuass" as={Col} md="6">
                   <Form.Label>Zile FNUASS</Form.Label>
-                  <Form.Control
-										disabled
-                    type="number"
-                    value={this.state.zilefnuass}
-                  />
+                  <Form.Control disabled type="number" value={this.state.zilefnuass} />
                 </Form.Group>
                 <Form.Group id="indemnizatiefnuass" as={Col} md="6">
                   <Form.Label>Indemnizație FNUASS</Form.Label>
-                  <Form.Control
-										disabled
-                    type="number"
-                    value={this.state.indemnizatiefnuass}
-                  />
+                  <Form.Control disabled type="number" value={this.state.indemnizatiefnuass} />
                 </Form.Group>
                 <Form.Group id="zilefaambp" as={Col} md="6">
                   <Form.Label>Zile FAAMBP</Form.Label>
-                  <Form.Control
-                    disabled
-                    type="number"
-                    value={this.state.zilefaambp}
-                  />
+                  <Form.Control disabled type="number" value={this.state.zilefaambp} />
                 </Form.Group>
                 <Form.Group id="indemnizatiefaambp" as={Col} md="6">
                   <Form.Label>Indemnizație FAAMBP</Form.Label>
-                  <Form.Control
-										disabled
-                    type="number"
-                    value={this.state.indemnizatiefaambp}
-                  />
+                  <Form.Control disabled type="number" value={this.state.indemnizatiefaambp} />
                 </Form.Group>
                 <Form.Group id="codindemnizatie" as={Col} md="6">
                   <Form.Label>Cod indemnizație</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.codindemnizatie}
-                  />
+                  <Form.Control disabled type="text" value={this.state.codindemnizatie} />
                 </Form.Group>
                 <Form.Group id="locprescriere" as={Col} md="6">
                   <Form.Label>Loc prescriere</Form.Label>
-                  <Form.Control
-										disabled
-                    number="text"
-                    value={this.state.locprescriere}
-                  />
+                  <Form.Control disabled number="text" value={this.state.locprescriere} />
                 </Form.Group>
                 <Form.Group id="nravizmedic" as={Col} md="6">
                   <Form.Label>Nr. aviz medical</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.nravizmedic}
-                  />
+                  <Form.Control disabled type="text" value={this.state.nravizmedic} />
                 </Form.Group>
                 <Form.Group id="urgenta" as={Col} md="6" className="mt-4">
                   <Form.Check
-										disabled
+                    disabled
                     custom
                     type="switch"
                     id="urgentaCheck"
@@ -700,19 +647,11 @@ class ConcediiMedicaleView extends React.Component {
                 </Form.Group>
                 <Form.Group id="conditii" as={Col} md="6">
                   <Form.Label>Condiții</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.conditii}
-                  />
+                  <Form.Control disabled type="text" value={this.state.conditii} />
                 </Form.Group>
                 <Form.Group id="cnpcopil" as={Col} md="6">
                   <Form.Label>CNP Copil</Form.Label>
-                  <Form.Control
-										disabled
-                    type="text"
-                    value={this.state.cnpcopil}
-                  />
+                  <Form.Control disabled type="text" value={this.state.cnpcopil} />
                 </Form.Group>
               </Row>
             </Form>

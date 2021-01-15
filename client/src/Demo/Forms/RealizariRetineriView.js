@@ -13,6 +13,7 @@ import {
   Table,
   Collapse,
   Breadcrumb,
+  Toast,
 } from 'react-bootstrap';
 import { Info } from 'react-feather';
 
@@ -222,7 +223,13 @@ class RealizariRetineriView extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua realizari/retineri corespunzatoare\n' + err.response.data.message,
+        })
+      );
 
     this.setState({
       lunaan: rr,
@@ -243,7 +250,12 @@ class RealizariRetineriView extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua persoana\n' + err.response.data.message,
+        })
+      );
     if (!angajati) return;
 
     let lista_angajati = [];
@@ -279,7 +291,13 @@ class RealizariRetineriView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua sau calcula realizari retineri\n' + err.response.data.message,
+        })
+      );
     if (!data) {
       this.clearForm();
       return;
@@ -365,7 +383,13 @@ class RealizariRetineriView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua totalul de pensie facultativă\n' + err.response.data.message,
+        })
+      );
 
     this.setState({
       totalpensiefacultativa: totalpensiefacan,
@@ -401,7 +425,12 @@ class RealizariRetineriView extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua orele suplimentare\n' + err.response.data.message,
+        })
+      );
 
     return oresuplimentare;
   }
@@ -478,7 +507,13 @@ class RealizariRetineriView extends React.Component {
           left: 0,
           behavior: 'smooth',
         });
-      });
+      })
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut descărca ștatul\n' + err.response.data.message,
+        })
+      );
   }
 
   async getStatIndividual() {
@@ -496,7 +531,12 @@ class RealizariRetineriView extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua ștatul individual\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       let numeintreg = this.state.selected_angajat.numeintreg;
@@ -586,6 +626,19 @@ class RealizariRetineriView extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* ORE SUPLIMENTARE */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

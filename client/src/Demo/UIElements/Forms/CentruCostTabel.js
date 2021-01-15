@@ -47,6 +47,8 @@ class CentruCostTabel extends React.Component {
       // info toast
       showToast: false,
       toastMessage: '',
+      toastTitle: '',
+      toastColor: '',
 
       // detalii centru cost
       id: 0,
@@ -196,22 +198,35 @@ class CentruCostTabel extends React.Component {
   }
 
   async fillTable() {
-		if(!this.state.socsel) return;
+    if (!this.state.socsel) return;
 
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
-			.catch((err) => console.error(err));
-			
-		if(centreCost)
-			this.setState({ centreCost: centreCost }, this.renderTabel);
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+          toastTitle: 'Eroare',
+          toastColor: 'red',
+        })
+      );
+
+    if (centreCost) this.setState({ centreCost: centreCost }, this.renderTabel);
   }
 
   async deleteCC(id) {
     await axios
       .delete(`${server.address}/centrucost/${id}`, { headers: authHeader() })
       .then(this.fillTable)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge centrul de cost\n' + err.response.data.message,
+          toastTitle: 'Eroare',
+          toastColor: 'red',
+        })
+      );
   }
 
   async addCC() {
@@ -231,7 +246,14 @@ class CentruCostTabel extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga centrul de cost\n' + err.response.data.message,
+          toastTitle: 'Eroare',
+          toastColor: 'red',
+        })
+      );
 
     if (ok)
       this.setState(
@@ -264,7 +286,14 @@ class CentruCostTabel extends React.Component {
         { headers: authHeader() }
       )
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza centrul de cost\n' + err.response.data.message,
+          toastTitle: 'Eroare',
+          toastColor: 'red',
+        })
+      );
     if (ok)
       this.setState(
         {
@@ -327,8 +356,8 @@ class CentruCostTabel extends React.Component {
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
-		};
-		const isAdresaSocietatii = (this.state.idadresa === this.props.adresaSocietate.id);
+    };
+    const isAdresaSocietatii = this.state.idadresa === this.props.adresaSocietate.id;
 
     return (
       <React.Fragment>
@@ -339,10 +368,10 @@ class CentruCostTabel extends React.Component {
           delay={2500}
           autohide
           className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: this.state.toastColor }}
         >
           <Toast.Header className="pr-2">
-            <strong className="mr-auto">Centru cost</strong>
+            <strong className="mr-auto">{this.state.toastTitle}</strong>
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
@@ -367,7 +396,7 @@ class CentruCostTabel extends React.Component {
               <Form.Group id="adresa" as={Col} md="12">
                 <Form.Label>Adresa</Form.Label>
                 <Form.Control
-									disabled={isAdresaSocietatii}
+                  disabled={isAdresaSocietatii}
                   required
                   type="text"
                   value={this.state.adresa || ''}
@@ -377,7 +406,7 @@ class CentruCostTabel extends React.Component {
               <Form.Group id="localitate" as={Col} md="12">
                 <Form.Label>Localitate</Form.Label>
                 <Form.Control
-									disabled={isAdresaSocietatii}
+                  disabled={isAdresaSocietatii}
                   required
                   type="text"
                   value={this.state.localitate || ''}
@@ -387,7 +416,7 @@ class CentruCostTabel extends React.Component {
               <Form.Group id="judet" as={Col} md="12">
                 <Form.Label>{this.state.tipJudet}</Form.Label>
                 <Form.Control
-									disabled={isAdresaSocietatii}
+                  disabled={isAdresaSocietatii}
                   required
                   as="select"
                   value={this.state.judet}

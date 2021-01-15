@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb, Toast } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -72,6 +72,9 @@ class FacturiTabel extends React.Component {
 
       fisier: null,
       numefisier: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -113,7 +116,12 @@ class FacturiTabel extends React.Component {
     let ok = await axios
       .post(`${server.address}/factura/`, formData, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga factura\n' + err.response.data.message,
+        })
+      );
     if (ok) {
       await this.handleClose();
       this.setState(
@@ -165,7 +173,12 @@ class FacturiTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza factura\n' + err.response.data.message,
+        })
+      );
 
     if (ok) {
       await this.handleClose();
@@ -215,7 +228,12 @@ class FacturiTabel extends React.Component {
     await axios
       .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
       .then(this.onRefresh)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge factura\n' + err.response.data.message,
+        })
+      );
     // if(ok) this.onRefresh();
   }
 
@@ -359,19 +377,34 @@ class FacturiTabel extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+        })
+      );
     const aprobatori = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}&u`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua aprobatorii\n' + err.response.data.message,
+        })
+      );
     const fact = await axios
       .get(`${server.address}/factura/idsoc/${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua facturile\n' + err.response.data.message,
+        })
+      );
     if (centreCost) {
       this.setState(
         {
@@ -480,6 +513,19 @@ class FacturiTabel extends React.Component {
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose} size="lg">
           <Modal.Header closeButton>

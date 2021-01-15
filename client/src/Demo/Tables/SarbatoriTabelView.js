@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -36,6 +36,9 @@ class SarbatoriTabelView extends React.Component {
       // succes modal:
       show_confirm: false,
       modalMessage: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -49,23 +52,28 @@ class SarbatoriTabelView extends React.Component {
     let an = today.getFullYear();
 
     this.setState({ an: an });
-	}
-	
-	getAniCuSarbatori(sarbatori) {
-		var ani_cu_sarbatori = new Set();
-		sarbatori.forEach((sarbatoare) => {
-			ani_cu_sarbatori.add(sarbatoare.dela.substring(0, 4))
-			// console.log(sarbatoare);
-		});
-		return [...ani_cu_sarbatori];
-	}
+  }
+
+  getAniCuSarbatori(sarbatori) {
+    var ani_cu_sarbatori = new Set();
+    sarbatori.forEach((sarbatoare) => {
+      ani_cu_sarbatori.add(sarbatoare.dela.substring(0, 4));
+      // console.log(sarbatoare);
+    });
+    return [...ani_cu_sarbatori];
+  }
 
   async fillTable() {
     //? fetch must be with idcontract
     const sarbatori = await axios
       .get(`${server.address}/sarbatori`, { headers: authHeader() })
       .then((res) => (res.status !== 200 ? null : res.data))
-      .catch((err) => console.error('err', err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua sărbătorile\n' + err.response.data.message,
+        })
+      );
 
     if (sarbatori) {
       this.setState(
@@ -119,7 +127,12 @@ class SarbatoriTabelView extends React.Component {
     await axios
       .delete(`${server.address}/sarbatori/${id}`, { headers: authHeader() })
       .then(this.fillTable)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge sărbătoarea\n' + err.response.data.message,
+        })
+      );
   }
 
   async onSubmit(e) {
@@ -138,12 +151,22 @@ class SarbatoriTabelView extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.status === 200)
-        .catch((err) => console.error('err:', err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut actualiza sărbătoarea\n' + err.response.data.message,
+          })
+        );
     } else {
       ok = await axios
         .post(`${server.address}/sarbatori`, sarbatoare_body, { headers: authHeader() })
         .then((res) => res.status === 200)
-        .catch((err) => console.error('err:', err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut adăuga sărbătoarea\n' + err.response.data.message,
+          })
+        );
     }
 
     if (ok) {
@@ -197,11 +220,25 @@ class SarbatoriTabelView extends React.Component {
   }
 
   render() {
-
-		const aniCuSarbatori = this.getAniCuSarbatori(this.state.sarbatori).map(an => <option key={an}>{an}</option>);
+    const aniCuSarbatori = this.getAniCuSarbatori(this.state.sarbatori).map((an) => (
+      <option key={an}>{an}</option>
+    ));
 
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* ADD/EDIT MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
@@ -277,7 +314,7 @@ class SarbatoriTabelView extends React.Component {
                     value={this.state.an}
                     onChange={(e) => this.onChangeAn(e.target.value)}
                   >
-									{aniCuSarbatori}
+                    {aniCuSarbatori}
                   </Form.Control>
                 </Form.Group>
                 <Table responsive hover>

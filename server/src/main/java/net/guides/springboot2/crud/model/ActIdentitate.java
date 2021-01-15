@@ -128,4 +128,5 @@ public class ActIdentitate implements Serializable {
 	public void setLoculnasterii(String loculnasterii) {
 		this.loculnasterii = loculnasterii;
 	}
+
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -26,6 +26,9 @@ class ParametriiSalariiView extends React.Component {
       valtichet: '',
       show: false,
       date: '',
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -41,7 +44,12 @@ class ParametriiSalariiView extends React.Component {
         // console.log(response);
         this.onRefresh();
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge parametrii\n' + err.response.data.message,
+        })
+      );
   }
 
   // function to render in react
@@ -91,7 +99,14 @@ class ParametriiSalariiView extends React.Component {
 
     let parametriiSalarii = await axios
       .get(`${server.address}/parametriisalariu/`, { headers: authHeader() })
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua parametrii din baza de date\n' + err.response.data.message,
+        })
+      );
 
     // console.log(parametriiSalarii);
 
@@ -129,7 +144,13 @@ class ParametriiSalariiView extends React.Component {
         },
         { headers: authHeader() }
       )
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga parametrii noi\n' + err.response.data.message,
+        })
+      );
     this.onRefresh();
     this.setState({ show: false });
   }
@@ -137,6 +158,19 @@ class ParametriiSalariiView extends React.Component {
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
           <Modal.Header closeButton>
             <Modal.Title>Parametrii Salarii</Modal.Title>

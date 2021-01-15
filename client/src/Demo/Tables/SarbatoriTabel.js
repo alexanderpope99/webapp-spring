@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Plus, Trash2, Edit3, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -13,425 +13,486 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 
 class SarbatoriTabel extends React.Component {
-	constructor() {
-		super();
+  constructor() {
+    super();
 
-		this.handleClose = this.handleClose.bind(this);
-		this.fillTable = this.fillTable.bind(this);
-		this.resetModals = this.resetModals.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
-		this.deleteSarbatoare = this.deleteSarbatoare.bind(this);
-		this.setCurrentYear = this.setCurrentYear.bind(this);
-		this.adaugaAn = this.adaugaAn.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.fillTable = this.fillTable.bind(this);
+    this.resetModals = this.resetModals.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.deleteSarbatoare = this.deleteSarbatoare.bind(this);
+    this.setCurrentYear = this.setCurrentYear.bind(this);
+    this.adaugaAn = this.adaugaAn.bind(this);
 
-		this.state = {
-			isEdit: false,
+    this.state = {
+      isEdit: false,
 
-			sarbatori: [],
-			sarbatoriComponent: null,
+      sarbatori: [],
+      sarbatoriComponent: null,
 
-			an: '',
+      an: '',
 
-			// edit modal:
-			show: false,
-			id: '',
-			dela: '',
-			panala: '',
-			nume: '',
+      // edit modal:
+      show: false,
+      id: '',
+      dela: '',
+      panala: '',
+      nume: '',
 
-			// succes modal:
-			show_confirm: false,
-			modalMessage: '',
+      // succes modal:
+      show_confirm: false,
+      modalMessage: '',
 
-			// an modal
-			show_an: false,
-		};
-	}
+      // an modal
+      show_an: false,
 
-	componentDidMount() {
-		this.setCurrentYear();
-		this.fillTable();
-	}
+      showToast: false,
+      toastMessage: '',
+    };
+  }
 
-	setCurrentYear() {
-		let today = new Date();
-		let an = today.getFullYear();
+  componentDidMount() {
+    this.setCurrentYear();
+    this.fillTable();
+  }
 
-		this.setState({ an: an });
-	}
+  setCurrentYear() {
+    let today = new Date();
+    let an = today.getFullYear();
 
-	getAniCuSarbatori(sarbatori) {
-		var ani_cu_sarbatori = new Set();
-		sarbatori.forEach((sarbatoare) => {
-			ani_cu_sarbatori.add(sarbatoare.dela.substring(0, 4))
-			// console.log(sarbatoare);
-		});
-		return [...ani_cu_sarbatori];
-	}
+    this.setState({ an: an });
+  }
 
-	async fillTable() {
-		//? fetch must be with idcontract
-		const sarbatori = await axios
-			.get(`${server.address}/sarbatori`, { headers: authHeader() })
-			.then((res) => (res.status !== 200 ? null : res.data))
-			.catch((err) => console.error('err', err));
+  getAniCuSarbatori(sarbatori) {
+    var ani_cu_sarbatori = new Set();
+    sarbatori.forEach((sarbatoare) => {
+      ani_cu_sarbatori.add(sarbatoare.dela.substring(0, 4));
+      // console.log(sarbatoare);
+    });
+    return [...ani_cu_sarbatori];
+  }
 
-		if (sarbatori) {
-			this.setState(
-				{
-					sarbatori: sarbatori,
-				},
-				this.renderSarbatori
-			);
-		} else {
-			this.setState(
-				{
-					sarbatori: [],
-				},
-				this.renderSarbatori
-			);
-		}
-	}
+  async fillTable() {
+    //? fetch must be with idcontract
+    const sarbatori = await axios
+      .get(`${server.address}/sarbatori`, { headers: authHeader() })
+      .then((res) => (res.status !== 200 ? null : res.data))
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua sărbătorile\n' + err.response.data.message,
+        })
+      );
 
-	resetModals() {
-		this.setState({
-			// add modal:
-			show: false,
-			dela: '',
-			panala: '',
-			nume: '',
+    if (sarbatori) {
+      this.setState(
+        {
+          sarbatori: sarbatori,
+        },
+        this.renderSarbatori
+      );
+    } else {
+      this.setState(
+        {
+          sarbatori: [],
+        },
+        this.renderSarbatori
+      );
+    }
+  }
 
-			// succes modal:
-			show_confirm: false,
-			modalMessage: '',
-		});
-	}
+  resetModals() {
+    this.setState({
+      // add modal:
+      show: false,
+      dela: '',
+      panala: '',
+      nume: '',
 
-	handleClose(confirmWindow) {
-		if (confirmWindow)
-			this.setState({
-				show_confirm: false,
-				modalMessage: '',
-			});
-		else
-			this.setState({
-				show: false,
-				// reset data
-				id: '',
-				dela: '',
-				panala: '',
-				nume: '',
-			});
-	}
+      // succes modal:
+      show_confirm: false,
+      modalMessage: '',
+    });
+  }
 
-	async deleteSarbatoare(id) {
-		await axios
-			.delete(`${server.address}/sarbatori/${id}`, { headers: authHeader() })
-			.then(this.fillTable)
-			.catch((err) => console.error(err));
-	}
+  handleClose(confirmWindow) {
+    if (confirmWindow)
+      this.setState({
+        show_confirm: false,
+        modalMessage: '',
+      });
+    else
+      this.setState({
+        show: false,
+        // reset data
+        id: '',
+        dela: '',
+        panala: '',
+        nume: '',
+      });
+  }
 
-	async onSubmit(e) {
-		e.preventDefault();
+  async deleteSarbatoare(id) {
+    await axios
+      .delete(`${server.address}/sarbatori/${id}`, { headers: authHeader() })
+      .then(this.fillTable)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge sărbătoarea\n' + err.response.data.message,
+        })
+      );
+  }
 
-		const sarbatoare_body = {
-			dela: this.state.dela || null,
-			panala: this.state.panala || null,
-			nume: this.state.nume || null,
-			// in DB also has sporuripermanente
-		};
-		let ok = false;
-		if (this.state.isEdit) {
-			ok = await axios
-				.put(`${server.address}/sarbatori/${this.state.id}`, sarbatoare_body, {
-					headers: authHeader(),
-				})
-				.then((res) => res.status === 200)
-				.catch((err) => console.error('err:', err));
-		} else {
-			ok = await axios
-				.post(`${server.address}/sarbatori`, sarbatoare_body, { headers: authHeader() })
-				.then((res) => res.status === 200)
-				.catch((err) => console.error('err:', err));
-		}
+  async onSubmit(e) {
+    e.preventDefault();
 
-		if (ok) {
-			// close add modal
-			this.handleClose();
-			// open confirm modal
-			this.setState({
-				show_confirm: true,
-				modalMessage:
-					'Sărbătoare ' +
-					this.state.nume +
-					(this.state.isEdit ? ' actualizată' : ' adăugată') +
-					' 💾',
-			});
+    const sarbatoare_body = {
+      dela: this.state.dela || null,
+      panala: this.state.panala || null,
+      nume: this.state.nume || null,
+      // in DB also has sporuripermanente
+    };
+    let ok = false;
+    if (this.state.isEdit) {
+      ok = await axios
+        .put(`${server.address}/sarbatori/${this.state.id}`, sarbatoare_body, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut actualiza sărbătoarea\n' + err.response.data.message,
+          })
+        );
+    } else {
+      ok = await axios
+        .post(`${server.address}/sarbatori`, sarbatoare_body, { headers: authHeader() })
+        .then((res) => res.status === 200)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut adăuga sărbătoare\n' + err.response.data.message,
+          })
+        );
+    }
 
-			this.fillTable();
-		}
-	}
+    if (ok) {
+      // close add modal
+      this.handleClose();
+      // open confirm modal
+      this.setState({
+        show_confirm: true,
+        modalMessage:
+          'Sărbătoare ' +
+          this.state.nume +
+          (this.state.isEdit ? ' actualizată' : ' adăugată') +
+          ' 💾',
+      });
 
-	editSarbatoare(sarbatoare) {
-		this.setState({
-			isEdit: true,
-			show: true,
-			id: sarbatoare.id,
-			dela: sarbatoare.dela,
-			panala: sarbatoare.panala,
-			nume: sarbatoare.nume,
-		});
-	}
+      this.fillTable();
+    }
+  }
 
-	onChangeAn(an) {
-		this.setState({ an: an }, this.renderSarbatori);
-	}
-	// function to create react component with fetched data
-	renderSarbatori() {
-		this.setState({
-			// eslint-disable-next-line array-callback-return
-			sarbatoriComponent: this.state.sarbatori.map((sarbatoare, index) => {
-				for (let key in sarbatoare) if (!sarbatoare[key]) sarbatoare[key] = '-';
-				if (sarbatoare.dela.includes(this.state.an)) {
-					return (
-						<tr key={sarbatoare.id}>
-							<th>{formatDate(sarbatoare.dela.substring(0, 10))}</th>
-							<th>{formatDate(sarbatoare.panala.substring(0, 10))}</th>
-							<th>{sarbatoare.nume}</th>
-							<th className="d-inline-flex flex-row justify-content-around">
-								<Button
-									variant="outline-secondary"
-									className="ml-2 p-1 rounded-circle border-0"
-									onClick={() => this.editSarbatoare(sarbatoare)}
-								>
-									<Edit3 size={20} />
-								</Button>
-								<PopupState variant="popover" popupId="demo-popup-popover">
-									{(popupState) => (
-										<div>
-											<Button
-												variant="outline-secondary"
-												className="m-0 p-1 rounded-circle border-0"
-												{...bindTrigger(popupState)}
-											>
-												<Trash2 size={20} />
-											</Button>
-											<Popover
-												{...bindPopover(popupState)}
-												anchorOrigin={{
-													vertical: 'bottom',
-													horizontal: 'center',
-												}}
-												transformOrigin={{
-													vertical: 'top',
-													horizontal: 'center',
-												}}
-											>
-												<Box p={2}>
-													<Typography>Sigur ștergeți sărbătoarea?</Typography>
-													<Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-													<br />
-													<Button
-														variant="outline-danger"
-														onClick={() => {
-															popupState.close();
-															this.deleteSarbatoare(sarbatoare.id);
-														}}
-														className="mt-2 "
-													>
-														Da
+  editSarbatoare(sarbatoare) {
+    this.setState({
+      isEdit: true,
+      show: true,
+      id: sarbatoare.id,
+      dela: sarbatoare.dela,
+      panala: sarbatoare.panala,
+      nume: sarbatoare.nume,
+    });
+  }
+
+  onChangeAn(an) {
+    this.setState({ an: an }, this.renderSarbatori);
+  }
+  // function to create react component with fetched data
+  renderSarbatori() {
+    this.setState({
+      // eslint-disable-next-line array-callback-return
+      sarbatoriComponent: this.state.sarbatori.map((sarbatoare, index) => {
+        for (let key in sarbatoare) if (!sarbatoare[key]) sarbatoare[key] = '-';
+        if (sarbatoare.dela.includes(this.state.an)) {
+          return (
+            <tr key={sarbatoare.id}>
+              <th>{formatDate(sarbatoare.dela.substring(0, 10))}</th>
+              <th>{formatDate(sarbatoare.panala.substring(0, 10))}</th>
+              <th>{sarbatoare.nume}</th>
+              <th className="d-inline-flex flex-row justify-content-around">
+                <Button
+                  variant="outline-secondary"
+                  className="ml-2 p-1 rounded-circle border-0"
+                  onClick={() => this.editSarbatoare(sarbatoare)}
+                >
+                  <Edit3 size={20} />
+                </Button>
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 size={20} />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Sigur ștergeți sărbătoarea?</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteSarbatoare(sarbatoare.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
                           </Button>
-													<Button
-														variant="outline-persondary"
-														onClick={popupState.close}
-														className="mt-2"
-													>
-														Nu
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
                           </Button>
-												</Box>
-											</Popover>
-										</div>
-									)}
-								</PopupState>
-							</th>
-						</tr>
-					);
-				}
-			}),
-		});
-	}
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </th>
+            </tr>
+          );
+        }
+      }),
+    });
+  }
 
-	async adaugaAn() {
-		const an = Number(this.state.adauga_an);
-		if (an < 1990 || 2100 < an) {
-			this.setState({ show_an: false });
-			return;
-		}
+  async adaugaAn() {
+    const an = Number(this.state.adauga_an);
+    if (an < 1990 || 2100 < an) {
+      this.setState({ show_an: false });
+      return;
+    }
 
-		const ok = await axios
-			.post(`${server.address}/sarbatori/init/${this.state.adauga_an}`, {}, { headers: authHeader() })
-			.then(res => res.status === 200 ? res.data : null)
-			.catch(err => console.error(err));
+    const ok = await axios
+      .post(
+        `${server.address}/sarbatori/init/${this.state.adauga_an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut adăuga sărbătorile din anul' +
+            this.state.adauga_an +
+            '\n' +
+            err.response.data.message,
+        })
+      );
 
-		if (ok) this.setState({
-			show_an: false,
-			show_confirm: true,
-			modalMessage: "Sărbători adăugate în " + an
-		});
-	}
+    if (ok)
+      this.setState({
+        show_an: false,
+        show_confirm: true,
+        modalMessage: 'Sărbători adăugate în ' + an,
+      });
+  }
 
-	render() {
+  render() {
+    const aniCuSarbatori = this.getAniCuSarbatori(this.state.sarbatori).map((an) => (
+      <option key={an}>{an}</option>
+    ));
 
-		const aniCuSarbatori = this.getAniCuSarbatori(this.state.sarbatori).map(an => <option key={an}>{an}</option>);
-
-		return (
-			<Aux>
-				{/* ADD/EDIT MODAL */}
-				<Modal show={this.state.show} onHide={() => this.handleClose(false)}>
-					<Modal.Header closeButton>
-						<Modal.Title>Sărbătoare nouă</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<Form onSubmit={this.onSubmit}>
-							<Form.Group id="dela">
-								<Form.Label>Începând cu (inclusiv)</Form.Label>
-								<Form.Control
-									required
-									type="date"
-									value={this.state.dela}
-									onChange={(e) => {
-										this.setState({ dela: e.target.value });
-									}}
-								/>
-							</Form.Group>
-							<Form.Group id="panala">
-								<Form.Label>Până la (inclusiv)</Form.Label>
-								<Form.Control
-									required
-									type="date"
-									value={this.state.panala}
-									onChange={(e) => {
-										this.setState({ panala: e.target.value });
-									}}
-								/>
-							</Form.Group>
-							<Form.Group id="nume">
-								<Form.Label>Nume</Form.Label>
-								<Form.Control
-									type="text"
-									value={this.state.nume}
-									onChange={(e) => {
-										this.setState({ nume: e.target.value });
-									}}
-								/>
-							</Form.Group>
-						</Form>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button variant="primary" onClick={this.onSubmit}>
-							{this.state.isEdit ? 'Actualizează' : 'Adaugă'}
-						</Button>
-					</Modal.Footer>
-				</Modal>
-
-				{/* ADD AN MODAL */}
-				<Modal show={this.state.show_an} onHide={() => this.setState({ show_an: false })}>
-					<Modal.Header closeButton>
-						<Modal.Title>Adaugă toate sărbatorile in anul</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<p>Se adauga urmatoarele sărbatori doar dacă nu exista nicio alta sărbatoare in anul respectiv:</p>
-						<p>Anul nou: 1, 2 ianuarie</p>
-						<p>Ziua Unirii Principatelor Române: 24 ianuarie</p>
-						<p>Ziua muncii: 1 mai</p>
-						<p>Ziua copilului: 1 iunie</p>
-						<p>Adormirea Maicii Domnului: 15 august</p>
-						<p>Sfântul Andrei: 30 noiembrie</p>
-						<p>Ziua Națională a României: 1 decembrie</p>
-						<p>Crăciunul: 25, 26 decembrie</p>
-						<Form.Group>
-							<Form.Label>An</Form.Label>
-							<Form.Control
-								type="number"
-								value={this.state.adauga_an}
-								onChange={(e) => this.setState({ adauga_an: e.target.value })}
-							/>
-						</Form.Group>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button onClick={this.adaugaAn}>Adaugă</Button>
-					</Modal.Footer>
-				</Modal>
-
-				{/* CONFIRM Modal */}
-				<Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
-					<Modal.Header closeButton>
-						<Modal.Title>{this.state.modalMessage}</Modal.Title>
-					</Modal.Header>
-					<Modal.Footer>
-						<Button variant="primary" onClick={this.handleClose}>
-							OK
+    return (
+      <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
+        {/* ADD/EDIT MODAL */}
+        <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Sărbătoare nouă</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.onSubmit}>
+              <Form.Group id="dela">
+                <Form.Label>Începând cu (inclusiv)</Form.Label>
+                <Form.Control
+                  required
+                  type="date"
+                  value={this.state.dela}
+                  onChange={(e) => {
+                    this.setState({ dela: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="panala">
+                <Form.Label>Până la (inclusiv)</Form.Label>
+                <Form.Control
+                  required
+                  type="date"
+                  value={this.state.panala}
+                  onChange={(e) => {
+                    this.setState({ panala: e.target.value });
+                  }}
+                />
+              </Form.Group>
+              <Form.Group id="nume">
+                <Form.Label>Nume</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.nume}
+                  onChange={(e) => {
+                    this.setState({ nume: e.target.value });
+                  }}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.onSubmit}>
+              {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
-					</Modal.Footer>
-				</Modal>
+          </Modal.Footer>
+        </Modal>
 
-				{/* PAGE CONTENTS */}
-				<Row>
-					<Col>
-						<Card>
-							<Card.Header className="border-0">
-								<Card.Title as="h5">Sărbători</Card.Title>
+        {/* ADD AN MODAL */}
+        <Modal show={this.state.show_an} onHide={() => this.setState({ show_an: false })}>
+          <Modal.Header closeButton>
+            <Modal.Title>Adaugă toate sărbatorile in anul</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Se adauga urmatoarele sărbatori doar dacă nu exista nicio alta sărbatoare in anul
+              respectiv:
+            </p>
+            <p>Anul nou: 1, 2 ianuarie</p>
+            <p>Ziua Unirii Principatelor Române: 24 ianuarie</p>
+            <p>Ziua muncii: 1 mai</p>
+            <p>Ziua copilului: 1 iunie</p>
+            <p>Adormirea Maicii Domnului: 15 august</p>
+            <p>Sfântul Andrei: 30 noiembrie</p>
+            <p>Ziua Națională a României: 1 decembrie</p>
+            <p>Crăciunul: 25, 26 decembrie</p>
+            <Form.Group>
+              <Form.Label>An</Form.Label>
+              <Form.Control
+                type="number"
+                value={this.state.adauga_an}
+                onChange={(e) => this.setState({ adauga_an: e.target.value })}
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.adaugaAn}>Adaugă</Button>
+          </Modal.Footer>
+        </Modal>
 
-								<Button
-									variant="outline-info"
-									size="sm"
-									style={{ fontSize: '1.25rem', float: 'right' }}
-									onClick={this.fillTable}
-								>
-									<RotateCw size="25" />
-								</Button>
+        {/* CONFIRM Modal */}
+        <Modal show={this.state.show_confirm} onHide={() => this.handleClose(true)}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.state.modalMessage}</Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.handleClose}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-								<Button
-									variant="outline-info"
-									className="float-right"
-									onClick={() => this.setState({ show: true })}
-									size="sm"
-									style={{ fontSize: '1.25rem', float: 'right' }}
-								>
-									<Plus size="25" />
-								</Button>
-							</Card.Header>
-							<Card.Body>
-								<Form.Group as={Col} sm="3">
-									<Form.Control
-										as="select"
-										value={this.state.an}
-										onChange={(e) => this.onChangeAn(e.target.value)}
-									>
-										{aniCuSarbatori}
-									</Form.Control>
-									<Button className="mt-2" variant="outline-primary" size="sm" block onClick={() => this.setState({ show_an: true })}>Adaugă an</Button>
-								</Form.Group>
+        {/* PAGE CONTENTS */}
+        <Row>
+          <Col>
+            <Card>
+              <Card.Header className="border-0">
+                <Card.Title as="h5">Sărbători</Card.Title>
 
+                <Button
+                  variant="outline-info"
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
+                  onClick={this.fillTable}
+                >
+                  <RotateCw size="25" />
+                </Button>
 
-								<Table responsive hover>
-									<thead>
-										<tr>
-											<th>Începând cu (inclusiv) ↓</th>
-											<th>Până la (inclusiv)</th>
-											<th>Nume</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>{this.state.sarbatoriComponent}</tbody>
-								</Table>
-							</Card.Body>
-						</Card>
-					</Col>
-				</Row>
-			</Aux>
-		);
-	}
+                <Button
+                  variant="outline-info"
+                  className="float-right"
+                  onClick={() => this.setState({ show: true })}
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
+                >
+                  <Plus size="25" />
+                </Button>
+              </Card.Header>
+              <Card.Body>
+                <Form.Group as={Col} sm="3">
+                  <Form.Control
+                    as="select"
+                    value={this.state.an}
+                    onChange={(e) => this.onChangeAn(e.target.value)}
+                  >
+                    {aniCuSarbatori}
+                  </Form.Control>
+                  <Button
+                    className="mt-2"
+                    variant="outline-primary"
+                    size="sm"
+                    block
+                    onClick={() => this.setState({ show_an: true })}
+                  >
+                    Adaugă an
+                  </Button>
+                </Form.Group>
+
+                <Table responsive hover>
+                  <thead>
+                    <tr>
+                      <th>Începând cu (inclusiv) ↓</th>
+                      <th>Până la (inclusiv)</th>
+                      <th>Nume</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>{this.state.sarbatoriComponent}</tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Aux>
+    );
+  }
 }
 
 export default SarbatoriTabel;

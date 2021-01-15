@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Form, Button, FormControl } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, FormControl, Toast } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';
@@ -24,6 +24,9 @@ class PlatiSalariiMTA extends React.Component {
       prenumeDeclarant: '',
       functieDeclarant: '',
       user: authService.getCurrentUser(),
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -65,7 +68,13 @@ class PlatiSalariiMTA extends React.Component {
         a.click();
         a.remove(); //afterwards we remove the element again
         console.log('downloaded');
-      });
+      })
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut descărca MTA\n' + err.response.data.message,
+        })
+      );
   }
 
   async creeazaMTA(e) {
@@ -85,7 +94,12 @@ class PlatiSalariiMTA extends React.Component {
       }
     )
       .then((res) => res.ok)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea MTA\n' + err.response.data.message,
+        })
+      );
 
     if (created) this.download(luna, an);
   }
@@ -95,6 +109,19 @@ class PlatiSalariiMTA extends React.Component {
 
     return (
       <Card>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Card.Header>
           <Typography variant="h5">Plăți Salarii MTA</Typography>
         </Card.Header>

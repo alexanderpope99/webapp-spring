@@ -21,6 +21,7 @@ class AddUser extends React.Component {
       societateselectată: '',
       show: false,
       modalMessage: '', // text,
+      modalTitle: '',
     };
   }
 
@@ -64,10 +65,18 @@ class AddUser extends React.Component {
       .then(() => {
         this.setState({
           show: true,
+          modalTitle: 'Succes',
           message: 'User adăugat cu succes!',
         });
       })
-      .then(this.clearFields());
+      .then(this.clearFields())
+      .catch((err) =>
+        this.setState({
+          show: true,
+          modalTitle: 'Eroare',
+          message: 'Eroare la adăugarea user-ului\n' + err.response.data.message,
+        })
+      );
   }
 
   render() {
@@ -75,7 +84,7 @@ class AddUser extends React.Component {
       <Aux>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Date incomplete</Modal.Title>
+            <Modal.Title>{this.state.modalTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.message}</Modal.Body>
           <Modal.Footer>

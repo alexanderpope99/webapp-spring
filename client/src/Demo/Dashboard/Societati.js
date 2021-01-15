@@ -52,10 +52,12 @@ class Societati extends React.Component {
       isEdit: false,
       show_confirm: false,
       socsel: getSocSel(),
-			user: authService.getCurrentUser(),
-			
-			showToast: false,
-			toastMessage: 'Nicio societate selectată',
+      user: authService.getCurrentUser(),
+
+      showToast: false,
+      toastMessage: 'Nicio societate selectată',
+      toastColor: '',
+      toastTitle: '',
 
       today: new Date(),
 
@@ -164,7 +166,15 @@ class Societati extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.log(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastColor: 'red',
+          toastTitle: 'Eroare',
+          toastMessage:
+            'Nu am putut prelua societățile din baza de date\n' + err.response.data.message,
+        })
+      );
 
     if (Array.isArray(societati_res)) {
       var societati = this.state.societati;
@@ -197,15 +207,17 @@ class Societati extends React.Component {
       societati[nume_soc].opacity = '1';
 
       setSocSel({ id: societati[nume_soc].id, nume: nume_soc });
-			const socsel = getSocSel();
-			console.log(socsel);
+      const socsel = getSocSel();
+      console.log(socsel);
 
-      this.setState({ 
-				societati: societati, 
-				socsel: getSocSel(),
-				showToast:true,
-				toastMessage: `Societate ${socsel.nume} selectată`,
-			});
+      this.setState({
+        societati: societati,
+        socsel: getSocSel(),
+        showToast: true,
+        toastMessage: `Societate ${socsel.nume} selectată`,
+        toastColor: 'lightgreen',
+        toastTitle: 'Societate selectată',
+      });
     }
   }
 
@@ -218,7 +230,14 @@ class Societati extends React.Component {
         this.setState({ show: false });
         window.location.reload();
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastColor: 'red',
+          toastTitle: 'Eroare',
+          toastMessage: 'Nu am putut șterge societatea\n' + err.response.data.message,
+        })
+      );
   }
 
   editSocietate(societate) {
@@ -257,7 +276,14 @@ class Societati extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastColor: 'red',
+          toastTitle: 'Eroare',
+          toastMessage: 'Nu am putut crea ștat salarii\n' + err.response.data.message,
+        })
+      );
 
     if (created) download(`Stat Salarii - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
   }
@@ -278,7 +304,14 @@ class Societati extends React.Component {
         }
       )
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastColor: 'red',
+          toastTitle: 'Eroare',
+          toastMessage: 'Nu am putut crea Declarația 112\n' + err.response.data.message,
+        })
+      );
 
     if (created) download(`Declaratia 112 - ${socsel.nume} - ${luni[luna]} ${an}.pdf`, user.id);
   }
@@ -294,7 +327,14 @@ class Societati extends React.Component {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastColor: 'red',
+          toastTitle: 'Eroare',
+          toastMessage: 'Nu am putut crea MTA\n' + err.response.data.message,
+        })
+      );
 
     if (created) download(`FisierMTA - ${socsel.nume} - ${luni[luna]} ${an}.xlsx`, user.id);
   }
@@ -341,7 +381,14 @@ class Societati extends React.Component {
           this.getSocietati
         );
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastColor: 'red',
+          toastTitle: 'Eroare',
+          toastMessage: 'Nu am putut actualiza societatea\n' + err.response.data.message,
+        })
+      );
   }
 
   render() {
@@ -365,34 +412,27 @@ class Societati extends React.Component {
           >
             <Card.Body>
               <h3>{key}</h3>
-              <div
-                className="mt-4"
-                visibility={
-                  showButtons
-                    ? 'visible'
-                    : 'hidden'
-                }
-              >
-                    <Edit
-                      className="d-flex justify-content-around float float-left m-2"
-                      visibility={showButtons ? 'visible' : 'hidden'}
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => this.editSocietate(this.state.societati[key])}
-                    />
+              <div className="mt-4" visibility={showButtons ? 'visible' : 'hidden'}>
+                <Edit
+                  className="d-flex justify-content-around float float-left m-2"
+                  visibility={showButtons ? 'visible' : 'hidden'}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.editSocietate(this.state.societati[key])}
+                />
 
-                    <Users
-                      className="d-flex justify-content-around float float-right m-2"
-                      visibility={showButtons ? 'visible' : 'hidden'}
-                      style={{ cursor: 'pointer' }}
-											onClick={() => (window.location.href = '/tables/angajati')}
-                    />
+                <Users
+                  className="d-flex justify-content-around float float-right m-2"
+                  visibility={showButtons ? 'visible' : 'hidden'}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => (window.location.href = '/tables/angajati')}
+                />
 
-                    <FileText
-                      className="d-flex justify-content-around float float-right m-2"
-                      visibility={showButtons ? 'visible' : 'hidden'}
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => (window.location.href = '/rapoarte')}
-                    />
+                <FileText
+                  className="d-flex justify-content-around float float-right m-2"
+                  visibility={showButtons ? 'visible' : 'hidden'}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => (window.location.href = '/rapoarte')}
+                />
               </div>
             </Card.Body>
           </Card>
@@ -415,19 +455,19 @@ class Societati extends React.Component {
 
     return (
       <Aux>
-				<Toast
-					onClose={() => this.setState({ showToast: false })}
-					show={this.state.showToast}
-					delay={4000}
-					autohide
-					className="position-fixed"
-					style={{ top: '10px', right: '5px', zIndex: '9999', background: 'lightgreen' }}
-				>
-					<Toast.Header className="pr-2">
-						<strong className="mr-auto">Societate selectată</strong>
-					</Toast.Header>
-					<Toast.Body>{this.state.toastMessage}</Toast.Body>
-				</Toast>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: this.state.toastColor }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">{this.state.toastTitle}</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
 
         {/* EDIT SOCIETATE MODAL HERE */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">

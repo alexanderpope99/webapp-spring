@@ -9,8 +9,8 @@ import {
   InputGroup,
   DropdownButton,
   Dropdown,
+  Toast,
 } from 'react-bootstrap';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
@@ -81,6 +81,9 @@ class Contract extends React.Component {
       // centrucost
       centruCost: null,
       centreCost: [],
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -164,7 +167,7 @@ class Contract extends React.Component {
   }
 
   async getSuperiori() {
-		if(!this.state.angajatsel) return;
+    if (!this.state.angajatsel) return;
 
     const superiori = await axios
       .get(`${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`, {
@@ -178,7 +181,13 @@ class Contract extends React.Component {
           }))
           .filter((angajat) => angajat.id !== this.state.angajatsel.idpersoana)
       )
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua angajații superiori posibili\n' + err.response.data.message,
+        })
+      );
 
     if (superiori) this.setState({ superiori: superiori });
   }
@@ -189,7 +198,12 @@ class Contract extends React.Component {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+        })
+      );
 
     if (centreCost) this.setState({ centreCost: centreCost });
   }
@@ -198,15 +212,20 @@ class Contract extends React.Component {
     this.getSuperiori();
     this.getCentreCost();
 
-		const angajatsel = getAngajatSel();
-		if(!angajatsel) return;
-		
+    const angajatsel = getAngajatSel();
+    if (!angajatsel) return;
+
     const angajat = await axios
       .get(`${server.address}/angajat/expand/${angajatsel.idpersoana}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua angajații\n' + err.response.data.message,
+        })
+      );
 
     if (angajat.contract) {
       this.clearFields();
@@ -383,21 +402,27 @@ class Contract extends React.Component {
           headers: authHeader(),
         })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => {
-          console.error(err.message);
-        });
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut actualiza contractul\n' + err.response.data.message,
+          })
+        );
     } else {
       contract = await axios
         .post(`${server.address}/contract/${this.state.angajat.idpersoana}`, contract_body, {
           headers: authHeader(),
         })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => {
-          console.error(err.message);
-        });
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut adăuga contractul\n' + err.response.data.message,
+          })
+        );
     }
 
-		if (contract) {
+    if (contract) {
       // update superior -> angajatul are superior, nu tine de contract
       if (this.state.superior) {
         await axios
@@ -407,7 +432,12 @@ class Contract extends React.Component {
             { headers: authHeader() }
           )
           .then((res) => res.status === 200)
-          .catch((err) => console.error(err));
+          .catch((err) =>
+            this.setState({
+              showToast: true,
+              toastMessage: 'Nu am putut actualiza superiorul\n' + err.response.data.message,
+            })
+          );
       }
 
       this.setState({
@@ -418,7 +448,7 @@ class Contract extends React.Component {
     } else {
       this.setState({
         show: true,
-        modalMessage: 'A aparut o eroare ⛔',
+        modalMessage: 'A apărut o eroare ⛔',
       });
     }
   }
@@ -458,6 +488,19 @@ class Contract extends React.Component {
 
     return (
       <React.Fragment>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -559,9 +602,8 @@ class Contract extends React.Component {
             </Col>
             <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
               <Form.Group id="functiedabaza">
-                
                 <Form.Label>
-									{/* <Switch
+                  {/* <Switch
 										color="primary"
                     checked={this.state.functieBaza}
 										onChange={(e) => this.setState({ functieBaza: e.target.checked })}

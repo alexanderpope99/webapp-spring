@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, OverlayTrigger, Tooltip, Toast } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -23,6 +23,9 @@ class PersoaneTabel extends React.Component {
       socsel: getSocSel(),
       persoane: [],
       persoaneComponent: null,
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -42,7 +45,13 @@ class PersoaneTabel extends React.Component {
       .then(() => {
         // console.log(response);
         this.onRefresh();
-      });
+      })
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge persoana\n' + err.response.data.message,
+        })
+      );
   }
 
   // function to create react component with fetched data
@@ -129,7 +138,13 @@ class PersoaneTabel extends React.Component {
   async onRefresh() {
     const persoane = await axios
       .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data);
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua persoanele\n' + err.response.data.message,
+        })
+      );
 
     this.setState({
       persoane: persoane,
@@ -141,6 +156,19 @@ class PersoaneTabel extends React.Component {
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         <Row>
           <Col>
             <Card>

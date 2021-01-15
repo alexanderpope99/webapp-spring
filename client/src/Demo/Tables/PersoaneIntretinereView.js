@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { RotateCw } from 'react-feather';
 
 import Aux from '../../hoc/_Aux';
@@ -43,6 +43,9 @@ class PersoaneIntretinereView extends React.Component {
       intretinut: false,
       coasigurat: false,
       idangajat: null,
+
+      showToast: false,
+      toastMessage: '',
     };
   }
 
@@ -59,7 +62,12 @@ class PersoaneIntretinereView extends React.Component {
       let angajat = await axios
         .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
         .then((res) => (res.status === 200 ? res.data : null))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+          })
+        );
       if (angajat)
         this.setState(
           { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
@@ -118,7 +126,12 @@ class PersoaneIntretinereView extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua persoanele întreținere\n' + err.response.data.message,
+          })
+        );
       if (persoane) {
         this.setState(
           {
@@ -185,6 +198,19 @@ class PersoaneIntretinereView extends React.Component {
   render() {
     return (
       <Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>

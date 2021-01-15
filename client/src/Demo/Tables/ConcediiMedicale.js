@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Edit3, RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -88,11 +88,14 @@ class CMTabel extends React.Component {
 			cnpcopil: '',
 			idcontract: null,
 
-			// succes modal:
-			show_confirm: false,
-			modalMessage: '',
-		};
-	}
+      // succes modal:
+      show_confirm: false,
+      modalMessage: '',
+
+      showToast: false,
+      toastMessage: '',
+    };
+  }
 
 	clearCM() {
 		this.setState({
@@ -149,21 +152,26 @@ class CMTabel extends React.Component {
 	async updateAngajatSel() {
 		let angajatSel = getAngajatSel();
 
-		if (angajatSel) {
-			let angajat = await axios
-				.get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
-				.then((res) => (res.status === 200 ? res.data : null))
-				.catch((err) => console.error(err));
-			if (angajat) {
-				this.setState(
-					{ angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
-					this.fillTable
-				);
-			}
-		} else {
-			this.setState({ angajat: null }, this.fillTable);
-		}
-	}
+    if (angajatSel) {
+      let angajat = await axios
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .then((res) => (res.status === 200 ? res.data : null))
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+          })
+        );
+      if (angajat) {
+        this.setState(
+          { angajat: { ...angajat, numeintreg: getAngajatSel().numeintreg } },
+          this.fillTable
+        );
+      }
+    } else {
+      this.setState({ angajat: null }, this.fillTable);
+    }
+  }
 
 	componentDidMount() {
 		this.setCurrentYear();
@@ -277,40 +285,45 @@ class CMTabel extends React.Component {
 			return;
 		}
 
-		const cm = await axios
-			.get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
-			// eslint-disable-next-line eqeqeq
-			.then((res) => (res.status == 200 ? res.data : null))
-			.catch((err) => console.error('err', err));
-		if (cm) {
-			var ani_cu_concediu = new Set();
-			var luni_cu_concediu = {};
-			// add ani_cu_concediu
-			for (let c of cm) {
-				if (c.dela) {
-					// an = c.dela.substring(0, 4);
-					ani_cu_concediu.add(Number(c.dela.substring(0, 4)));
-				}
-				if (c.panala) {
-					ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
-				}
-			}
-			// add ani in luni_cu_concediu
-			for (let _an of ani_cu_concediu) {
-				luni_cu_concediu[_an] = new Set();
-			}
-			// add luni in luni_cu_concediu
-			let an;
-			for (let c of cm) {
-				if (c.dela) {
-					an = c.dela.substring(0, 4);
-					luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
-				}
-			}
-			// convert to array from set
-			for (let _an of ani_cu_concediu) {
-				luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
-			}
+    const cm = await axios
+      .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
+      // eslint-disable-next-line eqeqeq
+      .then((res) => (res.status == 200 ? res.data : null))
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelau concediile medicale\n' + err.response.data.message,
+        })
+      );
+    if (cm) {
+      var ani_cu_concediu = new Set();
+      var luni_cu_concediu = {};
+      // add ani_cu_concediu
+      for (let c of cm) {
+        if (c.dela) {
+          // an = c.dela.substring(0, 4);
+          ani_cu_concediu.add(Number(c.dela.substring(0, 4)));
+        }
+        if (c.panala) {
+          ani_cu_concediu.add(Number(c.panala.substring(0, 4)));
+        }
+      }
+      // add ani in luni_cu_concediu
+      for (let _an of ani_cu_concediu) {
+        luni_cu_concediu[_an] = new Set();
+      }
+      // add luni in luni_cu_concediu
+      let an;
+      for (let c of cm) {
+        if (c.dela) {
+          an = c.dela.substring(0, 4);
+          luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
+        }
+      }
+      // convert to array from set
+      for (let _an of ani_cu_concediu) {
+        luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
+      }
 
 			let thisYear = new Date().getFullYear();
 			ani_cu_concediu.add(thisYear);
@@ -335,12 +348,17 @@ class CMTabel extends React.Component {
 		}
 	}
 
-	async deleteCM(id) {
-		await axios
-			.delete(`${server.address}/cm/${id}`, { headers: authHeader() })
-			.then(this.fillTable)
-			.catch((err) => console.error(err));
-	}
+  async deleteCM(id) {
+    await axios
+      .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
+      .then(this.fillTable)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut șterge concediul medical\n' + err.response.data.message,
+        })
+      );
+  }
 
 	async addCM() {
 		if (!this.state.angajat) return;
@@ -384,10 +402,15 @@ class CMTabel extends React.Component {
 			codindemnizatie: this.state.codindemnizatie,
 		};
 
-		let ok = await axios
-			.post(`${server.address}/cm`, cm_body, { headers: authHeader() })
-			.then((res) => res.data)
-			.catch((err) => console.error('err:', err));
+    let ok = await axios
+      .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut adăuga concediul\n' + err.response.data.message,
+        })
+      );
 
 		if (ok) {
 			// close add modal
@@ -437,12 +460,17 @@ class CMTabel extends React.Component {
 			codindemnizatie: this.state.codindemnizatie,
 		};
 
-		let ok = await axios
-			.put(`${server.address}/cm/${this.state.id}`, cm_body, {
-				headers: authHeader(),
-			})
-			.then((res) => res.data)
-			.catch((err) => console.error('err:', err));
+    let ok = await axios
+      .put(`${server.address}/cm/${this.state.id}`, cm_body, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut actualiza concediul\n' + err.response.data.message,
+        })
+      );
 
 		if (ok) {
 			// close add modal
@@ -645,14 +673,21 @@ class CMTabel extends React.Component {
 
 		let luna = this.state.dela.substring(5, 7);
 
-		// get baza calcul + zile baza calcul + medie zilnica
-		const baza_calcul = await axios
-			.get(
-				`${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}`,
-				{ headers: authHeader() }
-			)
-			.then((res) => res.data)
-			.catch((err) => console.error(err));
+    // get baza calcul + zile baza calcul + medie zilnica
+    const baza_calcul = await axios
+      .get(
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}`,
+        { headers: authHeader() }
+      )
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua baza calcul, nr zile și media zilnică\n' +
+            err.response.data.message,
+        })
+      );
 
 		if (baza_calcul) {
 			console.log(Math.round(baza_calcul.mediezilnica));
@@ -708,6 +743,19 @@ class CMTabel extends React.Component {
 
 		return (
 			<Aux>
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
 				{/* C.M. MODAL */}
 				<Modal show={this.state.show} onHide={() => this.handleClose(false)} size="lg">
 					<Modal.Header closeButton>
