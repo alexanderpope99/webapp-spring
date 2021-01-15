@@ -24,7 +24,7 @@ public class Persoana implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@Column(name = "gen")
 	private String gen;
 	@Column(name = "nume")
@@ -56,8 +56,8 @@ public class Persoana implements Serializable {
 	public Persoana() {
 	}
 
-	public Persoana(String gen, String nume, String prenume, ActIdentitate idactidentitate, Adresa idadresa, String starecivila,
-			String email, String telefon, String cnp) {
+	public Persoana(String gen, String nume, String prenume, ActIdentitate idactidentitate, Adresa idadresa,
+			String starecivila, String email, String telefon, String cnp) {
 		this.gen = gen;
 		this.nume = nume;
 		this.prenume = prenume;
@@ -69,7 +69,6 @@ public class Persoana implements Serializable {
 		this.telefon = telefon;
 		this.cnp = cnp;
 	}
-
 
 	public int getId() {
 		return id;
@@ -136,6 +135,7 @@ public class Persoana implements Serializable {
 	public void setActidentitate(ActIdentitate actidentitate) {
 		this.actidentitate = actidentitate;
 	}
+
 	public void setAdresa(Adresa adresa) {
 		this.adresa = adresa;
 	}

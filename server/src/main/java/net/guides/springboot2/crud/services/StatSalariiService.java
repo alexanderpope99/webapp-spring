@@ -80,7 +80,7 @@ public class StatSalariiService {
 			throws IOException, ResourceNotFoundException {
 		try {
 			Societate societate = societateRepository.findById(idsocietate)
-					.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+					.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 			Adresa adresaSocietate = societate.getAdresa();
 
 			List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
@@ -135,7 +135,7 @@ public class StatSalariiService {
 			writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 			writerCell = stat.getRow(4).getCell(0);
 			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																																																		// localitate
+																											// localitate
 
 			// * write luna, an
 			writerCell = stat.getRow(4).getCell(11);
@@ -158,7 +158,8 @@ public class StatSalariiService {
 
 				int idcontract = contract.getId();
 
-				RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
+				RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an,
+						idcontract);
 				Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
 
 				impozitScutit += realizariRetineri.getImpozitscutit();
@@ -251,8 +252,9 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getSalariurealizat());
 				writerCell = row2.createCell(11); // valoare CO
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue((realizariRetineri.getZilecolucratoare() - realizariRetineri.getZilecfplucratoare())
-						* realizariRetineri.getSalariupezi());
+				writerCell.setCellValue(
+						(realizariRetineri.getZilecolucratoare() - realizariRetineri.getZilecfplucratoare())
+								* realizariRetineri.getSalariupezi());
 				writerCell = row3.createCell(11); // CO neefect.
 				writerCell.setCellValue(0);
 
@@ -325,8 +327,8 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getImpozit());
 				writerCell.setCellStyle(salariuStyle);
 				writerCell = row2.createCell(18); // rest plata brut
-				writerCell
-						.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
+				writerCell.setCellValue(
+						realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
 				writerCell.setCellStyle(salariuStyle);
 				writerCell = row3.createCell(18); // alte retineri
 				writerCell.setCellValue(0); // TODO
@@ -666,11 +668,11 @@ public class StatSalariiService {
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 11, 13));
 
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 7, rowNr + 7, 14, 16)); // Impozit scutit cf. art. 60 din
-																																								// CF
+																						// CF
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 14, 16));
 
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 7, rowNr + 7, 17, 19)); // impozit scutit cf. art 60 din
-																																								// CF
+																						// CF
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 8, rowNr + 8, 17, 19));
 
 			// * OBLIGATII ANGAJATOR
@@ -917,8 +919,8 @@ public class StatSalariiService {
 
 			// * OUTPUT THE FILE
 			Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-			String newFileLocation = String.format("%s/downloads/%d/Stat Salarii - %s - %s %d.xlsx", homeLocation, userID,
-					societate.getNume(), lunaNume, an);
+			String newFileLocation = String.format("%s/downloads/%d/Stat Salarii - %s - %s %d.xlsx", homeLocation,
+					userID, societate.getNume(), lunaNume, an);
 
 			FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 			workbook.write(outputStream);
@@ -935,25 +937,23 @@ public class StatSalariiService {
 			throws ResourceNotFoundException {
 		try {
 			Societate societate = societateRepository.findById(idsocietate)
-					.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+					.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 			Adresa adresaSocietate = societate.getAdresa();
 
 			Angajat angajat = angajatRepository.findById(idangajat)
-					.orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + idangajat));
+					.orElseThrow(() -> new ResourceNotFoundException("Nu există persoană cu id: " + idangajat));
 
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
 
 			int idcontract = contract.getId();
 			RealizariRetineri realizariRetineri;
-			if(recalc == null || !recalc)
+			if (recalc == null || !recalc)
 				realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
 			else
 				realizariRetineri = realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
-				
+
 			Retineri retineri = retineriService.getRetinereByIdstat(realizariRetineri.getId());
-
-
 
 			String statTemplateLocation = homeLocation + "/templates";
 			FileInputStream file = new FileInputStream(new File(statTemplateLocation, "StatIndividual.xlsx"));
@@ -1004,7 +1004,7 @@ public class StatSalariiService {
 			writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 			writerCell = stat.getRow(4).getCell(0);
 			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																																																		// localitate
+																											// localitate
 
 			// * write luna, an
 			writerCell = stat.getRow(4).getCell(11);
@@ -1178,8 +1178,8 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row2.getCell(18); // rest plata brut
-			writerCell
-					.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
+			writerCell.setCellValue(
+					realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.getCell(18); // alte retineri
 			writerCell.setCellValue(0); // TODO
@@ -1211,8 +1211,8 @@ public class StatSalariiService {
 
 			// * OUTPUT THE FILE
 			Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-			String newFileLocation = String.format("%s/downloads/%d/Stat Salarii - %s %s - %s %d.xlsx", homeLocation, userID,
-					persoana.getNume(), persoana.getPrenume(), lunaNume, an);
+			String newFileLocation = String.format("%s/downloads/%d/Stat Salarii - %s %s - %s %d.xlsx", homeLocation,
+					userID, persoana.getNume(), persoana.getPrenume(), lunaNume, an);
 
 			FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 			workbook.write(outputStream);

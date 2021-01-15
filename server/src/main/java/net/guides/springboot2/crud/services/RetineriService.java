@@ -39,15 +39,16 @@ public class RetineriService {
 
 	public Retineri updateRetinere(RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
-				.orElseThrow(() -> new ResourceNotFoundException("RealizariRetineri not found for this id"));
-		
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"Nu există realizări rețineri cu id " + newRetinereDTO.getIdstat()));
+
 		Retineri newRetinere = modelMapper.map(newRetinereDTO, Retineri.class);
 		newRetinere.setStat(realizariRetineri);
 
 		return retineriRepository.save(newRetinere);
 	}
 
-	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) {
+	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) throws ResourceNotFoundException {
 		Float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
 		if (totalPensie == null || totalPensie > 400)
 			return 0;
@@ -55,11 +56,19 @@ public class RetineriService {
 			return retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idc, luna, an).getPensiefacangajat();
 	}
 
-	public Retineri getRetinereByIdstat(int stat) {
-		return retineriRepository.findByStat_Id(stat);
+	public Retineri getRetinereByIdstat(int stat) throws ResourceNotFoundException {
+		Retineri retinere = retineriRepository.findByStat_Id(stat);
+		if (retinere == null)
+			throw new ResourceNotFoundException("Nu există reținere pentru ștat cu id " + stat);
+		return retinere;
 	}
 
-	public Retineri getRetinereByIdcontractAndLunaAndAn(int idcontract, int luna, int an) {
-		return retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idcontract, luna, an);
+	public Retineri getRetinereByIdcontractAndLunaAndAn(int idcontract, int luna, int an)
+			throws ResourceNotFoundException {
+		Retineri retinere = retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idcontract, luna, an);
+		if (retinere == null)
+			throw new ResourceNotFoundException(
+					"Nu există reținere pentru contract cu id " + idcontract + " în " + luna + "/" + an);
+		return retinere;
 	}
 }

@@ -16,6 +16,8 @@ import javax.persistence.MappedSuperclass;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+
 @MappedSuperclass
 public class Concediu implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -76,11 +78,13 @@ public class Concediu implements Serializable {
 		this.contract = contract;
 	}
 
-	public boolean overlaps() {
+	public boolean overlaps() throws ResourceNotFoundException {
+		if (contract == null)
+			throw new ResourceNotFoundException("Concediul nu are contract");
 		List<Concediu> concediiExistente = new ArrayList<>();
 		concediiExistente.addAll(contract.getConcediiOdihna());
-		concediiExistente.addAll(contract.getConcediiMedicale());	
-		
+		concediiExistente.addAll(contract.getConcediiMedicale());
+
 		concediiExistente.removeIf(c -> this.id == c.getId());
 		// scrise separat pentru lizibilitate
 		for (Concediu concediu : concediiExistente) {
@@ -97,7 +101,8 @@ public class Concediu implements Serializable {
 				return true;
 			}
 
-			// overlaps co.panala inside concediu: concediu.dela < co.panala < concediu.panla
+			// overlaps co.panala inside concediu: concediu.dela < co.panala <
+			// concediu.panla
 			if (panala.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0) {
 				return true;
 			}

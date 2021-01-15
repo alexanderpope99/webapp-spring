@@ -47,13 +47,13 @@ public class CereriConcediuService {
 	public CereriConcediuDTO save(CereriConcediuDTO cerereConcediuDTO) throws ResourceNotFoundException {
 		CereriConcediu cerereConcediu = modelMapper.map(cerereConcediuDTO, CereriConcediu.class);
 
-		User user = userRepository.findById(cerereConcediuDTO.getIduser())
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id"));
+		User user = userRepository.findById(cerereConcediuDTO.getIduser()).orElseThrow(
+				() -> new ResourceNotFoundException("Nu există user cu id" + cerereConcediuDTO.getIduser()));
 
 		cerereConcediu.setUser(user);
 
-		Societate societate = societateRepository.findById(cerereConcediuDTO.getIdsocietate())
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id"));
+		Societate societate = societateRepository.findById(cerereConcediuDTO.getIdsocietate()).orElseThrow(
+				() -> new ResourceNotFoundException("Nu există societate cu id" + cerereConcediuDTO.getIdsocietate()));
 
 		cerereConcediu.setSocietate(societate);
 
@@ -64,8 +64,8 @@ public class CereriConcediuService {
 	}
 
 	public CereriConcediu setStatus(int cereriConcediuId, String status) throws ResourceNotFoundException {
-		CereriConcediu cerereConcediu = cereriConcediuRepository.findById(cereriConcediuId)
-				.orElseThrow(() -> new ResourceNotFoundException("Cereri Concediu not found for this id"));
+		CereriConcediu cerereConcediu = cereriConcediuRepository.findById(cereriConcediuId).orElseThrow(
+				() -> new ResourceNotFoundException("Nu există cereri concediu cu id " + cereriConcediuId));
 
 		cerereConcediu.setStatus(status);
 
@@ -88,13 +88,17 @@ public class CereriConcediuService {
 		return cerereConcediu;
 	}
 
-	public List<CereriConcediuDTO> getCereriConcediuWithNumeUserBySocId(int socId) {
+	public List<CereriConcediuDTO> getCereriConcediuWithNumeUserBySocId(int socId) throws ResourceNotFoundException {
 		List<CereriConcediu> cereri = cereriConcediuRepository.findBySocietate_Id(socId);
+
 		List<CereriConcediuDTO> cereriDTO = new ArrayList<>();
 		for (CereriConcediu cerere : cereri) {
 			CereriConcediuDTO cerereDTO = modelMapper.map(cerere, CereriConcediuDTO.class);
 			Persoana persoana = angajatRepository.findBySocietate_IdAndUser_Id(socId, cerere.getUser().getId())
 					.getPersoana();
+			if (persoana == null)
+				throw new ResourceNotFoundException(
+						"Nu există persoană cu id societate " + socId + " și id user" + cerere.getUser().getId());
 			String nume = persoana.getNume() + " " + persoana.getPrenume();
 			cerereDTO.setIdsocietate(cerere.getSocietate().getId());
 			cerereDTO.setIduser(cerere.getUser().getId());

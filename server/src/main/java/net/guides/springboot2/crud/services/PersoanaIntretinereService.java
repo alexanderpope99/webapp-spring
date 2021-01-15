@@ -23,11 +23,11 @@ public class PersoanaIntretinereService {
 
 	public PersoanaIntretinereDTO save(PersoanaIntretinereDTO piDTO) throws ResourceNotFoundException {
 		PersoanaIntretinere pi = modelMapper.map(piDTO, PersoanaIntretinere.class);
-		
+
 		Angajat angajat = angajatRepository.findById(piDTO.getIdangajat())
-			.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + piDTO.getIdangajat()));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există angajat cu id :: " + piDTO.getIdangajat()));
 		pi.setAngajat(angajat);
-		
+
 		persoanaIntretinereRepository.save(pi);
 		piDTO.setId(pi.getId());
 		return piDTO;
@@ -36,5 +36,31 @@ public class PersoanaIntretinereService {
 	public PersoanaIntretinereDTO update(int id, PersoanaIntretinereDTO piDTO) throws ResourceNotFoundException {
 		piDTO.setId(id);
 		return save(piDTO);
+	}
+
+	public String nrPersoaneIntretinereToString(int nr) {
+		switch (nr) {
+			case 0:
+				return "zero";
+			case 1:
+				return "una";
+			case 2:
+				return "doua";
+			case 3:
+				return "trei";
+			case 4:
+				return "patru";
+			default:
+				return "patru";
+		}
+	}
+
+	public int getNrPersoaneIntretinere(int idcontract) {
+		return persoanaIntretinereRepository.findByIdcontract(idcontract).size();
+	}
+
+	public String getStrPersoaneIntretinere(int idcontract) {
+		int nr = getNrPersoaneIntretinere(idcontract);
+		return nrPersoaneIntretinereToString(nr);
 	}
 }

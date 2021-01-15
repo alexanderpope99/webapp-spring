@@ -15,8 +15,8 @@ public class SocietateService {
 	public void delete(int id) throws ResourceNotFoundException {
 		// conturi bancare, angajati, facturi, centrecost, useri
 		Societate societate = societateRepository.findById(id)
-			.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
-		
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + id));
+
 		societate.setAdresa(null);
 		societate.setAngajati(null);
 		societate.setFacturi(null);
@@ -24,7 +24,7 @@ public class SocietateService {
 
 		societate.getUseri().forEach(user -> user.removeSocietate(societate));
 		societate.setUseri(null);
-		
+
 		societateRepository.delete(societate);
 	}
 }

@@ -36,6 +36,7 @@ public class SocietateController {
 
 	@Autowired
 	private SocietateRepository societateRepository;
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -96,7 +97,8 @@ public class SocietateController {
 
 	@PutMapping("{id}")
 	public ResponseEntity<Societate> updateSocietate(@PathVariable(value = "id") int id,
-			@RequestBody Societate newSocietate) {
+			@RequestBody Societate newSocietate) throws ResourceNotFoundException {
+		newSocietate.checkData();
 		newSocietate.setId(id);
 
 		final Societate updatedSocietate = societateRepository.save(newSocietate);

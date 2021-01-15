@@ -28,9 +28,8 @@ public class BazacalculService {
 
 	public BazacalculDTO save(BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
 		Bazacalcul bc = modelMapper.map(bazacalculDTO, Bazacalcul.class);
-		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat())
-				.orElseThrow(() -> new ResourceNotFoundException(
-						"Angajat not found for this id :: " + bazacalculDTO.getIdangajat()));
+		Angajat angajat = angajatRepository.findById(bazacalculDTO.getIdangajat()).orElseThrow(
+				() -> new ResourceNotFoundException("Nu există angajat cu id: " + bazacalculDTO.getIdangajat()));
 
 		bc.setAngajat(angajat);
 		bazacalculRepository.save(bc);
@@ -156,11 +155,14 @@ public class BazacalculService {
 		return bazacalculRepository.save(bazaCalcul);
 	}
 
-	public Bazacalcul updateBazacalcul(RealizariRetineri realizariRetineri) {
+	public Bazacalcul updateBazacalcul(RealizariRetineri realizariRetineri) throws ResourceNotFoundException {
 		int luna = realizariRetineri.getLuna();
 		int an = realizariRetineri.getAn();
 
 		Angajat angajat = angajatRepository.findByContract_Id(realizariRetineri.getContract().getId());
+		if (angajat == null)
+			throw new ResourceNotFoundException(
+					"Nu există angajat cu idcontract " + realizariRetineri.getContract().getId());
 
 		Bazacalcul oldBazacalcul = bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(luna, an,
 				angajat.getPersoana().getId());
