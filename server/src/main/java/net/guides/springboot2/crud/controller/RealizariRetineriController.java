@@ -76,7 +76,7 @@ public class RealizariRetineriController {
 	@PutMapping("update/idc={idc}&mo={luna}&y={an}")
 	public RealizariRetineri updateRealizariRetineri(@PathVariable(name = "luna") int luna,
 			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract,
-			@RequestBody RealizariRetineri newRealizariRetineri) {
+			@RequestBody RealizariRetineri newRealizariRetineri) throws ResourceNotFoundException {
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 				idcontract);
