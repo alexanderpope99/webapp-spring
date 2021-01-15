@@ -47,6 +47,10 @@ public class CMService {
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + cmDTO.getIdcontract()));
 		cm.setContract(contract);
 
+		// check if overlaps with existing concedii (odihna + medicale)
+		if(cm.overlaps())
+			return null;
+
 		// save to DB
 		cm = cmRepository.save(cm);
 

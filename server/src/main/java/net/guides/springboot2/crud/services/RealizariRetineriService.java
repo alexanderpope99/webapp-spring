@@ -291,9 +291,9 @@ public class RealizariRetineriService {
 		// calling this function
 		if (primaBruta == -1 && nrTichete == -1 && totalOreSuplimentare == -1) {
 			RealizariRetineri tmpRR = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
-			primaBruta = tmpRR.getPrimabruta();
-			nrTichete = tmpRR.getNrtichete();
-			totalOreSuplimentare = tmpRR.getTotaloresuplimentare();
+			primaBruta = tmpRR.getPrimabruta() == null ? 0 : tmpRR.getPrimabruta();
+			nrTichete = tmpRR.getNrtichete() == null ? 0 : tmpRR.getNrtichete();
+			totalOreSuplimentare = tmpRR.getTotaloresuplimentare() == null ? 0 : tmpRR.getTotaloresuplimentare();
 		}
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,

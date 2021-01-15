@@ -55,7 +55,8 @@ public class COService {
 				return concediu;
 			}
 
-			// overlaps co.panala inside concediu: concediu.dela < co.panala < concediu.panla
+			// overlaps co.panala inside concediu: concediu.dela < co.panala <
+			// concediu.panla
 			if (panala.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0) {
 				return concediu;
 			}
@@ -88,6 +89,11 @@ public class COService {
 			return null;
 	}
 
+	// public boolean overlapsWith(Concediu concediu) {
+	// 	return concediu.overlaps(concediu.getContract().getConcediiOdihna())
+	// 			|| concediu.overlaps(concediu.getContract().getConcediiMedicale());
+	// }
+
 	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
 		CO co = modelMapper.map(coDTO, CO.class);
 
@@ -95,16 +101,15 @@ public class COService {
 		int luna = co.getDela().getMonthValue();
 		int an = co.getDela().getYear();
 
-		// verifica ca nu se suprapune cu alt concediu
-		CODTO concediuOverlappedDTO = this.overlapsResponse(coDTO);
-
-		if (concediuOverlappedDTO != null)
-			return null;
 
 		Contract contract = contractRepository.findById(coDTO.getIdcontract())
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id"));
 
 		co.setContract(contract);
+		// verifica ca nu se suprapune cu alt concediu
+		if(co.overlaps())
+			return null;
+			
 		coRepository.save(co);
 
 		// update salariu
@@ -212,7 +217,7 @@ public class COService {
 
 			zileC += ChronoUnit.DAYS.between(dela, panala) + 1;
 		}
-		
+
 		return zileC;
 	}
 
