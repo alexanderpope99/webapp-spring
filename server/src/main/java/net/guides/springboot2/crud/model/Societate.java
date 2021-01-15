@@ -215,7 +215,7 @@ public class Societate implements Serializable {
 	}
 
 	public void checkData() throws ResourceNotFoundException {
-		if (nume.equals("Predoana"))
-			throw new ResourceNotFoundException("predoana");
+		if (nume == null)
+			throw new ResourceNotFoundException("Numele nu poate fi null");
 	}
 }

@@ -32,10 +32,10 @@ public class AngajatService {
 		Angajat angajat = modelMapper.map(angajatDTO, Angajat.class);
 
 		Persoana persoana = persoanaRepository.findById(angajatDTO.getIdpersoana()).orElseThrow(
-				() -> new ResourceNotFoundException("Persoana not found for this id :: " + angajatDTO.getIdpersoana()));
+				() -> new ResourceNotFoundException("Nu eistă persoana cu id : " + angajatDTO.getIdpersoana()));
 
 		Societate societate = societateRepository.findById(angajatDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Societate not found for this id :: " + angajatDTO.getIdsocietate()));
+				() -> new ResourceNotFoundException("Nu există societate cu id: " + angajatDTO.getIdsocietate()));
 
 		angajat.setPersoana(persoana);
 		angajat.setSocietate(societate);
@@ -49,13 +49,13 @@ public class AngajatService {
 		angajat.setPersoana(persoanaRepository.save(angajat.getPersoana()));
 
 		Societate societate = societateRepository.findById(idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + idsocietate));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 
 		angajat.setSocietate(societate);
 
 		if (idsuperior != null && idsuperior > 0) {
-			Angajat superior = angajatRepository.findById(idsuperior).orElseThrow(
-					() -> new ResourceNotFoundException("Superior (class Angajat) not found for this id :: " + idsuperior));
+			Angajat superior = angajatRepository.findById(idsuperior)
+					.orElseThrow(() -> new ResourceNotFoundException("Nu există superior cu id: " + idsuperior));
 			angajat.setSuperior(superior);
 		}
 
@@ -64,35 +64,35 @@ public class AngajatService {
 	}
 
 	public Angajat setSuperior(int idangajat, int idsuperior) throws ResourceNotFoundException {
-		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
-			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
-		Angajat superior = angajatRepository.findById(idsuperior).orElseThrow(
-			() -> new ResourceNotFoundException("Superior (class Angajat) not found for this id :: " + idsuperior));
-		
+		Angajat angajat = angajatRepository.findById(idangajat)
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există angajat cu id: " + idangajat));
+		Angajat superior = angajatRepository.findById(idsuperior)
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există superior cu id: " + idsuperior));
+
 		angajat.setSuperior(superior);
 
 		return angajatRepository.save(angajat);
 	}
 
 	public List<Angajat> getSubalterni(int idangajat) throws ResourceNotFoundException {
-		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
-			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
-		
+		Angajat angajat = angajatRepository.findById(idangajat)
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există angajat cu id: " + idangajat));
+
 		return angajat.getSubalterni();
 	}
 
 	public List<Angajat> getSuperioriPosibili(int idangajat) throws ResourceNotFoundException {
-		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(
-			() -> new ResourceNotFoundException("Angajat not found for this id :: " + idangajat));
-		
-		List<Integer> subalterni = angajat.getSubalterni().stream().map(Angajat::getIdpersoana).collect(Collectors.toList());
-		if(subalterni.isEmpty()) {
+		Angajat angajat = angajatRepository.findById(idangajat)
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există angajat cu id: " + idangajat));
+
+		List<Integer> subalterni = angajat.getSubalterni().stream().map(Angajat::getIdpersoana)
+				.collect(Collectors.toList());
+		if (subalterni.isEmpty()) {
 			return angajatRepository.findBySocietate_IdAndIdpersoanaNot(angajat.getSocietate().getId(), idangajat);
+		} else {
+			return angajatRepository.findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(
+					angajat.getSocietate().getId(), idangajat, subalterni);
 		}
-		else{
-			return angajatRepository.findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(angajat.getSocietate().getId(),
-					idangajat, subalterni);
-		}
-		
+
 	}
 }

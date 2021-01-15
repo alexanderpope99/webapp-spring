@@ -40,15 +40,17 @@ public class RetineriService {
 	public Retineri updateRetinere(RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
 				.orElseThrow(() -> new ResourceNotFoundException("RealizariRetineri not found for this id"));
-		
+
 		Retineri newRetinere = modelMapper.map(newRetinereDTO, Retineri.class);
 		newRetinere.setStat(realizariRetineri);
 
 		return retineriRepository.save(newRetinere);
 	}
 
-	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) {
+	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) throws ResourceNotFoundException {
 		Float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
+		if (totalPensie == null)
+			throw new ResourceNotFoundException("Nu se poate calcula totalul Pensie Facultativă (sunt valori lipsă)");
 		if (totalPensie == null || totalPensie > 400)
 			return 0;
 		else
