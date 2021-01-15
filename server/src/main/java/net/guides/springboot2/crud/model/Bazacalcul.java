@@ -15,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "bazacalcul")
 public class Bazacalcul implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	public Bazacalcul() {
 	}
 
@@ -47,53 +48,53 @@ public class Bazacalcul implements Serializable {
 		this.angajat = angajat;
 	}
 
+
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public int getAn() {
-		return an;
-	}
-
-	// public Angajat getAngajat() {
-	// 	return angajat;
-	// }
-
-	// ! GETTERS
 	public int getLuna() {
-		return luna;
+		return this.luna;
 	}
 
-	public int getSalariurealizat() {
-		return salariurealizat;
-	}
-
-	public int getZilelucrate() {
-		return zilelucrate;
-	}
-
-	// ! SETTERS
 	public void setLuna(int luna) {
 		this.luna = luna;
 	}
 
-	public void setSalariurealizat(int salariurealizat) {
-		this.salariurealizat = salariurealizat;
-	}
-
-	public void setZilelucrate(int zilelucrate) {
-		this.zilelucrate = zilelucrate;
+	public int getAn() {
+		return this.an;
 	}
 
 	public void setAn(int an) {
 		this.an = an;
 	}
 
-	 public void setAngajat(Angajat angajat) {
-	 	this.angajat = angajat;
-	 }
+	public int getZilelucrate() {
+		return this.zilelucrate;
+	}
+
+	public void setZilelucrate(int zilelucrate) {
+		this.zilelucrate = zilelucrate;
+	}
+
+	public int getSalariurealizat() {
+		return this.salariurealizat;
+	}
+
+	public void setSalariurealizat(int salariurealizat) {
+		this.salariurealizat = salariurealizat;
+	}
+
+	public Angajat getAngajat() {
+		return this.angajat;
+	}
+
+	public void setAngajat(Angajat angajat) {
+		this.angajat = angajat;
+	}
+
 }

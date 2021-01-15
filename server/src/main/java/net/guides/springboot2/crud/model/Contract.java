@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,25 +29,25 @@ public class Contract implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "tip")
+	@Column(name = "tip", nullable = false)
 	private String tip;
-	@Column(name = "nr")
+	@Column(name = "nr", nullable = false)
 	private String nr;
 	@Column(name = "marca")
 	private String marca;
-	@Column(name = "data")
+	@Column(name = "data", nullable = false)
 	private LocalDate data;
-	@Column(name = "dataincepere")
+	@Column(name = "dataincepere", nullable = false)
 	private LocalDate dataincepere;
-	@Column(name = "functiedebaza")
+	@Column(name = "functiedebaza", nullable = false)
 	private Boolean functiedebaza;
-	@Column(name = "calculdeduceri")
+	@Column(name = "calculdeduceri", nullable = false)
 	private Boolean calculdeduceri;
 	@Column(name = "studiisuperioare")
 	private Boolean studiisuperioare;
-	@Column(name = "normalucru")
+	@Column(name = "normalucru", nullable = false)
 	private Integer normalucru;
-	@Column(name = "salariutarifar")
+	@Column(name = "salariutarifar", nullable = false)
 	private Integer salariutarifar;
 	@Column(name = "monedasalariu")
 	private String monedasalariu;
@@ -446,5 +448,26 @@ public class Contract implements Serializable {
 
 	public void setAngajat(Angajat angajat) {
 		this.angajat = angajat;
+	}
+
+	public void checkData() throws ResourceNotFoundException {
+		if(tip == null)
+			throw new ResourceNotFoundException("Tipul contractului nu poate fi nul");
+		if(nr == null)
+			throw new ResourceNotFoundException("Numarul contractului nu poate fi nul");
+		if(data == null)
+			throw new ResourceNotFoundException("Data contractului contractului nu poate fi nula");
+		if(dataincepere == null)
+			throw new ResourceNotFoundException("Data incepere activitate nu poate fi nula");
+		if(calculdeduceri == null)
+			throw new ResourceNotFoundException("Calcul deduceri nu poate fi nul");
+		if(normalucru == null)
+			throw new ResourceNotFoundException("Norma lucru nu poate fi nula");
+		if(salariutarifar == null)
+			throw new ResourceNotFoundException("Salariul nu poate fi nul");
+		if(zilecoan == null)
+			throw new ResourceNotFoundException("Tipul contractului nu poate fi nul");
+		if(functie == null)
+			throw new ResourceNotFoundException("Tipul contractului nu poate fi nul");
 	}
 }

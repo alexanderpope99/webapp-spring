@@ -19,6 +19,8 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+
 @Entity
 @Table(name = "realizariretineri", uniqueConstraints = {@UniqueConstraint(columnNames = {"luna", "an", "idcontract"})})
 public class RealizariRetineri implements Serializable {
@@ -496,5 +498,14 @@ public class RealizariRetineri implements Serializable {
 	}
 	public void setRetineri(Retineri retineri) {
 		this.retineri = retineri;
+	}
+
+	public void checkData() throws ResourceNotFoundException {
+		if(primabruta == null)
+			throw new ResourceNotFoundException("Prima bruta nu are valoare");
+		if(totaloresuplimentare == null)
+			throw new ResourceNotFoundException("Total ore suplimentare nu are valoare");
+		if(nroresuplimentare == null)
+			throw new ResourceNotFoundException("Numarul de ore suplimentare nu are valoare");
 	}
 }
