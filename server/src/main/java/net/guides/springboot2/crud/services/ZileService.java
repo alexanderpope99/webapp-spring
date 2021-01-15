@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.model.Contract;
 @Service
 public class ZileService {
-	ZileService() {
-	}
 
 	@Autowired
 	private SarbatoriService sarbatoriService;
@@ -83,17 +81,17 @@ public class ZileService {
 		if (dataincepere.compareTo(primaZiLunaAn) < 0)
 			return getZileLucratoareInLunaAnul(luna, an);
 		else {
-			LocalDate ultimaZiLunaAn = LocalDate.of(an, luna, YearMonth.of(an, luna).lengthOfMonth());
+			LocalDate ultimaZiLuna = LocalDate.of(an, luna, YearMonth.of(an, luna).lengthOfMonth());
 
-			// contractul incepe in luna urmatoare
-			if (dataincepere.compareTo(ultimaZiLunaAn) > 0)
+			// activitatea nu a inceput incă
+			if (dataincepere.compareTo(ultimaZiLuna) > 0)
 				return 0;
 
-			// contractul incepe in luna, an
+			// activitatea incepe in luna, an
 			else
-				return (int)getZileLucratoareInInterval(dataincepere, ultimaZiLunaAn);
+				return (int)getZileLucratoareInInterval(dataincepere, ultimaZiLuna);
 		}
-	}
+	} // get zile lucratoare contract
 
 	public String getNumeLunaByNr(int nrLuna) {
 		switch (nrLuna) {

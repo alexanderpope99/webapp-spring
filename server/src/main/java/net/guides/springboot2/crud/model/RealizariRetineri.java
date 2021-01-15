@@ -40,7 +40,7 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "zilecfp")
 	private Integer zilecfp = 0;
 	@Column(name = "zilecfplucratoare")
-	private Integer zilecfplucratoare;
+	private Integer zilecfplucratoare = 0;
 	@Column(name = "zilecm")
 	private Integer zilecm = 0;
 	@Column(name = "zilecmlucratoare")
@@ -79,7 +79,7 @@ public class RealizariRetineri implements Serializable {
 	private Integer venitnet = 0;
 
 	@Column(name = "bazaimpozit")
-	private Integer bazaimpozit;
+	private Integer bazaimpozit = 0;
 
 	@Column(name = "salariupezi")
 	private Float salariupezi = 0f;
@@ -106,13 +106,13 @@ public class RealizariRetineri implements Serializable {
 	private Integer deducere = 0;
 
 	@Column(name = "primabruta")
-	private Integer primabruta;
+	private Integer primabruta = 0;
 
 	@Column(name = "totaloresuplimentare")
-	private Integer totaloresuplimentare;
+	private Integer totaloresuplimentare = 0;
 
 	@Column(name = "nroresuplimentare")
-	private Integer nroresuplimentare;
+	private Integer nroresuplimentare = 0;
 
 	@JsonBackReference(value = "stat-contract")
 	@ManyToOne

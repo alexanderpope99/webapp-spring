@@ -2,6 +2,8 @@ package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -72,5 +74,35 @@ public class Concediu implements Serializable {
 
 	public void setContract(Contract contract) {
 		this.contract = contract;
+	}
+
+	public boolean overlaps() {
+		List<Concediu> concediiExistente = new ArrayList<>();
+		concediiExistente.addAll(contract.getConcediiOdihna());
+		concediiExistente.addAll(contract.getConcediiMedicale());	
+		
+		concediiExistente.removeIf(c -> this.id == c.getId());
+		// scrise separat pentru lizibilitate
+		for (Concediu concediu : concediiExistente) {
+			// co includes concediu.dela: co.dela < concediu.dela < co.panala
+			if (dela.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getDela()) <= 0)
+				return true;
+
+			// co includes concediu.panala: co.dela < concediu.dela < co.panala
+			if (dela.compareTo(concediu.getPanala()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0)
+				return true;
+
+			// overlaps - co.dela inside concediu: concediu.dela < co.dela < concediu.panala
+			if (dela.compareTo(concediu.getDela()) >= 0 && dela.compareTo(concediu.getPanala()) <= 0) {
+				return true;
+			}
+
+			// overlaps co.panala inside concediu: concediu.dela < co.panala < concediu.panla
+			if (panala.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

@@ -42,13 +42,11 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	verificare suprapunere la concedii odihna
+	added toast on select societate
 }
 
 
 TODO: {
-
-	toast cand selectez soc
 
 	1 -> buton de adauga utilizatori pt toti angajatii
 

@@ -501,7 +501,7 @@ class COTabel extends React.Component {
       ));
     }
 
-    const yearsComponent = this.state.ani_cu_concediu.map((an, index) => (
+    const yearsComponent = this.state.ani_cu_concediu.sort().map((an, index) => (
       <option key={index}>{an}</option>
     ));
 
@@ -533,9 +533,7 @@ class COTabel extends React.Component {
             <Form noValidate onSubmit={this.state.isEdit ? this.updateCO : this.addCO}>
               <Form.Group id="zilecodisponibile">
                 <Form.Label>
-                  {this.state.validated
-                    ? `${this.state.zile_co_disponibile} zile concediu de odihnă disponibile`
-                    : `Concediul se suprapune cu unul existent`}
+                  {`${this.state.zile_co_disponibile} zile concediu de odihnă disponibile`}
                 </Form.Label>
               </Form.Group>
 

@@ -773,11 +773,12 @@ public class Dec112Service {
 
 					if (contract.getTip().compareTo("Contract de administrator") == 0)
 						tip = "13";
-					if (contract.getTip().compareTo("Contract de munca") == 0)
+					if (contract.getTip().compareTo("Contract de munca") == 0) {
 						if (contract.isStudiisuperioare())
 							tip = "26";
 						else
 							tip = "1";
+					}
 					childElement = doc.createElement("A_1"); // tip asigurat
 					childElement.appendChild(doc.createTextNode(tip));
 					sbfrmSectiuneaA.appendChild(childElement);
