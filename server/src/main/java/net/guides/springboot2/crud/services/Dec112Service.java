@@ -68,6 +68,8 @@ public class Dec112Service {
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+		if (angajati.isEmpty())
+			throw new ResourceNotFoundException("Societatea nu are angajați");
 
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		try {

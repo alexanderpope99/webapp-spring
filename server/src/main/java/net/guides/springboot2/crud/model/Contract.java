@@ -428,6 +428,7 @@ public class Contract implements Serializable {
 	public List<CO> getConcediiOdihna() {
 		return concediiOdihna;
 	}
+
 	public void setConcediiOdihna(List<CO> concediiOdihna) {
 		this.concediiOdihna = concediiOdihna;
 	}
