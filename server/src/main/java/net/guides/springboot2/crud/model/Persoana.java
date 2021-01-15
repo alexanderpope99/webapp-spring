@@ -79,6 +79,10 @@ public class Persoana implements Serializable {
 	}
 
 	// ! GETTERS
+	public String getNumeIntreg() {
+		return nume +' '+ prenume;
+	}
+
 	public String getCnp() {
 		return cnp;
 	}

@@ -453,22 +453,22 @@ public class Contract implements Serializable {
 
 	public void checkData() throws ResourceNotFoundException {
 		if(tip == null)
-			throw new ResourceNotFoundException("Tipul contractului nu poate fi nul");
+			throw new ResourceNotFoundException("Tipul contractului lui " + angajat.getPersoana().getNumeIntreg() + " este nul");
 		if(nr == null)
-			throw new ResourceNotFoundException("Numarul contractului nu poate fi nul");
+			throw new ResourceNotFoundException("Numarul contractului este nul");
 		if(data == null)
-			throw new ResourceNotFoundException("Data contractului contractului nu poate fi nula");
+			throw new ResourceNotFoundException("Data contractului contractului este nula");
 		if(dataincepere == null)
-			throw new ResourceNotFoundException("Data incepere activitate nu poate fi nula");
+			throw new ResourceNotFoundException("Data incepere activitate este nula");
 		if(calculdeduceri == null)
-			throw new ResourceNotFoundException("Calcul deduceri nu poate fi nul");
+			throw new ResourceNotFoundException("Calcul deduceri este nul");
 		if(normalucru == null)
-			throw new ResourceNotFoundException("Norma lucru nu poate fi nula");
+			throw new ResourceNotFoundException("Norma lucru este nula");
 		if(salariutarifar == null)
-			throw new ResourceNotFoundException("Salariul nu poate fi nul");
+			throw new ResourceNotFoundException("Salariul este nul");
 		if(zilecoan == null)
-			throw new ResourceNotFoundException("Tipul contractului nu poate fi nul");
+			throw new ResourceNotFoundException("Tipul contractului este nul");
 		if(functie == null)
-			throw new ResourceNotFoundException("Tipul contractului nu poate fi nul");
+			throw new ResourceNotFoundException("Tipul contractului este nul");
 	}
 }
