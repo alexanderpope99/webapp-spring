@@ -16,7 +16,7 @@ const AdminLayout = Loadable({
 
 class App extends Component {
   render() {
-    // menu = singin-1 and singup-1 pages
+    // singin-1 and singup-1 pages
     const menu = routes.map((route, index) => {
       return route.component ? (
         <Route
@@ -34,6 +34,7 @@ class App extends Component {
         <ScrollToTop>
           <Suspense fallback={<Loader />}>
             <Switch>
+							{/* singin-1 and singup-1 pages */}
               {menu}
               {sessionStorage.getItem('user') === null ? <Redirect to="/auth/signin-1" /> : null}
               <Route path="/" component={AdminLayout} />

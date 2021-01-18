@@ -65,7 +65,6 @@ public class Persoana implements Serializable {
 		this.adresa = idadresa;
 		this.starecivila = starecivila;
 		this.email = email;
-		this.email = email;
 		this.telefon = telefon;
 		this.cnp = cnp;
 	}
