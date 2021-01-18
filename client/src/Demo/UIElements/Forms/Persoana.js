@@ -224,7 +224,7 @@ class Persoana extends React.Component {
       this.clearFields();
       this.setState({
         show: true,
-        modalMessage: 'Persoană adaugată cu succes 💾',
+        modalMessage: 'Persoană adaugată  💾',
       });
 
       console.log('idpersoana:', persoana.id);

@@ -105,7 +105,7 @@ class CereriConcediuTabel extends React.Component {
       this.setState(
         {
           showConfirm: true,
-          modalMessage: 'Cerere adăugată cu succes',
+          modalMessage: 'Cerere adăugată ',
         },
         this.onRefresh
       );

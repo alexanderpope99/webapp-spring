@@ -369,4 +369,19 @@ public class RealizariRetineriService {
 			this.recalcRealizariRetineriUltimele6Luni(luna, an, angajat.getContract().getId());
 		}
 	}
+
+	public boolean fixValuesMissing() {
+		var wrapper = new Object(){ boolean value = true; };
+
+		realizariRetineriRepository.findAll().forEach(rr -> {
+			try {
+				realizariRetineriRepository.save(rr.fixValuesMissing());
+			} catch (ResourceNotFoundException e) {
+				e.printStackTrace();
+				wrapper.value = false;
+			}
+		});
+
+		return wrapper.value;
+	}
 }

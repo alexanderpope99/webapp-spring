@@ -56,9 +56,9 @@ public class Contract implements Serializable {
 	@Column(name = "pensieprivata")
 	private Boolean pensieprivata;
 	@Column(name = "cotizatiepensieprivata")
-	private Double cotizatiepensieprivata;
+	private Float cotizatiepensieprivata;
 	@Column(name = "avans")
-	private Double avans;
+	private Float avans;
 	@Column(name = "monedaavans")
 	private String monedaavans;
 	@Column(name = "zilecoan")
@@ -78,7 +78,7 @@ public class Contract implements Serializable {
 	@Column(name = "sindicat")
 	private Boolean sindicat;
 	@Column(name = "cotizatiesindicat")
-	private Double cotizatiesindicat;
+	private Float cotizatiesindicat;
 	@Column(name = "spor")
 	private String spor;
 	@Column(name = "pensionar")
@@ -127,9 +127,9 @@ public class Contract implements Serializable {
 			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament,
 			Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru,
 			Integer salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata,
-			Double cotizatiepensieprivata, Double avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru,
+			Float cotizatiepensieprivata, Float avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru,
 			String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor,
-			Boolean sindicat, Double cotizatiesindicat, String spor, Boolean pensionar) {
+			Boolean sindicat, Float cotizatiesindicat, String spor, Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
@@ -307,19 +307,19 @@ public class Contract implements Serializable {
 		this.pensieprivata = pensieprivata;
 	}
 
-	public Double getCotizatiepensieprivata() {
+	public Float getCotizatiepensieprivata() {
 		return cotizatiepensieprivata;
 	}
 
-	public void setCotizatiepensieprivata(Double cotizatiepensieprivata) {
+	public void setCotizatiepensieprivata(Float cotizatiepensieprivata) {
 		this.cotizatiepensieprivata = cotizatiepensieprivata;
 	}
 
-	public Double getAvans() {
+	public Float getAvans() {
 		return avans;
 	}
 
-	public void setAvans(Double avans) {
+	public void setAvans(Float avans) {
 		this.avans = avans;
 	}
 
@@ -395,11 +395,11 @@ public class Contract implements Serializable {
 		this.sindicat = sindicat;
 	}
 
-	public Double getCotizatiesindicat() {
+	public Float getCotizatiesindicat() {
 		return cotizatiesindicat;
 	}
 
-	public void setCotizatiesindicat(Double cotizatiesindicat) {
+	public void setCotizatiesindicat(Float cotizatiesindicat) {
 		this.cotizatiesindicat = cotizatiesindicat;
 	}
 
@@ -484,6 +484,8 @@ public class Contract implements Serializable {
 			this.normalucru = 8;
 		if(zilecoan == null)
 			this.zilecoan = 21;
+		if(avans == null)
+			this.avans = 0f;
 		
 		checkData();
 		

@@ -418,7 +418,7 @@ class CMTabel extends React.Component {
 			// open confirm modal <- closes on OK button
 			this.setState({
 				show_confirm: true,
-				modalMessage: 'Concediu medical adăugat cu succes 💾',
+				modalMessage: 'Concediu medical adăugat  💾',
 			});
 			this.fillTable();
 			this.clearCM();

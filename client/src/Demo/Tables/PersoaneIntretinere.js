@@ -363,7 +363,7 @@ class PersoaneIntretinereTabel extends React.Component {
         {/* add/edit modal */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Detalii persoană întreținere</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.addPersoanaIntretinere}>
@@ -469,7 +469,7 @@ class PersoaneIntretinereTabel extends React.Component {
         {/* confirm modal */}
         <Modal show={this.state.showConfirm} onHide={this.handleCloseConfirm}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>Detalii persoană întreținere</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>

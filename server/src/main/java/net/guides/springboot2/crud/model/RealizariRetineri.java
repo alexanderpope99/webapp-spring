@@ -501,11 +501,102 @@ public class RealizariRetineri implements Serializable {
 	}
 
 	public void checkData() throws ResourceNotFoundException {
+		if(contract == null)
+			throw new ResourceNotFoundException("Contractul lipseste pt realizariRetineri.id = " + id);
 		if(primabruta == null)
-			throw new ResourceNotFoundException("Prima bruta nu are valoare");
+			throw new ResourceNotFoundException("Prima bruta nu are valoare pt realizariRetineri.id = " + id);
 		if(totaloresuplimentare == null)
-			throw new ResourceNotFoundException("Total ore suplimentare nu are valoare");
+			throw new ResourceNotFoundException("Total ore suplimentare nu are valoare pt realizariRetineri.id = " + id);
 		if(nroresuplimentare == null)
-			throw new ResourceNotFoundException("Numarul de ore suplimentare nu are valoare");
+			throw new ResourceNotFoundException("Numarul de ore suplimentare nu are valoare pt realizariRetineri.id = " + id);
+	}
+
+	public RealizariRetineri fixValuesMissing() throws ResourceNotFoundException {
+	if(nrtichete == null)
+		this.nrtichete = 0;
+	if(zileco == null)
+		this.zileco = 0;
+	if(zilecolucratoare == null)
+		this.zilecolucratoare = 0;
+	if(zilecfp == null)
+		this.zilecfp = 0;
+	if(zilecfplucratoare == null)
+		this.zilecfplucratoare = 0;
+	if(zilecm == null)
+		this.zilecm = 0;
+	if(zilecmlucratoare == null)
+		this.zilecmlucratoare = 0;
+	if(zilec == null)
+		this.zilec = 0;
+	if(zileplatite == null)
+		this.zileplatite = 0;
+
+	if(impozitscutit == null)
+		this.impozitscutit = 0;
+
+	if(valcm == null)
+		this.valcm = 0;
+	if(valco == null)
+		this.valco = 0;
+
+	if(norma == null)
+		this.norma = 0;
+	if(duratazilucru == null)
+		this.duratazilucru= 0;
+	if(zilecontract == null)
+		this.zilecontract = 0;
+	if(zilelucrate == null)
+		this.zilelucrate = 0;
+	if(orelucrate == null)
+		this.orelucrate = 0;
+
+	if(totaldrepturi == null)
+		this.totaldrepturi = 0;
+
+	if(salariurealizat == null)
+		this.salariurealizat = 0;
+
+	if(venitnet == null)
+		this.venitnet = 0;
+
+	if(bazaimpozit == null)
+		this.bazaimpozit = 0;
+
+	if(salariupezi == null)
+		this.salariupezi = 0f;
+	if(salariupeora == null)
+		this.salariupeora = 0f;
+
+	if(cas == null)
+		this.cas = 0f;
+	if(cass == null)
+		this.cass = 0f;
+	if(cam == null)
+		this.cam = 0f;
+	if(impozit == null)
+		this.impozit = 0f;
+	if(valoaretichete == null)
+		this.valoaretichete = 0f;
+
+	if(restplata == null)
+		this.restplata = 0;
+
+	if(nrpersoaneintretinere == null)
+		this.nrpersoaneintretinere = 0;
+	if(deducere == null)
+		this.deducere = 0;
+
+	if(primabruta == null)
+		this.primabruta = 0;
+
+	if(totaloresuplimentare == null)
+		this.totaloresuplimentare = 0;
+
+	if(nroresuplimentare == null)
+		this.nroresuplimentare = 0;
+	
+		this.checkData();
+
+		return this;
 	}
 }
