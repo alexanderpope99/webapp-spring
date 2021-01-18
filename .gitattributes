@@ -13,6 +13,7 @@
 *.h text eol=lf
 *.ipynb text eol=lf
 *.js text eol=lf
+*.java text eol=lf
 *.m text eol=lf
 *.md text eol=lf
 *.pas text eol=lf
