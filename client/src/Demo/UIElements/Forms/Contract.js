@@ -247,7 +247,7 @@ class Contract extends React.Component {
           angajatsel: getAngajatSel(),
 
           id: contract.id,
-          modelContract: contract.tip || '', //text
+          modelContract: contract.tip || 'Contract de muncă', //text
           numărContract: contract.nr || '', //text
           marca: contract.marca || '', //text
           dataContract: contract.data ? contract.data.substring(0, 10) : '',
@@ -629,7 +629,7 @@ class Contract extends React.Component {
                   custom
                   type="switch"
                   id="deduceriCheck"
-                  label="Calcul deduceri"
+                  label="Platește impozit"
                   checked={this.state.calculdeduceri || false}
                   onChange={(e) => {
                     this.setState({ calculdeduceri: e.target.checked });

@@ -188,7 +188,7 @@ class Dec112 extends React.Component {
           delay={4000}
           autohide
           className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
         >
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Eroare</strong>

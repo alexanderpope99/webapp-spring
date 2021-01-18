@@ -103,7 +103,7 @@ class RealizariRetineri extends React.Component {
       totaloresuplimentare: 0,
 
       // retineri
-      idretineri: 0,
+      idretineri: null,
       avansnet: 0,
       cursValutar: 0,
       pensiefacangajat: 0,
@@ -168,7 +168,7 @@ class RealizariRetineri extends React.Component {
       totaloresuplimentare: 0,
 
       // retineri
-      idretineri: 0,
+      idretineri: null,
       avansnet: 0,
       cursValutar: 0,
       pensiefacangajat: 0,
@@ -255,7 +255,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage:
             'Nu am putut prelua persoanele din baza de date\n' + err.response.data.message,
         })
@@ -275,18 +275,7 @@ class RealizariRetineri extends React.Component {
         headers: authHeader(),
       })
       .then((res) => (res.status === 200 ? res.data : null))
-      .catch((err) =>
-        this.setState({
-          showToast: true,
-          toastTitle: 'Eroare',
-          toastColor: 'red',
-          toastMessage:
-            'Nu am putut calcula totalul de pensie facultativă pentru contractul ' +
-            this.state.idcontract +
-            '\n' +
-            err.response.data.message,
-        })
-      );
+      .catch((err) => console.error(err));
 
     this.setState({
       totalpensiefacultativa: totalpensiefacan,
@@ -316,7 +305,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage:
             'Nu am putut prelua contractul pentru persoana\n' + err.response.data.message,
         })
@@ -338,7 +327,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage:
             'Nu am putut prelua sau calcula realizari retineri\n' + err.response.data.message,
         })
@@ -390,7 +379,7 @@ class RealizariRetineri extends React.Component {
         zilec: data.zilec || 0,
 
         //* retineri
-        idretineri: retineri.id || 0,
+        idretineri: retineri.id,
         avansnet: retineri.avansnet || 0,
         cursValutar: retineri.curseurron || 0,
         pensiefacangajat: retineri.pensiefacangajat || 0,
@@ -467,49 +456,46 @@ class RealizariRetineri extends React.Component {
     }
 
     //* 1. save retineri to DB
-    const ok = await axios
+		if(this.state.idstat)  {
+			await axios
       .put(
         `${server.address}/retineri/${this.state.idretineri}`,
         {
           idstat: this.state.idstat,
-          avansnet: this.state.avansnet,
-          curseurron: this.state.cursValutar,
-          pensiealimentara: this.state.pensiealimentara,
-          pensiefacangajat: this.state.pensiefacangajat,
-          pensiefacangajator: this.state.pensiefacangajator,
-          pensiefacangajatretinuta: this.state.pensiefacangajatretinuta,
-          pensiefacangajatordeductibila: this.state.pensiefacangajatordeductibila,
-          pensiefacexcedent: this.state.pensiefacexcedent,
-          popriri: this.state.popriri,
-          imprumuturi: this.state.imprumuturi,
+          avansnet: this.state.avansnet || 0,
+          curseurron: this.state.cursValutar || 0,
+          pensiealimentara: this.state.pensiealimentara || 0,
+          pensiefacangajat: this.state.pensiefacangajat || 0,
+          pensiefacangajator: this.state.pensiefacangajator || 0,
+          pensiefacangajatretinuta: this.state.pensiefacangajatretinuta || 0,
+          pensiefacangajatordeductibila: this.state.pensiefacangajatordeductibila || 0,
+          pensiefacexcedent: this.state.pensiefacexcedent || 0,
+          popriri: this.state.popriri || 0,
+          imprumuturi: this.state.imprumuturi || 0,
         },
         {
           headers: authHeader(),
         }
       )
       .then((res) => res.status === 200)
-      .catch((err) =>
-        this.setState({
-          showToast: true,
-          toastTitle: 'Eroare',
-          toastColor: 'red',
-          toastMessage: 'Nu am putut salva reținerile\n' + err.response.data.message,
-        })
-      );
-    if (!ok) {
-      console.log('Retineri nu exista, se va initializa');
-    }
+      .catch((err) => console.error(err));
+		}
 
-    let pb = this.state.primabruta;
-    let nrt = this.state.nrtichete;
-    let tos = this.state.totaloresuplimentare;
+		const rrDetails = {
+			idcontract: this.state.idcontract,
+			luna: luna,
+			an: an,
+			primaBruta: this.state.primabruta || 0,
+			nrTichete: this.state.nrtichete || 0,
+			totalOreSuplimentare: this.state.totaloresuplimentare || 0,
+		}
 
     //* 2. recalculare realizariRetineri
     console.log(this.state.idcontract);
     const data = await axios
       .put(
-        `${server.address}/realizariretineri/update/calc/idc=${this.state.idcontract}&mo=${luna}&y=${an}&pb=${pb}&nrt=${nrt}&tos=${tos}`,
-        {},
+        `${server.address}/realizariretineri/update/calc`,
+        rrDetails,
         { headers: authHeader() }
       )
       .then((res) => (res.status === 200 ? res.data : null))
@@ -517,21 +503,21 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
-          toastMessage: 'Nu am putut recalcula realizari/retineri\n' + err.response.data.message,
+          toastColor: 'white',
+          toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
         })
       );
     if (!data) return;
 
     this.setState(
       {
-        totaldrepturi: data.totaldrepturi,
-        restplata: data.restplata,
-        cas: data.cas,
-        cass: data.cass,
-        cam: data.cam,
-        impozit: data.impozit,
-        valoaretichete: data.valoaretichete,
+        totaldrepturi: data.totaldrepturi || 0,
+        restplata: data.restplata || 0,
+        cas: data.cas || 0,
+        cass: data.cass || 0,
+        cam: data.cam || 0,
+        impozit: data.impozit || 0,
+        valoaretichete: data.valoaretichete || 0,
 
         showToast: true,
         toastTitle: 'Recalculat',
@@ -562,7 +548,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut recalcula realizari/retineri\n' + err.response.data.message,
         })
       );
@@ -597,7 +583,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut recalcula realizari/retineri\n' + err.response.data.message,
         })
       );
@@ -630,7 +616,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am prelua tichetele\n' + err.response.data.message,
         })
       );
@@ -649,7 +635,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut prelua cursul curent\n' + err.response.data.message,
         })
       );
@@ -669,7 +655,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut prelua orele suplimentare\n' + err.response.data.message,
         })
       );
@@ -708,7 +694,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut adăuga ore suplimentare\n' + err.response.data.message,
         })
       );
@@ -722,7 +708,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut șterge orele suplimentare\n' + err.response.data.message,
         })
       );
@@ -791,7 +777,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut descărca ștatul\n' + err.response.data.message,
         })
       );
@@ -813,7 +799,7 @@ class RealizariRetineri extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
           toastMessage: 'Nu am putut prelua ștatul individual\n' + err.response.data.message,
         })
       );
@@ -943,8 +929,6 @@ class RealizariRetineri extends React.Component {
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
-          delay={4000}
-          autohide
           className="position-fixed"
           style={{ top: '10px', right: '5px', zIndex: '9999', background: this.state.toastColor }}
         >

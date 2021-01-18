@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.LuniCuSalarii;
+import net.guides.springboot2.crud.dto.RRDetails;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
@@ -289,6 +290,10 @@ public class RealizariRetineriService {
 			return this.saveRealizariRetineri(luna, an, idcontract);
 	} // saveOrGetRealizariRetineri
 
+	public RealizariRetineri recalcRealizariRetineri(RRDetails rrDetails) throws ResourceNotFoundException {
+		return recalcRealizariRetineri(rrDetails.getLuna(), rrDetails.getAn(), rrDetails.getIdcontract(), rrDetails.getPrimaBruta(), rrDetails.getNrTichete(), rrDetails.getTotalOreSuplimentare());
+	}
+
 	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract, int primaBruta, int nrTichete,
 			int totalOreSuplimentare) throws ResourceNotFoundException {
 
@@ -320,7 +325,7 @@ public class RealizariRetineriService {
 		bazacalculService.updateBazacalcul(newRealizariRetineri);
 
 		return realizariRetineriRepository.save(newRealizariRetineri);
-	}
+	} // recalcRealizariRetineri
 
 	// exclude (luna, an) din argument
 	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate

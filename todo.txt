@@ -42,15 +42,14 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	added toast on select societate
+	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 }
 
 
 TODO: {
+	functie de verificat integritatea datelor
 
 	1 -> buton de adauga utilizatori pt toti angajatii
-
-	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori

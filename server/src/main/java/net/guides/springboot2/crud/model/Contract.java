@@ -458,7 +458,7 @@ public class Contract implements Serializable {
 		if(nr == null)
 			throw new ResourceNotFoundException("Numarul contractului " + numeAngajat + " nu are valoare");
 		if(data == null)
-			throw new ResourceNotFoundException("Data contractului contractului " + numeAngajat + " nu are valoare");
+			throw new ResourceNotFoundException("Data contractului " + numeAngajat + " nu are valoare");
 		if(dataincepere == null)
 			throw new ResourceNotFoundException("Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
 		if(calculdeduceri == null)

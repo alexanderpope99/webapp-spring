@@ -169,7 +169,7 @@ class Societati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastColor: 'red',
+          toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage:
             'Nu am putut prelua societățile din baza de date\n' + err.response.data.message,
@@ -233,7 +233,7 @@ class Societati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastColor: 'red',
+          toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage: 'Nu am putut șterge societatea\n' + err.response.data.message,
         })
@@ -279,7 +279,7 @@ class Societati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastColor: 'red',
+          toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage: 'Nu am putut crea ștat salarii\n' + err.response.data.message,
         })
@@ -307,7 +307,7 @@ class Societati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastColor: 'red',
+          toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage: 'Nu am putut crea Declarația 112\n' + err.response.data.message,
         })
@@ -330,7 +330,7 @@ class Societati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastColor: 'red',
+          toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage: 'Nu am putut crea MTA\n' + err.response.data.message,
         })
@@ -384,7 +384,7 @@ class Societati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastColor: 'red',
+          toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage: 'Nu am putut actualiza societatea\n' + err.response.data.message,
         })
