@@ -24,16 +24,16 @@ public class Bazacalcul implements Serializable {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "luna")
+	@Column(name = "luna", nullable = false)
 	private int luna;
 
-	@Column(name = "an")
+	@Column(name = "an", nullable = false)
 	private int an;
 
-	@Column(name = "zilelucrate")
+	@Column(name = "zilelucrate", nullable = false)
 	private int zilelucrate = 0;
 
-	@Column(name = "salariurealizat")
+	@Column(name = "salariurealizat", nullable = false)
 	private int salariurealizat = 0;
 
 	@ManyToOne

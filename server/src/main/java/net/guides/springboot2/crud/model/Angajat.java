@@ -34,7 +34,7 @@ public class Angajat implements Serializable {
 	private Contract contract;
 
 	@ManyToOne
-	@JoinColumn(name = "idsocietate")
+	@JoinColumn(name = "idsocietate", nullable = false)
 	private Societate societate;
 
 	@ManyToOne

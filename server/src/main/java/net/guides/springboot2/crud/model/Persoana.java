@@ -27,9 +27,9 @@ public class Persoana implements Serializable {
 
 	@Column(name = "gen")
 	private String gen;
-	@Column(name = "nume")
+	@Column(name = "nume", nullable = false)
 	private String nume;
-	@Column(name = "prenume")
+	@Column(name = "prenume", nullable = false)
 	private String prenume;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -64,7 +64,6 @@ public class Persoana implements Serializable {
 		this.actidentitate = idactidentitate;
 		this.adresa = idadresa;
 		this.starecivila = starecivila;
-		this.email = email;
 		this.email = email;
 		this.telefon = telefon;
 		this.cnp = cnp;

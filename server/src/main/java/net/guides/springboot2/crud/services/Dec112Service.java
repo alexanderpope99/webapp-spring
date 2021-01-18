@@ -66,6 +66,7 @@ public class Dec112Service {
 			String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+		societate.checkData();
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 		if (angajati.isEmpty())
@@ -599,6 +600,8 @@ public class Dec112Service {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 			for (Angajat angajat : angajati) {
 				Contract contract = angajat.getContract();
+				contract.checkData();
+
 				Element sbfrmPage1Asig = doc.createElement("sbfrmPage1Asig");
 				frmMAIN.appendChild(sbfrmPage1Asig);
 

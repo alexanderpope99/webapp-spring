@@ -13,7 +13,7 @@ public class Role implements Serializable {
 	private int id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length = 20)
+	@Column(length = 20, nullable = false)
 	private ERole name;
 
 	// @ManyToMany(mappedBy = "roles")

@@ -23,39 +23,39 @@ public class Retineri implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "avansnet")
+	@Column(name = "avansnet", nullable = false)
 	private Integer avansnet = 0;
 
-	@Column(name = "pensiealimentara")
+	@Column(name = "pensiealimentara", nullable = false)
 	private Integer pensiealimentara = 0;
 
-	@Column(name = "popriri")
+	@Column(name = "popriri", nullable = false)
 	private Integer popriri = 0;
 
-	@Column(name = "imprumuturi")
+	@Column(name = "imprumuturi", nullable = false)
 	private Integer imprumuturi = 0;
 
-	@Column(name = "curseurron")
+	@Column(name = "curseurron", nullable = false)
 	private Float curseurron = 0f;
 
-	@Column(name = "pensiefacangajat")
+	@Column(name = "pensiefacangajat", nullable = false)
 	private Integer pensiefacangajat = 0;
 
-	@Column(name = "pensiefacangajator")
+	@Column(name = "pensiefacangajator", nullable = false)
 	private Integer pensiefacangajator = 0;
 
-	@Column(name = "pensiefacangajatretinuta")
+	@Column(name = "pensiefacangajatretinuta", nullable = false)
 	private Integer pensiefacangajatretinuta = 0;
 
-	@Column(name = "pensiefacangajatordeductibila")
+	@Column(name = "pensiefacangajatordeductibila", nullable = false)
 	private Integer pensiefacangajatordeductibila = 0;
 
-	@Column(name = "pensiefacexcedent")
+	@Column(name = "pensiefacexcedent", nullable = false)
 	private Integer pensiefacexcedent = 0;
 
 	@JsonBackReference(value = "retinere-stat")
 	@OneToOne
-	@JoinColumn(name = "idstat")
+	@JoinColumn(name = "idstat", nullable = false)
 	private RealizariRetineri stat;
 
 	public Retineri() {

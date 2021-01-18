@@ -15,10 +15,10 @@ public class Sarbatori implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "dela")
+	@Column(name = "dela", nullable = false)
 	private LocalDate dela;
 
-	@Column(name = "panala")
+	@Column(name = "panala", nullable = false)
 	private LocalDate panala;
 
 	@Column(name = "nume")

@@ -24,19 +24,19 @@ public class CereriConcediu implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "dela")
+	@Column(name = "dela", nullable = false)
 	private LocalDate dela;
 
-	@Column(name = "panala")
+	@Column(name = "panala", nullable = false)
 	private LocalDate panala;
 
-	@Column(name = "tip")
+	@Column(name = "tip", nullable = false)
 	private String tip;
 
 	@Column(name = "motiv")
 	private String motiv;
 
-	@Column(name = "status")
+	@Column(name = "status", nullable = false)
 	private String status;
 
 	@JsonBackReference(value = "cerericoncediu-societate")

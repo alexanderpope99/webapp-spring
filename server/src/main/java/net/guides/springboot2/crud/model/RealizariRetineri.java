@@ -29,96 +29,96 @@ public class RealizariRetineri implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "luna")
+	@Column(name = "luna", nullable = false)
 	private Integer luna;
-	@Column(name = "an")
+	@Column(name = "an", nullable = false)
 	private Integer an;
-	@Column(name = "nrtichete")
+	@Column(name = "nrtichete", nullable = false)
 	private Integer nrtichete = 0;
-	@Column(name = "zileco")
+	@Column(name = "zileco", nullable = false)
 	private Integer zileco = 0;
-	@Column(name = "zilecolucratoare")
+	@Column(name = "zilecolucratoare", nullable = false)
 	private Integer zilecolucratoare = 0;
-	@Column(name = "zilecfp")
+	@Column(name = "zilecfp", nullable = false)
 	private Integer zilecfp = 0;
-	@Column(name = "zilecfplucratoare")
+	@Column(name = "zilecfplucratoare", nullable = false)
 	private Integer zilecfplucratoare = 0;
-	@Column(name = "zilecm")
+	@Column(name = "zilecm", nullable = false)
 	private Integer zilecm = 0;
-	@Column(name = "zilecmlucratoare")
+	@Column(name = "zilecmlucratoare", nullable = false)
 	private Integer zilecmlucratoare = 0;
-	@Column(name = "zilec")
+	@Column(name = "zilec", nullable = false)
 	private Integer zilec = 0;
-	@Column(name = "zileplatite")
+	@Column(name = "zileplatite", nullable = false)
 	private Integer zileplatite = 0;
 
-	@Column(name = "impozitscutit")
+	@Column(name = "impozitscutit", nullable = false)
 	private Integer impozitscutit = 0;
 
-	@Column(name = "valcm")
+	@Column(name = "valcm", nullable = false)
 	private Integer valcm = 0;
-	@Column(name = "valco")
+	@Column(name = "valco", nullable = false)
 	private Integer valco = 0;
 
-	@Column(name = "norma")
+	@Column(name = "norma", nullable = false)
 	private Integer norma = 0; // nr zile lucratoare in luna
-	@Column(name = "duratazilucru")
+	@Column(name = "duratazilucru", nullable = false)
 	private Integer duratazilucru = 0; // contract.normalucru
-	@Column(name = "zilecontract")
+	@Column(name = "zilecontract", nullable = false)
 	private Integer zilecontract = 0;
-	@Column(name = "zilelucrate")
+	@Column(name = "zilelucrate", nullable = false)
 	private Integer zilelucrate = 0;
-	@Column(name = "orelucrate")
+	@Column(name = "orelucrate", nullable = false)
 	private Integer orelucrate = 0;
 
-	@Column(name = "totaldrepturi")
+	@Column(name = "totaldrepturi", nullable = false)
 	private Integer totaldrepturi = 0;
 
-	@Column(name = "salariurealizat")
+	@Column(name = "salariurealizat", nullable = false)
 	private Integer salariurealizat = 0;
 
-	@Column(name = "venitnet")
+	@Column(name = "venitnet", nullable = false)
 	private Integer venitnet = 0;
 
-	@Column(name = "bazaimpozit")
+	@Column(name = "bazaimpozit", nullable = false)
 	private Integer bazaimpozit = 0;
 
-	@Column(name = "salariupezi")
+	@Column(name = "salariupezi", nullable = false)
 	private Float salariupezi = 0f;
-	@Column(name = "salariupeora")
+	@Column(name = "salariupeora", nullable = false)
 	private Float salariupeora = 0f;
 
-	@Column(name = "cas")
+	@Column(name = "cas", nullable = false)
 	private Float cas = 0f;
-	@Column(name = "cass")
+	@Column(name = "cass", nullable = false)
 	private Float cass = 0f;
-	@Column(name = "cam")
+	@Column(name = "cam", nullable = false)
 	private Float cam = 0f;
-	@Column(name = "impozit")
+	@Column(name = "impozit", nullable = false)
 	private Float impozit = 0f;
-	@Column(name = "valoaretichete")
+	@Column(name = "valoaretichete", nullable = false)
 	private Float valoaretichete = 0f;
 
-	@Column(name = "restplata")
+	@Column(name = "restplata", nullable = false)
 	private Integer restplata = 0;
 
-	@Column(name = "nrpersoaneintretinere")
+	@Column(name = "nrpersoaneintretinere", nullable = false)
 	private Integer nrpersoaneintretinere = 0;
-	@Column(name = "deducere")
+	@Column(name = "deducere", nullable = false)
 	private Integer deducere = 0;
 
-	@Column(name = "primabruta")
+	@Column(name = "primabruta", nullable = false)
 	private Integer primabruta = 0;
 
-	@Column(name = "totaloresuplimentare")
+	@Column(name = "totaloresuplimentare", nullable = false)
 	private Integer totaloresuplimentare = 0;
 
-	@Column(name = "nroresuplimentare")
+	@Column(name = "nroresuplimentare", nullable = false)
 	private Integer nroresuplimentare = 0;
 
 	@JsonBackReference(value = "stat-contract")
 	@ManyToOne
-	@JoinColumn(name = "idcontract", referencedColumnName = "id")
+	@JoinColumn(name = "idcontract", referencedColumnName = "id", nullable = false)
 	private Contract contract;
 
 	@JsonBackReference(value = "oresuplimentare-realizariretineri")

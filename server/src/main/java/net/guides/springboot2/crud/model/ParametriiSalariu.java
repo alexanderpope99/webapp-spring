@@ -19,31 +19,31 @@ public class ParametriiSalariu implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "salariumin")
+	@Column(name = "salariumin", nullable = false)
 	private Integer salariumin;
 
-	@Column(name = "salariuminstudiivechime")
+	@Column(name = "salariuminstudiivechime", nullable = false)
 	private Integer salariuminstudiivechime;
 
-	@Column(name = "salariumediubrut")
+	@Column(name = "salariumediubrut", nullable = false)
 	private Integer salariumediubrut;
 
-	@Column(name = "impozit")
+	@Column(name = "impozit", nullable = false)
 	private Float impozit;
 
-	@Column(name = "cas")
+	@Column(name = "cas", nullable = false)
 	private Float cas;
 
-	@Column(name = "cass")
+	@Column(name = "cass", nullable = false)
 	private Float cass;
 
-	@Column(name = "cam")
+	@Column(name = "cam", nullable = false)
 	private Float cam;
 
-	@Column(name = "valtichet")
+	@Column(name = "valtichet", nullable = false)
 	private Float valtichet;
 
-	@Column(name = "date")
+	@Column(name = "date", nullable = false)
 	private LocalDate date;
 
 	public ParametriiSalariu() {

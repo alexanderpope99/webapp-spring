@@ -42,12 +42,12 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
+		Modele: adauga nullable false
 }
 
 
 TODO: {
-	functie de verificat integritatea datelor
+	Contract: fix data -> daca ceva din fixData e null, da-i valoarea default
 
 	1 -> buton de adauga utilizatori pt toti angajatii
 

@@ -141,7 +141,6 @@ public class RealizariRetineriService {
 	public RealizariRetineri calcRealizariRetineri(int idcontract, int luna, int an, int primaBruta, int nrTichete,
 			int totalOreSuplimentare) throws ResourceNotFoundException {
 		Contract contract = contractService.getContractById(idcontract);
-		contract.checkData();
 		
 		impozitSalariu = 0;
 		deducere = 0;
