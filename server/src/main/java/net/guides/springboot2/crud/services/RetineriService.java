@@ -48,7 +48,7 @@ public class RetineriService {
 		return retineriRepository.save(newRetinere);
 	}
 
-	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) throws ResourceNotFoundException {
+	public Integer calculeazaPensieDeductibila(int idc, int an, int luna) {
 		Float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
 		if (totalPensie == null || totalPensie > 400)
 			return 0;
@@ -63,12 +63,7 @@ public class RetineriService {
 		return retinere;
 	}
 
-	public Retineri getRetinereByIdcontractAndLunaAndAn(int idcontract, int luna, int an)
-			throws ResourceNotFoundException {
-		Retineri retinere = retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idcontract, luna, an);
-		if (retinere == null)
-			throw new ResourceNotFoundException(
-					"Nu există reținere pentru contract cu id " + idcontract + " în " + luna + "/" + an);
-		return retinere;
+	public Retineri getRetinereByIdcontractAndLunaAndAn(int idcontract, int luna, int an) {
+		return retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idcontract, luna, an);
 	}
 }

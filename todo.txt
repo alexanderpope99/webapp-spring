@@ -42,15 +42,14 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-	added toast on select societate
+	:5000/contract/fix-missing-values
 }
 
 
 TODO: {
+	auto git pull every 2 hours
 
 	1 -> buton de adauga utilizatori pt toti angajatii
-
-	3 -> verifica pe backend daca un concediu nu se suprapune cu celelalte
 
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori

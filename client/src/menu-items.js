@@ -26,7 +26,7 @@ var items = [
       },
       {
         id: 'sarbatori',
-        title: 'Sărbători',
+        title: 'Sărbători legale',
         type: 'item',
         url: '/sarbatori',
         icon: 'feather icon-calendar',

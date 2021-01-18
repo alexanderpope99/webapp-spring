@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.dto.LuniCuSalarii;
+import net.guides.springboot2.crud.dto.RRDetails;
 import net.guides.springboot2.crud.dto.RealizariRetineriDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.payload.response.MessageResponse;
 import net.guides.springboot2.crud.repository.AngajatRepository;
-import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
-import net.guides.springboot2.crud.services.BazacalculService;
 import net.guides.springboot2.crud.services.RealizariRetineriService;
 
 @RestController
@@ -29,12 +28,7 @@ public class RealizariRetineriController {
 	@Autowired
 	private RealizariRetineriService realizariRetineriService;
 	@Autowired
-	private RealizariRetineriRepository realizariRetineriRepository;
-	@Autowired
 	private AngajatRepository angajatRepository;
-
-	@Autowired
-	private BazacalculService bazacalculService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -72,23 +66,6 @@ public class RealizariRetineriController {
 				nrTichete, totalOreSuplimentare), RealizariRetineriDTO.class);
 	}
 
-	// classic PUT
-	@PutMapping("update/idc={idc}&mo={luna}&y={an}")
-	public RealizariRetineri updateRealizariRetineri(@PathVariable(name = "luna") int luna,
-			@PathVariable(name = "an") int an, @PathVariable(name = "idc") int idcontract,
-			@RequestBody RealizariRetineri newRealizariRetineri) throws ResourceNotFoundException {
-
-		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
-				idcontract);
-		newRealizariRetineri.setId(oldRealizariRetineri.getId());
-
-		final RealizariRetineri updatedRR = realizariRetineriRepository.save(newRealizariRetineri);
-
-		bazacalculService.updateBazacalcul(updatedRR);
-
-		return updatedRR;
-	}
-
 	// * CALCULEAZA pt un angajat pe o luna
 	@PostMapping("save/idc={id}&mo={luna}&y={an}")
 	public RealizariRetineri saveRealizariRetineri(@PathVariable(value = "id") int idcontract,
@@ -99,14 +76,11 @@ public class RealizariRetineriController {
 
 	// * RECALCULEAZA pt un angajat, pe o luna
 	// * butonul RealizariRetineri.js : "Recalculează"
-	@PutMapping("update/calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
-	public RealizariRetineri recalcRealizariRetineri(@PathVariable("id") int idcontract,
-			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an, @PathVariable("pb") Integer primaBruta,
-			@PathVariable("nrt") Integer nrTichete, @PathVariable(value = "tos") Integer totalOreSuplimentare)
+	@PutMapping("update/calc")
+	public RealizariRetineri recalcRealizariRetineri(@RequestBody RRDetails rrDetails)
 			throws ResourceNotFoundException {
-
-		return realizariRetineriService.recalcRealizariRetineri(luna, an, idcontract, primaBruta, nrTichete,
-				totalOreSuplimentare);
+		
+		return realizariRetineriService.recalcRealizariRetineri(rrDetails);
 	}
 
 	// * RECALCULEAZA pt un angajat, pe ultimele 6 luni, exclusiv (luna, an)

@@ -51,6 +51,11 @@ public class ContractController {
 		return ResponseEntity.ok().body(contract);
 	}
 
+	@GetMapping("/fix-missing-values")
+	public boolean fixDefaultMissingValues() {
+		return contractService.fixDefaultValuesMissing();
+	}
+
 	@PostMapping
 	public Contract createContract(@RequestBody Contract contract) {
 		return contractRepository.save(contract);

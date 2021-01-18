@@ -23,10 +23,10 @@ public class PersoanaIntretinere implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "nume")
+	@Column(name = "nume", nullable = false)
 	private String nume;
 
-	@Column(name = "prenume")
+	@Column(name = "prenume", nullable = false)
 	private String prenume;
 
 	@Column(name = "cnp")
@@ -41,10 +41,10 @@ public class PersoanaIntretinere implements Serializable {
 	@Column(name = "gradinvaliditate")
 	private String gradinvaliditate;
 
-	@Column(name = "intretinut")
+	@Column(name = "intretinut", nullable = false)
 	private Boolean intretinut;
 
-	@Column(name = "coasigurat")
+	@Column(name = "coasigurat", nullable = false)
 	private Boolean coasigurat;
 
 	@JsonBackReference("persoanaintretinere-angajat")

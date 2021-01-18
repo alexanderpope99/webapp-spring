@@ -21,10 +21,10 @@ public class Oresuplimentare implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "nr")
+	@Column(name = "nr", nullable = false)
 	private Long nr;
 
-	@Column(name = "procent")
+	@Column(name = "procent", nullable = false)
 	private Integer procent;
 
 	@Column(name = "includenormale")

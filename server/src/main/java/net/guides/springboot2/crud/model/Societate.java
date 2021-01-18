@@ -29,7 +29,7 @@ public class Societate implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "nume")
+	@Column(name = "nume", nullable = false)
 	private String nume;
 
 	@Column(name = "idcaen")

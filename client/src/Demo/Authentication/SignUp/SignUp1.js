@@ -45,7 +45,7 @@ class SignUp1 extends React.Component {
           if (response.status === 200)
             this.setState({
               show: true,
-              message: 'Utilizator adăugat cu succes',
+              message: 'Utilizator adăugat ',
             });
         })
         .catch(() => {
