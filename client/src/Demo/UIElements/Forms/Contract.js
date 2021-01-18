@@ -445,11 +445,6 @@ class Contract extends React.Component {
         modalMessage: this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat  📄',
         id: contract.id,
       });
-    } else {
-      this.setState({
-        show: true,
-        modalMessage: 'A apărut o eroare ⛔',
-      });
     }
   }
 

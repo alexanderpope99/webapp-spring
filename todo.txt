@@ -47,6 +47,8 @@ LAST-UPDATE : {
 
 
 TODO: {
+	auto git pull every 2 hours
+
 	1 -> buton de adauga utilizatori pt toti angajatii
 
 	4.1 -> mi-am uitat parola
