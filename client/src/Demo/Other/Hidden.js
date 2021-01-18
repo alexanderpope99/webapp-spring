@@ -5,9 +5,8 @@ import { server } from '../Resources/server-address';
 
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import authService from '../../services/auth.service';
 
-class DataIntegrityButtons extends React.Component {
+class Hidden extends React.Component {
 	constructor() {
 		super();
 
@@ -26,6 +25,11 @@ class DataIntegrityButtons extends React.Component {
 		if(ok) {
 			this.setState({
 				toastMessage: 'Contractele au fost completate',
+				showToast: true,
+			})
+		} else {
+			this.setState({
+				toastMessage: 'O valoare care nu poate fi predefinita lipseste. Aceasta poate fi  ',
 				showToast: true,
 			})
 		}
@@ -54,4 +58,4 @@ class DataIntegrityButtons extends React.Component {
   }
 }
 
-export default DataIntegrityButtons;
+export default Hidden;

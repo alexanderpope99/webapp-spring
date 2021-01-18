@@ -16,7 +16,7 @@ const ParametriiSalarii = React.lazy(() => import('./Demo/Dashboard/ParametriiSa
 const ParametriiSalariiView = React.lazy(() => import('./Demo/Dashboard/ParametriiSalariiView'));
 
 const Notificari = React.lazy(() => import('./Demo/Other/Notificari'));
-const DataIntegrityButtons = React.lazy(() => import('./Demo/Other/DataIntegrityButtons'));
+const Hidden = React.lazy(() => import('./Demo/Other/Hidden'));
 
 // FORMS
 const FormsElements = React.lazy(() => import('./Demo/Forms/FormsElements'));
@@ -167,7 +167,7 @@ const routes = [
 	{ path: '/edit/profile', exact: true, name: 'Profil', component: Profile },
 
 	// TEST
-	{ path: '/hidden', exact: true, name: 'Data buttons', component: isAngajatSimplu ? null : DataIntegrityButtons },
+	{ path: '/hidden', exact: true, name: 'Data buttons', component: isAngajatSimplu ? null : Hidden },
 	// { path: '/test/add-persoana', exact: true, name: 'Add Persoana Test', component: AddPersoanaTest },
 ];
 

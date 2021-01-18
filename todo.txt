@@ -42,13 +42,11 @@ Pasi de urmat:
 
 
 LAST-UPDATE : {
-		Modele: adauga nullable false
+	:5000/contract/fix-missing-values
 }
 
 
 TODO: {
-	Contract: fix data -> daca ceva din fixData e null, da-i valoarea default
-
 	1 -> buton de adauga utilizatori pt toti angajatii
 
 	4.1 -> mi-am uitat parola

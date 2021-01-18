@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Form, Button, FormControl, Modal, Toast } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, FormControl, Toast } from 'react-bootstrap';
 import Typography from '@material-ui/core/Typography/Typography';
 import { server } from '../Resources/server-address';
 import { getSocSel } from '../Resources/socsel';

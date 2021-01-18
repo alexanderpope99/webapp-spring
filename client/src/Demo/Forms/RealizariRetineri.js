@@ -929,6 +929,8 @@ class RealizariRetineri extends React.Component {
 				<Toast
 					onClose={() => this.setState({ showToast: false })}
 					show={this.state.showToast}
+					delay={5000}
+					autohide
 					className="position-fixed"
 					style={{ top: '10px', right: '5px', zIndex: '9999', background: this.state.toastColor }}
 				>
