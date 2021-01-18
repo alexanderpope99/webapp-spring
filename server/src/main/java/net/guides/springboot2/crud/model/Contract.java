@@ -452,6 +452,8 @@ public class Contract implements Serializable {
 	}
 
 	public void checkData() throws ResourceNotFoundException {
+		if(angajat == null)
+			return;
 		String numeAngajat = angajat.getPersoana().getNumeIntreg();
 		if(tip == null)
 			throw new ResourceNotFoundException("Tipul contractului lui " + numeAngajat + " nu are valoare");
@@ -471,5 +473,20 @@ public class Contract implements Serializable {
 			throw new ResourceNotFoundException("Zilele concediu/an din contractul lui " + numeAngajat + " nu are valoare");
 		if(functie == null)
 			throw new ResourceNotFoundException("Functia lui " + numeAngajat + " nu are valoare");
+	}	
+
+	public Contract fixDefaultValuesMissing() throws ResourceNotFoundException {
+		if(tip == null)
+			this.tip = "Contract de muncă";
+		if(calculdeduceri == null)
+			this.calculdeduceri = true;
+		if(normalucru == null)
+			this.normalucru = 8;
+		if(zilecoan == null)
+			this.zilecoan = 21;
+		
+		checkData();
+		
+		return this;
 	}
 }
