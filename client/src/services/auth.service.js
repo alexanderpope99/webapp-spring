@@ -2,6 +2,7 @@ import axios from 'axios';
 import { server } from '../Demo/Resources/server-address';
 
 const API_URL = `${server.address}/api/auth/`;
+const URL = `${server.address}`;
 
 class AuthService {
   async login(username, password) {
@@ -69,22 +70,42 @@ class AuthService {
     return JSON.parse(sessionStorage.getItem('user'));
   }
 
+  async getTokenFromCookie() {
+    return await axios
+      .get(URL + '/cookie/token', { withCredentials: true })
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+  }
+
+  async getRolesFromCookie() {
+    return await axios
+      .get(URL + '/cookie/roles', { withCredentials: true })
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+  }
+
+  async getIdFromCookie() {
+    return await axios
+      .get(URL + '/cookie/id', { withCredentials: true })
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+  }
+
   isAdmin() {
-    const user = this.getCurrentUser();
-    return user.roles.includes('ROLE_ADMIN');
+    return this.getRolesFromCookie().includes('ROLE_ADMIN');
   }
 
   isDirectorOrContabil() {
-    const user = this.getCurrentUser();
-    return user.roles.includes('ROLE_DIRECTOR') || user.roles.includes('ROLE_CONTABIL');
+    const roles = this.gerRolesFromCookie();
+    return roles.includes('ROLE_DIRECTOR') || roles.includes('ROLE_CONTABIL');
   }
 
   isAngajatSimplu() {
-    const user = this.getCurrentUser();
+    const roles = this.gerRolesFromCookie();
     return !(
-      user.roles.includes('ROLE_ADMIN') ||
-      user.roles.includes('ROLE_DIRECTOR') ||
-      user.roles.includes('ROLE_CONTABIL')
+      roles.includes('ROLE_ADMIN') ||
+      roles.includes('ROLE_DIRECTOR') ||
+      roles.includes('ROLE_CONTABIL')
     );
   }
 

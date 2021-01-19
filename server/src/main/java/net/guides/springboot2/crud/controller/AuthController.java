@@ -74,7 +74,13 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
+		StringBuilder rolesStringify = new StringBuilder();
+		for (String role : roles)
+			rolesStringify.append(role);
+
 		response = cookieService.setCookie("token", jwt, response);
+		response = cookieService.setCookie("id", String.valueOf(userDetails.getId()), response);
+		response = cookieService.setCookie("roles", rolesStringify.toString(), response);
 
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
 				userDetails.getEmail(), roles, userDetails.isGen()));
