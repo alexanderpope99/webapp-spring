@@ -27,9 +27,9 @@ public class Persoana implements Serializable {
 
 	@Column(name = "gen")
 	private String gen;
-	@Column(name = "nume", nullable = false)
+	@Column(name = "nume")
 	private String nume;
-	@Column(name = "prenume", nullable = false)
+	@Column(name = "prenume")
 	private String prenume;
 
 	@OneToOne(cascade = CascadeType.ALL)
