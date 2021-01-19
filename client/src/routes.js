@@ -20,6 +20,7 @@ const Hidden = React.lazy(() => import('./Demo/Other/Hidden'));
 
 // FORMS
 const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
+const AddSocietate = React.lazy(() => import('./Demo/Forms/AddSocietate'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const AngajatSimplu = React.lazy(() => import('./Demo/Forms/AngajatSimplu'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
@@ -32,7 +33,6 @@ const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
 const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
 const AngajatiTabelView = React.lazy(() => import('./Demo/Tables/AngajatiTabelView'));
 const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
-// const SocietatiTabel = React.lazy(() => import('./Demo/Tables/SocietatiTabel'));
 const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
 const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
 const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
@@ -74,7 +74,8 @@ const routes = [
 	},
 
 	// FORMS
-	{ path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: AddPersoana },
+	{ path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: isAngajatSimplu ? null : AddPersoana },
+	{ path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: isAngajatSimplu ? null : AddSocietate },
 	{
 		path: '/forms/angajat',
 		exact: true,
@@ -92,13 +93,6 @@ const routes = [
 	// RAPOARTE
 	{ path: '/rapoarte', exact: true, name: 'Rapoarte', component: isDirectorContabil ? Rapoarte : null },
 
-	// TABLES
-	// {
-	// 	path: '/tables/societati-tabel',
-	// 	exact: true,
-	// 	name: 'Tabel Societati',
-	// 	component: SocietatiTabel,
-	// },
 	{
 		path: '/tables/user-tabel',
 		exact: true,
@@ -160,7 +154,6 @@ const routes = [
 
 	// TEST
 	{ path: '/hidden', exact: true, name: 'Data buttons', component: isAngajatSimplu ? null : Hidden },
-	// { path: '/test/add-persoana', exact: true, name: 'Add Persoana Test', component: AddPersoanaTest },
 ];
 
 export default routes;
