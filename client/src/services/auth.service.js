@@ -5,12 +5,21 @@ const API_URL = `${server.address}/api/auth/`;
 
 class AuthService {
   async login(username, password) {
-    const response = await axios.post(API_URL + 'signin', {
-      username,
-      password,
-    });
+    const response = await axios.post(
+      API_URL + 'signin',
+      {
+        username,
+        password,
+      },
+      { withCredentials: true }
+    );
     if (response.data.accessToken) {
-      sessionStorage.setItem('user', JSON.stringify(response.data));
+      const body = {
+        username: response.data.username,
+        email: response.data.email,
+        gen: response.data.gen,
+      };
+      sessionStorage.setItem('user', JSON.stringify(body));
     }
     return response.data;
   }
@@ -58,12 +67,12 @@ class AuthService {
 
   getCurrentUser() {
     return JSON.parse(sessionStorage.getItem('user'));
-	}
-	
-	isAdmin() {
-		const user = this.getCurrentUser();
-		return user.roles.includes('ROLE_ADMIN');
-	}
+  }
+
+  isAdmin() {
+    const user = this.getCurrentUser();
+    return user.roles.includes('ROLE_ADMIN');
+  }
 
   isDirectorOrContabil() {
     const user = this.getCurrentUser();

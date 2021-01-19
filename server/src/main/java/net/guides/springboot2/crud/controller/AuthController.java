@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import net.guides.springboot2.crud.repository.RoleRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
 import net.guides.springboot2.crud.security.jwt.JwtUtils;
 import net.guides.springboot2.crud.security.services.UserDetailsImpl;
+import net.guides.springboot2.crud.services.CookieService;
 import net.guides.springboot2.crud.services.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -55,11 +57,15 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	@Autowired
+	private CookieService cookieService;
 
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+	@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
+			HttpServletResponse response) {
+
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
@@ -67,6 +73,8 @@ public class AuthController {
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
+
+		response = cookieService.setCookie("token", jwt, response);
 
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
 				userDetails.getEmail(), roles, userDetails.isGen()));

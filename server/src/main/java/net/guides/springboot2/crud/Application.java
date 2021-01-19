@@ -28,7 +28,7 @@ public class Application {
 				registry.addMapping("/**")
 						.allowedOrigins("http://localhost:3000", "http://192.168.2.173:3000",
 								"http://192.168.2.159:3000", "http://192.168.2.161:3000", "http://192.168.2.24:3000")
-						.allowedMethods("POST", "GET", "PUT", "DELETE");
+						.allowedMethods("POST", "GET", "PUT", "DELETE").allowCredentials(true);
 			}
 		};
 	}
