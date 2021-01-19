@@ -46,6 +46,8 @@ LAST-UPDATE : {
 
 
 TODO: {
+	endpointul de login pune cookie HttpOnly token
+
 	auto git pull every 2 hours
 
 	1 -> buton de adauga utilizatori pt toti angajatii

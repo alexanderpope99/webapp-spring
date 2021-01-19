@@ -11,8 +11,8 @@ class Hidden extends React.Component {
     super();
 
     this.fixContracte = this.fixContracte.bind(this);
-    this.getColor = this.getColor.bind(this);
-    this.setColor = this.setColor.bind(this);
+    this.getCookie = this.getCookie.bind(this);
+    this.setCookie = this.setCookie.bind(this);
 
     this.state = {
       toastMessage: '',
@@ -40,9 +40,9 @@ class Hidden extends React.Component {
   }
 
   // / => gets color, /all => gets all, /add => changes color to blue
-  async getColor() {
+  async getCookie() {
     const color = await axios
-      .get(`${server.address}/cookie`, { headers: authHeader() })
+      .get(`${server.address}/cookie/key=token`, { headers: authHeader(), withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (color) {
@@ -50,10 +50,11 @@ class Hidden extends React.Component {
         color: color,
       });
     }
-  }
-  async setColor() {
+	}
+	
+  async setCookie() {
     const color = await axios
-      .get(`${server.address}/cookie/add`, { headers: authHeader() })
+      .get(`${server.address}/cookie/add/token/kjh23j89sdfo32h489jerh3rm89j2iow3rj`, { headers: authHeader(), withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (color) {
@@ -84,9 +85,8 @@ class Hidden extends React.Component {
           Introdu date prestabilite in contracte acolo unde lipsesc
         </Button>
         <br />
-        <Button onClick={this.getColor}>get color</Button>
-        <Button onClick={this.setBlue}>set color to blue</Button>
-        <Button onClick={this.getAllCookies}>get all cookies</Button>
+        <Button onClick={this.getCookie}>get token</Button>
+        <Button onClick={this.setCookie}>set token</Button>
         <p>{this.state.color}</p>
       </Aux>
     );
