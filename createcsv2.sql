@@ -38,50 +38,13 @@ select
 	zilefaambp, zilefirma, zilefnuass, idcontract
 from cm_psql;
 
+-- select 
+-- 	id, dela, panala, bazacalcul, bazacalculplafonata, cnpcopil, codboala, codboalainfcont,
+-- 	codindemnizatie, codurgenta, conditii, continuare, dataeliberare, datainceput, 
+-- 	indemnizatiefaambp, indemnizatiefirma, indemnizatiefnuass, locprescriere, 
+-- 	mediezilnica, nr, nravizmedic, procent, serie, urgenta, zilebazacalcul,
+-- 	zilefaambp, zilefirma, zilefnuass, idcontract
+-- from cm_psql;
+
 -- PERSOANE INTRETINERE
 select id, cnp, coasigurat, datanasterii, grad, valid, intretinut, nume, prenume, idangajat from persoanaintretinere_psql;
-
-
-
-
-
-
-
-
-
-
-
-
-
------------------------------------------------------------------------------------------------
--- NU UITA SA ADAUGI HEADER: Tools -> Options -> Query Results -> SQL Server -> Results to grid
-
--- ADRESE
-select id, adresa, localitate, judet from adresa_psql;
-
--- SOCIETATI
-select * from societate_psql;
-
--- ACTE IDENTITATE - sterge NULL din .csv
-select id, cnp, tip, serie, numar, datanasterii, eliberatde, dataeliberarii, loculnasterii from actidentitate_psql;
-
--- PERSOANE
-select id, gen, nume, prenume, idactidentitate, idadresa, starecivila, telefon, cnp from persoana_psql
-
--- CONT BANCAR
-select id, iban from contbancar_psql;
-
--- CONTRACTE - sterge NULL din .csv
-SELECT [id],[tip],[nr],[marca],[dindata],[dataincepere],[idpunctlucru],[idcentrucost],[idechipa],[iddepartament],[functiedebaza],[calculdeduceri],[studiisuperioare],[normalucru],[salariutarifar],[monedasalariu],[conditiimunca],[pensieprivata],[cotizatiepensieprivata],[avans],[monedaavans],[zilecoan],[ultimazilucru],[casasanatate],[gradinvaliditate],[functie],[nivelstudii],[cor],[sindicat],[cotizatiesindicat],[spor],[pensionar],[echipa],[modplata],[idcontbancar] FROM [Salarizare123].[dbo].[contract_psql]
-
--- ANGAJATI
-select * from angajat_psql;
-
--- CONCEDII ODIHNA
-select * from co_psql;
-
--- CONCEDII MEDICALE - sterge NULL din csv
-select * from cm_psql;
-
--- PERSOANE INTRETINERE
-select * from persoanaintretinere_psql;
