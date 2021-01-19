@@ -60,5 +60,6 @@
   ],
   "devDependencies": {
     "react-to-print": "^2.10.3"
-  }
+	},
+	"proxy": "http://localhost:5000"
 }
