@@ -26,15 +26,15 @@ public class Concediu implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "dela")
+	@Column(name = "dela", nullable = false)
 	private LocalDate dela;
 
-	@Column(name = "panala")
+	@Column(name = "panala", nullable = false)
 	private LocalDate panala;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idcontract")
+	@JoinColumn(name = "idcontract", nullable = false)
 	private Contract contract;
 
 	public Concediu() {

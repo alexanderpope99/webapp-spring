@@ -127,7 +127,7 @@ class FacturiTabel extends React.Component {
       this.setState(
         {
           showConfirm: true,
-          modalMessage: 'Factură adăugată cu succes',
+          modalMessage: 'Factură adăugată ',
         },
         this.onRefresh
       );

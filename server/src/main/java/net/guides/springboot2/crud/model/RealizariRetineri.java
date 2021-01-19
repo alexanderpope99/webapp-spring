@@ -29,96 +29,96 @@ public class RealizariRetineri implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "luna")
+	@Column(name = "luna", nullable = false)
 	private Integer luna;
-	@Column(name = "an")
+	@Column(name = "an", nullable = false)
 	private Integer an;
-	@Column(name = "nrtichete")
+	@Column(name = "nrtichete", nullable = false)
 	private Integer nrtichete = 0;
-	@Column(name = "zileco")
+	@Column(name = "zileco", nullable = false)
 	private Integer zileco = 0;
-	@Column(name = "zilecolucratoare")
+	@Column(name = "zilecolucratoare", nullable = false)
 	private Integer zilecolucratoare = 0;
-	@Column(name = "zilecfp")
+	@Column(name = "zilecfp", nullable = false)
 	private Integer zilecfp = 0;
-	@Column(name = "zilecfplucratoare")
+	@Column(name = "zilecfplucratoare", nullable = false)
 	private Integer zilecfplucratoare = 0;
-	@Column(name = "zilecm")
+	@Column(name = "zilecm", nullable = false)
 	private Integer zilecm = 0;
-	@Column(name = "zilecmlucratoare")
+	@Column(name = "zilecmlucratoare", nullable = false)
 	private Integer zilecmlucratoare = 0;
-	@Column(name = "zilec")
+	@Column(name = "zilec", nullable = false)
 	private Integer zilec = 0;
-	@Column(name = "zileplatite")
+	@Column(name = "zileplatite", nullable = false)
 	private Integer zileplatite = 0;
 
-	@Column(name = "impozitscutit")
+	@Column(name = "impozitscutit", nullable = false)
 	private Integer impozitscutit = 0;
 
-	@Column(name = "valcm")
+	@Column(name = "valcm", nullable = false)
 	private Integer valcm = 0;
-	@Column(name = "valco")
+	@Column(name = "valco", nullable = false)
 	private Integer valco = 0;
 
-	@Column(name = "norma")
+	@Column(name = "norma", nullable = false)
 	private Integer norma = 0; // nr zile lucratoare in luna
-	@Column(name = "duratazilucru")
+	@Column(name = "duratazilucru", nullable = false)
 	private Integer duratazilucru = 0; // contract.normalucru
-	@Column(name = "zilecontract")
+	@Column(name = "zilecontract", nullable = false)
 	private Integer zilecontract = 0;
-	@Column(name = "zilelucrate")
+	@Column(name = "zilelucrate", nullable = false)
 	private Integer zilelucrate = 0;
-	@Column(name = "orelucrate")
+	@Column(name = "orelucrate", nullable = false)
 	private Integer orelucrate = 0;
 
-	@Column(name = "totaldrepturi")
+	@Column(name = "totaldrepturi", nullable = false)
 	private Integer totaldrepturi = 0;
 
-	@Column(name = "salariurealizat")
+	@Column(name = "salariurealizat", nullable = false)
 	private Integer salariurealizat = 0;
 
-	@Column(name = "venitnet")
+	@Column(name = "venitnet", nullable = false)
 	private Integer venitnet = 0;
 
-	@Column(name = "bazaimpozit")
+	@Column(name = "bazaimpozit", nullable = false)
 	private Integer bazaimpozit = 0;
 
-	@Column(name = "salariupezi")
+	@Column(name = "salariupezi", nullable = false)
 	private Float salariupezi = 0f;
-	@Column(name = "salariupeora")
+	@Column(name = "salariupeora", nullable = false)
 	private Float salariupeora = 0f;
 
-	@Column(name = "cas")
+	@Column(name = "cas", nullable = false)
 	private Float cas = 0f;
-	@Column(name = "cass")
+	@Column(name = "cass", nullable = false)
 	private Float cass = 0f;
-	@Column(name = "cam")
+	@Column(name = "cam", nullable = false)
 	private Float cam = 0f;
-	@Column(name = "impozit")
+	@Column(name = "impozit", nullable = false)
 	private Float impozit = 0f;
-	@Column(name = "valoaretichete")
+	@Column(name = "valoaretichete", nullable = false)
 	private Float valoaretichete = 0f;
 
-	@Column(name = "restplata")
+	@Column(name = "restplata", nullable = false)
 	private Integer restplata = 0;
 
-	@Column(name = "nrpersoaneintretinere")
+	@Column(name = "nrpersoaneintretinere", nullable = false)
 	private Integer nrpersoaneintretinere = 0;
-	@Column(name = "deducere")
+	@Column(name = "deducere", nullable = false)
 	private Integer deducere = 0;
 
-	@Column(name = "primabruta")
+	@Column(name = "primabruta", nullable = false)
 	private Integer primabruta = 0;
 
-	@Column(name = "totaloresuplimentare")
+	@Column(name = "totaloresuplimentare", nullable = false)
 	private Integer totaloresuplimentare = 0;
 
-	@Column(name = "nroresuplimentare")
+	@Column(name = "nroresuplimentare", nullable = false)
 	private Integer nroresuplimentare = 0;
 
 	@JsonBackReference(value = "stat-contract")
 	@ManyToOne
-	@JoinColumn(name = "idcontract", referencedColumnName = "id")
+	@JoinColumn(name = "idcontract", referencedColumnName = "id", nullable = false)
 	private Contract contract;
 
 	@JsonBackReference(value = "oresuplimentare-realizariretineri")
@@ -501,11 +501,102 @@ public class RealizariRetineri implements Serializable {
 	}
 
 	public void checkData() throws ResourceNotFoundException {
+		if(contract == null)
+			throw new ResourceNotFoundException("Contractul lipseste pt realizariRetineri.id = " + id);
 		if(primabruta == null)
-			throw new ResourceNotFoundException("Prima bruta nu are valoare");
+			throw new ResourceNotFoundException("Prima bruta nu are valoare pt realizariRetineri.id = " + id);
 		if(totaloresuplimentare == null)
-			throw new ResourceNotFoundException("Total ore suplimentare nu are valoare");
+			throw new ResourceNotFoundException("Total ore suplimentare nu are valoare pt realizariRetineri.id = " + id);
 		if(nroresuplimentare == null)
-			throw new ResourceNotFoundException("Numarul de ore suplimentare nu are valoare");
+			throw new ResourceNotFoundException("Numarul de ore suplimentare nu are valoare pt realizariRetineri.id = " + id);
+	}
+
+	public RealizariRetineri fixValuesMissing() throws ResourceNotFoundException {
+	if(nrtichete == null)
+		this.nrtichete = 0;
+	if(zileco == null)
+		this.zileco = 0;
+	if(zilecolucratoare == null)
+		this.zilecolucratoare = 0;
+	if(zilecfp == null)
+		this.zilecfp = 0;
+	if(zilecfplucratoare == null)
+		this.zilecfplucratoare = 0;
+	if(zilecm == null)
+		this.zilecm = 0;
+	if(zilecmlucratoare == null)
+		this.zilecmlucratoare = 0;
+	if(zilec == null)
+		this.zilec = 0;
+	if(zileplatite == null)
+		this.zileplatite = 0;
+
+	if(impozitscutit == null)
+		this.impozitscutit = 0;
+
+	if(valcm == null)
+		this.valcm = 0;
+	if(valco == null)
+		this.valco = 0;
+
+	if(norma == null)
+		this.norma = 0;
+	if(duratazilucru == null)
+		this.duratazilucru= 0;
+	if(zilecontract == null)
+		this.zilecontract = 0;
+	if(zilelucrate == null)
+		this.zilelucrate = 0;
+	if(orelucrate == null)
+		this.orelucrate = 0;
+
+	if(totaldrepturi == null)
+		this.totaldrepturi = 0;
+
+	if(salariurealizat == null)
+		this.salariurealizat = 0;
+
+	if(venitnet == null)
+		this.venitnet = 0;
+
+	if(bazaimpozit == null)
+		this.bazaimpozit = 0;
+
+	if(salariupezi == null)
+		this.salariupezi = 0f;
+	if(salariupeora == null)
+		this.salariupeora = 0f;
+
+	if(cas == null)
+		this.cas = 0f;
+	if(cass == null)
+		this.cass = 0f;
+	if(cam == null)
+		this.cam = 0f;
+	if(impozit == null)
+		this.impozit = 0f;
+	if(valoaretichete == null)
+		this.valoaretichete = 0f;
+
+	if(restplata == null)
+		this.restplata = 0;
+
+	if(nrpersoaneintretinere == null)
+		this.nrpersoaneintretinere = 0;
+	if(deducere == null)
+		this.deducere = 0;
+
+	if(primabruta == null)
+		this.primabruta = 0;
+
+	if(totaloresuplimentare == null)
+		this.totaloresuplimentare = 0;
+
+	if(nroresuplimentare == null)
+		this.nroresuplimentare = 0;
+	
+		this.checkData();
+
+		return this;
 	}
 }

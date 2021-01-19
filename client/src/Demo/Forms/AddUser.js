@@ -66,7 +66,7 @@ class AddUser extends React.Component {
         this.setState({
           show: true,
           modalTitle: 'Succes',
-          message: 'User adăugat cu succes!',
+          message: 'User adăugat !',
         });
       })
       .then(this.clearFields())

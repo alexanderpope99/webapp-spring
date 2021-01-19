@@ -242,7 +242,7 @@ class SarbatoriTabelView extends React.Component {
         {/* ADD/EDIT MODAL */}
         <Modal show={this.state.show} onHide={() => this.handleClose(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Sărbătoare nouă</Modal.Title>
+            <Modal.Title>Date sărbătoare legală</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.onSubmit}>

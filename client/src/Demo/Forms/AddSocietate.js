@@ -217,7 +217,7 @@ class AddSocietate extends React.Component {
     if (ok) {
       this.setState({
         show: true,
-        modalMessage: this.state.isEdit ? 'Societate actualizată' : 'Societate adăugată cu succes!',
+        modalMessage: this.state.isEdit ? 'Societate actualizată' : 'Societate adăugată !',
       });
 
       if (!this.state.isEdit) this.clearFields();

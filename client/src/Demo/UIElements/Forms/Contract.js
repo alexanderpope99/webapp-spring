@@ -247,7 +247,7 @@ class Contract extends React.Component {
           angajatsel: getAngajatSel(),
 
           id: contract.id,
-          modelContract: contract.tip || '', //text
+          modelContract: contract.tip || 'Contract de muncă', //text
           numărContract: contract.nr || '', //text
           marca: contract.marca || '', //text
           dataContract: contract.data ? contract.data.substring(0, 10) : '',
@@ -442,13 +442,8 @@ class Contract extends React.Component {
 
       this.setState({
         show: true,
-        modalMessage: this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat cu succes 📄',
+        modalMessage: this.state.id ? 'Contract actualizat 💾' : 'Contract adăugat  📄',
         id: contract.id,
-      });
-    } else {
-      this.setState({
-        show: true,
-        modalMessage: 'A apărut o eroare ⛔',
       });
     }
   }
@@ -491,16 +486,18 @@ class Contract extends React.Component {
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
-          delay={4000}
-          autohide
           className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
         >
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Eroare</strong>
           </Toast.Header>
-          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+          <Toast.Body>
+						{this.state.toastMessage}
+						<Button variant="light">Repara scriind valori predefinite</Button>
+					</Toast.Body>
         </Toast>
+
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -629,7 +626,7 @@ class Contract extends React.Component {
                   custom
                   type="switch"
                   id="deduceriCheck"
-                  label="Calcul deduceri"
+                  label="Platește impozit"
                   checked={this.state.calculdeduceri || false}
                   onChange={(e) => {
                     this.setState({ calculdeduceri: e.target.checked });

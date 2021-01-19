@@ -54,7 +54,9 @@ class EditPersoana extends React.Component {
       socsel: getSocSel(),
       angajatsel: angajatSel,
 
-      show: false,
+			show: false,
+			showToast: false,
+			toastMessage: '',
       modalMessage: '',
 
       tipJudet: 'Județ',
@@ -361,7 +363,7 @@ class EditPersoana extends React.Component {
     console.log('persoana actualizata');
     this.setState({
       show: true,
-      modalMessage: 'Persoană actualizată cu succes 💾',
+      modalMessage: 'Persoană actualizată  💾',
     });
 
     return this.state.id;
@@ -398,8 +400,6 @@ class EditPersoana extends React.Component {
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
-          delay={4000}
-          autohide
           className="position-fixed"
           style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
         >

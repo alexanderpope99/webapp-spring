@@ -208,7 +208,7 @@ class CentruCostTabel extends React.Component {
           showToast: true,
           toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
         })
       );
 
@@ -224,7 +224,7 @@ class CentruCostTabel extends React.Component {
           showToast: true,
           toastMessage: 'Nu am putut șterge centrul de cost\n' + err.response.data.message,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
         })
       );
   }
@@ -251,7 +251,7 @@ class CentruCostTabel extends React.Component {
           showToast: true,
           toastMessage: 'Nu am putut adăuga centrul de cost\n' + err.response.data.message,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
         })
       );
 
@@ -291,7 +291,7 @@ class CentruCostTabel extends React.Component {
           showToast: true,
           toastMessage: 'Nu am putut actualiza centrul de cost\n' + err.response.data.message,
           toastTitle: 'Eroare',
-          toastColor: 'red',
+          toastColor: 'white',
         })
       );
     if (ok)

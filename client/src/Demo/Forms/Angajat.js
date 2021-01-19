@@ -27,7 +27,6 @@ class Angajat extends React.Component {
 
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    // this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);

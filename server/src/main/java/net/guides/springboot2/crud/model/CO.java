@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class CO extends Concediu {
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "tip")
+	@Column(name = "tip", nullable = false)
 	private String tip;
 
 	@Column(name = "sporuripermanente")

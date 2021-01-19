@@ -18,25 +18,25 @@ public class Deduceri  implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "dela")
+	@Column(name = "dela", nullable = false)
 	private Integer dela;
 
-	@Column(name = "panala")
+	@Column(name = "panala", nullable = false)
 	private Integer panala;
 
-	@Column(name = "zero")
+	@Column(name = "zero", nullable = false)
 	private Integer zero;
 
-	@Column(name = "una")
+	@Column(name = "una", nullable = false)
 	private Integer una;
 
-	@Column(name = "doua")
+	@Column(name = "doua", nullable = false)
 	private Integer doua;
 
-	@Column(name = "trei")
+	@Column(name = "trei", nullable = false)
 	private Integer trei;
 
-	@Column(name = "patru")
+	@Column(name = "patru", nullable = false)
 	private Integer patru;
 
 	public Deduceri() {

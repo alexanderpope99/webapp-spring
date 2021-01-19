@@ -30,4 +30,20 @@ public class ContractService {
 
 		return contract;
 	}
+
+	public boolean fixDefaultValuesMissing() {
+
+		var wrapper = new Object(){ boolean value = true; };
+
+		contractRepository.findAll().forEach(contract -> {
+			try {
+				contractRepository.save(contract.fixDefaultValuesMissing());
+			} catch (ResourceNotFoundException e) {
+				e.printStackTrace();
+				wrapper.value = false;
+			}
+		});
+
+		return wrapper.value;
+	}
 }
