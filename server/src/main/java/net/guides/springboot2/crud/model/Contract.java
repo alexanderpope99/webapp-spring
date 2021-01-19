@@ -453,23 +453,25 @@ public class Contract implements Serializable {
 
 	public void checkData() throws ResourceNotFoundException {
 		String numeAngajat = angajat.getPersoana().getNumeIntreg();
-		if(tip == null)
+		if (tip == null)
 			throw new ResourceNotFoundException("Tipul contractului lui " + numeAngajat + " nu are valoare");
-		if(nr == null)
+		if (nr == null)
 			throw new ResourceNotFoundException("Numarul contractului " + numeAngajat + " nu are valoare");
-		if(data == null)
-			throw new ResourceNotFoundException("Data contractului contractului " + numeAngajat + " nu are valoare");
-		if(dataincepere == null)
-			throw new ResourceNotFoundException("Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
-		if(calculdeduceri == null)
+		if (data == null)
+			throw new ResourceNotFoundException("Data contractului " + numeAngajat + " nu are valoare");
+		if (dataincepere == null)
+			throw new ResourceNotFoundException(
+					"Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
+		if (calculdeduceri == null)
 			throw new ResourceNotFoundException("Calcul deduceri pentru " + numeAngajat + " nu are valoare");
-		if(normalucru == null)
+		if (normalucru == null)
 			throw new ResourceNotFoundException("Norma lucru pentru " + numeAngajat + " nu are valoarea");
-		if(salariutarifar == null)
+		if (salariutarifar == null)
 			throw new ResourceNotFoundException("Salariul lui " + numeAngajat + " nu are valoare");
-		if(zilecoan == null)
-			throw new ResourceNotFoundException("Zilele concediu/an din contractul lui " + numeAngajat + " nu are valoare");
-		if(functie == null)
+		if (zilecoan == null)
+			throw new ResourceNotFoundException(
+					"Zilele concediu/an din contractul lui " + numeAngajat + " nu are valoare");
+		if (functie == null)
 			throw new ResourceNotFoundException("Functia lui " + numeAngajat + " nu are valoare");
 	}
 }
