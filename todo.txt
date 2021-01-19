@@ -1,3 +1,4 @@
+TEST
 ########### DE MUTAT BAZA DE DATE DIN SQL SERVER IN POSTGRES ###########
 Pasi de urmat:
 	0. In SQL Server -> Tools -> Option -> Query Results -> SQL Server -> Results to grid -> ☑ Include column headers...

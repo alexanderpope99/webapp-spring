@@ -252,6 +252,7 @@ public class Dec112Service {
 					erori += "Angajatul " + angajat.getPersoana().getNume() + " " + angajat.getPersoana().getPrenume()
 							+ " nu are Realizari/Retineri efectuat in " + lunaNume + " " + an + "\n";
 				} else {
+					realizariRetineri.checkData();
 					impozit_datorat += realizariRetineri.getImpozit();
 					impozit_scutit += realizariRetineri.getImpozitscutit();
 					cas += realizariRetineri.getCas();
@@ -601,7 +602,6 @@ public class Dec112Service {
 			for (Angajat angajat : angajati) {
 				Contract contract = angajat.getContract();
 				contract.checkData();
-
 				Element sbfrmPage1Asig = doc.createElement("sbfrmPage1Asig");
 				frmMAIN.appendChild(sbfrmPage1Asig);
 
