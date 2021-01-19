@@ -57,6 +57,7 @@ class SignUp1 extends React.Component {
     }
   }
   render() {
+		console.log('SignUp');
     if (sessionStorage.getItem('user')) return <Redirect to="/auth/signin-1" />;
     else
       return (

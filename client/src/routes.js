@@ -9,6 +9,9 @@ global.jQuery = $;
 const isAngajatSimplu = authService.isAngajatSimplu();
 const isAdmin = authService.isAdmin();
 const isDirectorContabil = authService.isDirectorOrContabil();
+console.log('angajat simplu:', isAngajatSimplu);
+console.log('admin:', isAdmin);
+console.log('director/contabil:', isDirectorContabil);
 
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
 const SocietatiView = React.lazy(() => import('./Demo/Dashboard/SocietatiView'));

@@ -31,9 +31,8 @@ class AdminLayout extends Component {
   }
 
   render() {
-    /** fetch login state
-     * if not logged in -> redirect to login page
-     * else render normally **/
+		console.log('AdminLayout')
+
     const menu = routes.map((route, index) => {
       return route.component ? (
         <Route

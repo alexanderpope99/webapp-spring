@@ -13,15 +13,8 @@ class SignUp1 extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       username: '',
-      //     localStorage.getItem('savedCheckbox') === 'true'
-      //       ? localStorage.getItem('savedUsername')
-      //       : '',
       password: '',
-      //     localStorage.getItem('savedCheckbox') === 'true'
-      //       ? localStorage.getItem('savedPassword')
-      //       : '',
       show: false,
-      //   checked: localStorage.getItem('savedCheckbox') === 'true' ? true : false,
     };
   }
   async handleClick(e) {
@@ -38,6 +31,7 @@ class SignUp1 extends React.Component {
     );
   }
   render() {
+		console.log('SignIn');
     if (sessionStorage.getItem('user') !== null) return <Redirect to="/auth/signin-1" />;
     else
       return (

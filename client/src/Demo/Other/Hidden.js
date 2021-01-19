@@ -42,7 +42,7 @@ class Hidden extends React.Component {
   // / => gets color, /all => gets all, /add => changes color to blue
   async getCookie() {
     const color = await axios
-      .get(`${server.address}/cookie/key=token`, { headers: authHeader(), withCredentials: true })
+      .get(`${server.address}/cookie/token`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (color) {
@@ -54,7 +54,7 @@ class Hidden extends React.Component {
 	
   async setCookie() {
     const color = await axios
-      .get(`${server.address}/cookie/add/token/kjh23j89sdfo32h489jerh3rm89j2iow3rj`, { headers: authHeader(), withCredentials: true })
+      .get(`${server.address}/cookie/add/token/kjh23j89sdfo32h489jerh3rm89j2iow3rj`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (color) {

@@ -27,8 +27,8 @@ class App extends Component {
           render={(props) => <route.component {...props} />}
         />
       ) : null;
-    });
-
+		});
+		console.log('App')
     return (
       <Aux>
         <ScrollToTop>
