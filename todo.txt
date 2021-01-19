@@ -39,8 +39,6 @@ Pasi de urmat:
 #################################################################################
 
 
-
-
 LAST-UPDATE : {
 	:5000/contract/fix-missing-values
 }
@@ -88,3 +86,4 @@ operator_plati:
 administrator de firma: bogdan tanase + ion corneliu
 
 bogdan poate da acordul, dar ion aproba in final
+LALA
