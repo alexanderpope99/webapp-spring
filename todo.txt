@@ -47,7 +47,8 @@ LAST-UPDATE : {
 
 
 TODO: {
-	auto git pull every 2 hours
+
+	pagina despre cum functioneaza aplicatia
 
 	1 -> buton de adauga utilizatori pt toti angajatii
 
