@@ -175,7 +175,7 @@ class PlatiSalariiMTA extends React.Component {
                 </Form.Group>
               </Col>
               {/* CONT PLATITOR */}
-              <Col md={4}>
+              {/* <Col md={4}>
                 <Form.Label>Contul din care se face plata</Form.Label>
                 <Form.Group>
                   <Form.Control
@@ -186,7 +186,8 @@ class PlatiSalariiMTA extends React.Component {
                     {conturiComponent}
                   </Form.Control>
                 </Form.Group>
-              </Col>
+              </Col> */}
+
             </Row>
           </Form>
           <div className="mt-4">
