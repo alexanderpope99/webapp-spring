@@ -196,7 +196,7 @@ class ContBancarTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza' + err.response.data.message,
+				toastMessage: 'Nu am putut adăuga ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })
@@ -208,7 +208,7 @@ class ContBancarTabel extends React.Component {
           show: false,
           isEdit: false,
           showToast: true,
-          toastMessage: `Cont bancar actualizat!`,
+				toastMessage: `Cont bancar adăugat! `,
           toastColor: 'lightgreen',
         },
         this.fillTable
