@@ -20,7 +20,7 @@ const Hidden = React.lazy(() => import('./Demo/Other/Hidden'));
 
 // FORMS
 const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
-const AddSocietate = React.lazy(() => import('./Demo/Forms/AddSocietate'));
+const Societate = React.lazy(() => import('./Demo/Forms/Societate'));
 const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
 const AngajatSimplu = React.lazy(() => import('./Demo/Forms/AngajatSimplu'));
 const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
@@ -75,7 +75,7 @@ const routes = [
 
 	// FORMS
 	{ path: '/forms/add-persoana', exact: true, name: 'Adauga Persoana', component: isAngajatSimplu ? null : AddPersoana },
-	{ path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: isAngajatSimplu ? null : AddSocietate },
+	{ path: '/forms/add-societate', exact: true, name: 'Adauga Societate', component: isAngajatSimplu ? null : Societate },
 	{
 		path: '/forms/angajat',
 		exact: true,

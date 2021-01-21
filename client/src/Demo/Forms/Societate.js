@@ -10,6 +10,7 @@ import authHeader from '../../services/auth-header';
 
 import authService from '../../services/auth.service';
 import CentruCostTabel from '../UIElements/Forms/CentruCostTabel';
+import ContBancarTabel from '../UIElements/Forms/ContBancarTabel';
 
 const judeteOptions = judete.map((judet, index) => {
   return <option key={index}>{judet}</option>;
@@ -19,7 +20,7 @@ const sectoareOptions = sectoare.map((sector, index) => {
   return <option key={index}>{sector}</option>;
 });
 
-class AddSocietate extends React.Component {
+class Societate extends React.Component {
   constructor() {
     super();
     this.onSubmit = this.onSubmit.bind(this);
@@ -38,6 +39,7 @@ class AddSocietate extends React.Component {
 
       // accordion
       showCentreCost: false,
+      showContBancar: false,
 
       // form data
       id: 0,
@@ -115,8 +117,6 @@ class AddSocietate extends React.Component {
   }
 
   async getSocietateDetails() {
-    // if (!this.state.socsel) window.location.href = '/dashboard/societati';
-
     const societate = await axios
       .get(`${server.address}/societate/${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
@@ -412,43 +412,77 @@ class AddSocietate extends React.Component {
                       />
                     </Form.Group>
                   </Row>
-                  {this.state.isEdit ? (
-                    <Col md={12}>
-                      <Card className="mt-2">
-                        <Card.Header
-                          style={{ cursor: 'pointer' }}
-                          onClick={() =>
-                            this.setState({
-                              showCentreCost: !this.state.showCentreCost,
-                            })
-                          }
-                        >
-                          <Card.Title
-                            as="h5"
-                            aria-controls="accordion1"
-                            aria-expanded={this.state.showCentreCost}
-                          >
-                            Centre cost
-                          </Card.Title>
-                        </Card.Header>
 
-                        <Collapse in={this.state.showCentreCost}>
-                          <div id="accordion1">
-                            <Card.Body>
-                              <CentruCostTabel
-                                adresaSocietate={{
-                                  id: this.state.idadresa,
-                                  adresa: this.state.adresa,
-                                  localitate: this.state.localitate,
-                                  tipJudet: this.state.tipJudet,
-                                  judet: this.state.judet,
-                                }}
-                              />
-                            </Card.Body>
-                          </div>
-                        </Collapse>
-                      </Card>
-                    </Col>
+                  {this.state.isEdit ? (
+                    <React.Fragment>
+                      {/* CONT BANCAR */}
+											<Col md={12}>
+                        <Card className="mt-2">
+                          <Card.Header
+                            style={{ cursor: 'pointer' }}
+                            onClick={() =>
+                              this.setState({
+                                showContBancar: !this.state.showContBancar,
+                              })
+                            }
+                          >
+                            <Card.Title
+                              as="h5"
+                              aria-controls="accordion1"
+                              aria-expanded={this.state.showContBancar}
+                            >
+                              Conturi bancare
+                            </Card.Title>
+                          </Card.Header>
+
+                          <Collapse in={this.state.showContBancar}>
+                            <div id="accordion1">
+                              <Card.Body>
+                                <ContBancarTabel />
+                              </Card.Body>
+                            </div>
+                          </Collapse>
+                        </Card>
+                      </Col>
+                      
+											{/* CENTRE COST */}
+											<Col md={12}>
+                        <Card className="mt-2">
+                          <Card.Header
+                            style={{ cursor: 'pointer' }}
+                            onClick={() =>
+                              this.setState({
+                                showCentreCost: !this.state.showCentreCost,
+                              })
+                            }
+                          >
+                            <Card.Title
+                              as="h5"
+                              aria-controls="accordion1"
+                              aria-expanded={this.state.showCentreCost}
+                            >
+                              Centre cost
+                            </Card.Title>
+                          </Card.Header>
+
+                          <Collapse in={this.state.showCentreCost}>
+                            <div id="accordion1">
+                              <Card.Body>
+                                <CentruCostTabel
+                                  adresaSocietate={{
+                                    id: this.state.idadresa,
+                                    adresa: this.state.adresa,
+                                    localitate: this.state.localitate,
+                                    tipJudet: this.state.tipJudet,
+                                    judet: this.state.judet,
+                                  }}
+                                />
+                              </Card.Body>
+                            </div>
+                          </Collapse>
+                        </Card>
+                      </Col>
+                    </React.Fragment>
                   ) : null}
                   <Row>
                     <Col md={6}>
@@ -467,4 +501,4 @@ class AddSocietate extends React.Component {
   }
 }
 
-export default AddSocietate;
+export default Societate;

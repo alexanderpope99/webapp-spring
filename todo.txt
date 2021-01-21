@@ -45,9 +45,10 @@ LAST-UPDATE : {
 	:5000/contract/fix-missing-values
 }
 
-
 TODO: {
-	auto git pull every 2 hours
+	daca nu are functie de baza, nu ii pune tichete
+
+	pagina despre cum functioneaza aplicatia
 
 	1 -> buton de adauga utilizatori pt toti angajatii
 

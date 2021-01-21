@@ -1,0 +1,10 @@
+SELECT pg_catalog.setval(pg_get_serial_sequence('actidentitate', 'id'), (SELECT MAX(id) FROM actidentitate)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('adresa', 'id'), (SELECT MAX(id) FROM adresa)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('angajat', 'idpersoana'), (SELECT MAX(idpersoana) FROM angajat)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('cm', 'id'), (SELECT MAX(id) FROM cm)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('co', 'id'), (SELECT MAX(id) FROM co)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('contbancar', 'id'), (SELECT MAX(id) FROM contbancar)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('contract', 'id'), (SELECT MAX(id) FROM contract)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('persoana', 'id'), (SELECT MAX(id) FROM persoana)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('persoanaintretinere', 'id'), (SELECT MAX(id) FROM persoanaintretinere)+1);
+SELECT pg_catalog.setval(pg_get_serial_sequence('societate', 'id'), (SELECT MAX(id) FROM societate)+1);

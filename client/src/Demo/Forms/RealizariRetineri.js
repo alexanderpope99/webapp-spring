@@ -1542,7 +1542,9 @@ class RealizariRetineri extends React.Component {
                           type="text"
                           disabled
                           value={this.numberWithCommas(
-                            Number(this.state.cam) + Number(this.state.totaldrepturi)
+                            Number(this.state.cam) +
+                              Number(this.state.totaldrepturi) +
+                              Number(this.state.valoaretichete)
                           )}
                         />
                       </Form.Group>

@@ -500,6 +500,10 @@ public class RealizariRetineri implements Serializable {
 		this.retineri = retineri;
 	}
 
+	public int getCheltuieliangajator() {
+		return Math.round(restplata + cam + valoaretichete);
+	}
+
 	public void checkData() throws ResourceNotFoundException {
 		if(contract == null)
 			throw new ResourceNotFoundException("Contractul lipseste pt realizariRetineri.id = " + id);

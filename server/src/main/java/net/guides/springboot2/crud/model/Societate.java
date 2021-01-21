@@ -218,4 +218,12 @@ public class Societate implements Serializable {
 		if (nume == null)
 			throw new ResourceNotFoundException("Numele nu poate fi null");
 	}
+
+	public void addContBancar(ContBancar contBancar) {
+		this.contbancar.add(contBancar);
+	}
+
+	public void removeContBancar(ContBancar contBancar) {
+		this.contbancar.remove(contBancar);
+	}
 }
