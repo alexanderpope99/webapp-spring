@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.ContBancar;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
@@ -40,24 +41,28 @@ public class MTAService {
 	private RealizariRetineriRepository realizariRetineriRepository;
 	@Autowired
 	private SocietateRepository societateRepository;
+	@Autowired
+	private ContBancarService contBancarService;
 
 	@Autowired
 	private ZileService zileService;
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean createMTA(int idsocietate, int luna, int an, int userID)
+	public boolean createMTA(int idsocietate, int luna, int an, int userID, int idContBancar)
 			throws IOException, ResourceNotFoundException {
 
+		List<Angajat> angajati = angajatRepository
+				.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
+		Societate societate = societateRepository.findById(idsocietate)
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+		ContBancar contSocietate = contBancarService.findById(idContBancar);
+		
 		// * READ THE FILE
 		String templateLocation = homeLocation + "/templates";
 		FileInputStream file = new FileInputStream(new File(templateLocation, "PlatiSalariiMTA.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet sheet = workbook.getSheetAt(0);
-
-		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
-		Societate societate = societateRepository.findById(idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 
 		Font arial10 = workbook.createFont();
 		arial10.setFontHeightInPoints((short) 10);
@@ -79,8 +84,8 @@ public class MTAService {
 					contract.getId());
 			if (realizariRetineri == null) {
 				workbook.close();
-				throw new ResourceNotFoundException("Salariatul cu idcontract " + contract.getId()
-						+ " nu are salariul calculat pe " + luna + "/" + an);
+				throw new ResourceNotFoundException(
+						"Salariatul cu idcontract " + contract.getId() + " nu are salariul calculat pe " + luna + "/" + an);
 			}
 
 			int rowNr = 2 + nrAngajat;

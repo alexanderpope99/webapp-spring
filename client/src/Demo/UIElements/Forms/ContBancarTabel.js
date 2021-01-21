@@ -66,8 +66,6 @@ class ContBancarTabel extends React.Component {
     );
   }
 
-
-
   componentDidMount() {
     this.fillTable();
   }

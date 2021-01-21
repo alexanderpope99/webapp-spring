@@ -303,8 +303,6 @@ public class RealizariRetineriService {
 
 		// verifica daca trebuie folosite (primaBruta, nrTichete, totalOreSuplimentare)
 		// existente
-		// could also work with Integer and check if is null and not pass arguments when
-		// calling this function
 		if (primaBruta == -1 && nrTichete == -1 && totalOreSuplimentare == -1) {
 			RealizariRetineri tmpRR = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
 			primaBruta = tmpRR.getPrimabruta() == null ? 0 : tmpRR.getPrimabruta();

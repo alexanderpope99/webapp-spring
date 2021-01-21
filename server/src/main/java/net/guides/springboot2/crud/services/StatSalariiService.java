@@ -83,7 +83,7 @@ public class StatSalariiService {
 					.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 			Adresa adresaSocietate = societate.getAdresa();
 
-			List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+			List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 
 			String statTemplateLocation = homeLocation + "/templates";
 
