@@ -48,7 +48,7 @@ class CentruCostTabel extends React.Component {
       showToast: false,
       toastMessage: '',
       toastTitle: '',
-      toastColor: '',
+      toastColor: 'lightgreen',
 
       // detalii centru cost
       id: 0,
@@ -206,7 +206,7 @@ class CentruCostTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })
@@ -222,7 +222,7 @@ class CentruCostTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge centrul de cost\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge centrul de cost ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })
@@ -261,7 +261,8 @@ class CentruCostTabel extends React.Component {
           show: false,
           isEdit: false,
           showToast: true,
-          toastMessage: `Centru cost "${centruCost.nume}" adăugat!`,
+					toastMessage: `Centru cost "${centruCost.nume}" adăugat!`,
+					toastColor: 'lightgreen',
         },
         this.fillTable
       );
@@ -301,6 +302,7 @@ class CentruCostTabel extends React.Component {
           isEdit: false,
           showToast: true,
           toastMessage: `Centru cost "${centruCost.nume}" actualizat!`,
+					toastColor: 'lightgreen',
         },
         this.fillTable
       );

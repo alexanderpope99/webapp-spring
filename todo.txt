@@ -45,8 +45,8 @@ LAST-UPDATE : {
 	:5000/contract/fix-missing-values
 }
 
-
 TODO: {
+	daca nu are functie de baza, nu ii pune tichete
 
 	pagina despre cum functioneaza aplicatia
 
