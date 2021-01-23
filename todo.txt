@@ -48,6 +48,8 @@ LAST-UPDATE : {
 TODO: {
 	daca nu are functie de baza, nu ii pune tichete
 
+	ia in considerare Panala din contract
+
 	pagina despre cum functioneaza aplicatia
 
 	1 -> buton de adauga utilizatori pt toti angajatii

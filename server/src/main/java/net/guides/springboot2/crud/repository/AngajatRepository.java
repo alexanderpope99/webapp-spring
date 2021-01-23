@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,6 +36,8 @@ public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 
 	List<Angajat> findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(int idsocietate, int idangajat,
 			List<Integer> subalterni);
+
+	List<Angajat> findBySocietate_IdAndContractNotNullAndContract_UltimaZiLucruBeforeOrderByPersoana_NumePersoana_Prenume(int idsocietate, LocalDate primaZiUrmatoareaLuna);
 
 	int countBySocietate_Id(int idsocietate);
 

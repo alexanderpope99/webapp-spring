@@ -71,16 +71,16 @@ class PlatiSalariiMTA extends React.Component {
     e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
-		let an = this.state.an;
-		let socselId = this.state.socsel.id;
-		let userId = this.state.user.id;
-		let idContBancar = this.state.idContBancar;
-		if(!idContBancar) {
-			this.setState({
-				showToast: true,
-				toastMessage: 'Selectați un cont plătitor',
-			})
-		}
+    let an = this.state.an;
+    let socselId = this.state.socsel.id;
+    let userId = this.state.user.id;
+    let idContBancar = this.state.idContBancar;
+    if (!idContBancar) {
+      this.setState({
+        showToast: true,
+        toastMessage: 'Selectați un cont plătitor',
+      })
+    }
 
     const created = await axios
       .get(
@@ -116,11 +116,11 @@ class PlatiSalariiMTA extends React.Component {
   render() {
     const luniComponent = luni.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
-    const conturiComponent = this.state.conturiBancare.map((cont) => (
-      <option key={cont.id} data-key={cont.id}>
-        {cont.numebanca}
-      </option>
-    ));
+    // const conturiComponent = this.state.conturiBancare.map((cont) => (
+    //   <option key={cont.id} data-key={cont.id}>
+    //     {cont.numebanca}
+    //   </option>
+    // ));
 
     return (
       <Card>
@@ -135,8 +135,8 @@ class PlatiSalariiMTA extends React.Component {
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
-        
-				<Card.Header>
+
+        <Card.Header>
           <Typography variant="h5">Plăți Salarii MTA</Typography>
         </Card.Header>
         <Card.Body>

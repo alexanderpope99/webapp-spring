@@ -57,7 +57,7 @@ public class MTAService {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 		ContBancar contSocietate = contBancarService.findById(idContBancar);
-		
+
 		// * READ THE FILE
 		String templateLocation = homeLocation + "/templates";
 		FileInputStream file = new FileInputStream(new File(templateLocation, "PlatiSalariiMTA.xlsx"));

@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,6 +94,10 @@ public class AngajatService {
 			return angajatRepository.findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(
 					angajat.getSocietate().getId(), idangajat, subalterni);
 		}
+	}
 
+	public List<Angajat> getAngajatiContracteValide(int idsocietate, int luna, int an) {
+		LocalDate primaZiUrmatoareaLuna = LocalDate.of(an, luna+1, 1);
+		return angajatRepository.findBySocietate_IdAndContractNotNullAndContract_UltimaZiLucruBeforeOrderByPersoana_NumePersoana_Prenume(idsocietate, primaZiUrmatoareaLuna);
 	}
 }
