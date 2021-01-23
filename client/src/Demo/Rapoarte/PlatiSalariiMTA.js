@@ -63,8 +63,8 @@ class PlatiSalariiMTA extends React.Component {
           showToast: true,
           toastMessage: 'Nu am putut prelua conturile societății ' + err.response.data.message,
         })
-      );
-    if (conturi) this.setState({ conturiBancare: conturi, idContBancar: conturi[0].id, numeBanca: conturi[0].numebanca });
+			);
+    if (conturi.length > 0) this.setState({ conturiBancare: conturi, idContBancar: conturi[0].id, numeBanca: conturi[0].numebanca });
   }
 
   async creeazaMTA(e) {
@@ -79,7 +79,8 @@ class PlatiSalariiMTA extends React.Component {
       this.setState({
         showToast: true,
         toastMessage: 'Selectați un cont plătitor',
-      })
+			})
+			return;
     }
 
     const created = await axios
@@ -116,11 +117,11 @@ class PlatiSalariiMTA extends React.Component {
   render() {
     const luniComponent = luni.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
-    // const conturiComponent = this.state.conturiBancare.map((cont) => (
-    //   <option key={cont.id} data-key={cont.id}>
-    //     {cont.numebanca}
-    //   </option>
-    // ));
+    const conturiComponent = this.state.conturiBancare.map((cont) => (
+      <option key={cont.id} data-key={cont.id}>
+        {cont.numebanca}
+      </option>
+    ));
 
     return (
       <Card>
@@ -175,7 +176,7 @@ class PlatiSalariiMTA extends React.Component {
                 </Form.Group>
               </Col>
               {/* CONT PLATITOR */}
-              {/* <Col md={4}>
+              <Col md={4}>
                 <Form.Label>Contul din care se face plata</Form.Label>
                 <Form.Group>
                   <Form.Control
@@ -186,7 +187,7 @@ class PlatiSalariiMTA extends React.Component {
                     {conturiComponent}
                   </Form.Control>
                 </Form.Group>
-              </Col> */}
+              </Col>
 
             </Row>
           </Form>

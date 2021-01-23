@@ -29,14 +29,13 @@ import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
-import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
 public class MTAService {
 	@Autowired
-	private AngajatRepository angajatRepository;
+	private AngajatService angajatService;
 	@Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
 	@Autowired
@@ -52,10 +51,11 @@ public class MTAService {
 	public boolean createMTA(int idsocietate, int luna, int an, int userID, int idContBancar)
 			throws IOException, ResourceNotFoundException {
 
-		List<Angajat> angajati = angajatRepository
-				.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+
+		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
+
 		ContBancar contSocietate = contBancarService.findById(idContBancar);
 
 		// * READ THE FILE
@@ -69,9 +69,18 @@ public class MTAService {
 		arial10.setFontName("Arial");
 		CellStyle style = workbook.createCellStyle();
 		style.setFont(arial10);
+		
+		CellStyle ibanSocietate = workbook.createCellStyle();
+		ibanSocietate.setFont(arial10);
+		ibanSocietate.setBorderRight(BorderStyle.THIN);
 
 		// * initialize writerCell;
 		Cell writerCell;
+
+		// write iban-ul platitorului
+		writerCell = sheet.getRow(1).getCell(1);
+		writerCell.setCellStyle(ibanSocietate);
+		writerCell.setCellValue(contSocietate.getIban());
 
 		int nrAngajat = 1;
 		for (Angajat angajat : angajati) {
@@ -85,7 +94,7 @@ public class MTAService {
 			if (realizariRetineri == null) {
 				workbook.close();
 				throw new ResourceNotFoundException(
-						"Salariatul cu idcontract " + contract.getId() + " nu are salariul calculat pe " + luna + "/" + an);
+						persoana.getNumeIntreg() + " nu are salariul calculat pe " + luna + "/" + an);
 			}
 
 			int rowNr = 2 + nrAngajat;
@@ -131,9 +140,11 @@ public class MTAService {
 		sheet.autoSizeColumn(5);
 
 		// * set borders
+
 		PropertyTemplate allCellsBordered = new PropertyTemplate();
 		String cellRange = "$A$4:$F$" + (2 + nrAngajat);
-		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);
+		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange),
+		BorderStyle.THIN, BorderExtent.ALL);
 		allCellsBordered.applyBorders(sheet);
 
 		// * OUTPUT THE FILE
@@ -141,8 +152,6 @@ public class MTAService {
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID,
 				societate.getNume(), lunaNume, an);
-		// String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s
-		// %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

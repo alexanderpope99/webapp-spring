@@ -32,11 +32,11 @@ public class AngajatService {
 	public Angajat save(AngajatDTO angajatDTO) throws ResourceNotFoundException {
 		Angajat angajat = modelMapper.map(angajatDTO, Angajat.class);
 
-		Persoana persoana = persoanaRepository.findById(angajatDTO.getIdpersoana()).orElseThrow(
-				() -> new ResourceNotFoundException("Nu eistă persoana cu id : " + angajatDTO.getIdpersoana()));
+		Persoana persoana = persoanaRepository.findById(angajatDTO.getIdpersoana())
+				.orElseThrow(() -> new ResourceNotFoundException("Nu eistă persoana cu id : " + angajatDTO.getIdpersoana()));
 
-		Societate societate = societateRepository.findById(angajatDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Nu există societate cu id: " + angajatDTO.getIdsocietate()));
+		Societate societate = societateRepository.findById(angajatDTO.getIdsocietate())
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + angajatDTO.getIdsocietate()));
 
 		angajat.setPersoana(persoana);
 		angajat.setSocietate(societate);
@@ -91,13 +91,25 @@ public class AngajatService {
 		if (subalterni.isEmpty()) {
 			return angajatRepository.findBySocietate_IdAndIdpersoanaNot(angajat.getSocietate().getId(), idangajat);
 		} else {
-			return angajatRepository.findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(
-					angajat.getSocietate().getId(), idangajat, subalterni);
+			return angajatRepository.findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(angajat.getSocietate().getId(),
+					idangajat, subalterni);
 		}
 	}
 
-	public List<Angajat> getAngajatiContracteValide(int idsocietate, int luna, int an) {
-		LocalDate primaZiUrmatoareaLuna = LocalDate.of(an, luna+1, 1);
-		return angajatRepository.findBySocietate_IdAndContractNotNullAndContract_UltimaZiLucruBeforeOrderByPersoana_NumePersoana_Prenume(idsocietate, primaZiUrmatoareaLuna);
+	public List<Angajat> getAngajatiContracteValide(int idsocietate, int an, int luna) {
+		List<Angajat> angajati = angajatRepository
+				.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
+
+		angajati.removeIf(angajat -> {
+			LocalDate ultimaZiLucru = angajat.getContract().getUltimazilucru();
+			if (ultimaZiLucru != null) {
+				if(ultimaZiLucru.getYear() < an) return true;
+				else if(ultimaZiLucru.getYear() == an) return ultimaZiLucru.getMonthValue() < luna;
+				else return false;
+			} else
+				return false;
+		});
+
+		return angajati;
 	}
 }
