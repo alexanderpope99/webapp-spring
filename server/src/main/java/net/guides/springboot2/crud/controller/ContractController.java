@@ -36,7 +36,7 @@ public class ContractController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Contract> getContractById(@PathVariable(value = "id") int contractId)
+	public ResponseEntity<Contract> findById(@PathVariable(value = "id") int contractId)
 			throws ResourceNotFoundException {
 		Contract contract = contractRepository.findById(contractId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
@@ -44,7 +44,7 @@ public class ContractController {
 	}
 
 	@GetMapping("idp={id}")
-	public ResponseEntity<Contract> getContractByIdPersoana(@PathVariable(value = "id") int idpersoana)
+	public ResponseEntity<Contract> findByIdPersoana(@PathVariable(value = "id") int idpersoana)
 			throws ResourceNotFoundException {
 		Contract contract = contractRepository.findByIdPersoana(idpersoana).orElseThrow(
 				() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
