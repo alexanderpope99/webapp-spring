@@ -1078,7 +1078,7 @@ public class StatSalariiService {
 			// * ZILE CM
 			writerCell = row1.getCell(8); // CM
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(cmService.getZileCM(luna, an, idcontract));
+			writerCell.setCellValue(realizariRetineri.getZilecmlucratoare());
 			writerCell = row2.getCell(8); // FNUASS
 			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(0);

@@ -38,9 +38,8 @@ public class RetineriService {
 	}
 
 	public Retineri updateRetinere(RetineriDTO newRetinereDTO) throws ResourceNotFoundException {
-		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat())
-				.orElseThrow(() -> new ResourceNotFoundException(
-						"Nu există realizări rețineri cu id " + newRetinereDTO.getIdstat()));
+		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(newRetinereDTO.getIdstat()).orElseThrow(
+				() -> new ResourceNotFoundException("Nu există realizări rețineri cu id " + newRetinereDTO.getIdstat()));
 
 		Retineri newRetinere = modelMapper.map(newRetinereDTO, Retineri.class);
 		newRetinere.setStat(realizariRetineri);
@@ -52,8 +51,11 @@ public class RetineriService {
 		Float totalPensie = retineriRepository.getTotalPensieFacByYear(idc, an);
 		if (totalPensie == null || totalPensie > 400)
 			return 0;
-		else
-			return retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idc, luna, an).getPensiefacangajat();
+		else{
+			Retineri rv = retineriRepository.findByStat_Contract_IdAndStat_LunaAndStat_An(idc, luna, an);
+			if(rv != null) return rv.getPensiefacangajat();
+			else return 0;
+		}
 	}
 
 	public Retineri getRetinereByIdstat(int stat) throws ResourceNotFoundException {
