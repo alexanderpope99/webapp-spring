@@ -76,6 +76,7 @@ public class MTAService {
 
 		// daca soc are doar un cont ia toti angajatii
 		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
+		angajati.removeIf(ang -> ang.getContract().getContbancar().getIban().isEmpty());
 		// daca soc are mai multe conturi, ia-i doar pe cei cu cont la raiff == scoate-i pe cei care nu au raiff
 		if (societate.getContbancar().size() > 1)
 			angajati.removeIf(ang -> !ang.getContract().getContbancar().getNumebanca().toLowerCase().contains("raiff"));
@@ -193,6 +194,7 @@ public class MTAService {
 
 		// daca soc are doar un cont ia toti angajatii
 		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
+		angajati.removeIf(ang -> ang.getContract().getContbancar().getIban().isEmpty());
 		// daca soc are mai multe conturi, scoate-i pe cei care au raiff
 		if (societate.getContbancar().size() > 1)
 			angajati.removeIf(ang -> ang.getContract().getContbancar().getNumebanca().toLowerCase().contains("raiff"));
