@@ -15,6 +15,7 @@ class Stat extends React.Component {
 
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
+    this.recalcSocietate = this.recalcSocietate.bind(this);
     this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
     // this.download = this.download.bind(this);
 
@@ -47,7 +48,7 @@ class Stat extends React.Component {
     });
   }
 
-  async creeazaStatSalarii(e) {
+  async creeazaStatSalarii(e, tip) {
     e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
@@ -67,11 +68,52 @@ class Stat extends React.Component {
         })
       );
 
-    if (created)
+    if (created && tip === 'XLSX')
       download(
         `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
         this.state.user.id
       );
+
+    if (created && tip === 'PDF')
+      download(
+        `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.pdf`,
+        this.state.user.id
+      );
+  }
+
+  async recalcSocietate() {
+    let luna = this.state.luna;
+    let an = this.state.an;
+
+    const ok = await axios
+      .put(
+        `${server.address}/realizariretineri/recalc/societate/ids=${this.state.socsel.id}&mo=${luna.nr}&y=${an}`,
+        {},
+        { headers: authHeader() }
+      )
+      .then((res) => res.status === 200)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastTitle: 'Eroare',
+          toastColor: 'white',
+          toastMessage: 'Nu am putut recalcula realizari/retineri\n' + err.response.data.message,
+        })
+      );
+
+    if (ok) {
+      this.setState({
+        showToast: true,
+        toastColor: 'lightgreen',
+        toastTitle: 'Recalculate',
+        toastMessage: `Toate salariile din luna ${luna.nume} au fost recalculate pentru ${this.state.socsel.nume}`,
+      });
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
   }
 
   render() {
@@ -82,11 +124,13 @@ class Stat extends React.Component {
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
+          delay={5000}
+          autohide
           className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: this.state.toastColor }}
         >
           <Toast.Header className="pr-2">
-            <strong className="mr-auto">Eroare</strong>
+            <strong className="mr-auto">{this.state.toastTitle}</strong>
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
@@ -140,7 +184,10 @@ class Stat extends React.Component {
               </Row>
             </Form>
             <div className="mt-2">
-              <Button onClick={this.creeazaStatSalarii}>Stat salarii in Excel</Button>
+              <Button onClick={(e) => this.creeazaStatSalarii(e, 'XLSX')}>
+                Ștat salarii Excel
+              </Button>
+              <Button onClick={this.recalcSocietate}>Recalculează Salarii</Button>
             </div>
           </Card.Body>
         </Card>

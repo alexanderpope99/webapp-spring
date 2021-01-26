@@ -39,7 +39,8 @@ public class ContBancar implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Societate societate;
 
-	public ContBancar() {}
+	public ContBancar() {
+	}
 
 	public ContBancar(String iban, String numebanca) {
 		this.iban = iban;
@@ -61,7 +62,7 @@ public class ContBancar implements Serializable {
 	public Contract getContract() {
 		return contract;
 	}
-	
+
 	public String getIban() {
 		return iban;
 	}
