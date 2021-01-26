@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.guides.springboot2.crud.dto.OresuplimentareDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.repository.OresuplimentareRepository;
@@ -38,47 +37,45 @@ public class OresuplimentareController {
 	private OresuplimentareService oresuplimentareService;
 
 	@GetMapping
-	public List<OresuplimentareDTO> getAllPersoane() {
-		return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
-			.stream().map(os -> modelMapper.map(os, OresuplimentareDTO.class)).collect(Collectors.toList());
+	public List<Oresuplimentare> getAllPersoane() {
+		return oresuplimentareRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<OresuplimentareDTO> getOresuplimentareById(@PathVariable(value = "id") int id)
+	public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value = "id") int id)
 			throws ResourceNotFoundException {
 		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
 
-		return ResponseEntity.ok().body(modelMapper.map(oresuplimentare, OresuplimentareDTO.class));
+		return ResponseEntity.ok().body(modelMapper.map(oresuplimentare, Oresuplimentare.class));
 	}
 
 	@GetMapping("/api/idc={id}&mo={luna}&y={an}")
-	public ResponseEntity<List<OresuplimentareDTO>> getOresuplimentareByLunaAnIdcontract(
+	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByLunaAnIdcontract(
 			@PathVariable(value = "id") int idcontract, @PathVariable(value = "luna") Integer luna,
 			@PathVariable(value = "an") Integer an) {
-		List<OresuplimentareDTO> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an,
-				idcontract).stream().map(os -> modelMapper.map(os, OresuplimentareDTO.class)).collect(Collectors.toList());
+		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 
 		return ResponseEntity.ok().body(oresuplimentare);
 	}
 
 	@GetMapping("idss={id}")
-	public ResponseEntity<List<OresuplimentareDTO>> getOresuplimentareByIdstat(@PathVariable(value = "id") int idstat) {
-		List<OresuplimentareDTO> oresuplimentare = oresuplimentareRepository.findByStatsalariat_Id(idstat)
-		.stream().map(os -> modelMapper.map(os, OresuplimentareDTO.class)).collect(Collectors.toList());
+	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable(value = "id") int idstat) {
+		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByStatsalariat_Id(idstat).stream()
+				.map(os -> modelMapper.map(os, Oresuplimentare.class)).collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(oresuplimentare);
 	}
 
 	@PostMapping
-	public OresuplimentareDTO createOresuplimentare(@RequestBody OresuplimentareDTO oresuplimentare)
+	public Oresuplimentare createOresuplimentare(@RequestBody Oresuplimentare oresuplimentare)
 			throws ResourceNotFoundException {
 		return oresuplimentareService.save(oresuplimentare);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<OresuplimentareDTO> updateOresuplimentare(@PathVariable(value = "id") int id,
-			@RequestBody OresuplimentareDTO newOresuplimentare) throws ResourceNotFoundException {
+	public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") int id,
+			@RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
 		return ResponseEntity.ok(oresuplimentareService.update(id, newOresuplimentare));
 	}
 

@@ -504,6 +504,10 @@ public class RealizariRetineri implements Serializable {
 		return Math.round(restplata + cam + valoaretichete);
 	}
 
+	public void addOreSuplimentare(Oresuplimentare oresuplimentare) {
+		this.oresuplimentare.add(oresuplimentare);
+	}
+
 	public void checkData() throws ResourceNotFoundException {
 		if(contract == null)
 			throw new ResourceNotFoundException("Contractul lipseste pt realizariRetineri.id = " + id);

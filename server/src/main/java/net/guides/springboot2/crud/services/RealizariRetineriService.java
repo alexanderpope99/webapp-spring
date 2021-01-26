@@ -12,13 +12,13 @@ import net.guides.springboot2.crud.dto.LuniCuSalarii;
 import net.guides.springboot2.crud.dto.RRDetails;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
-import net.guides.springboot2.crud.repository.OresuplimentareRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 
 @Service
@@ -51,8 +51,6 @@ public class RealizariRetineriService {
 	// REPOSITORIES
 	@Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
-	@Autowired
-	private OresuplimentareRepository oresuplimentareRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
 	@Autowired
@@ -212,11 +210,8 @@ public class RealizariRetineriService {
 				(int) totalDrepturi, salariuPeZi, salariuPeOra, cas, cass, cam, impozit, valoareTichete, restPlata,
 				nrPersoaneIntretinere, (int) this.deducere, primaBruta, totalOreSuplimentare);
 
-		int nrOreSuplimentare = oresuplimentareRepository.getNrOreSuplimentareByIdstat(rr.getId());
-
 		rr.setValcm(valCM);
 		rr.setZileplatite(zilePlatite);
-		rr.setNroresuplimentare(nrOreSuplimentare);
 		rr.setSalariurealizat((int) salariuRealizat);
 		rr.setVenitnet(Math.round(venitNet));
 		rr.setBazaimpozit(Math.round(bazaImpozit * platesteImpozit));
@@ -273,9 +268,7 @@ public class RealizariRetineriService {
 
 		realizariRetineri.setRetineri(retineri);
 
-		realizariRetineri = realizariRetineriRepository.save(realizariRetineri);
-
-		return realizariRetineri;
+		return realizariRetineriRepository.save(realizariRetineri);
 	} // saveRealizariRetineri
 
 	// daca exista deja calculate, returneaza pe acelea, daca nu, calculeaza
@@ -300,23 +293,32 @@ public class RealizariRetineriService {
 			return this.saveRealizariRetineri(luna, an, idcontract);
 		}
 
-		// verifica daca trebuie folosite (primaBruta, nrTichete, totalOreSuplimentare)
-		// existente
+		// verifica daca trebuie folosite (primaBruta, nrTichete, totalOreSuplimentare) existente
 		if (primaBruta == -1 && nrTichete == -1 && totalOreSuplimentare == -1) {
 			RealizariRetineri tmpRR = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
 			primaBruta = tmpRR.getPrimabruta() == null ? 0 : tmpRR.getPrimabruta();
 			nrTichete = tmpRR.getNrtichete() == null ? 0 : tmpRR.getNrtichete();
 			totalOreSuplimentare = tmpRR.getTotaloresuplimentare() == null ? 0 : tmpRR.getTotaloresuplimentare();
-		}
+		}		
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 				idcontract);
 		if (oldRealizariRetineri == null)
-			throw new ResourceNotFoundException("Nu are salariul calculat în " + luna + "/" + an);
+			throw new ResourceNotFoundException("Nu are salariul calculat în " + luna + "/" + an);		
 
 		RealizariRetineri newRealizariRetineri = this.calcRealizariRetineri(idcontract, luna, an, primaBruta, nrTichete,
 				totalOreSuplimentare);
 		newRealizariRetineri.setId(oldRealizariRetineri.getId());
+
+		// ore suplimentare
+		List<Oresuplimentare> oreSuplimentare = oldRealizariRetineri.getOresuplimentare();
+		int nroresuplimentare = 0;
+		for(Oresuplimentare ore : oreSuplimentare) {
+			nroresuplimentare += ore.getNr();
+		}
+		newRealizariRetineri.setNroresuplimentare(nroresuplimentare);
+		newRealizariRetineri.setOrelucrate(newRealizariRetineri.getOrelucrate() + nroresuplimentare);
+
 
 		bazacalculService.updateBazacalcul(newRealizariRetineri);
 

@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.dto.OresuplimentareDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Oresuplimentare;
 import net.guides.springboot2.crud.model.RealizariRetineri;
@@ -21,21 +20,25 @@ public class OresuplimentareService {
 	@Autowired
 	private OresuplimentareRepository oresuplimentareRepository;
 
-	public OresuplimentareDTO save(OresuplimentareDTO osDTO) throws ResourceNotFoundException {
-		Oresuplimentare os = modelMapper.map(osDTO, Oresuplimentare.class);
+	public Oresuplimentare save(Oresuplimentare oresuplimentare) throws ResourceNotFoundException {
+		Oresuplimentare os = modelMapper.map(oresuplimentare, Oresuplimentare.class);
 
-		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(osDTO.getIdstatsalariat())
+		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(oresuplimentare.getStatsalariat().getId())
 				.orElseThrow(() -> new ResourceNotFoundException(
-						"Nu există realizară rețineri cu id: " + osDTO.getIdstatsalariat()));
+						"Nu există realizară rețineri cu id: " + oresuplimentare.getStatsalariat().getId()));
 
-		os.setStatsalariat(realizariRetineri);
+		// os.setStatsalariat(realizariRetineri);
 		os = oresuplimentareRepository.save(os);
 		os.setId(os.getId());
-		return osDTO;
+
+		realizariRetineri.addOreSuplimentare(os);
+		realizariRetineriRepository.save(realizariRetineri);
+
+		return oresuplimentare;
 	}
 
-	public OresuplimentareDTO update(int osID, OresuplimentareDTO newOsDTO) throws ResourceNotFoundException {
-		newOsDTO.setId(osID);
-		return save(newOsDTO);
+	public Oresuplimentare update(int osID, Oresuplimentare newOs) throws ResourceNotFoundException {
+		newOs.setId(osID);
+		return save(newOs);
 	}
 }

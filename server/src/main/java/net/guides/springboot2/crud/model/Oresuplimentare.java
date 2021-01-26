@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "oresuplimentare")
 public class Oresuplimentare implements Serializable {
@@ -33,7 +35,7 @@ public class Oresuplimentare implements Serializable {
 	@Column(name = "total")
 	private Float total;
 
-	// @JsonManagedReference(value = "oresuplimentare-realizariretineri")
+	@JsonBackReference(value = "oresuplimentare-stat")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idstatsalariat")
 	private RealizariRetineri statsalariat;
