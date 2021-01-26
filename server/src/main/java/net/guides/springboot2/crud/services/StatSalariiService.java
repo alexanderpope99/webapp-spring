@@ -134,8 +134,8 @@ public class StatSalariiService {
 			writerCell = stat.getRow(3).getCell(0);
 			writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 			writerCell = stat.getRow(4).getCell(0);
-			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																											// localitate
+			// judet + localitate
+			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate());
 
 			// * write luna, an
 			writerCell = stat.getRow(4).getCell(11);
