@@ -187,8 +187,7 @@ public class RealizariRetineriService {
 		float salariuPeZi = totalDrepturi / norma;
 		float salariuPeOra = totalDrepturi / norma / duratazilucru;
 
-		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare)
-				+ primaBruta + totalOreSuplimentare);
+		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta);
 
 		float valCO = (zileCOLucratoare) * salariuPeZi;
 		totalDrepturi = Math.round(salariuRealizat + valCM - primaBruta);
