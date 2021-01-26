@@ -112,11 +112,11 @@ public class RealizariRetineriService {
 		float valoareTichete = nrTichete * parametriiSalariu.getValtichet();
 		this.venitNet = restPlata + valoareTichete;
 
-		// Integer deducerePensieFacultativa = retineriService.calculeazaPensieDeductibila(idcontract, an, luna);
-		// if (deducerePensieFacultativa == null)
-		// 	deducerePensieFacultativa = 0;
+		Integer deducerePensieFacultativa = retineriService.calculeazaPensieDeductibila(idcontract, an, luna);
+		if (deducerePensieFacultativa == null)
+			deducerePensieFacultativa = 0;
 
-		this.bazaImpozit = (restPlata + valoareTichete - deducere);
+		this.bazaImpozit = (restPlata + valoareTichete - deducere - deducerePensieFacultativa);
 
 		this.impozitSalariu = bazaImpozit * impozit;
 
