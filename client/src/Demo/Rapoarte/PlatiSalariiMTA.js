@@ -65,7 +65,11 @@ class PlatiSalariiMTA extends React.Component {
         })
 			);
     if (conturi.length > 0) this.setState({ conturiBancare: conturi, idContBancar: conturi[0].id, numeBanca: conturi[0].numebanca });
-  }
+	}
+	
+	getMTAFormat(numeBanca) {
+		return numeBanca.toLowerCase().includes('raiff') ? 'r' : 'u';
+	}
 
   async creeazaMTA(e) {
     e.preventDefault();
@@ -81,11 +85,13 @@ class PlatiSalariiMTA extends React.Component {
         toastMessage: 'Selectați un cont plătitor',
 			})
 			return;
-    }
+		}
+		
+		const format = this.getMTAFormat(this.state.numeBanca);
 
     const created = await axios
       .get(
-        `${server.address}/mta/${socselId}&mo=${luna.nr}&y=${an}/${userId}/${idContBancar}`,
+        `${server.address}/mta/${socselId}&mo=${luna.nr}&y=${an}/${userId}/${idContBancar}/${format}`,
         { headers: authHeader() }
       )
       .then((res) => res.status === 200)
@@ -96,11 +102,15 @@ class PlatiSalariiMTA extends React.Component {
         })
       );
 
-    if (created)
+		if (created) {
+			console.log('MTA Created');
+			console.log(format === 'r' ? 'xlsx' : 'csv');
+			// return;
       download(
-        `FisierMTA - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
+        `MTA ${this.state.numeBanca} - ${this.state.socsel.nume} - ${luna.nume} ${an}.${format === 'r' ? 'xlsx' : 'csv'}`,
         this.state.user.id
-      );
+			);
+		}
   }
 
   onChangeCont(e) {

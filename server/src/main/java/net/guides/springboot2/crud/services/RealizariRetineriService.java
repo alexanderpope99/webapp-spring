@@ -190,8 +190,7 @@ public class RealizariRetineriService {
 		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare)
 				+ primaBruta + totalOreSuplimentare);
 
-		// zileCOLucratoare include zileCFPLucratoare
-		float valCO = (zileCOLucratoare - zileCFPLucratoare) * salariuPeZi;
+		float valCO = (zileCOLucratoare) * salariuPeZi;
 		totalDrepturi = Math.round(salariuRealizat + valCM - primaBruta);
 
 		float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);

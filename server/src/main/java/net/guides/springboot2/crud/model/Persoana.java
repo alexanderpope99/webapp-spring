@@ -83,7 +83,7 @@ public class Persoana implements Serializable {
 	}
 
 	public String getCnp() {
-		return cnp;
+		return cnp == null ? "" : cnp;
 	}
 
 	public String getEmail() {

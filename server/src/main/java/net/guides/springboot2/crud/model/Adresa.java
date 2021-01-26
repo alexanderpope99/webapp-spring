@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "adresa")
@@ -89,5 +90,13 @@ public class Adresa implements Serializable {
 	}
 	public void setSocietati(Societate societati) {
 		this.societati = societati;
+	}
+
+	@JsonIgnore
+	public String getAdresaCompleta() {
+		String j = judet == null ? "" : judet+' ';
+		String l = localitate == null ? "" : localitate+' ';
+		String a = adresa == null ? "" : adresa;
+		return j + l + a;
 	}
 }

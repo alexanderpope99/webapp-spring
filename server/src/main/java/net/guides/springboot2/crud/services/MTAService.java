@@ -1,11 +1,18 @@
 package net.guides.springboot2.crud.services;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.BorderExtent;
@@ -48,7 +55,22 @@ public class MTAService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean createMTA(int idsocietate, int luna, int an, int userID, int idContBancar)
+	private String faraDiacritice(String str) {
+		str = str.replace("ă", "a");
+		str = str.replace("â", "a");
+		str = str.replace("Â", "A");
+		str = str.replace("Ă", "A");
+		str = str.replace("ț", "t");
+		str = str.replace("Ț", "T");
+		str = str.replace("ș", "s");
+		str = str.replace("Ș", "S");
+		str = str.replace("î", "i");
+		str = str.replace("Î", "I");
+
+		return str;
+	}
+
+	public boolean createMTA_Raiffeisen(int idsocietate, int luna, int an, int userID, int idContBancar)
 			throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById(idsocietate)
@@ -69,7 +91,7 @@ public class MTAService {
 		arial10.setFontName("Arial");
 		CellStyle style = workbook.createCellStyle();
 		style.setFont(arial10);
-		
+
 		CellStyle ibanSocietate = workbook.createCellStyle();
 		ibanSocietate.setFont(arial10);
 		ibanSocietate.setBorderRight(BorderStyle.THIN);
@@ -77,7 +99,7 @@ public class MTAService {
 		// * initialize writerCell;
 		Cell writerCell;
 
-		// write iban-ul platitorului
+		// * iban-ul platitorului
 		writerCell = sheet.getRow(1).getCell(1);
 		writerCell.setCellStyle(ibanSocietate);
 		writerCell.setCellValue(contSocietate.getIban());
@@ -86,7 +108,7 @@ public class MTAService {
 		for (Angajat angajat : angajati) {
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
-			if (contract.getContbancar() == null)
+			if (contract.getContbancar().getIban().isEmpty())
 				continue;
 
 			RealizariRetineri realizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
@@ -103,7 +125,7 @@ public class MTAService {
 			// * Descriere tranzactie cont beneficiar
 			writerCell = row.createCell(0);
 			writerCell.setCellStyle(style);
-			writerCell.setCellValue("Plată salariu");
+			writerCell.setCellValue("Plata salariu");
 
 			// * Cont beneficiar
 			writerCell = row.createCell(1);
@@ -123,7 +145,7 @@ public class MTAService {
 			// * Nume beneficiar (nume + prenume)
 			writerCell = row.createCell(4);
 			writerCell.setCellStyle(style);
-			writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
+			writerCell.setCellValue(faraDiacritice(persoana.getNumeIntreg()));
 
 			// * Nr. evidenta plata
 			writerCell = row.createCell(5);
@@ -135,7 +157,6 @@ public class MTAService {
 
 		sheet.autoSizeColumn(0);
 		sheet.autoSizeColumn(1);
-		// sheet.autoSizeColumn(2);
 		sheet.autoSizeColumn(4);
 		sheet.autoSizeColumn(5);
 
@@ -143,15 +164,14 @@ public class MTAService {
 
 		PropertyTemplate allCellsBordered = new PropertyTemplate();
 		String cellRange = "$A$4:$F$" + (2 + nrAngajat);
-		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange),
-		BorderStyle.THIN, BorderExtent.ALL);
+		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);
 		allCellsBordered.applyBorders(sheet);
 
 		// * OUTPUT THE FILE
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
 		String lunaNume = zileService.getNumeLunaByNr(luna);
-		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID,
-				societate.getNume(), lunaNume, an);
+		String newFileLocation = String.format("%s/downloads/%d/MTA %s - %s - %s %d.xlsx", homeLocation, userID,
+				contSocietate.getNumebanca(), societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
@@ -160,7 +180,7 @@ public class MTAService {
 		return true;
 	} // createMTA
 
-	public boolean createMTA2(int idsocietate, int luna, int an, int userID, int idContBancar)
+	public boolean createMTA_Unicredit(int idsocietate, int luna, int an, int userID, int idContBancar)
 			throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById(idsocietate)
@@ -168,33 +188,25 @@ public class MTAService {
 
 		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
 
+		// faster than java filtering??
 		ContBancar contSocietate = contBancarService.findById(idContBancar);
 
-		// * READ THE FILE
-		String templateLocation = homeLocation + "/templates";
-		FileInputStream file = new FileInputStream(new File(templateLocation, "MTA_BCR.xlsx"));
-		Workbook workbook = new XSSFWorkbook(file);
-		Sheet sheet = workbook.getSheetAt(0);
-
-		Font arial10 = workbook.createFont();
-		arial10.setFontHeightInPoints((short) 10);
-		arial10.setFontName("Arial");
-		CellStyle style = workbook.createCellStyle();
-		style.setFont(arial10);
-		
-		CellStyle ibanSocietate = workbook.createCellStyle();
-		ibanSocietate.setFont(arial10);
-		ibanSocietate.setBorderRight(BorderStyle.THIN);
-
-		// * initialize writerCell;
-		Cell writerCell;
-
-		// write iban-ul platitorului
-		writerCell = sheet.getRow(1).getCell(1);
-		writerCell.setCellStyle(ibanSocietate);
-		writerCell.setCellValue(contSocietate.getIban());
+		PrintWriter pw = null;
+		try {
+			Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
+			String lunaNume = zileService.getNumeLunaByNr(luna);
+			String newFileLocation = String.format("%s/downloads/%d/MTA %s - %s - %s %d.csv", homeLocation, userID,
+					contSocietate.getNumebanca(), societate.getNume(), lunaNume, an);
+			File output = new File(newFileLocation);
+			output.createNewFile();
+			pw = new PrintWriter(newFileLocation);
+			// pw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newFileLocation), StandardCharsets.UTF_8));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		int nrAngajat = 1;
+		StringBuilder csv = new StringBuilder();
 		for (Angajat angajat : angajati) {
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
@@ -204,72 +216,59 @@ public class MTAService {
 			RealizariRetineri realizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an,
 					contract.getId());
 			if (realizariRetineri == null) {
-				workbook.close();
+				pw.close();
 				throw new ResourceNotFoundException(
 						persoana.getNumeIntreg() + " nu are salariul calculat pe " + luna + "/" + an);
 			}
 
-			int rowNr = 2 + nrAngajat;
-			Row row = sheet.createRow(rowNr);
+			StringBuilder row = new StringBuilder();
+			// * index
+			row.append(String.valueOf(nrAngajat)).append(',');
 
-			// * Descriere tranzactie cont beneficiar
-			writerCell = row.createCell(0);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue("Plată salariu");
+			// * Amount + RON
+			row.append(realizariRetineri.getRestplata().toString()).append(",RON,");
 
-			// * Cont beneficiar
-			writerCell = row.createCell(1);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue(contract.getContbancar().getIban());
+			// * Payer Account IBAN
+			row.append(contSocietate.getIban()).append(',');
 
-			// * Suma
-			writerCell = row.createCell(2);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue(realizariRetineri.getRestplata());
+			// * Payer name
+			row.append(faraDiacritice(persoana.getNumeIntreg())).append(',');
 
-			// * CNP/CUI beneficiar
-			writerCell = row.createCell(3);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue(persoana.getCnp());
+			// * Payee address 1
+			// row.append(faraDiacritice(persoana.getAdresa().getAdresaCompleta())).append(',');
+			row.append(',');
 
-			// * Nume beneficiar (nume + prenume)
-			writerCell = row.createCell(4);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
+			// * Payee address 2
+			row.append(',');
 
-			// * Nr. evidenta plata
-			writerCell = row.createCell(5);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue(nrAngajat);
+			// * Payee CUI
+			row.append(persoana.getCnp()).append(',');
 
+			// * Payee Account IBAN
+			row.append(contract.getContbancar().getIban()).append(',');
+
+			// * Details 1
+			row.append("Plata salariu,");
+
+			// * Details 2
+			row.append(',');
+
+			// * Details 3
+			row.append(',');
+
+			// * Processing date [YYMMDD]
+			LocalDate today = LocalDate.now();
+			String yymmdd = String.valueOf(an).substring(2);
+			yymmdd += String.format("%02d", luna);
+			yymmdd += String.format("%02d", today.getDayOfMonth());
+			row.append(yymmdd).append(",NORMAL\n");
+			csv.append(row);
 			nrAngajat++;
 		}
 
-		sheet.autoSizeColumn(0);
-		sheet.autoSizeColumn(1);
-		// sheet.autoSizeColumn(2);
-		sheet.autoSizeColumn(4);
-		sheet.autoSizeColumn(5);
-
-		// * set borders
-
-		PropertyTemplate allCellsBordered = new PropertyTemplate();
-		String cellRange = "$A$4:$F$" + (2 + nrAngajat);
-		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange),
-		BorderStyle.THIN, BorderExtent.ALL);
-		allCellsBordered.applyBorders(sheet);
-
-		// * OUTPUT THE FILE
-		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-		String lunaNume = zileService.getNumeLunaByNr(luna);
-		String newFileLocation = String.format("%s/downloads/%d/FisierMTA - %s - %s %d.xlsx", homeLocation, userID,
-				societate.getNume(), lunaNume, an);
-
-		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
-		workbook.write(outputStream);
-		workbook.close();
+		pw.write(csv.toString());
+		pw.close();
 
 		return true;
-	} // createMTA
-
+	} // createMTA_Unicredit
 }

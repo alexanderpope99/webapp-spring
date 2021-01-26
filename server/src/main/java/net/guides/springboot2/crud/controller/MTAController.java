@@ -17,13 +17,23 @@ public class MTAController {
 	@Autowired
 	private MTAService mtaService;
 
-	@GetMapping("/{ids}&mo={luna}&y={an}/{uid}/{cbid}")
-	public boolean createMTA(
+	@GetMapping("/{ids}&mo={luna}&y={an}/{uid}/{cbid}/r")
+	public boolean createMTA_Raiffeisen(
 		@PathVariable ("ids") int idsocietate, 
 		@PathVariable ("luna") int luna, 
 		@PathVariable ("an") int an, 
 		@PathVariable("uid") int userID,
 		@PathVariable("cbid") int idContBancar) throws ResourceNotFoundException, IOException {
-		return mtaService.createMTA(idsocietate, luna, an, userID, idContBancar);
+		return mtaService.createMTA_Raiffeisen(idsocietate, luna, an, userID, idContBancar);
+	}
+
+	@GetMapping("/{ids}&mo={luna}&y={an}/{uid}/{cbid}/u")
+	public boolean createMTA_Unicredit(
+		@PathVariable ("ids") int idsocietate, 
+		@PathVariable ("luna") int luna, 
+		@PathVariable ("an") int an, 
+		@PathVariable("uid") int userID,
+		@PathVariable("cbid") int idContBancar) throws ResourceNotFoundException, IOException {
+		return mtaService.createMTA_Unicredit(idsocietate, luna, an, userID, idContBancar);
 	}
 }
