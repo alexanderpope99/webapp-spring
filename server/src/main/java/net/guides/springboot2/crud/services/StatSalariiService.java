@@ -622,6 +622,7 @@ public class StatSalariiService {
 			Row row6 = stat.createRow(rowNr + 5);
 			Row row8 = stat.createRow(rowNr + 7);
 			Row row9 = stat.createRow(rowNr + 8);
+			Row row10 = stat.createRow(rowNr + 9);
 
 			stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 0, 3)); // obligatii angajator
 			stat.addMergedRegion(new CellRangeAddress(rowNr + 2, rowNr + 2, 0, 3)); // cas cond. speciale.
@@ -850,22 +851,22 @@ public class StatSalariiService {
 			cellRange = "I$" + (rowNr + 9) + ":$K$" + (rowNr + 9);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
-			// * CAS 10%***
+			// * CASS 10%***
 			writerCell = row8.createCell(11);
 			writerCell.setCellStyle(salariu10Style);
-			writerCell.setCellValue("CAS 10%***");
+			writerCell.setCellValue("CASS 10%***");
 			cellRange = "L$" + (rowNr + 8) + ":$N$" + (rowNr + 8);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row9.createCell(11);
 			writerCell.setCellStyle(salariu10Style);
-			writerCell.setCellValue(stat.getRow(totalRowNr).getCell(18).getNumericCellValue());
+			writerCell.setCellValue(stat.getRow(totalRowNr+1).getCell(16).getNumericCellValue());
 			cellRange = "L$" + (rowNr + 9) + ":$N$" + (rowNr + 9);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
 			// * CASS scutit***
 			writerCell = row8.createCell(14);
 			writerCell.setCellStyle(font10);
-			writerCell.setCellValue("CAS scutit***");
+			writerCell.setCellValue("CASS scutit***");
 			cellRange = "O$" + (rowNr + 8) + ":$Q$" + (rowNr + 8);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row9.createCell(14);
