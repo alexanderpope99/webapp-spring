@@ -141,7 +141,7 @@ public class RealizariRetineriService {
 	public RealizariRetineri calcRealizariRetineri(int idcontract, int luna, int an, int primaBruta, int nrTichete,
 			int totalOreSuplimentare) throws ResourceNotFoundException {
 		Contract contract = contractService.findById(idcontract);
-		
+
 		impozitSalariu = 0;
 		deducere = 0;
 		venitNet = 0;
@@ -289,7 +289,8 @@ public class RealizariRetineriService {
 	} // saveOrGetRealizariRetineri
 
 	public RealizariRetineri recalcRealizariRetineri(RRDetails rrDetails) throws ResourceNotFoundException {
-		return recalcRealizariRetineri(rrDetails.getLuna(), rrDetails.getAn(), rrDetails.getIdcontract(), rrDetails.getPrimaBruta(), rrDetails.getNrTichete(), rrDetails.getTotalOreSuplimentare());
+		return recalcRealizariRetineri(rrDetails.getLuna(), rrDetails.getAn(), rrDetails.getIdcontract(),
+				rrDetails.getPrimaBruta(), rrDetails.getNrTichete(), rrDetails.getTotalOreSuplimentare());
 	}
 
 	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract, int primaBruta, int nrTichete,
@@ -368,7 +369,9 @@ public class RealizariRetineriService {
 	}
 
 	public boolean fixValuesMissing() {
-		var wrapper = new Object(){ boolean value = true; };
+		var wrapper = new Object() {
+			boolean value = true;
+		};
 
 		realizariRetineriRepository.findAll().forEach(rr -> {
 			try {
