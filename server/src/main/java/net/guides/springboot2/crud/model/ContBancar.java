@@ -63,7 +63,7 @@ public class ContBancar implements Serializable {
 	}
 	
 	public String getIban() {
-		return iban;
+		return iban == null ? "" : iban;
 	}
 
 	public void setIban(String iban) {
@@ -71,7 +71,7 @@ public class ContBancar implements Serializable {
 	}
 
 	public String getNumebanca() {
-		return numebanca;
+		return numebanca == null ? "" : numebanca;
 	}
 
 	public void setNumebanca(String adresa) {

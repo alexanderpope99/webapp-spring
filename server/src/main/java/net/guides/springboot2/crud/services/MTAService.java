@@ -72,9 +72,16 @@ public class MTAService {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 
-		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
-
 		ContBancar contSocietate = contBancarService.findById(idContBancar);
+
+		// daca soc are doar un cont ia toti angajatii
+		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
+		// daca soc are mai multe conturi, ia-i doar pe cei cu cont la raiff == scoate-i pe cei care nu au raiff
+		if (societate.getContbancar().size() > 1)
+			angajati.removeIf(ang -> !ang.getContract().getContbancar().getNumebanca().toLowerCase().contains("raiff"));
+
+		if (angajati.isEmpty())
+			throw new ResourceNotFoundException("Nu există angajați cu cont la Raiffeisen Bank");
 
 		// * READ THE FILE
 		String templateLocation = homeLocation + "/templates";
@@ -181,11 +188,14 @@ public class MTAService {
 
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
-
-		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
-
 		// faster than java filtering??
 		ContBancar contSocietate = contBancarService.findById(idContBancar);
+
+		// daca soc are doar un cont ia toti angajatii
+		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
+		// daca soc are mai multe conturi, scoate-i pe cei care au raiff
+		if (societate.getContbancar().size() > 1)
+			angajati.removeIf(ang -> ang.getContract().getContbancar().getNumebanca().toLowerCase().contains("raiff"));
 
 		PrintWriter pw = null;
 		try {
@@ -196,7 +206,8 @@ public class MTAService {
 			File output = new File(newFileLocation);
 			output.createNewFile();
 			pw = new PrintWriter(newFileLocation);
-			// pw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newFileLocation), StandardCharsets.UTF_8));
+			// pw = new BufferedWriter(new OutputStreamWriter(new
+			// FileOutputStream(newFileLocation), StandardCharsets.UTF_8));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

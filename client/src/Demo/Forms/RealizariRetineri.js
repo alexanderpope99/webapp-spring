@@ -1556,6 +1556,7 @@ class RealizariRetineri extends React.Component {
 										variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
 										disabled={!this.state.selected_angajat}
 										className="mb-3 float-right"
+										onClick={(e) => e.stopPropagation()}
 									>
 										<Dropdown.Item eventKey="1" onClick={this.onSubmit}>
 											Luna selectată
