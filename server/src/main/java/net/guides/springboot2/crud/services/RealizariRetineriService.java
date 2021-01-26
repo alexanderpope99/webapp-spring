@@ -85,7 +85,7 @@ public class RealizariRetineriService {
 	public int calcRestplata(int idcontract, int luna, int an, float totalDrepturi, float nrTichete,
 			int nrPersoaneIntretinere) throws ResourceNotFoundException {
 
-		Contract contract = contractService.getContractById(idcontract);
+		Contract contract = contractService.findById(idcontract);
 		if (contract == null)
 			throw new ResourceNotFoundException("Nu există contract cu id " + idcontract);
 
@@ -140,7 +140,7 @@ public class RealizariRetineriService {
 	// just calc, doesnt affect DB
 	public RealizariRetineri calcRealizariRetineri(int idcontract, int luna, int an, int primaBruta, int nrTichete,
 			int totalOreSuplimentare) throws ResourceNotFoundException {
-		Contract contract = contractService.getContractById(idcontract);
+		Contract contract = contractService.findById(idcontract);
 		
 		impozitSalariu = 0;
 		deducere = 0;
@@ -190,8 +190,7 @@ public class RealizariRetineriService {
 		this.salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare)
 				+ primaBruta + totalOreSuplimentare);
 
-		// zileCOLucratoare include zileCFPLucratoare
-		float valCO = (zileCOLucratoare - zileCFPLucratoare) * salariuPeZi;
+		float valCO = (zileCOLucratoare) * salariuPeZi;
 		totalDrepturi = Math.round(salariuRealizat + valCM - primaBruta);
 
 		float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
@@ -303,8 +302,6 @@ public class RealizariRetineriService {
 
 		// verifica daca trebuie folosite (primaBruta, nrTichete, totalOreSuplimentare)
 		// existente
-		// could also work with Integer and check if is null and not pass arguments when
-		// calling this function
 		if (primaBruta == -1 && nrTichete == -1 && totalOreSuplimentare == -1) {
 			RealizariRetineri tmpRR = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
 			primaBruta = tmpRR.getPrimabruta() == null ? 0 : tmpRR.getPrimabruta();

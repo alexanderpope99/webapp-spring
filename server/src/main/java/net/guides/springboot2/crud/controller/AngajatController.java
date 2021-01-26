@@ -127,6 +127,11 @@ public class AngajatController {
 		return angajatRepository.findBySocietate_IdAndUser_IdAndContractNotNull(idsocietate, iduser);
 	}
 
+	@GetMapping("/ids={ids}/test/{an}/{luna}")
+	public List<Angajat> getAngajatiCuSalariu(@PathVariable("ids") int idsocietate, @PathVariable("an") int an, @PathVariable("luna") int luna) {
+		return angajatService.getAngajatiContracteValide(idsocietate, an, luna);
+	}
+
 	@PostMapping("/expand")
 	public Angajat createAngajat(@RequestBody Angajat angajat) {
 		return angajatRepository.save(angajat);

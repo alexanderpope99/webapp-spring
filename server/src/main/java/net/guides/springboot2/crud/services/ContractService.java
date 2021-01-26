@@ -16,7 +16,7 @@ public class ContractService {
 	@Autowired
 	AngajatRepository angajatRepository;
 
-	public Contract getContractById(int idcontract) throws ResourceNotFoundException {
+	public Contract findById(int idcontract) throws ResourceNotFoundException {
 		return contractRepository.findById(idcontract)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idcontract));
 	}

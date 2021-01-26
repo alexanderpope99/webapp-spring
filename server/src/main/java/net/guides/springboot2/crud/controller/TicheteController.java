@@ -45,7 +45,7 @@ public class TicheteController {
 
 	@GetMapping("nr/idc={idc}&mo={luna}&y={an}")
 	public int getNrTicheteByLunaAnIdcontract(@PathVariable(value = "idc") int idcontract,
-			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) {
+			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) throws ResourceNotFoundException {
 		return ticheteService.getNrTichete(luna, an, idcontract);
 	}
 

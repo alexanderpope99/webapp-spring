@@ -83,7 +83,7 @@ public class StatSalariiService {
 					.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 			Adresa adresaSocietate = societate.getAdresa();
 
-			List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+			List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 
 			String statTemplateLocation = homeLocation + "/templates";
 
@@ -134,8 +134,8 @@ public class StatSalariiService {
 			writerCell = stat.getRow(3).getCell(0);
 			writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 			writerCell = stat.getRow(4).getCell(0);
-			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																											// localitate
+			// judet + localitate
+			writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate());
 
 			// * write luna, an
 			writerCell = stat.getRow(4).getCell(11);
@@ -252,9 +252,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getSalariurealizat());
 				writerCell = row2.createCell(11); // valoare CO
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(
-						(realizariRetineri.getZilecolucratoare() - realizariRetineri.getZilecfplucratoare())
-								* realizariRetineri.getSalariupezi());
+				writerCell.setCellValue(realizariRetineri.getValco());
 				writerCell = row3.createCell(11); // CO neefect.
 				writerCell.setCellValue(0);
 

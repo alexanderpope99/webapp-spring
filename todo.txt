@@ -48,6 +48,10 @@ LAST-UPDATE : {
 TODO: {
 	daca nu are functie de baza, nu ii pune tichete
 
+	fisierul trebuie sa fie csv sau excel?
+
+	ia in considerare Panala din contract
+
 	pagina despre cum functioneaza aplicatia
 
 	1 -> buton de adauga utilizatori pt toti angajatii
@@ -55,17 +59,27 @@ TODO: {
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori
 
-	* -> https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/ 
+	* -> https://dev.to/jazzzzz/converting-excel-to-pdf-in-java-application-474i
+
 	* -> https://vladmihalcea.com/the-best-way-to-map-an-enum-type-with-jpa-and-hibernate/ 
 	* -> add sorting and filtering to tables on frontend 
 }
 
 *** INTREBARI: ***
-din ce se calculeaza CASS? din sal. realizat?
+ impozit  apoi scad pensia
 
 CONCEDIU DE ODIHNA:
 	IN STAT APARE NR ZILE TOTAL (NU DOAR LUCRATOARE) -> INCLUDE WEEKEND?
 
+
+!! HARDCODAT
+societatea are doar un cont => scot un singur mta cu format in functie de nume (are sau nu 'raiff' in nume)
+societatea are 2 conturi => 
+	pentru raiff scot doar angajatii care au raiff
+	restul intra la celalalt cont (deci Unicredit)
+
+1,2000,RON,RO80BTRLRONCRT0375026601,Negoita Bogdan-Ionut,Bld. Alexandru Obregia 32,,1981005460044,RO80BTRLRONCRT0375026602,Plata Salariu,,,,210126,NORMAL
+5,2000,RON,RO49AAAA1B31007593840BCR,Negoiță Bogdan-Ionuț,,,null,RO80BTRLRONCRT0375026601,Plată salariu,,,210126,NORMAL
 _________________________________________
 
 admin = nu vede datele

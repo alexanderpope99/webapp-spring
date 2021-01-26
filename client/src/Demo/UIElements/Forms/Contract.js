@@ -510,7 +510,7 @@ class Contract extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        <Form onSubmit={(e) => e.preventDefault()}>
+        <Form onSubmit={(e) => this.onSubmit(e)}>
           <Row>
             <Col md={12}>
               <Form.Group controlId="functia">
@@ -601,12 +601,6 @@ class Contract extends React.Component {
             <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
               <Form.Group id="functiedabaza">
                 <Form.Label>
-                  {/* <Switch
-										color="primary"
-                    checked={this.state.functieBaza}
-										onChange={(e) => this.setState({ functieBaza: e.target.checked })}
-                  />
-                  Funcție de bază */}
                   <Form.Check
                     custom
                     type="switch"
@@ -785,7 +779,7 @@ class Contract extends React.Component {
                   </Form.Group>
                 </Col>
                 <Col md={6}>
-                  <Form.Group id="numebanca">
+                  <Form.Group controlId="numebanca">
                     <Form.Label>Nume bancă</Form.Label>
                     <Form.Control
                       type="text"
