@@ -86,9 +86,9 @@ class ContBancarTabel extends React.Component {
       );
 
     if (conturiBancare) this.setState({ conturiBancare: conturiBancare }, this.renderTabel);
-	}
-	
-	renderTabel() {
+  }
+
+  renderTabel() {
     this.setState({
       conturiBancareComponent: this.state.conturiBancare.map((item) => {
         return (
@@ -185,16 +185,14 @@ class ContBancarTabel extends React.Component {
     };
 
     const ok = await axios
-      .post(
-        `${server.address}/contbancar/ids=${this.state.socsel.id}`,
-        contbancar,
-        { headers: authHeader() }
-      )
+      .post(`${server.address}/contbancar/ids=${this.state.socsel.id}`, contbancar, {
+        headers: authHeader(),
+      })
       .then((res) => res.status === 200)
       .catch((err) =>
         this.setState({
           showToast: true,
-				toastMessage: 'Nu am putut adăuga ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })
@@ -206,7 +204,7 @@ class ContBancarTabel extends React.Component {
           show: false,
           isEdit: false,
           showToast: true,
-				toastMessage: `Cont bancar adăugat! `,
+          toastMessage: `Cont bancar adăugat! `,
           toastColor: 'lightgreen',
         },
         this.fillTable
@@ -221,9 +219,13 @@ class ContBancarTabel extends React.Component {
     };
 
     const ok = await axios
-      .put(`${server.address}/contbancar/${contbancar.id}/ids=${this.state.socsel.id}`, contbancar, {
-        headers: authHeader(),
-      })
+      .put(
+        `${server.address}/contbancar/${contbancar.id}/ids=${this.state.socsel.id}`,
+        contbancar,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.status === 200)
       .catch((err) =>
         this.setState({
@@ -249,8 +251,8 @@ class ContBancarTabel extends React.Component {
 
   edit(item) {
     this.setState({
-			show: true,
-			isEdit: true,
+      show: true,
+      isEdit: true,
       id: item.id,
       iban: item.iban,
       numeBanca: item.numebanca,
@@ -292,7 +294,7 @@ class ContBancarTabel extends React.Component {
             </Form.Group>
 
             <Form.Group id="iban" as={Col} md="12">
-              <Form.Label>Nume bancă</Form.Label>
+              <Form.Label>IBAN</Form.Label>
               <Form.Control
                 required
                 type="text"

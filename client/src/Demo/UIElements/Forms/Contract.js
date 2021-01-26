@@ -493,9 +493,9 @@ class Contract extends React.Component {
             <strong className="mr-auto">Eroare</strong>
           </Toast.Header>
           <Toast.Body>
-						{this.state.toastMessage}
-						<Button variant="light">Repara scriind valori predefinite</Button>
-					</Toast.Body>
+            {this.state.toastMessage}
+            <Button variant="light">Repara scriind valori predefinite</Button>
+          </Toast.Body>
         </Toast>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
@@ -536,6 +536,7 @@ class Contract extends React.Component {
                 >
                   <option>Contract de munca</option>
                   <option>Contract de administrator</option>
+                  <option>Contract suspendat</option>
                   <option>Convenție civilă</option>
                   <option>Drepturi de autor</option>
                   <option>Figuranți / Zilieri</option>

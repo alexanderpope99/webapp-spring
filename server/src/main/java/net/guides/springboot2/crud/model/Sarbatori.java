@@ -9,11 +9,13 @@ import javax.persistence.*;
 @Table(name = "sarbatori")
 public class Sarbatori implements Serializable {
 	private static final long serialVersionUID = 1L;
-	Sarbatori() {}
+
+	Sarbatori() {
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "dela", nullable = false)
 	private LocalDate dela;
@@ -36,10 +38,11 @@ public class Sarbatori implements Serializable {
 		this.nume = nume;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(long id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
 
