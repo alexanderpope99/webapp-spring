@@ -66,10 +66,6 @@ TODO: {
 }
 
 *** INTREBARI: ***
- impozit  apoi scad pensia
-
-CONCEDIU DE ODIHNA:
-
 
 !! HARDCODAT
 societatea are doar un cont => scot un singur mta cu format in functie de nume (are sau nu 'raiff' in nume)

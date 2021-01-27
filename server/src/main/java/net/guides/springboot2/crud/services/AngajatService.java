@@ -97,8 +97,7 @@ public class AngajatService {
 	}
 
 	public List<Angajat> getAngajatiContracteValide(int idsocietate, int an, int luna) {
-		List<Angajat> angajati = angajatRepository
-				.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullAndContract_ContbancarNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 
 		angajati.removeIf(angajat -> {
 			LocalDate ultimaZiLucru = angajat.getContract().getUltimazilucru();
