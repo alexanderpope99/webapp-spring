@@ -12,7 +12,7 @@ public class CM extends Concediu{
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "continuare")
-	private Boolean continuare;
+	private Boolean continuare = false;
 
 	@Column(name = "datainceput")
 	private LocalDate datainceput;
@@ -39,34 +39,34 @@ public class CM extends Concediu{
 	private String codboalainfcont;
 
 	@Column(name = "bazacalcul")
-	private Float bazacalcul;
+	private Float bazacalcul = 0f;
 
 	@Column(name = "bazacalculplafonata")
-	private Float bazacalculplafonata;
+	private Float bazacalculplafonata = 0f;
 
 	@Column(name = "zilebazacalcul")
-	private Integer zilebazacalcul;
+	private Integer zilebazacalcul = 0;
 
 	@Column(name = "mediezilnica")
-	private Float mediezilnica;
+	private Float mediezilnica = 0f;
 
 	@Column(name = "zilefirma")
-	private Integer zilefirma;
+	private Integer zilefirma = 0;
 
 	@Column(name = "indemnizatiefirma")
-	private Float indemnizatiefirma;
+	private Float indemnizatiefirma = 0f;
 
 	@Column(name = "zilefnuass")
-	private Integer zilefnuass;
+	private Integer zilefnuass = 0;
 
 	@Column(name = "indemnizatiefnuass")
-	private Float indemnizatiefnuass;
+	private Float indemnizatiefnuass = 0f;
 
 	@Column(name = "zilefaambp")
-	private Integer zilefaamb;
+	private Integer zilefaambp = 0;
 
 	@Column(name = "indemnizatiefaambp")
-	private Float indemnizatiefaambp;
+	private Float indemnizatiefaambp = 0f;
 
 	@Column(name = "locprescriere")
 	private String locprescriere;
@@ -81,7 +81,7 @@ public class CM extends Concediu{
 	private String codboala;
 
 	@Column(name = "urgenta")
-	private Boolean urgenta;
+	private Boolean urgenta = false;
 
 	@Column(name = "conditii")
 	private String conditii;
@@ -113,7 +113,7 @@ public class CM extends Concediu{
 		this.indemnizatiefirma = indemnizatiefirma;
 		this.zilefnuass = zilefnuass;
 		this.indemnizatiefnuass = indemnizatiefnuass;
-		this.zilefaamb = zilefaambp;
+		this.zilefaambp = zilefaambp;
 		this.indemnizatiefaambp = indemnizatiefaambp;
 		this.locprescriere = locprescriere;
 		this.nravizmedic = nravizmedic;
@@ -245,7 +245,7 @@ public class CM extends Concediu{
 	}
 
 	public Integer getZilefnuass() {
-		return zilefnuass;
+		return zilefnuass == null ? 0 : zilefnuass;
 	}
 
 	public void setZilefnuass(Integer zilefnuass) {
@@ -260,12 +260,12 @@ public class CM extends Concediu{
 		this.indemnizatiefnuass = indemnizatiefnuass;
 	}
 
-	public Integer getZilefaamb() {
-		return zilefaamb;
+	public Integer getZilefaambp() {
+		return zilefaambp == null ? 0 : zilefaambp;
 	}
 
-	public void setZilefaamb(Integer zilefaamb) {
-		this.zilefaamb = zilefaamb;
+	public void setZilefaambp(Integer zilefaambp) {
+		this.zilefaambp = zilefaambp;
 	}
 
 	public Float getIndemnizatiefaambp() {

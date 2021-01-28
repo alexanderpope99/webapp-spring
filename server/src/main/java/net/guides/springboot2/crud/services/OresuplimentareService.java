@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.services;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +11,6 @@ import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 
 @Service
 public class OresuplimentareService {
-	@Autowired
-	private ModelMapper modelMapper;
 
 	@Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
@@ -21,17 +18,14 @@ public class OresuplimentareService {
 	private OresuplimentareRepository oresuplimentareRepository;
 
 	public Oresuplimentare save(Oresuplimentare oresuplimentare) throws ResourceNotFoundException {
-		Oresuplimentare os = modelMapper.map(oresuplimentare, Oresuplimentare.class);
-
 		RealizariRetineri realizariRetineri = realizariRetineriRepository.findById(oresuplimentare.getStatsalariat().getId())
-				.orElseThrow(() -> new ResourceNotFoundException(
-						"Nu există realizară rețineri cu id: " + oresuplimentare.getStatsalariat().getId()));
+				.orElseThrow(() -> new ResourceNotFoundException("Nu există realizări rețineri cu id-ul respectiv"));
 
 		// os.setStatsalariat(realizariRetineri);
-		os = oresuplimentareRepository.save(os);
-		os.setId(os.getId());
+		oresuplimentare.setStatsalariat(realizariRetineri);
+		oresuplimentare = oresuplimentareRepository.save(oresuplimentare);
 
-		realizariRetineri.addOreSuplimentare(os);
+		realizariRetineri.addOreSuplimentare(oresuplimentare);
 		realizariRetineriRepository.save(realizariRetineri);
 
 		return oresuplimentare;

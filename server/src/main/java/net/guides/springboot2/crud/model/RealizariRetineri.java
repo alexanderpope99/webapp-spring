@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -505,6 +506,9 @@ public class RealizariRetineri implements Serializable {
 	}
 
 	public void addOreSuplimentare(Oresuplimentare oresuplimentare) {
+		if(this.oresuplimentare == null)
+			this.oresuplimentare = new ArrayList<>();
+
 		this.oresuplimentare.add(oresuplimentare);
 	}
 

@@ -675,10 +675,10 @@ class RealizariRetineri extends React.Component {
 
 	async addOrasuplimentara(n, p, t) {
 		const ore_body = {
-			idstatsalariat: this.state.idstat,
-			nr: n || null,
-			procent: p || null,
-			total: t.toFixed(0),
+			statsalariat: {id: this.state.idstat},
+			nr: n || 0,
+			procent: p || 0,
+			total: t ? t.toFixed(0) : 0,
 		};
 
 		await axios
@@ -973,13 +973,13 @@ class RealizariRetineri extends React.Component {
 								<Form.Group>
 									<Form.Label>Suma</Form.Label>
 									<Form.Control
+										disabled
 										type="number"
 										value={(
 											Number(this.state.nrore) *
 											(Number(this.state.procent) / 100) *
 											Number(this.state.salariupeora)
 										).toFixed(0)}
-										disabled
 									/>
 								</Form.Group>
 							</Col>

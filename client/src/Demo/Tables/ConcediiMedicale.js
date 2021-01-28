@@ -371,7 +371,6 @@ class CMTabel extends React.Component {
     }
 
     const cm_body = {
-      id: this.state.id,
       idcontract: this.state.angajat.idcontract,
       dela: this.state.dela,
       panala: this.state.panala,
@@ -384,16 +383,16 @@ class CMTabel extends React.Component {
       codurgenta: this.state.codurgenta,
       procent: this.state.procent,
       codboalainfcont: this.state.codboalainfcont,
-      bazacalcul: this.state.bazacalcul,
-      bazacalculplafonata: this.state.bazacalculplafonata,
-      zilebazacalcul: this.state.zilebazacalcul,
-      mediezilnica: this.state.mediezilnica,
-      zilefirma: this.state.zilefirma,
-      indemnizatiefirma: this.state.indemnizatiefirma,
-      zilefnuass: this.state.zilefnuass,
-      indemnizatiefnuass: this.state.indemnizatiefnuass,
-      zilefaambp: this.state.zilefaambp,
-      indemnizatiefaambp: this.state.indemnizatiefaambp,
+      bazacalcul: this.correctNumber(this.state.bazacalcul) || 0,
+      bazacalculplafonata: this.correctNumber(this.state.bazacalculplafonata) || 0,
+      zilebazacalcul: this.state.zilebazacalcul || 0,
+      mediezilnica: this.correctNumber(this.state.mediezilnica) || 0,
+      zilefirma: this.state.zilefirma || 0,
+      indemnizatiefirma: this.state.indemnizatiefirma || 0,
+      zilefnuass: this.state.zilefnuass || 0,
+      indemnizatiefnuass: this.state.indemnizatiefnuass || 0,
+      zilefaambp: this.state.zilefaambp || 0,
+      indemnizatiefaambp: this.state.indemnizatiefaambp || 0,
       locprescriere: this.state.locprescriere,
       nravizmedic: this.state.nravizmedic,
       codboala: this.state.codboala,
@@ -442,16 +441,16 @@ class CMTabel extends React.Component {
       codurgenta: this.state.codurgenta,
       procent: this.state.procent,
       codboalainfcont: this.state.codboalainfcont,
-      bazacalcul: this.correctNumber(this.state.bazacalcul),
-      bazacalculplafonata: this.correctNumber(this.state.bazacalculplafonata),
-      zilebazacalcul: this.state.zilebazacalcul,
-      mediezilnica: this.correctNumber(this.state.mediezilnica),
-      zilefirma: this.state.zilefirma,
-      indemnizatiefirma: this.state.indemnizatiefirma,
-      zilefnuass: this.state.zilefnuass,
-      indemnizatiefnuass: this.state.indemnizatiefnuass,
-      zilefaambp: this.state.zilefaambp,
-      indemnizatiefaambp: this.state.indemnizatiefaambp,
+      bazacalcul: this.correctNumber(this.state.bazacalcul) || 0,
+      bazacalculplafonata: this.correctNumber(this.state.bazacalculplafonata) || 0,
+      zilebazacalcul: this.state.zilebazacalcul || 0,
+      mediezilnica: this.correctNumber(this.state.mediezilnica) || 0,
+      zilefirma: this.state.zilefirma || 0,
+      indemnizatiefirma: this.state.indemnizatiefirma || 0,
+      zilefnuass: this.state.zilefnuass || 0,
+      indemnizatiefnuass: this.state.indemnizatiefnuass || 0,
+      zilefaambp: this.state.zilefaambp || 0,
+      indemnizatiefaambp: this.state.indemnizatiefaambp || 0,
       locprescriere: this.state.locprescriere,
       nravizmedic: this.state.nravizmedic,
       codboala: this.state.codboala,
@@ -1005,7 +1004,7 @@ class CMTabel extends React.Component {
                   <Form.Label>Cod indemnizație</Form.Label>
                   <Form.Control
                     type="text"
-                    disabled
+                    // disabled
                     value={this.state.codindemnizatie}
                     onChange={(e) => {
                       this.setState({ codindemnizatie: e.target.value });

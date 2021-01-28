@@ -111,7 +111,7 @@ public class CMService {
 
 		return cmRepository.findByContract_IdAndDelaBetween(idcontract, inceputLuna, sfarsitLuna);
 	}
-
+	
 	public int getValCM(int luna, int an, int idcontract) {
 		// get idangajat of idcontract
 		int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
@@ -125,6 +125,38 @@ public class CMService {
 		}
 
 		return Math.round(valCM);
+	}
+
+	public int getValcmFNUASS(List<CM> concediiMedicale) {
+		int valcmfnuass = 0;
+		for(CM cm : concediiMedicale) {
+			valcmfnuass += cm.getIndemnizatiefnuass();
+		}
+		return valcmfnuass;
+	}
+
+	public int getZilecmFNUASS(List<CM> concediiMedicale) {
+		int zilecmfnuass = 0;
+		for(CM cm : concediiMedicale) {
+			zilecmfnuass += cm.getZilefnuass();
+		}
+		return zilecmfnuass;
+	}
+
+	public int getValcmFAAMBP(List<CM> concediiMedicale) {
+		int valcmfaambp = 0;
+		for(CM cm : concediiMedicale) {
+			valcmfaambp += cm.getIndemnizatiefaambp();
+		}
+		return valcmfaambp;
+	}
+
+	public int getZilecmFAAMBP(List<CM> concediiMedicale) {
+		int zilecmfaambp = 0;
+		for(CM cm : concediiMedicale) {
+			zilecmfaambp += cm.getZilefaambp();
+		}
+		return zilecmfaambp;
 	}
 
 	private int zileC(int luna, int an, List<CM> concedii) {

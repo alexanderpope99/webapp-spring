@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.Persoana;
 import net.guides.springboot2.crud.model.RealizariRetineri;
@@ -48,6 +49,8 @@ public class StatSalariiService {
 	private ZileService zileService;
 	@Autowired
 	private COService coService;
+	@Autowired
+	private CMService cmService;
 
 	@Autowired
 	private SocietateRepository societateRepository;
@@ -150,6 +153,7 @@ public class StatSalariiService {
 				// * 1. get contract + stat(luna, an, idcontract); -- contract should not be null
 				Contract contract = angajat.getContract();
 				Persoana persoana = angajat.getPersoana();
+				List<CM> concediiMedicale = cmService.getCMInLunaAnul(luna, an, contract.getId());
 
 				int idcontract = contract.getId();
 
@@ -218,15 +222,15 @@ public class StatSalariiService {
 				writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
 
 				// * ZILE CM
-				writerCell = row1.createCell(8); // CM
+				writerCell = row1.createCell(8); // zile CM
 				writerCell.setCellStyle(centered);
 				writerCell.setCellValue(realizariRetineri.getZilecmlucratoare());
-				writerCell = row2.createCell(8); // FNUASS
+				writerCell = row2.createCell(8); // zile FNUASS
 				writerCell.setCellStyle(centered);
-				writerCell.setCellValue(0);
-				writerCell = row3.createCell(8); // FAAMBP
+				writerCell.setCellValue(cmService.getZilecmFNUASS(concediiMedicale));
+				writerCell = row3.createCell(8); // zile FAAMBP
 				writerCell.setCellStyle(centered);
-				writerCell.setCellValue(0);
+				writerCell.setCellValue(cmService.getZilecmFAAMBP(concediiMedicale));
 
 				// * ORE
 				writerCell = row1.createCell(9); // ore ind 75%
@@ -256,10 +260,10 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getValcm());
 				writerCell = row2.createCell(12); // CM din FNUASS
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); // TODO
+				writerCell.setCellValue(cmService.getValcmFNUASS(concediiMedicale));
 				writerCell = row3.createCell(12); // cm din FAAMBP
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); // TODO
+				writerCell.setCellValue(cmService.getValcmFAAMBP(concediiMedicale));
 
 				// * drepturi
 				writerCell = row1.createCell(13); // total sporuri
@@ -270,7 +274,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getPrimabruta());
 				writerCell = row3.createCell(13); // alte drepturi
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0);
+				writerCell.setCellValue(0); // TODO
 
 				// * drepturi
 				writerCell = row1.createCell(14); // val tichetemasa
@@ -285,13 +289,13 @@ public class StatSalariiService {
 				// *
 				writerCell = row1.createCell(15); // Val zile libere B
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); // TODO
+				writerCell.setCellValue(0); 
 				writerCell = row2.createCell(15); // Val zile libere N
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(0);
 				writerCell = row3.createCell(15); // Val ind somaj
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); // TODO
+				writerCell.setCellValue(0); 
 
 				// *
 				writerCell = row1.createCell(16); // CAS
@@ -931,6 +935,7 @@ public class StatSalariiService {
 
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
+			List<CM> concediiMedicale = cmService.getCMInLunaAnul(luna, an, contract.getId());
 
 			int idcontract = contract.getId();
 			RealizariRetineri realizariRetineri;
@@ -1063,15 +1068,15 @@ public class StatSalariiService {
 			writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
 
 			// * ZILE CM
-			writerCell = row1.getCell(8); // CM
+			writerCell = row1.getCell(8); // zile CM
 			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(realizariRetineri.getZilecmlucratoare());
-			writerCell = row2.getCell(8); // FNUASS
+			writerCell = row2.getCell(8); // zile FNUASS
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(0);
-			writerCell = row3.getCell(8); // FAAMBP
+			writerCell.setCellValue(cmService.getZilecmFNUASS(concediiMedicale));
+			writerCell = row3.getCell(8); // zile FAAMBP
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(0);
+			writerCell.setCellValue(cmService.getZilecmFAAMBP(concediiMedicale));
 
 			// * ORE
 			writerCell = row1.getCell(9); // ore ind 75%
@@ -1096,15 +1101,17 @@ public class StatSalariiService {
 			writerCell.setCellValue(0);
 
 			// * CM valoare
+			int valcmfnuass = cmService.getValcmFNUASS(concediiMedicale);
+			int valcmfaambp = cmService.getValcmFAAMBP(concediiMedicale);
 			writerCell = row1.getCell(12); // cm societate
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getValcm());
+			writerCell.setCellValue(realizariRetineri.getValcm() - valcmfnuass - valcmfaambp);
 			writerCell = row2.getCell(12); // CM din FNUASS
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(valcmfnuass);
 			writerCell = row3.getCell(12); // cm din FAAMBP
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(valcmfaambp);
 
 			// * drepturi
 			writerCell = row1.getCell(13); // total sporuri
@@ -1115,7 +1122,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getPrimabruta());
 			writerCell = row3.getCell(13); // alte drepturi
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0);
+			writerCell.setCellValue(0); // TODO
 
 			// * drepturi
 			writerCell = row1.getCell(14); // val tichetemasa
@@ -1130,13 +1137,13 @@ public class StatSalariiService {
 			// *
 			writerCell = row1.createCell(15); // Val zile libere B
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(0); 
 			writerCell = row2.createCell(15); // Val zile libere N
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(0);
 			writerCell = row3.createCell(15); // Val ind somaj
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(0); 
 
 			// *
 			writerCell = row1.getCell(16); // CAS
