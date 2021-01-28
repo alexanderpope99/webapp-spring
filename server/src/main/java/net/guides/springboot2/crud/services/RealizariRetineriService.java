@@ -178,8 +178,8 @@ public class RealizariRetineriService {
 
 		// float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
 
-		float salariuPeZi = contract.getSalariutarifar() / norma;
-		float salariuPeOra = contract.getSalariutarifar() / norma / duratazilucru;
+		float salariuPeZi = (float)contract.getSalariutarifar() / norma;
+		float salariuPeOra = (float)contract.getSalariutarifar() / norma / duratazilucru;
 
 		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta + totalOreSuplimentare);
 
