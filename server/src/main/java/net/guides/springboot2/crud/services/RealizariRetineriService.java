@@ -112,7 +112,7 @@ public class RealizariRetineriService {
 		this.bazaImpozit = (restPlata + valoareTichete - deducere - deducerePensieFacultativa);
 
 		this.impozitSalariu = bazaImpozit * impozit;
-
+		if(this.impozitSalariu < 0) this.impozitSalariu = 0;
 		this.impozitScutit = 0;
 		if (platesteImpozit == 0)
 			this.impozitScutit += impozitSalariu;
@@ -175,7 +175,7 @@ public class RealizariRetineriService {
 		int zileLucrate = zileContract - zileCOLucratoare - zileCMLucratoare - zileCFPLucratoare;
 		int oreLucrate = zileLucrate * duratazilucru;
 
-		float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
+		// float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
 
 		float salariuPeZi = contract.getSalariutarifar() / norma;
 		float salariuPeOra = contract.getSalariutarifar() / norma / duratazilucru;
@@ -183,7 +183,7 @@ public class RealizariRetineriService {
 		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta);
 
 		float valCO = (zileCOLucratoare) * salariuPeZi;
-		// float totalDrepturi = salariuRealizat + valCM - primaBruta;
+		float totalDrepturi = salariuRealizat + valCM + totalOreSuplimentare;
 
 		float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
 		float cass = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
