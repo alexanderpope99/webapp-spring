@@ -89,14 +89,12 @@ public class RealizariRetineriService {
 		if (parametriiSalariu == null)
 			throw new ResourceNotFoundException("Nu există parametrii salariu");
 
-		this.impozitScutit = 0;
-
 		float casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
 		float cassSalariu = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
-		int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
-
-		int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
 		float impozit = parametriiSalariu.getImpozit() / 100;
+
+		int platesteImpozit = contract.isCalculdeduceri() ? 1 : 0;
+		int areFunctieDebaza = contract.isFunctiedebaza() ? 1 : 0;
 
 		this.deducere = 0;
 		if (totalDrepturi < 3600)
@@ -115,6 +113,7 @@ public class RealizariRetineriService {
 
 		this.impozitSalariu = bazaImpozit * impozit;
 
+		this.impozitScutit = 0;
 		if (platesteImpozit == 0)
 			this.impozitScutit += impozitSalariu;
 
@@ -145,7 +144,7 @@ public class RealizariRetineriService {
 		int zileContract = zileService.getNrZileLucratoareContract(luna, an, contract);
 		// contractul nu a inceput
 		if (zileContract == 0) {
-			// return retineri cu valori de 0
+			// returneaza retineri cu valori de 0
 			return new RealizariRetineri(luna, an, contract);
 		}
 
@@ -157,7 +156,7 @@ public class RealizariRetineriService {
 
 		int zileCO = 0, zileCOLucratoare = 0;
 		int zileCFP = 0, zileCFPLucratoare = 0;
-		if (zileCOTotal != 0) {
+		if (zileCOTotal > 0) {
 			zileCO = coService.getZileCO(luna, an, idcontract);
 			zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
 			zileCFP = coService.getZileCFP(luna, an, idcontract);
@@ -165,7 +164,7 @@ public class RealizariRetineriService {
 		}
 		int zileCM = cmService.getZileCM(luna, an, idcontract);
 		int valCM = 0, zileCMLucratoare = 0;
-		if (zileCM != 0) {
+		if (zileCM > 0) {
 			valCM = cmService.getValCM(luna, an, idcontract);
 			zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
 		}

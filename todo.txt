@@ -74,6 +74,8 @@ societatea are 2 conturi =>
 	restul intra la celalalt cont (deci Unicredit)
 _________________________________________
 
+imprumut apare la alte retineri
+
 admin = nu vede datele
 
 director:
