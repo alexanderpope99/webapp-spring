@@ -13,7 +13,6 @@ import net.guides.springboot2.crud.dto.CMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.Contract;
-import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.CMRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
 
@@ -25,14 +24,10 @@ public class CMService {
 	@Autowired
 	private CMRepository cmRepository;
 	@Autowired
-	private AngajatRepository angajatRepository;
-	@Autowired
 	private ContractRepository contractRepository;
 
 	@Autowired
 	private SarbatoriService sarbatoriService;
-	@Autowired
-	private BazacalculService bazacalculService;
 	@Autowired
 	private RealizariRetineriService realizariRetineriService;
 
@@ -104,7 +99,6 @@ public class CMService {
 	}
 
 	public List<CM> getCMInLunaAnul(int luna, int an, int idcontract) {
-		// select * from cm where '2020-09-01' <= dela and '2020-09-30' >= panala
 		LocalDate inceputLuna = LocalDate.of(an, luna, 1);
 		int nrZileLuna = inceputLuna.getMonth().length(inceputLuna.isLeapYear());
 		LocalDate sfarsitLuna = LocalDate.of(an, luna, nrZileLuna);
