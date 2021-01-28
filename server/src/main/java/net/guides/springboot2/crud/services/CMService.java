@@ -116,6 +116,8 @@ public class CMService {
 		return Math.round(valCM);
 	}
 
+	
+	
 	public int getValcmFNUASS(List<CM> concediiMedicale) {
 		int valcmfnuass = 0;
 		for(CM cm : concediiMedicale) {
