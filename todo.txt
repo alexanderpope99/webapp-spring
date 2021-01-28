@@ -74,7 +74,9 @@ societatea are 2 conturi =>
 	restul intra la celalalt cont (deci Unicredit)
 _________________________________________
 
-imprumut apare la alte retineri
+salariu realizat din cate zile se face? zilele includ si concediu de odihna?
+intrebare la ore suplimentare: salariu/zi + salariu/ora + calcul salariu realizat 
+	=> la final se adauga "totalOre*((zileLucrate+zileCO)/zileLuna)" in loc de "totalOre"
 
 admin = nu vede datele
 

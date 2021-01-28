@@ -322,11 +322,11 @@ public class StatSalariiService {
 				writerCell = row1.createCell(18); // impozit
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(realizariRetineri.getImpozit());
-				writerCell.setCellStyle(salariuStyle);
 				writerCell = row2.createCell(18); // rest plata brut
-				writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
 				writerCell.setCellStyle(salariuStyle);
+				writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
 				writerCell = row3.createCell(18); // alte retineri
+				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(retineri.getImprumuturi());
 
 				// *
@@ -443,6 +443,7 @@ public class StatSalariiService {
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
 			writerCell = row1.createCell(10); // ore lucrate
+			writerCell.setCellStyle(salariuStyle);
 			formula = this.sumFormula('K', 15, nrAngajat);
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
@@ -451,6 +452,7 @@ public class StatSalariiService {
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
 			writerCell = row3.createCell(10); // Val. ore supl.
+			writerCell.setCellStyle(salariuStyle);
 			formula = this.sumFormula('K', 17, nrAngajat);
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
@@ -566,6 +568,7 @@ public class StatSalariiService {
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
 			writerCell = row3.createCell(17); // baza impozit
+			writerCell.setCellStyle(salariuStyle);
 			formula = this.sumFormula('R', 17, nrAngajat);
 			writerCell.setCellFormula(formula);
 			formulaEvaluator.evaluateFormulaCell(writerCell);
@@ -1175,7 +1178,8 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.getCell(18); // alte retineri
-			writerCell.setCellValue(retineri.getImprumuturi());
+				writerCell.setCellStyle(salariuStyle);
+				writerCell.setCellValue(retineri.getImprumuturi());
 
 			// *
 			writerCell = row1.getCell(19); // sume neimpozabile
