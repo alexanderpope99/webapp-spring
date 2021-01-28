@@ -206,17 +206,16 @@ public class StatSalariiService {
 				stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 6, 7));
 				writerCell = row1.createCell(6); // ZL
 				writerCell.setCellStyle(centered);
-				writerCell.setCellStyle(centered);
 				writerCell.setCellValue(realizariRetineri.getZilelucrate());
 				writerCell = row2.createCell(6); // CS
 				writerCell.setCellStyle(centered);
 				writerCell.setCellValue(coService.getZileCS(luna, an, idcontract));
 				writerCell = row2.createCell(7); // CO
 				writerCell.setCellStyle(centered);
-				writerCell.setCellValue(coService.getZileCO(luna, an, idcontract));
+				writerCell.setCellValue(realizariRetineri.getZilecolucratoare());
 				writerCell = row3.createCell(6); // CFP
 				writerCell.setCellStyle(centered);
-				writerCell.setCellValue(coService.getZileCFP(luna, an, idcontract));
+				writerCell.setCellValue(realizariRetineri.getZilecfplucratoare());
 				writerCell = row3.createCell(7); // ST
 				writerCell.setCellStyle(centered);
 				writerCell.setCellValue(coService.getZileST(luna, an, idcontract));

@@ -113,15 +113,10 @@ public class CMService {
 	}
 	
 	public int getValCM(int luna, int an, int idcontract) {
-		// get idangajat of idcontract
-		int idangajat = angajatRepository.findIdpersoanaByIdcontract(idcontract);
-		// get cm
 		List<CM> cms = this.getCMInLunaAnul(luna, an, idcontract);
 		float valCM = 0;
-		// media zilnica pe 6 luni = venitTotal6luni / nrZileLucrate6luni <- din bazacalcul
-		float mediaZilnica = bazacalculService.getMediaZilnicaUltimele6Luni(luna, an, idangajat);
 		for (CM cm : cms) {
-			valCM += this.zileCLucratoare(cm) * mediaZilnica * cm.getProcent() / 100;
+			valCM += this.zileCLucratoare(cm) * cm.getMediezilnica() * cm.getProcent() / 100;
 		}
 
 		return Math.round(valCM);
