@@ -72,14 +72,14 @@ public class TicheteService {
 
 		FileInputStream file = new FileInputStream(new File(raportTicheteTemplateLocation, "RaportTichete.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
-		Sheet stat = workbook.getSheetAt(0);
+		Sheet raportTichete = workbook.getSheetAt(0);
 
-		Cell writerCell = stat.getRow(0).getCell(0);
+		Cell writerCell = raportTichete.getRow(0).getCell(0);
 		int nrCrt = 0;
 		for (Angajat ang : angajati) {
 			Contract contract = ang.getContract();
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, contract.getId());
-			Row row1 = stat.createRow(1 + nrCrt);
+			Row row1 = raportTichete.createRow(1 + nrCrt);
 			writerCell = row1.createCell(0);
 			writerCell.setCellValue(nrCrt + 1);
 			writerCell = row1.createCell(1);
@@ -92,6 +92,9 @@ public class TicheteService {
 			writerCell.setCellValue(realizariRetineri.getNrtichete());
 			nrCrt++;
 		}
+
+		raportTichete.autoSizeColumn(1);
+		raportTichete.autoSizeColumn(2);
 
 		/* ------ ENDING ------ **/
 		// * OUTPUT THE FILE
