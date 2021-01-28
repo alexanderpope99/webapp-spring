@@ -7,6 +7,7 @@ import Dec112 from './Dec112.js';
 import Pontaj from './Pontaj.js';
 import Stat from './Stat.js';
 import NotaContabila from './NotaContabila.js';
+import Tichete from './Tichete.js';
 
 class Rapoarte extends React.Component {
   constructor() {
@@ -25,6 +26,7 @@ class Rapoarte extends React.Component {
           <Breadcrumb.Item active>Rapoarte</Breadcrumb.Item>
         </Breadcrumb>
         <Stat />
+        <Tichete />
         <NotaContabila />
         <Pontaj />
         <Dec112 />

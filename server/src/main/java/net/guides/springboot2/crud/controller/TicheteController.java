@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,16 +38,19 @@ public class TicheteController {
 
 	@GetMapping("{id}")
 	public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
-		Tichete tichete = ticheteRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+		Tichete tichete = ticheteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
 		return ResponseEntity.ok().body(tichete);
 	}
 
 	@GetMapping("nr/idc={idc}&mo={luna}&y={an}")
-	public int getNrTicheteByLunaAnIdcontract(@PathVariable(value = "idc") int idcontract,
-			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) throws ResourceNotFoundException {
+	public int getNrTicheteByLunaAnIdcontract(@PathVariable(value = "idc") int idcontract, @PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) throws ResourceNotFoundException {
 		return ticheteService.getNrTichete(luna, an, idcontract);
+	}
+
+	@GetMapping("/raport/{ids}/mo={luna}&y={an}/{uid}")
+	public boolean createNotaContabila(@PathVariable("ids") int ids, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
+		return ticheteService.createRaportTichete(luna, an, ids, uid);
 	}
 
 	@PostMapping
@@ -55,10 +59,8 @@ public class TicheteController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") int id, @RequestBody Tichete newTichete)
-			throws ResourceNotFoundException {
-		Tichete tichete = ticheteRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+	public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") int id, @RequestBody Tichete newTichete) throws ResourceNotFoundException {
+		Tichete tichete = ticheteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
 		newTichete.setId(tichete.getId());
 		final Tichete updatedTichete = ticheteRepository.save(newTichete);
@@ -67,8 +69,7 @@ public class TicheteController {
 
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
-		Tichete tichete = ticheteRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
+		Tichete tichete = ticheteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
 		ticheteRepository.delete(tichete);
 		Map<String, Boolean> response = new HashMap<>();

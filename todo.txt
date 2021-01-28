@@ -63,6 +63,8 @@ TODO: {
 
 	* -> https://vladmihalcea.com/the-best-way-to-map-an-enum-type-with-jpa-and-hibernate/ 
 	* -> add sorting and filtering to tables on frontend 
+
+	daca adaugi concediu, el recalculeaza realizari retineri, dar nu modifica nr tichete
 }
 
 *** INTREBARI: ***
