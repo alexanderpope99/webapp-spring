@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -77,12 +78,19 @@ public class StatSalariiService {
 		return formula.toString();
 	}
 
-	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, int userID) throws IOException, ResourceNotFoundException {
+	public boolean createStatSalarii(int luna, int an, int idsocietate, String intocmitDe, int userID, int angajatiScutitiImpozit) throws IOException, ResourceNotFoundException {
 		try {
 			Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 			Adresa adresaSocietate = societate.getAdresa();
 
-			List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
+			List<Angajat> angajati = new ArrayList<>();
+
+			if (angajatiScutitiImpozit == 0)
+				angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
+			else if (angajatiScutitiImpozit == 1)
+				angajati = angajatRepository.findBySocietate_IdAndContract_CalculdeduceriAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate, true);
+			else if (angajatiScutitiImpozit == 2)
+				angajati = angajatRepository.findBySocietate_IdAndContract_CalculdeduceriAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate, false);
 
 			String statTemplateLocation = homeLocation + "/templates";
 
@@ -288,13 +296,13 @@ public class StatSalariiService {
 				// *
 				writerCell = row1.createCell(15); // Val zile libere B
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); 
+				writerCell.setCellValue(0);
 				writerCell = row2.createCell(15); // Val zile libere N
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(0);
 				writerCell = row3.createCell(15); // Val ind somaj
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); 
+				writerCell.setCellValue(0);
 
 				// *
 				writerCell = row1.createCell(16); // CAS
@@ -915,7 +923,12 @@ public class StatSalariiService {
 
 			// * OUTPUT THE FILE
 			Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-			String newFileLocation = String.format("%s/downloads/%d/Stat Salarii - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
+			String tipStat = "";
+			if (angajatiScutitiImpozit == 1)
+				tipStat = " (doar impozit)";
+			else if (angajatiScutitiImpozit == 2)
+				tipStat = " (fara impozit)";
+			String newFileLocation = String.format("%s/downloads/%d/Stat Salarii%s - %s - %s %d.xlsx", homeLocation, userID, tipStat, societate.getNume(), lunaNume, an);
 
 			FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 			workbook.write(outputStream);
@@ -1139,13 +1152,13 @@ public class StatSalariiService {
 			// *
 			writerCell = row1.createCell(15); // Val zile libere B
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); 
+			writerCell.setCellValue(0);
 			writerCell = row2.createCell(15); // Val zile libere N
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(0);
 			writerCell = row3.createCell(15); // Val ind somaj
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); 
+			writerCell.setCellValue(0);
 
 			// *
 			writerCell = row1.getCell(16); // CAS
@@ -1165,8 +1178,8 @@ public class StatSalariiService {
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getVenitnet());
 			writerCell = row3.getCell(17); // baza impozit
-				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getBazaimpozit());
+			writerCell.setCellStyle(salariuStyle);
+			writerCell.setCellValue(realizariRetineri.getBazaimpozit());
 
 			// *
 			writerCell = row1.getCell(18); // impozit
@@ -1177,8 +1190,8 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.getCell(18); // alte retineri
-				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(retineri.getImprumuturi());
+			writerCell.setCellStyle(salariuStyle);
+			writerCell.setCellValue(retineri.getImprumuturi());
 
 			// *
 			writerCell = row1.getCell(19); // sume neimpozabile

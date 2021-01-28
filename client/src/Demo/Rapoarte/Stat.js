@@ -28,6 +28,9 @@ class Stat extends React.Component {
 
       showToast: false,
       toastMessage: '',
+
+      tip: '',
+      tipStat: '0',
     };
   }
 
@@ -48,16 +51,18 @@ class Stat extends React.Component {
     });
   }
 
-  async creeazaStatSalarii(e, tip) {
+  async creeazaStatSalarii(e, format) {
     e.preventDefault();
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
     let i = this.state.intocmitDe || '-';
 
+    console.log(this.state.tipStat);
+
     const created = await axios
       .get(
-        `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
+        `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}/${this.state.tipStat}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
@@ -68,17 +73,29 @@ class Stat extends React.Component {
         })
       );
 
-    if (created && tip === 'XLSX')
+    if (created && this.state.tipStat === '0')
       download(
         `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
         this.state.user.id
       );
 
-    if (created && tip === 'PDF')
+    if (created && this.state.tipStat === '1')
       download(
-        `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.pdf`,
+        `Stat Salarii (doar impozit) - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
         this.state.user.id
       );
+
+    if (created && this.state.tipStat === '2')
+      download(
+        `Stat Salarii (fara impozit) - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
+        this.state.user.id
+      );
+
+    // if (created && format === 'PDF')
+    //   download(
+    //     `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.pdf`,
+    //     this.state.user.id
+    //   );
   }
 
   async recalcSocietate() {
@@ -143,30 +160,56 @@ class Stat extends React.Component {
               <Row>
                 {/* LUNA */}
                 <Col md={4}>
-                  <Form.Control
-                    as="select"
-                    value={this.state.luna.nume}
-                    onChange={(e) =>
-                      this.setState({
-                        luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
-                      })
-                    }
-                  >
-                    {luniComponent}
-                  </Form.Control>
+                  <Form.Group controlId="luna">
+                    <Form.Control
+                      as="select"
+                      value={this.state.luna.nume}
+                      onChange={(e) =>
+                        this.setState({
+                          luna: { nume: e.target.value, nr: e.target.options.selectedIndex + 1 },
+                        })
+                      }
+                    >
+                      {luniComponent}
+                    </Form.Control>
+                  </Form.Group>
                 </Col>
                 {/* AN */}
                 <Col md={4}>
-                  <FormControl
-                    type="number"
-                    value={this.state.an}
-                    onChange={(e) =>
-                      this.setState({
-                        an: e.target.value,
-                      })
-                    }
-                  />
+                  <Form.Group controlId="an">
+                    <FormControl
+                      type="number"
+                      value={this.state.an}
+                      onChange={(e) =>
+                        this.setState({
+                          an: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
                 </Col>
+                <Col md={4}>
+                  <Form.Group controlId="tipstat">
+                    <FormControl
+                      as="select"
+                      value={this.state.tip}
+                      onChange={(e) =>
+                        this.setState({
+                          tip: e.target.value,
+                          tipStat: e.target.options[e.target.options.selectedIndex].getAttribute(
+                            'data-key'
+                          ),
+                        })
+                      }
+                    >
+                      <option data-key="0">Toți Angajații</option>
+                      <option data-key="1">Angajații Cu Impozit</option>
+                      <option data-key="2">Angajații Fără Impozit</option>
+                    </FormControl>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
                 <Col md={4}>
                   <Form.Group controlId="intocmitde">
                     <Form.Control

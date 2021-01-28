@@ -19,6 +19,8 @@ public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 
 	List<Angajat> findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(int idsocietate);
 
+	List<Angajat> findBySocietate_IdAndContract_CalculdeduceriAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(int idsocietate, boolean calculdeduceri);
+
 	List<Angajat> findBySocietate_IdAndContract_IdNotNullAndContract_ContbancarNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(int idsocietate);
 
 	List<Angajat> findBySocietate_IdAndUser_IdAndContractNotNull(int idsocietate, int iduser);
@@ -35,8 +37,7 @@ public interface AngajatRepository extends JpaRepository<Angajat, Integer> {
 
 	Angajat findBySocietate_IdAndUser_Id(int idsocietate, int iduser);
 
-	List<Angajat> findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(int idsocietate, int idangajat,
-			List<Integer> subalterni);
+	List<Angajat> findBySocietate_IdAndIdpersoanaNotAndIdpersoanaNotIn(int idsocietate, int idangajat, List<Integer> subalterni);
 
 	int countBySocietate_Id(int idsocietate);
 
