@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,7 @@ public class CMService {
 		// convert from DTO to Entity
 		CM cm = modelMapper.map(cmDTO, CM.class);
 
-		Contract contract = contractRepository.findById(cmDTO.getIdcontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + cmDTO.getIdcontract()));
+		Contract contract = contractRepository.findById(cmDTO.getIdcontract()).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + cmDTO.getIdcontract()));
 		cm.setContract(contract);
 
 		// check if overlaps with existing concedii (odihna + medicale)
@@ -67,13 +67,11 @@ public class CMService {
 	}
 
 	public Map<String, Boolean> delete(int cmId) throws ResourceNotFoundException {
-		CM cm = cmRepository.findById(cmId)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există CM cu id: " + cmId));
+		CM cm = cmRepository.findById(cmId).orElseThrow(() -> new ResourceNotFoundException("Nu există CM cu id: " + cmId));
 
 		cmRepository.delete(cm);
 
-		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(),
-				cm.getContract().getId(), -1, -1, -1);
+		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(), cm.getContract().getId(), -1, -1, -1);
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -105,7 +103,7 @@ public class CMService {
 
 		return cmRepository.findByContract_IdAndDelaBetween(idcontract, inceputLuna, sfarsitLuna);
 	}
-	
+
 	public int getValCM(int luna, int an, int idcontract) {
 		List<CM> cms = this.getCMInLunaAnul(luna, an, idcontract);
 		float valCM = 0;
@@ -116,11 +114,28 @@ public class CMService {
 		return Math.round(valCM);
 	}
 
-	
-	
+	public int getValCMScutitImpozit(int luna, int an, int idcontract) {
+		List<CM> toateConcediile = this.getCMInLunaAnul(luna, an, idcontract);
+		Set<String> coduriScutite = Set.of("08", "09", "15");
+		toateConcediile.removeIf(cm -> {
+			String cod = cm.getCodboala();
+			if (cod.isEmpty())
+				return true;
+			cod = cod.substring(0, 2);
+			return !coduriScutite.contains(cod);
+		});
+
+		float valCM = 0;
+		for (CM cm : toateConcediile) {
+			valCM += this.zileCLucratoare(cm) * cm.getMediezilnica() * cm.getProcent() / 100;
+		}
+
+		return Math.round(valCM);
+	}
+
 	public int getValcmFNUASS(List<CM> concediiMedicale) {
 		int valcmfnuass = 0;
-		for(CM cm : concediiMedicale) {
+		for (CM cm : concediiMedicale) {
 			valcmfnuass += cm.getIndemnizatiefnuass();
 		}
 		return valcmfnuass;
@@ -128,7 +143,7 @@ public class CMService {
 
 	public int getZilecmFNUASS(List<CM> concediiMedicale) {
 		int zilecmfnuass = 0;
-		for(CM cm : concediiMedicale) {
+		for (CM cm : concediiMedicale) {
 			zilecmfnuass += cm.getZilefnuass();
 		}
 		return zilecmfnuass;
@@ -136,7 +151,7 @@ public class CMService {
 
 	public int getValcmFAAMBP(List<CM> concediiMedicale) {
 		int valcmfaambp = 0;
-		for(CM cm : concediiMedicale) {
+		for (CM cm : concediiMedicale) {
 			valcmfaambp += cm.getIndemnizatiefaambp();
 		}
 		return valcmfaambp;
@@ -144,7 +159,7 @@ public class CMService {
 
 	public int getZilecmFAAMBP(List<CM> concediiMedicale) {
 		int zilecmfaambp = 0;
-		for(CM cm : concediiMedicale) {
+		for (CM cm : concediiMedicale) {
 			zilecmfaambp += cm.getZilefaambp();
 		}
 		return zilecmfaambp;
@@ -186,8 +201,7 @@ public class CMService {
 
 			for (int i = 1; i <= nrZileLuna; ++i) {
 				day = LocalDate.of(an, luna, i);
-				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0 && day.getDayOfWeek().getValue() != 6
-						&& day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
+				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0 && day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
 					zileC++;
 			}
 		}

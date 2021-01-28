@@ -159,7 +159,7 @@ class Stat extends React.Component {
             <Form onSubmit={this.creeazaStatSalarii}>
               <Row>
                 {/* LUNA */}
-                <Col md={4}>
+                <Col md={3}>
                   <Form.Group controlId="luna">
                     <Form.Control
                       as="select"
@@ -175,7 +175,7 @@ class Stat extends React.Component {
                   </Form.Group>
                 </Col>
                 {/* AN */}
-                <Col md={4}>
+                <Col md={3}>
                   <Form.Group controlId="an">
                     <FormControl
                       type="number"
@@ -188,7 +188,7 @@ class Stat extends React.Component {
                     />
                   </Form.Group>
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                   <Form.Group controlId="tipstat">
                     <FormControl
                       as="select"
@@ -208,9 +208,7 @@ class Stat extends React.Component {
                     </FormControl>
                   </Form.Group>
                 </Col>
-              </Row>
-              <Row>
-                <Col md={4}>
+								<Col md={3}>
                   <Form.Group controlId="intocmitde">
                     <Form.Control
                       type="text"
@@ -230,7 +228,7 @@ class Stat extends React.Component {
               <Button onClick={(e) => this.creeazaStatSalarii(e, 'XLSX')}>
                 Ștat salarii Excel
               </Button>
-              <Button onClick={this.recalcSocietate}>Recalculează Salarii</Button>
+              <Button onClick={this.recalcSocietate}>Recalculează toate salariile</Button>
             </div>
           </Card.Body>
         </Card>

@@ -109,8 +109,10 @@ public class RealizariRetineriService {
 		if (deducerePensieFacultativa == null)
 			deducerePensieFacultativa = 0;
 
-		this.bazaImpozit = (restPlata + valoareTichete - deducere - deducerePensieFacultativa);
-		if(this.bazaImpozit < 0) this.bazaImpozit = 0;
+		int valcmscutit = cmService.getValCMScutitImpozit(luna, an, idcontract);
+		this.bazaImpozit = (restPlata + valoareTichete - deducere - deducerePensieFacultativa - valcmscutit);
+		if (this.bazaImpozit < 0)
+			this.bazaImpozit = 0;
 
 		this.impozitSalariu = bazaImpozit * impozit;
 
@@ -176,21 +178,19 @@ public class RealizariRetineriService {
 		int zileLucrate = zileContract - zileCOLucratoare - zileCMLucratoare - zileCFPLucratoare;
 		int oreLucrate = zileLucrate * duratazilucru;
 
-		// float totalDrepturi = contract.getSalariutarifar() + primaBruta + totalOreSuplimentare;
+		float salariuPeZi = (float) contract.getSalariutarifar() / norma;
+		float salariuPeOra = (float) contract.getSalariutarifar() / norma / duratazilucru;
 
-		float salariuPeZi = (float)contract.getSalariutarifar() / norma;
-		float salariuPeOra = (float)contract.getSalariutarifar() / norma / duratazilucru;
-
-		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCFPLucratoare - zileCMLucratoare) + primaBruta + totalOreSuplimentare);
+		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCOLucratoare - zileCFPLucratoare - zileCMLucratoare));
 
 		float valCO = (zileCOLucratoare) * salariuPeZi;
-		float totalDrepturi = salariuRealizat + valCM;
-
-		float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
-		float cass = Math.round(totalDrepturi * parametriiSalariu.getCass() / 100);
-		float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
+		float totalDrepturi = salariuRealizat + valCM + primaBruta + totalOreSuplimentare;
 
 		float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
+
+		float cas = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
+		float cass = Math.round((totalDrepturi - valCM) * parametriiSalariu.getCass() / 100);
+		float cam = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
 
 		int nrPersoaneIntretinere = persoaneIntretinereService.getNrPersoaneIntretinere(contract.getId());
 
