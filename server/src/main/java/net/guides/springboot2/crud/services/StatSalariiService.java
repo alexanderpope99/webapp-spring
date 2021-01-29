@@ -262,15 +262,17 @@ public class StatSalariiService {
 				writerCell.setCellValue(0);
 
 				// * CM valoare
+				int valcmfnuass = cmService.getValcmFNUASS(concediiMedicale);
+				int valcmfaambp = cmService.getValcmFAAMBP(concediiMedicale);
 				writerCell = row1.createCell(12); // cm societate
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getValcm());
+				writerCell.setCellValue(realizariRetineri.getValcm() - valcmfnuass - valcmfaambp);
 				writerCell = row2.createCell(12); // CM din FNUASS
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(cmService.getValcmFNUASS(concediiMedicale));
+				writerCell.setCellValue(valcmfnuass);
 				writerCell = row3.createCell(12); // cm din FAAMBP
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(cmService.getValcmFAAMBP(concediiMedicale));
+				writerCell.setCellValue(valcmfaambp);
 
 				// * drepturi
 				writerCell = row1.createCell(13); // total sporuri
@@ -1120,7 +1122,7 @@ public class StatSalariiService {
 			int valcmfaambp = cmService.getValcmFAAMBP(concediiMedicale);
 			writerCell = row1.getCell(12); // cm societate
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getValcm());
+			writerCell.setCellValue(realizariRetineri.getValcm() - valcmfnuass - valcmfaambp);
 			writerCell = row2.getCell(12); // CM din FNUASS
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(valcmfnuass);

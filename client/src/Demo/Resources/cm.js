@@ -356,9 +356,9 @@ function countHolidays(startDate, endDate, holidays) {
       }
       // concediul include sarbatoarea in totalitate
       else if(startDate <= dela && panala <= endDate){
-        console.log('concediul include sarbatoarea in totalitate');
-        console.log('se suprapun:', ((panala - dela) / (24 * 3600 * 1000) + 1), 'zile de sarbatoare');
-        console.log('din care', countWeekendDays(new Date(panala), new Date(dela + (24 * 3600 * 1000))), 'in weekend');
+        // console.log('concediul include sarbatoarea in totalitate');
+        // console.log('se suprapun:', ((panala - dela) / (24 * 3600 * 1000) + 1), 'zile de sarbatoare');
+        // console.log('din care', countWeekendDays(new Date(panala), new Date(dela + (24 * 3600 * 1000))), 'in weekend');
         nholidays += ((panala - dela) / (24 * 3600 * 1000) + 1) - countWeekendDays(new Date(panala), new Date(dela + (24 * 3600 * 1000)));
       }
       // sarbatoarea se termina in concediu, dar nu incepe in el

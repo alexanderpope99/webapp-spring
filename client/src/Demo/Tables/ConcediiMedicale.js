@@ -19,7 +19,6 @@ import {
   getProcente,
   getZileFirma,
   countWeekendDays,
-  countHolidays,
 } from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
@@ -241,13 +240,13 @@ class CMTabel extends React.Component {
       );
       if (this.state.mediezilnica) {
         indemnizatiefirma = Math.round(
-          (zilefirma * Math.round(this.state.mediezilnica) * this.state.procent) / 100
+          (zilefirma * this.state.mediezilnica * this.state.procent) / 100
         );
         indemnizatiefnuass = Math.round(
-          (zilefnuass * Math.round(this.state.mediezilnica) * this.state.procent) / 100
+          (zilefnuass * this.state.mediezilnica * this.state.procent) / 100
         );
         indemnizatiefaambp = Math.round(
-          (zilefaambp * Math.round(this.state.mediezilnica) * this.state.procent) / 100
+          (zilefaambp * this.state.mediezilnica * this.state.procent) / 100
         );
       }
     }
