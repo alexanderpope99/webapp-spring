@@ -1074,10 +1074,10 @@ public class StatSalariiService {
 			writerCell.setCellValue(coService.getZileCS(luna, an, idcontract));
 			writerCell = row2.getCell(7); // CO
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(coService.getZileCO(luna, an, idcontract));
+			writerCell.setCellValue(realizariRetineri.getZilecolucratoare());
 			writerCell = row3.getCell(6); // CFP
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(coService.getZileCFP(luna, an, idcontract));
+			writerCell.setCellValue(realizariRetineri.getZilecfplucratoare());
 			writerCell = row3.getCell(7); // ST
 			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(coService.getZileST(luna, an, idcontract));

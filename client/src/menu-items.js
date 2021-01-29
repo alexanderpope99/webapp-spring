@@ -126,8 +126,15 @@ var items = [
     title: 'Facturi',
     type: 'group',
     icon: 'icon-group',
-    show: user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR'),
+    show: user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR') || user.roles.includes('ROLE_OPERATOR'),
     children: [
+      {
+        id: 'clienti',
+        title: 'Clienți',
+        type: 'item',
+        url: '/clienti',
+        icon: 'feather icon-file-text',
+      },
       {
         id: 'facturi',
         title: 'Facturi',

@@ -40,6 +40,7 @@ const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 const SarbatoriTabelView = React.lazy(() => import('./Demo/Tables/SarbatoriTabelView'));
 const FacturiTabel = React.lazy(() => import('./Demo/Tables/FacturiTabel'));
+const ClientiTabel = React.lazy(() => import('./Demo/Tables/ClientiTabel'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
 const FacturiOperatorTabel = React.lazy(() => import('./Demo/Tables/FacturiOperatorTabel'));
 
@@ -137,6 +138,12 @@ const routes = [
     exact: true,
     name: 'Sărbători',
     component: isAngajatSimplu ? SarbatoriTabelView : SarbatoriTabel,
+  },
+  {
+    path: '/clienti',
+    exact: true,
+    name: 'Tabel Clienți',
+    component: ClientiTabel,
   },
   {
     path: '/facturi',

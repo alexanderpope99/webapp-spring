@@ -54,9 +54,9 @@ class EditPersoana extends React.Component {
       socsel: getSocSel(),
       angajatsel: angajatSel,
 
-			show: false,
-			showToast: false,
-			toastMessage: '',
+      show: false,
+      showToast: false,
+      toastMessage: '',
       modalMessage: '',
 
       tipJudet: 'Județ',
@@ -353,9 +353,7 @@ class EditPersoana extends React.Component {
     };
 
     // update persoana
-    await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, {
-      headers: authHeader(),
-    });
+    await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, { headers: authHeader() });
 
     // refresh numele angajatilor
     this.getNumeintreg();

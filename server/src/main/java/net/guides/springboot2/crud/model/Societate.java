@@ -76,6 +76,10 @@ public class Societate implements Serializable {
 	@ManyToMany(mappedBy = "societati", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<User> useri;
 
+	@JsonBackReference(value = "client-societate")
+	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Client> clienti;
+
 	public Societate() {
 	}
 
