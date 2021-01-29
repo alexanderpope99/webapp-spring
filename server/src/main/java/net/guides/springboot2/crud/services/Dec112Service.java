@@ -60,7 +60,7 @@ public class Dec112Service {
 	@Autowired
 	private BazacalculService bazaCalculService;
 
-	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createDec112(int luna, int an, int idsocietate, int userID, int drec, String numeDeclarant,
 			String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
@@ -1443,8 +1443,8 @@ public class Dec112Service {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 
-			Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
-			String newFileLocation = String.format("%s\\downloads\\%d\\Declaratia 112 - %s - %s %d.xml", homeLocation,
+			Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
+			String newFileLocation = String.format("%s/downloads/%d/Declaratia 112 - %s - %s %d.xml", homeLocation,
 					userID, societate.getNume(), lunaNume, an);
 
 			StreamResult result = new StreamResult(new File(newFileLocation));
@@ -1454,8 +1454,8 @@ public class Dec112Service {
 
 			transformer.transform(source, result);
 
-			var pdfReader = new PdfReader(homeLocation + "templates\\D112.pdf");
-			String newFileLocationPDF = String.format("%s\\downloads\\%d\\Declaratia 112 - %s - %s %d.pdf",
+			var pdfReader = new PdfReader(homeLocation + "templates/D112.pdf");
+			String newFileLocationPDF = String.format("%s/downloads/%d/Declaratia 112 - %s - %s %d.pdf",
 					homeLocation, userID, societate.getNume(), lunaNume, an);
 			var outputStream = new FileOutputStream(newFileLocationPDF);
 

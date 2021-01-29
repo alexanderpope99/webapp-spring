@@ -46,7 +46,7 @@ public class TicheteService {
 	@Autowired
 	private SocietateRepository societateRepository;
 
-	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public int getNrTichete(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		Contract contract = contractService.findById(idcontract);
@@ -68,7 +68,7 @@ public class TicheteService {
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 
-		String raportTicheteTemplateLocation = homeLocation + "\\templates";
+		String raportTicheteTemplateLocation = homeLocation + "/templates";
 
 		FileInputStream file = new FileInputStream(new File(raportTicheteTemplateLocation, "RaportTichete.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
@@ -98,8 +98,8 @@ public class TicheteService {
 
 		/* ------ ENDING ------ **/
 		// * OUTPUT THE FILE
-		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
-		String newFileLocation = String.format("%s\\downloads\\%d\\Tichete - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
+		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
+		String newFileLocation = String.format("%s/downloads/%d/Tichete - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
