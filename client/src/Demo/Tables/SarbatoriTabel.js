@@ -73,7 +73,6 @@ class SarbatoriTabel extends React.Component {
   }
 
   async fillTable() {
-    //? fetch must be with idcontract
     const sarbatori = await axios
       .get(`${server.address}/sarbatori`, { headers: authHeader() })
       .then((res) => (res.status !== 200 ? null : res.data))

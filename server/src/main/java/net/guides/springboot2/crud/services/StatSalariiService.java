@@ -1120,7 +1120,7 @@ public class StatSalariiService {
 			int valcmfaambp = cmService.getValcmFAAMBP(concediiMedicale);
 			writerCell = row1.getCell(12); // cm societate
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getValcm() - valcmfnuass - valcmfaambp);
+			writerCell.setCellValue(realizariRetineri.getValcm());
 			writerCell = row2.getCell(12); // CM din FNUASS
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(valcmfnuass);

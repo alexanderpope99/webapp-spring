@@ -187,10 +187,11 @@ public class RealizariRetineriService {
 		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCOLucratoare - zileCFPLucratoare - zileCMLucratoare));
 
 		float valCO = (zileCOLucratoare) * salariuPeZi;
-		float totalDrepturi = salariuRealizat + valCM + primaBruta + totalOreSuplimentare;
+		float totalDrepturi = salariuRealizat + valCM + valCO + primaBruta + totalOreSuplimentare;
 
 		float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
 
+		// totalDrepturi nu include tichete || venitBrut = totalDrepturi + tichete
 		this.casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
 		this.cassSalariu = Math.round((totalDrepturi - valCM) * parametriiSalariu.getCass() / 100);
 		this.camSalariu = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);

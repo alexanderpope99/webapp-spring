@@ -19,6 +19,7 @@ import {
   getProcente,
   getZileFirma,
   countWeekendDays,
+  countHolidays,
 } from '../Resources/cm.js';
 
 class CMTabel extends React.Component {
@@ -44,6 +45,7 @@ class CMTabel extends React.Component {
       luna: { nume: '-', nr: '-' },
       ani_cu_concediu: [],
       luni_cu_concediu: { '': [] },
+      sarbatori: [],
 
       cm: [],
       cmComponent: null,
@@ -167,9 +169,23 @@ class CMTabel extends React.Component {
     }
   }
 
+  async getSarbatori() {
+    const sarbatori = await axios
+      .get(`${server.address}/sarbatori`, { headers: authHeader() })
+      .then((res) => (res.status !== 200 ? null : res.data))
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua sărbătorile ' + err.response.data.message,
+        })
+      );
+    if(sarbatori) this.setState({sarbatori: sarbatori});
+  }
+
   componentDidMount() {
     this.setCurrentYear();
     this.updateAngajatSel();
+    this.getSarbatori();
   }
 
   onChangeAn(an) {
@@ -220,7 +236,8 @@ class CMTabel extends React.Component {
       [zilefirma, zilefnuass, zilefaambp] = getZileFirma(
         date1,
         date2,
-        this.state.codboala.substring(0, 2)
+        this.state.codboala.substring(0, 2),
+        this.state.sarbatori,
       );
       if (this.state.mediezilnica) {
         indemnizatiefirma = Math.round(
