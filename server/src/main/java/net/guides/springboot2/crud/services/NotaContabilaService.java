@@ -38,7 +38,7 @@ public class NotaContabilaService {
 	@Autowired
 	RetineriRepository retineriRepository;
 
-	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
@@ -48,7 +48,7 @@ public class NotaContabilaService {
 		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(
 				() -> new ResourceNotFoundException("Nu există adresă pentru societatea: " + societate.getNume()));
 
-		String statTemplateLocation = homeLocation + "\\templates";
+		String statTemplateLocation = homeLocation + "/templates";
 
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "NotaContabila.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
@@ -122,8 +122,8 @@ public class NotaContabilaService {
 		FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		evaluator.evaluateAll();
 		// * OUTPUT THE FILE
-		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
-		String newFileLocation = String.format("%s\\downloads\\%d\\Nota Contabila - %s - %s %d.xlsx", homeLocation,
+		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
+		String newFileLocation = String.format("%s/downloads/%d/Nota Contabila - %s - %s %d.xlsx", homeLocation,
 				userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);

@@ -54,7 +54,7 @@ public class FoaiePontajService {
 	@Autowired
 	private AngajatRepository angajatRepository;
 
-	private String homeLocation = "src\\main\\java\\net\\guides\\springboot2\\crud\\";
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createFoaiePontaj(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
@@ -63,7 +63,7 @@ public class FoaiePontajService {
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
-		String statTemplateLocation = homeLocation + "\\templates";
+		String statTemplateLocation = homeLocation + "/templates";
 
 		FileInputStream file = new FileInputStream(new File(statTemplateLocation, "FoaiePontaj.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
@@ -313,8 +313,8 @@ public class FoaiePontajService {
 			nrAngajat++;
 		} // ! for loop end
 
-		Files.createDirectories(Paths.get(homeLocation + "downloads\\" + userID));
-		String newFileLocation = String.format("%s\\downloads\\%d\\Foaie Pontaj - %s - %s %d.xlsx", homeLocation,
+		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
+		String newFileLocation = String.format("%s/downloads/%d/Foaie Pontaj - %s - %s %d.xlsx", homeLocation,
 				userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
