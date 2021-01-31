@@ -119,7 +119,7 @@ public class CMService {
 		Set<String> coduriScutite = Set.of("08", "09", "15");
 		toateConcediile.removeIf(cm -> {
 			String cod = cm.getCodboala();
-			if (cod.isEmpty())
+			if (cod == null || cod.isEmpty())
 				return true;
 			cod = cod.substring(0, 2);
 			return !coduriScutite.contains(cod);
