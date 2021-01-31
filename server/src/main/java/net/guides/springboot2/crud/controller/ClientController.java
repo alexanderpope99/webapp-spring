@@ -43,10 +43,21 @@ public class ClientController {
     return clientService.save(client);
   }
 
+  @PostMapping("ids={ids}")
+  public Client save(@RequestBody Client client, @PathVariable("ids") int idsocietate) throws ResourceNotFoundException {
+    return clientService.saveBySocietate_Id(client, idsocietate);
+  }
+
   @PutMapping("{id}")
   public Client update(@PathVariable("id") int id, @RequestBody Client newClient) throws ResourceNotFoundException {
     return clientService.update(id, newClient);
   }
+
+  @PutMapping("{id}/ids={ids}")
+  public Client save(@PathVariable("id") int id, @RequestBody Client client, @PathVariable("ids") int idsocietate) throws ResourceNotFoundException {
+    return clientService.updateBySocietate_Id(id, client, idsocietate);
+  }
+
 
   @DeleteMapping("{id}")
   public Map<String, Boolean> delete(@PathVariable("id") int id) throws ResourceNotFoundException {

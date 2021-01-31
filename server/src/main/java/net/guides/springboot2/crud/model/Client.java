@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import net.guides.springboot2.crud.model.types.Moneda;
 
 @Entity
 @Table(name = "client")
@@ -62,7 +66,8 @@ public class Client implements Serializable {
   private String cont;
 
   @Column(name = "moneda")
-  private String moneda = "RON";
+  @Enumerated(EnumType.STRING)
+  private Moneda moneda = Moneda.RON;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "idadresa", referencedColumnName = "id")
@@ -73,11 +78,10 @@ public class Client implements Serializable {
   @JoinColumn(name = "idsocietate", referencedColumnName = "id")
   private Societate societate;
 
-
   public Client() {
   }
 
-  public Client(String numecomplet, String nume, String statut, String nrregcom, String codfiscal, String cotatva, Adresa adresa, Boolean client, Boolean furnizor, Boolean extern, String banca, String sucursala, String cont, String moneda) {
+  public Client(String numecomplet, String nume, String statut, String nrregcom, String codfiscal, String cotatva, Adresa adresa, Boolean client, Boolean furnizor, Boolean extern, String banca, String sucursala, String cont, Moneda moneda) {
     this.numecomplet = numecomplet;
     this.nume = nume;
     this.statut = statut;
@@ -218,12 +222,20 @@ public class Client implements Serializable {
     this.cont = cont;
   }
 
-  public String getMoneda() {
+  public Moneda getMoneda() {
     return this.moneda;
   }
 
-  public void setMoneda(String moneda) {
+  public void setMoneda(Moneda moneda) {
     this.moneda = moneda;
+  }
+
+  public Societate getSocietate() {
+    return societate;
+  }
+
+  public void setSocietate(Societate societate) {
+    this.societate = societate;
   }
 
 }

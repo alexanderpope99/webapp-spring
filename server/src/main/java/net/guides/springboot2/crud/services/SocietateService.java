@@ -12,10 +12,14 @@ public class SocietateService {
 	@Autowired
 	private SocietateRepository societateRepository;
 
+	public Societate findById(int idsocietate) throws ResourceNotFoundException {
+		return societateRepository.findById(idsocietate)
+		.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+	}
+
 	public void delete(int id) throws ResourceNotFoundException {
 		// conturi bancare, angajati, facturi, centrecost, useri
-		Societate societate = societateRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + id));
+		Societate societate = findById(id);
 
 		societate.setAdresa(null);
 		societate.setAngajati(null);

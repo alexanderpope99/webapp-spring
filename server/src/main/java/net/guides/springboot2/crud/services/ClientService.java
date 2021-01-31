@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Client;
+import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.ClientRepository;
 
 @Service
 public class ClientService {
   @Autowired
   private ClientRepository clientRepository;
+
+  @Autowired
+  private SocietateService societateService;
 
   public List<Client> findAll() {
     return clientRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
@@ -34,10 +38,30 @@ public class ClientService {
     return clientRepository.save(client);
   }
 
+  public Client saveBySocietate_Id(Client client, int idsocietate) throws ResourceNotFoundException {
+    Societate societate = societateService.findById(idsocietate);
+    
+    client.setSocietate(societate);
+
+    return clientRepository.save(client);
+  }
+
   public Client update(int id, Client newClient) throws ResourceNotFoundException {
     Client oldClient = findById(id);
 
     newClient.setId(oldClient.getId());
+
+    return clientRepository.save(newClient);
+  }
+
+  public Client updateBySocietate_Id(int id, Client newClient, int idsocietate) throws ResourceNotFoundException {
+    Client oldClient = findById(id);
+
+    newClient.setId(oldClient.getId());
+
+    Societate societate = societateService.findById(idsocietate);
+
+    newClient.setSocietate(societate);
 
     return clientRepository.save(newClient);
   }
