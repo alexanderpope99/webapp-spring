@@ -235,6 +235,8 @@ class AngajatiTabel extends React.Component {
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
+
+        
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
