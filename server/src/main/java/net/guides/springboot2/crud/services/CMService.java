@@ -64,6 +64,7 @@ public class CMService {
 	public CMDTO update(int cmID, CMDTO newCmDTO) throws ResourceNotFoundException {
 		newCmDTO.setId(cmID);
 		return save(newCmDTO);
+
 	}
 
 	public Map<String, Boolean> delete(int cmId) throws ResourceNotFoundException {

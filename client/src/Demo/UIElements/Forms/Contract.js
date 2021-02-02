@@ -982,7 +982,7 @@ class Contract extends React.Component {
 
             <Col md={6}>
               <Form.Group id="ultimazilucru">
-                <Form.Label>Ultima zi de lucru</Form.Label>
+                <Form.Label>Data încetării</Form.Label>
                 <Form.Control
                   type="date"
                   placeholder="data"

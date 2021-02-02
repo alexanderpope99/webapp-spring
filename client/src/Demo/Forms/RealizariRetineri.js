@@ -599,27 +599,11 @@ class RealizariRetineri extends React.Component {
 		}
 	}
 
-	async calcNrTichete() {
+	calcNrTichete() {
 		if (!this.state.selected_angajat) return;
 
-		let idc = this.state.idcontract;
-		let luna = this.state.luna.nr;
-		let an = this.state.an;
-		let nrTichete = await axios
-			.get(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, { headers: authHeader() })
-			.then((res) => res.data)
-			.catch((err) =>
-				this.setState({
-					showToast: true,
-					toastTitle: 'Eroare',
-					toastColor: 'white',
-					toastMessage: 'Nu am prelua tichetele\n' + err.response.data.message,
-				})
-			);
-
-		console.log(nrTichete);
 		this.setState({
-			nrtichete: nrTichete,
+			nrtichete: this.state.zilelucrate,
 		});
 	}
 

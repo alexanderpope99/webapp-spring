@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +92,19 @@ public class StatSalariiService {
 				angajati = angajatRepository.findBySocietate_IdAndContract_CalculdeduceriAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate, true);
 			else if (angajatiScutitiImpozit == 2)
 				angajati = angajatRepository.findBySocietate_IdAndContract_CalculdeduceriAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate, false);
+
+			angajati.removeIf(angajat -> {
+				LocalDate ultimaZiLucru = angajat.getContract().getUltimazilucru();
+				if (ultimaZiLucru != null) {
+					if (ultimaZiLucru.getYear() < an)
+						return true;
+					else if (ultimaZiLucru.getYear() == an)
+						return ultimaZiLucru.getMonthValue() < luna;
+					else
+						return false;
+				} else
+					return false;
+			});
 
 			String statTemplateLocation = homeLocation + "/templates";
 
@@ -347,7 +361,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(retineri.getAvansnet());
 				writerCell = row3.createCell(19); // rest plata net
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit()-realizariRetineri.getValoaretichete());
+				writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit() - realizariRetineri.getValoaretichete());
 
 				// * set borders
 				String cellRange = "$A$" + (15 + nrAngajat * 3) + ":$U$" + (17 + nrAngajat * 3);
@@ -1204,7 +1218,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(retineri.getAvansnet());
 			writerCell = row3.getCell(19); // rest plata net
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit()-realizariRetineri.getValoaretichete());
+			writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit() - realizariRetineri.getValoaretichete());
 
 			// * set borders
 			String cellRange = "$A$15:$U$17";
