@@ -113,7 +113,7 @@ public class RealizariRetineriService {
 		if (this.bazaImpozit < 0)
 			this.bazaImpozit = 0;
 
-		this.impozitSalariu = bazaImpozit * impozitSalariu;
+		this.impozitSalariu = Math.round(bazaImpozit * parametriiSalariu.getImpozit()/100);
 
 		this.impozitScutit = 0;
 		if (platesteImpozit == 0)

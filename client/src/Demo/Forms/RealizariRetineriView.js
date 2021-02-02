@@ -1036,7 +1036,7 @@ class RealizariRetineriView extends React.Component {
                     </Col>
                     <Col md={6}>
                       <Form.Group id="restplata">
-                        <Form.Label>Rest de plată</Form.Label>
+                        <Form.Label>Rest de plată brut</Form.Label>
                         <Form.Control
                           type="text"
                           disabled
