@@ -123,13 +123,7 @@ public class Contract implements Serializable {
 	public Contract() {
 	}
 
-	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
-			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament,
-			Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru,
-			Integer salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata,
-			Float cotizatiepensieprivata, Float avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru,
-			String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor,
-			Boolean sindicat, Float cotizatiesindicat, String spor, Boolean pensionar) {
+	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere, PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Integer salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata, Float cotizatiepensieprivata, Float avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Float cotizatiesindicat, String spor, Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
@@ -452,43 +446,43 @@ public class Contract implements Serializable {
 	}
 
 	public void checkData() throws ResourceNotFoundException {
-		if(angajat == null)
+		if (angajat == null)
 			return;
 		String numeAngajat = angajat.getPersoana().getNumeIntreg();
-		if(tip == null)
+		if (tip == null)
 			throw new ResourceNotFoundException("Tipul contractului lui " + numeAngajat + " nu are valoare");
-		if(nr == null)
+		if (nr == null)
 			throw new ResourceNotFoundException("Numarul contractului " + numeAngajat + " nu are valoare");
-		if(data == null)
+		if (data == null)
 			throw new ResourceNotFoundException("Data contractului " + numeAngajat + " nu are valoare");
-		if(dataincepere == null)
+		if (dataincepere == null)
 			throw new ResourceNotFoundException("Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
-		if(calculdeduceri == null)
+		if (calculdeduceri == null)
 			throw new ResourceNotFoundException("Calcul deduceri pentru " + numeAngajat + " nu are valoare");
-		if(normalucru == null)
+		if (normalucru == null)
 			throw new ResourceNotFoundException("Norma lucru pentru " + numeAngajat + " nu are valoarea");
-		if(salariutarifar == null)
+		if (salariutarifar == null)
 			throw new ResourceNotFoundException("Salariul lui " + numeAngajat + " nu are valoare");
-		if(zilecoan == null)
+		if (zilecoan == null)
 			throw new ResourceNotFoundException("Zilele concediu/an din contractul lui " + numeAngajat + " nu are valoare");
-		if(functie == null)
+		if (functie == null)
 			throw new ResourceNotFoundException("Functia lui " + numeAngajat + " nu are valoare");
-	}	
+	}
 
 	public Contract fixDefaultValuesMissing() throws ResourceNotFoundException {
-		if(tip == null)
+		if (tip == null)
 			this.tip = "Contract de muncă";
-		if(calculdeduceri == null)
+		if (calculdeduceri == null)
 			this.calculdeduceri = true;
-		if(normalucru == null)
+		if (normalucru == null)
 			this.normalucru = 8;
-		if(zilecoan == null)
+		if (zilecoan == null)
 			this.zilecoan = 21;
-		if(avans == null)
+		if (avans == null)
 			this.avans = 0f;
-		
+
 		checkData();
-		
+
 		return this;
 	}
 }

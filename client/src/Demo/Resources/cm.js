@@ -343,12 +343,12 @@ function countWeekendDays(d0, d1) {
 }
 
 function countHolidays(startDate, endDate, holidays) {
-  if(!holidays) return 0;
+  if (!holidays) return 0;
   var nholidays = 0;
   // eslint-disable-next-line array-callback-return
-  holidays.map(holiday => {
-      let dela = Date.parse(holiday.dela);
-      let panala = Date.parse(holiday.panala);
+  holidays.map((holiday) => {
+    let dela = Date.parse(holiday.dela);
+    let panala = Date.parse(holiday.panala);
 
       // concediul nu include sarbatoarea
       if(panala < startDate || endDate < dela) {
@@ -377,4 +377,12 @@ function countHolidays(startDate, endDate, holidays) {
   return nholidays;
 }
 
-export { cod_boala, cod_urgenta, cod_boala_infect, getProcente, getZileFirma, countWeekendDays, countHolidays };
+export {
+  cod_boala,
+  cod_urgenta,
+  cod_boala_infect,
+  getProcente,
+  getZileFirma,
+  countWeekendDays,
+  countHolidays,
+};
