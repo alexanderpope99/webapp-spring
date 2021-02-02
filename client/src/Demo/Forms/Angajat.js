@@ -10,6 +10,7 @@ import ConcediiMedicale from '../Tables/ConcediiMedicale';
 import { getAngajatSel } from '../Resources/angajatsel';
 import PersoaneIntretinereTabel from '../Tables/PersoaneIntretinere';
 import BazaCalcul from '../Tables/BazaCalcul';
+import ZileCOAn from '../Tables/ZileCOAn';
 
 /*
   ? how it works now:
@@ -37,6 +38,7 @@ class Angajat extends React.Component {
     this.co = React.createRef();
     this.cm = React.createRef();
     this.bc = React.createRef();
+    this.zc = React.createRef();
 
     this.state = {
       socsel: getSocSel(),
@@ -100,6 +102,11 @@ class Angajat extends React.Component {
     this.setState({ angajatsel: getAngajatSel() });
   }
 
+  async onFocusZC() {
+    await this.zc.current.updateAngajatSel();
+    this.setState({ angajatsel: getAngajatSel() });
+  }
+
   render() {
     return (
       <Aux>
@@ -145,6 +152,7 @@ class Angajat extends React.Component {
                 else if (key === 'cm') this.onFocusCM();
                 else if (key === 'pi') this.onFocusPI();
                 else if (key === 'bc') this.onFocusBC();
+                else if (key === 'zc') this.onFocusZC();
               }}
             >
               <Tab eventKey="date-personale" title="Date Personale">
@@ -175,6 +183,12 @@ class Angajat extends React.Component {
               <Tab eventKey="pi" title="Pers. într.">
                 <PersoaneIntretinereTabel
                   ref={this.persoaneintretinere}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
+                />
+              </Tab>
+			  <Tab eventKey="zc" title="Zile CO An">
+                <ZileCOAn
+                  ref={this.zc}
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
