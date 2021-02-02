@@ -283,8 +283,6 @@ function getZileFirma(dela, panala, cod, sarbatori) {
 
   let nr_zile = (panala.getTime() - dela.getTime()) / (1000 * 3600 * 24) + 1;
   let nr_zile_lucratoare = nr_zile - getFreeDays(dela, panala, sarbatori);
-  console.log('zile in interval:', nr_zile);
-  console.log('zile lucratoare in interval:', nr_zile_lucratoare);
   let zilefirma = 0;
   let zilefnuass = 0;
   let zilefaambp = 0;

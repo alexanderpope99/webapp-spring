@@ -18,6 +18,12 @@ public class RoleService {
 			roleRepository.save(new Role(ERole.ROLE_DIRECTOR));
 			roleRepository.save(new Role(ERole.ROLE_CONTABIL));
 			roleRepository.save(new Role(ERole.ROLE_ANGAJAT));
-		}
+			roleRepository.save(new Role(ERole.ROLE_OPERATOR));
+		} else addOperator();
+	}
+
+	public void addOperator() {
+		if(roleRepository.count() < 5)
+			roleRepository.save(new Role(ERole.ROLE_OPERATOR));
 	}
 }

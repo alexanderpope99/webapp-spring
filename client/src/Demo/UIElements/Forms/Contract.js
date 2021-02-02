@@ -185,7 +185,7 @@ class Contract extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua angajații superiori posibili\n' + err.response.data.message,
+            'Nu am putut prelua angajații superiori posibili ' + err.response.data.message,
         })
       );
 
@@ -201,7 +201,7 @@ class Contract extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost ' + err.response.data.message,
         })
       );
 
@@ -223,7 +223,7 @@ class Contract extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua angajații\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua angajații ' + err.response.data.message,
         })
       );
 
@@ -366,7 +366,6 @@ class Contract extends React.Component {
       marca: this.state.marca || null,
       data: this.state.dataContract || null,
       dataincepere: this.state.dataIncepere || null,
-      // punctdelucru: null, //punctlucru.id,  // null or in || null
       centrucost: centrucost_body, //centrucost.id || null,
       idechipa: null, //echipa.id || null,
       iddepartament: null, //departament.id || null,

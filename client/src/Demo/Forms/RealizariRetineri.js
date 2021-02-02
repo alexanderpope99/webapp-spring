@@ -257,7 +257,7 @@ class RealizariRetineri extends React.Component {
 					toastTitle: 'Eroare',
 					toastColor: 'white',
 					toastMessage:
-						'Nu am putut prelua persoanele din baza de date\n' + err.response.data.message,
+						'Nu am putut prelua persoanele din baza de date ' + err.response.data.message,
 				})
 			);
 		if (!persoane) return;
@@ -297,7 +297,7 @@ class RealizariRetineri extends React.Component {
 			return;
 		}
 
-		// get contract by idpersoana :: contract body needed for 4 fields
+		// get contract by idpersoana :: contract needed for 4 fields
 		const contract = await axios
 			.get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
 			.then((res) => (res.status === 200 ? res.data : null))
@@ -307,7 +307,7 @@ class RealizariRetineri extends React.Component {
 					toastTitle: 'Eroare',
 					toastColor: 'white',
 					toastMessage:
-						'Nu am putut prelua contractul pentru persoana\n' + err.response.data.message,
+						'Nu am putut prelua contractul pentru persoana ' + err.response.data.message,
 				})
 			);
 		console.log('contract:', contract);
@@ -329,7 +329,7 @@ class RealizariRetineri extends React.Component {
 					toastTitle: 'Eroare',
 					toastColor: 'white',
 					toastMessage:
-						'Nu am putut prelua sau calcula realizari retineri\n' + err.response.data.message,
+						'Nu am putut prelua sau calcula realizari retineri ' + err.response.data.message,
 				})
 			);
 
@@ -545,7 +545,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut recalcula realizari/retineri\n' + err.response.data.message,
+					toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
 				})
 			);
 
@@ -580,7 +580,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut recalcula realizari/retineri\n' + err.response.data.message,
+					toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
 				})
 			);
 
@@ -616,7 +616,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut prelua cursul curent\n' + err.response.data.message,
+					toastMessage: 'Nu am putut prelua cursul curent ' + err.response.data.message,
 				})
 			);
 
@@ -636,7 +636,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut prelua orele suplimentare\n' + err.response.data.message,
+					toastMessage: 'Nu am putut prelua orele suplimentare ' + err.response.data.message,
 				})
 			);
 
@@ -675,7 +675,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut adăuga ore suplimentare\n' + err.response.data.message,
+					toastMessage: 'Nu am putut adăuga ore suplimentare ' + err.response.data.message,
 				})
 			);
 	}
@@ -689,7 +689,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut șterge orele suplimentare\n' + err.response.data.message,
+					toastMessage: 'Nu am putut șterge orele suplimentare ' + err.response.data.message,
 				})
 			);
 	}
@@ -758,7 +758,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut descărca ștatul\n' + err.response.data.message,
+					toastMessage: 'Nu am putut descărca ștatul ' + err.response.data.message,
 				})
 			);
 	}
@@ -780,7 +780,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut prelua ștatul individual\n' + err.response.data.message,
+					toastMessage: 'Nu am putut prelua ștatul individual ' + err.response.data.message,
 				})
 			);
 
