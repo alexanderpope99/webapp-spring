@@ -365,7 +365,7 @@ function countHolidays(startDate, endDate, holidays) {
       else if(dela < startDate && panala <= endDate){
         // console.log('sarbatoarea se termina in concediu, dar nu incepe in el');
         // console.log('se suprapun:' ((panala - startDate) / (24 * 3600 * 1000) + 1), 'zile');
-        nholidays += ((panala - startDate) / (24 * 3600 * 1000) + 1) - countWeekendDays(new Date(panala), startDate.addDays(1));
+        nholidays += ((panala - startDate) / (24 * 3600 * 1000) + 1) - countWeekendDays(new Date(panala), addDays(startDate, 1));
       }
       // sarbatoarea incepe in concediu, dar nu se termina in el
       else if(startDate <= dela && endDate < panala){

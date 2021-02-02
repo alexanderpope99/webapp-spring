@@ -89,11 +89,6 @@ public class COService {
 			return null;
 	}
 
-	// public boolean overlapsWith(Concediu concediu) {
-	// return concediu.overlaps(concediu.getContract().getConcediiOdihna())
-	// || concediu.overlaps(concediu.getContract().getConcediiMedicale());
-	// }
-
 	public CODTO save(CODTO coDTO) throws ResourceNotFoundException {
 		CO co = modelMapper.map(coDTO, CO.class);
 
@@ -166,6 +161,12 @@ public class COService {
 		List<CO> concediiOdihna = coRepository.findByContract_Id(idcontract);
 
 		return zileC(luna, an, concediiOdihna);
+	}
+
+	public int getZileCOLucratoareTotal(int luna, int an, int idcontract) {
+		List<CO> concediiOdihna = coRepository.findByContract_Id(idcontract);
+
+		return zileCLucratoare(luna, an, concediiOdihna);
 	}
 
 	public int getZileCFP(int luna, int an, int idcontract) {

@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-import net.guides.springboot2.crud.model.types.Moneda;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -51,7 +50,7 @@ public class Contract implements Serializable {
 	@Column(name = "salariutarifar", nullable = false)
 	private Integer salariutarifar;
 	@Column(name = "monedasalariu")
-	private Moneda monedasalariu;
+	private String monedasalariu;
 	@Column(name = "conditiimunca")
 	private String conditiimunca;
 	@Column(name = "pensieprivata")
@@ -61,7 +60,7 @@ public class Contract implements Serializable {
 	@Column(name = "avans")
 	private Float avans;
 	@Column(name = "monedaavans")
-	private Moneda monedaavans;
+	private String monedaavans;
 	@Column(name = "zilecoan")
 	private Integer zilecoan;
 	@Column(name = "ultimazilucru")
@@ -127,8 +126,8 @@ public class Contract implements Serializable {
 	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
 			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament,
 			Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru,
-			Integer salariutarifar, Moneda monedasalariu, String conditiimunca, Boolean pensieprivata,
-			Float cotizatiepensieprivata, Float avans, Moneda monedaavans, Integer zilecoan, LocalDate ultimazilucru,
+			Integer salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata,
+			Float cotizatiepensieprivata, Float avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru,
 			String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor,
 			Boolean sindicat, Float cotizatiesindicat, String spor, Boolean pensionar) {
 		this.tip = tip;
@@ -284,11 +283,11 @@ public class Contract implements Serializable {
 		this.salariutarifar = salariutarifar;
 	}
 
-	public Moneda getMonedasalariu() {
+	public String getMonedasalariu() {
 		return monedasalariu;
 	}
 
-	public void setMonedasalariu(Moneda monedasalariu) {
+	public void setMonedasalariu(String monedasalariu) {
 		this.monedasalariu = monedasalariu;
 	}
 
@@ -324,11 +323,11 @@ public class Contract implements Serializable {
 		this.avans = avans;
 	}
 
-	public Moneda getMonedaavans() {
+	public String getMonedaavans() {
 		return monedaavans;
 	}
 
-	public void setMonedaavans(Moneda monedaavans) {
+	public void setMonedaavans(String monedaavans) {
 		this.monedaavans = monedaavans;
 	}
 
