@@ -1670,6 +1670,14 @@ class RealizariRetineri extends React.Component {
 															<Form.Label>Zile plătite</Form.Label>
 															<Form.Control type="number" value={this.state.zileplatite} disabled />
 														</Form.Group>
+														<Form.Group id="restplatanet" as={Col} md="6">
+															<Form.Label>Rest plata net</Form.Label>
+															<Form.Control type="number" value={this.state.restplata-this.state.valoaretichete} disabled />
+														</Form.Group>
+														<Form.Group id="zileconeefectuat" as={Col} md="6">
+															<Form.Label>Rest plata net</Form.Label>
+															<Form.Control type="number" value={this.state.restplata-this.state.valoaretichete} disabled />
+														</Form.Group>
 													</Row>
 												</Card.Body>
 											</div>
