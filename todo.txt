@@ -50,8 +50,6 @@ LAST-UPDATE : {
 }
 
 TODO: {W
-	ia in considerare Panala din contract
-
 	pagina despre cum functioneaza aplicatia
 
 	1 -> buton de adauga utilizatori pt toti angajatii
@@ -59,12 +57,7 @@ TODO: {W
 	4.1 -> mi-am uitat parola
 	4.2 -> reseteaza parola din panou utilizatori
 
-	* -> https://dev.to/jazzzzz/converting-excel-to-pdf-in-java-application-474i
-
-	* -> https://vladmihalcea.com/the-best-way-to-map-an-enum-type-with-jpa-and-hibernate/ 
 	* -> add sorting and filtering to tables on frontend 
-
-	daca adaugi concediu, el recalculeaza realizari retineri, dar nu modifica nr tichete
 }
 
 *** INTREBARI: ***

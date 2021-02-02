@@ -43,7 +43,7 @@ public class RoleController {
     @PostMapping
     public Role createRole(@RequestBody Role role) {
         return roleRepository.save(role);
-    }
+		}
 
     @PutMapping("{id}")
     public ResponseEntity<Role> updateRole(@PathVariable(value = "id") int id, @RequestBody Role newRole)

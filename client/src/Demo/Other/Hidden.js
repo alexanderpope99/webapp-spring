@@ -11,6 +11,7 @@ class Hidden extends React.Component {
 		super();
 
 		this.fixContracte = this.fixContracte.bind(this);
+		this.initRoles = this.initRoles.bind(this);
 
 		this.state = {
 			toastMessage: '',
@@ -35,6 +36,18 @@ class Hidden extends React.Component {
 		}
 	}
 
+	async initRoles() {
+		const ok = axios
+			.get(`${server.address}/init/roles`, {headers: authHeader()})
+			.then(res => res.status === 200)
+			.catch(err => console.error(err));
+		if(ok) 
+			this.setState({
+				toastMessage: 'Rolurile au fost initializate',
+				showToast: true,
+			})
+	}
+
   render() {
     return (
       <Aux>
@@ -53,6 +66,7 @@ class Hidden extends React.Component {
 				</Toast>
 
         <Button onClick={this.fixContracte}>Introdu date prestabilite in contracte acolo unde lipsesc</Button>
+        <Button onClick={this.initRoles}>Initializeaza rolurile</Button>
       </Aux>
     );
   }
