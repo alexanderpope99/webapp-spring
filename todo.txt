@@ -38,18 +38,18 @@ Pasi de urmat:
 	6. Baza de date se initializeaza automat cand se creeaza primul user
 #################################################################################
 
-
-
+FLORIN ADRIAN - NIMIC
+GHEORGHE TUDOR - CO 4-17, ZILE INVOIRE 1, TICHETE 0, POPRIRI 100
+IONESCU MARIA - CM SARCINA TOATA LUNA
+MARIN RADU - CFP 4-17, 3 ORE SUPLIMENTARE 100%
+MIREL TONEE - SALARIU<DEDUCERE
+POPESCU ANA-MARIA - BOALA PROFESIONALA 4-17 80%, PENSIE FAC 1000
+SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 
 LAST-UPDATE : {
-	:5000/contract/fix-missing-values
 }
 
-TODO: {
-	daca nu are functie de baza, nu ii pune tichete
-
-	fisierul trebuie sa fie csv sau excel?
-
+TODO: {W
 	ia in considerare Panala din contract
 
 	pagina despre cum functioneaza aplicatia

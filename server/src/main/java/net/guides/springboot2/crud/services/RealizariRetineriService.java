@@ -63,7 +63,6 @@ public class RealizariRetineriService {
 	private float impozitScutit = 0;
 	private float casSalariu = 0;
 	private float cassSalariu = 0;
-	private float camSalariu = 0;
 
 	// gets RealizariRetineri from DB + daca nu are BazaCalcul => creeaza una noua, cu datele existente
 	public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
@@ -140,7 +139,6 @@ public class RealizariRetineriService {
 		impozitSalariu = 0;
 		casSalariu = 0;
 		cassSalariu = 0;
-		camSalariu = 0;
 		deducere = 0;
 		venitNet = 0;
 		bazaImpozit = 0;
@@ -194,12 +192,12 @@ public class RealizariRetineriService {
 		// totalDrepturi nu include tichete || venitBrut = totalDrepturi + tichete
 		this.casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
 		this.cassSalariu = Math.round((totalDrepturi - valCM) * parametriiSalariu.getCass() / 100);
-		this.camSalariu = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
+		float camSalariu = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
 
 		int nrPersoaneIntretinere = persoaneIntretinereService.getNrPersoaneIntretinere(contract.getId());
 
 		int restPlata = 0;
-		int zilePlatite = norma - zileCFPLucratoare;
+		int zilePlatite = zileContract - zileCFPLucratoare;
 		if (zilePlatite > 0)
 			restPlata = calcRestplata(idcontract, luna, an, totalDrepturi, nrTichete, nrPersoaneIntretinere);
 
@@ -249,6 +247,8 @@ public class RealizariRetineriService {
 		// verifica daca trebuie folosite (primaBruta, nrTichete, totalOreSuplimentare) existente
 		if (primaBruta == -1 && nrTichete == -1 && totalOreSuplimentare == -1) {
 			RealizariRetineri tmpRR = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
+			if(tmpRR == null)
+				tmpRR = new RealizariRetineri();
 			primaBruta = tmpRR.getPrimabruta() == null ? 0 : tmpRR.getPrimabruta();
 			nrTichete = tmpRR.getNrtichete() == null ? 0 : tmpRR.getNrtichete();
 			totalOreSuplimentare = tmpRR.getTotaloresuplimentare() == null ? 0 : tmpRR.getTotaloresuplimentare();

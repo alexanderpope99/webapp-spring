@@ -350,39 +350,30 @@ function countHolidays(startDate, endDate, holidays) {
     let dela = Date.parse(holiday.dela);
     let panala = Date.parse(holiday.panala);
 
-    // concediul nu include sarbatoarea
-    if (panala < startDate || endDate < dela) {
-      return 0;
-    }
-    // concediul include sarbatoarea in totalitate
-    else if (startDate <= dela && panala <= endDate) {
-      // console.log('concediul include sarbatoarea in totalitate');
-      // console.log('se suprapun:', ((panala - dela) / (24 * 3600 * 1000) + 1), 'zile de sarbatoare');
-      // console.log('din care', countWeekendDays(new Date(panala), new Date(dela + (24 * 3600 * 1000))), 'in weekend');
-      nholidays +=
-        (panala - dela) / (24 * 3600 * 1000) +
-        1 -
-        countWeekendDays(new Date(panala), new Date(dela + 24 * 3600 * 1000));
-    }
-    // sarbatoarea se termina in concediu, dar nu incepe in el
-    else if (dela < startDate && panala <= endDate) {
-      // console.log('sarbatoarea se termina in concediu, dar nu incepe in el');
-      // console.log('se suprapun:' ((panala - startDate) / (24 * 3600 * 1000) + 1), 'zile');
-      nholidays +=
-        (panala - startDate) / (24 * 3600 * 1000) +
-        1 -
-        countWeekendDays(new Date(panala), addDays(startDate, 1));
-    }
-    // sarbatoarea incepe in concediu, dar nu se termina in el
-    else if (startDate <= dela && endDate < panala) {
-      // console.log('sarbatoarea incepe in concediu, dar nu se termina in el');
-      // console.log('se suprapun:' ((endDate - dela)  / (24 * 3600 * 1000) + 1), 'zile');
-      nholidays +=
-        (endDate - dela) / (24 * 3600 * 1000) +
-        1 -
-        countWeekendDays(endDate, new Date(dela + 24 * 3600 * 1000));
-    }
-  });
+      // concediul nu include sarbatoarea
+      if(panala < startDate || endDate < dela) {
+        return 0;
+      }
+      // concediul include sarbatoarea in totalitate
+      else if(startDate <= dela && panala <= endDate){
+        // console.log('concediul include sarbatoarea in totalitate');
+        // console.log('se suprapun:', ((panala - dela) / (24 * 3600 * 1000) + 1), 'zile de sarbatoare');
+        // console.log('din care', countWeekendDays(new Date(panala), new Date(dela + (24 * 3600 * 1000))), 'in weekend');
+        nholidays += ((panala - dela) / (24 * 3600 * 1000) + 1) - countWeekendDays(new Date(panala), new Date(dela + (24 * 3600 * 1000)));
+      }
+      // sarbatoarea se termina in concediu, dar nu incepe in el
+      else if(dela < startDate && panala <= endDate){
+        // console.log('sarbatoarea se termina in concediu, dar nu incepe in el');
+        // console.log('se suprapun:' ((panala - startDate) / (24 * 3600 * 1000) + 1), 'zile');
+        nholidays += ((panala - startDate) / (24 * 3600 * 1000) + 1) - countWeekendDays(new Date(panala), addDays(startDate, 1));
+      }
+      // sarbatoarea incepe in concediu, dar nu se termina in el
+      else if(startDate <= dela && endDate < panala){
+        // console.log('sarbatoarea incepe in concediu, dar nu se termina in el');
+        // console.log('se suprapun:' ((endDate - dela)  / (24 * 3600 * 1000) + 1), 'zile');
+        nholidays += ((endDate - dela) / (24 * 3600 * 1000) + 1) - countWeekendDays(endDate,  new Date(dela + (24 * 3600 * 1000)));
+      }
+    });
   return nholidays;
 }
 
