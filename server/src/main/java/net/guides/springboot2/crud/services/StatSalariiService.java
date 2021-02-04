@@ -1101,15 +1101,17 @@ public class StatSalariiService {
 			writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
 
 			// * ZILE CM
+			int zilecmfnuass = cmService.getZilecmFNUASS(concediiMedicale);
+			int zilecmfaambp = cmService.getZilecmFAAMBP(concediiMedicale);
 			writerCell = row1.getCell(8); // zile CM
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(realizariRetineri.getZilecmlucratoare());
+			writerCell.setCellValue(realizariRetineri.getZilecmlucratoare() - zilecmfnuass - zilecmfaambp);
 			writerCell = row2.getCell(8); // zile FNUASS
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(cmService.getZilecmFNUASS(concediiMedicale));
+			writerCell.setCellValue(zilecmfnuass);
 			writerCell = row3.getCell(8); // zile FAAMBP
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(cmService.getZilecmFAAMBP(concediiMedicale));
+			writerCell.setCellValue(zilecmfaambp);
 
 			// * ORE
 			writerCell = row1.getCell(9); // ore ind 75%
