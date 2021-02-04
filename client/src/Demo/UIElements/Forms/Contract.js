@@ -67,7 +67,7 @@ class Contract extends React.Component {
       cor: '',
       dataIncepere: '',
       dataContract: '',
-      ultimaZiLucru: '',
+      ultimazilucru: '',
       pensionar: false,
 
       show: false,
@@ -121,7 +121,7 @@ class Contract extends React.Component {
       cor: '',
       dataIncepere: '',
       dataContract: '',
-      ultimaZiLucru: '',
+      ultimazilucru: '',
       pensionar: false,
 
       show: false,
@@ -238,7 +238,8 @@ class Contract extends React.Component {
         : null;
       let centruCost = contract.centrucost
         ? { id: contract.centrucost.id, nume: contract.centrucost.nume }
-        : null;
+		: null;
+		
 
       this.setState(
         {
@@ -272,7 +273,7 @@ class Contract extends React.Component {
           avans: contract.avans || 0,
           monedăAvans: contract.monedaavans || 'RON',
           zileCOan: contract.zilecoan || 0,
-          ultimaZiLucru: contract.ultimaZiLucru ? contract.ultimazilucru.substring(0, 10) : '',
+          ultimazilucru: contract.ultimazilucru ? contract.ultimazilucru.substring(0, 10) : '',
           casăSănătate: contract.casasanatate || '-',
           gradInvalid: contract.gradinvaliditate || '', //text
           funcție: contract.functie || '', //text
@@ -281,7 +282,7 @@ class Contract extends React.Component {
           pensionar: contract.pensionar || false,
           spor: contract.spor || '',
         },
-        () => console.log('idangajat:', angajat.idpersoana, '\tidcontract:', contract.id)
+        () => console.log('idangajat:', angajat.idpersoana, '\tidcontract:', contract.id,'\tultimazilucru:',contract.ultimazilucru)
       );
     } else {
       // nu are contract
@@ -384,7 +385,7 @@ class Contract extends React.Component {
       avans: this.state.avans || null,
       monedaavans: this.state.monedăAvans || 'RON',
       zilecoan: this.state.zileCOan || 21,
-      ultimazilucru: this.state.ultimaZiLucru === '' ? null : this.state.ultimaZiLucru || null,
+      ultimazilucru: this.state.ultimazilucru === '' ? null : this.state.ultimazilucru || null,
       casasanatate: this.state.casăSănătate || null,
       gradinvaliditate: this.state.gradInvalid || null,
       functie: this.state.funcție || null,
@@ -985,9 +986,9 @@ class Contract extends React.Component {
                 <Form.Control
                   type="date"
                   placeholder="data"
-                  value={this.state.ultimaZiLucru}
+                  value={this.state.ultimazilucru}
                   onChange={(e) => {
-                    this.setState({ ultimaZiLucru: e.target.value });
+                    this.setState({ ultimazilucru: e.target.value });
                   }}
                 />
               </Form.Group>
