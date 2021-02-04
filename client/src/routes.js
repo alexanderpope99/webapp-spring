@@ -111,7 +111,7 @@ const routes = [
     path: '/tables/user-tabel',
     exact: true,
     name: 'Tabel Useri',
-    component: isAdmin ? UserTabel : null,
+    component: isAngajatSimplu ? UserTabel : null,
   },
   { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
   {

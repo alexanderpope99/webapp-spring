@@ -165,7 +165,7 @@ var items = [
     title: 'CONFIGURARE',
     type: 'group',
     icon: 'icon-group',
-    show: user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR'),
+    show: user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_DIRECTOR') || user.roles.includes('ROLE_CONTABIL'),
     children: [
       {
         id: 'user-tabel',
