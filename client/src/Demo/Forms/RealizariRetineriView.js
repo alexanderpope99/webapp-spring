@@ -537,7 +537,7 @@ class RealizariRetineriView extends React.Component {
           toastMessage: 'Nu am putut prelua ștatul individual ' + err.response.data.message,
         })
       );
-
+		console.log(ok);
     if (ok) {
       let numeintreg = this.state.selected_angajat.numeintreg;
       this.downloadStatIndividual(numeintreg, luna, an);

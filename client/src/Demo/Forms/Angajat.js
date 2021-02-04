@@ -155,11 +155,11 @@ class Angajat extends React.Component {
                 else if (key === 'zc') this.onFocusZC();
               }}
             >
-              <Tab eventKey="date-personale" title="Date Personale">
+              <Tab eventKey="date-personale" title="Date personale">
                 <EditPersoana ref={this.persoana} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
 
-              <Tab eventKey="contract" title="Contract de munca">
+              <Tab eventKey="contract" title="Contract muncă">
                 <Contract
                   ref={this.contract}
                   idcontract={this.state.idcontract}

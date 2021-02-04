@@ -293,7 +293,7 @@ class AngajatiTabel extends React.Component {
                       <th>Nume</th>
                       <th>Prenume</th>
                       <th>Funcție</th>
-                      <th>Salariu Tarifar</th>
+                      <th>Salariu de baza</th>
                       <th></th>
                     </tr>
                   </thead>
