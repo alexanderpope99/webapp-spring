@@ -85,7 +85,9 @@ public class Concediu implements Serializable {
 		concediiExistente.addAll(contract.getConcediiOdihna());
 		concediiExistente.addAll(contract.getConcediiMedicale());
 
+		// remove slef
 		concediiExistente.removeIf(c -> this.id == c.getId());
+
 		// scrise separat pentru lizibilitate
 		for (Concediu concediu : concediiExistente) {
 			// co includes concediu.dela: co.dela < concediu.dela < co.panala
@@ -97,15 +99,12 @@ public class Concediu implements Serializable {
 				return true;
 
 			// overlaps - co.dela inside concediu: concediu.dela < co.dela < concediu.panala
-			if (dela.compareTo(concediu.getDela()) >= 0 && dela.compareTo(concediu.getPanala()) <= 0) {
+			if (dela.compareTo(concediu.getDela()) >= 0 && dela.compareTo(concediu.getPanala()) <= 0)
 				return true;
-			}
 
-			// overlaps co.panala inside concediu: concediu.dela < co.panala <
-			// concediu.panla
-			if (panala.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0) {
+			// overlaps co.panala inside concediu: concediu.dela < co.panala < concediu.panla
+			if (panala.compareTo(concediu.getDela()) >= 0 && panala.compareTo(concediu.getPanala()) <= 0)
 				return true;
-			}
 		}
 
 		return false;

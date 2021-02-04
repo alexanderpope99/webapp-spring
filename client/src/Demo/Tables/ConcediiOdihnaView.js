@@ -81,7 +81,7 @@ class ConcediiOdihnaView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul ' + err.response.data.message,
           })
         );
       // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
@@ -207,7 +207,7 @@ class ConcediiOdihnaView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua concediile de odihnă\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua concediile de odihnă ' + err.response.data.message,
         })
       );
 

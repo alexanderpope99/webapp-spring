@@ -31,7 +31,7 @@ class FileUpload extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut încărca fișierul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut încărca fișierul ' + err.response.data.message,
         })
       );
   }

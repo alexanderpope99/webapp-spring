@@ -53,7 +53,7 @@ class ParametriiSalarii extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putu șterge parametrii\n' + err.response.data.message,
+          toastMessage: 'Nu am putu șterge parametrii ' + err.response.data.message,
         })
       );
   }
@@ -160,7 +160,7 @@ class ParametriiSalarii extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua parametrii\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua parametrii ' + err.response.data.message,
         })
       );
 
@@ -204,7 +204,7 @@ class ParametriiSalarii extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga parametrii\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga parametrii ' + err.response.data.message,
         })
       );
     this.onRefresh();

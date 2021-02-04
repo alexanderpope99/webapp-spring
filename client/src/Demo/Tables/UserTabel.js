@@ -89,7 +89,7 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua angajații fără user\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua angajații fără user ' + err.response.data.message,
         })
       );
   }
@@ -104,7 +104,7 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua societățile\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua societățile ' + err.response.data.message,
         })
       );
     // get all roles
@@ -114,7 +114,7 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua role-urile\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua role-urile ' + err.response.data.message,
         })
       );
 
@@ -127,7 +127,7 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajații\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajații ' + err.response.data.message,
           })
         );
 
@@ -173,7 +173,7 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut actualiza user-ul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut actualiza user-ul ' + err.response.data.message,
           })
         );
       if (ok) {
@@ -193,7 +193,7 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut creea user-ul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut creea user-ul ' + err.response.data.message,
           })
         );
       if (ok) {
@@ -328,7 +328,7 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge user-ul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge user-ul ' + err.response.data.message,
         })
       );
   }
@@ -343,7 +343,7 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua userii\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua userii ' + err.response.data.message,
           })
         );
       const all_angajati_of_socsel_nouser = await this.getAngajatiFaraUser();
@@ -364,7 +364,7 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua userii fără societate\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua userii fără societate ' + err.response.data.message,
           })
         );
       if (users) {

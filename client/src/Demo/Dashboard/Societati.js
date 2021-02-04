@@ -172,7 +172,7 @@ class Societati extends React.Component {
           toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage:
-            'Nu am putut prelua societățile din baza de date\n' + err.response.data.message,
+            'Nu am putut prelua societățile din baza de date ' + err.response.data.message,
         })
       );
 
@@ -235,7 +235,7 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut șterge societatea\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge societatea ' + err.response.data.message,
         })
       );
   }
@@ -281,7 +281,7 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut crea ștat salarii\n' + err.response.data.message,
+          toastMessage: 'Nu am putut crea ștat salarii ' + err.response.data.message,
         })
       );
 
@@ -309,7 +309,7 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut crea Declarația 112\n' + err.response.data.message,
+          toastMessage: 'Nu am putut crea Declarația 112 ' + err.response.data.message,
         })
       );
 
@@ -332,7 +332,7 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut crea MTA\n' + err.response.data.message,
+          toastMessage: 'Nu am putut crea MTA ' + err.response.data.message,
         })
       );
 
@@ -386,7 +386,7 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut actualiza societatea\n' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza societatea ' + err.response.data.message,
         })
       );
   }

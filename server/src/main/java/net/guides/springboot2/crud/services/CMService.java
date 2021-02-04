@@ -56,7 +56,7 @@ public class CMService {
 		// update salariu
 		realizariRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
 
-		// return sent body with correct id
+		// return updated cm
 		cmDTO.setId(cm.getId());
 		return cmDTO;
 	}

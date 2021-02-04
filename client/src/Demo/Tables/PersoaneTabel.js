@@ -49,7 +49,7 @@ class PersoaneTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge persoana\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge persoana ' + err.response.data.message,
         })
       );
   }
@@ -142,7 +142,7 @@ class PersoaneTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua persoanele\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua persoanele ' + err.response.data.message,
         })
       );
 

@@ -119,7 +119,7 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga factura\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga factura ' + err.response.data.message,
         })
       );
     if (ok) {
@@ -176,7 +176,7 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza factura\n' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza factura ' + err.response.data.message,
         })
       );
 
@@ -231,7 +231,7 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge factura\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge factura ' + err.response.data.message,
         })
       );
     // if(ok) this.onRefresh();
@@ -380,7 +380,7 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost ' + err.response.data.message,
         })
       );
     const aprobatori = await axios
@@ -391,7 +391,7 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua aprobatorii\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua aprobatorii ' + err.response.data.message,
         })
       );
     const fact = await axios
@@ -402,7 +402,7 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua facturile\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua facturile ' + err.response.data.message,
         })
       );
     if (centreCost) {

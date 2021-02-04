@@ -40,7 +40,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut aproba cererea de concediu\n' + err.response.data.message,
+          toastMessage: 'Nu am putut aproba cererea de concediu ' + err.response.data.message,
         })
       );
   }
@@ -53,7 +53,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut respinge cererea de concediu\n' + err.response.data.message,
+          toastMessage: 'Nu am putut respinge cererea de concediu ' + err.response.data.message,
         })
       );
   }
@@ -192,7 +192,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua cererile de concediu\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua cererile de concediu ' + err.response.data.message,
         })
       );
 

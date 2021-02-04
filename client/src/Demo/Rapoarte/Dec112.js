@@ -80,7 +80,7 @@ class Dec112 extends React.Component {
 			.catch((err) =>
 				this.setState({
 					showToast: true,
-					toastMessage: 'Nu am putut descărca declarația XML\n' + err.response.data.message,
+					toastMessage: 'Nu am putut descărca declarația XML ' + err.response.data.message,
 				})
 			);
 	}
@@ -113,7 +113,7 @@ class Dec112 extends React.Component {
 			.catch((err) =>
 				this.setState({
 					showToast: true,
-					toastMessage: 'Nu am putut descărca declarația PDF\n' + err.response.data.message,
+					toastMessage: 'Nu am putut descărca declarația PDF ' + err.response.data.message,
 				})
 			);
 	}
@@ -139,7 +139,7 @@ class Dec112 extends React.Component {
 			.catch((err) =>
 				this.setState({
 					showToast: true,
-					toastMessage: 'Nu am putut crea declarația XML\n' + err.response.data.message,
+					toastMessage: 'Nu am putut crea declarația XML ' + err.response.data.message,
 				})
 			);
 		if (created) this.downloadXML(luna, an);
@@ -166,7 +166,7 @@ class Dec112 extends React.Component {
 			.catch((err) =>
 				this.setState({
 					showToast: true,
-					toastMessage: 'Nu am putut crea declarația PDF\n' + err.response.data.message,
+					toastMessage: 'Nu am putut crea declarația PDF ' + err.response.data.message,
 				})
 			);
 		if (created) this.downloadPDF(luna, an);

@@ -171,7 +171,7 @@ class ContBancarTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge centrul de cost\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge centrul de cost ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })

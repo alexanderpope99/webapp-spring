@@ -404,7 +404,7 @@ class Contract extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut actualiza contractul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut actualiza contractul ' + err.response.data.message,
           })
         );
     } else {
@@ -416,7 +416,7 @@ class Contract extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga contractul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut adăuga contractul ' + err.response.data.message,
           })
         );
     }
@@ -434,7 +434,7 @@ class Contract extends React.Component {
           .catch((err) =>
             this.setState({
               showToast: true,
-              toastMessage: 'Nu am putut actualiza superiorul\n' + err.response.data.message,
+              toastMessage: 'Nu am putut actualiza superiorul ' + err.response.data.message,
             })
           );
       }

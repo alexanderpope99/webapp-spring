@@ -72,7 +72,7 @@ class PersoaneIntretinereTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am prelua angajatul\n' + err.response.data.message,
+            toastMessage: 'Nu am prelua angajatul ' + err.response.data.message,
           })
         );
       if (angajat)
@@ -104,7 +104,7 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga persoana întreținere\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga persoana întreținere ' + err.response.data.message,
         })
       );
     if (ok) {
@@ -140,7 +140,7 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut modifica persoana întreținere\n' + err.response.data.message,
+          toastMessage: 'Nu am putut modifica persoana întreținere ' + err.response.data.message,
         })
       );
 
@@ -180,7 +180,7 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge persoana întreținere\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge persoana întreținere ' + err.response.data.message,
         })
       );
   }
@@ -217,7 +217,7 @@ class PersoaneIntretinereTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua persoanele întreținere\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua persoanele întreținere ' + err.response.data.message,
           })
         );
       if (persoane) {

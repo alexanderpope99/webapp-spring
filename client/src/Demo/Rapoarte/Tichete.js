@@ -63,7 +63,7 @@ class Tichete extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea raport tichete\n' + err.response.data.message,
+          toastMessage: 'Nu am putut crea raport tichete ' + err.response.data.message,
         })
       );
 

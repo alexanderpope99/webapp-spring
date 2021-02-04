@@ -67,7 +67,7 @@ class BazaCalculView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am prelua angajatul\n' + err.response.data.message,
+            toastMessage: 'Nu am prelua angajatul ' + err.response.data.message,
           })
         );
       if (angajat)
@@ -109,7 +109,7 @@ class BazaCalculView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua baza calcul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua baza calcul ' + err.response.data.message,
           })
         );
       if (bazacalcul) {

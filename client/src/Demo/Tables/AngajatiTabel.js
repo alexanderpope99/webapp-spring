@@ -63,7 +63,7 @@ class AngajatiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge angajatul PDF\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge angajatul PDF ' + err.response.data.message,
         })
       );
   }
@@ -208,7 +208,7 @@ class AngajatiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua lista de angajați\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua lista de angajați ' + err.response.data.message,
         })
       );
 

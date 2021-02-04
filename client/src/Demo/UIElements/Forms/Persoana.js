@@ -216,7 +216,7 @@ class Persoana extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga angajatul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga angajatul ' + err.response.data.message,
         })
       );
 

@@ -79,7 +79,7 @@ class SarbatoriTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua sărbătorile\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua sărbătorile ' + err.response.data.message,
         })
       );
 
@@ -138,7 +138,7 @@ class SarbatoriTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge sărbătoarea\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge sărbătoarea ' + err.response.data.message,
         })
       );
   }
@@ -162,7 +162,7 @@ class SarbatoriTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut actualiza sărbătoarea\n' + err.response.data.message,
+            toastMessage: 'Nu am putut actualiza sărbătoarea ' + err.response.data.message,
           })
         );
     } else {
@@ -172,7 +172,7 @@ class SarbatoriTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga sărbătoare\n' + err.response.data.message,
+            toastMessage: 'Nu am putut adăuga sărbătoare ' + err.response.data.message,
           })
         );
     }

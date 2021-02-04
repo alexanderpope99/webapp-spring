@@ -77,7 +77,7 @@ class BazaCalcul extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul ' + err.response.data.message,
           })
         );
       if (angajat)
@@ -105,7 +105,7 @@ class BazaCalcul extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga bază calcul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga bază calcul ' + err.response.data.message,
         })
       );
 
@@ -138,7 +138,7 @@ class BazaCalcul extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza baza calcul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza baza calcul ' + err.response.data.message,
         })
       );
 
@@ -174,7 +174,7 @@ class BazaCalcul extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge baza calcul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge baza calcul ' + err.response.data.message,
         })
       );
   }
@@ -269,7 +269,7 @@ class BazaCalcul extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua baza calcul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua baza calcul ' + err.response.data.message,
           })
         );
       if (bazacalcul) {

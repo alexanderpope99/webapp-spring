@@ -86,7 +86,6 @@ class CMTabel extends React.Component {
       urgenta: false,
       conditii: '',
       cnpcopil: '',
-      idcontract: null,
 
       // succes modal:
       show_confirm: false,
@@ -131,7 +130,6 @@ class CMTabel extends React.Component {
       urgenta: false,
       conditii: '',
       cnpcopil: '',
-      idcontract: null,
     });
   }
 
@@ -154,7 +152,7 @@ class CMTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul ' + err.response.data.message,
           })
         );
       if (angajat) {
@@ -302,7 +300,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelau concediile medicale\n' + err.response.data.message,
+          toastMessage: 'Nu am putut prelau concediile medicale ' + err.response.data.message,
         })
       );
     if (cm) {
@@ -371,7 +369,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul medical\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge concediul medical ' + err.response.data.message,
         })
       );
   }
@@ -423,7 +421,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga concediul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga concediul ' + err.response.data.message,
         })
       );
 
@@ -483,7 +481,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza concediul\n' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza concediul ' + err.response.data.message,
         })
       );
 
@@ -546,7 +544,6 @@ class CMTabel extends React.Component {
         codboala: cm.codboala,
         urgenta: cm.urgenta || false,
         conditii: cm.conditii,
-        idcontract: cm.idcontract,
 
         isEdit: true,
         show: true,

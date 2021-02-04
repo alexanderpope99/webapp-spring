@@ -2,9 +2,7 @@ package net.guides.springboot2.crud.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,30 +29,23 @@ public class CMController {
 	private CMRepository cmRepository;
 
 	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
 	private CMService cmService;
 
 	@GetMapping
-	public List<CMDTO> getAllCMs() {
-		return cmRepository.findAll(Sort.by(Sort.Direction.DESC, "dela")).stream()
-				.map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
+	public List<CM> getAllCMs() {
+		return cmRepository.findAll(Sort.by(Sort.Direction.DESC, "dela"));
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CMDTO> getCMById(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
+	public ResponseEntity<CM> getCMById(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
 		CM cm = cmRepository.findById(cmId)
 				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
-		return ResponseEntity.ok().body(modelMapper.map(cm, CMDTO.class));
+		return ResponseEntity.ok().body(cm);
 	}
 
 	@GetMapping("idc={id}")
-	public ResponseEntity<List<CMDTO>> getCMByIdcontract(@PathVariable(value = "id") int idcontract) {
-		List<CMDTO> cm = cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract).stream()
-				.map(c -> modelMapper.map(c, CMDTO.class)).collect(Collectors.toList());
-
-		return ResponseEntity.ok().body(cm);
+	public List<CM> getCMByIdcontract(@PathVariable(value = "id") int idcontract) {
+		return cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 	}
 
 	@GetMapping("testvalcm/l={luna}an={an}idc={idcontract}")
