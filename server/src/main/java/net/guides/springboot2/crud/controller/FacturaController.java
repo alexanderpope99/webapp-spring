@@ -52,7 +52,7 @@ public class FacturaController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<FacturaDTO> getFacturaById(@PathVariable(value = "id") int facturaId)
+	public ResponseEntity<FacturaDTO> getFacturaById(@PathVariable("id") int facturaId)
 			throws ResourceNotFoundException {
 		Factura factura = facturaRepository.findById(facturaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
@@ -60,7 +60,7 @@ public class FacturaController {
 	}
 
 	@GetMapping("{id}/expand")
-	public ResponseEntity<Factura> getFacturaByIdExpand(@PathVariable(value = "id") int facturaId)
+	public ResponseEntity<Factura> getFacturaByIdExpand(@PathVariable("id") int facturaId)
 			throws ResourceNotFoundException {
 		Factura factura = facturaRepository.findById(facturaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
@@ -81,29 +81,29 @@ public class FacturaController {
 
 	@Transactional
 	@GetMapping("/{id}/respinge")
-	public ResponseEntity<String> rejectFacturaById(@PathVariable(value = "id") int facturaId)
+	public ResponseEntity<String> rejectFacturaById(@PathVariable("id") int facturaId)
 			throws ResourceNotFoundException {
 		return facturaService.reject(facturaId);
 	}
 
 	@Transactional
 	@GetMapping("/{id}/aproba")
-	public ResponseEntity<String> approveFacturaById(@PathVariable(value = "id") int facturaId)
+	public ResponseEntity<String> approveFacturaById(@PathVariable("id") int facturaId)
 			throws ResourceNotFoundException {
 		return facturaService.approve(facturaId);
 	}
 
 	@Transactional
 	@GetMapping("/{id}/amana")
-	public ResponseEntity<String> postponeFacturaById(@PathVariable(value = "id") int facturaId)
+	public ResponseEntity<String> postponeFacturaById(@PathVariable("id") int facturaId)
 			throws ResourceNotFoundException {
 		return facturaService.postpone(facturaId);
 	}
 
 	@Transactional
 	@GetMapping("/idsocuid/{ids}&{uid}")
-	public List<Factura> getFacturaByIdSocietateAndIdAprobator(@PathVariable(value = "ids") int societateId,
-			@PathVariable(value = "uid") int userID) {
+	public List<Factura> getFacturaByIdSocietateAndIdAprobator(@PathVariable("ids") int societateId,
+			@PathVariable("uid") int userID) {
 		return facturaRepository.findBySocietate_IdAndAprobator_User_Id(societateId, userID);
 	}
 
@@ -123,7 +123,7 @@ public class FacturaController {
 	}
 
 	@PutMapping("{id}/obs&codp")
-	public ResponseEntity<String> updateFacturaObsCodp(@PathVariable(value = "id") int facturaId,
+	public ResponseEntity<String> updateFacturaObsCodp(@PathVariable("id") int facturaId,
 			@RequestBody FacturaJSON obsCodp) throws ResourceNotFoundException {
 		return facturaService.updateObsCodp(facturaId, obsCodp);
 	}

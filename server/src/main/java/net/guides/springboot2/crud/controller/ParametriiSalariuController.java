@@ -41,12 +41,12 @@ public class ParametriiSalariuController {
 
 	@GetMapping("/date/{date}")
 	public ParametriiSalariu getParametriiSalariuByDate(
-			@PathVariable(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+			@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 		return parametriiSalariuRepository.findByDate(date);
 	}
 
 	@GetMapping("{id}")
-	public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable(value = "id") int id) {
+	public Optional<ParametriiSalariu> getParametriiSalariuById(@PathVariable("id") int id) {
 		return parametriiSalariuRepository.findById(id);
 	}
 
@@ -62,7 +62,7 @@ public class ParametriiSalariuController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<ParametriiSalariu> updateParametriiSalariu(@PathVariable(value = "id") int id,
+	public ResponseEntity<ParametriiSalariu> updateParametriiSalariu(@PathVariable("id") int id,
 			@RequestBody ParametriiSalariu newParametriiSalariu) throws ResourceNotFoundException {
 		ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));
@@ -73,7 +73,7 @@ public class ParametriiSalariuController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteParametriiSalariu(@PathVariable(value = "id") int id)
+	public Map<String, Boolean> deleteParametriiSalariu(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		ParametriiSalariu parametriiSalariu = parametriiSalariuRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ParametriiSalariu not found for this id :: " + id));

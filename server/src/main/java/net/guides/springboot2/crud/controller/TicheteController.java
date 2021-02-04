@@ -37,14 +37,14 @@ public class TicheteController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Tichete> getTicheteById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public ResponseEntity<Tichete> getTicheteById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Tichete tichete = ticheteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
 		return ResponseEntity.ok().body(tichete);
 	}
 
 	@GetMapping("nr/idc={idc}&mo={luna}&y={an}")
-	public int getNrTicheteByLunaAnIdcontract(@PathVariable(value = "idc") int idcontract, @PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an) throws ResourceNotFoundException {
+	public int getNrTicheteByLunaAnIdcontract(@PathVariable("idc") int idcontract, @PathVariable("luna") int luna, @PathVariable("an") int an) throws ResourceNotFoundException {
 		return ticheteService.getNrTichete(luna, an, idcontract);
 	}
 
@@ -59,7 +59,7 @@ public class TicheteController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Tichete> updateTichete(@PathVariable(value = "id") int id, @RequestBody Tichete newTichete) throws ResourceNotFoundException {
+	public ResponseEntity<Tichete> updateTichete(@PathVariable("id") int id, @RequestBody Tichete newTichete) throws ResourceNotFoundException {
 		Tichete tichete = ticheteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
 		newTichete.setId(tichete.getId());
@@ -68,7 +68,7 @@ public class TicheteController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteTichete(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteTichete(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Tichete tichete = ticheteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tichete not found for this id :: " + id));
 
 		ticheteRepository.delete(tichete);

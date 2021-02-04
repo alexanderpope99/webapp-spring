@@ -149,7 +149,7 @@ public class AngajatController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Angajat> updateAngajat(@PathVariable(value = "id") int angajatId,
+	public ResponseEntity<Angajat> updateAngajat(@PathVariable("id") int angajatId,
 			@RequestBody Angajat angajatDetails) throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));
@@ -166,7 +166,7 @@ public class AngajatController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteAngajat(@PathVariable(value = "id") int angajatId)
+	public Map<String, Boolean> deleteAngajat(@PathVariable("id") int angajatId)
 			throws ResourceNotFoundException {
 		Angajat angajat = angajatRepository.findById(angajatId)
 				.orElseThrow(() -> new ResourceNotFoundException("Angajat not found for this id :: " + angajatId));

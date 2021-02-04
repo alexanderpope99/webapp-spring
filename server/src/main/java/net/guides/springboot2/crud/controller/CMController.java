@@ -37,20 +37,20 @@ public class CMController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CM> getCMById(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
+	public ResponseEntity<CM> getCMById(@PathVariable("id") int cmId) throws ResourceNotFoundException {
 		CM cm = cmRepository.findById(cmId)
 				.orElseThrow(() -> new ResourceNotFoundException("CM not found for this id :: " + cmId));
 		return ResponseEntity.ok().body(cm);
 	}
 
 	@GetMapping("idc={id}")
-	public List<CM> getCMByIdcontract(@PathVariable(value = "id") int idcontract) {
+	public List<CM> getCMByIdcontract(@PathVariable("id") int idcontract) {
 		return cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 	}
 
 	@GetMapping("testvalcm/l={luna}an={an}idc={idcontract}")
-	public int getValCM(@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an,
-			@PathVariable(value = "idcontract") int idcontract) {
+	public int getValCM(@PathVariable("luna") int luna, @PathVariable("an") int an,
+			@PathVariable("idcontract") int idcontract) {
 		return cmService.getValCM(luna, an, idcontract);
 	}
 
@@ -60,13 +60,13 @@ public class CMController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<CMDTO> updateCM(@PathVariable(value = "id") int cmId, @RequestBody CMDTO cmDTO)
+	public ResponseEntity<CMDTO> updateCM(@PathVariable("id") int cmId, @RequestBody CMDTO cmDTO)
 			throws ResourceNotFoundException {
 		return ResponseEntity.ok(cmService.update(cmId, cmDTO));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteCM(@PathVariable(value = "id") int cmId) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteCM(@PathVariable("id") int cmId) throws ResourceNotFoundException {
 		return cmService.delete(cmId);
 	}
 }

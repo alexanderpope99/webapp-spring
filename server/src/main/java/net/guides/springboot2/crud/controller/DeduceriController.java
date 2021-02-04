@@ -37,7 +37,7 @@ public class DeduceriController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Deduceri> getDeduceriById(@PathVariable(value = "id") int id)
+	public ResponseEntity<Deduceri> getDeduceriById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Deduceri deduceri = deduceriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Deduceri not found for this id :: " + id));
@@ -57,7 +57,7 @@ public class DeduceriController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Deduceri> updateDeduceri(@PathVariable(value = "id") int id,
+	public ResponseEntity<Deduceri> updateDeduceri(@PathVariable("id") int id,
 			@RequestBody Deduceri newDeduceri) throws ResourceNotFoundException {
 		newDeduceri.setId(id);
 		final Deduceri updatedDeduceri = deduceriRepository.save(newDeduceri);
@@ -65,7 +65,7 @@ public class DeduceriController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteDeduceri(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteDeduceri(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Deduceri deduceri = deduceriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Deduceri not found for this id :: " + id));
 

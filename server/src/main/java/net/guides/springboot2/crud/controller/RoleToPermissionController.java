@@ -31,8 +31,8 @@ public class RoleToPermissionController {
     }
 
     @GetMapping("{roleid}+{permissionid}")
-    public ResponseEntity<RoleToPermission> getRoleToPermissionById(@PathVariable(value = "roleid") Long roleid,
-            @PathVariable(value = "permissionid") Long permissionid) throws ResourceNotFoundException {
+    public ResponseEntity<RoleToPermission> getRoleToPermissionById(@PathVariable("roleid") Long roleid,
+            @PathVariable("permissionid") Long permissionid) throws ResourceNotFoundException {
         RoleToPermission roleToPermission = roleToPermissionRepository.findByRoleidAndPermissionid(roleid, permissionid)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));
@@ -46,8 +46,8 @@ public class RoleToPermissionController {
     }
 
     @PutMapping("{roleid}+{permissionid}")
-    public ResponseEntity<RoleToPermission> updateRoleToPermission(@PathVariable(value = "roleid") Long roleid,
-            @PathVariable(value = "permissionid") Long permissionid, @RequestBody RoleToPermission newRoleToPermission)
+    public ResponseEntity<RoleToPermission> updateRoleToPermission(@PathVariable("roleid") Long roleid,
+            @PathVariable("permissionid") Long permissionid, @RequestBody RoleToPermission newRoleToPermission)
             throws ResourceNotFoundException {
         RoleToPermission roleToPermission = roleToPermissionRepository.findByRoleidAndPermissionid(roleid, permissionid)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -61,8 +61,8 @@ public class RoleToPermissionController {
     }
 
     @DeleteMapping("{roleid}+{permissionid}")
-    public Map<String, Boolean> deleteRoleToPermission(@PathVariable(value = "roleid") Long roleid,
-            @PathVariable(value = "permissionid") Long permissionid) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteRoleToPermission(@PathVariable("roleid") Long roleid,
+            @PathVariable("permissionid") Long permissionid) throws ResourceNotFoundException {
         RoleToPermission roleToPermission = roleToPermissionRepository.findByRoleidAndPermissionid(roleid, permissionid)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "RoleToPermission not found for roleid :: " + roleid + " and permissionid :: " + permissionid));

@@ -1229,11 +1229,7 @@ class RealizariRetineri extends React.Component {
 												<Form.Control
 													type="number"
 													disabled
-													value={
-														this.state.orelucrate -
-														this.state.duratazilucru *
-														(Number(this.state.zilelibere) + Number(this.state.zileinvoire))
-													}
+													value={this.state.orelucrate}
 												/>
 											</Form.Group>
 										</Col>

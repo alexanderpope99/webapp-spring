@@ -37,7 +37,7 @@ public class BazacalculController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Bazacalcul> getBazacalculById(@PathVariable(value = "id") int bazacalculId)
+	public ResponseEntity<Bazacalcul> getBazacalculById(@PathVariable("id") int bazacalculId)
 			throws ResourceNotFoundException {
 		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
 				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
@@ -67,13 +67,13 @@ public class BazacalculController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<BazacalculDTO> updateBazacalcul(@PathVariable(value = "id") int id,
+	public ResponseEntity<BazacalculDTO> updateBazacalcul(@PathVariable("id") int id,
 			@RequestBody BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(bazaCalculService.update(id, bazacalculDTO));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteBazacalcul(@PathVariable(value = "id") int bazacalculId)
+	public Map<String, Boolean> deleteBazacalcul(@PathVariable("id") int bazacalculId)
 			throws ResourceNotFoundException {
 		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
 				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));

@@ -36,7 +36,7 @@ public class ContBancarController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<ContBancar> getContBancarById(@PathVariable(value = "id") int contBancarId)
+	public ResponseEntity<ContBancar> getContBancarById(@PathVariable("id") int contBancarId)
 			throws ResourceNotFoundException {
 		ContBancar contBancar = contBancarRepository.findById(contBancarId)
 				.orElseThrow(() -> new ResourceNotFoundException("ContBancar not found for this id :: " + contBancarId));
@@ -60,7 +60,7 @@ public class ContBancarController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<ContBancar> updateContBancar(@PathVariable(value = "id") int contBancarId,
+	public ResponseEntity<ContBancar> updateContBancar(@PathVariable("id") int contBancarId,
 			@RequestBody ContBancar contBancarDetails) throws ResourceNotFoundException {
 		ContBancar contBancar = contBancarRepository.findById(contBancarId)
 				.orElseThrow(() -> new ResourceNotFoundException("ContBancar not found for this id :: " + contBancarId));
@@ -79,7 +79,7 @@ public class ContBancarController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteContBancar(@PathVariable(value = "id") int contBancarId)
+	public Map<String, Boolean> deleteContBancar(@PathVariable("id") int contBancarId)
 			throws ResourceNotFoundException {
 		return contBancarService.delete(contBancarId);
 	}

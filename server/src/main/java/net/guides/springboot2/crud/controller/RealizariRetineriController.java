@@ -34,21 +34,21 @@ public class RealizariRetineriController {
 	private ModelMapper modelMapper;
 
 	@GetMapping("get/idc={id}&mo={luna}&y={an}")
-	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable(value = "id") int idcontract,
-			@PathVariable(value = "luna") int luna, @PathVariable(value = "an") int an)
+	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable("id") int idcontract,
+			@PathVariable("luna") int luna, @PathVariable("an") int an)
 			throws ResourceNotFoundException {
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 	}
 
 	@GetMapping("/luni-ani/ids={ids}&idu={idu}")
-	public List<LuniCuSalarii> getAllRealizariRetineriByIdSocAndIdUser(@PathVariable(value = "ids") int idsocietate,
-			@PathVariable(value = "idu") int iduser) throws ResourceNotFoundException {
+	public List<LuniCuSalarii> getAllRealizariRetineriByIdSocAndIdUser(@PathVariable("ids") int idsocietate,
+			@PathVariable("idu") int iduser) throws ResourceNotFoundException {
 		return realizariRetineriService.getAllRealizariRetineriByIdSocietateAndIdUser(idsocietate, iduser);
 	}
 
 	@GetMapping("idp={id}&mo={luna}&y={an}")
-	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable(value = "id") int idpersoana,
-			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
+	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable("id") int idpersoana,
+			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an)
 			throws ResourceNotFoundException {
 		// get contract of persoana
 		int idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
@@ -58,18 +58,18 @@ public class RealizariRetineriController {
 
 	// just a calculator
 	@GetMapping("calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
-	public RealizariRetineriDTO calcRealizariRetineri(@PathVariable(value = "id") int idcontract,
-			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an,
-			@PathVariable(value = "pb") Integer primabruta, @PathVariable(value = "nrt") Integer nrTichete,
-			@PathVariable(value = "tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
+	public RealizariRetineriDTO calcRealizariRetineri(@PathVariable("id") int idcontract,
+			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an,
+			@PathVariable("pb") Integer primabruta, @PathVariable("nrt") Integer nrTichete,
+			@PathVariable("tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
 		return modelMapper.map(realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primabruta,
 				nrTichete, totalOreSuplimentare), RealizariRetineriDTO.class);
 	}
 
 	// * CALCULEAZA pt un angajat pe o luna
 	@PostMapping("save/idc={id}&mo={luna}&y={an}")
-	public RealizariRetineri saveRealizariRetineri(@PathVariable(value = "id") int idcontract,
-			@PathVariable(value = "luna") Integer luna, @PathVariable(value = "an") Integer an)
+	public RealizariRetineri saveRealizariRetineri(@PathVariable("id") int idcontract,
+			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an)
 			throws ResourceNotFoundException {
 		return realizariRetineriService.saveOrGetRealizariRetineri(luna, an, idcontract);
 	}

@@ -31,6 +31,8 @@ public class CMService {
 	private SarbatoriService sarbatoriService;
 	@Autowired
 	private RealizariRetineriService realizariRetineriService;
+	@Autowired
+	private ContractService contractService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -115,9 +117,22 @@ public class CMService {
 		return Math.round(valCM);
 	}
 
-	public int getValCMScutitImpozit(int luna, int an, int idcontract) {
+	public int getValCMScutitImpozit(int luna, int an, int idcontract) throws ResourceNotFoundException {
+		Contract contract = contractService.findById(idcontract);
+
 		List<CM> toateConcediile = this.getCMInLunaAnul(luna, an, idcontract);
 		Set<String> coduriScutite = Set.of("08", "09", "15");
+
+		// daca e scutit de impozit, concediul medical nu intra in baza calcul
+		if (!contract.isCalculdeduceri()) {
+			float valCM = 0;
+			for (CM cm : toateConcediile) {
+				valCM += this.zileCLucratoare(cm) * cm.getMediezilnica() * cm.getProcent() / 100;
+			}
+
+			return Math.round(valCM);
+		}
+
 		toateConcediile.removeIf(cm -> {
 			String cod = cm.getCodboala();
 			if (cod == null || cod.isEmpty())

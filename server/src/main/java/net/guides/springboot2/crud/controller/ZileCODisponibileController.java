@@ -33,7 +33,7 @@ public class ZileCODisponibileController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<ZileCODisponibile> getZileCODisponibileById(@PathVariable(value = "id") int id)
+	public ResponseEntity<ZileCODisponibile> getZileCODisponibileById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		ZileCODisponibile zileCODisponibile = zileCODisponibileRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ZileCODisponibile not found for this id :: " + id));
@@ -47,7 +47,7 @@ public class ZileCODisponibileController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<ZileCODisponibile> updateZileCODisponibile(@PathVariable(value = "id") int id,
+	public ResponseEntity<ZileCODisponibile> updateZileCODisponibile(@PathVariable("id") int id,
 			@RequestBody ZileCODisponibile newZileCODisponibile) throws ResourceNotFoundException {
 		ZileCODisponibile zileCODisponibile = zileCODisponibileRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ZileCODisponibile not found for this id :: " + id));
@@ -58,7 +58,7 @@ public class ZileCODisponibileController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteZileCODisponibile(@PathVariable(value = "id") int id)
+	public Map<String, Boolean> deleteZileCODisponibile(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		ZileCODisponibile zileCODisponibile = zileCODisponibileRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("ZileCODisponibile not found for this id :: " + id));

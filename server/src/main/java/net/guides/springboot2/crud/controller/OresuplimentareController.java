@@ -42,7 +42,7 @@ public class OresuplimentareController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable(value = "id") int id)
+	public ResponseEntity<Oresuplimentare> getOresuplimentareById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));
@@ -52,15 +52,15 @@ public class OresuplimentareController {
 
 	@GetMapping("/api/idc={id}&mo={luna}&y={an}")
 	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByLunaAnIdcontract(
-			@PathVariable(value = "id") int idcontract, @PathVariable(value = "luna") Integer luna,
-			@PathVariable(value = "an") Integer an) {
+			@PathVariable("id") int idcontract, @PathVariable("luna") Integer luna,
+			@PathVariable("an") Integer an) {
 		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByLunaAndAnAndIdcontract(luna, an, idcontract);
 
 		return ResponseEntity.ok().body(oresuplimentare);
 	}
 
 	@GetMapping("idss={id}")
-	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable(value = "id") int idstat) {
+	public ResponseEntity<List<Oresuplimentare>> getOresuplimentareByIdstat(@PathVariable("id") int idstat) {
 		List<Oresuplimentare> oresuplimentare = oresuplimentareRepository.findByStatsalariat_Id(idstat).stream()
 				.map(os -> modelMapper.map(os, Oresuplimentare.class)).collect(Collectors.toList());
 
@@ -74,13 +74,13 @@ public class OresuplimentareController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable(value = "id") int id,
+	public ResponseEntity<Oresuplimentare> updateOresuplimentare(@PathVariable("id") int id,
 			@RequestBody Oresuplimentare newOresuplimentare) throws ResourceNotFoundException {
 		return ResponseEntity.ok(oresuplimentareService.update(id, newOresuplimentare));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteOresuplimentare(@PathVariable(value = "id") int id)
+	public Map<String, Boolean> deleteOresuplimentare(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Oresuplimentare oresuplimentare = oresuplimentareRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Oresuplimentare not found for this id :: " + id));

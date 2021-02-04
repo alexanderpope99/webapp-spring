@@ -36,7 +36,7 @@ public class AdresaController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Adresa> getAdresaById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public ResponseEntity<Adresa> getAdresaById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Adresa adresa = adresaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 
@@ -55,7 +55,7 @@ public class AdresaController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Adresa> updateAdresa(@PathVariable(value = "id") int id, @RequestBody Adresa newAdresa)
+	public ResponseEntity<Adresa> updateAdresa(@PathVariable("id") int id, @RequestBody Adresa newAdresa)
 			throws ResourceNotFoundException {
 		Adresa adresa = adresaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
@@ -66,7 +66,7 @@ public class AdresaController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteAdresa(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteAdresa(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Adresa adresa = adresaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Adresa not found for this id :: " + id));
 

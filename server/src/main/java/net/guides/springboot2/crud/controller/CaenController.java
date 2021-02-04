@@ -32,7 +32,7 @@ public class CaenController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Caen> getCaenById(@PathVariable(value = "id") int caenId) throws ResourceNotFoundException {
+	public ResponseEntity<Caen> getCaenById(@PathVariable("id") int caenId) throws ResourceNotFoundException {
 		Caen caen = caenRepository.findById(caenId)
 				.orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
 		return ResponseEntity.ok().body(caen);
@@ -44,7 +44,7 @@ public class CaenController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Caen> updateCaen(@PathVariable(value = "id") int caenId, @RequestBody Caen caenDetails)
+	public ResponseEntity<Caen> updateCaen(@PathVariable("id") int caenId, @RequestBody Caen caenDetails)
 			throws ResourceNotFoundException {
 		Caen caen = caenRepository.findById(caenId)
 				.orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
@@ -55,7 +55,7 @@ public class CaenController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteCaen(@PathVariable(value = "id") int caenId) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteCaen(@PathVariable("id") int caenId) throws ResourceNotFoundException {
 		Caen caen = caenRepository.findById(caenId)
 				.orElseThrow(() -> new ResourceNotFoundException("Caen not found for this id :: " + caenId));
 

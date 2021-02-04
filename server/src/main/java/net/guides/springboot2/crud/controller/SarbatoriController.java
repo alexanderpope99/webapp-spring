@@ -34,7 +34,7 @@ public class SarbatoriController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Sarbatori> getSarbatoriById(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Sarbatori> getSarbatoriById(@PathVariable("id") Long id)
 			throws ResourceNotFoundException {
 		Sarbatori sarbatori = sarbatoriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Sarbatori not found for this id :: " + id));
@@ -65,7 +65,7 @@ public class SarbatoriController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Sarbatori> updateSarbatori(@PathVariable(value = "id") Long id,
+	public ResponseEntity<Sarbatori> updateSarbatori(@PathVariable("id") Long id,
 			@RequestBody Sarbatori newSarbatori) throws ResourceNotFoundException {
 		Sarbatori sarbatori = sarbatoriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Sarbatori not found for this id :: " + id));
@@ -76,7 +76,7 @@ public class SarbatoriController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteSarbatori(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteSarbatori(@PathVariable("id") Long id) throws ResourceNotFoundException {
 		Sarbatori sarbatori = sarbatoriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Sarbatori not found for this id :: " + id));
 

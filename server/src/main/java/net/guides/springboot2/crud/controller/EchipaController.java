@@ -32,7 +32,7 @@ public class EchipaController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Echipa> getEchipaById(@PathVariable(value = "id") int echipaId)
+	public ResponseEntity<Echipa> getEchipaById(@PathVariable("id") int echipaId)
 			throws ResourceNotFoundException {
 		Echipa echipa = echipaRepository.findById(echipaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
@@ -45,7 +45,7 @@ public class EchipaController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Echipa> updateEchipa(@PathVariable(value = "id") int echipaId,
+	public ResponseEntity<Echipa> updateEchipa(@PathVariable("id") int echipaId,
 			@RequestBody Echipa echipaDetails) throws ResourceNotFoundException {
 		Echipa echipa = echipaRepository.findById(echipaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));
@@ -56,7 +56,7 @@ public class EchipaController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteEchipa(@PathVariable(value = "id") int echipaId)
+	public Map<String, Boolean> deleteEchipa(@PathVariable("id") int echipaId)
 			throws ResourceNotFoundException {
 		Echipa echipa = echipaRepository.findById(echipaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Echipa not found for this id :: " + echipaId));

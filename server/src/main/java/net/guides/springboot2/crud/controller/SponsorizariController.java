@@ -33,7 +33,7 @@ public class SponsorizariController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Sponsorizari> getSponsorizariById(@PathVariable(value = "id") int id)
+	public ResponseEntity<Sponsorizari> getSponsorizariById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
@@ -47,7 +47,7 @@ public class SponsorizariController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Sponsorizari> updateSponsorizari(@PathVariable(value = "id") int id,
+	public ResponseEntity<Sponsorizari> updateSponsorizari(@PathVariable("id") int id,
 			@RequestBody Sponsorizari newSponsorizari) throws ResourceNotFoundException {
 		Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));
@@ -58,7 +58,7 @@ public class SponsorizariController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteSponsorizari(@PathVariable(value = "id") int id)
+	public Map<String, Boolean> deleteSponsorizari(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Sponsorizari sponsorizari = sponsorizariRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Sponsorizari not found for this id :: " + id));

@@ -55,7 +55,7 @@ public class SocietateController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<SocietateDTO> getSocietateById(@PathVariable(value = "id") int id)
+	public ResponseEntity<SocietateDTO> getSocietateById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Societate societate = societateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
@@ -65,7 +65,7 @@ public class SocietateController {
 	}
 
 	@GetMapping("/user/{id}")
-	public List<SocietateDTO> getSocietateByUserId(@PathVariable(value = "id") Integer id) {
+	public List<SocietateDTO> getSocietateByUserId(@PathVariable("id") Integer id) {
 		List<Societate> societati = societateRepository.findByUserId(id);
 		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class))
 				.collect(Collectors.toList());
@@ -96,7 +96,7 @@ public class SocietateController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Societate> updateSocietate(@PathVariable(value = "id") int id,
+	public ResponseEntity<Societate> updateSocietate(@PathVariable("id") int id,
 			@RequestBody Societate newSocietate) throws ResourceNotFoundException {
 		newSocietate.checkData();
 		newSocietate.setId(id);
@@ -107,7 +107,7 @@ public class SocietateController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteSocietate(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteSocietate(@PathVariable("id") int id) throws ResourceNotFoundException {
 		// Societate societate = societateRepository.findById(id)
 		// .orElseThrow(() -> new ResourceNotFoundException("Societate not found for
 		// this id :: " + id));

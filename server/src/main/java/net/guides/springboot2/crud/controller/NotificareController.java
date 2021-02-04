@@ -51,7 +51,7 @@ public class NotificareController {
 	}
 
 	@GetMapping("/userid/{id}")
-	public List<NotificareDTO> getNotificariByUserId(@PathVariable(value = "id") int userId) {
+	public List<NotificareDTO> getNotificariByUserId(@PathVariable("id") int userId) {
 		List<Notificare> notificari = notificareRepository.findByUser_Id(userId);
 		modelMapper.typeMap(Notificare.class, NotificareDTO.class).addMapping(Notificare::getUser,
 				NotificareDTO::setIduserObj);
@@ -64,7 +64,7 @@ public class NotificareController {
 	}
 
 	@GetMapping("/userid/{id}/unread")
-	public List<NotificareDTO> getUnredNotificariByUserId(@PathVariable(value = "id") int userId) {
+	public List<NotificareDTO> getUnredNotificariByUserId(@PathVariable("id") int userId) {
 		List<Notificare> notificari = notificareRepository.findByUser_Id(userId);
 		modelMapper.typeMap(Notificare.class, NotificareDTO.class).addMapping(Notificare::getUser,
 				NotificareDTO::setIduserObj);
@@ -78,7 +78,7 @@ public class NotificareController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<NotificareDTO> getNotificareByIdDTO(@PathVariable(value = "id") int notificareId)
+	public ResponseEntity<NotificareDTO> getNotificareByIdDTO(@PathVariable("id") int notificareId)
 			throws ResourceNotFoundException {
 		modelMapper.typeMap(Notificare.class, NotificareDTO.class).addMapping(Notificare::getUser,
 				NotificareDTO::setIduserObj);
@@ -94,7 +94,7 @@ public class NotificareController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Notificare> updateNotificare(@PathVariable(value = "id") int notificareId,
+	public ResponseEntity<Notificare> updateNotificare(@PathVariable("id") int notificareId,
 			@RequestBody Notificare notificareDetails) throws ResourceNotFoundException {
 		Notificare notificare = notificareRepository.findById(notificareId).orElseThrow(
 				() -> new ResourceNotFoundException("Notificare not found for this id :: " + notificareId));
@@ -105,7 +105,7 @@ public class NotificareController {
 	}
 
 	@GetMapping("{id}/read")
-	public Notificare readNotificare(@PathVariable(value = "id") int notificareId) throws ResourceNotFoundException {
+	public Notificare readNotificare(@PathVariable("id") int notificareId) throws ResourceNotFoundException {
 		Notificare notificare = notificareRepository.findById(notificareId).orElseThrow(
 				() -> new ResourceNotFoundException("Notificare not found for this id :: " + notificareId));
 		notificare.setCitit(true);
@@ -114,7 +114,7 @@ public class NotificareController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteNotificare(@PathVariable(value = "id") int notificareId)
+	public Map<String, Boolean> deleteNotificare(@PathVariable("id") int notificareId)
 			throws ResourceNotFoundException {
 		Notificare notificare = notificareRepository.findById(notificareId).orElseThrow(
 				() -> new ResourceNotFoundException("Notificare not found for this id :: " + notificareId));

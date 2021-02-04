@@ -31,8 +31,8 @@ public class UserToRoleController {
     }
 
     @GetMapping("{roleid}+{userid}")
-    public ResponseEntity<UserToRole> getUserToRoleById(@PathVariable(value = "roleid") Long roleid,
-            @PathVariable(value = "userid") Long userid) throws ResourceNotFoundException {
+    public ResponseEntity<UserToRole> getUserToRoleById(@PathVariable("roleid") Long roleid,
+            @PathVariable("userid") Long userid) throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));
@@ -46,8 +46,8 @@ public class UserToRoleController {
     }
 
     @PutMapping("{roleid}+{userid}")
-    public ResponseEntity<UserToRole> updateUserToRole(@PathVariable(value = "roleid") Long roleid,
-            @PathVariable(value = "userid") Long userid, @RequestBody UserToRole newUserToRole)
+    public ResponseEntity<UserToRole> updateUserToRole(@PathVariable("roleid") Long roleid,
+            @PathVariable("userid") Long userid, @RequestBody UserToRole newUserToRole)
             throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -61,8 +61,8 @@ public class UserToRoleController {
     }
 
     @DeleteMapping("/role={roleid}/user={userid}")
-    public Map<String, Boolean> deleteUserToRole(@PathVariable(value = "roleid") Long roleid,
-            @PathVariable(value = "userid") Long userid) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteUserToRole(@PathVariable("roleid") Long roleid,
+            @PathVariable("userid") Long userid) throws ResourceNotFoundException {
         UserToRole userToRole = userToRoleRepository.findByUseridAndRoleid(userid, roleid)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "UserToRole not found for userid :: " + userid + " and roleid :: " + roleid));

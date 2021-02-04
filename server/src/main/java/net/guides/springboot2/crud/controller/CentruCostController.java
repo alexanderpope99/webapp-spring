@@ -37,7 +37,7 @@ public class CentruCostController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<CentruCost> getCentruCostById(@PathVariable(value = "id") int centruCostId)
+	public ResponseEntity<CentruCost> getCentruCostById(@PathVariable("id") int centruCostId)
 			throws ResourceNotFoundException {
 		CentruCost centruCost = centruCostRepository.findById(centruCostId)
 				.orElseThrow(() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));
@@ -45,7 +45,7 @@ public class CentruCostController {
 	}
 
 	@GetMapping("/ids={id}")
-	public List<CentruCost> getCentruCostByIdsocietate(@PathVariable(value = "id") int societateId) {
+	public List<CentruCost> getCentruCostByIdsocietate(@PathVariable("id") int societateId) {
 		return centruCostRepository.findCentreCostByIdsocietate(societateId);
 	}
 
@@ -74,7 +74,7 @@ public class CentruCostController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteCentruCost(@PathVariable(value = "id") int centruCostId)
+	public Map<String, Boolean> deleteCentruCost(@PathVariable("id") int centruCostId)
 			throws ResourceNotFoundException {
 		CentruCost centruCost = centruCostRepository.findById(centruCostId)
 				.orElseThrow(() -> new ResourceNotFoundException("CentruCost not found for this id :: " + centruCostId));

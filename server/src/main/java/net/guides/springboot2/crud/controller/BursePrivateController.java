@@ -32,7 +32,7 @@ public class BursePrivateController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<BursePrivate> getBursePrivateById(@PathVariable(value = "id") int bursePrivateId)
+	public ResponseEntity<BursePrivate> getBursePrivateById(@PathVariable("id") int bursePrivateId)
 			throws ResourceNotFoundException {
 		BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
 				() -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
@@ -45,7 +45,7 @@ public class BursePrivateController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<BursePrivate> updateBursePrivate(@PathVariable(value = "id") int bursePrivateId,
+	public ResponseEntity<BursePrivate> updateBursePrivate(@PathVariable("id") int bursePrivateId,
 			@RequestBody BursePrivate bursePrivateDetails) throws ResourceNotFoundException {
 		BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
 				() -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));
@@ -56,7 +56,7 @@ public class BursePrivateController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteBursePrivate(@PathVariable(value = "id") int bursePrivateId)
+	public Map<String, Boolean> deleteBursePrivate(@PathVariable("id") int bursePrivateId)
 			throws ResourceNotFoundException {
 		BursePrivate bursePrivate = bursePrivateRepository.findById(bursePrivateId).orElseThrow(
 				() -> new ResourceNotFoundException("BursePrivate not found for this id :: " + bursePrivateId));

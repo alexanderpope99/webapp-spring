@@ -37,7 +37,7 @@ public class PersoanaIntretinereController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<PersoanaIntretinere> getPersoanaIntretinereById(@PathVariable(value = "id") int id)
+	public ResponseEntity<PersoanaIntretinere> getPersoanaIntretinereById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		PersoanaIntretinere persoanaIntretinere = persoanaIntretinereRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));
@@ -46,12 +46,12 @@ public class PersoanaIntretinereController {
 	}
 
 	@GetMapping("ida={id}")
-	public List<PersoanaIntretinere> getPersoanaIntretinereByIdangajat(@PathVariable(value = "id") int id) {
+	public List<PersoanaIntretinere> getPersoanaIntretinereByIdangajat(@PathVariable("id") int id) {
 		return persoanaIntretinereRepository.findByAngajat_IdpersoanaOrderByNumeAscPrenumeAsc(id);
 	}
 
 	@GetMapping("idc={id}")
-	public List<PersoanaIntretinere> getPersoanaIntretinereByIdcontract(@PathVariable(value = "id") int id) {
+	public List<PersoanaIntretinere> getPersoanaIntretinereByIdcontract(@PathVariable("id") int id) {
 		return persoanaIntretinereRepository.findByIdcontract(id);
 	}
 
@@ -62,13 +62,13 @@ public class PersoanaIntretinereController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<PersoanaIntretinereDTO> updatePersoanaIntretinere(@PathVariable(value = "id") int id,
+	public ResponseEntity<PersoanaIntretinereDTO> updatePersoanaIntretinere(@PathVariable("id") int id,
 			@RequestBody PersoanaIntretinereDTO piDTO) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(persoanaintretinereService.update(id, piDTO));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deletePersoanaIntretinere(@PathVariable(value = "id") int id)
+	public Map<String, Boolean> deletePersoanaIntretinere(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		PersoanaIntretinere persoanaIntretinere = persoanaIntretinereRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("PersoanaIntretinere not found for this id :: " + id));

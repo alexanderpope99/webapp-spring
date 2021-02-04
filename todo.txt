@@ -49,9 +49,7 @@ SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 LAST-UPDATE : {
 }
 
-TODO: {W
-	pagina despre cum functioneaza aplicatia
-
+TODO: {
 	1 -> buton de adauga utilizatori pt toti angajatii
 
 	4.1 -> mi-am uitat parola

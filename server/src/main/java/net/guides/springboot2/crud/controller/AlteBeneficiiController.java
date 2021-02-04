@@ -32,7 +32,7 @@ public class AlteBeneficiiController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AlteBeneficii> getAlteBeneficiiById(@PathVariable(value = "id") int alteBeneficiiId)
+    public ResponseEntity<AlteBeneficii> getAlteBeneficiiById(@PathVariable("id") int alteBeneficiiId)
             throws ResourceNotFoundException {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)
                 .orElseThrow(() -> new ResourceNotFoundException("AlteBeneficii not found for this id :: " + alteBeneficiiId));
@@ -45,7 +45,7 @@ public class AlteBeneficiiController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AlteBeneficii> updateAlteBeneficii(@PathVariable(value = "id") int alteBeneficiiId,
+    public ResponseEntity<AlteBeneficii> updateAlteBeneficii(@PathVariable("id") int alteBeneficiiId,
                                                              @RequestBody AlteBeneficii alteBeneficiiDetails) throws ResourceNotFoundException {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)
                 .orElseThrow(() -> new ResourceNotFoundException("AlteBeneficii not found for this id :: " + alteBeneficiiId));
@@ -56,7 +56,7 @@ public class AlteBeneficiiController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteAlteBeneficii(@PathVariable(value = "id") int alteBeneficiiId)
+    public Map<String, Boolean> deleteAlteBeneficii(@PathVariable("id") int alteBeneficiiId)
             throws ResourceNotFoundException {
         AlteBeneficii alteBeneficii = alteBeneficiiRepository.findById(alteBeneficiiId)
                 .orElseThrow(() -> new ResourceNotFoundException("AlteBeneficii not found for this id :: " + alteBeneficiiId));

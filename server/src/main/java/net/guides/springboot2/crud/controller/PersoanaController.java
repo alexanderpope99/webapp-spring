@@ -38,7 +38,7 @@ public class PersoanaController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Persoana> getPersoanaById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public ResponseEntity<Persoana> getPersoanaById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Persoana persoana = persoanaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
 
@@ -46,12 +46,12 @@ public class PersoanaController {
 	}
 
 	@GetMapping("ids={id}&c")
-	public List<Persoana> getPersoanaByIdsocietate(@PathVariable(value = "id") int idsocietate) {
+	public List<Persoana> getPersoanaByIdsocietate(@PathVariable("id") int idsocietate) {
 		return persoanaRepository.findByIdsocietateWithContract(idsocietate);
 	}
 
 	@GetMapping("ids={id}")
-	public List<Persoana> getPersoanaByIdsocietateNoC(@PathVariable(value = "id") int idsocietate) {
+	public List<Persoana> getPersoanaByIdsocietateNoC(@PathVariable("id") int idsocietate) {
 		return persoanaRepository.findByIdsocietate(idsocietate);
 	}
 
@@ -61,7 +61,7 @@ public class PersoanaController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Persoana> updatePersoana(@PathVariable(value = "id") int id, @RequestBody Persoana newPersoana)
+	public ResponseEntity<Persoana> updatePersoana(@PathVariable("id") int id, @RequestBody Persoana newPersoana)
 			throws ResourceNotFoundException {
 		Persoana persoana = persoanaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
@@ -72,7 +72,7 @@ public class PersoanaController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deletePersoana(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deletePersoana(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Persoana persoana = persoanaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Persoana not found for this id :: " + id));
 

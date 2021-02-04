@@ -36,7 +36,7 @@ public class ContractController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Contract> findById(@PathVariable(value = "id") int contractId)
+	public ResponseEntity<Contract> findById(@PathVariable("id") int contractId)
 			throws ResourceNotFoundException {
 		Contract contract = contractRepository.findById(contractId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
@@ -44,7 +44,7 @@ public class ContractController {
 	}
 
 	@GetMapping("idp={id}")
-	public ResponseEntity<Contract> findByIdPersoana(@PathVariable(value = "id") int idpersoana)
+	public ResponseEntity<Contract> findByIdPersoana(@PathVariable("id") int idpersoana)
 			throws ResourceNotFoundException {
 		Contract contract = contractRepository.findByIdPersoana(idpersoana).orElseThrow(
 				() -> new ResourceNotFoundException("Contract not found for this idpersoana :: " + idpersoana));
@@ -68,7 +68,7 @@ public class ContractController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Contract> updateContract(@PathVariable(value = "id") int contractId,
+	public ResponseEntity<Contract> updateContract(@PathVariable("id") int contractId,
 			@RequestBody Contract contractDetails) throws ResourceNotFoundException {
 		Contract contract = contractRepository.findById(contractId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));
@@ -79,7 +79,7 @@ public class ContractController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteContract(@PathVariable(value = "id") int contractId)
+	public Map<String, Boolean> deleteContract(@PathVariable("id") int contractId)
 			throws ResourceNotFoundException {
 		Contract contract = contractRepository.findById(contractId)
 				.orElseThrow(() -> new ResourceNotFoundException("Contract not found for this id :: " + contractId));

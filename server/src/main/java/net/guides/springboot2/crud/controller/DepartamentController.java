@@ -32,7 +32,7 @@ public class DepartamentController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Departament> getDepartamentById(@PathVariable(value = "id") int departamentId)
+	public ResponseEntity<Departament> getDepartamentById(@PathVariable("id") int departamentId)
 			throws ResourceNotFoundException {
 		Departament departament = departamentRepository.findById(departamentId).orElseThrow(
 				() -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
@@ -45,7 +45,7 @@ public class DepartamentController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Departament> updateDepartament(@PathVariable(value = "id") int departamentId,
+	public ResponseEntity<Departament> updateDepartament(@PathVariable("id") int departamentId,
 			@RequestBody Departament departamentDetails) throws ResourceNotFoundException {
 		Departament departament = departamentRepository.findById(departamentId).orElseThrow(
 				() -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));
@@ -56,7 +56,7 @@ public class DepartamentController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteDepartament(@PathVariable(value = "id") int departamentId)
+	public Map<String, Boolean> deleteDepartament(@PathVariable("id") int departamentId)
 			throws ResourceNotFoundException {
 		Departament departament = departamentRepository.findById(departamentId).orElseThrow(
 				() -> new ResourceNotFoundException("Departament not found for this id :: " + departamentId));

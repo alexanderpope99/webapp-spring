@@ -31,7 +31,7 @@ public class SporController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Spor> getSporById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public ResponseEntity<Spor> getSporById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Spor spor = sporRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
 
@@ -44,7 +44,7 @@ public class SporController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Spor> updateSpor(@PathVariable(value = "id") int id, @RequestBody Spor newSpor)
+	public ResponseEntity<Spor> updateSpor(@PathVariable("id") int id, @RequestBody Spor newSpor)
 			throws ResourceNotFoundException {
 		Spor spor = sporRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
@@ -55,7 +55,7 @@ public class SporController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteSpor(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteSpor(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Spor spor = sporRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Spor not found for this id :: " + id));
 

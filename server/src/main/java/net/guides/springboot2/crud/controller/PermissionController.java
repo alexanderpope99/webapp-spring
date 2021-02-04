@@ -32,7 +32,7 @@ public class PermissionController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Permission> getPermissionById(@PathVariable(value = "id") Long id)
+    public ResponseEntity<Permission> getPermissionById(@PathVariable("id") Long id)
             throws ResourceNotFoundException {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
@@ -46,7 +46,7 @@ public class PermissionController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Permission> updatePermission(@PathVariable(value = "id") Long id,
+    public ResponseEntity<Permission> updatePermission(@PathVariable("id") Long id,
             @RequestBody Permission newPermission) throws ResourceNotFoundException {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
@@ -57,7 +57,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deletePermission(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+    public Map<String, Boolean> deletePermission(@PathVariable("id") Long id) throws ResourceNotFoundException {
         Permission permission = permissionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Permission not found for this id :: " + id));
 

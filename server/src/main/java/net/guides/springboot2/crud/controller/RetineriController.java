@@ -41,12 +41,12 @@ public class RetineriController {
 	}
 
 	@GetMapping("ids={ids}")
-	public Retineri getRetineriByIdstat(@PathVariable(value = "ids") int id) {
+	public Retineri getRetineriByIdstat(@PathVariable("ids") int id) {
 		return retineriRepository.findByStat_Id(id);
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Retineri> getRetineriById(@PathVariable(value = "id") int id)
+	public ResponseEntity<Retineri> getRetineriById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		Retineri retineri = retineriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
@@ -55,8 +55,8 @@ public class RetineriController {
 	}
 
 	@GetMapping("{idc}/pensiefac/{an}")
-	public ResponseEntity<Float> getTotalPensieFacByYear(@PathVariable(value = "idc") int idc,
-			@PathVariable(value = "an") int an) {
+	public ResponseEntity<Float> getTotalPensieFacByYear(@PathVariable("idc") int idc,
+			@PathVariable("an") int an) {
 		Float totalPensieFac = retineriRepository.getTotalPensieFacByYear(idc, an);
 		if(totalPensieFac == null)
 				return ResponseEntity.ok().body(0f);
@@ -69,14 +69,14 @@ public class RetineriController {
 	}
 
 	@PutMapping("{id}")
-	public Retineri updateRetineri(@PathVariable(value = "id") int id, @RequestBody RetineriDTO newRetineriDTO)
+	public Retineri updateRetineri(@PathVariable("id") int id, @RequestBody RetineriDTO newRetineriDTO)
 			throws ResourceNotFoundException {
 		newRetineriDTO.setId(id);
 		return retineriService.updateRetinere(newRetineriDTO);
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteRetineri(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteRetineri(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Retineri retineri = retineriRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Retineri not found for this id :: " + id));
 

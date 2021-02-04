@@ -32,7 +32,7 @@ public class CondicaController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Condica> getCondicaById(@PathVariable(value = "id") int condicaId)
+	public ResponseEntity<Condica> getCondicaById(@PathVariable("id") int condicaId)
 			throws ResourceNotFoundException {
 		Condica condica = condicaRepository.findById(condicaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
@@ -45,7 +45,7 @@ public class CondicaController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Condica> updateCondica(@PathVariable(value = "id") int condicaId,
+	public ResponseEntity<Condica> updateCondica(@PathVariable("id") int condicaId,
 			@RequestBody Condica condicaDetails) throws ResourceNotFoundException {
 		Condica condica = condicaRepository.findById(condicaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));
@@ -56,7 +56,7 @@ public class CondicaController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteCondica(@PathVariable(value = "id") int condicaId)
+	public Map<String, Boolean> deleteCondica(@PathVariable("id") int condicaId)
 			throws ResourceNotFoundException {
 		Condica condica = condicaRepository.findById(condicaId)
 				.orElseThrow(() -> new ResourceNotFoundException("Condica not found for this id :: " + condicaId));

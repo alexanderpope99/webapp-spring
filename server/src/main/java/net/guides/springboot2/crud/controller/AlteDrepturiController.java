@@ -33,7 +33,7 @@ public class AlteDrepturiController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AlteDrepturi> getAlteDrepturiById(@PathVariable(value = "id") int alteDrepturiId)
+    public ResponseEntity<AlteDrepturi> getAlteDrepturiById(@PathVariable("id") int alteDrepturiId)
             throws ResourceNotFoundException {
         AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId).orElseThrow(
                 () -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
@@ -46,7 +46,7 @@ public class AlteDrepturiController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AlteDrepturi> updateAlteDrepturi(@PathVariable(value = "id") int alteDrepturiId,
+    public ResponseEntity<AlteDrepturi> updateAlteDrepturi(@PathVariable("id") int alteDrepturiId,
             @RequestBody AlteDrepturi alteDrepturiDetails) throws ResourceNotFoundException {
         AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId).orElseThrow(
                 () -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));
@@ -57,7 +57,7 @@ public class AlteDrepturiController {
     }
 
     @DeleteMapping("{id}")
-    public Map<String, Boolean> deleteAlteDrepturi(@PathVariable(value = "id") int alteDrepturiId)
+    public Map<String, Boolean> deleteAlteDrepturi(@PathVariable("id") int alteDrepturiId)
             throws ResourceNotFoundException {
         AlteDrepturi alteDrepturi = alteDrepturiRepository.findById(alteDrepturiId).orElseThrow(
                 () -> new ResourceNotFoundException("AlteDrepturi not found for this id :: " + alteDrepturiId));

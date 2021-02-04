@@ -33,7 +33,7 @@ public class PunctDeLucruController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<PunctDeLucru> getPunctDeLucruById(@PathVariable(value = "id") int id)
+	public ResponseEntity<PunctDeLucru> getPunctDeLucruById(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
@@ -47,7 +47,7 @@ public class PunctDeLucruController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<PunctDeLucru> updatePunctDeLucru(@PathVariable(value = "id") int id,
+	public ResponseEntity<PunctDeLucru> updatePunctDeLucru(@PathVariable("id") int id,
 			@RequestBody PunctDeLucru newPunctDeLucru) throws ResourceNotFoundException {
 		PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));
@@ -58,7 +58,7 @@ public class PunctDeLucruController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deletePunctDeLucru(@PathVariable(value = "id") int id)
+	public Map<String, Boolean> deletePunctDeLucru(@PathVariable("id") int id)
 			throws ResourceNotFoundException {
 		PunctDeLucru punctDeLucru = punctDeLucruRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("PunctDeLucru not found for this id :: " + id));

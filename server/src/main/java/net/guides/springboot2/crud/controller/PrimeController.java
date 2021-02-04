@@ -32,7 +32,7 @@ public class PrimeController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Prime> getPrimeById(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public ResponseEntity<Prime> getPrimeById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Prime prime = primeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
 
@@ -45,7 +45,7 @@ public class PrimeController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Prime> updatePrime(@PathVariable(value = "id") int id, @RequestBody Prime newPrime)
+	public ResponseEntity<Prime> updatePrime(@PathVariable("id") int id, @RequestBody Prime newPrime)
 			throws ResourceNotFoundException {
 		Prime prime = primeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
@@ -56,7 +56,7 @@ public class PrimeController {
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deletePrime(@PathVariable(value = "id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> deletePrime(@PathVariable("id") int id) throws ResourceNotFoundException {
 		Prime prime = primeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Prime not found for this id :: " + id));
 
