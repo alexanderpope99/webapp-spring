@@ -165,7 +165,6 @@ public class MTAService {
 		sheet.autoSizeColumn(5);
 
 		// * set borders
-
 		PropertyTemplate allCellsBordered = new PropertyTemplate();
 		String cellRange = "$A$4:$F$" + (2 + nrAngajat);
 		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);

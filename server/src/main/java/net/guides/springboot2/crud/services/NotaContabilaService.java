@@ -40,13 +40,10 @@ public class NotaContabilaService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID)
-			throws IOException, ResourceNotFoundException {
+	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
 
-		Societate societate = societateRepository.findById((int) idsocietate)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
-		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(
-				() -> new ResourceNotFoundException("Nu există adresă pentru societatea: " + societate.getNume()));
+		Societate societate = societateRepository.findById((int) idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(() -> new ResourceNotFoundException("Nu există adresă pentru societatea: " + societate.getNume()));
 
 		String statTemplateLocation = homeLocation + "/templates";
 
@@ -64,8 +61,7 @@ public class NotaContabilaService {
 		writerCell = stat.getRow(3).getCell(0);
 		writerCell.setCellValue("Strada: " + adresaSocietate.getAdresa()); // adresa
 		writerCell = stat.getRow(4).getCell(0);
-		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet +
-																										// localitate
+		writerCell.setCellValue(adresaSocietate.getJudet() + ", " + adresaSocietate.getLocalitate()); // judet + localitate
 
 		// * - LUNA AN -
 		writerCell = stat.getRow(7).getCell(2);
@@ -74,12 +70,10 @@ public class NotaContabilaService {
 
 		int idSocietate = societate.getId();
 
-		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an,
-				idSocietate);
+		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an, idSocietate);
 		if (notaContabila == null) {
 			workbook.close();
-			throw new ResourceNotFoundException(
-					"Nu este salariul calculat pentru idsocietate " + idSocietate + " în " + luna + "/" + an);
+			throw new ResourceNotFoundException("Nu este salariul calculat pentru idsocietate " + idSocietate + " în " + luna + "/" + an);
 		}
 
 		// * Concedii medicale din fonduri
@@ -110,7 +104,6 @@ public class NotaContabilaService {
 		// * Impozit
 		writerCell = stat.getRow(25).getCell(5);
 		long impozit = notaContabila.getImpozit();
-		System.out.println(impozit);
 		writerCell.setCellValue(impozit);
 
 		// * CAM
@@ -123,8 +116,7 @@ public class NotaContabilaService {
 		evaluator.evaluateAll();
 		// * OUTPUT THE FILE
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-		String newFileLocation = String.format("%s/downloads/%d/Nota Contabila - %s - %s %d.xlsx", homeLocation,
-				userID, societate.getNume(), lunaNume, an);
+		String newFileLocation = String.format("%s/downloads/%d/Nota Contabila - %s - %s %d.xlsx", homeLocation, userID, societate.getNume(), lunaNume, an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

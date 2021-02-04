@@ -12,7 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "adresa")
@@ -38,7 +37,8 @@ public class Adresa implements Serializable {
 	@OneToOne(mappedBy = "adresa", fetch = FetchType.LAZY)
 	private Persoana persoane;
 
-	public Adresa() { }
+	public Adresa() {
+	}
 
 	public Adresa(String adresa, String localitate, String judet) {
 		this.adresa = adresa;
@@ -81,6 +81,7 @@ public class Adresa implements Serializable {
 	public Persoana getPersoane() {
 		return persoane;
 	}
+
 	public Societate getSocietati() {
 		return societati;
 	}
@@ -88,15 +89,46 @@ public class Adresa implements Serializable {
 	public void setPersoane(Persoana persoane) {
 		this.persoane = persoane;
 	}
+
 	public void setSocietati(Societate societati) {
 		this.societati = societati;
 	}
 
-	@JsonIgnore
-	public String getAdresaCompleta() {
-		String j = judet == null ? "" : judet+' ';
-		String l = localitate == null ? "" : localitate+' ';
+	public boolean isCapitala() {
+		if(judet == null) return false;
+		return judet.substring(0, 2).compareTo("SE") == 0;
+	}
+
+	@Override
+	public String toString() {
+		String j = judet == null ? "" : judet + ' ';
+		String l = localitate == null ? "" : localitate + ' ';
 		String a = adresa == null ? "" : adresa;
 		return j + l + a;
+	}
+
+	public String toString(String format) {
+		String j = judet == null ? "" : judet;
+		String l = localitate == null ? "" : localitate;
+		String a = adresa == null ? "" : adresa;
+		if (format != null && !format.isEmpty() || format.length() != 3)
+			return j + l + a;
+
+		switch (format) {
+		case "ajl":
+			return a +", "+ j +", "+ l;
+		case "alj":
+			return a +", "+ l +", "+ j;
+		case "jal":
+			return j +", "+ a +", "+ l;
+		case "jla":
+			return j +", "+ l +", "+ a;
+		case "laj":
+			return l +", "+ a +", "+ j;
+		case "lja":
+			return l +", "+ j +", "+ a;
+		default:
+			return j +", "+ l +", "+ a;
+		}
 	}
 }
