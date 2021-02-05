@@ -9,13 +9,13 @@ import axios from 'axios';
 import authHeader from '../../services/auth-header';
 import authService from '../../services/auth.service';
 
-class Tichete extends React.Component {
+class CentralizatorVarsta extends React.Component {
   constructor() {
     super();
 
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
-    this.creeazaRaportTichete = this.creeazaRaportTichete.bind(this);
+    this.creeazaCentralizatorVarsta = this.creeazaCentralizatorVarsta.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -45,30 +45,30 @@ class Tichete extends React.Component {
     });
   }
 
-  async creeazaRaportTichete() {
+  async creeazaCentralizatorVarsta() {
     // make request to create stat for soc, luna, an
     let luna = this.state.luna;
     let an = this.state.an;
 
     console.log(
-      `${server.address}/tichete/raport/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`
+      `${server.address}/societate/raport/centralizatorvarsta/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`
     );
 
     const created = await axios
       .get(
-        `${server.address}/tichete/raport/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
+        `${server.address}/societate/raport/centralizatorvarsta/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea raport tichete ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea centralizator vârstă ' + err.response.data.message,
         })
       );
 
     if (created)
-      download(`Tichete - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`, this.state.user.id);
+      download(`Centralizator vârstă - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`, this.state.user.id);
   }
 
   render() {
@@ -89,10 +89,10 @@ class Tichete extends React.Component {
         </Toast>
         <Card className="border">
           <Card.Header>
-            <Typography variant="h5">Raport Tichete</Typography>
+            <Typography variant="h5">Centralizator Vârstă</Typography>
           </Card.Header>
           <Card.Body>
-            <Form onSubmit={this.creeazaRaportTichete}>
+            <Form onSubmit={this.creeazaCentralizatorVarsta}>
               <Row>
                 {/* LUNA */}
                 <Col md={4}>
@@ -123,7 +123,7 @@ class Tichete extends React.Component {
               </Row>
             </Form>
             <div className="mt-4">
-              <Button onClick={this.creeazaRaportTichete}>Raport Tichete în Excel</Button>
+              <Button onClick={this.creeazaCentralizatorVarsta}>Centralizator Vârstă în Excel</Button>
             </div>
           </Card.Body>
         </Card>
@@ -132,4 +132,4 @@ class Tichete extends React.Component {
   }
 }
 
-export default Tichete;
+export default CentralizatorVarsta;

@@ -8,6 +8,8 @@ import Pontaj from './Pontaj.js';
 import Stat from './Stat.js';
 import NotaContabila from './NotaContabila.js';
 import Tichete from './Tichete.js';
+import ListaAngajati from './ListaAngajati.js';
+import CentralizatorVarsta from './CentralizatorVarsta.js';
 
 class Rapoarte extends React.Component {
   constructor() {
@@ -27,6 +29,8 @@ class Rapoarte extends React.Component {
         </Breadcrumb>
         <Stat />
         <Tichete />
+        <ListaAngajati />
+        <CentralizatorVarsta />
         <NotaContabila />
         <Pontaj />
         <Dec112 />
