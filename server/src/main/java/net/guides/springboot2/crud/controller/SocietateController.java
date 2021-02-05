@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
+import net.guides.springboot2.crud.services.CentralizatorVarstaService;
+import net.guides.springboot2.crud.services.ListaAngajatiService;
 import net.guides.springboot2.crud.services.SocietateService;
 
 import org.springframework.data.domain.Sort;
@@ -42,6 +45,12 @@ public class SocietateController {
 
 	@Autowired
 	private SocietateService societateService;
+
+	@Autowired
+	private ListaAngajatiService listaAngajatiService;
+
+	@Autowired
+	private CentralizatorVarstaService centralizatorVarstaService;
 
 	@GetMapping
 	public List<SocietateDTO> getAll() {
@@ -73,6 +82,16 @@ public class SocietateController {
 			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati().size());
 		}
 		return societatiDTO;
+	}
+
+	@GetMapping("/raport/listaangajati/{ids}/mo={luna}&y={an}/{uid}")
+	public boolean createListaAngajati(@PathVariable("ids") int ids, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
+		return listaAngajatiService.createListaAngajati(luna, an, ids, uid);
+	}
+
+	@GetMapping("/raport/centralizatorvarsta/{ids}/mo={luna}&y={an}/{uid}")
+	public boolean createCentralizatorVarsta(@PathVariable("ids") int ids, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
+		return centralizatorVarstaService.createCentralizatorVarsta(luna, an, ids, uid);
 	}
 
 	@PostMapping

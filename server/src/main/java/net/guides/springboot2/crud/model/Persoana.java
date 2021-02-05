@@ -1,6 +1,8 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -161,5 +163,21 @@ public class Persoana implements Serializable {
 
 	public void setAngajat(Angajat angajat) {
 		this.angajat = angajat;
+	}
+
+	public int getVarsta(){
+		if(this.cnp.substring(0,1).equals("1")||this.cnp.substring(0,1).equals("2"))
+		{
+			String dataNasteriiString= "19"+this.cnp.substring(1,3)+"-"+this.cnp.substring(3,5)+"-"+this.cnp.substring(5,7);
+			LocalDate dataNasterii = LocalDate.parse(dataNasteriiString);
+			return Period.between(dataNasterii, LocalDate.now()).getYears();
+
+		}
+		else 
+		{
+			String dataNasteriiString= "20"+this.cnp.substring(1,3)+"-"+this.cnp.substring(3,5)+"-"+this.cnp.substring(5,7);
+			LocalDate dataNasterii = LocalDate.parse(dataNasteriiString);
+			return Period.between(dataNasterii, LocalDate.now()).getYears();
+		}
 	}
 }
