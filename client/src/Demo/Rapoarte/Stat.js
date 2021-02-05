@@ -90,12 +90,6 @@ class Stat extends React.Component {
         `Stat Salarii (fara impozit) - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`,
         this.state.user.id
       );
-
-    // if (created && format === 'PDF')
-    //   download(
-    //     `Stat Salarii - ${this.state.socsel.nume} - ${luna.nume} ${an}.pdf`,
-    //     this.state.user.id
-    //   );
   }
 
   async recalcSocietate() {

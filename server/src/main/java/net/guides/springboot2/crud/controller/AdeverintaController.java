@@ -17,7 +17,7 @@ public class AdeverintaController {
 	@Autowired
 	private AdeverintaVenitService adeverintaService;
 
-	@GetMapping("/m1={m1}&m2={m2}&y={an}&ida={ida}/{uid}")
+	@GetMapping("{ida}/m1={m1}&m2={m2}&y={an}/{uid}")
 	public Boolean createAdeverintaVenit(@PathVariable("m1") int lunaDela, @PathVariable("m2") int lunaPanala, @PathVariable("an") int an, @PathVariable("ida") int idangajat, @PathVariable("uid") int userID) throws ResourceNotFoundException, IOException {
 		return adeverintaService.createAdeverintaVenit(lunaDela, lunaPanala, an, idangajat, userID);
 	}

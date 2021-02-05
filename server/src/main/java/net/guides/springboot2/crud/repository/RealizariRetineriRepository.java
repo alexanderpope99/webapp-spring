@@ -13,6 +13,8 @@ import net.guides.springboot2.crud.model.RealizariRetineri;
 public interface RealizariRetineriRepository extends JpaRepository<RealizariRetineri, Integer> {
 	public RealizariRetineri findByLunaAndAnAndContract_Id(int luna, int an, int idcontract);
 
+	public List<RealizariRetineri> findByLunaBetweenAndAnAndContract_Id(int lunaDela, int lunaPanal, int an, int idcontract);
+
 	@Query(value = "select sum(cas) as cas25, sum(cass) as cass10, sum(impozit) as impozit, sum(salariurealizat) as salariuDatorat, sum(valcm) as valCM, sum(cam) as cam from realizariretineri where luna = ?1 and an = ?2 and idcontract in (select id from contract where id in (select idcontract from angajat where idsocietate = ?3))", nativeQuery = true)
 	public NotaContabilaDTO getNotaContabilaByLunaAndAnAndIdsocietate(int luna, int an, int idsocietate);
 

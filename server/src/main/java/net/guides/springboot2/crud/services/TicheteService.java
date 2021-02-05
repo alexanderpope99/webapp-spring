@@ -74,7 +74,7 @@ public class TicheteService {
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet raportTichete = workbook.getSheetAt(0);
 
-		Cell writerCell = raportTichete.getRow(0).getCell(0);
+		Cell writerCell;
 		int nrCrt = 0;
 		for (Angajat ang : angajati) {
 			Contract contract = ang.getContract();

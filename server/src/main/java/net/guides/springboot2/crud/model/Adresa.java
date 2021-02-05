@@ -55,7 +55,7 @@ public class Adresa implements Serializable {
 	}
 
 	public String getAdresa() {
-		return adresa;
+		return adresa == null ? "" : adresa;
 	}
 
 	public void setAdresa(String adresa) {
@@ -63,7 +63,7 @@ public class Adresa implements Serializable {
 	}
 
 	public String getLocalitate() {
-		return localitate;
+		return localitate == null ? "" : localitate;
 	}
 
 	public void setLocalitate(String localitate) {
@@ -71,7 +71,7 @@ public class Adresa implements Serializable {
 	}
 
 	public String getJudet() {
-		return judet;
+		return judet == null ? "" : judet;
 	}
 
 	public void setJudet(String judet) {
@@ -111,7 +111,7 @@ public class Adresa implements Serializable {
 		String j = judet == null ? "" : judet;
 		String l = localitate == null ? "" : localitate;
 		String a = adresa == null ? "" : adresa;
-		if (format != null && !format.isEmpty() || format.length() != 3)
+		if (format == null || !format.isEmpty() && format.length() != 3)
 			return j + l + a;
 
 		switch (format) {

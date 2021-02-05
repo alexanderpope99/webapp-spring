@@ -350,6 +350,14 @@ public class RealizariRetineriService {
 		}
 	}
 
+	public List<RealizariRetineri> saveOrGetFromTo(int lunaDela, int lunaPanala, int an, int idcontract) throws ResourceNotFoundException {
+		List<RealizariRetineri> returnValue = new ArrayList<>();
+		for(int luna = lunaDela; luna <= lunaPanala; luna++) {
+			returnValue.add(saveOrGetRealizariRetineri(luna, an, idcontract));
+		}
+		return returnValue;
+	}
+
 	public boolean fixValuesMissing() {
 		var wrapper = new Object() {
 			boolean value = true;
