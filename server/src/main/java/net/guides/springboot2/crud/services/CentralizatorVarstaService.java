@@ -38,7 +38,7 @@ public class CentralizatorVarstaService {
 
 	@Autowired
 	RealizariRetineriService realizariRetineriService;
-
+	
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createCentralizatorVarsta(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
@@ -59,9 +59,9 @@ public class CentralizatorVarstaService {
 		writerCell = listaAngajati.getRow(2).getCell(0);
 		writerCell.setCellValue("Nr. reg. com: " + societate.getRegcom());// reg com
 		writerCell = listaAngajati.getRow(3).getCell(0);
-		writerCell.setCellValue(societate.getAdresa().getLocalitate() + societate.getAdresa().getJudet());// judet,localitate
+		writerCell.setCellValue(societate.getAdresa().getLocalitate()+societate.getAdresa().getJudet());//judet,localitate
 		writerCell = listaAngajati.getRow(4).getCell(0);
-		writerCell.setCellValue(societate.getAdresa().getAdresa());// judet,localitate
+		writerCell.setCellValue(societate.getAdresa().getAdresa());//judet,localitate
 
 		writerCell = listaAngajati.getRow(6).getCell(2);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
@@ -74,48 +74,49 @@ public class CentralizatorVarstaService {
 		left.setAlignment(HorizontalAlignment.LEFT);
 		right.setAlignment(HorizontalAlignment.RIGHT);
 
-		int[] nr = { 0, 0, 0, 0 };
-		float[] vb = { 0, 0, 0, 0 };
-		float[] vn = { 0, 0, 0, 0 };
-		float[] im = { 0, 0, 0, 0 };
+		int[] nr={0,0,0,0};
+		float[] vb={0,0,0,0};
+		float[] vn={0,0,0,0};
+		float[] im={0,0,0,0};
 
+		
 		for (Angajat ang : angajati) {
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, ang.getContract().getId());
-			int varsta = ang.getPersoana().getVarsta();
-			int i = -1;
-			if (varsta >= 0 && varsta < 20)
-				i = 0;
-			else if (varsta >= 20 && varsta < 30)
-				i = 1;
-			else if (varsta >= 30 && varsta < 40)
-				i = 2;
-			else if (varsta >= 40 && varsta < 50)
-				i = 3;
-			else
-				i = -1;
+			int varsta=ang.getPersoana().getVarsta();
+			int i=-1;
+			if(varsta>=0 && varsta<20)i=0;
+			else if (varsta>=20 && varsta<30)i=1;
+			else if(varsta>=30 && varsta<40)i=2;
+			else if(varsta>=40 && varsta<50)i=3;
+			else i=-1;
 
-			if (i != -1) {
-				nr[i] += 1;
-				vb[i] += realizariRetineri.getTotaldrepturi();
-				vn[i] += realizariRetineri.getVenitnet();
-				im[i] += realizariRetineri.getImpozit();
+			if(i!=-1)
+			{
+			nr[i]+=1;
+			vb[i]+=realizariRetineri.getTotaldrepturi();
+			vn[i]+=realizariRetineri.getVenitnet();
+			im[i]+=realizariRetineri.getImpozit();
 			}
 		}
 
-		for (int i = 0; i <= 3; i++) {
-			writerCell = listaAngajati.getRow(10 + i).getCell(1);
+		for(int i=0;i<=3;i++)
+		{
+			writerCell = listaAngajati.getRow(10+i).getCell(1);
 			writerCell.setCellValue(nr[i]); // numar interval
-			writerCell = listaAngajati.getRow(10 + i).getCell(2);
+			writerCell = listaAngajati.getRow(10+i).getCell(2);
 			writerCell.setCellValue(vb[i]); // venit brut
-			writerCell = listaAngajati.getRow(10 + i).getCell(3);
-			writerCell.setCellValue(nr[i] != 0 ? vb[i] / nr[i] : 0); // venit brut mediu
-			writerCell = listaAngajati.getRow(10 + i).getCell(4);
+			writerCell = listaAngajati.getRow(10+i).getCell(3);
+			writerCell.setCellValue(nr[i]!=0?vb[i]/nr[i]:0); // venit brut mediu
+			writerCell = listaAngajati.getRow(10+i).getCell(4);
 			writerCell.setCellValue(vn[i]); // venit net
-			writerCell = listaAngajati.getRow(10 + i).getCell(5);
-			writerCell.setCellValue(nr[i] != 0 ? vn[i] / nr[i] : 0); // venit net mediu
-			writerCell = listaAngajati.getRow(10 + i).getCell(6);
+			writerCell = listaAngajati.getRow(10+i).getCell(5);
+			writerCell.setCellValue(nr[i]!=0?vn[i]/nr[i]:0); // venit net mediu
+			writerCell = listaAngajati.getRow(10+i).getCell(6);
 			writerCell.setCellValue(im[i]); // impozit
 		}
+
+
+
 
 		/* ------ ENDING ------ **/
 		// * OUTPUT THE FILE
@@ -147,9 +148,9 @@ public class CentralizatorVarstaService {
 		writerCell = listaAngajati.getRow(2).getCell(0);
 		writerCell.setCellValue("Nr. reg. com: " + societate.getRegcom());// reg com
 		writerCell = listaAngajati.getRow(3).getCell(0);
-		writerCell.setCellValue(societate.getAdresa().getLocalitate() + societate.getAdresa().getJudet());// judet,localitate
+		writerCell.setCellValue(societate.getAdresa().getLocalitate()+societate.getAdresa().getJudet());//judet,localitate
 		writerCell = listaAngajati.getRow(4).getCell(0);
-		writerCell.setCellValue(societate.getAdresa().getAdresa());// judet,localitate
+		writerCell.setCellValue(societate.getAdresa().getAdresa());//judet,localitate
 
 		writerCell = listaAngajati.getRow(6).getCell(2);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
@@ -162,20 +163,25 @@ public class CentralizatorVarstaService {
 		left.setAlignment(HorizontalAlignment.LEFT);
 		right.setAlignment(HorizontalAlignment.RIGHT);
 
-		int[] nr = { 0, 0, 0, 0 };
-		float[] vb = { 0, 0, 0, 0 };
-		float[] vn = { 0, 0, 0, 0 };
-		float[] im = { 0, 0, 0, 0 };
+		int[] nr={0,0,0,0};
+		float[] vb={0,0,0,0};
+		float[] vn={0,0,0,0};
+		float[] im={0,0,0,0};
 
+		
 		for (Angajat ang : angajati) {
 			RealizariRetineri realizariRetineri = realizariRetineriService.saveOrGetRealizariRetineri(luna, an, ang.getContract().getId());
-			int varsta = ang.getPersoana().getVarsta();
+			int varsta=ang.getPersoana().getVarsta();
 
 		}
 
-		for (int i = 0; i <= 3; i++) {
+		for(int i=0;i<=3;i++)
+		{
 
 		}
+
+
+
 
 		/* ------ ENDING ------ **/
 		// * OUTPUT THE FILE
