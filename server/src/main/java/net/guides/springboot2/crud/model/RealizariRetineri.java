@@ -505,6 +505,10 @@ public class RealizariRetineri implements Serializable {
 		return Math.round(restplata + cam + valoaretichete);
 	}
 
+	public int getVenitbrut() {
+		return Math.round(totaldrepturi + valoaretichete);
+	}
+
 	public void addOreSuplimentare(Oresuplimentare oresuplimentare) {
 		if(this.oresuplimentare == null)
 			this.oresuplimentare = new ArrayList<>();

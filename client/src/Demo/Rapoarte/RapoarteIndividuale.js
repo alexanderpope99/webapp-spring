@@ -2,6 +2,7 @@ import React from 'react';
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import AdeverintaVenit from './AdeverintaVenit';
+import Fluturas from './Fluturas';
 
 class Rapoarte extends React.Component {
   constructor() {
@@ -16,6 +17,7 @@ class Rapoarte extends React.Component {
     return (
       <Aux>
         <AdeverintaVenit />
+				<Fluturas />
       </Aux>
     );
   }

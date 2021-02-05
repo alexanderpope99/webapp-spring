@@ -189,6 +189,11 @@ public class Retineri implements Serializable {
 	}
 
 	@JsonIgnore
+	public int getAlteRetineri() {
+		return getTotalPensiiFacultativeRON() + popriri + imprumuturi;
+	}
+
+	@JsonIgnore
 	public int getTotalPensiiFacultativeRON() {
 		return pensiefacangajat + pensiefacangajator + pensiefacangajatretinuta + pensiefacangajatordeductibila
 				+ pensiefacexcedent;
