@@ -55,6 +55,8 @@ class AdeverintaVenit extends React.Component {
 		let lunaPanala = this.state.lunaPanala;
 		let an = this.state.an;
 
+		if(lunaDela.nr < lunaPanala.nr) return;
+
 		const created = await axios
 		  .get(
 		    `${server.address}/adeverinta-venit/${this.state.angajatsel.idpersoana}/m1=${lunaDela.nr}&m2=${lunaPanala.nr}&y=${an}/${this.state.user.id}`,
