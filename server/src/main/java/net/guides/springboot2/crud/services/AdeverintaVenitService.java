@@ -106,7 +106,7 @@ public class AdeverintaVenitService {
 		// normal.setDataFormat(format.getFormat("#,##0"));
 		// normal.setAlignment(HorizontalAlignment.RIGHT);
 
-		// TABLE CONTENTS
+		// ! TABLE CONTENT
 		int index = 0;
 		for (RealizariRetineri rr : realizariRetineri) {
 			Row row = sheet.createRow(23 + index);
