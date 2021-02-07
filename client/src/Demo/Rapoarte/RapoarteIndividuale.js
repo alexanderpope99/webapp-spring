@@ -2,6 +2,7 @@ import React from 'react';
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import AdeverintaVenit from './AdeverintaVenit';
+import FisaIndividuala from './FisaIndividuala';
 import Fluturas from './Fluturas';
 
 class Rapoarte extends React.Component {
@@ -18,6 +19,7 @@ class Rapoarte extends React.Component {
       <Aux>
         <AdeverintaVenit />
 				<Fluturas />
+				<FisaIndividuala />
       </Aux>
     );
   }

@@ -32,9 +32,6 @@ public class FluturasSalariuService {
 	@Autowired
 	private RealizariRetineriService realizariRetineriService;
 
-	@Autowired
-	private CMService cmService;
-
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createFluturas(int luna, int an, int idangajat, int userID) throws IOException, ResourceNotFoundException {

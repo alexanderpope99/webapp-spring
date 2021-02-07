@@ -10,7 +10,7 @@ import authHeader from '../../services/auth-header';
 import authService from '../../services/auth.service';
 import { getAngajatSel } from '../Resources/angajatsel';
 
-class AdeverintaVenit extends React.Component {
+class FisaIndividuala extends React.Component {
 	constructor() {
 		super();
 
@@ -59,7 +59,7 @@ class AdeverintaVenit extends React.Component {
 
 		const created = await axios
 		  .get(
-		    `${server.address}/adeverinta-venit/${this.state.angajatsel.idpersoana}/m1=${lunaDela.nr}&m2=${lunaPanala.nr}&y=${an}/${this.state.user.id}`,
+		    `${server.address}/fisa-individuala/${this.state.angajatsel.idpersoana}/m1=${lunaDela.nr}&m2=${lunaPanala.nr}&y=${an}/${this.state.user.id}`,
 		    { headers: authHeader() }
 		  )
 		  .then((res) => res.data)
@@ -72,7 +72,7 @@ class AdeverintaVenit extends React.Component {
 
 		if (created)
 		  download(
-		    `Adeverinta de venit - ${this.state.angajatsel.numeintreg} - ${an}.xlsx`,
+		    `Fisa individuala - ${this.state.angajatsel.numeintreg} - ${an}.xlsx`,
 		    this.state.user.id
 		  );
 	}
@@ -95,7 +95,7 @@ class AdeverintaVenit extends React.Component {
 				</Toast>
 				<Card className="border">
 					<Card.Header>
-						<Typography variant="h5">Adeverință de venit</Typography>
+						<Typography variant="h5">Fișă individuală</Typography>
 					</Card.Header>
 					<Card.Body>
 						<Form onSubmit={this.creeazaFisier}>
@@ -152,7 +152,7 @@ class AdeverintaVenit extends React.Component {
 							</Row>
 						</Form>
 						<div className="mt-4">
-							<Button onClick={this.creeazaFisier}>Adeverință de venit in Excel</Button>
+							<Button onClick={this.creeazaFisier}>Fișă individuală in Excel</Button>
 						</div>
 					</Card.Body>
 				</Card>
@@ -161,4 +161,4 @@ class AdeverintaVenit extends React.Component {
 	}
 }
 
-export default AdeverintaVenit;
+export default FisaIndividuala;
