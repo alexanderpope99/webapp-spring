@@ -50,10 +50,16 @@ LAST-UPDATE : {
 }
 
 TODO: {
-	1 -> buton de adauga utilizatori pt toti angajatii
-
-	4.1 -> mi-am uitat parola
-	4.2 -> reseteaza parola din panou utilizatori
+	FACTURI: main page has pills:
+		-> lista facturi: are un buton care selecteaza pill-ul de adauga factura
+		-> adauga factura (emitere factura)
+			1. Un array de produse, se identifica prin index
+				pagina are un form cu produse/servicii -> apesi adauga -> adauga in array
+				produsele sunt randate in functie de array-ul de produse
+				onSubmit trebuie sa ia toate datele adaugate
+			2. 
+		-> persoane autorizare, persoane delegate
+		-> activitati/proiecte
 
 	* -> add sorting and filtering to tables on frontend 
 }

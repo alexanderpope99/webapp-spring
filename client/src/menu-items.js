@@ -123,7 +123,7 @@ var items = [
   // FACTURI
   {
     id: 'facturi',
-    title: 'Facturi',
+    title: 'Facturare',
     type: 'group',
     icon: 'icon-group',
     show: user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR') || user.roles.includes('ROLE_OPERATOR'),

@@ -95,7 +95,7 @@ public class Adresa implements Serializable {
 	}
 
 	public boolean isCapitala() {
-		if(judet == null) return false;
+		if(judet == null || judet.isEmpty()) return false;
 		return judet.substring(0, 2).compareTo("SE") == 0;
 	}
 
