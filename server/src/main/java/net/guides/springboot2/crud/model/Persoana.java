@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "persoana")
@@ -165,14 +166,14 @@ public class Persoana implements Serializable {
 		this.angajat = angajat;
 	}
 
-	public Integer getVarsta(){
-		if(cnp==null)return null;
+	@JsonIgnore
+	public int getVarsta() {
+		if(cnp == null || cnp.isEmpty()) return 0;
 		if(this.cnp.substring(0,1).equals("1")||this.cnp.substring(0,1).equals("2"))
 		{
 			String dataNasteriiString= "19"+this.cnp.substring(1,3)+"-"+this.cnp.substring(3,5)+"-"+this.cnp.substring(5,7);
 			LocalDate dataNasterii = LocalDate.parse(dataNasteriiString);
 			return Period.between(dataNasterii, LocalDate.now()).getYears();
-
 		}
 		else 
 		{

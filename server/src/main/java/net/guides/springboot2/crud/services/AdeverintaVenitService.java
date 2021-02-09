@@ -43,7 +43,7 @@ public class AdeverintaVenitService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean createAdeverintaVenit(int lunaDela, int lunaPanala, int an, int idangajat, int userID) throws IOException, ResourceNotFoundException {
+	public boolean create(int lunaDela, int lunaPanala, int an, int idangajat, int userID) throws IOException, ResourceNotFoundException {
 
 		Angajat angajat = angajatService.findById(idangajat);
 		Persoana persoana = angajat.getPersoana();
@@ -106,7 +106,7 @@ public class AdeverintaVenitService {
 		// normal.setDataFormat(format.getFormat("#,##0"));
 		// normal.setAlignment(HorizontalAlignment.RIGHT);
 
-		// TABLE CONTENTS
+		// ! TABLE CONTENT
 		int index = 0;
 		for (RealizariRetineri rr : realizariRetineri) {
 			Row row = sheet.createRow(23 + index);
