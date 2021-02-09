@@ -24,7 +24,7 @@ import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
-import net.guides.springboot2.crud.services.CentralizatorVarstaService;
+import net.guides.springboot2.crud.services.CentralizatorService;
 import net.guides.springboot2.crud.services.ListaAngajatiService;
 import net.guides.springboot2.crud.services.SocietateService;
 
@@ -50,7 +50,7 @@ public class SocietateController {
 	private ListaAngajatiService listaAngajatiService;
 
 	@Autowired
-	private CentralizatorVarstaService centralizatorVarstaService;
+	private CentralizatorService centralizatorService;
 
 	@GetMapping
 	public List<SocietateDTO> getAll() {
@@ -89,10 +89,24 @@ public class SocietateController {
 		return listaAngajatiService.createListaAngajati(luna, an, ids, uid);
 	}
 
-	@GetMapping("/raport/centralizatorvarsta/{ids}/mo={luna}&y={an}/{uid}")
-	public boolean createCentralizatorVarsta(@PathVariable("ids") int ids, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
-		return centralizatorVarstaService.createCentralizatorVarsta(luna, an, ids, uid);
+	@GetMapping("/raport/centralizator/{pentru}/{tip}/{ids}/mo={luna}&y={an}/{uid}")
+	public boolean createCentralizator(@PathVariable("pentru") int pentru,@PathVariable("tip") int tip,@PathVariable("ids") int ids, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
+		if(pentru==1 && tip==1)
+		return centralizatorService.createCentralizatorVarsta(luna, an, ids, uid);
+		else if(pentru==1 && tip==2)
+		return centralizatorService.createCentralizatorVarstaComplet(luna, an, ids, uid);
+		else if(pentru==2 && tip==1)
+		return centralizatorService.createCentralizatorSex(luna, an, ids, uid);
+		else if(pentru==2 && tip==2)
+		return centralizatorService.createCentralizatorSexComplet(luna, an, ids, uid);
+		else if(pentru==3 && tip==1)
+		return centralizatorService.createCentralizatorVechime(luna, an, ids, uid);
+		else if(pentru==3 && tip==2)
+		return centralizatorService.createCentralizatorVechimeComplet(luna, an, ids, uid);
+		return false;
+
 	}
+
 
 	@PostMapping
 	public Societate createSocietate(@RequestBody Societate societate) throws ResourceNotFoundException {
