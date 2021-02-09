@@ -66,7 +66,7 @@ public class ActIdentitate implements Serializable {
 	}
 
 	public String getCnp() {
-		return cnp;
+		return cnp == null ? "" : cnp;
 	}
 
 	public void setCnp(String cnp) {
@@ -82,7 +82,7 @@ public class ActIdentitate implements Serializable {
 	}
 
 	public String getSerie() {
-		return serie;
+		return serie == null ? "" : serie;
 	}
 
 	public void setSerie(String serie) {
@@ -90,7 +90,7 @@ public class ActIdentitate implements Serializable {
 	}
 
 	public String getNumar() {
-		return numar;
+		return numar == null ? "" : numar;
 	}
 
 	public void setNumar(String numar) {

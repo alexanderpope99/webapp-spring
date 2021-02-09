@@ -57,9 +57,12 @@ class AdeverintaVenit extends React.Component {
 
 		if(lunaDela.nr > lunaPanala.nr) return;
 
+		// get current angajat
+		const angajatsel = getAngajatSel();
+
 		const created = await axios
 		  .get(
-		    `${server.address}/adeverinta-venit/${this.state.angajatsel.idpersoana}/m1=${lunaDela.nr}&m2=${lunaPanala.nr}&y=${an}/${this.state.user.id}`,
+		    `${server.address}/adeverinta-venit/${angajatsel.idpersoana}/m1=${lunaDela.nr}&m2=${lunaPanala.nr}&y=${an}/${this.state.user.id}`,
 		    { headers: authHeader() }
 		  )
 		  .then((res) => res.data)
@@ -72,7 +75,7 @@ class AdeverintaVenit extends React.Component {
 
 		if (created)
 		  download(
-		    `Adeverinta de venit - ${this.state.angajatsel.numeintreg} - ${an}.xlsx`,
+		    `Adeverinta de venit - ${angajatsel.numeintreg} - ${an}.xlsx`,
 		    this.state.user.id
 		  );
 	}

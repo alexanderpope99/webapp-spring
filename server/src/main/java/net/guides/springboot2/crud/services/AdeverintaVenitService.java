@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.ActIdentitate;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Persoana;
@@ -73,25 +74,20 @@ public class AdeverintaVenitService {
 		writerCell.setCellValue("PE ANUL " + an);
 
 		// text
+		String text = "Prin prezenta se atesta faptul ca dl./dna. %s domiciliat(a) in %s, %s, judetul %s, posesor al BI/CI seria %s, nr %s, CNP %s are calitatea de slariat incepand cu data de %s si a inregistrat in anul %d urmatoarele venituri si impozite cu retinere la sursa:";
+		Adresa adresa = persoana.getAdresa();
+		ActIdentitate actId = persoana.getActidentitate();
+		String locatie = adresa.isCapitala() 
+		? adresa.getAdresa() + adresa.getJudet() 
+		: adresa.getAdresa();
+		String judet = adresa.isCapitala()
+		? adresa.getLocalitate()
+		: adresa.getJudet();
+		String dataIncepere = angajat.getContract().getDataincepere().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		text = String.format(text, persoana.getNumeIntreg(), adresa.getLocalitate(), locatie, judet, actId.getSerie(), actId.getNumar(), actId.getCnp(), dataIncepere, an);
+		
 		writerCell = sheet.getRow(9).getCell(0);
-		writerCell.setCellValue("      Prin prezenta se atesta faptul ca dl./dna " + persoana.getNumeIntreg() + " domiciliat(a)");
-
-		Adresa adrAngajat = persoana.getAdresa();
-		String adrStr, judStr;
-		if (adrAngajat.isCapitala()) {
-			adrStr = adrAngajat.getLocalitate() + ", " + adrAngajat.getAdresa() + ", " + adrAngajat.getJudet();
-			judStr = adrAngajat.getLocalitate();
-		} else {
-			adrStr = adrAngajat.getLocalitate() + ", " + adrAngajat.getAdresa();
-			judStr = adrAngajat.getJudet();
-		}
-		writerCell = sheet.getRow(10).getCell(0);
-		writerCell.setCellValue("in " + adrStr);
-
-		writerCell = sheet.getRow(11).getCell(0);
-		writerCell.setCellValue(judStr + ", posesor al BI/CI seria" + persoana.getActidentitate().getSerie() + ", nr. " + persoana.getActidentitate().getNumar() + ", CNP " + persoana.getActidentitate().getCnp() + " are calitatea de");
-		writerCell = sheet.getRow(12).getCell(0);
-		writerCell.setCellValue("salariat incepand cu data de " + angajat.getContract().getDataincepere().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " si a inregistrat in anul " + an + " urmatoarele venituri");
+		writerCell.setCellValue(text);
 
 		writerCell = sheet.getRow(18).getCell(0);
 		YearMonth yearMonthObject = YearMonth.of(an, lunaPanala);
@@ -103,8 +99,8 @@ public class AdeverintaVenitService {
 		total.setDataFormat(format.getFormat("#,##0"));
 		total.setAlignment(HorizontalAlignment.RIGHT);
 		CellStyle normal = sheet.getRow(23).getCell(2).getCellStyle();
-		// normal.setDataFormat(format.getFormat("#,##0"));
-		// normal.setAlignment(HorizontalAlignment.RIGHT);
+		normal.setDataFormat(format.getFormat("#,##0"));
+		normal.setAlignment(HorizontalAlignment.RIGHT);
 
 		// ! TABLE CONTENT
 		int index = 0;
