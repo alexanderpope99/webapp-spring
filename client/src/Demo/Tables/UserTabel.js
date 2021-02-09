@@ -634,7 +634,7 @@ class UserTabel extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+              <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel ? this.state.socsel.nume : 'Societăți'}</Breadcrumb.Item>
               <Breadcrumb.Item active>Utilizatori</Breadcrumb.Item>
             </Breadcrumb>
             <Card>

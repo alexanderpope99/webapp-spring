@@ -39,7 +39,7 @@ const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConc
 const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
 const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
 const SarbatoriTabelView = React.lazy(() => import('./Demo/Tables/SarbatoriTabelView'));
-const FacturiTabel = React.lazy(() => import('./Demo/Tables/FacturiTabel'));
+const Facturi = React.lazy(() => import('./Demo/Forms/Facturi'));
 const ClientiTabel = React.lazy(() => import('./Demo/Tables/ClientiTabel'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
 const FacturiOperatorTabel = React.lazy(() => import('./Demo/Tables/FacturiOperatorTabel'));
@@ -149,7 +149,7 @@ const routes = [
     path: '/facturi',
     exact: true,
     name: 'Tabel Facturi',
-    component: FacturiTabel,
+    component: Facturi,
   },
   {
     path: '/facturi-aprobator',

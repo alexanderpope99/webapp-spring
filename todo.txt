@@ -52,11 +52,15 @@ LAST-UPDATE : {
 TODO: {
 	FACTURI: main page has pills:
 		-> lista facturi: are un buton care selecteaza pill-ul de adauga factura
+			editeaza = trimite pe pill-ul emitere cu props = factura
+			in tabel, coloana "Seria" = serie + zerofill(nr_factura, 7)
+			are filtrare dupa: client, data, scadenta, status incasat
 		-> adauga factura (emitere factura)
 			1. Un array de produse, se identifica prin index
 				pagina are un form cu produse/servicii -> apesi adauga -> adauga in array
 				produsele sunt randate in functie de array-ul de produse
 				onSubmit trebuie sa ia toate datele adaugate
+				proiect, activitate = dropdown-multiselect
 			2. 
 		-> persoane autorizare, persoane delegate
 		-> activitati/proiecte

@@ -1,6 +1,10 @@
 import React from 'react';
 import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb, Toast } from 'react-bootstrap';
-import { RotateCw } from 'react-feather';
+import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography/Typography';
 
 import Aux from '../../hoc/_Aux';
 import { server } from '../Resources/server-address';
@@ -8,24 +12,24 @@ import { getSocSel } from '../Resources/socsel';
 import { downloadFactura } from '../Resources/download';
 import axios from 'axios';
 import authHeader from '../../services/auth-header';
-import authService from '../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
 
-class FacturiOperatorTabel extends React.Component {
+class FacturiTabel extends React.Component {
   constructor() {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
+    this.addFactura = this.addFactura.bind(this);
+    this.updateFactura = this.updateFactura.bind(this);
+    this.editFactura = this.editFactura.bind(this);
+    this.deleteFactura = this.deleteFactura.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleCloseConfirm = this.handleCloseConfirm.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeCentruCost = this.onChangeCentruCost.bind(this);
     this.onChangeAprobator = this.onChangeAprobator.bind(this);
     this.changeSortOrder = this.changeSortOrder.bind(this);
-    this.approveFactura = this.approveFactura.bind(this);
-    this.rejectFactura = this.rejectFactura.bind(this);
-    this.postponeFactura = this.postponeFactura.bind(this);
     this.getStatusColor = this.getStatusColor.bind(this);
 
     this.state = {
@@ -62,7 +66,6 @@ class FacturiOperatorTabel extends React.Component {
       sumaachitata: '',
       idsocietate: null,
       show: false,
-      user: authService.getCurrentUser(),
 
       idcentrucost: null,
       idaprobator: null,
@@ -82,44 +85,156 @@ class FacturiOperatorTabel extends React.Component {
     window.scrollTo(0, 0);
   }
 
-  async approveFactura(fact) {
-    const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/aproba`, { headers: authHeader() })
-      .then((response) => response.status === 200)
+  async addFactura() {
+    const formData = new FormData();
+    if (this.state.numefisier) formData.append('fisier', this.state.fisier);
+
+    const factura_body = {
+      status: 'În așteptare',
+      denumirefurnizor: this.state.denumirefurnizor || null,
+      ciffurnizor: this.state.ciffurnizor || null,
+      nr: this.state.nr || null,
+      data: this.state.data || null,
+      moneda: this.state.moneda || 'RON',
+      sumafaratva: this.state.sumafaratva || null,
+      termenscadenta: this.state.termenscadenta || null,
+      tipachizitie: this.state.tipachizitie || null,
+      descriereactivitati: this.state.descriereactivitati || null,
+      idaprobator: this.state.idaprobator || null,
+      aprobat: this.state.aprobat || false,
+      observatii: this.state.observatii || null,
+      idcentrucost: this.state.idcentrucost || null,
+      dataplatii: this.state.dataplatii || null,
+      sumaachitata: this.state.sumaachitata || null,
+      idsocietate: this.state.socsel.id,
+    };
+
+    for (let key in factura_body) {
+      if (factura_body[key]) formData.append(key, factura_body[key]);
+    }
+
+    let ok = await axios
+      .post(`${server.address}/factura/`, formData, { headers: authHeader() })
+      .then((res) => res.data)
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut aproba factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga factura ' + err.response.data.message,
         })
       );
-    if (ok) this.onRefresh();
+    if (ok) {
+      await this.handleClose();
+      this.setState(
+        {
+          showConfirm: true,
+          modalMessage: 'Factură adăugată ',
+        },
+        this.onRefresh
+      );
+    }
   }
 
-  async rejectFactura(fact) {
+  async updateFactura(idfactura) {
+    const formData = new FormData();
+    var withFileUri = 'keep-file';
+    if (this.state.sterge) withFileUri = 'new-file';
+    if (this.state.fisier) {
+      formData.append('fisier', this.state.fisier);
+      withFileUri = 'new-file';
+    }
+
+    const factura_body = {
+      status: 'În așteptare',
+      denumirefurnizor: this.state.denumirefurnizor || null,
+      ciffurnizor: this.state.ciffurnizor || null,
+      nr: this.state.nr || null,
+      data: this.state.data || null,
+      moneda: this.state.moneda || null,
+      sumafaratva: this.state.sumafaratva || null,
+      termenscadenta: this.state.termenscadenta || null,
+      tipachizitie: this.state.tipachizitie || null,
+      descriereactivitati: this.state.descriereactivitati || null,
+      idaprobator: this.state.idaprobator || null,
+      aprobat: this.state.aprobat || null,
+      observatii: this.state.observatii || null,
+      codproiect: this.state.codproiect || null,
+      idcentrucost: this.state.idcentrucost || null,
+      dataplatii: this.state.dataplatii || null,
+      sumaachitata: this.state.sumaachitata || null,
+      idsocietate: this.state.socsel.id,
+    };
+
+    for (let key in factura_body) {
+      if (factura_body[key]) formData.append(key, factura_body[key]);
+    }
+
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/respinge`, { headers: authHeader() })
-      .then((response) => response.status === 200)
+      .put(`${server.address}/factura/${idfactura}/${withFileUri}`, formData, {
+        headers: authHeader(),
+      })
+      .then((res) => res.status === 200)
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut respinge factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza factura ' + err.response.data.message,
         })
       );
-    if (ok) this.onRefresh();
+
+    if (ok) {
+      await this.handleClose();
+      this.setState(
+        {
+          showConfirm: true,
+          modalMessage: 'Factură actualizată',
+        },
+        this.onRefresh
+      );
+    }
   }
 
-  async postponeFactura(fact) {
-    console.log(`${server.address}/factura/${fact.id}/amana`);
-    const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/amana`, { headers: authHeader() })
-      .then((response) => response.status === 200)
+  async editFactura(fact) {
+    this.setState({
+      isEdit: true,
+      show: true,
+
+      id: fact.id,
+      denumirefurnizor: fact.denumirefurnizor || '',
+      ciffurnizor: fact.ciffurnizor || '',
+      nr: fact.nr || '',
+      data: fact.data ? fact.data.substring(0, 10) : '',
+      moneda: fact.moneda || '',
+      sumafaratva: fact.sumafaratva || '',
+      termenscadenta: fact.termenscadenta || '',
+      tipachizitie: fact.tipachizitie || '',
+      descriereactivitati: fact.descriereactivitati || '',
+      numeaprobator: fact.aprobator
+        ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+        : '-',
+      idaprobator: fact.aprobator ? fact.aprobator.persoana.id : null,
+      aprobat: fact.aprobat,
+      observatii: fact.observatii || '',
+      codproiect: fact.codproiect || '',
+      centrucost: fact.centrucost ? fact.centrucost : '-',
+      idcentrucost: fact.centrucost ? fact.centrucost.id : null,
+      dataplatii: fact.dataplatii || '',
+      sumaachitata: fact.sumaachitata || '',
+
+      numefisier: fact.numefisier || '',
+      sterge: false,
+    });
+  }
+
+  async deleteFactura(id) {
+    await axios
+      .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
+      .then(this.onRefresh)
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut amâna factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge factura ' + err.response.data.message,
         })
       );
-    if (ok) this.onRefresh();
+    // if(ok) this.onRefresh();
   }
 
   getStatusColor(factStatus) {
@@ -139,43 +254,114 @@ class FacturiOperatorTabel extends React.Component {
 
     const facturi = this.state.factura.sort(compare);
     this.setState({
-      facturaComponent: await Promise.all(
-        facturi.map(async (fact, index) => {
-          return (
-            // TODO
-            <tr key={fact.id}>
-              <th>{fact.denumirefurnizor}</th>
-              <th>{fact.ciffurnizor}</th>
-              <th>{fact.nr}</th>
-              <th>{fact.data}</th>
-              <th>{fact.moneda}</th>
-              <th>{fact.sumafaratva}</th>
-              <th>{fact.termenscadenta}</th>
-              <th>{fact.tipachizitie}</th>
-              <th>{fact.descriereactivitati}</th>
-              <th>
-                {fact.aprobator
-                  ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
-                  : '-'}
-              </th>
-              <th>{fact.aprobat}</th>
-              <th>{fact.observatii}</th>
-              <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
-              <th>{fact.dataplatii}</th>
-              <th>{fact.sumaachitata}</th>
-              <th>
-                {fact.numefisier ? (
-                  <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>
-                    {fact.numefisier}
-                  </Button>
-                ) : (
-                  'Niciun fisier încărcat'
-                )}
-              </th>
-            </tr>
-          );
-        })
-      ),
+      facturaComponent: facturi.map((fact, index) => {
+        return (
+          // TODO
+          <tr key={fact.id}>
+            <th>
+              <div className="d-flex">
+                <Button
+                  onClick={() => this.editFactura(fact)}
+                  variant="outline-secondary"
+                  className="m-1 p-1 rounded-circle border-0"
+                >
+                  <Edit3 size={20} />
+                </Button>
+
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-1 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 size={20} />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>
+                            Sigur ștergeți factura {fact.dela} {fact.panala}?
+                          </Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteFactura(fact.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </div>
+            </th>
+            <th>
+              {fact.status === 'În așteptare' ? (
+                <i className="fa fa-circle text-c-gray f-10 mr-2" />
+              ) : fact.status === 'Aprobată' ? (
+                <i className="fa fa-circle text-c-green f-10 mr-2" />
+              ) : fact.status === 'Respinsă' ? (
+                <i className="fa fa-circle text-c-red f-10 mr-2" />
+              ) : (
+                <i className="fa fa-circle text-c-yellow f-10 mr-2" />
+              )}
+              {fact.status}
+            </th>
+            <th>{fact.codproiect ? fact.codproiect : '-'}</th>
+            <th>{fact.observatii ? fact.observatii : '-'}</th>
+            <th>{fact.denumirefurnizor}</th>
+            <th>{fact.ciffurnizor}</th>
+            <th>{fact.nr}</th>
+            <th>{fact.data}</th>
+            <th>{fact.moneda}</th>
+            <th>{fact.sumafaratva}</th>
+            <th>{fact.termenscadenta}</th>
+            <th>{fact.tipachizitie}</th>
+            <th>{fact.descriereactivitati}</th>
+            <th>
+              {fact.aprobator
+                ? fact.aprobator.persoana.nume + ' ' + fact.aprobator.persoana.prenume
+                : '-'}
+            </th>
+            <th>{fact.centrucost ? fact.centrucost.nume : '-'}</th>
+            <th>{fact.dataplatii}</th>
+            <th>{fact.sumaachitata}</th>
+            <th>
+              {fact.numefisier ? (
+                <Button variant="link" onClick={() => downloadFactura(fact.numefisier, fact.id)}>
+                  {fact.numefisier}
+                </Button>
+              ) : (
+                'Niciun fișier încărcat'
+              )}
+            </th>
+          </tr>
+        );
+      }),
     });
   }
 
@@ -198,25 +384,25 @@ class FacturiOperatorTabel extends React.Component {
         })
       );
     const aprobatori = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&u`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua aprobatori ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua aprobatorii ' + err.response.data.message,
         })
       );
     const fact = await axios
-      .get(`${server.address}/factura/idsoc/approved/${this.state.socsel.id}`, {
+      .get(`${server.address}/factura/idsoc/${this.state.socsel.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua facturile aprobate ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua facturile ' + err.response.data.message,
         })
       );
     if (centreCost) {
@@ -304,17 +490,17 @@ class FacturiOperatorTabel extends React.Component {
   render() {
     var centreCost = [];
     if (this.state.centreCostComponent.length > 0)
-      centreCost = this.state.centreCostComponent.map((cod, index) => (
-        <option key={index} data-key={cod.id}>
-          {cod.nume}
+      centreCost = this.state.centreCostComponent.map((centrucost, index) => (
+        <option key={index} data-key={centrucost.id}>
+          {centrucost.nume}
         </option>
       ));
 
     var aprobatori = [];
     if (this.state.aprobatoriComponent.length > 0)
-      aprobatori = this.state.aprobatoriComponent.map((cod, index) => (
-        <option key={index} data-key={cod.persoana.id}>
-          {cod.persoana.nume + ' ' + cod.persoana.prenume}
+      aprobatori = this.state.aprobatoriComponent.map((angajat, index) => (
+        <option key={index} data-key={angajat.persoana.id}>
+          {angajat.persoana.nume + ' ' + angajat.persoana.prenume}
         </option>
       ));
 
@@ -387,9 +573,9 @@ class FacturiOperatorTabel extends React.Component {
                     value={this.state.moneda}
                     onChange={(e) => this.setState({ moneda: e.target.value })}
                   >
-                    <option key="1">RON</option>
-                    <option key="2">EUR</option>
-                    <option key="3">USD</option>
+                    <option>RON</option>
+                    <option>EUR</option>
+                    <option>USD</option>
                   </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
@@ -425,10 +611,18 @@ class FacturiOperatorTabel extends React.Component {
                   />
                 </Form.Group>
                 <Form.Group as={Col} md="6">
+                  <Form.Label>Cod proiect</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.codproiect}
+                    onChange={(e) => this.setState({ codproiect: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
                   <Form.Label>Observații</Form.Label>
                   <Form.Control
                     type="text"
-                    value={this.state.observatii}
+                    value={this.state.observatii || ''}
                     onChange={(e) => this.setState({ observatii: e.target.value })}
                   />
                 </Form.Group>
@@ -491,7 +685,11 @@ class FacturiOperatorTabel extends React.Component {
                       </Button>
                     </div>
                   ) : (
-                    <Dropzone onChangeStatus={handleChangeStatus} maxFiles={1} />
+                    <Dropzone
+                      inputLabel="Trage fișierul"
+                      onChangeStatus={handleChangeStatus}
+                      maxFiles={1}
+                    />
                   )}
                 </Form.Group>
               </Row>
@@ -521,11 +719,11 @@ class FacturiOperatorTabel extends React.Component {
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
               <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
-              <Breadcrumb.Item active>Operare Facturi</Breadcrumb.Item>
+              <Breadcrumb.Item active>Facturi</Breadcrumb.Item>
             </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Operare Facturi Aprobate</Card.Title>
+                <Card.Title as="h5">Facturi</Card.Title>
 
                 <Button
                   variant="outline-info"
@@ -536,11 +734,24 @@ class FacturiOperatorTabel extends React.Component {
                   <RotateCw size="25" />
                   {/* ↺ */}
                 </Button>
+
+                <Button
+                  onClick={() => this.setState({ isEdit: false, show: true })}
+                  variant="outline-info"
+                  size="sm"
+                  style={{ fontSize: '1.25rem', float: 'right' }}
+                >
+                  <Plus size="25" />
+                </Button>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
                   <thead>
                     <tr>
+                      <th></th>
+                      <th>Status</th>
+                      <th>Cod Proiect</th>
+                      <th>Observații</th>
                       <th
                         onClick={() => this.changeSortOrder('denumirefurnizor')}
                         style={{ cursor: 'pointer' }}
@@ -566,11 +777,10 @@ class FacturiOperatorTabel extends React.Component {
                       <th>Tip Achiziție</th>
                       <th>Descriere Activități</th>
                       <th>Aprobator</th>
-                      <th>Aprobat</th>
-                      <th>Observații</th>
                       <th>Centru Cost</th>
                       <th>Data plății</th>
                       <th>Suma Achitată</th>
+                      <th>Fișier atașat</th>
                     </tr>
                   </thead>
                   <tbody>{this.state.facturaComponent}</tbody>
@@ -584,4 +794,4 @@ class FacturiOperatorTabel extends React.Component {
   }
 }
 
-export default FacturiOperatorTabel;
+export default FacturiTabel;

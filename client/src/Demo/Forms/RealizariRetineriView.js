@@ -720,7 +720,7 @@ class RealizariRetineriView extends React.Component {
         </Modal>
 
         <Breadcrumb style={{ fontSize: '12px' }}>
-          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+          <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
           <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
           <Breadcrumb.Item active>Realizări & Rețineri</Breadcrumb.Item>
         </Breadcrumb>

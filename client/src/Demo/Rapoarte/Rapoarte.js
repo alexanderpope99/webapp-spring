@@ -24,7 +24,7 @@ class Rapoarte extends React.Component {
     return (
       <Aux>
         <Breadcrumb style={{ fontSize: '12px' }}>
-          <Breadcrumb.Item href="/dashboard/societati">Societăți</Breadcrumb.Item>
+          <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
           <Breadcrumb.Item active>Rapoarte</Breadcrumb.Item>
         </Breadcrumb>
         <Stat />
