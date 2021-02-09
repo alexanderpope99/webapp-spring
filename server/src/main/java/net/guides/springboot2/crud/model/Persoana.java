@@ -165,7 +165,8 @@ public class Persoana implements Serializable {
 		this.angajat = angajat;
 	}
 
-	public int getVarsta(){
+	public Integer getVarsta(){
+		if(cnp==null)return null;
 		if(this.cnp.substring(0,1).equals("1")||this.cnp.substring(0,1).equals("2"))
 		{
 			String dataNasteriiString= "19"+this.cnp.substring(1,3)+"-"+this.cnp.substring(3,5)+"-"+this.cnp.substring(5,7);

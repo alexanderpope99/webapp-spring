@@ -9,7 +9,7 @@ import Stat from './Stat.js';
 import NotaContabila from './NotaContabila.js';
 import Tichete from './Tichete.js';
 import ListaAngajati from './ListaAngajati.js';
-import CentralizatorVarsta from './CentralizatorVarsta.js';
+import Centralizator from './Centralizator.js';
 
 class Rapoarte extends React.Component {
   constructor() {
@@ -30,7 +30,7 @@ class Rapoarte extends React.Component {
         <Stat />
         <Tichete />
         <ListaAngajati />
-        <CentralizatorVarsta />
+        <Centralizator />
         <NotaContabila />
         <Pontaj />
         <Dec112 />

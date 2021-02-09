@@ -68,7 +68,7 @@ public class ListaAngajatiService {
 		writerCell = listaAngajati.getRow(2).getCell(0);
 		writerCell.setCellValue("Str: " + societate.getAdresa().getAdresa()); // adresa
 		writerCell = listaAngajati.getRow(4).getCell(0);
-		writerCell.setCellValue(societate.getAdresa().getLocalitate()+societate.getAdresa().getJudet());//judet,localitate
+		writerCell.setCellValue(societate.getAdresa().getLocalitate()+" "+societate.getAdresa().getJudet());//judet,localitate
 
 		writerCell = listaAngajati.getRow(6).getCell(7);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
