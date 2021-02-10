@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Tabs, Tab, Button, Modal, Breadcrumb } from 'react-bootstrap';
+import { Row, Col, Tabs, Tab, Breadcrumb } from 'react-bootstrap';
 import Aux from '../../hoc/_Aux';
 import { getSocSel } from '../Resources/socsel';
 import FacturiTabel from '../Tables/FacturiTabel';
@@ -12,7 +12,7 @@ export default class Facturi extends React.Component {
 		this.edit = this.edit.bind(this);
 
     this.state = {
-      key: 'tabel-facturi',
+      key: 'emite-factura',
       socsel: getSocSel(),
     };
   }
@@ -47,8 +47,8 @@ export default class Facturi extends React.Component {
               <Tab eventKey="tabel-facturi" title="Tabel facturi">
                 <FacturiTabel edit={this.edit}/>
               </Tab>
-              <Tab eventKey="emite-factura" title="Emite factură">
-								<EmitereFactura factura={this.state.factura}/>
+              <Tab eventKey="emite-factura" title="Emitere factură">
+								<EmitereFactura factura={this.state.factura} numarFactura={3}/>
 							</Tab>
             </Tabs>
           </Col>

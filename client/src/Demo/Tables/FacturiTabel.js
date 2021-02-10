@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb, Toast } from 'react-bootstrap';
-import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
+import { Row, Col, Card, Table, Button, Toast } from 'react-bootstrap';
+import { Trash2, Edit3 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -21,6 +21,7 @@ class FacturiTabel extends React.Component {
       showToast: false,
       toastMessage: '',
 
+			socsel: getSocSel(),
       facturi: [],
       clienti: [],
     };
