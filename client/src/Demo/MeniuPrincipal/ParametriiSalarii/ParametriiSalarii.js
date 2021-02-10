@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
-import { Trash2, Plus, RotateCw } from 'react-feather';
+import { Trash2, Plus, RotateCw,Edit } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Popover from '@material-ui/core/Popover';
@@ -17,6 +17,7 @@ class ParametriiSalarii extends React.Component {
     super();
 
     this.onRefresh = this.onRefresh.bind(this);
+    this.addParametrii = this.addParametrii.bind(this);
     this.updateParametrii = this.updateParametrii.bind(this);
 
     this.state = {
@@ -33,6 +34,8 @@ class ParametriiSalarii extends React.Component {
 	  tva:'',
       show: false,
       date: '',
+	  isEdit:false,
+	  id:'',
 
       showToast: false,
       toastMessage: '',
@@ -82,6 +85,13 @@ class ParametriiSalarii extends React.Component {
             <th>{par.tva || '-'}</th>
             <th>
               <div className="d-inline-flex">
+			  <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+						onClick={()=>{this.setState({isEdit:true,id:par.id,show:true})}}
+                      >
+                        <Edit fontSize="small" />
+                      </Button>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                   {(popupState) => (
                     <div>
@@ -188,7 +198,7 @@ class ParametriiSalarii extends React.Component {
 	}	
   }
 
-  async updateParametrii() {
+  async addParametrii() {
     await axios
       .post(
         `${server.address}/parametriisalariu`,
@@ -214,7 +224,36 @@ class ParametriiSalarii extends React.Component {
         })
       );
     this.onRefresh();
-    this.setState({ show: false });
+    this.setState({ show: false,isEdit:false });
+  }
+
+  async updateParametrii() {
+    await axios
+      .put(
+        `${server.address}/parametriisalariu/${this.state.id}`,
+        {
+          salariumin: this.state.salariumin,
+          salariuminstudiivechime: this.state.salariuminstudiivechime,
+          salariumediubrut: this.state.salariumediubrut,
+          impozit: this.state.impozit,
+          cas: this.state.cas,
+          cass: this.state.cass,
+          cam: this.state.cam,
+          valtichet: this.state.valtichet,
+		  tva:this.state.tva,
+          date: this.state.date,
+        },
+        { headers: authHeader() }
+      )
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut modifica parametrii ' + err.response.data.message,
+        })
+      );
+    this.onRefresh();
+    this.setState({ show: false,isEdit:false });
   }
 
   render() {
@@ -233,7 +272,7 @@ class ParametriiSalarii extends React.Component {
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
-        <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
+        <Modal show={this.state.show} onHide={() => this.setState({ show: false,isEdit:false })}>
           <Modal.Header closeButton>
             <Modal.Title>Taxe și impozite</Modal.Title>
           </Modal.Header>
@@ -342,9 +381,15 @@ class ParametriiSalarii extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.updateParametrii}>
+			  {this.state.isEdit?
+			  <Button variant="primary" onClick={this.updateParametrii}>
               Confirmă
             </Button>
+			:
+            <Button variant="primary" onClick={this.addParametrii}>
+              Confirmă
+            </Button>
+  			}
           </Modal.Footer>
         </Modal>
         <Row>
