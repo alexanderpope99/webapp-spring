@@ -21,6 +21,9 @@ export default class EmitereFactura extends React.Component {
       nrAvizInsotire: '-',
       client: { id: 0, nume: '-' },
       titlu: 'Cf. Contract vanzare-cumparare',
+      produse: [],
+      dataExpedierii: new Date().toISOString().substring(0, 10),
+      oraExpedierii: '09:00',
     };
   }
 
@@ -38,7 +41,7 @@ export default class EmitereFactura extends React.Component {
         factura: null,
 
         serie: 'BVFZ',
-        numar: this.state.props ? this.state.props.numarFactura : 0,
+        numar: this.props.numarFactura,
         today: new Date().toISOString().substring(0, 10),
         nrAvizInsotire: '-',
         client: { id: 0, nume: '-' },
@@ -181,19 +184,58 @@ export default class EmitereFactura extends React.Component {
               </Col>
             </Row>
 
-						{/* PRODUSE / SERVICII */}
-						<Row className="border rounded mt-2 pt-3 pb-2">
-							<Col md={12}>
-								<Button>Adauga produs/serviciu</Button>
-							</Col>
-						</Row>
+            {/* PRODUSE / SERVICII */}
+            <Row className="border rounded mt-2 pt-3 pb-2">
+              <Col md={12}>
+                <Button>Adauga produs/serviciu</Button>
+              </Col>
+            </Row>
 
-						{/* FOOTER */}
-						<Row className="border rounded mt-2 pt-3">
-							<Col md={8}>
-								<Button>Adauga produs/serviciu</Button>
-							</Col>
-						</Row>
+            {/* FOOTER */}
+            <Row className="mt-2">
+              <Col md={6} className="border rounded pt-3">
+                <Form.Group>
+                  <Form.Label>Data si ora expedierii</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.dataExpedierii}
+                    onChange={(e) => this.setState({ dataExpedierii: e.target.value })}
+                  />
+                  <Form.Control
+                    className="mt-2"
+                    type="time"
+                    value={this.state.oraExpedierii}
+                    onChange={(e) => this.setState({ oraExpedierii: e.target.value })}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6} className="border rounded pt-3">
+                <Form.Group>
+                  <Form.Label>Total (fara TVA)</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.totalFaraTva}
+                    onChange={(e) => this.setState({ totalFaraTva: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>TVA</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.tva}
+                    onChange={(e) => this.setState({ tva: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Total (cu TVA)</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={this.state.totalCuTva}
+                    onChange={(e) => this.setState({ totalCuTva: e.target.value })}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
           </Card.Body>
         </Card>
       </Aux>
