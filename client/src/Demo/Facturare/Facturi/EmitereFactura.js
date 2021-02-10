@@ -1,10 +1,13 @@
 import React from 'react';
 import { Row, Col, Card, Button, Form, Toast } from 'react-bootstrap';
+import { Typography } from '@material-ui/core';
 import Aux from '../../../hoc/_Aux';
 
 export default class EmitereFactura extends React.Component {
   constructor(props) {
     super(props);
+
+    this.adaugaProdus = this.adaugaProdus.bind(this);
 
     this.state = {
       showToast: false,
@@ -14,16 +17,20 @@ export default class EmitereFactura extends React.Component {
 
       clienti: [],
 
+      today: new Date().toISOString().substring(0, 10),
+
       // datele din formular
       serie: 'BVFZ',
       numar: props.numarFactura,
-      today: new Date().toISOString().substring(0, 10),
       nrAvizInsotire: '-',
       client: { id: 0, nume: '-' },
       titlu: 'Cf. Contract vanzare-cumparare',
       produse: [],
       dataExpedierii: new Date().toISOString().substring(0, 10),
       oraExpedierii: '09:00',
+      totalFaraTva: 0,
+      tva: 0,
+      totalCuTva: 0,
     };
   }
 
@@ -44,6 +51,12 @@ export default class EmitereFactura extends React.Component {
         nrAvizInsotire: '-',
         client: { id: 0, nume: '-' },
         titlu: 'Cf. Contract vanzare-cumparare',
+        produse: [],
+        dataExpedierii: new Date().toISOString().substring(0, 10),
+        oraExpedierii: '09:00',
+        totalFaraTva: 0,
+        tva: 0,
+        totalCuTva: 0,
       });
     } else {
       this.setState({
@@ -71,7 +84,121 @@ export default class EmitereFactura extends React.Component {
     this.setState({ client: { id: Number(idClient), nume: e.target.value } });
   }
 
+  adaugaProdus() {
+    let produse = this.state.produse;
+    produse.push({
+      denumire: '',
+      um: '',
+      cantitatea: 0,
+      pretUnitar: 0,
+      valoareFaraTva: 0,
+      tva: 0,
+    });
+    this.setState({ produse: produse });
+  }
+  stergeProdus(index) {
+    let produse = this.state.produse;
+    produse.splice(index, 1);
+    this.setState({ produse: produse });
+  }
+
+  changeProdusAttribute(produs, attr, value, index) {
+    let produse = this.state.produse;
+    produs = { ...produs, [attr]: value };
+    produse[index] = produs;
+    this.setState({ produse: produse });
+  }
+
+  getTotal() {
+    const produse = this.state.produse;
+    var totalFaraTva = 0,
+      totalTva = 0,
+      totalCuTva = 0;
+    if (produse && produse.length > 0) {
+      console.log(produse);
+      totalFaraTva = produse.reduce(
+        (acc, produs) => acc + produs.cantitatea * produs.pretUnitar,
+        0
+      );
+			totalTva = totalFaraTva * 0.19;
+      totalCuTva = totalFaraTva + totalTva;
+    }
+
+    return { totalFaraTva, totalTva, totalCuTva };
+  }
+
   render() {
+    const produseComponent = this.state.produse.map((produs, index) => (
+      <Row className="border rounded p-0 pt-2 mt-2 mb-2" key={index}>
+        <Col md={12}>
+          <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+            Produs #{index + 1}
+          </Typography>
+        </Col>
+        <Form.Group as={Col} sm="12">
+          <Form.Label>Denumirea produselor sau serviciilor</Form.Label>
+          <Form.Control
+            as="textarea"
+            value={produs.denumire}
+            onChange={(e) => this.changeProdusAttribute(produs, 'denumire', e.target.value, index)}
+          />
+        </Form.Group>
+        <Form.Group as={Col} lg="2">
+          <Form.Label>UM</Form.Label>
+          <Form.Control
+            type="text"
+            value={produs.um}
+            onChange={(e) => this.changeProdusAttribute(produs, 'um', e.target.value, index)}
+          />
+        </Form.Group>
+        <Form.Group as={Col} lg="2">
+          <Form.Label>Cantitatea</Form.Label>
+          <Form.Control
+            type="number"
+            value={produs.cantitatea}
+            onChange={(e) =>
+              this.changeProdusAttribute(produs, 'cantitatea', Number(e.target.value), index)
+            }
+          />
+        </Form.Group>
+        <Form.Group as={Col} lg="2">
+          <Form.Label>Pret unitar</Form.Label>
+          <Form.Control
+            type="number"
+            step="0.01"
+            value={produs.pretUnitar}
+            onChange={(e) =>
+              this.changeProdusAttribute(produs, 'pretUnitar', Number(e.target.value), index)
+            }
+          />
+        </Form.Group>
+        <Form.Group as={Col} sm="2">
+          <Form.Label>Valoare (fara TVA)</Form.Label>
+          <Form.Control disabled type="number" value={produs.pretUnitar * produs.cantitatea} />
+        </Form.Group>
+        <Form.Group as={Col} sm="2">
+          <Form.Label>Valoare TVA</Form.Label>
+          <Form.Control
+            disabled
+            type="text"
+            step="0.01"
+            value={produs.pretUnitar * produs.cantitatea * 0.19}
+          />
+        </Form.Group>
+        <Col md={12}>
+          <Button
+            className="p-1 float-right"
+            variant="link"
+            onClick={() => this.stergeProdus(index)}
+          >
+            Șterge produs
+          </Button>
+        </Col>
+      </Row>
+    ));
+
+    const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
+
     return (
       <Aux>
         <Toast
@@ -185,7 +312,8 @@ export default class EmitereFactura extends React.Component {
             {/* PRODUSE / SERVICII */}
             <Row className="border rounded mt-2 pt-3 pb-2">
               <Col md={12}>
-                <Button>Adauga produs/serviciu</Button>
+                <Button onClick={this.adaugaProdus}>Adauga produs/serviciu</Button>
+                <Col md={12}>{produseComponent}</Col>
               </Col>
             </Row>
 
@@ -212,24 +340,27 @@ export default class EmitereFactura extends React.Component {
                   <Form.Label>Total (fara TVA)</Form.Label>
                   <Form.Control
                     type="number"
-                    value={this.state.totalFaraTva}
-                    onChange={(e) => this.setState({ totalFaraTva: e.target.value })}
+                    value={totalFaraTva}
+                    disabled
+                    // onChange={(e) => this.setState({ totalFaraTva: e.target.value })}
                   />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>TVA</Form.Label>
                   <Form.Control
                     type="number"
-                    value={this.state.tva}
-                    onChange={(e) => this.setState({ tva: e.target.value })}
+                    value={totalTva}
+                    disabled
+                    // onChange={(e) => this.setState({ tva: e.target.value })}
                   />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Total (cu TVA)</Form.Label>
                   <Form.Control
                     type="number"
-                    value={this.state.totalCuTva}
-                    onChange={(e) => this.setState({ totalCuTva: e.target.value })}
+                    value={totalCuTva}
+                    disabled
+                    // onChange={(e) => this.setState({ totalCuTva: e.target.value })}
                   />
                 </Form.Group>
               </Col>

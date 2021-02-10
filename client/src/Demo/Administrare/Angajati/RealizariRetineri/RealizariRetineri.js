@@ -1164,21 +1164,6 @@ class RealizariRetineri extends React.Component {
 									</Button>
 								</OverlayTrigger>
 							</InputGroup.Append>
-							{/* <InputGroup.Append>
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
-                  overlay={
-                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                      Adaugă angajat
-                    </Tooltip>
-                  }
-                >
-                  <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
-                    <Plus size={20} className="m-0" />
-                  </Button>
-                </OverlayTrigger>
-              </InputGroup.Append> */}
 						</InputGroup>
 					</Card.Header>
 
@@ -1187,9 +1172,9 @@ class RealizariRetineri extends React.Component {
 							<Row>
 								{/* REALIZARI = LEFT TOP */}
 								<Col md={8} className="border rounded pt-3">
-									<Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+									<asdasd variant="body1" className="border-bottom mb-3" gutterBottom>
 										Realizări
-                  </Typography>
+                  </asdasd>
 									<Row>
 										<Col md={6}>
 											<Form.Group id="functie">

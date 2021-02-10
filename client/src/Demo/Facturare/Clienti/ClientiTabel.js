@@ -43,10 +43,10 @@ export default class ClientiTabel extends React.Component {
       id: null,
       numecomplet: '',
       nume: '',
-      statut: '',
+      statut: 'Persoana juridica',
       nrregcom: '',
       codfiscal: '',
-      cotatva: '',
+      cotatva: 19,
       client: false,
       furnizor: false,
       extern: false,
@@ -67,10 +67,10 @@ export default class ClientiTabel extends React.Component {
       id: null,
       numecomplet: '',
       nume: '',
-      statut: '',
+      statut: 'Persoana juridica',
       nrregcom: '',
       codfiscal: '',
-      cotatva: '',
+      cotatva: 19,
       client: false,
       furnizor: false,
       extern: false,
@@ -241,7 +241,7 @@ export default class ClientiTabel extends React.Component {
     const clientiComponent = this.state.clienti.map(item =>
     (
       <tr key={item.id}>
-        <th>
+        <td>
           <div>
             <div className="d-flex">
               <Button
@@ -303,24 +303,23 @@ export default class ClientiTabel extends React.Component {
               </PopupState>
             </div>
           </div>
-        </th>
+        </td>
 
-        <th>{item.numecomplet}</th>
-        <th>{item.nume}</th>
-        <th>{item.statut}</th>
-        <th>{item.nrregcom}</th>
-        <th>{item.codfiscal}</th>
-        <th>{item.cotatva}</th>
-        <th>{item.adresa.adresa}</th>
-        <th>{item.adresa.localitate}</th>
-        <th>{item.adresa.judet}</th>
-        <th>{item.client}</th>
-        <th>{item.furnizor}</th>
-        <th>{item.extern}</th>
-        <th>{item.banca}</th>
-        <th>{item.sucursala}</th>
-        <th>{item.cont}</th>
-        <th>{item.moneda}</th>
+        <td>{item.nume}</td>
+        <td>{item.statut}</td>
+        <td>{item.nrregcom}</td>
+        <td>{item.codfiscal}</td>
+        <td>{item.cotatva}</td>
+        <td>{item.adresa.adresa.length > 15 ? item.adresa.adresa.substring(0, 15)+"..."  : '' }</td>
+        <td>{item.adresa.localitate}</td>
+        <td>{item.adresa.judet}</td>
+        <td>{item.client ? 'DA' : 'NU'}</td>
+        <td>{item.furnizor ? 'DA' : 'NU'}</td>
+        <td>{item.extern ? 'DA' : 'NU'}</td>
+        <td>{item.banca}</td>
+        <td>{item.sucursala}</td>
+        <td>{item.cont}</td>
+        <td>{item.moneda}</td>
       </tr>
 
     ));
@@ -385,7 +384,7 @@ export default class ClientiTabel extends React.Component {
                   </Form.Control>
                 </Form.Group>
 
-                <Form.Group as={Col} md="6" controlId="regcom">
+                <Form.Group as={Col} md="4" controlId="regcom">
                   <Form.Label>Număr Registrul Comerțului</Form.Label>
                   <Form.Control
                     type="text"
@@ -394,7 +393,7 @@ export default class ClientiTabel extends React.Component {
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} md="6" controlId="codfiscal">
+                <Form.Group as={Col} md="4" controlId="codfiscal">
                   <Form.Label>Cod Fiscal / CNP</Form.Label>
                   <Form.Control
                     type="text"
@@ -403,16 +402,16 @@ export default class ClientiTabel extends React.Component {
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} md="6" controlId="cotatva">
+                <Form.Group as={Col} md="4" controlId="cotatva">
                   <Form.Label>Cota TVA</Form.Label>
                   <Form.Control
                     type="number"
-                    value={this.state.cotatva}
+                    value={this.state.cotatva || 19}
                     onChange={(e) => this.setState({ cotatva: e.target.value })}
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} md="6" controlId="adresa">
+                <Form.Group as={Col} md="12" controlId="adresa">
                   <Form.Label>Adresa</Form.Label>
                   <Form.Control
                     type="text"
@@ -574,7 +573,6 @@ export default class ClientiTabel extends React.Component {
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Nume Complet</th>
                       <th>Nume</th>
                       <th>Statut</th>
                       <th>Nr. reg. com.</th>
