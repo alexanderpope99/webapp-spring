@@ -24,6 +24,7 @@ class ParametriiSalariiView extends React.Component {
       cass: '',
       cam: '',
       valtichet: '',
+	  tva:'',
       show: false,
       date: '',
 
@@ -47,7 +48,7 @@ class ParametriiSalariiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge parametrii ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge taxele și impozitele ' + err.response.data.message,
         })
       );
   }
@@ -72,6 +73,7 @@ class ParametriiSalariiView extends React.Component {
             <th>{par.cass || '-'}</th>
             <th>{par.cam || '-'}</th>
             <th>{par.valtichet || '-'}</th>
+            <th>{par.tva || '-'}</th>
           </tr>
         );
       }),
@@ -104,7 +106,7 @@ class ParametriiSalariiView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua parametrii din baza de date ' + err.response.data.message,
+            'Nu am putut prelua taxele și impozitele din baza de date ' + err.response.data.message,
         })
       );
 
@@ -112,6 +114,7 @@ class ParametriiSalariiView extends React.Component {
 
     this.state.parametriiSalarii = parametriiSalarii;
 
+	if(parametriiSalarii.length!==0){
     this.setState({
       salariumin: parametriiSalarii[0].salariumin,
       salariuminstudiivechime: parametriiSalarii[0].salariuminstudiivechime,
@@ -121,11 +124,13 @@ class ParametriiSalariiView extends React.Component {
       cass: parametriiSalarii[0].cass,
       cam: parametriiSalarii[0].cam,
       valtichet: parametriiSalarii[0].valtichet,
+      tva: parametriiSalarii[0].tva,
       date: parametriiSalarii[0].date,
     });
 
     this.renderParametriiSalarii();
-  }
+	}
+}
 
   async updateParametrii() {
     await axios
@@ -140,6 +145,7 @@ class ParametriiSalariiView extends React.Component {
           cass: this.state.cass,
           cam: this.state.cam,
           valtichet: this.state.valtichet,
+          tva: this.state.tva,
           date: this.state.date,
         },
         { headers: authHeader() }
@@ -148,7 +154,7 @@ class ParametriiSalariiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga parametrii noi ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga taxe și impozite noi ' + err.response.data.message,
         })
       );
     this.onRefresh();
@@ -173,7 +179,7 @@ class ParametriiSalariiView extends React.Component {
         </Toast>
         <Modal show={this.state.show} onHide={() => this.setState({ show: false })}>
           <Modal.Header closeButton>
-            <Modal.Title>Parametrii Salarii</Modal.Title>
+            <Modal.Title>Taxe și Impozite</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -190,7 +196,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="salariumin">
                 <Form.Label>Sal. Minim (RON)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.salariumin}
                   onChange={(e) => {
                     this.setState({ salariumin: e.target.value });
@@ -200,7 +206,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="salariuminstudiivechime">
                 <Form.Label>Sal. Minim - SS,V (RON)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.salariuminstudiivechime}
                   onChange={(e) => {
                     this.setState({ salariuminstudiivechime: e.target.value });
@@ -210,7 +216,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="salariumediubrut">
                 <Form.Label>Sal. Mediu Brut (RON)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.salariumediubrut}
                   onChange={(e) => {
                     this.setState({ salariumediubrut: e.target.value });
@@ -220,7 +226,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="impozit">
                 <Form.Label>Impozit (%)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.impozit}
                   onChange={(e) => {
                     this.setState({ impozit: e.target.value });
@@ -230,7 +236,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="cas">
                 <Form.Label>CAS (%)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.cas}
                   onChange={(e) => {
                     this.setState({ cas: e.target.value });
@@ -240,7 +246,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="cass">
                 <Form.Label>CASS (%)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.cass}
                   onChange={(e) => {
                     this.setState({ cass: e.target.value });
@@ -250,7 +256,7 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="salariumediubrut">
                 <Form.Label>CAM (%)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.cam}
                   onChange={(e) => {
                     this.setState({ cam: e.target.value });
@@ -260,10 +266,20 @@ class ParametriiSalariiView extends React.Component {
               <Form.Group id="valtichet">
                 <Form.Label>Val. tichet (RON)</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   value={this.state.valtichet}
                   onChange={(e) => {
                     this.setState({ valtichet: e.target.value });
+                  }}
+                />
+              </Form.Group>
+			  <Form.Group id="tva">
+                <Form.Label>TVA (%)</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={this.state.tva}
+                  onChange={(e) => {
+                    this.setState({ tva: e.target.value });
                   }}
                 />
               </Form.Group>
@@ -279,7 +295,7 @@ class ParametriiSalariiView extends React.Component {
           <Col>
             <Card>
               <Card.Header>
-                <Card.Title as="h5">Parametrii Salarii</Card.Title>
+                <Card.Title as="h5">Taxe și impozite</Card.Title>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
@@ -294,6 +310,7 @@ class ParametriiSalariiView extends React.Component {
                       <th>CASS (%)</th>
                       <th>CAM (%)</th>
                       <th>Val tichet (RON)</th>
+                      <th>TVA (%)</th>
                     </tr>
                   </thead>
                   <tbody>{this.state.parametriiSalariiComponent}</tbody>

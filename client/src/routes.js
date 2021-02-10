@@ -58,9 +58,9 @@ const routes = [
     component: isAngajatSimplu ? SocietatiView : Societati,
   },
   {
-    path: '/parametriisalarii',
+    path: '/taxeimpozite',
     exact: true,
-    name: 'Parametrii Salarii',
+    name: 'Taxe Impozite',
     component: isAngajatSimplu ? ParametriiSalariiView : ParametriiSalarii,
   },
 

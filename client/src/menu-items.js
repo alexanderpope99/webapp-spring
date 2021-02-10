@@ -18,10 +18,10 @@ var items = [
         icon: 'feather icon-home',
       },
       {
-        id: 'parametriisalarii',
-        title: 'Parametrii Salarii',
+        id: 'taxeimpozite',
+        title: 'Taxe și Impozite',
         type: 'item',
-        url: '/parametriisalarii',
+        url: '/taxeimpozite',
         icon: 'feather icon-dollar-sign',
       },
       {
