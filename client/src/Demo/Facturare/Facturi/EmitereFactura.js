@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb, Toast } from 'react-bootstrap';
+import { Row, Col, Card, Button, Form, Toast } from 'react-bootstrap';
 import Aux from '../../../hoc/_Aux';
 
 export default class EmitereFactura extends React.Component {
@@ -29,13 +29,11 @@ export default class EmitereFactura extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.factura !== prevProps.factura) {
-      // this.setState({ factura: this.props.factura });
       this.fillForm(this.props.factura);
     } else return;
   }
 
   fillForm(factura) {
-    // const factura = this.props.factura;
     if (!factura) {
       this.setState({
         factura: null,

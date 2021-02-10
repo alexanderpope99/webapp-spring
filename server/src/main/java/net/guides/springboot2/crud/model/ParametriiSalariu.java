@@ -43,8 +43,8 @@ public class ParametriiSalariu implements Serializable {
 	@Column(name = "valtichet", nullable = false)
 	private Float valtichet;
 
-	@Column(name = "tva", nullable = false)
-	private Float tva;
+	@Column(name = "tva")
+	private Float tva = 19f;
 
 	@Column(name = "date", nullable = false)
 	private LocalDate date;
