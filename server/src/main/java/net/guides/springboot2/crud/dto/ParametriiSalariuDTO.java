@@ -21,6 +21,8 @@ public class ParametriiSalariuDTO {
 
 	private Float valtichet;
 
+	private Float tva;
+
 	private LocalDate date;
 
 	public Float getCam() {
@@ -101,5 +103,13 @@ public class ParametriiSalariuDTO {
 
 	public void setValtichet(Float valtichet) {
 		this.valtichet = valtichet;
+	}
+
+	public Float getTva() {
+		return tva;
+	}
+
+	public void setTva(Float tva) {
+		this.tva = tva;
 	}
 }
