@@ -37,7 +37,7 @@ var items = [
   // CERERI CONCEDIU
   {
     id: 'general-angajat',
-    title: 'GENERAL',
+    title: 'Cereri concediu',
     type: 'group',
     icon: 'icon-group',
     show: user.roles.includes('ROLE_ANGAJAT'),

@@ -7,50 +7,49 @@ window.$ = $;
 global.jQuery = $;
 
 const isAngajatSimplu = authService.isAngajatSimplu();
-const isAdmin = authService.isAdmin();
 const isDirectorContabil = authService.isDirectorOrContabil();
 
-const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
-const SocietatiView = React.lazy(() => import('./Demo/Dashboard/SocietatiView'));
-const ParametriiSalarii = React.lazy(() => import('./Demo/Dashboard/ParametriiSalarii'));
-const ParametriiSalariiView = React.lazy(() => import('./Demo/Dashboard/ParametriiSalariiView'));
+// MENIU PRINCIPAL
+const Societati = React.lazy(() => import('./Demo/MeniuPrincipal/Societati/Societati'));
+const Societate = React.lazy(() => import('./Demo/MeniuPrincipal/Societati/Societate'));
+const SocietatiView = React.lazy(() => import('./Demo/MeniuPrincipal/Societati/SocietatiView'));
+const ParametriiSalarii = React.lazy(() => import('./Demo/MeniuPrincipal/ParametriiSalarii/ParametriiSalarii'));
+const ParametriiSalariiView = React.lazy(() => import('./Demo/MeniuPrincipal/ParametriiSalarii/ParametriiSalariiView'));
+const SarbatoriTabel = React.lazy(() => import('./Demo/MeniuPrincipal/SarbatoriLegale/SarbatoriTabel'));
+const SarbatoriTabelView = React.lazy(() => import('./Demo/MeniuPrincipal/SarbatoriLegale/SarbatoriTabelView'));
 
+// CERERI CONCEDIU
+const CereriConcediu = React.lazy(() => import('./Demo/CereriConcediu/CereriConcediu'));
+const CereriConcediuSuperior = React.lazy(() => import('./Demo/CereriConcediu/CereriConcediuSuperior'));
+
+// ADMINISTRARE
+// 		ANGAJATI
+const AngajatiTabel = React.lazy(() => import('./Demo/Administrare/Angajati/AngajatiTabel'));
+const AngajatiTabelView = React.lazy(() => import('./Demo/Administrare/Angajati/AngajatiTabelView'));
+// 			DETALII ANGAJAT
+const Angajat = React.lazy(() => import('./Demo/Administrare/Angajati/Angajat/Angajat'));
+const AngajatSimplu = React.lazy(() => import('./Demo/Administrare/Angajati/Angajat/AngajatSimplu'));
+const AddPersoana = React.lazy(() => import('./Demo/Administrare/Angajati/Angajat/Persoana/AddPersoana'));
+const RealizariRetineri = React.lazy(() => import('./Demo/Administrare/Angajati/RealizariRetineri/RealizariRetineri'));
+const RealizariRetineriView = React.lazy(() => import('./Demo/Administrare/Angajati/RealizariRetineri/RealizariRetineriView'));
+// 		RAPOARTE
+const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
+
+// FACTURARE
+const ClientiTabel = React.lazy(() => import('./Demo/Facturare/Clienti/ClientiTabel'));
+const Facturi = React.lazy(() => import('./Demo/Facturare/Facturi/Facturi'));
+const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Facturare/AprobareFacturi/FacturiAprobatorTabel'));
+const FacturiOperatorTabel = React.lazy(() => import('./Demo/Facturare/OperareFacturi/FacturiOperatorTabel'));
+
+// CONFIGURARE
+const UserTabel = React.lazy(() => import('./Demo/Configurare/Utilizatori/UserTabel'));
+const Profile = React.lazy(() => import('./Demo/Configurare/Profil/Profile'));
+
+// OTHER
 const Notificari = React.lazy(() => import('./Demo/Other/Notificari'));
 const Hidden = React.lazy(() => import('./Demo/Other/Hidden'));
 
-// FORMS
-const AddPersoana = React.lazy(() => import('./Demo/Forms/AddPersoana'));
-const Societate = React.lazy(() => import('./Demo/Forms/Societate'));
-const Angajat = React.lazy(() => import('./Demo/Forms/Angajat'));
-const AngajatSimplu = React.lazy(() => import('./Demo/Forms/AngajatSimplu'));
-const RealizariRetineri = React.lazy(() => import('./Demo/Forms/RealizariRetineri'));
-const RealizariRetineriView = React.lazy(() => import('./Demo/Forms/RealizariRetineriView'));
-
-// RAPOARTE
-const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
-
-// TABLES
-const AngajatiTabel = React.lazy(() => import('./Demo/Tables/AngajatiTabel'));
-const AngajatiTabelView = React.lazy(() => import('./Demo/Tables/AngajatiTabelView'));
-const ConcediiOdihna = React.lazy(() => import('./Demo/Tables/ConcediiOdihna'));
-const PersoaneTabel = React.lazy(() => import('./Demo/Tables/PersoaneTabel'));
-const CereriConcediu = React.lazy(() => import('./Demo/Tables/CereriConcediu'));
-const CereriConcediuSuperior = React.lazy(() => import('./Demo/Tables/CereriConcediuSuperior'));
-const UserTabel = React.lazy(() => import('./Demo/Tables/UserTabel'));
-const SarbatoriTabel = React.lazy(() => import('./Demo/Tables/SarbatoriTabel'));
-const SarbatoriTabelView = React.lazy(() => import('./Demo/Tables/SarbatoriTabelView'));
-const Facturi = React.lazy(() => import('./Demo/Forms/Facturi'));
-const ClientiTabel = React.lazy(() => import('./Demo/Tables/ClientiTabel'));
-const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Tables/FacturiAprobatorTabel'));
-const FacturiOperatorTabel = React.lazy(() => import('./Demo/Tables/FacturiOperatorTabel'));
-
-// EDIT
-const EditPersoana = React.lazy(() => import('./Demo/Edit/EditPersoana'));
-const Profile = React.lazy(() => import('./Demo/Edit/Profile'));
-
 const routes = [
-  // LOGIN?
-
   // CARDS
   {
     path: '/dashboard/societati',
@@ -111,14 +110,7 @@ const routes = [
     path: '/tables/user-tabel',
     exact: true,
     name: 'Tabel Useri',
-    component: isAngajatSimplu ? UserTabel : null,
-  },
-  { path: '/tables/persoane-tabel', exact: true, name: 'Tabel Persoane', component: PersoaneTabel },
-  {
-    path: '/tables/concedii-odihna',
-    exact: true,
-    name: 'Concedii Odihna',
-    component: ConcediiOdihna,
+    component: isAngajatSimplu ? null : UserTabel,
   },
   {
     path: '/tables/cereri-concediu',
@@ -170,7 +162,6 @@ const routes = [
     component: isAngajatSimplu ? AngajatiTabelView : AngajatiTabel,
   },
   // EDIT
-  { path: '/edit/edit-persoana', exact: true, name: 'Editeaza Persoana', component: EditPersoana },
   { path: '/edit/profile', exact: true, name: 'Profil', component: Profile },
 
   // TEST
