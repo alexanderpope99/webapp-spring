@@ -62,8 +62,6 @@ TODO: {
 				onSubmit trebuie sa ia toate datele adaugate
 				proiect, activitate = dropdown-multiselect
 			2. 
-		-> persoane autorizare, persoane delegate
-		-> activitati/proiecte
 
 	* -> add sorting and filtering to tables on frontend 
 }

@@ -10,10 +10,11 @@ export default class EmitereFactura extends React.Component {
       showToast: false,
       toastMessage: '',
 
-      factura: props.factura, // pentru a lua datele fin factura care este editata
+      factura: props.factura, // datele din factura care este editata
 
       clienti: [],
 
+      // datele din formular
       serie: 'BVFZ',
       numar: props.numarFactura,
       today: new Date().toISOString().substring(0, 10),
@@ -37,13 +38,13 @@ export default class EmitereFactura extends React.Component {
         factura: null,
 
         serie: 'BVFZ',
-        numar: this.state.props.numarFactura,
+        numar: this.state.props ? this.state.props.numarFactura : 0,
         today: new Date().toISOString().substring(0, 10),
         nrAvizInsotire: '-',
         client: { id: 0, nume: '-' },
         titlu: 'Cf. Contract vanzare-cumparare',
       });
-    } else
+    } else {
       this.setState({
         factura: factura,
 
@@ -55,6 +56,7 @@ export default class EmitereFactura extends React.Component {
           : { id: 0, nume: '-' },
         titlu: factura.titlu,
       });
+    }
   }
 
   onChangeClient(e) {
@@ -178,6 +180,20 @@ export default class EmitereFactura extends React.Component {
                 </Form.Group>
               </Col>
             </Row>
+
+						{/* PRODUSE / SERVICII */}
+						<Row className="border rounded mt-2 pt-3 pb-2">
+							<Col md={12}>
+								<Button>Adauga produs/serviciu</Button>
+							</Col>
+						</Row>
+
+						{/* FOOTER */}
+						<Row className="border rounded mt-2 pt-3">
+							<Col md={8}>
+								<Button>Adauga produs/serviciu</Button>
+							</Col>
+						</Row>
           </Card.Body>
         </Card>
       </Aux>
