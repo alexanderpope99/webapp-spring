@@ -1,6 +1,9 @@
 package net.guides.springboot2.crud.dto;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Angajat;
@@ -31,6 +34,34 @@ public class SocietateDTO {
 	private List<ContBancar> contbancar;
 
 	private Integer nrangajati;
+
+	private MultipartFile imagine;
+
+	public void setImagine(MultipartFile imagine) {
+		this.imagine = imagine;
+	}
+
+	public byte[] getImagine() throws IOException {
+		if (imagine != null)
+			return imagine.getBytes();
+		// returns empty array instead of null
+		else
+			return new byte[0];
+	}
+
+	public String getNumeimagine() {
+		if (imagine != null)
+			return imagine.getOriginalFilename();
+		else
+			return null;
+	}
+
+	public long getDimensiuneimagine() {
+		if (imagine != null)
+			return imagine.getSize();
+		else
+			return 0;
+	}
 
 	public Double getCapsoc() {
 		return capsoc;

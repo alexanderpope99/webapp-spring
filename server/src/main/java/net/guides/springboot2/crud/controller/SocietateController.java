@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -107,6 +108,16 @@ public class SocietateController {
 
 	}
 
+	@GetMapping("file/{id}")
+	public ResponseEntity<byte[]> getFile(@PathVariable("id") int id) throws ResourceNotFoundException {
+		Societate societate = societateRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
+
+		return ResponseEntity.ok()
+				.header("Content-Disposition", "attachment; filename=\"" + societate.getNumeimagine() + "\"")
+				.body(societate.getImagine());
+	}
+
 
 	@PostMapping
 	public Societate createSocietate(@RequestBody Societate societate) throws ResourceNotFoundException {
@@ -137,6 +148,18 @@ public class SocietateController {
 		final Societate updatedSocietate = societateRepository.save(newSocietate);
 
 		return ResponseEntity.ok().body(updatedSocietate);
+	}
+
+	@PutMapping("{id}/new-file")
+	public ResponseEntity<Societate> updateSocietate(@PathVariable("id") int societateId,
+			@ModelAttribute SocietateDTO societateDTO) throws ResourceNotFoundException {
+		return ResponseEntity.ok(societateService.update(societateId, societateDTO));
+	}
+
+	@PutMapping("{id}/keep-file")
+	public ResponseEntity<Societate> updateSocietateIgnoreFile(@PathVariable("id") int societateId,
+			@ModelAttribute SocietateDTO societateDTO) throws ResourceNotFoundException {
+		return ResponseEntity.ok(societateService.updateKeepOldFile(societateId, societateDTO));
 	}
 
 	@DeleteMapping("{id}")

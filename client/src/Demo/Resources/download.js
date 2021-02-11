@@ -53,4 +53,30 @@ async function downloadFactura(fileName, idfactura) {
   }
 }
 
-export { download, downloadFactura };
+async function downloadImagineSocietate(fileName, idsocietate) {
+	// const token = this.state.user.accessToken;
+	console.log('trying to download...');
+  
+	const blob = await fetch(`${server.address}/societate/file/${idsocietate}`, {
+	  method: 'GET',
+	  headers: {
+		'Content-Type': 'application/octet-stream',
+		...authHeader(),
+	  },
+	})
+	  .then((res) => (res.ok ? res.blob() : null))
+		  .catch((err) => console.error(err));
+		  
+	if (blob) {
+	  var url = window.URL.createObjectURL(blob);
+	  var a = document.createElement('a');
+	  a.href = url;
+	  a.download = fileName;
+	  document.body.appendChild(a); 
+	  a.click();
+	  a.remove();
+	  console.log('downloaded');
+	}
+  }
+
+export { download, downloadFactura,downloadImagineSocietate };

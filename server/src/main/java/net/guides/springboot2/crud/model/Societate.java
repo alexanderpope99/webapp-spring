@@ -11,12 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 
@@ -83,6 +85,17 @@ public class Societate implements Serializable {
 	@JsonBackReference(value = "activitate-societate")
 	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Activitate> activitati;
+
+	@Column(name = "numeimagine")
+	private String numeimagine;
+
+	@Column(name = "dimensiuneimagine")
+	private Long dimensiuneimagine;
+	
+	@JsonIgnore
+	@Lob
+	@Column(name = "imagine")
+	private byte[] imagine;
 
 	public Societate() {
 	}
@@ -249,5 +262,29 @@ public class Societate implements Serializable {
 
 	public void removeContBancar(ContBancar contBancar) {
 		this.contbancar.remove(contBancar);
+	}
+
+	public Long getDimensiuneimagine() {
+		return dimensiuneimagine;
+	}
+
+	public void setDimensiuneimagine(Long dimensiuneimagine) {
+		this.dimensiuneimagine = dimensiuneimagine;
+	}
+
+	public byte[] getImagine() {
+		return imagine;
+	}
+
+	public void setImagine(byte[] imagine) {
+		this.imagine = imagine;
+	}
+
+	public String getNumeimagine() {
+		return numeimagine;
+	}
+
+	public void setNumeimagine(String numeimagine) {
+		this.numeimagine = numeimagine;
 	}
 }
