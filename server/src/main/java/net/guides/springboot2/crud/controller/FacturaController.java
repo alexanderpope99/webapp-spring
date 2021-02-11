@@ -37,7 +37,12 @@ public class FacturaController {
 	}
 
 	@PostMapping
-	public FacturaDTO saveFactura(@RequestBody FacturaDTO newFactura) throws ResourceNotFoundException {
+	public Factura saveFactura(@RequestBody Factura newFactura) {
+		return facturaService.save(newFactura);
+	}
+
+	@PostMapping("ids={ids}")
+	public Factura saveFactura(@RequestBody Factura newFactura, @PathVariable("ids") int ids ) throws ResourceNotFoundException {
 		return facturaService.save(newFactura);
 	}
 

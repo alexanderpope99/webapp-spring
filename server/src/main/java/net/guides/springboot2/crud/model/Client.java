@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -75,8 +74,7 @@ public class Client implements Serializable {
   @JoinColumn(name = "idadresa", referencedColumnName = "id")
   private Adresa adresa;
 
-  @JsonBackReference(value = "client-societate")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "idsocietate", referencedColumnName = "id")
   private Societate societate;
 
@@ -253,7 +251,6 @@ public class Client implements Serializable {
 	}
 
 	public Client update(Client newClient) {
-		this.id = newClient.id;
 		this.numecomplet = newClient.numecomplet;
 		this.nume = newClient.nume;
 		this.statut = newClient.statut;

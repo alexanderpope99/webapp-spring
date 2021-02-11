@@ -403,7 +403,7 @@ export default class ClientiTabel extends React.Component {
                 </Form.Group>
 
                 <Form.Group as={Col} md="4" controlId="cotatva">
-                  <Form.Label>Cota TVA</Form.Label>
+                  <Form.Label>Cotă TVA (%)</Form.Label>
                   <Form.Control
                     type="number"
                     value={this.state.cotatva || 19}
@@ -577,7 +577,7 @@ export default class ClientiTabel extends React.Component {
                       <th>Statut</th>
                       <th>Nr. reg. com.</th>
                       <th>Cod fiscal</th>
-                      <th>Cotă TVA</th>
+                      <th>Cotă TVA (%)</th>
                       <th>Adresa</th>
                       <th>Localitate</th>
                       <th>Județ</th>
