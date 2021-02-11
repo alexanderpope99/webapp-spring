@@ -62,12 +62,5 @@ public class Proiect implements Serializable {
 		this.activitate = activitate;
 	}
 
-	public List<Factura> getFacturi() {
-		return facturi;
-	}
-
-	public void setFacturi(List<Factura> facturi) {
-		this.facturi = facturi;
-	}
 
 }
