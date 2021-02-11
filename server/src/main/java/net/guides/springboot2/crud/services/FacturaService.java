@@ -14,7 +14,6 @@ import net.guides.springboot2.crud.model.Client;
 import net.guides.springboot2.crud.model.Factura;
 import net.guides.springboot2.crud.model.Produs;
 import net.guides.springboot2.crud.model.Proiect;
-import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.ClientRepository;
 import net.guides.springboot2.crud.repository.ProdusRepository;
 import net.guides.springboot2.crud.repository.FacturaRepository;

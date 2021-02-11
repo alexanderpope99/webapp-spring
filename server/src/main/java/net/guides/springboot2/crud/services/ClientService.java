@@ -47,11 +47,9 @@ public class ClientService {
   }
 
   public Client update(int id, Client newClient) throws ResourceNotFoundException {
-    Client oldClient = findById(id);
+    Client client = findById(id);
 
-    newClient.setId(oldClient.getId());
-
-    return clientRepository.save(newClient);
+    return clientRepository.save(client.update(newClient));
   }
 
   public Client updateBySocietate_Id(int id, Client newClient, int idsocietate) throws ResourceNotFoundException {

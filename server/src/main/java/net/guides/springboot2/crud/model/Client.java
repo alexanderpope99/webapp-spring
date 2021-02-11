@@ -47,7 +47,7 @@ public class Client implements Serializable {
   private String codfiscal;
 
   @Column(name = "cotatva")
-  private String cotatva;
+  private Float cotatva = 19f;
 
   @Column(name = "client")
   private Boolean client = false;
@@ -87,7 +87,7 @@ public class Client implements Serializable {
   public Client() {
   }
 
-  public Client(String numecomplet, String nume, String statut, String nrregcom, String codfiscal, String cotatva, Adresa adresa, Boolean client, Boolean furnizor, Boolean extern, String banca, String sucursala, String cont, Moneda moneda) {
+  public Client(String numecomplet, String nume, String statut, String nrregcom, String codfiscal, Float cotatva, Adresa adresa, Boolean client, Boolean furnizor, Boolean extern, String banca, String sucursala, String cont, Moneda moneda) {
     this.numecomplet = numecomplet;
     this.nume = nume;
     this.statut = statut;
@@ -152,11 +152,11 @@ public class Client implements Serializable {
     this.codfiscal = codfiscal;
   }
 
-  public String getCotatva() {
+  public Float getCotatva() {
     return this.cotatva;
   }
 
-  public void setCotatva(String cotatva) {
+  public void setCotatva(Float cotatva) {
     this.cotatva = cotatva;
   }
 
@@ -243,5 +243,34 @@ public class Client implements Serializable {
   public void setSocietate(Societate societate) {
     this.societate = societate;
   }
+
+	public List<Factura> getFacturi() {
+		return facturi;
+	}
+
+	public void setFacturi(List<Factura> facturi) {
+		this.facturi = facturi;
+	}
+
+	public Client update(Client newClient) {
+		this.id = newClient.id;
+		this.numecomplet = newClient.numecomplet;
+		this.nume = newClient.nume;
+		this.statut = newClient.statut;
+		this.nrregcom = newClient.nrregcom;
+		this.codfiscal = newClient.codfiscal;
+		this.cotatva = newClient.cotatva;
+		this.client = newClient.client;
+		this.furnizor = newClient.furnizor;
+		this.extern = newClient.furnizor;
+		this.banca = newClient.banca;
+		this.sucursala = newClient.sucursala;
+		this.cont = newClient.cont;
+		this.moneda = newClient.moneda;
+		this.adresa = newClient.adresa;
+		// restul ramane this
+
+		return this;
+	}
 
 }
