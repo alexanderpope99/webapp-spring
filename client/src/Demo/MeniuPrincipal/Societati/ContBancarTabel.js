@@ -79,7 +79,7 @@ class ContBancarTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua conturile ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua conturile: ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })
@@ -171,7 +171,7 @@ class ContBancarTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge centrul de cost ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge centrul de cost: ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })
@@ -192,7 +192,7 @@ class ContBancarTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga: ' + err.response.data.message,
           toastTitle: 'Eroare',
           toastColor: 'white',
         })

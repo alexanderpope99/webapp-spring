@@ -48,7 +48,7 @@ class ParametriiSalariiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge taxele și impozitele ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge taxele și impozitele: ' + err.response.data.message,
         })
       );
   }
@@ -106,7 +106,7 @@ class ParametriiSalariiView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua taxele și impozitele din baza de date ' + err.response.data.message,
+            'Nu am putut prelua taxele și impozitele din baza de date: ' + err.response.data.message,
         })
       );
 
@@ -154,7 +154,7 @@ class ParametriiSalariiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga taxe și impozite noi ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga taxe și impozite noi: ' + err.response.data.message,
         })
       );
     this.onRefresh();

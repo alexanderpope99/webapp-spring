@@ -107,7 +107,7 @@ class FacturiAprobatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut aproba factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut aproba factura: ' + err.response.data.message,
         })
       );
     if (ok) {
@@ -128,7 +128,7 @@ class FacturiAprobatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut rejecta factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut rejecta factura: ' + err.response.data.message,
         })
       );
     if (ok) {
@@ -150,7 +150,7 @@ class FacturiAprobatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut amâna factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut amâna factura: ' + err.response.data.message,
         })
       );
     if (ok) {
@@ -303,7 +303,7 @@ class FacturiAprobatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost: ' + err.response.data.message,
         })
       );
 
@@ -315,7 +315,7 @@ class FacturiAprobatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua aprobatorii ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua aprobatorii: ' + err.response.data.message,
         })
       );
 
@@ -327,7 +327,7 @@ class FacturiAprobatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua facturile ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua facturile: ' + err.response.data.message,
         })
       );
 
@@ -384,7 +384,7 @@ class FacturiAprobatorTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut introduce observații și cod proiect ' + err.response.data.message,
+            'Nu am putut introduce observații și cod proiect: ' + err.response.data.message,
         })
       );
     if (ok) {
@@ -411,7 +411,7 @@ class FacturiAprobatorTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut introduce observații și cod proiect PDF ' + err.response.data.message,
+            'Nu am putut introduce observații și cod proiect PDF: ' + err.response.data.message,
         })
       );
     if (ok) {

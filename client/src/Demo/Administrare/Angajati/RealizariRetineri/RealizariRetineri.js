@@ -257,7 +257,7 @@ class RealizariRetineri extends React.Component {
 					toastTitle: 'Eroare',
 					toastColor: 'white',
 					toastMessage:
-						'Nu am putut prelua persoanele din baza de date ' + err.response.data.message,
+						'Nu am putut prelua persoanele din baza de date: ' + err.response.data.message,
 				})
 			);
 		if (!persoane) return;
@@ -307,7 +307,7 @@ class RealizariRetineri extends React.Component {
 					toastTitle: 'Eroare',
 					toastColor: 'white',
 					toastMessage:
-						'Nu am putut prelua contractul pentru persoana ' + err.response.data.message,
+						'Nu am putut prelua contractul pentru persoana: ' + err.response.data.message,
 				})
 			);
 		console.log('contract:', contract);
@@ -329,7 +329,7 @@ class RealizariRetineri extends React.Component {
 					toastTitle: 'Eroare',
 					toastColor: 'white',
 					toastMessage:
-						'Nu am putut prelua sau calcula realizari retineri ' + err.response.data.message,
+						'Nu am putut prelua sau calcula realizari retineri: ' + err.response.data.message,
 				})
 			);
 
@@ -500,7 +500,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
+					toastMessage: 'Nu am putut recalcula realizari/retineri: ' + err.response.data.message,
 				})
 			);
 		if (!data) return;
@@ -545,7 +545,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
+					toastMessage: 'Nu am putut recalcula realizari/retineri: ' + err.response.data.message,
 				})
 			);
 
@@ -580,7 +580,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
+					toastMessage: 'Nu am putut recalcula realizari/retineri: ' + err.response.data.message,
 				})
 			);
 
@@ -616,7 +616,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut prelua cursul curent ' + err.response.data.message,
+					toastMessage: 'Nu am putut prelua cursul curent: ' + err.response.data.message,
 				})
 			);
 
@@ -636,7 +636,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut prelua orele suplimentare ' + err.response.data.message,
+					toastMessage: 'Nu am putut prelua orele suplimentare: ' + err.response.data.message,
 				})
 			);
 
@@ -675,7 +675,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut adăuga ore suplimentare ' + err.response.data.message,
+					toastMessage: 'Nu am putut adăuga ore suplimentare: ' + err.response.data.message,
 				})
 			);
 	}
@@ -689,7 +689,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut șterge orele suplimentare ' + err.response.data.message,
+					toastMessage: 'Nu am putut șterge orele suplimentare: ' + err.response.data.message,
 				})
 			);
 	}
@@ -758,7 +758,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut descărca ștatul ' + err.response.data.message,
+					toastMessage: 'Nu am putut descărca ștatul: ' + err.response.data.message,
 				})
 			);
 	}
@@ -780,7 +780,7 @@ class RealizariRetineri extends React.Component {
 					showToast: true,
 					toastTitle: 'Eroare',
 					toastColor: 'white',
-					toastMessage: 'Nu am putut prelua ștatul individual ' + err.response.data.message,
+					toastMessage: 'Nu am putut prelua ștatul individual: ' + err.response.data.message,
 				})
 			);
 
@@ -1164,21 +1164,6 @@ class RealizariRetineri extends React.Component {
 									</Button>
 								</OverlayTrigger>
 							</InputGroup.Append>
-							{/* <InputGroup.Append>
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250, hide: 250 }}
-                  overlay={
-                    <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                      Adaugă angajat
-                    </Tooltip>
-                  }
-                >
-                  <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
-                    <Plus size={20} className="m-0" />
-                  </Button>
-                </OverlayTrigger>
-              </InputGroup.Append> */}
 						</InputGroup>
 					</Card.Header>
 
@@ -1187,9 +1172,9 @@ class RealizariRetineri extends React.Component {
 							<Row>
 								{/* REALIZARI = LEFT TOP */}
 								<Col md={8} className="border rounded pt-3">
-									<Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+									<asdasd variant="body1" className="border-bottom mb-3" gutterBottom>
 										Realizări
-                  </Typography>
+                  </asdasd>
 									<Row>
 										<Col md={6}>
 											<Form.Group id="functie">

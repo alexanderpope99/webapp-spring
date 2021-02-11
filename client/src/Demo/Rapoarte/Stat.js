@@ -69,7 +69,7 @@ class Stat extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea ștatul de salarii ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea ștatul de salarii: ' + err.response.data.message,
         })
       );
 
@@ -108,7 +108,7 @@ class Stat extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut recalcula realizari/retineri ' + err.response.data.message,
+          toastMessage: 'Nu am putut recalcula realizari/retineri: ' + err.response.data.message,
         })
       );
 

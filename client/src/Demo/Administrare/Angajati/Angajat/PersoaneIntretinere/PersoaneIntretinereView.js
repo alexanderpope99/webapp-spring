@@ -65,7 +65,7 @@ class PersoaneIntretinereView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul: ' + err.response.data.message,
           })
         );
       if (angajat)
@@ -129,7 +129,7 @@ class PersoaneIntretinereView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua persoanele întreținere ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua persoanele întreținere: ' + err.response.data.message,
           })
         );
       if (persoane) {

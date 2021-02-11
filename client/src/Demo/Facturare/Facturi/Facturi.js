@@ -14,6 +14,8 @@ export default class Facturi extends React.Component {
     this.state = {
       key: 'emite-factura',
       socsel: getSocSel(),
+
+			numarFactura: 0,
     };
   }
 
@@ -25,6 +27,7 @@ export default class Facturi extends React.Component {
     this.setState({
 			key: 'emite-factura',
 			factura: factura,
+			numarFactura: factura.numar,
 		});
   }
 
@@ -48,7 +51,7 @@ export default class Facturi extends React.Component {
                 <FacturiTabel edit={this.edit}/>
               </Tab>
               <Tab eventKey="emite-factura" title="Emitere factură">
-								<EmitereFactura factura={this.state.factura} numarFactura={3}/>
+								<EmitereFactura factura={this.state.factura} numarFactura={this.state.numarFactura}/>
 							</Tab>
             </Tabs>
           </Col>

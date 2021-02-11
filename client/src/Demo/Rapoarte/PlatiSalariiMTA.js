@@ -61,7 +61,7 @@ class PlatiSalariiMTA extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua conturile societății ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua conturile societății: ' + err.response.data.message,
         })
 			);
     if (conturi.length > 0) this.setState({ conturiBancare: conturi, idContBancar: conturi[0].id, numeBanca: conturi[0].numebanca });
@@ -98,7 +98,7 @@ class PlatiSalariiMTA extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea MTA ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea MTA: ' + err.response.data.message,
         })
       );
 
