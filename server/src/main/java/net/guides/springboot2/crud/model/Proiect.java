@@ -33,10 +33,6 @@ public class Proiect implements Serializable {
 	@JoinColumn(name = "idactivitate", nullable = false)
 	private Activitate activitate;
 
-	@JsonBackReference(value = "facturi-proiecte")
-	@OneToMany(mappedBy = "proiect", cascade = CascadeType.ALL)
-	private List<Factura> facturi;
-
 	public Integer getId() {
 		return id;
 	}
@@ -61,12 +57,5 @@ public class Proiect implements Serializable {
 		this.activitate = activitate;
 	}
 
-	public List<Factura> getFacturi() {
-		return facturi;
-	}
-
-	public void setFacturi(List<Factura> facturi) {
-		this.facturi = facturi;
-	}
 
 }
