@@ -32,7 +32,6 @@ public class FacturaService {
 	}
 
 	public Factura save(Factura newFactura) {
-		// newFactura = facturaRepository.save(newFactura);
 		for(Produs produs : newFactura.getProduse()) {
 			produs.setFactura(newFactura);
 		}

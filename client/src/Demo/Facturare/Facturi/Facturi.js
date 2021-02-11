@@ -12,6 +12,8 @@ export default class Facturi extends React.Component {
     this.edit = this.edit.bind(this);
 		this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);
 
+		this.tabelFacturi = React.createRef();
+
     this.state = {
       key: 'tabel-facturi',
       socsel: getSocSel(),
@@ -21,6 +23,9 @@ export default class Facturi extends React.Component {
   }
 
   onSelectPill(key) {
+		if(key === 'tabel-facturi') {
+			this.tabelFacturi.current.getFacturi();
+		}
     this.setState({ key: key, factura: null });
   }
 
@@ -57,7 +62,9 @@ export default class Facturi extends React.Component {
               onSelect={(key) => this.onSelectPill(key)}
             >
               <Tab eventKey="tabel-facturi" title="Tabel facturi">
-                <FacturiTabel edit={this.edit} scrollToTopSmooth={this.scrollToTopSmooth} />
+                <FacturiTabel 
+								ref={this.tabelFacturi}
+								edit={this.edit} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
               <Tab eventKey="emite-factura" title="Emitere factură">
                 <EmitereFactura
