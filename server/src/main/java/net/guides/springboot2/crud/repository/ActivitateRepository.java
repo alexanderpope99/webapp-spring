@@ -3,9 +3,9 @@ package net.guides.springboot2.crud.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import net.guides.springboot2.crud.model.Factura;
+import net.guides.springboot2.crud.model.Activitate;
 
 @Repository
-public interface FacturaRepository extends JpaRepository<Factura, Integer> {
+public interface ActivitateRepository extends JpaRepository<Activitate, Integer> {
 
 }

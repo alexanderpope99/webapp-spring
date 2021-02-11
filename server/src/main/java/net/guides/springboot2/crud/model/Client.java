@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -77,6 +79,10 @@ public class Client implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idsocietate", referencedColumnName = "id")
   private Societate societate;
+
+  @JsonBackReference(value = "client-facturi")
+  @OneToMany(mappedBy = "client", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+  private List<Factura> facturi;
 
   public Client() {
   }

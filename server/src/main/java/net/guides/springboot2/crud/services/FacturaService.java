@@ -1,130 +1,97 @@
 package net.guides.springboot2.crud.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
-import net.guides.springboot2.crud.dto.FacturaJSON;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-import net.guides.springboot2.crud.model.CentruCost;
+import net.guides.springboot2.crud.model.Client;
 import net.guides.springboot2.crud.model.Factura;
-import net.guides.springboot2.crud.model.Angajat;
-import net.guides.springboot2.crud.model.Societate;
-import net.guides.springboot2.crud.repository.CentruCostRepository;
-import net.guides.springboot2.crud.repository.FacturaRepository;
-import net.guides.springboot2.crud.repository.SocietateRepository;
+import net.guides.springboot2.crud.model.Produs;
+import net.guides.springboot2.crud.model.Proiect;
 import net.guides.springboot2.crud.repository.AngajatRepository;
-import org.springframework.http.ResponseEntity;
+import net.guides.springboot2.crud.repository.ClientRepository;
+import net.guides.springboot2.crud.repository.ProdusRepository;
+import net.guides.springboot2.crud.repository.FacturaRepository;
+import net.guides.springboot2.crud.repository.ProiectRepository;
 
 @Service
 public class FacturaService {
-	FacturaService() {
-	}
-
-	@Autowired
-	private SocietateRepository societateRepository;
-
-	@Autowired
-	private FacturaRepository facturaRepository;
-
-	@Autowired
-	private CentruCostRepository centruCostRepository;
-
-	@Autowired
-	private AngajatRepository angajatRepository;
-
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public Factura save(FacturaDTO facturaDTO) throws ResourceNotFoundException {
-		Factura factura = modelMapper.map(facturaDTO, Factura.class);
+	@Autowired
+	private ProiectRepository proiectRepository;
+	@Autowired
+	private FacturaRepository facturaRepository;
+	@Autowired
+	private ProdusRepository produsRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-		Societate societate = societateRepository.findById(facturaDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Nu există societate cu id: " + facturaDTO.getIdsocietate()));
-		factura.setSocietate(societate);
-
-		if (facturaDTO.getIdcentrucost() != 0) {
-			CentruCost centruCost = centruCostRepository.findById(facturaDTO.getIdcentrucost())
-					.orElseThrow(() -> new ResourceNotFoundException(
-							"Nu există centru cost cu id: " + facturaDTO.getIdcentrucost()));
-			factura.setCentrucost(centruCost);
-		}
-
-		if (facturaDTO.getIdaprobator() != 0) {
-			Angajat aprobator = angajatRepository.findById(facturaDTO.getIdaprobator()).orElseThrow(
-					() -> new ResourceNotFoundException("Nu există angajat cu id: " + facturaDTO.getIdaprobator()));
-			factura.setAprobator(aprobator);
-		}
-
-		return facturaRepository.save(factura);
+	FacturaService() {
 	}
 
-	public ResponseEntity<String> updateObsCodp(int facturaID, FacturaJSON obscodp) throws ResourceNotFoundException {
-		Factura factura = facturaRepository.findById(facturaID)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există factură cu id: " + facturaID));
-		factura.setObservatii(obscodp.getObservatii());
-		factura.setCodproiect(obscodp.getCodproiect());
-		facturaRepository.save(factura);
-		return ResponseEntity.ok().body("Factură Actualizată");
+	public List<FacturaDTO> findAll() {
+		List<Factura> facturi = facturaRepository.findAll();
+		modelMapper.typeMap(Factura.class, FacturaDTO.class).addMapping(Factura::getProiecte, FacturaDTO::setProiecteClass);
+		return facturi.stream().map(user -> modelMapper.map(user, FacturaDTO.class)).collect(Collectors.toList());
 	}
 
-	public Factura update(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
-		newFacturaDTO.setId(facturaID);
-		return this.save(newFacturaDTO);
+	public FacturaDTO findById(int id) {
+		modelMapper.typeMap(Factura.class, FacturaDTO.class).addMapping(Factura::getProiecte, FacturaDTO::setProiecteClass);
+		Factura factura = facturaRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Factura not in database"));
+		return modelMapper.map(factura, FacturaDTO.class);
 	}
 
-	public ResponseEntity<String> approve(int facturaID) throws ResourceNotFoundException {
-		Factura factura = facturaRepository.findById(facturaID)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există factură cu id: " + facturaID));
-		factura.setStatus("Aprobată");
-		facturaRepository.save(factura);
-		return ResponseEntity.ok().body("Factură Aprobată");
+
+	public FacturaDTO save(FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
+
+		// convert from dto to model :: sets Proiecte
+		Factura newFactura = modelMapper.map(newFacturaDTO, Factura.class);
+
+		Client client = clientRepository.findById(newFacturaDTO.getIdclient())
+		.orElseThrow(() -> new ResourceNotFoundException("Nu există cleint cu id :: " + newFacturaDTO.getIdclient()));
+		newFactura.setClient(client);
+
+		// set produs
+		List<Produs> newProduse = new ArrayList<>();
+		newFacturaDTO.getProduse().forEach(pr -> {
+		// get from db and push to list
+		Produs tmpProdus = produsRepository.findById(pr.getId()).get();
+					
+		// produs needs to point to this factura
+		tmpProdus.setFactura(newFactura);
+								
+		newProduse.add(tmpProdus);
+		});
+		// set newFactura with complete Produse list
+		newFactura.setProduse(newProduse);
+
+		// convert from FacturaDTO.ProiecteJSON to Factura.Proiecte
+		List<Proiect> newProiecte = new ArrayList<>();
+		newFacturaDTO.getProiecte()
+				.forEach(pr -> proiectRepository.findById(pr.getId()).ifPresent(newProiecte::add));
+		newFacturaDTO.setProiecteClass(newProiecte);
+
+		int newFacturaId = facturaRepository.save(newFactura).getId();
+		newFacturaDTO.setId(newFacturaId);
+		return newFacturaDTO;
+	} // save
+
+	public void delete(int facturaId) throws ResourceNotFoundException {
+		Factura factura = facturaRepository.findById(facturaId)
+				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
+
+		factura.getProduse().forEach(pr -> pr.setFactura(null));
+
+		facturaRepository.delete(factura);
 	}
 
-	public ResponseEntity<String> reject(int facturaID) throws ResourceNotFoundException {
-		Factura factura = facturaRepository.findById(facturaID)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există factură cu id: " + facturaID));
-		factura.setStatus("Respinsă");
-		facturaRepository.save(factura);
-		return ResponseEntity.ok().body("Factură Respinsă");
-	}
-
-	public ResponseEntity<String> postpone(int facturaID) throws ResourceNotFoundException {
-		Factura factura = facturaRepository.findById(facturaID)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există factură cu id: " + facturaID));
-		factura.setStatus("Amânată");
-		facturaRepository.save(factura);
-		return ResponseEntity.ok().body("Factură Amânată");
-	}
-
-	public Factura updateKeepOldFile(int facturaID, FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
-		newFacturaDTO.setId(facturaID);
-		Factura oldFactura = facturaRepository.findById(facturaID)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există factura cu id: " + facturaID));
-
-		Factura factura = modelMapper.map(newFacturaDTO, Factura.class);
-		factura.setFisier(oldFactura.getFisier());
-		factura.setNumefisier(oldFactura.getNumefisier());
-		factura.setDimensiunefisier(oldFactura.getDimensiunefisier());
-
-		Societate societate = societateRepository.findById(newFacturaDTO.getIdsocietate()).orElseThrow(
-				() -> new ResourceNotFoundException("Nu există societate cu id: " + newFacturaDTO.getIdsocietate()));
-		factura.setSocietate(societate);
-
-		if (newFacturaDTO.getIdcentrucost() != 0) {
-			CentruCost centruCost = centruCostRepository.findById(newFacturaDTO.getIdcentrucost())
-					.orElseThrow(() -> new ResourceNotFoundException(
-							"Nu există centru cost cu id: " + newFacturaDTO.getIdcentrucost()));
-			factura.setCentrucost(centruCost);
-		}
-
-		if (newFacturaDTO.getIdaprobator() != 0) {
-			Angajat aprobator = angajatRepository.findById(newFacturaDTO.getIdaprobator()).orElseThrow(
-					() -> new ResourceNotFoundException("Nu există angajat cu id: " + newFacturaDTO.getIdaprobator()));
-			factura.setAprobator(aprobator);
-		}
-
-		return facturaRepository.save(factura);
-	}
 }

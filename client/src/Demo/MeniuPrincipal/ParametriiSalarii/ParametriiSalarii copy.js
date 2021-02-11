@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Card,Button, Modal, Form, Toast } from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
+import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Trash2, Plus, RotateCw,Edit } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -63,6 +62,91 @@ class ParametriiSalarii extends React.Component {
       );
   }
 
+  // function to render in react
+  async renderParametriiSalarii() {
+    // console.log('render called');
+    this.setState({
+      parametriiSalariiComponent: this.state.parametriiSalarii.map((par, index) => {
+        // for (let key in soc) {
+        //   if (!soc[key]) soc[key] = '-';
+        // }
+        // console.log(soc);
+        return (
+          <tr key={par.id}>
+            <th>{par.date.substring(0, 10) || '-'}</th>
+            <th>{par.salariumin || '-'}</th>
+            <th>{par.salariuminstudiivechime || '-'}</th>
+            <th>{par.salariumediubrut || '-'}</th>
+            <th>{par.impozit || '-'}</th>
+            <th>{par.cas || '-'}</th>
+            <th>{par.cass || '-'}</th>
+            <th>{par.cam || '-'}</th>
+            <th>{par.valtichet || '-'}</th>
+            <th>{par.tva || '-'}</th>
+            <th>
+              <div className="d-inline-flex">
+			  <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+						onClick={()=>{this.setState({isEdit:true,id:par.id,show:true})}}
+                      >
+                        <Edit fontSize="small" />
+                      </Button>
+                <PopupState variant="popover" popupId="demo-popup-popover">
+                  {(popupState) => (
+                    <div>
+                      <Button
+                        variant="outline-secondary"
+                        className="m-0 p-1 rounded-circle border-0"
+                        {...bindTrigger(popupState)}
+                      >
+                        <Trash2 fontSize="small" />
+                      </Button>
+                      <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'center',
+                        }}
+                      >
+                        <Box p={2}>
+                          <Typography>Sigur ștergeți taxele și impozitele respective?</Typography>
+                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                          <br />
+                          <Button
+                            variant="outline-danger"
+                            onClick={() => {
+                              popupState.close();
+                              this.deleteParametrii(par.id);
+                            }}
+                            className="mt-2 "
+                          >
+                            Da
+                          </Button>
+                          <Button
+                            variant="outline-persondary"
+                            onClick={popupState.close}
+                            className="mt-2"
+                          >
+                            Nu
+                          </Button>
+                        </Box>
+                      </Popover>
+                    </div>
+                  )}
+                </PopupState>
+              </div>
+            </th>
+          </tr>
+        );
+      }),
+    });
+  }
+
   getDate() {
     var today = new Date();
     var dd = today.getDate();
@@ -98,7 +182,6 @@ class ParametriiSalarii extends React.Component {
 
 	if(parametriiSalarii.length!==0){
     this.setState({
-	  parametriiSalarii:parametriiSalarii,
       salariumin: parametriiSalarii[0].salariumin,
       salariuminstudiivechime: parametriiSalarii[0].salariuminstudiivechime,
       salariumediubrut: parametriiSalarii[0].salariumediubrut,
@@ -110,6 +193,8 @@ class ParametriiSalarii extends React.Component {
 	  tva:parametriiSalarii[0].tva,
       date: parametriiSalarii[0].date,
     });
+
+    this.renderParametriiSalarii();
 	}	
   }
 
@@ -171,125 +256,7 @@ class ParametriiSalarii extends React.Component {
     this.setState({ show: false,isEdit:false });
   }
 
-  buttons = (cell, row, rowIndex, formatExtraData) => {
-    return (
-		<div className="d-inline-flex">
-		<Button
-				  variant="outline-secondary"
-				  className="m-0 p-1 rounded-circle border-0"
-				onClick={()=>{this.setState({isEdit:true,id:row.id,show:true})}}
-				>
-				  <Edit fontSize="small" />
-				</Button>
-		  <PopupState variant="popover" popupId="demo-popup-popover">
-			{(popupState) => (
-			  <div>
-				<Button
-				  variant="outline-secondary"
-				  className="m-0 p-1 rounded-circle border-0"
-				  {...bindTrigger(popupState)}
-				>
-				  <Trash2 fontSize="small" />
-				</Button>
-				<Popover
-				  {...bindPopover(popupState)}
-				  anchorOrigin={{
-					vertical: 'bottom',
-					horizontal: 'center',
-				  }}
-				  transformOrigin={{
-					vertical: 'top',
-					horizontal: 'center',
-				  }}
-				>
-				  <Box p={2}>
-					<Typography>Sigur ștergeți taxele și impozitele respective?</Typography>
-					<Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-					<br />
-					<Button
-					  variant="outline-danger"
-					  onClick={() => {
-						popupState.close();
-						this.deleteParametrii(row.id);
-					  }}
-					  className="mt-2 "
-					>
-					  Da
-					</Button>
-					<Button
-					  variant="outline-persondary"
-					  onClick={popupState.close}
-					  className="mt-2"
-					>
-					  Nu
-					</Button>
-				  </Box>
-				</Popover>
-			  </div>
-			)}
-		  </PopupState>
-		</div>
-    );
-  };
-
   render() {
-	  
-	  const columns=[
-		{
-		  dataField:'date',
-		  text: 'Începând cu',
-		  sort: true
-	  	},
-		{
-			dataField:'salariumin',
-			text: 'Sal. Minim (RON)',
-			sort: true,
-		},
-		{
-			dataField:'salariuminstudiivechime',
-			text: 'Sal. Minim - SS,V (RON)',
-			sort: true
-		},
-		{
-			dataField:'salariumediubrut',
-			text: 'Sal. Mediu Brut (RON)',
-			sort: true
-		},
-		{
-			dataField:'impozit',
-			text: 'Impozit (%)',
-			sort: true
-		},
-		{
-			dataField:'cas',
-			text: 'CAS (%)',
-			sort: true
-		},
-		{
-			dataField:'cass',
-			text: 'CASS (%)',
-			sort: true
-		},
-		{
-			dataField:'cam',
-			text: 'CAM (%)',
-			sort: true
-		},
-		{
-			dataField:'valtichet',
-			text: 'Val tichet (RON)',
-			sort: true
-		},
-		{
-			dataField:'tva',
-			text: 'TVA (%)',
-			sort: true
-		},
-        {
-			dataField: "follow",
-			formatter: this.buttons
-		  }
-	];
     return (
       <Aux>
         <Toast
@@ -448,9 +415,23 @@ class ParametriiSalarii extends React.Component {
                 </Button>
               </Card.Header>
               <Card.Body>
-			  <BootstrapTable wrapperClasses="table-responsive" 
-			  keyField='id' data={ this.state.parametriiSalarii } columns={ columns }   
-			  hover bordered={ false }/>
+                <Table responsive hover>
+                  <thead>
+                    <tr>
+                      <th>Începând cu</th>
+                      <th>Sal. Minim (RON)</th>
+                      <th>Sal. Minim - SS,V (RON)</th>
+                      <th>Sal. Mediu Brut (RON)</th>
+                      <th>Impozit (%)</th>
+                      <th>CAS (%)</th>
+                      <th>CASS (%)</th>
+                      <th>CAM (%)</th>
+                      <th>Val tichet (RON)</th>
+                      <th>TVA (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody>{this.state.parametriiSalariiComponent}</tbody>
+                </Table>
               </Card.Body>
             </Card>
           </Col>

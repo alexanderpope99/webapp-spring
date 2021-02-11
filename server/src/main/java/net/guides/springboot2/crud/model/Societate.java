@@ -66,7 +66,7 @@ public class Societate implements Serializable {
 
 	@JsonBackReference(value = "factura-societate")
 	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL)
-	private List<Factura> facturi;
+	private List<FacturaOld> facturi;
 
 	@JsonBackReference(value = "centrucost-societate")
 	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -79,6 +79,10 @@ public class Societate implements Serializable {
 	@JsonBackReference(value = "client-societate")
 	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Client> clienti;
+
+	@JsonBackReference(value = "activitate-societate")
+	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Activitate> activitati;
 
 	public Societate() {
 	}
@@ -149,7 +153,7 @@ public class Societate implements Serializable {
 		return centreCost;
 	}
 
-	public List<Factura> getFacturi() {
+	public List<FacturaOld> getFacturi() {
 		return facturi;
 	}
 
@@ -210,7 +214,7 @@ public class Societate implements Serializable {
 		this.centreCost = centreCost;
 	}
 
-	public void setFacturi(List<Factura> facturi) {
+	public void setFacturi(List<FacturaOld> facturi) {
 		this.facturi = facturi;
 	}
 

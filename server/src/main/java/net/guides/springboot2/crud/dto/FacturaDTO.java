@@ -1,270 +1,140 @@
 package net.guides.springboot2.crud.dto;
 
-import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-import net.guides.springboot2.crud.model.Angajat;
-import net.guides.springboot2.crud.model.CentruCost;
-import net.guides.springboot2.crud.model.Societate;
+import net.guides.springboot2.crud.model.Client;
+import net.guides.springboot2.crud.model.Produs;
+import net.guides.springboot2.crud.model.Proiect;
 
 public class FacturaDTO {
 	private int id;
 
-	private String denumirefurnizor;
+	private String serie;
+	private String numar;
+	private String nravizinsotire;
+	private String titlu;
+	private LocalDate dataexpedierii;
+	private String oraexpedierii;
+	private Float totalFaraTva;
+	private Float tva;
 
-	private String ciffurnizor;
+	private int idclient;
 
-	private String nr;
+	private Client client;
 
-	private String moneda;
+	private List<Produs> produse;
 
-	private double sumafaratva;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate data;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate termenscadenta;
-
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate dataplatii;
-
-	private String tipachizitie;
-
-	private String descriereactivitati;
-
-	private String observatii;
-
-	private String codproiect;
-
-	private String status;
-
-	private double sumaachitata;
-
-	private MultipartFile fisier;
-
-	// * ///////////////////
-	private Angajat aprobator;
-	private int idaprobator;
-	private CentruCost centrucost;
-	private int idcentrucost;
-	private Societate societate;
-	private int idsocietate;
-
-	public int getIdaprobator() {
-		if (aprobator == null)
-			return idaprobator;
-		return aprobator.getPersoana().getId();
-	}
-
-	public int getIdcentrucost() {
-		if (centrucost == null)
-			return idcentrucost;
-		return centrucost.getId();
-	}
-
-	public int getIdsocietate() {
-		if (societate == null)
-			return idsocietate;
-		return societate.getId();
-	}
-
-	public void setAprobator(Angajat aprobator) {
-		this.aprobator = aprobator;
-	}
-
-	public void setIdaprobator(Angajat aprobator) {
-		this.idaprobator = aprobator.getPersoana().getId();
-	}
-
-	public void setIdaprobator(int idaprobator) {
-		this.idaprobator = idaprobator;
-	}
-
-	public void setCentrucost(CentruCost centrucost) {
-		this.centrucost = centrucost;
-	}
-
-	public void setIdcentrucost(CentruCost centrucost) {
-		this.idcentrucost = centrucost.getId();
-	}
-
-	public void setIdcentrucost(int idcentrucost) {
-		this.idcentrucost = idcentrucost;
-	}
-
-	public void setSocietate(Societate societate) {
-		this.societate = societate;
-	}
-
-	public void setIdsocietate(Societate societate) {
-		this.idsocietate = societate.getId();
-	}
-
-	public void setIdsocietate(int idsocietate) {
-		this.idsocietate = idsocietate;
-	}
-
-	// * ///////////////////
-	public void setFisier(MultipartFile fisier) {
-		this.fisier = fisier;
-	}
-
-	public byte[] getFisier() throws IOException {
-		if (fisier != null)
-			return fisier.getBytes();
-		// returns empty array instead of null
-		else
-			return new byte[0];
-	}
-
-	public String getNumefisier() {
-		if (fisier != null)
-			return fisier.getOriginalFilename();
-		else
-			return null;
-	}
-
-	public long getDimensiunefisier() {
-		if (fisier != null)
-			return fisier.getSize();
-		else
-			return 0;
-	}
-	// * ///////////////////
-
-	public String getCiffurnizor() {
-		return ciffurnizor;
-	}
-
-	public void setCiffurnizor(String ciffurnizor) {
-		this.ciffurnizor = ciffurnizor;
-	}
-
-	public LocalDate getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = LocalDate.parse(data);
-	}
-
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
-
-	public LocalDate getDataplatii() {
-		return dataplatii;
-	}
-
-	public void setDataplatii(String dataplatii) {
-		this.dataplatii = LocalDate.parse(dataplatii);
-	}
-
-	public void setDataplatii(LocalDate dataplatii) {
-		this.dataplatii = dataplatii;
-	}
-
-	public String getDenumirefurnizor() {
-		return denumirefurnizor;
-	}
-
-	public void setDenumirefurnizor(String denumirefurnizor) {
-		this.denumirefurnizor = denumirefurnizor;
-	}
-
-	public String getDescriereactivitati() {
-		return descriereactivitati;
-	}
-
-	public void setDescriereactivitati(String descriereactivitati) {
-		this.descriereactivitati = descriereactivitati;
-	}
+	private List<ProiectJSON> proiecte;
 
 	public int getId() {
 		return id;
+	}
+	public List<ProiectJSON> getProiecte() {
+		return proiecte;
 	}
 
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getMoneda() {
-		return moneda;
+	public void setProiecte(List<ProiectJSON> proiecte) {
+		this.proiecte = proiecte;
+	}
+	public void setProiecteClass(List<Proiect> proiecte) {
+    this.proiecte = new ArrayList<>();
+    proiecte.forEach(pr -> this.proiecte.add(new ProiectJSON(pr.getId(), pr.getNume())));
 	}
 
-	public void setMoneda(String moneda) {
-		this.moneda = moneda;
+	public LocalDate getDataexpedierii() {
+		return dataexpedierii;
 	}
 
-	public String getNr() {
-		return nr;
+	public void setDataexpedierii(LocalDate dataexpedierii) {
+		this.dataexpedierii = dataexpedierii;
 	}
 
-	public void setNr(String nr) {
-		this.nr = nr;
+	public String getNravizinsotire() {
+		return nravizinsotire;
 	}
 
-	public String getObservatii() {
-		return observatii;
+	public void setNravizinsotire(String nravizinsotire) {
+		this.nravizinsotire = nravizinsotire;
 	}
 
-	public void setObservatii(String observatii) {
-		this.observatii = observatii;
+	public String getNumar() {
+		return numar;
 	}
 
-	public double getSumaachitata() {
-		return sumaachitata;
+	public void setNumar(String numar) {
+		this.numar = numar;
 	}
 
-	public void setSumaachitata(double sumaachitata) {
-		this.sumaachitata = sumaachitata;
+	public String getOraexpedierii() {
+		return oraexpedierii;
 	}
 
-	public double getSumafaratva() {
-		return sumafaratva;
+	public void setOraexpedierii(String oraexpedierii) {
+		this.oraexpedierii = oraexpedierii;
 	}
 
-	public void setSumafaratva(double sumafaratva) {
-		this.sumafaratva = sumafaratva;
+	public String getSerie() {
+		return serie;
 	}
 
-	public LocalDate getTermenscadenta() {
-		return termenscadenta;
+	public void setSerie(String serie) {
+		this.serie = serie;
 	}
 
-	public void setTermenscadenta(String termenscadenta) {
-		this.termenscadenta = LocalDate.parse(termenscadenta);
+	public String getTitlu() {
+		return titlu;
 	}
 
-	public void setTermenscadenta(LocalDate termenscadenta) {
-		this.termenscadenta = termenscadenta;
+	public void setTitlu(String titlu) {
+		this.titlu = titlu;
 	}
 
-	public String getTipachizitie() {
-		return tipachizitie;
+	public Float getTotalFaraTva() {
+		return totalFaraTva;
 	}
 
-	public void setTipachizitie(String tipachizitie) {
-		this.tipachizitie = tipachizitie;
+	public void setTotalFaraTva(Float totalFaraTva) {
+		this.totalFaraTva = totalFaraTva;
 	}
 
-	public String getStatus() {
-		return status;
+	public Float getTva() {
+		return tva;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setTva(Float tva) {
+		this.tva = tva;
+	}
+	
+	public Float getTotal(){
+		return totalFaraTva+tva;
+	}
+	
+	public List<Produs> getProduse() {
+		return produse;
 	}
 
-	public String getCodproiect() {
-		return codproiect;
+	public void setProduse(List<Produs> produse) {
+		this.produse = produse;
 	}
 
-	public void setCodproiect(String codproiect) {
-		this.codproiect = codproiect;
+	public Integer getIdclient() {
+		if (client == null)
+			return idclient;
+		else
+			return client.getId();
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+	public void setIdclient(int idclient) {
+		this.idclient = idclient;
 	}
 }
+
+

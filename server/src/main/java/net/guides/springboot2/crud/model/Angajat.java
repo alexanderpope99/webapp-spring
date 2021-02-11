@@ -43,7 +43,7 @@ public class Angajat implements Serializable {
 
 	@JsonBackReference(value = "factura-aprobator")
 	@OneToMany(mappedBy = "aprobator", cascade = CascadeType.ALL)
-	private List<Factura> facturi;
+	private List<FacturaOld> facturi;
 
 	@JsonBackReference(value = "angajat-angajat")
 	@OneToMany(mappedBy = "superior")
@@ -106,7 +106,7 @@ public class Angajat implements Serializable {
 		return bazaCalcul;
 	}
 
-	public List<Factura> getFacturi() {
+	public List<FacturaOld> getFacturi() {
 		return facturi;
 	}
 
@@ -130,7 +130,7 @@ public class Angajat implements Serializable {
 		this.bazaCalcul = bazaCalcul;
 	}
 
-	public void setFacturi(List<Factura> facturi) {
+	public void setFacturi(List<FacturaOld> facturi) {
 		this.facturi = facturi;
 	}
 
