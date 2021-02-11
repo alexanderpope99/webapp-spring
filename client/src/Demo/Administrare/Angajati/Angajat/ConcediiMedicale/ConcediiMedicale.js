@@ -152,7 +152,7 @@ class CMTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul: ' + err.response.data.message,
           })
         );
       if (angajat) {
@@ -173,7 +173,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua sărbătorile ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua sărbătorile: ' + err.response.data.message,
         })
       );
     if(sarbatori) this.setState({sarbatori: sarbatori});
@@ -300,7 +300,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelau concediile medicale ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelau concediile medicale: ' + err.response.data.message,
         })
       );
     if (cm) {
@@ -369,7 +369,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul medical ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge concediul medical: ' + err.response.data.message,
         })
       );
   }
@@ -421,7 +421,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga concediul ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga concediul: ' + err.response.data.message,
         })
       );
 
@@ -481,7 +481,7 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza concediul ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza concediul: ' + err.response.data.message,
         })
       );
 

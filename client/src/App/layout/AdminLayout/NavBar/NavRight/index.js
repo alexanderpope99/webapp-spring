@@ -72,7 +72,7 @@ class NavRight extends Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua cursul valutar. ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua cursul valutar.: ' + err.response.data.message,
         })
       );
 
@@ -89,7 +89,7 @@ class NavRight extends Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut citi notificările ' + err.response.data.message,
+          toastMessage: 'Nu am putut citi notificările: ' + err.response.data.message,
         })
       );
   }
@@ -102,7 +102,7 @@ class NavRight extends Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut citi toate notificările ' + err.response.data.message,
+            toastMessage: 'Nu am putut citi toate notificările: ' + err.response.data.message,
           })
         );
     });

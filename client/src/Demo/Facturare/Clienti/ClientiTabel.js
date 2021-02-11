@@ -100,7 +100,7 @@ export default class ClientiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua clientii ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua clientii: ' + err.response.data.message,
         })
       );
     if (clienti) this.setState({ clienti: clienti }, this.clearFields);
@@ -177,7 +177,7 @@ export default class ClientiTabel extends React.Component {
       .catch(err =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge clientul ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge clientul: ' + err.response.data.message,
         }));
   }
 
@@ -212,7 +212,7 @@ export default class ClientiTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut modifica clientul ' + err.response.data.message,
+            toastMessage: 'Nu am putut modifica clientul: ' + err.response.data.message,
           })
         );
     } else {
@@ -222,7 +222,7 @@ export default class ClientiTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga clientul ' + err.response.data.message,
+            toastMessage: 'Nu am putut adăuga clientul: ' + err.response.data.message,
           })
         );
     }

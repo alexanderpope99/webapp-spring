@@ -1,25 +1,34 @@
 import React from 'react';
-import { Row, Col, Card, Button, Form, Toast } from 'react-bootstrap';
+import axios from 'axios';
+import { Row, Col, Card, Button, Form, Toast, Modal } from 'react-bootstrap';
 import { Typography } from '@material-ui/core';
 import Aux from '../../../hoc/_Aux';
+
+import authHeader from '../../../services/auth-header';
+
+import { server } from '../../Resources/server-address';
+import { getSocSel } from '../../Resources/socsel';
 
 export default class EmitereFactura extends React.Component {
   constructor(props) {
     super(props);
 
     this.adaugaProdus = this.adaugaProdus.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       showToast: false,
       toastMessage: '',
 
-      factura: props.factura, // datele din factura care este editata
+      factura: props.factura, // factura care este editata
 
       clienti: [],
+      activitati: [],
 
       today: new Date().toISOString().substring(0, 10),
 
-      // datele din formular
+      // datele facturii
+      id: null,
       serie: 'BVFZ',
       numar: props.numarFactura,
       nrAvizInsotire: '-',
@@ -29,10 +38,28 @@ export default class EmitereFactura extends React.Component {
       dataExpedierii: new Date().toISOString().substring(0, 10),
       oraExpedierii: '09:00',
       totalFaraTva: 0,
-      tva: 0,
+      totalTva: 0,
       totalCuTva: 0,
     };
   }
+
+	async getClienti() {
+		return await axios
+			.get(`${server.address}/client/ids=${getSocSel().id}`, { headers: authHeader()})
+			.then(res => res.data)
+			.catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut prelua clienții: ' + err.response.data.message,
+          })
+        );
+	}
+
+	componentDidMount() {
+		// get clienti
+		const clienti = this.getClienti();
+		this.setState({clienti: clienti});
+	}
 
   componentDidUpdate(prevProps) {
     if (this.props.factura !== prevProps.factura) {
@@ -45,6 +72,7 @@ export default class EmitereFactura extends React.Component {
       this.setState({
         factura: null,
 
+        id: null,
         serie: 'BVFZ',
         numar: this.props.numarFactura,
         today: new Date().toISOString().substring(0, 10),
@@ -55,13 +83,14 @@ export default class EmitereFactura extends React.Component {
         dataExpedierii: new Date().toISOString().substring(0, 10),
         oraExpedierii: '09:00',
         totalFaraTva: 0,
-        tva: 0,
+        totalTva: 0,
         totalCuTva: 0,
       });
     } else {
       this.setState({
         factura: factura,
 
+        id: factura.id,
         serie: factura.serie,
         numar: factura.numar,
         nrAvizInsotire: factura.nravizinsotire,
@@ -69,6 +98,12 @@ export default class EmitereFactura extends React.Component {
           ? { id: factura.client.id, nume: factura.client.nume }
           : { id: 0, nume: '-' },
         titlu: factura.titlu,
+        produse: factura.produse,
+        dataExpedierii: factura.dataexpedierii,
+        oraExpedierii: factura.oraexpedierii,
+        totalFaraTva: factura.totalfaratva,
+        totalTva: factura.tva,
+        totalCuTva: factura.totalcutva,
       });
     }
   }
@@ -101,7 +136,6 @@ export default class EmitereFactura extends React.Component {
     produse.splice(index, 1);
     this.setState({ produse: produse });
   }
-
   changeProdusAttribute(produs, attr, value, index) {
     let produse = this.state.produse;
     produs = { ...produs, [attr]: value };
@@ -115,16 +149,71 @@ export default class EmitereFactura extends React.Component {
       totalTva = 0,
       totalCuTva = 0;
     if (produse && produse.length > 0) {
-      console.log(produse);
       totalFaraTva = produse.reduce(
         (acc, produs) => acc + produs.cantitatea * produs.pretUnitar,
         0
       );
-			totalTva = totalFaraTva * 0.19;
+      totalTva = totalFaraTva * 0.19;
       totalCuTva = totalFaraTva + totalTva;
     }
 
     return { totalFaraTva, totalTva, totalCuTva };
+  }
+
+  async onSubmit() {
+    const factura = this.state.factura;
+		const nrAvizInsotire = this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire;
+		const client = this.state.clienti.find(c => c.id === this.state.client.id);
+		
+    const newFactura = {
+      serie: this.state.serie,
+      numar: this.state.numar,
+      nrAvizInsotire: this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire,
+      client: client,
+      titlu: this.state.titlu,
+      produse: this.state.produse,
+      dataExpedierii: this.state.dataExpedierii,
+      oraExpedierii: this.state.oraExpedierii,
+      totalFaraTva: this.state.totalFaraTva,
+      totalTva: this.state.totalTva,
+      totalCuTva: this.state.totalCuTva,
+    };
+
+    var ok = false;
+    // se adauga o factura noua
+    if (!factura) {
+      console.log('POST:', newFactura);
+      // ok = await axios
+      //   .post(`${server.address}/factura/ids=${this.state.socsel.id}`, newFactura, { headers: authHeader() })
+      //   .then((res) => res.status === 200)
+      //   .catch((err) =>
+      //     this.setState({
+      //       showToast: true,
+      //       toastMessage: 'Nu am putut adăuga factura: ' + err.response.data.message,
+      //     })
+      //   );
+    } else {
+      newFactura['id'] = factura.id;
+      console.log('PUT:', newFactura);
+      // ok = await axios
+      //   .put(`${server.address}/factura/id=${factura.id}`, newFactura, { headers: authHeader() })
+      //   .then((res) => res.status === 200)
+      //   .catch((err) =>
+      //     this.setState({
+      //       showToast: true,
+      //       toastMessage: 'Nu am putut modifica factura: ' + err.response.data.message,
+      //     })
+      //   );
+    }
+
+    if (ok) {
+      this.setState({
+        showToast: false,
+        toastMessage: '',
+        showModal: true,
+        modalMessage: factura ? 'Factură modificată' : 'Factură adăugată',
+      });
+    }
   }
 
   render() {
@@ -132,7 +221,7 @@ export default class EmitereFactura extends React.Component {
       <Row className="border rounded p-0 pt-2 mt-2 mb-2" key={index}>
         <Col md={12}>
           <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
-            Produs #{index + 1}
+            #{index + 1}
           </Typography>
         </Col>
         <Form.Group as={Col} sm="12">
@@ -187,7 +276,7 @@ export default class EmitereFactura extends React.Component {
         </Form.Group>
         <Col md={12}>
           <Button
-            className="p-1 float-right"
+            className="p-1 mb-3 float-right"
             variant="link"
             onClick={() => this.stergeProdus(index)}
           >
@@ -201,6 +290,7 @@ export default class EmitereFactura extends React.Component {
 
     return (
       <Aux>
+        {/* ERROR TOAST */}
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
@@ -214,6 +304,18 @@ export default class EmitereFactura extends React.Component {
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
+
+        {/* CONFIRM MODAL */}
+        <Modal show={this.state.showModal} onHide={this.hanldeClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.state.modalMessage}</Modal.Title>
+          </Modal.Header>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.handleClose}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <Card>
           <Card.Header className="border-0">
@@ -312,7 +414,7 @@ export default class EmitereFactura extends React.Component {
             {/* PRODUSE / SERVICII */}
             <Row className="border rounded mt-2 pt-3 pb-2">
               <Col md={12}>
-                <Button onClick={this.adaugaProdus}>Adauga produs/serviciu</Button>
+                <Button onClick={this.adaugaProdus} variant="info" className="pt-1 pb-1">Adauga produs/serviciu</Button>
                 <Col md={12}>{produseComponent}</Col>
               </Col>
             </Row>
@@ -338,32 +440,20 @@ export default class EmitereFactura extends React.Component {
               <Col md={6} className="border rounded pt-3">
                 <Form.Group>
                   <Form.Label>Total (fara TVA)</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={totalFaraTva}
-                    disabled
-                    // onChange={(e) => this.setState({ totalFaraTva: e.target.value })}
-                  />
+                  <Form.Control type="number" value={totalFaraTva} disabled />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>TVA</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={totalTva}
-                    disabled
-                    // onChange={(e) => this.setState({ tva: e.target.value })}
-                  />
+                  <Form.Control type="number" value={totalTva} disabled />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Total (cu TVA)</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={totalCuTva}
-                    disabled
-                    // onChange={(e) => this.setState({ totalCuTva: e.target.value })}
-                  />
+                  <Form.Control type="number" value={totalCuTva} disabled />
                 </Form.Group>
               </Col>
+              <Button onClick={this.onSubmit} className="mt-3">
+                {this.state.factura ? 'Modifică' : 'Emite factura'}
+              </Button>
             </Row>
           </Card.Body>
         </Card>

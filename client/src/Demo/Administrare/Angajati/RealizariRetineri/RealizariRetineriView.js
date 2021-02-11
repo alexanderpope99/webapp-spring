@@ -227,7 +227,7 @@ class RealizariRetineriView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua realizari/retineri corespunzatoare ' + err.response.data.message,
+            'Nu am putut prelua realizari/retineri corespunzatoare: ' + err.response.data.message,
         })
       );
 
@@ -253,7 +253,7 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua persoana ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua persoana: ' + err.response.data.message,
         })
       );
     if (!angajati) return;
@@ -295,7 +295,7 @@ class RealizariRetineriView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua sau calcula realizari retineri ' + err.response.data.message,
+            'Nu am putut prelua sau calcula realizari retineri: ' + err.response.data.message,
         })
       );
     if (!data) {
@@ -387,7 +387,7 @@ class RealizariRetineriView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua totalul de pensie facultativă ' + err.response.data.message,
+            'Nu am putut prelua totalul de pensie facultativă: ' + err.response.data.message,
         })
       );
 
@@ -428,7 +428,7 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua orele suplimentare ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua orele suplimentare: ' + err.response.data.message,
         })
       );
 
@@ -511,7 +511,7 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut descărca ștatul ' + err.response.data.message,
+          toastMessage: 'Nu am putut descărca ștatul: ' + err.response.data.message,
         })
       );
   }
@@ -534,7 +534,7 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua ștatul individual ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua ștatul individual: ' + err.response.data.message,
         })
       );
 		console.log(ok);

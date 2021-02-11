@@ -90,7 +90,7 @@ class FacturiOperatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut aproba factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut aproba factura: ' + err.response.data.message,
         })
       );
     if (ok) this.onRefresh();
@@ -103,7 +103,7 @@ class FacturiOperatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut respinge factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut respinge factura: ' + err.response.data.message,
         })
       );
     if (ok) this.onRefresh();
@@ -117,7 +117,7 @@ class FacturiOperatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut amâna factura ' + err.response.data.message,
+          toastMessage: 'Nu am putut amâna factura: ' + err.response.data.message,
         })
       );
     if (ok) this.onRefresh();
@@ -195,7 +195,7 @@ class FacturiOperatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost: ' + err.response.data.message,
         })
       );
     const aprobatori = await axios
@@ -206,7 +206,7 @@ class FacturiOperatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua aprobatori ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua aprobatori: ' + err.response.data.message,
         })
       );
     const fact = await axios
@@ -217,7 +217,7 @@ class FacturiOperatorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua facturile aprobate ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua facturile aprobate: ' + err.response.data.message,
         })
       );
     if (centreCost) {

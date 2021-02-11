@@ -164,7 +164,7 @@ class SocietatiView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua societățile din baza de date ' + err.response.data.message,
+            'Nu am putut prelua societățile din baza de date: ' + err.response.data.message,
         })
       );
 
@@ -217,7 +217,7 @@ class SocietatiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge societatea ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge societatea: ' + err.response.data.message,
         })
       );
   }
@@ -261,7 +261,7 @@ class SocietatiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea ștat salarii ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea ștat salarii: ' + err.response.data.message,
         })
       );
 
@@ -287,7 +287,7 @@ class SocietatiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea Declarația 112 ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea Declarația 112: ' + err.response.data.message,
         })
       );
 
@@ -308,7 +308,7 @@ class SocietatiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea MTA ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea MTA: ' + err.response.data.message,
         })
       );
 
@@ -360,7 +360,7 @@ class SocietatiView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza societatea ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza societatea: ' + err.response.data.message,
         })
       );
   }

@@ -63,7 +63,7 @@ class ListaAngajati extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea lista angajați ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea lista angajați: ' + err.response.data.message,
         })
       );
 

@@ -170,7 +170,7 @@ class ContractView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua angajații superiori posibili ' + err.response.data.message,
+            'Nu am putut prelua angajații superiori posibili: ' + err.response.data.message,
         })
       );
 
@@ -186,7 +186,7 @@ class ContractView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost: ' + err.response.data.message,
         })
       );
 
@@ -208,7 +208,7 @@ class ContractView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua angajații ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua angajații: ' + err.response.data.message,
         })
       );
 

@@ -94,7 +94,7 @@ class COTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul: ' + err.response.data.message,
           })
         );
       // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
@@ -119,7 +119,7 @@ class COTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua zilele de concediu disponibile ' + err.response.data.message,
+            'Nu am putut prelua zilele de concediu disponibile: ' + err.response.data.message,
         })
       );
   }
@@ -278,7 +278,7 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua concediile de odihnă ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua concediile de odihnă: ' + err.response.data.message,
         })
       );
 
@@ -368,7 +368,7 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul de odihnă ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge concediul de odihnă: ' + err.response.data.message,
         })
       );
   }
@@ -396,7 +396,7 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga concediul de odihnă ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga concediul de odihnă: ' + err.response.data.message,
         })
       );
 
@@ -437,7 +437,7 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza concediul de odihnă ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza concediul de odihnă: ' + err.response.data.message,
         })
       );
 
