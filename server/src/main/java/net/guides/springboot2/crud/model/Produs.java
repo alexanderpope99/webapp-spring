@@ -44,7 +44,7 @@ public class Produs implements Serializable {
 	private Float tva;
 
 	@JsonBackReference(value = "produs-factura")
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idfactura", referencedColumnName = "id")
 	private Factura factura;
 

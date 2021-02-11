@@ -293,13 +293,13 @@ public class StatSalariiService {
 				// * drepturi
 				writerCell = row1.createCell(13); // total sporuri
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); // TODO
+				writerCell.setCellValue(0);
 				writerCell = row2.createCell(13); // total prime
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(realizariRetineri.getPrimabruta());
 				writerCell = row3.createCell(13); // alte drepturi
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(0); // TODO
+				writerCell.setCellValue(0);
 
 				// * drepturi
 				writerCell = row1.createCell(14); // val tichetemasa
@@ -1151,13 +1151,13 @@ public class StatSalariiService {
 			// * drepturi
 			writerCell = row1.getCell(13); // total sporuri
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(0);
 			writerCell = row2.getCell(13); // total prime
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getPrimabruta());
 			writerCell = row3.getCell(13); // alte drepturi
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(0); // TODO
+			writerCell.setCellValue(0);
 
 			// * drepturi
 			writerCell = row1.getCell(14); // val tichetemasa

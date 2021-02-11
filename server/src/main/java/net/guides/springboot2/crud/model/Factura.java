@@ -53,7 +53,7 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "idclient")
 	private Client client;
 
-	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Produs> produse;
 
 	@ManyToOne
@@ -160,13 +160,18 @@ public class Factura implements Serializable {
 		this.produse = produse;
 	}
 
+	public void updateProduse(List<Produs> produse) {
+		this.produse.clear();
+		this.produse.addAll(produse);
+	}
+
 	public Factura update(Factura newFactura) {
 		this.serie = newFactura.serie;
 		this.numar = newFactura.numar;
 		this.nravizinsotire = newFactura.nravizinsotire;
 		this.client = newFactura.client;
 		this.titlu = newFactura.titlu;
-		this.produse = newFactura.produse;
+		this.updateProduse(newFactura.produse);
 		this.dataexpedierii = newFactura.dataexpedierii;
 		this.oraexpedierii = newFactura.oraexpedierii;
 		this.totalfaratva = newFactura.totalfaratva;

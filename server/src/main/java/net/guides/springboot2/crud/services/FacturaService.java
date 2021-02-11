@@ -45,7 +45,6 @@ public class FacturaService {
 
 	public Factura update(Factura newFactura, int id) throws ResourceNotFoundException {
 		Factura factura = findById(id);
-		
 		return save(factura.update(newFactura));
 	}
 
