@@ -9,27 +9,36 @@ export default class Facturi extends React.Component {
   constructor(props) {
     super(props);
 
-		this.edit = this.edit.bind(this);
+    this.edit = this.edit.bind(this);
+		this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);
 
     this.state = {
-      key: 'emite-factura',
+      key: 'tabel-facturi',
       socsel: getSocSel(),
 
-			numarFactura: 0,
+      numarFactura: 0,
     };
   }
 
-	onSelectPill(key) {
-		this.setState({key: key, factura: null,});
-	}
-
-	edit(factura) {
-    this.setState({
-			key: 'emite-factura',
-			factura: factura,
-			numarFactura: factura.numar,
-		});
+  onSelectPill(key) {
+    this.setState({ key: key, factura: null });
   }
+
+  edit(factura) {
+    this.setState({
+      key: 'emite-factura',
+      factura: factura,
+      numarFactura: factura ? factura.numar : 1,
+    });
+  }
+
+	scrollToTopSmooth() {
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth',
+		});
+	}
 
   render() {
     return (
@@ -48,11 +57,15 @@ export default class Facturi extends React.Component {
               onSelect={(key) => this.onSelectPill(key)}
             >
               <Tab eventKey="tabel-facturi" title="Tabel facturi">
-                <FacturiTabel edit={this.edit}/>
+                <FacturiTabel edit={this.edit} scrollToTopSmooth={this.scrollToTopSmooth} />
               </Tab>
               <Tab eventKey="emite-factura" title="Emitere factură">
-								<EmitereFactura factura={this.state.factura} numarFactura={this.state.numarFactura}/>
-							</Tab>
+                <EmitereFactura
+                  factura={this.state.factura}
+                  numarFactura={this.state.numarFactura}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
+                />
+              </Tab>
             </Tabs>
           </Col>
         </Row>

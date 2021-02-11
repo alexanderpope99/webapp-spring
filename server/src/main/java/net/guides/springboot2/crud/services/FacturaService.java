@@ -1,21 +1,17 @@
 package net.guides.springboot2.crud.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.dto.FacturaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Factura;
+import net.guides.springboot2.crud.model.Produs;
 import net.guides.springboot2.crud.repository.FacturaRepository;
 
 @Service
 public class FacturaService {
-	@Autowired
-	private ModelMapper modelMapper;
 
 	@Autowired
 	private FacturaRepository facturaRepository;
@@ -23,16 +19,23 @@ public class FacturaService {
 	FacturaService() {
 	}
 
-	public List<FacturaDTO> findAll() {
-		List<Factura> facturi = facturaRepository.findAll();
-		return facturi.stream().map(user -> modelMapper.map(user, FacturaDTO.class)).collect(Collectors.toList());
+	public List<Factura> findAll() {
+		return facturaRepository.findAll();
 	}
 
 	public Factura findById(int id) throws ResourceNotFoundException {
 		return facturaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + id));
 	}
 
+	public List<Factura> findBySocietate_Id(int idsocietate) {
+		return facturaRepository.findByClient_Societate_Id(idsocietate);
+	}
+
 	public Factura save(Factura newFactura) {
+		// newFactura = facturaRepository.save(newFactura);
+		for(Produs produs : newFactura.getProduse()) {
+			produs.setFactura(newFactura);
+		}
 		return facturaRepository.save(newFactura);
 	}
 

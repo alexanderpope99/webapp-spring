@@ -1,13 +1,17 @@
 package net.guides.springboot2.crud.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
 
@@ -39,7 +43,8 @@ public class Produs implements Serializable {
 	@Column(name = "valoaretva")
 	private Float tva;
 
-	@ManyToOne
+	@JsonBackReference(value = "produs-factura")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idfactura", referencedColumnName = "id")
 	private Factura factura;
 

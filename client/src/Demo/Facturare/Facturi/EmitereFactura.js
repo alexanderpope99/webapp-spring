@@ -15,6 +15,7 @@ export default class EmitereFactura extends React.Component {
 
     this.adaugaProdus = this.adaugaProdus.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+		this.handleClose = this.handleClose.bind(this);
 
     this.state = {
       showToast: false,
@@ -125,7 +126,7 @@ export default class EmitereFactura extends React.Component {
     produse.push({
       denumire: '',
       um: '',
-      cantitatea: 0,
+      cantitate: 0,
       pretUnitar: 0,
       valoareFaraTva: 0,
       tva: 0,
@@ -151,7 +152,7 @@ export default class EmitereFactura extends React.Component {
       totalCuTva = 0;
     if (produse && produse.length > 0) {
       totalFaraTva = produse.reduce(
-        (acc, produs) => acc + produs.cantitatea * produs.pretUnitar,
+        (acc, produs) => acc + produs.cantitate * produs.pretUnitar,
         0
       );
       totalTva = totalFaraTva * 0.19;
@@ -231,7 +232,7 @@ export default class EmitereFactura extends React.Component {
 		this.setState({
 			showModal: false,
 			modalMessage: '',
-		})
+		}, this.props.scrollToTopSmooth)
 	}
 
   render() {
@@ -262,9 +263,9 @@ export default class EmitereFactura extends React.Component {
           <Form.Label>Cantitatea</Form.Label>
           <Form.Control
             type="number"
-            value={produs.cantitatea}
+            value={produs.cantitate}
             onChange={(e) =>
-              this.changeProdusAttribute(produs, 'cantitatea', Number(e.target.value), index)
+              this.changeProdusAttribute(produs, 'cantitate', Number(e.target.value), index)
             }
           />
         </Form.Group>
@@ -281,7 +282,7 @@ export default class EmitereFactura extends React.Component {
         </Form.Group>
         <Form.Group as={Col} sm="6">
           <Form.Label>Valoare (fara TVA)</Form.Label>
-          <Form.Control disabled type="number" value={produs.pretUnitar * produs.cantitatea} />
+          <Form.Control disabled type="number" value={produs.pretUnitar * produs.cantitate} />
         </Form.Group>
         <Form.Group as={Col} sm="6">
           <Form.Label>Valoare TVA</Form.Label>
@@ -289,7 +290,7 @@ export default class EmitereFactura extends React.Component {
             disabled
             type="text"
             step="0.01"
-            value={(produs.pretUnitar * produs.cantitatea * 0.19).toFixed(2)}
+            value={(produs.pretUnitar * produs.cantitate * 0.19).toFixed(2)}
           />
         </Form.Group>
         <Col md={12}>

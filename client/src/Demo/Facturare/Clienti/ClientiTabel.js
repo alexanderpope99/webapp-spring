@@ -59,7 +59,7 @@ export default class ClientiTabel extends React.Component {
       judet: '',
       tipJudet: 'Județ',
       localitate: '',
-    }
+    };
   }
 
   clearFields() {
@@ -96,7 +96,7 @@ export default class ClientiTabel extends React.Component {
   async getClienti() {
     const clienti = await axios
       .get(`${server.address}/client/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then(res => res.data)
+      .then((res) => res.data)
       .catch((err) =>
         this.setState({
           showToast: true,
@@ -122,9 +122,12 @@ export default class ClientiTabel extends React.Component {
     if (localitate) {
       let tip_judet = this.getTipJudet(localitate);
 
-      let judet = tip_judet === this.state.tipJudet
-        ? this.state.judet
-        : tip_judet === 'Județ' ? 'ALBA' : 'SECTOR 1';
+      let judet =
+        tip_judet === this.state.tipJudet
+          ? this.state.judet
+          : tip_judet === 'Județ'
+          ? 'ALBA'
+          : 'SECTOR 1';
 
       this.setState({
         tipJudet: tip_judet,
@@ -135,50 +138,57 @@ export default class ClientiTabel extends React.Component {
   }
 
   handleClose() {
-    this.setState({
-      showConfirm: false,
-      modalMessage: '',
-      show: false,
-      isEdit: false,
-    }, this.clearFields);
+    this.setState(
+      {
+        showConfirm: false,
+        modalMessage: '',
+        show: false,
+        isEdit: false,
+      },
+      this.clearFields
+    );
   }
 
   edit(client) {
-    this.setState({
-      showConfirm: false,
-      modalMessage: '',
-      show: true,
-      isEdit: true,
+    this.setState(
+      {
+        showConfirm: false,
+        modalMessage: '',
+        show: true,
+        isEdit: true,
 
-      // detalii client
-      id: client.id,
-      numecomplet: client.numecomplet || '',
-      nume: client.nume || '',
-      statut: client.statut || '',
-      nrregcom: client.nrregcom || '',
-      codfiscal: client.codfiscal || '',
-      cotatva: client.cotatva || '',
-      client: client.client || false,
-      furnizor: client.furnizor || false,
-      extern: client.extern || false,
-      banca: client.banca || '',
-      sucursala: client.sucursala || '',
-      cont: client.cont || '',
-      moneda: client.moneda || 'RON',
-      idadresa: client.adresa.id || null,
-      adresa: client.adresa.adresa || '',
-    }, () => this.onChangeLocalitate(client.adresa.localitate));
+        // detalii client
+        id: client.id,
+        numecomplet: client.numecomplet || '',
+        nume: client.nume || '',
+        statut: client.statut || '',
+        nrregcom: client.nrregcom || '',
+        codfiscal: client.codfiscal || '',
+        cotatva: client.cotatva || '',
+        client: client.client || false,
+        furnizor: client.furnizor || false,
+        extern: client.extern || false,
+        banca: client.banca || '',
+        sucursala: client.sucursala || '',
+        cont: client.cont || '',
+        moneda: client.moneda || 'RON',
+        idadresa: client.adresa.id || null,
+        adresa: client.adresa.adresa || '',
+      },
+      () => this.onChangeLocalitate(client.adresa.localitate)
+    );
   }
 
   async delete(id) {
     await axios
       .delete(`${server.address}/client/${id}`, { headers: authHeader() })
       .then(this.getClienti)
-      .catch(err =>
+      .catch((err) =>
         this.setState({
           showToast: true,
           toastMessage: 'Nu am putut șterge clientul: ' + err.response.data.message,
-        }));
+        })
+      );
   }
 
   async onSubmit() {
@@ -200,15 +210,17 @@ export default class ClientiTabel extends React.Component {
         id: this.state.idadresa || null,
         adresa: this.state.adresa || '',
         judet: this.state.judet || '',
-        localitate: this.state.localitate || ''
-      }
-    }
+        localitate: this.state.localitate || '',
+      },
+    };
 
     var res = null;
     if (this.state.isEdit) {
       res = await axios
-        .put(`${server.address}/client/${this.state.id}/ids=${this.state.socsel.id}`, client, { headers: authHeader() })
-        .then(res => res.data)
+        .put(`${server.address}/client/${this.state.id}/ids=${this.state.socsel.id}`, client, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
         .catch((err) =>
           this.setState({
             showToast: true,
@@ -217,8 +229,10 @@ export default class ClientiTabel extends React.Component {
         );
     } else {
       res = await axios
-        .post(`${server.address}/client/ids=${this.state.socsel.id}`, client, { headers: authHeader() })
-        .then(res => res.data)
+        .post(`${server.address}/client/ids=${this.state.socsel.id}`, client, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
         .catch((err) =>
           this.setState({
             showToast: true,
@@ -227,19 +241,19 @@ export default class ClientiTabel extends React.Component {
         );
     }
     if (res) {
-
-      this.setState({
-        show: false,
-        showConfirm: true,
-        modalMessage: this.state.isEdit ? 'Client modificat' : 'Client adăugat',
-      }, this.getClienti);
+      this.setState(
+        {
+          show: false,
+          showConfirm: true,
+          modalMessage: this.state.isEdit ? 'Client modificat' : 'Client adăugat',
+        },
+        this.getClienti
+      );
     }
   }
 
   render() {
-
-    const clientiComponent = this.state.clienti.map(item =>
-    (
+    const clientiComponent = this.state.clienti.map((item) => (
       <tr key={item.id}>
         <td>
           <div>
@@ -274,9 +288,7 @@ export default class ClientiTabel extends React.Component {
                       }}
                     >
                       <Box p={2}>
-                        <Typography>
-                          Sigur ștergeți clientul?
-                          </Typography>
+                        <Typography>Sigur ștergeți clientul?</Typography>
                         <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
@@ -288,14 +300,14 @@ export default class ClientiTabel extends React.Component {
                           className="mt-2 "
                         >
                           Da
-                          </Button>
+                        </Button>
                         <Button
                           variant="outline-persondary"
                           onClick={popupState.close}
                           className="mt-2"
                         >
                           Nu
-                          </Button>
+                        </Button>
                       </Box>
                     </Popover>
                   </div>
@@ -310,7 +322,11 @@ export default class ClientiTabel extends React.Component {
         <td>{item.nrregcom}</td>
         <td>{item.codfiscal}</td>
         <td>{item.cotatva}</td>
-        <td>{item.adresa.adresa.length > 15 ? item.adresa.adresa.substring(0, 15)+"..."  : '' }</td>
+        <td>
+          {item.adresa.adresa.length > 15
+            ? item.adresa.adresa.substring(0, 15) + '...'
+            : item.adresa.adresa}
+        </td>
         <td>{item.adresa.localitate}</td>
         <td>{item.adresa.judet}</td>
         <td>{item.client ? 'DA' : 'NU'}</td>
@@ -321,13 +337,12 @@ export default class ClientiTabel extends React.Component {
         <td>{item.cont}</td>
         <td>{item.moneda}</td>
       </tr>
-
     ));
 
     var judeteComponent = [];
     if (this.state.tipJudet === 'Județ')
       judeteComponent = judete.map((judet, index) => <option key={index}>{judet}</option>);
-    else judeteComponent = sectoare.map((sector, index) => <option key={index}>{sector}</option>)
+    else judeteComponent = sectoare.map((sector, index) => <option key={index}>{sector}</option>);
 
     return (
       <Aux>
@@ -507,7 +522,6 @@ export default class ClientiTabel extends React.Component {
                     />
                   </Form.Group>
 
-
                   <Form.Group as={Col} md="6" controlId="numebanca">
                     <Form.Label>Moneda</Form.Label>
                     <Form.Control
@@ -545,7 +559,9 @@ export default class ClientiTabel extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
+              <Breadcrumb.Item href="/dashboard/societati">
+                {this.state.socsel.nume}
+              </Breadcrumb.Item>
               <Breadcrumb.Item active>Clienți</Breadcrumb.Item>
             </Breadcrumb>
             <Card>
@@ -566,7 +582,6 @@ export default class ClientiTabel extends React.Component {
                 >
                   <Plus size={20} />
                 </Button>
-
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
@@ -596,8 +611,7 @@ export default class ClientiTabel extends React.Component {
             </Card>
           </Col>
         </Row>
-
       </Aux>
-    )
+    );
   }
 }

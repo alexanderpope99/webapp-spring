@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Table, Button, Toast } from 'react-bootstrap';
-import { Trash2, Edit3 } from 'react-feather';
+import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
@@ -10,7 +10,6 @@ import Aux from '../../../hoc/_Aux';
 
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
-import { downloadFactura } from '../../Resources/download';
 
 import authHeader from '../../../services/auth-header';
 
@@ -18,20 +17,43 @@ class FacturiTabel extends React.Component {
   constructor(props) {
     super(props);
 
+		this.getFacturi = this.getFacturi.bind(this);
+
     this.state = {
       showToast: false,
       toastMessage: '',
 
-			socsel: getSocSel(),
+      socsel: getSocSel(),
       facturi: [],
       clienti: [],
     };
   }
 
+  async getFacturi() {
+    const facturi = await axios
+      .get(`${server.address}/factura/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua facturile: ' + err.response.data.message,
+        })
+      );
+    this.setState({ facturi: facturi });
+  }
+
+  componentDidMount() {
+    if (!this.state.socsel) {
+      window.location.href = '/dashboard/societati';
+      return;
+    }
+    this.getFacturi();
+  }
+
   render() {
     const facturiComponent = this.state.facturi.map((item, index) => (
       <tr key={item.id}>
-        <th>
+        <td>
           <div className="d-flex">
             <Button
               onClick={() => this.props.edit(item)}
@@ -89,10 +111,16 @@ class FacturiTabel extends React.Component {
               )}
             </PopupState>
           </div>
-        </th>
-        <th>{index + 1}</th>
-        <th>{item.client || '-'}</th>
-        <th>{item.serie || ''}</th>
+        </td>
+        <td>{index + 1}</td>
+        <td>{item.client.nume || '-'}</td>
+        <td>{item.serie || ''}</td>
+        <td>{item.titlu.length > 20 ? item.titlu.substring(0, 20) + '...' : item.titlu}</td>
+        <td>{item.proiect ? item.proiect.nume : ''}</td>
+        <td>{item.totalcutva}</td>
+        <td>{item.dataexpedierii}</td>
+        <td>{item.scadenta}</td>
+        <td>{item.statut}</td>
       </tr>
     ));
 
@@ -117,6 +145,20 @@ class FacturiTabel extends React.Component {
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Facturi</Card.Title>
+                <Button variant="outline-primary" size="sm" className="float-right"
+									onClick={() => this.props.edit(null)}
+								>
+                  <Plus />
+                </Button>
+
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  className="float-right"
+                  onClick={this.getFacturi}
+                >
+                  <RotateCw className="m-0 p-0" />
+                </Button>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
