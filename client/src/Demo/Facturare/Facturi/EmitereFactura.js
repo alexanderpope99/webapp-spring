@@ -157,7 +157,9 @@ export default class EmitereFactura extends React.Component {
       totalTva = totalFaraTva * 0.19;
       totalCuTva = totalFaraTva + totalTva;
     }
-
+		totalFaraTva = totalFaraTva.toFixed(2);
+		totalTva = totalTva.toFixed(2);
+		totalCuTva = totalCuTva.toFixed(2);
     return { totalFaraTva, totalTva, totalCuTva };
   }
 
@@ -170,7 +172,8 @@ export default class EmitereFactura extends React.Component {
 			this.setState({
 				toastMessage: 'Factura are nevoie de un client',
 				showToast: true,
-			})
+			});
+			return;
 		}
 
     const newFactura = {
@@ -191,27 +194,27 @@ export default class EmitereFactura extends React.Component {
     // se adauga o factura noua
     if (!factura) {
       console.log('POST:', newFactura);
-      // ok = await axios
-      //   .post(`${server.address}/factura/ids=${this.state.socsel.id}`, newFactura, { headers: authHeader() })
-      //   .then((res) => res.status === 200)
-      //   .catch((err) =>
-      //     this.setState({
-      //       showToast: true,
-      //       toastMessage: 'Nu am putut adăuga factura: ' + err.response.data.message,
-      //     })
-      //   );
+      ok = await axios
+        .post(`${server.address}/factura`, newFactura, { headers: authHeader() })
+        .then((res) => res.status === 200)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut adăuga factura: ' + err.response.data.message,
+          })
+        );
     } else {
       newFactura['id'] = factura.id;
       console.log('PUT:', newFactura);
-      // ok = await axios
-      //   .put(`${server.address}/factura/id=${factura.id}`, newFactura, { headers: authHeader() })
-      //   .then((res) => res.status === 200)
-      //   .catch((err) =>
-      //     this.setState({
-      //       showToast: true,
-      //       toastMessage: 'Nu am putut modifica factura: ' + err.response.data.message,
-      //     })
-      //   );
+      ok = await axios
+        .put(`${server.address}/factura/${factura.id}`, newFactura, { headers: authHeader() })
+        .then((res) => res.status === 200)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: 'Nu am putut modifica factura: ' + err.response.data.message,
+          })
+        );
     }
 
     if (ok) {
@@ -223,6 +226,13 @@ export default class EmitereFactura extends React.Component {
       });
     }
   }
+
+	handleClose() {
+		this.setState({
+			showModal: false,
+			modalMessage: '',
+		})
+	}
 
   render() {
     const produseComponent = this.state.produse.map((produs, index) => (
@@ -240,7 +250,7 @@ export default class EmitereFactura extends React.Component {
             onChange={(e) => this.changeProdusAttribute(produs, 'denumire', e.target.value, index)}
           />
         </Form.Group>
-        <Form.Group as={Col} lg="2">
+        <Form.Group as={Col} lg="4">
           <Form.Label>UM</Form.Label>
           <Form.Control
             type="text"
@@ -248,7 +258,7 @@ export default class EmitereFactura extends React.Component {
             onChange={(e) => this.changeProdusAttribute(produs, 'um', e.target.value, index)}
           />
         </Form.Group>
-        <Form.Group as={Col} lg="2">
+        <Form.Group as={Col} lg="4">
           <Form.Label>Cantitatea</Form.Label>
           <Form.Control
             type="number"
@@ -258,7 +268,7 @@ export default class EmitereFactura extends React.Component {
             }
           />
         </Form.Group>
-        <Form.Group as={Col} lg="2">
+        <Form.Group as={Col} lg="4">
           <Form.Label>Pret unitar</Form.Label>
           <Form.Control
             type="number"
@@ -269,17 +279,17 @@ export default class EmitereFactura extends React.Component {
             }
           />
         </Form.Group>
-        <Form.Group as={Col} sm="2">
+        <Form.Group as={Col} sm="6">
           <Form.Label>Valoare (fara TVA)</Form.Label>
           <Form.Control disabled type="number" value={produs.pretUnitar * produs.cantitatea} />
         </Form.Group>
-        <Form.Group as={Col} sm="2">
+        <Form.Group as={Col} sm="6">
           <Form.Label>Valoare TVA</Form.Label>
           <Form.Control
             disabled
             type="text"
             step="0.01"
-            value={produs.pretUnitar * produs.cantitatea * 0.19}
+            value={(produs.pretUnitar * produs.cantitatea * 0.19).toFixed(2)}
           />
         </Form.Group>
         <Col md={12}>

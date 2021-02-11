@@ -48,8 +48,8 @@ public class ClientService {
 
   public Client update(int id, Client newClient) throws ResourceNotFoundException {
     Client client = findById(id);
-
-    return clientRepository.save(client.update(newClient));
+		client = client.update(newClient);
+    return clientRepository.save(client);
   }
 
   public Map<String, Boolean> delete(int id) throws ResourceNotFoundException {

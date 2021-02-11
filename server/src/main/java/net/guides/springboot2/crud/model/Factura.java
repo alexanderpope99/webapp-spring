@@ -50,14 +50,14 @@ public class Factura implements Serializable {
 	private Float tva;
 
 	@ManyToOne
-	@JoinColumn(name = "idclient", nullable = true)
+	@JoinColumn(name = "idclient")
 	private Client client;
 
 	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
 	private List<Produs> produse;
 
 	@ManyToOne
-	@JoinColumn(name = "idproiect", nullable = true)
+	@JoinColumn(name = "idproiect")
 	private Proiect proiect;
 
 	public Integer getId() {
