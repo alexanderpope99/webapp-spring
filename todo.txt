@@ -36,7 +36,9 @@ Pasi de urmat:
 
 	
 	6. Baza de date se initializeaza automat cand se creeaza primul user
-#################################################################################
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 FLORIN ADRIAN - NIMIC
 GHEORGHE TUDOR - CO 4-17, ZILE INVOIRE 1, TICHETE 0, POPRIRI 100
@@ -46,36 +48,22 @@ MIREL TONEE - SALARIU<DEDUCERE
 POPESCU ANA-MARIA - BOALA PROFESIONALA 4-17 80%, PENSIE FAC 1000
 SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 
-LAST-UPDATE : {
-}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TODO: {
-	FACTURI: main page has pills:
-		-> lista facturi: are un buton care selecteaza pill-ul de adauga factura
-			editeaza = trimite pe pill-ul emitere cu props = factura
-			in tabel, coloana "Seria" = serie + zerofill(nr_factura, 7)
-			are filtrare dupa: client, data, scadenta, status incasat
-		-> adauga factura (emitere factura)
-			1. Un array de produse, se identifica prin index
-				pagina are un form cu produse/servicii -> apesi adauga -> adauga in array
-				produsele sunt randate in functie de array-ul de produse
-				onSubmit trebuie sa ia toate datele adaugate
-				proiect, activitate = dropdown-multiselect
-			2. 
-
+	https://react-bootstrap-table.github.io/react-bootstrap-table2/storybook/index.html?selectedKind=Column%20Filter&selectedStory=Configure%20Select%20Filter%20Options&full=0&addons=1&stories=1&panelRight=0&addonPanel=storybook%2Factions%2Factions-panel
 	* -> add sorting and filtering to tables on frontend 
 }
 
-*** INTREBARI: ***
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 !! HARDCODAT
 societatea are doar un cont => scot un singur mta cu format in functie de nume (are sau nu 'raiff' in nume)
 societatea are 2 conturi => 
 	pentru raiff scot doar angajatii care au raiff
 	restul intra la celalalt cont (deci Unicredit)
-_________________________________________
 
-salariu realizat din cate zile se face? zilele includ si concediu de odihna?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 admin = nu vede datele
 
@@ -98,3 +86,4 @@ operator_plati:
 administrator de firma: bogdan tanase + ion corneliu
 
 bogdan poate da acordul, dar ion aproba in final
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

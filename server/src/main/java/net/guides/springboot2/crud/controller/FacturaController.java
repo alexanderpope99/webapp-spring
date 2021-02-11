@@ -40,6 +40,11 @@ public class FacturaController {
 		return facturaService.findBySocietate_Id(ids);
 	}
 
+	@GetMapping("numar")
+	public int findNumarFactura() {
+		return facturaService.findNumarFactura();
+	}
+
 	@PostMapping
 	public Factura save(@RequestBody Factura newFactura) {
 		return facturaService.save(newFactura);

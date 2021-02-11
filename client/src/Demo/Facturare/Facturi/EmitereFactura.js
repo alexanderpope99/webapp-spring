@@ -15,7 +15,7 @@ export default class EmitereFactura extends React.Component {
 
     this.adaugaProdus = this.adaugaProdus.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-		this.handleClose = this.handleClose.bind(this);
+    this.handleClose = this.handleClose.bind(this);
 
     this.state = {
       showToast: false,
@@ -27,6 +27,8 @@ export default class EmitereFactura extends React.Component {
       activitati: [],
 
       today: new Date().toISOString().substring(0, 10),
+
+      ultimulNumar: 1,
 
       // datele facturii
       id: null,
@@ -57,35 +59,53 @@ export default class EmitereFactura extends React.Component {
     this.setState({ clienti: clienti ? clienti : [] });
   }
 
+  async getNumarFactura() {
+    var nr = 1;
+    if (!this.state.factura) {
+      nr = await axios
+        .get(`${server.address}/factura/numar`, { headers: authHeader() })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
+    } else {
+      nr = this.state.factura.nr;
+    }
+    this.setState({ numar: nr, ultimulNumar: nr });
+    return nr;
+  }
+
   componentDidMount() {
     this.getClienti();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.factura !== prevProps.factura) {
+      console.log('factura changed');
       this.fillForm(this.props.factura);
     } else return;
   }
 
   fillForm(factura) {
     if (!factura) {
-      this.setState({
-        factura: null,
+      this.setState(
+        {
+          factura: null,
 
-        id: null,
-        serie: 'BVFZ',
-        numar: this.props.numarFactura,
-        today: new Date().toISOString().substring(0, 10),
-        nrAvizInsotire: '-',
-        client: { nume: '' },
-        titlu: 'Cf. Contract vanzare-cumparare',
-        produse: [],
-        dataExpedierii: new Date().toISOString().substring(0, 10),
-        oraExpedierii: new Date().toLocaleTimeString().substring(0, 5),
-        totalFaraTva: 0,
-        totalTva: 0,
-        totalCuTva: 0,
-      });
+          id: null,
+          serie: 'BVFZ',
+          numar: this.props.numarFactura,
+          today: new Date().toISOString().substring(0, 10),
+          nrAvizInsotire: '-',
+          client: { nume: '' },
+          titlu: 'Cf. Contract vanzare-cumparare',
+          produse: [],
+          dataExpedierii: new Date().toISOString().substring(0, 10),
+          oraExpedierii: new Date().toLocaleTimeString().substring(0, 5),
+          totalFaraTva: 0,
+          totalTva: 0,
+          totalCuTva: 0,
+        },
+        this.getNumarFactura
+      );
     } else {
       this.setState({
         factura: factura,
@@ -115,9 +135,9 @@ export default class EmitereFactura extends React.Component {
     }
     const selectedIndex = e.target.options.selectedIndex;
     const idClient = e.target.options[selectedIndex].getAttribute('data-key');
-		// eslint-disable-next-line eqeqeq
-		const client = this.state.clienti.find(c => c.id == idClient);
-    this.setState({ client: client ? client : {nume: ''}});
+    // eslint-disable-next-line eqeqeq
+    const client = this.state.clienti.find((c) => c.id == idClient);
+    this.setState({ client: client ? client : { nume: '' } });
   }
 
   adaugaProdus() {
@@ -150,16 +170,13 @@ export default class EmitereFactura extends React.Component {
       totalTva = 0,
       totalCuTva = 0;
     if (produse && produse.length > 0) {
-      totalFaraTva = produse.reduce(
-        (acc, produs) => acc + produs.cantitate * produs.pretUnitar,
-        0
-      );
+      totalFaraTva = produse.reduce((acc, produs) => acc + produs.cantitate * produs.pretUnitar, 0);
       totalTva = totalFaraTva * 0.19;
       totalCuTva = totalFaraTva + totalTva;
     }
-		totalFaraTva = totalFaraTva.toFixed(2);
-		totalTva = totalTva.toFixed(2);
-		totalCuTva = totalCuTva.toFixed(2);
+    totalFaraTva = totalFaraTva.toFixed(2);
+    totalTva = totalTva.toFixed(2);
+    totalCuTva = totalCuTva.toFixed(2);
     return { totalFaraTva, totalTva, totalCuTva };
   }
 
@@ -168,13 +185,13 @@ export default class EmitereFactura extends React.Component {
     const nrAvizInsotire = this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire;
     const client = this.state.clienti.find((c) => c.id === this.state.client.id);
 
-		if(!client) {
-			this.setState({
-				toastMessage: 'Factura are nevoie de un client',
-				showToast: true,
-			});
-			return;
-		}
+    if (!client) {
+      this.setState({
+        toastMessage: 'Factura are nevoie de un client',
+        showToast: true,
+      });
+      return;
+    }
 
     const newFactura = {
       serie: this.state.serie,
@@ -217,20 +234,25 @@ export default class EmitereFactura extends React.Component {
 
     if (ok) {
       this.setState({
+        factura: newFactura,
         showToast: false,
         toastMessage: '',
         showModal: true,
         modalMessage: factura ? 'Factură modificată' : 'Factură adăugată',
+        ultimulNumar: newFactura.numar + 1,
       });
     }
   }
 
-	handleClose() {
-		this.setState({
-			showModal: false,
-			modalMessage: '',
-		}, this.props.scrollToTopSmooth)
-	}
+  handleClose() {
+    this.setState(
+      {
+        showModal: false,
+        modalMessage: '',
+      },
+      this.props.scrollToTopSmooth
+    );
+  }
 
   render() {
     const produseComponent = this.state.produse.map((produs, index) => (
@@ -279,7 +301,11 @@ export default class EmitereFactura extends React.Component {
         </Form.Group>
         <Form.Group as={Col} sm="6">
           <Form.Label>Valoare (fără TVA)</Form.Label>
-          <Form.Control disabled type="number" value={(produs.pretUnitar * produs.cantitate).toFixed(2)} />
+          <Form.Control
+            disabled
+            type="number"
+            value={(produs.pretUnitar * produs.cantitate).toFixed(2)}
+          />
         </Form.Group>
         <Form.Group as={Col} sm="6">
           <Form.Label>Valoare TVA</Form.Label>
@@ -302,9 +328,11 @@ export default class EmitereFactura extends React.Component {
       </Row>
     ));
 
-		const clientiComponent = this.state.clienti.map((client) => (
-			<option key={client.id} data-key={client.id}>{client.nume}</option>
-		))
+    const clientiComponent = this.state.clienti.map((client) => (
+      <option key={client.id} data-key={client.id}>
+        {client.nume}
+      </option>
+    ));
 
     const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
 
@@ -375,7 +403,11 @@ export default class EmitereFactura extends React.Component {
                     Numărul facturii:
                   </Form.Label>
                   <Col md={8}>
-                    <Form.Control type="text" disabled value={this.state.numar} />
+                    <Form.Control
+                      type="text"
+                      value={this.state.numar}
+                      onChange={(e) => this.setState({ numar: e.target.value })}
+                    />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row}>
@@ -412,7 +444,7 @@ export default class EmitereFactura extends React.Component {
                     onChange={(e) => this.onChangeClient(e)}
                   >
                     <option>-</option>
-										{clientiComponent}
+                    {clientiComponent}
                   </Form.Control>
                 </Form.Group>
               </Col>

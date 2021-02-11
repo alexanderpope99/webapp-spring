@@ -3,6 +3,7 @@ package net.guides.springboot2.crud.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
@@ -20,7 +21,7 @@ public class FacturaService {
 	}
 
 	public List<Factura> findAll() {
-		return facturaRepository.findAll();
+		return facturaRepository.findAll(Sort.by(Sort.Direction.DESC, "dataexpedierii", "numar"));
 	}
 
 	public Factura findById(int id) throws ResourceNotFoundException {
@@ -28,7 +29,11 @@ public class FacturaService {
 	}
 
 	public List<Factura> findBySocietate_Id(int idsocietate) {
-		return facturaRepository.findByClient_Societate_Id(idsocietate);
+		return facturaRepository.findByClient_Societate_IdOrderByDataexpedieriiDescNumarDesc(idsocietate);
+	}
+
+	public int findNumarFactura() {
+		return facturaRepository.findNumarFactura();
 	}
 
 	public Factura save(Factura newFactura) {

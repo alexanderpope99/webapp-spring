@@ -29,7 +29,7 @@ public class Factura implements Serializable {
 	private String serie;
 
 	@Column(name = "numar")
-	private String numar;
+	private Integer numar;
 
 	@Column(name = "nravizinsotire")
 	private String nravizinsotire;
@@ -76,11 +76,11 @@ public class Factura implements Serializable {
 		this.serie = serie;
 	}
 
-	public String getNumar() {
+	public Integer getNumar() {
 		return numar;
 	}
 
-	public void setNumar(String numar) {
+	public void setNumar(Integer numar) {
 		this.numar = numar;
 	}
 

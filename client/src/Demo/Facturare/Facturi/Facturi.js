@@ -1,18 +1,19 @@
 import React from 'react';
 import { Row, Col, Tabs, Tab, Breadcrumb } from 'react-bootstrap';
 import Aux from '../../../hoc/_Aux';
-import { getSocSel } from '../../Resources/socsel';
-import FacturiTabel from './FacturiTabel';
+import FacturiTabel from './FacturiTabelNext';
 import EmitereFactura from './EmitereFactura';
+
+import { getSocSel } from '../../Resources/socsel';
 
 export default class Facturi extends React.Component {
   constructor(props) {
     super(props);
 
     this.edit = this.edit.bind(this);
-		this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);
+    this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);
 
-		this.tabelFacturi = React.createRef();
+    this.tabelFacturi = React.createRef();
 
     this.state = {
       key: 'tabel-facturi',
@@ -23,27 +24,30 @@ export default class Facturi extends React.Component {
   }
 
   onSelectPill(key) {
-		if(key === 'tabel-facturi') {
-			this.tabelFacturi.current.getFacturi();
-		}
+    if (key === 'tabel-facturi') {
+      this.tabelFacturi.current.getFacturi();
+    }
+    if (key === 'emite-factura') {
+      this.edit(null);
+    }
     this.setState({ key: key, factura: null });
   }
 
-  edit(factura) {
+  async edit(factura) {
+		console.log('emite factura:', factura);
     this.setState({
       key: 'emite-factura',
       factura: factura,
-      numarFactura: factura ? factura.numar : 1,
     });
   }
 
-	scrollToTopSmooth() {
-		window.scrollTo({
-			top: 0,
-			left: 0,
-			behavior: 'smooth',
-		});
-	}
+  scrollToTopSmooth() {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  }
 
   render() {
     return (
@@ -62,9 +66,11 @@ export default class Facturi extends React.Component {
               onSelect={(key) => this.onSelectPill(key)}
             >
               <Tab eventKey="tabel-facturi" title="Tabel facturi">
-                <FacturiTabel 
-								ref={this.tabelFacturi}
-								edit={this.edit} scrollToTopSmooth={this.scrollToTopSmooth} />
+                <FacturiTabel
+                  ref={this.tabelFacturi}
+                  edit={this.edit}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
+                />
               </Tab>
               <Tab eventKey="emite-factura" title="Emitere factură">
                 <EmitereFactura
