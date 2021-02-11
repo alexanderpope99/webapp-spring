@@ -399,7 +399,7 @@ class EditPersoana extends React.Component {
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
           className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
         >
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Eroare</strong>

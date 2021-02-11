@@ -32,7 +32,7 @@ export default class EmitereFactura extends React.Component {
       serie: 'BVFZ',
       numar: props.numarFactura,
       nrAvizInsotire: '-',
-      client: { id: 0, nume: '-' },
+      client: { nume: '' },
       titlu: 'Cf. Contract vanzare-cumparare',
       produse: [],
       dataExpedierii: new Date().toISOString().substring(0, 10),
@@ -43,23 +43,22 @@ export default class EmitereFactura extends React.Component {
     };
   }
 
-	async getClienti() {
-		const clienti = await axios
-			.get(`${server.address}/client/ids=${getSocSel().id}`, { headers: authHeader()})
-			.then(res => res.data)
-			.catch((err) =>
-          this.setState({
-            showToast: true,
-            toastMessage: 'Nu am putut prelua clienții: ' + err.response.data.message,
-          })
-        );
-		console.log(clienti);
-		this.setState({clienti: clienti ? clienti : []});
-	}
+  async getClienti() {
+    const clienti = await axios
+      .get(`${server.address}/client/ids=${getSocSel().id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua clienții: ' + err.response.data.message,
+        })
+      );
+    this.setState({ clienti: clienti ? clienti : [] });
+  }
 
-	componentDidMount() {
-		this.getClienti();
-	}
+  componentDidMount() {
+    this.getClienti();
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.factura !== prevProps.factura) {
@@ -77,7 +76,7 @@ export default class EmitereFactura extends React.Component {
         numar: this.props.numarFactura,
         today: new Date().toISOString().substring(0, 10),
         nrAvizInsotire: '-',
-        client: { id: 0, nume: '-' },
+        client: { nume: '' },
         titlu: 'Cf. Contract vanzare-cumparare',
         produse: [],
         dataExpedierii: new Date().toISOString().substring(0, 10),
@@ -110,13 +109,15 @@ export default class EmitereFactura extends React.Component {
 
   onChangeClient(e) {
     if (e.target.value === '-') {
-      this.setState({ client: { id: 0, nume: '-' } });
+      this.setState({ client: { nume: '' } });
       return;
     }
     const selectedIndex = e.target.options.selectedIndex;
     const idClient = e.target.options[selectedIndex].getAttribute('data-key');
-
-    this.setState({ client: { id: Number(idClient), nume: e.target.value } });
+		// eslint-disable-next-line eqeqeq
+		const client = this.state.clienti.find(c => c.id == idClient);
+		console.log(client);
+    this.setState({ client: client ? client : {nume: ''}});
   }
 
   adaugaProdus() {
@@ -162,13 +163,20 @@ export default class EmitereFactura extends React.Component {
 
   async onSubmit() {
     const factura = this.state.factura;
-		const nrAvizInsotire = this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire;
-		const client = this.state.clienti.find(c => c.id === this.state.client.id);
-		
+    const nrAvizInsotire = this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire;
+    const client = this.state.clienti.find((c) => c.id === this.state.client.id);
+
+		if(!client) {
+			this.setState({
+				toastMessage: 'Factura are nevoie de un client',
+				showToast: true,
+			})
+		}
+
     const newFactura = {
       serie: this.state.serie,
       numar: this.state.numar,
-      nrAvizInsotire: this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire,
+      nrAvizInsotire: nrAvizInsotire,
       client: client,
       titlu: this.state.titlu,
       produse: this.state.produse,
@@ -286,6 +294,10 @@ export default class EmitereFactura extends React.Component {
       </Row>
     ));
 
+		const clientiComponent = this.state.clienti.map((client) => (
+			<option key={client.id} data-key={client.id}>{client.nume}</option>
+		))
+
     const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
 
     return (
@@ -297,7 +309,7 @@ export default class EmitereFactura extends React.Component {
           delay={4000}
           autohide
           className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'red' }}
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
         >
           <Toast.Header className="pr-2">
             <strong className="mr-auto">Eroare</strong>
@@ -391,7 +403,8 @@ export default class EmitereFactura extends React.Component {
                     value={this.state.client.nume}
                     onChange={(e) => this.onChangeClient(e)}
                   >
-                    <option data-key="2">-</option>
+                    <option>-</option>
+										{clientiComponent}
                   </Form.Control>
                 </Form.Group>
               </Col>
@@ -414,7 +427,9 @@ export default class EmitereFactura extends React.Component {
             {/* PRODUSE / SERVICII */}
             <Row className="border rounded mt-2 pt-3 pb-2">
               <Col md={12}>
-                <Button onClick={this.adaugaProdus} variant="info" className="pt-1 pb-1">Adauga produs/serviciu</Button>
+                <Button onClick={this.adaugaProdus} variant="info" className="pt-1 pb-1">
+                  Adauga produs/serviciu
+                </Button>
                 <Col md={12}>{produseComponent}</Col>
               </Col>
             </Row>
