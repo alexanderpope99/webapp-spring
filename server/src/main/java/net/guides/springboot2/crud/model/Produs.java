@@ -2,15 +2,12 @@ package net.guides.springboot2.crud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
 
@@ -22,7 +19,7 @@ public class Produs implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private int id;
 
 	@Column(name = "denumire")
 	private String denumire;
@@ -43,83 +40,86 @@ public class Produs implements Serializable {
 	private Float tva;
 
 	@ManyToOne
-	@JoinColumn(name = "idproiect", nullable = false)
-	private Proiect proiect;
-
-	@JsonBackReference(value = "factura-produse")
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idfactura", referencedColumnName = "id")
 	private Factura factura;
 
-	public Integer getId() {
-		return id;
+
+	public Produs() {
 	}
 
-	public void setId(Integer id) {
+	public Produs(String denumire, String um, int cantitate, Float pretUnitar, Float valoareFaraTva, Float tva, Factura factura) {
+		this.denumire = denumire;
+		this.um = um;
+		this.cantitate = cantitate;
+		this.pretUnitar = pretUnitar;
+		this.valoareFaraTva = valoareFaraTva;
+		this.tva = tva;
+		this.factura = factura;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
 		this.id = id;
 	}
 
 	public String getDenumire() {
-		return denumire;
+		return this.denumire;
 	}
 
 	public void setDenumire(String denumire) {
 		this.denumire = denumire;
 	}
 
-	public Float getPretunitar() {
-		return pretUnitar;
-	}
-
-	public void setPretunitar(Float pretunitar) {
-		this.pretUnitar = pretunitar;
-	}
-
-	public Proiect getProiect() {
-		return proiect;
-	}
-
-	public void setProiect(Proiect proiect) {
-		this.proiect = proiect;
-	}
-
 	public String getUm() {
-		return um;
+		return this.um;
 	}
+
 	public void setUm(String um) {
 		this.um = um;
 	}
 
-	public Float getValoarefaratva() {
-		return valoareFaraTva;
-	}
-
-	public void setValoarefaratva(Float valoarefaratva) {
-		this.valoareFaraTva = valoarefaratva;
-	}
-
-	public Float getTva() {
-		return tva;
-	}
-
-	public void setTva(Float valoaretva) {
-		this.tva = valoaretva;
-	}
-
-	public Factura getFactura() {
-		return factura;
-	}
-
-	public void setFactura(Factura factura) {
-		this.factura = factura;
-	}
-
 	public int getCantitate() {
-		return cantitate;
+		return this.cantitate;
 	}
 
 	public void setCantitate(int cantitate) {
 		this.cantitate = cantitate;
 	}
+
+	public Float getPretUnitar() {
+		return this.pretUnitar;
+	}
+
+	public void setPretUnitar(Float pretUnitar) {
+		this.pretUnitar = pretUnitar;
+	}
+
+	public Float getValoareFaraTva() {
+		return this.valoareFaraTva;
+	}
+
+	public void setValoareFaraTva(Float valoareFaraTva) {
+		this.valoareFaraTva = valoareFaraTva;
+	}
+
+	public Float getTva() {
+		return this.tva;
+	}
+
+	public void setTva(Float tva) {
+		this.tva = tva;
+	}
+
+	public Factura getFactura() {
+		return this.factura;
+	}
+
+	public void setFactura(Factura factura) {
+		this.factura = factura;
+	}
+	
 	
 }

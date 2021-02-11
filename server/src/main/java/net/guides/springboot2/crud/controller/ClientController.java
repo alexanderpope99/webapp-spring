@@ -55,7 +55,7 @@ public class ClientController {
 
   @PutMapping("{id}/ids={ids}")
   public Client save(@PathVariable("id") int id, @RequestBody Client client, @PathVariable("ids") int idsocietate) throws ResourceNotFoundException {
-    return clientService.updateBySocietate_Id(id, client, idsocietate);
+    return clientService.update(id, client);
   }
 
 

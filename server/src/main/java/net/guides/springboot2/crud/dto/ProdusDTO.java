@@ -1,7 +1,5 @@
 package net.guides.springboot2.crud.dto;
 
-import net.guides.springboot2.crud.model.Proiect;
-
 public class ProdusDTO {
 	private int id;
 	private String denumire;

@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Factura;
 import net.guides.springboot2.crud.services.FacturaService;
 
 @RestController
@@ -30,13 +32,18 @@ public class FacturaController {
 	}
 
 	@GetMapping("{id}")
-	public FacturaDTO getById(@PathVariable("id") int id) {
+	public Factura getById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		return facturaService.findById(id);
 	}
 
 	@PostMapping
 	public FacturaDTO saveFactura(@RequestBody FacturaDTO newFactura) throws ResourceNotFoundException {
 		return facturaService.save(newFactura);
+	}
+
+	@PutMapping("{id}")
+	public Factura update(@RequestBody Factura newFactura, @PathVariable("id") int id) throws ResourceNotFoundException {
+		return facturaService.update(newFactura, id);
 	}
 
 	@DeleteMapping("{id}")

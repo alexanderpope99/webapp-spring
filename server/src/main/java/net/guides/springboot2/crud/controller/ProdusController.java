@@ -45,12 +45,12 @@ public class ProdusController {
 
 
 	@PostMapping
-	public ProdusDTO createProdus(@RequestBody ProdusDTO produsDTO) throws ResourceNotFoundException {
+	public Produs createProdus(@RequestBody ProdusDTO produsDTO) throws ResourceNotFoundException {
 		return produsService.save(produsDTO);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<ProdusDTO> updateProdus(@PathVariable("id") int acId, @RequestBody ProdusDTO acDTO)
+	public ResponseEntity<Produs> updateProdus(@PathVariable("id") int acId, @RequestBody ProdusDTO acDTO)
 			throws ResourceNotFoundException {
 		return ResponseEntity.ok(produsService.update(acId, acDTO));
 	}

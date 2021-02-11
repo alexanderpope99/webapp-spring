@@ -176,15 +176,15 @@ export default class EmitereFactura extends React.Component {
     const newFactura = {
       serie: this.state.serie,
       numar: this.state.numar,
-      nrAvizInsotire: nrAvizInsotire,
+      nravizinsotire: nrAvizInsotire,
       client: client,
       titlu: this.state.titlu,
       produse: this.state.produse,
-      dataExpedierii: this.state.dataExpedierii,
-      oraExpedierii: this.state.oraExpedierii,
-      totalFaraTva: this.state.totalFaraTva,
-      totalTva: this.state.totalTva,
-      totalCuTva: this.state.totalCuTva,
+      dataexpedierii: this.state.dataExpedierii,
+      oraexpedierii: this.state.oraExpedierii,
+      totalfaratva: this.state.totalFaraTva,
+      tva: this.state.totalTva,
+      // totalcutva: this.state.totalCuTva,
     };
 
     var ok = false;

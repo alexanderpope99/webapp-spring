@@ -222,6 +222,22 @@ public class Societate implements Serializable {
 		this.useri = useri;
 	}
 
+	public List<Activitate> getActivitati() {
+		return activitati;
+	}
+
+	public void setActivitati(List<Activitate> activitati) {
+		this.activitati = activitati;
+	}
+
+	public List<Client> getClienti() {
+		return clienti;
+	}
+
+	public void setClienti(List<Client> clienti) {
+		this.clienti = clienti;
+	}
+
 	public void checkData() throws ResourceNotFoundException {
 		if (nume == null)
 			throw new ResourceNotFoundException("Numele nu poate fi null");

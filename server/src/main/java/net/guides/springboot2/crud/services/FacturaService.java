@@ -10,14 +10,9 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.FacturaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
-import net.guides.springboot2.crud.model.Client;
 import net.guides.springboot2.crud.model.Factura;
 import net.guides.springboot2.crud.model.Produs;
-import net.guides.springboot2.crud.model.Proiect;
-import net.guides.springboot2.crud.repository.ClientRepository;
-import net.guides.springboot2.crud.repository.ProdusRepository;
 import net.guides.springboot2.crud.repository.FacturaRepository;
-import net.guides.springboot2.crud.repository.ProiectRepository;
 
 @Service
 public class FacturaService {
@@ -37,12 +32,19 @@ public class FacturaService {
 		return facturi.stream().map(user -> modelMapper.map(user, FacturaDTO.class)).collect(Collectors.toList());
 	}
 
-	public FacturaDTO findById(int id) {
-	Factura factura = facturaRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Factura not in database"));
-		return modelMapper.map(factura, FacturaDTO.class);
+	public Factura findById(int id) throws ResourceNotFoundException {
+		return facturaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + id));
 	}
 
+	public Factura save(Factura newFactura) {
+		return facturaRepository.save(newFactura);
+	}
+
+	public Factura update(Factura newFactura, int id) throws ResourceNotFoundException {
+		Factura factura = findById(id);
+		
+		return save(factura.update(newFactura));
+	}
 
 	public FacturaDTO save(FacturaDTO newFacturaDTO) throws ResourceNotFoundException {
 
@@ -52,13 +54,13 @@ public class FacturaService {
 		// set produs
 		List<Produs> newProduse = new ArrayList<>();
 		newFacturaDTO.getProduse().forEach(pr -> {
-		// get from db and push to list
-		Produs produs=produsService.save(pr);
-					
-		// produs needs to point to this factura
-		produs.setFactura(newFactura);
-								
-		newProduse.add(produs);
+			// get from db and push to list
+			Produs produs = produsService.save(pr);
+
+			// produs needs to point to this factura
+			produs.setFactura(newFactura);
+
+			newProduse.add(produs);
 		});
 		// set newFactura with complete Produse list
 		newFactura.setProduse(newProduse);
@@ -69,10 +71,7 @@ public class FacturaService {
 	} // save
 
 	public void delete(int facturaId) throws ResourceNotFoundException {
-		Factura factura = facturaRepository.findById(facturaId)
-				.orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
-
-		factura.getProduse().forEach(pr -> pr.setFactura(null));
+		Factura factura = facturaRepository.findById(facturaId).orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
 
 		facturaRepository.delete(factura);
 	}

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.ProdusDTO;
-import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Produs;
 import net.guides.springboot2.crud.repository.ProdusRepository;
 

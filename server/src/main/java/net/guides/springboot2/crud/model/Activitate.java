@@ -62,4 +62,12 @@ public class Activitate implements Serializable {
 		this.societate = societate;
 	}
 
+	public List<Proiect> getProiecte() {
+		return proiecte;
+	}
+
+	public void setProiecte(List<Proiect> proiecte) {
+		this.proiecte = proiecte;
+	}
+
 }

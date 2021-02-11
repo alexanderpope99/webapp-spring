@@ -11,8 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -46,7 +44,7 @@ public class Factura implements Serializable {
 	private String oraexpedierii;
 
 	@Column(name = "totalfaratva")
-	private Float totalFaraTva;
+	private Float totalfaratva;
 
 	@Column(name = "tva")
 	private Float tva;
@@ -55,14 +53,12 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "idclient", nullable = true)
 	private Client client;
 
-	@JsonBackReference(value = "produs-factura")
 	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
 	private List<Produs> produse;
 
 	@ManyToOne
 	@JoinColumn(name = "idproiect", nullable = true)
 	private Proiect proiect;
-
 
 	public Integer getId() {
 		return id;
@@ -136,12 +132,12 @@ public class Factura implements Serializable {
 		this.titlu = titlu;
 	}
 
-	public Float getTotalFaraTva() {
-		return totalFaraTva;
+	public Float getTotalfaratva() {
+		return totalfaratva;
 	}
 
-	public void setTotalFaraTva(Float totalFaraTva) {
-		this.totalFaraTva = totalFaraTva;
+	public void setTotalfaratva(Float totalfaratva) {
+		this.totalfaratva = totalfaratva;
 	}
 
 	public Float getTva() {
@@ -152,8 +148,8 @@ public class Factura implements Serializable {
 		this.tva = tva;
 	}
 
-	public Float getTotal(){
-		return totalFaraTva+tva;
+	public Float getTotalcutva() {
+		return totalfaratva + tva;
 	}
 
 	public List<Produs> getProduse() {
@@ -164,4 +160,18 @@ public class Factura implements Serializable {
 		this.produse = produse;
 	}
 
+	public Factura update(Factura newFactura) {
+		this.serie = newFactura.serie;
+		this.numar = newFactura.numar;
+		this.nravizinsotire = newFactura.nravizinsotire;
+		this.client = newFactura.client;
+		this.titlu = newFactura.titlu;
+		this.produse = newFactura.produse;
+		this.dataexpedierii = newFactura.dataexpedierii;
+		this.oraexpedierii = newFactura.oraexpedierii;
+		this.totalfaratva = newFactura.totalfaratva;
+		this.tva = newFactura.tva;
+
+		return this;
+	}
 }
