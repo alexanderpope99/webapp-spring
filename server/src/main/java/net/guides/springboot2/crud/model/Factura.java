@@ -3,13 +3,10 @@ package net.guides.springboot2.crud.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -55,17 +52,16 @@ public class Factura implements Serializable {
 	private Float tva;
 
 	@ManyToOne
-	@JoinColumn(name = "idclient", nullable = false)
+	@JoinColumn(name = "idclient", nullable = true)
 	private Client client;
 
 	@JsonBackReference(value = "produs-factura")
 	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
 	private List<Produs> produse;
 
-	@JsonBackReference(value = "factura-proiect")
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "factura_proiect", joinColumns = @JoinColumn(name = "factura_id"), inverseJoinColumns = @JoinColumn(name = "proiect_id"))
-	private List<Proiect> proiecte;
+	@ManyToOne
+	@JoinColumn(name = "idproiect", nullable = true)
+	private Proiect proiect;
 
 
 	public Integer getId() {
@@ -124,12 +120,12 @@ public class Factura implements Serializable {
 		this.oraexpedierii = oraexpedierii;
 	}
 
-	public List<Proiect> getProiecte() {
-		return proiecte;
+	public Proiect getProiect() {
+		return proiect;
 	}
 
-	public void setProiecte(List<Proiect> proiecte) {
-		this.proiecte = proiecte;
+	public void setProiect(Proiect proiect) {
+		this.proiect = proiect;
 	}
 
 	public String getTitlu() {

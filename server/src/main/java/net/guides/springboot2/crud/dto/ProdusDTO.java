@@ -7,12 +7,9 @@ public class ProdusDTO {
 	private String denumire;
 	private String um;
 	private int cantitate;
-	private Float pretunitar;
-	private Float valoarefaratva;
-	private Float valoaretva;
-	private int idproiect;
-
-	private Proiect proiect;
+	private Float pretUnitar;
+	private Float valoareFaraTva;
+	private Float tva;
 
 	public int getId() {
 		return id;
@@ -31,11 +28,11 @@ public class ProdusDTO {
 	}
 
 	public Float getPretunitar() {
-		return pretunitar;
+		return pretUnitar;
 	}
 
 	public void setPretunitar(Float pretunitar) {
-		this.pretunitar = pretunitar;
+		this.pretUnitar = pretunitar;
 	}
 
 	public String getUm() {
@@ -47,34 +44,21 @@ public class ProdusDTO {
 	}
 
 	public Float getValoarefaratva() {
-		return valoarefaratva;
+		return valoareFaraTva;
 	}
 
 	public void setValoarefaratva(Float valoarefaratva) {
-		this.valoarefaratva = valoarefaratva;
+		this.valoareFaraTva = valoarefaratva;
 	}
 
-	public Float getValoaretva() {
-		return valoaretva;
+	public Float getTva() {
+		return tva;
 	}
 
-	public void setValoaretva(Float valoaretva) {
-		this.valoaretva = valoaretva;
+	public void setTva(Float valoaretva) {
+		this.tva = valoaretva;
 	}
 
-	public Integer getIdproiect() {
-		if (proiect == null)
-			return idproiect;
-		else
-			return proiect.getId();
-	}
-
-	public void setProiect(Proiect proiect) {
-		this.proiect = proiect;
-	}
-	public void setIdproiect(int idproiect) {
-		this.idproiect = idproiect;
-	}
 
 	public int getCantitate() {
 		return cantitate;

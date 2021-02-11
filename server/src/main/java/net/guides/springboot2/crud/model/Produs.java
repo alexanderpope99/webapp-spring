@@ -34,13 +34,13 @@ public class Produs implements Serializable {
 	private int cantitate;
 
 	@Column(name = "pretunitar")
-	private Float pretunitar;
+	private Float pretUnitar;
 
 	@Column(name = "valoarefaratva")
-	private Float valoarefaratva;
+	private Float valoareFaraTva;
 
 	@Column(name = "valoaretva")
-	private Float valoaretva;
+	private Float tva;
 
 	@ManyToOne
 	@JoinColumn(name = "idproiect", nullable = false)
@@ -68,11 +68,11 @@ public class Produs implements Serializable {
 	}
 
 	public Float getPretunitar() {
-		return pretunitar;
+		return pretUnitar;
 	}
 
 	public void setPretunitar(Float pretunitar) {
-		this.pretunitar = pretunitar;
+		this.pretUnitar = pretunitar;
 	}
 
 	public Proiect getProiect() {
@@ -91,19 +91,19 @@ public class Produs implements Serializable {
 	}
 
 	public Float getValoarefaratva() {
-		return valoarefaratva;
+		return valoareFaraTva;
 	}
 
 	public void setValoarefaratva(Float valoarefaratva) {
-		this.valoarefaratva = valoarefaratva;
+		this.valoareFaraTva = valoarefaratva;
 	}
 
-	public Float getValoaretva() {
-		return valoaretva;
+	public Float getTva() {
+		return tva;
 	}
 
-	public void setValoaretva(Float valoaretva) {
-		this.valoaretva = valoaretva;
+	public void setTva(Float valoaretva) {
+		this.tva = valoaretva;
 	}
 
 	public Factura getFactura() {

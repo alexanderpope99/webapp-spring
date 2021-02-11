@@ -1,11 +1,9 @@
 package net.guides.springboot2.crud.dto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.guides.springboot2.crud.model.Client;
-import net.guides.springboot2.crud.model.Produs;
 import net.guides.springboot2.crud.model.Proiect;
 
 public class FacturaDTO {
@@ -13,53 +11,40 @@ public class FacturaDTO {
 
 	private String serie;
 	private String numar;
-	private String nravizinsotire;
+	private String nrAvizInsotire;
 	private String titlu;
-	private LocalDate dataexpedierii;
-	private String oraexpedierii;
+	private LocalDate dataExpedierii;
+	private String oraExpedierii;
 	private Float totalFaraTva;
 	private Float tva;
 
-	private int idclient;
-
 	private Client client;
+	private Proiect proiect;
 
-	private List<Produs> produse;
-
-	private List<ProiectJSON> proiecte;
+	private List<ProdusDTO> produse;
 
 	public int getId() {
 		return id;
-	}
-	public List<ProiectJSON> getProiecte() {
-		return proiecte;
 	}
 
 	public void setId(int id) {
 		this.id = id;
 	}
-	public void setProiecte(List<ProiectJSON> proiecte) {
-		this.proiecte = proiecte;
-	}
-	public void setProiecteClass(List<Proiect> proiecte) {
-    this.proiecte = new ArrayList<>();
-    proiecte.forEach(pr -> this.proiecte.add(new ProiectJSON(pr.getId(), pr.getNume())));
-	}
 
 	public LocalDate getDataexpedierii() {
-		return dataexpedierii;
+		return dataExpedierii;
 	}
 
 	public void setDataexpedierii(LocalDate dataexpedierii) {
-		this.dataexpedierii = dataexpedierii;
+		this.dataExpedierii = dataexpedierii;
 	}
 
 	public String getNravizinsotire() {
-		return nravizinsotire;
+		return nrAvizInsotire;
 	}
 
 	public void setNravizinsotire(String nravizinsotire) {
-		this.nravizinsotire = nravizinsotire;
+		this.nrAvizInsotire = nravizinsotire;
 	}
 
 	public String getNumar() {
@@ -71,11 +56,11 @@ public class FacturaDTO {
 	}
 
 	public String getOraexpedierii() {
-		return oraexpedierii;
+		return oraExpedierii;
 	}
 
 	public void setOraexpedierii(String oraexpedierii) {
-		this.oraexpedierii = oraexpedierii;
+		this.oraExpedierii = oraexpedierii;
 	}
 
 	public String getSerie() {
@@ -114,27 +99,30 @@ public class FacturaDTO {
 		return totalFaraTva+tva;
 	}
 	
-	public List<Produs> getProduse() {
+	public List<ProdusDTO> getProduse() {
 		return produse;
 	}
 
-	public void setProduse(List<Produs> produse) {
+	public void setProduse(List<ProdusDTO> produse) {
 		this.produse = produse;
 	}
 
-	public Integer getIdclient() {
-		if (client == null)
-			return idclient;
-		else
-			return client.getId();
+	public Client getClient() {
+		return client;
 	}
 
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	public void setIdclient(int idclient) {
-		this.idclient = idclient;
+
+	public Proiect getProiect() {
+		return proiect;
 	}
+
+	public void setProiect(Proiect proiect) {
+		this.proiect = proiect;
+	}
+	
 }
 
 

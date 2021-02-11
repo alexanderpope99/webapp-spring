@@ -38,6 +38,10 @@ public class Proiect implements Serializable {
 	@OneToMany(mappedBy = "proiect", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Produs> produse;
 
+	@JsonBackReference(value = "facturi-proiecte")
+	@OneToMany(mappedBy = "proiect", cascade = CascadeType.ALL)
+	private List<Factura> facturi;
+
 	public Integer getId() {
 		return id;
 	}
@@ -60,6 +64,14 @@ public class Proiect implements Serializable {
 
 	public void setActivitate(Activitate activitate) {
 		this.activitate = activitate;
+	}
+
+	public List<Factura> getFacturi() {
+		return facturi;
+	}
+
+	public void setFacturi(List<Factura> facturi) {
+		this.facturi = facturi;
 	}
 
 }
