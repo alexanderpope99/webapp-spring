@@ -20,7 +20,6 @@ export default class ClientiTabel extends React.Component {
 
     this.getClienti = this.getClienti.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.onChangeLocalitate = this.onChangeLocalitate.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
@@ -57,7 +56,6 @@ export default class ClientiTabel extends React.Component {
       idadresa: null,
       adresa: '',
       judet: '',
-      tipJudet: 'Județ',
       localitate: '',
     };
   }
@@ -81,7 +79,6 @@ export default class ClientiTabel extends React.Component {
       idadresa: null,
       adresa: '',
       judet: '',
-      tipJudet: 'Județ',
       localitate: '',
     });
   }
@@ -106,37 +103,6 @@ export default class ClientiTabel extends React.Component {
     if (clienti) this.setState({ clienti: clienti }, this.clearFields);
   }
 
-  getTipJudet(tipJudet) {
-    if (typeof tipJudet !== 'string') {
-      return 'Județ';
-    }
-    if (
-      tipJudet.toLowerCase() === 'bucuresti' ||
-      tipJudet.toLowerCase() === 'bucurești' ||
-      tipJudet.toLowerCase() === 'bucharest'
-    )
-      return 'Sector';
-    else return 'Județ';
-  }
-  onChangeLocalitate(localitate) {
-    if (localitate) {
-      let tip_judet = this.getTipJudet(localitate);
-
-      let judet =
-        tip_judet === this.state.tipJudet
-          ? this.state.judet
-          : tip_judet === 'Județ'
-          ? 'ALBA'
-          : 'SECTOR 1';
-
-      this.setState({
-        tipJudet: tip_judet,
-        judet: judet,
-        localitate: localitate,
-      });
-    }
-  }
-
   handleClose() {
     this.setState(
       {
@@ -150,33 +116,32 @@ export default class ClientiTabel extends React.Component {
   }
 
   edit(client) {
-    this.setState(
-      {
-        showConfirm: false,
-        modalMessage: '',
-        show: true,
-        isEdit: true,
+    this.setState({
+      showConfirm: false,
+      modalMessage: '',
+      show: true,
+      isEdit: true,
 
-        // detalii client
-        id: client.id,
-        numecomplet: client.numecomplet || '',
-        nume: client.nume || '',
-        statut: client.statut || '',
-        nrregcom: client.nrregcom || '',
-        codfiscal: client.codfiscal || '',
-        cotatva: client.cotatva || '',
-        client: client.client || false,
-        furnizor: client.furnizor || false,
-        extern: client.extern || false,
-        banca: client.banca || '',
-        sucursala: client.sucursala || '',
-        cont: client.cont || '',
-        moneda: client.moneda || 'RON',
-        idadresa: client.adresa.id || null,
-        adresa: client.adresa.adresa || '',
-      },
-      () => this.onChangeLocalitate(client.adresa.localitate)
-    );
+      // detalii client
+      id: client.id,
+      numecomplet: client.numecomplet || '',
+      nume: client.nume || '',
+      statut: client.statut || '',
+      nrregcom: client.nrregcom || '',
+      codfiscal: client.codfiscal || '',
+      cotatva: client.cotatva || '',
+      client: client.client || false,
+      furnizor: client.furnizor || false,
+      extern: client.extern || false,
+      banca: client.banca || '',
+      sucursala: client.sucursala || '',
+      cont: client.cont || '',
+      moneda: client.moneda || 'RON',
+      idadresa: client.adresa.id || null,
+      adresa: client.adresa.adresa || '',
+      localitate: client.adresa.localitate || '',
+      judet: client.adresa.judet || 'ALBA',
+    });
   }
 
   async delete(id) {
@@ -339,10 +304,8 @@ export default class ClientiTabel extends React.Component {
       </tr>
     ));
 
-    var judeteComponent = [];
-    if (this.state.tipJudet === 'Județ')
-      judeteComponent = judete.map((judet, index) => <option key={index}>{judet}</option>);
-    else judeteComponent = sectoare.map((sector, index) => <option key={index}>{sector}</option>);
+    var judeteComponent = judete.map((judet) => <option key={judet}>{judet}</option>);
+		var sectoareComponent = sectoare.map((sector) => <option key={sector}>{sector}</option>)
 
     return (
       <Aux>
@@ -426,34 +389,42 @@ export default class ClientiTabel extends React.Component {
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} md="12" controlId="adresa">
-                  <Form.Label>Adresa</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.adresa}
-                    onChange={(e) => this.setState({ adresa: e.target.value })}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} md="6" controlId="localitate">
-                  <Form.Label>Localitate</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.localitate}
-                    onChange={(e) => this.onChangeLocalitate(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} md="6">
-                  <Form.Label>{this.state.tipJudet}</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={this.state.judet}
-                    onChange={(e) => this.setState({ judet: e.target.value })}
-                  >
-                    {judeteComponent}
-                  </Form.Control>
-                </Form.Group>
+                {/* ADRESA */}
+                <Row className="border rounded pt-3 pb-3 m-3">
+                  <Col md={12}>
+                    <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+                      Adresă
+                    </Typography>
+                  </Col>
+                  <Form.Group as={Col} md="12" controlId="adresa">
+                    <Form.Label>Adresa</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.adresa}
+                      onChange={(e) => this.setState({ adresa: e.target.value })}
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} md="6" controlId="localitate">
+                    <Form.Label>Localitate</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={this.state.localitate}
+                      onChange={(e) => this.setState({localitate: e.target.value})}
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} md="6">
+                    <Form.Label>Sector / Județ</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.judet}
+                      onChange={(e) => this.setState({ judet: e.target.value })}
+                    >
+											<option>-</option>
+											{sectoareComponent}
+                      {judeteComponent}
+                    </Form.Control>
+                  </Form.Group>
+                </Row>
 
                 <Form.Group as={Col} md="4">
                   <Form.Check
@@ -465,7 +436,6 @@ export default class ClientiTabel extends React.Component {
                     onChange={(e) => this.setState({ client: e.target.checked })}
                   />
                 </Form.Group>
-
                 <Form.Group as={Col} md="4">
                   <Form.Check
                     custom
@@ -476,7 +446,6 @@ export default class ClientiTabel extends React.Component {
                     onChange={(e) => this.setState({ furnizor: e.target.checked })}
                   />
                 </Form.Group>
-
                 <Form.Group as={Col} md="4">
                   <Form.Check
                     custom
@@ -488,13 +457,13 @@ export default class ClientiTabel extends React.Component {
                   />
                 </Form.Group>
 
+                {/* CONT BANCAR */}
                 <Row className="border rounded pt-3 pb-3 m-3">
                   <Col md={12}>
                     <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
-                      Detalii cont principal (obligatoriu)
+                      Detalii cont principal
                     </Typography>
                   </Col>
-
                   <Form.Group as={Col} md="6" controlId="numebanca">
                     <Form.Label>Banca</Form.Label>
                     <Form.Control
@@ -503,7 +472,6 @@ export default class ClientiTabel extends React.Component {
                       onChange={(e) => this.setState({ banca: e.target.value })}
                     />
                   </Form.Group>
-
                   <Form.Group as={Col} md="6" controlId="numebanca">
                     <Form.Label>Sucursala</Form.Label>
                     <Form.Control
@@ -512,7 +480,6 @@ export default class ClientiTabel extends React.Component {
                       onChange={(e) => this.setState({ sucursala: e.target.value })}
                     />
                   </Form.Group>
-
                   <Form.Group as={Col} md="6">
                     <Form.Label>Cont</Form.Label>
                     <Form.Control
@@ -521,7 +488,6 @@ export default class ClientiTabel extends React.Component {
                       onChange={(e) => this.setState({ cont: e.target.value })}
                     />
                   </Form.Group>
-
                   <Form.Group as={Col} md="6" controlId="numebanca">
                     <Form.Label>Moneda</Form.Label>
                     <Form.Control

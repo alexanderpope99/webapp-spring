@@ -17,7 +17,7 @@ class FacturiTabel extends React.Component {
   constructor(props) {
     super(props);
 
-		this.getFacturi = this.getFacturi.bind(this);
+    this.getFacturi = this.getFacturi.bind(this);
 
     this.state = {
       showToast: false,
@@ -48,6 +48,24 @@ class FacturiTabel extends React.Component {
       return;
     }
     this.getFacturi();
+  }
+
+	componentDidUpdate(prevProps) {
+    if (this.props.factura !== prevProps.factura) {
+      this.getFacturi();
+    } else return;
+  }
+
+  async delete(id) {
+    await axios
+      .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
+      .then(this.getFacturi)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut sterge factura: ' + err.response.data.message,
+        })
+      );
   }
 
   render() {
@@ -145,9 +163,12 @@ class FacturiTabel extends React.Component {
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Facturi</Card.Title>
-                <Button variant="outline-primary" size="sm" className="float-right"
-									onClick={() => this.props.edit(null)}
-								>
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  className="float-right"
+                  onClick={() => this.props.edit(null)}
+                >
                   <Plus />
                 </Button>
 

@@ -37,7 +37,7 @@ export default class EmitereFactura extends React.Component {
       titlu: 'Cf. Contract vanzare-cumparare',
       produse: [],
       dataExpedierii: new Date().toISOString().substring(0, 10),
-      oraExpedierii: '09:00',
+      oraExpedierii: new Date().toLocaleTimeString().substring(0, 5),
       totalFaraTva: 0,
       totalTva: 0,
       totalCuTva: 0,
@@ -81,7 +81,7 @@ export default class EmitereFactura extends React.Component {
         titlu: 'Cf. Contract vanzare-cumparare',
         produse: [],
         dataExpedierii: new Date().toISOString().substring(0, 10),
-        oraExpedierii: '09:00',
+        oraExpedierii: new Date().toLocaleTimeString().substring(0, 5),
         totalFaraTva: 0,
         totalTva: 0,
         totalCuTva: 0,
@@ -117,7 +117,6 @@ export default class EmitereFactura extends React.Component {
     const idClient = e.target.options[selectedIndex].getAttribute('data-key');
 		// eslint-disable-next-line eqeqeq
 		const client = this.state.clienti.find(c => c.id == idClient);
-		console.log(client);
     this.setState({ client: client ? client : {nume: ''}});
   }
 
@@ -194,7 +193,6 @@ export default class EmitereFactura extends React.Component {
     var ok = false;
     // se adauga o factura noua
     if (!factura) {
-      console.log('POST:', newFactura);
       ok = await axios
         .post(`${server.address}/factura`, newFactura, { headers: authHeader() })
         .then((res) => res.status === 200)
@@ -206,7 +204,6 @@ export default class EmitereFactura extends React.Component {
         );
     } else {
       newFactura['id'] = factura.id;
-      console.log('PUT:', newFactura);
       ok = await axios
         .put(`${server.address}/factura/${factura.id}`, newFactura, { headers: authHeader() })
         .then((res) => res.status === 200)
@@ -281,8 +278,8 @@ export default class EmitereFactura extends React.Component {
           />
         </Form.Group>
         <Form.Group as={Col} sm="6">
-          <Form.Label>Valoare (fara TVA)</Form.Label>
-          <Form.Control disabled type="number" value={produs.pretUnitar * produs.cantitate} />
+          <Form.Label>Valoare (fără TVA)</Form.Label>
+          <Form.Control disabled type="number" value={(produs.pretUnitar * produs.cantitate).toFixed(2)} />
         </Form.Group>
         <Form.Group as={Col} sm="6">
           <Form.Label>Valoare TVA</Form.Label>
