@@ -44,7 +44,7 @@ export default class EmitereFactura extends React.Component {
   }
 
 	async getClienti() {
-		return await axios
+		const clienti = await axios
 			.get(`${server.address}/client/ids=${getSocSel().id}`, { headers: authHeader()})
 			.then(res => res.data)
 			.catch((err) =>
@@ -53,12 +53,12 @@ export default class EmitereFactura extends React.Component {
             toastMessage: 'Nu am putut prelua clienții: ' + err.response.data.message,
           })
         );
+		console.log(clienti);
+		this.setState({clienti: clienti ? clienti : []});
 	}
 
 	componentDidMount() {
-		// get clienti
-		const clienti = this.getClienti();
-		this.setState({clienti: clienti});
+		this.getClienti();
 	}
 
   componentDidUpdate(prevProps) {
