@@ -139,7 +139,7 @@ var items = [
         id: 'facturi',
         title: 'Facturi',
         type: 'item',
-        url: '/facturi',
+        url: '/facturi?tabel-facturi',
         icon: 'feather icon-file-text',
       },
       {

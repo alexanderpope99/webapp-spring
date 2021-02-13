@@ -11,19 +11,18 @@ export default class Facturi extends React.Component {
 		super(props);
 
 		this.edit = this.edit.bind(this);
-		this.scrollToTopSmooth = this.scrollToTopSmooth.bind(this);
+		this.onSelectPill = this.onSelectPill.bind(this);
 
 		this.tabelFacturi = React.createRef();
 		this.emiteFactura = React.createRef();
 
 		this.state = {
-			key: 'tabel-facturi',
+			key: window.location.search.substring(1),
 			socsel: getSocSel(),
 
 			numarFactura: 0,
 		};
 	}
-
 	onSelectPill(key) {
 		if (key === 'tabel-facturi') {
 			this.tabelFacturi.current.getFacturi();
@@ -32,6 +31,7 @@ export default class Facturi extends React.Component {
 		if (key === 'emite-factura') {
 			this.edit(null);
 		}
+		window.history.pushState(key, 'Tabel facturi', '/facturi?' + key);
 	}
 
 	async edit(factura) {

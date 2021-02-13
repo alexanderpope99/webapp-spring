@@ -184,7 +184,7 @@ export default class EmitereFactura extends React.Component {
 			});
 			return;
 		}
-
+		const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
 		const newFactura = {
 			serie: this.state.serie,
 			numar: this.state.numar,
@@ -194,9 +194,9 @@ export default class EmitereFactura extends React.Component {
 			produse: this.state.produse,
 			dataexpedierii: this.state.dataExpedierii,
 			oraexpedierii: this.state.oraExpedierii,
-			totalfaratva: this.state.totalFaraTva,
-			tva: this.state.totalTva,
-			// totalcutva: this.state.totalCuTva,
+			totalfaratva: totalFaraTva,
+			tva: totalTva,
+			totalcutva: totalCuTva,
 		};
 
 		var ok = false;
@@ -246,6 +246,9 @@ export default class EmitereFactura extends React.Component {
 	}
 
 	render() {
+
+		const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
+
 		const produseComponent = this.state.produse.map((produs, index) => (
 			<Row className="border rounded p-0 pt-2 mt-2 mb-2" key={index}>
 				<Col md={12}>
@@ -324,8 +327,6 @@ export default class EmitereFactura extends React.Component {
 				{client.nume}
 			</option>
 		));
-
-		const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
 
 		return (
 			<Aux>
