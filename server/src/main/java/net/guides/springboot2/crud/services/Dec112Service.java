@@ -68,7 +68,7 @@ public class Dec112Service {
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 		societate.checkData();
 
-		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 		if (angajati.isEmpty())
 			throw new ResourceNotFoundException("Societatea nu are angajați");
 
@@ -92,7 +92,6 @@ public class Dec112Service {
 			sbfrmPage1Ang.appendChild(sfmIdentif);
 
 			// beginning sfmIdentif
-
 			Element childElement = doc.createElement("d_rec");
 			childElement.appendChild(doc.createTextNode(String.valueOf(drec)));
 			sfmIdentif.appendChild(childElement);
