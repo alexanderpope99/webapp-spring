@@ -18,7 +18,7 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import authService from '../../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
-import { downloadImagineSocietate } from '../../Resources/download';
+import {downloadImagineSocietate} from '../../Resources/download';
 
 const addSocietateComponent = (
   <Col md={6} xl={4}>
@@ -352,14 +352,6 @@ class Societati extends React.Component {
       console.log(err);
     }
 
-	const formData = new FormData();
-    var withFileUri = 'keep-file';
-    if (this.state.sterge) withFileUri = 'new-file';
-    if (this.state.fisier) {
-      formData.append('fisier', this.state.fisier);
-      withFileUri = 'new-file';
-    }
-
     let adresa_body = {
       id: this.state.idadresa,
       adresa: this.state.adresa || null,
@@ -380,13 +372,9 @@ class Societati extends React.Component {
       fax: this.state.fax || null,
     };
 
-	for (let key in societate_body) {
-		if (societate_body[key]) formData.append(key, societate_body[key]);
-	  }
-
     // UPDATE SOCIETATE
     await axios
-      .put(`${server.address}/societate/${withFileUri}`, formData, {
+      .put(`${server.address}/societate/${this.state.id}`, societate_body, {
         headers: authHeader(),
       })
       .then(() => {
