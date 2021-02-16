@@ -18,7 +18,7 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import authService from '../../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
-import {downloadImagineSocietate} from '../../Resources/download';
+import { downloadImagineSocietate } from '../../Resources/download';
 
 const addSocietateComponent = (
   <Col md={6} xl={4}>
@@ -80,7 +80,7 @@ class Societati extends React.Component {
       telefon: '',
       fax: '',
 
-	  fisier: null,
+      fisier: null,
       numefisier: '',
     };
   }
@@ -144,7 +144,12 @@ class Societati extends React.Component {
     const user = this.state.user;
     if (!user) return;
 
-    if (user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR')) return true;
+    if (
+      user.roles.includes('ROLE_CONTABIL') ||
+      user.roles.includes('ROLE_OPERATOR') ||
+      user.roles.includes('ROLE_DIRECTOR')
+    )
+      return true;
     return false;
   }
 
@@ -164,7 +169,11 @@ class Societati extends React.Component {
     this.clearFields();
     const user = authService.getCurrentUser();
     let uri = `${server.address}/societate/user/${user.id}`;
-    if (user.roles.includes('ROLE_DIRECTOR')) {
+    if (
+      user.roles.includes('ROLE_CONTABIL') ||
+      user.roles.includes('ROLE_DIRECTOR') ||
+      user.roles.includes('ROLE_OPERATOR')
+    ) {
       uri = `${server.address}/societate/`;
     }
     const societati_res = await axios
@@ -401,7 +410,6 @@ class Societati extends React.Component {
     const societatiComponent = Object.keys(this.state.societati).map((key) => {
       const showButtons = this.state.societati[key].opacity === '1' && this.state.canAddSocietate;
 
-	  
       return (
         <Col md={6} xl={4} key={key}>
           <Card
@@ -461,12 +469,12 @@ class Societati extends React.Component {
       return sectoareObj;
     };
 
-	const handleChangeStatus = ({ file }, status) => {
-		if (status === 'done') {
-		  console.log(status, file);
-		  this.setState({ fisier: file, numefisier: file.name });
-		}
-	  };
+    const handleChangeStatus = ({ file }, status) => {
+      if (status === 'done') {
+        console.log(status, file);
+        this.setState({ fisier: file, numefisier: file.name });
+      }
+    };
 
     return (
       <Aux>
@@ -642,13 +650,15 @@ class Societati extends React.Component {
                     Mai multe detalii
                   </Button>
                 </Form.Group>
-				<Form.Group as={Col} md="12">
+                <Form.Group as={Col} md="12">
                   <Form.Label>Imagine</Form.Label>
                   {this.state.numefisier ? (
                     <div>
                       <Button
                         variant="dark"
-                         onClick={() => downloadImagineSocietate(this.state.numefisier, this.state.id)}
+                        onClick={() =>
+                          downloadImagineSocietate(this.state.numefisier, this.state.id)
+                        }
                       >
                         {this.state.numefisier}
                       </Button>
@@ -664,7 +674,7 @@ class Societati extends React.Component {
                   ) : (
                     <Dropzone
                       inputContent="Pune imaginea aici"
-                       onChangeStatus={handleChangeStatus}
+                      onChangeStatus={handleChangeStatus}
                       maxFiles={1}
                     />
                   )}

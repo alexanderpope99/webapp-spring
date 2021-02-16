@@ -24,7 +24,7 @@ public class Produs implements Serializable {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "denumire")
+	@Column(name = "denumire", columnDefinition="TEXT")
 	private String denumire;
 
 	@Column(name = "um")

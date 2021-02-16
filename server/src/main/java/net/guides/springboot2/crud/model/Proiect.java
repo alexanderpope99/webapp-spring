@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,12 +29,13 @@ public class Proiect implements Serializable {
 	@Column(name = "nume")
 	private String nume;
 
+	@JsonBackReference(value = "proiect-activitate")
 	@ManyToOne
 	@JoinColumn(name = "idactivitate", nullable = false)
 	private Activitate activitate;
 
 	@JsonBackReference(value = "facturi-proiecte")
-	@OneToMany(mappedBy = "proiect", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "proiect", fetch = FetchType.LAZY)
 	private List<Factura> facturi;
 
 	public Integer getId() {
@@ -62,5 +62,22 @@ public class Proiect implements Serializable {
 		this.activitate = activitate;
 	}
 
+	public List<Factura> getFacturi() {
+		return facturi;
+	}
 
+	public void setFacturi(List<Factura> facturi) {
+		this.facturi = facturi;
+	}
+
+	public Proiect update(Proiect np) { // np = newProiect
+		this.nume = np.nume;
+		this.activitate = np.activitate;
+		return this;
+	}
+
+	public Proiect detachFacturi() {
+		facturi.forEach(factura -> factura.setProiect(null));
+		return this;
+	}
 }

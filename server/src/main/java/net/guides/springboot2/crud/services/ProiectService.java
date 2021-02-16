@@ -1,41 +1,47 @@
 package net.guides.springboot2.crud.services;
 
-import org.modelmapper.ModelMapper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import net.guides.springboot2.crud.dto.ProiectDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Proiect;
-import net.guides.springboot2.crud.model.Activitate;
 import net.guides.springboot2.crud.repository.ProiectRepository;
-import net.guides.springboot2.crud.repository.ActivitateRepository;
 
 @Service
 public class ProiectService {
-	@Autowired
-	private ActivitateRepository activitateRepository;
 
 	@Autowired
 	private ProiectRepository proiectRepository;
 
-	@Autowired
-	private ModelMapper modelMapper;
-
-	public ProiectDTO save(ProiectDTO prDTO) throws ResourceNotFoundException {
-		Proiect pr = modelMapper.map(prDTO, Proiect.class);
-
-		Activitate activitate = activitateRepository.findById(prDTO.getIdactivitate())
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id :: " + prDTO.getIdactivitate()));
-		pr.setActivitate(activitate);
-
-		proiectRepository.save(pr);
-		prDTO.setId(pr.getId());
-		return prDTO;
+	public List<Proiect> findAll() {
+		return proiectRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
 	}
 
-	public ProiectDTO update(int id, ProiectDTO prDTO) throws ResourceNotFoundException {
-		prDTO.setId(id);
-		return save(prDTO);
+	public Proiect findById(int id) throws ResourceNotFoundException {
+		return proiectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proiect not found for id :: " + id));
+	}
+
+	public Proiect save(Proiect newProiect) {
+		return proiectRepository.save(newProiect);
+	}
+
+	public Proiect update(Proiect newProiect, int id) throws ResourceNotFoundException {
+		Proiect proiect = findById(id);
+		return save(proiect.update(newProiect));
+	}
+
+	public Map<String, Boolean> delete(int id) throws ResourceNotFoundException {
+		Proiect proiect = findById(id);
+		proiect.getFacturi().forEach(factura -> factura.setProiect(null));
+
+		proiectRepository.delete(proiect);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
 	}
 }

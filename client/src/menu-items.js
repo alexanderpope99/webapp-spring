@@ -35,47 +35,47 @@ var items = [
   },
 
   // CERERI CONCEDIU
-  {
-    id: 'general-angajat',
-    title: 'Cereri concediu',
-    type: 'group',
-    icon: 'icon-group',
-    show: user.roles.includes('ROLE_ANGAJAT'),
-    children: [
-      {
-        id: 'cereri-concediu-angajat',
-        title: 'Cereri Concediu',
-        type: 'item',
-        url: '/tables/cereri-concediu',
-        icon: 'feather icon-briefcase',
-      },
-    ],
-  },
+  // {
+  //   id: 'general-angajat',
+  //   title: 'Cereri concediu',
+  //   type: 'group',
+  //   icon: 'icon-group',
+  //   show: user.roles.includes('ROLE_ANGAJAT'),
+  //   children: [
+  //     {
+  //       id: 'cereri-concediu-angajat',
+  //       title: 'Cereri Concediu',
+  //       type: 'item',
+  //       url: '/tables/cereri-concediu',
+  //       icon: 'feather icon-briefcase',
+  //     },
+  //   ],
+  // },
 
   // CERERI CONCEDIU + APROBARE
-  {
-    id: 'general',
-    title: 'GENERAL',
-    type: 'group',
-    icon: 'icon-group',
-    show: user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR'),
-    children: [
-      {
-        id: 'cereri-concediu',
-        title: 'Cereri Concediu',
-        type: 'item',
-        url: '/tables/cereri-concediu',
-        icon: 'feather icon-briefcase',
-      },
-      {
-        id: 'cereriConcediu',
-        title: 'Aprobare Cereri Concediu',
-        type: 'item',
-        url: '/tables/cereri-concediu-director',
-        icon: 'feather icon-briefcase',
-      },
-    ],
-  },
+  // {
+  //   id: 'general',
+  //   title: 'GENERAL',
+  //   type: 'group',
+  //   icon: 'icon-group',
+  //   show: user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR'),
+  //   children: [
+  //     {
+  //       id: 'cereri-concediu',
+  //       title: 'Cereri Concediu',
+  //       type: 'item',
+  //       url: '/tables/cereri-concediu',
+  //       icon: 'feather icon-briefcase',
+  //     },
+  //     {
+  //       id: 'cereriConcediu',
+  //       title: 'Aprobare Cereri Concediu',
+  //       type: 'item',
+  //       url: '/tables/cereri-concediu-director',
+  //       icon: 'feather icon-briefcase',
+  //     },
+  //   ],
+  // },
 
   // DETALII PERSONALE
   {
@@ -142,20 +142,20 @@ var items = [
         url: '/facturi?tabel-facturi',
         icon: 'feather icon-file-text',
       },
-      {
-        id: 'facturi-aprobator',
-        title: 'Aprobare Facturi',
-        type: 'item',
-        url: '/facturi-aprobator',
-        icon: 'feather icon-file-text',
-      },
-      {
-        id: 'facturi-operator',
-        title: 'Operare Facturi',
-        type: 'item',
-        url: '/facturi-operator',
-        icon: 'feather icon-file-text',
-      },
+      // {
+      //   id: 'facturi-aprobator',
+      //   title: 'Aprobare Facturi',
+      //   type: 'item',
+      //   url: '/facturi-aprobator',
+      //   icon: 'feather icon-file-text',
+      // },
+      // {
+      //   id: 'facturi-operator',
+      //   title: 'Operare Facturi',
+      //   type: 'item',
+      //   url: '/facturi-operator',
+      //   icon: 'feather icon-file-text',
+      // },
     ],
   },
 

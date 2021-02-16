@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import {
   Row,
   Col,
@@ -11,13 +10,13 @@ import {
   Breadcrumb,
   Toast,
 } from 'react-bootstrap';
+import Aux from '../../../hoc/_Aux';
+import axios from 'axios';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import Aux from '../../../hoc/_Aux';
 
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
-import BootstrapTable from 'react-bootstrap-table-next';
 
 import { getSocSel } from '../../Resources/socsel';
 import { setAngajatSel } from '../../Resources/angajatsel';
@@ -220,148 +219,7 @@ class AngajatiTabel extends React.Component {
     this.renderAngajati();
   }
 
-  buttons = (cell, row, rowIndex) => (
-    <div className="d-inline-flex">
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id="realizari-retineri" style={{ opacity: '.4' }}>
-            Realizări / Rețineri
-          </Tooltip>
-        }
-      >
-        <Button
-          disabled={!row.contract.id}
-          onClick={() => {
-            setAngajatSel({
-              idpersoana: row.persoana.id,
-              numeintreg: row.persoana.nume + ' ' + row.persoana.prenume,
-            });
-            window.location.href = `/forms/realizari-retineri`;
-          }}
-          variant="outline-secondary"
-          className="ml-2 p-1 rounded-circle border-0"
-        >
-          <FileText size={20} />
-        </Button>
-      </OverlayTrigger>
-
-      {/* DATE PERSONALE BUTTON */}
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id="edit-button" style={{ opacity: '.4' }}>
-            Date personale, contract, concedii, etc.
-          </Tooltip>
-        }
-      >
-        <Button
-          onClick={() => {
-            setAngajatSel({
-              idpersoana: row.persoana.id,
-              numeintreg: row.persoana.nume + ' ' + row.persoana.prenume,
-            });
-            window.location.href = `/forms/angajat`;
-          }}
-          variant="outline-secondary"
-          className="ml-2 p-1 rounded-circle border-0"
-        >
-          <Info size={20} />
-        </Button>
-      </OverlayTrigger>
-
-      <PopupState variant="popover" popupId="demo-popup-popover">
-        {(popupState) => (
-          <div>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="delete-button" style={{ opacity: '.4' }}>
-                  Șterge
-                </Tooltip>
-              }
-            >
-              <Button
-                variant="outline-secondary"
-                className="m-0 p-1 rounded-circle border-0"
-                {...bindTrigger(popupState)}
-              >
-                <Trash2 size={20} />
-              </Button>
-            </OverlayTrigger>
-            <Popover
-              {...bindPopover(popupState)}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-            >
-              <Box p={2}>
-                <Typography>
-                  Sigur ștergeți angajatul {row.nume} {row.prenume}?
-                </Typography>
-                <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                <br />
-                <Button
-                  variant="outline-danger"
-                  onClick={() => {
-                    popupState.close();
-                    this.deleteAngajat(row.persoana.id);
-                  }}
-                  className="mt-2 "
-                >
-                  Da
-                </Button>
-                <Button variant="outline-persondary" onClick={popupState.close} className="mt-2">
-                  Nu
-                </Button>
-              </Box>
-            </Popover>
-          </div>
-        )}
-      </PopupState>
-    </div>
-  );
-
   render() {
-    const columns = [
-      {
-        dataField: 'any',
-        text: '#',
-        formatter: (cell, row, rowIndex) => rowIndex + 1,
-				headerStyle: {width: '50px'},
-      },
-      {
-        dataField: 'persoana.nume',
-        text: 'Nume',
-        sort: true,
-      },
-      {
-        dataField: 'persoana.prenume',
-        text: 'Prenume',
-        sort: true,
-      },
-      {
-        dataField: 'contract.functie',
-        text: 'Funcție',
-        sort: true,
-      },
-      {
-        dataField: 'contract.salariutarifar',
-        text: 'Salariu de baza',
-        sort: true,
-      },
-      {
-        dataField: '',
-        text: 'Acțiuni',
-        formatter: this.buttons,
-      },
-    ];
-
     return (
       <Aux>
         <Toast
@@ -378,12 +236,11 @@ class AngajatiTabel extends React.Component {
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
 
+        
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
-                {this.state.socsel ? this.state.socsel.nume : ''}
-              </Breadcrumb.Item>
+              <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel ? this.state.socsel.nume : ''}</Breadcrumb.Item>
               <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
             </Breadcrumb>
             <Card>
@@ -429,15 +286,19 @@ class AngajatiTabel extends React.Component {
                 </OverlayTrigger>
               </Card.Header>
               <Card.Body>
-                <BootstrapTable
-                  bootstrap4
-                  keyField="idpersoana"
-                  data={this.state.angajati}
-                  columns={columns}
-                  wrapperClasses="table-responsive"
-                  hover
-                  bordered={false}
-                />
+                <Table responsive hover>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Nume</th>
+                      <th>Prenume</th>
+                      <th>Funcție</th>
+                      <th>Salariu de baza</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>{this.state.angajatiComponent}</tbody>
+                </Table>
               </Card.Body>
             </Card>
           </Col>

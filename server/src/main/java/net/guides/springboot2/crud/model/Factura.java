@@ -34,11 +34,14 @@ public class Factura implements Serializable {
 	@Column(name = "nravizinsotire")
 	private String nravizinsotire;
 
-	@Column(name = "titlu")
+	@Column(name = "titlu", columnDefinition = "TEXT")
 	private String titlu;
 
 	@Column(name = "dataexpedierii")
 	private LocalDate dataexpedierii;
+
+	@Column(name = "scadenta")
+	private LocalDate scadenta;
 
 	@Column(name = "oraexpedierii")
 	private String oraexpedierii;
@@ -98,6 +101,14 @@ public class Factura implements Serializable {
 
 	public void setDataexpedierii(LocalDate dataexpedierii) {
 		this.dataexpedierii = dataexpedierii;
+	}
+
+	public LocalDate getScadenta() {
+		return scadenta;
+	}
+
+	public void setScadenta(LocalDate scadenta) {
+		this.scadenta = scadenta;
 	}
 
 	public String getNravizinsotire() {
@@ -174,6 +185,7 @@ public class Factura implements Serializable {
 		this.updateProduse(newFactura.produse);
 		this.dataexpedierii = newFactura.dataexpedierii;
 		this.oraexpedierii = newFactura.oraexpedierii;
+		this.scadenta = newFactura.scadenta;
 		this.totalfaratva = newFactura.totalfaratva;
 		this.tva = newFactura.tva;
 

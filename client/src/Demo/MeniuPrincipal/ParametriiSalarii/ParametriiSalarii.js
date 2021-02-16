@@ -284,6 +284,7 @@ class ParametriiSalarii extends React.Component {
       },
       {
         dataField: 'follow',
+				text: '',
         formatter: this.buttons,
       },
     ];
@@ -446,6 +447,7 @@ class ParametriiSalarii extends React.Component {
               </Card.Header>
               <Card.Body>
                 <BootstrapTable
+								bootstrap4
                   wrapperClasses="table-responsive"
                   keyField="id"
                   data={this.state.parametriiSalarii}

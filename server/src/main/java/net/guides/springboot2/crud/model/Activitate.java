@@ -30,11 +30,11 @@ public class Activitate implements Serializable {
 	@Column(name = "nume")
 	private String nume;
 
+	@JsonBackReference(value = "activitate-societate")
 	@ManyToOne
 	@JoinColumn(name = "idsocietate", nullable = false)
 	private Societate societate;
 
-	@JsonBackReference(value = "proiect-activitate")
 	@OneToMany(mappedBy = "activitate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Proiect> proiecte;
 
@@ -68,6 +68,16 @@ public class Activitate implements Serializable {
 
 	public void setProiecte(List<Proiect> proiecte) {
 		this.proiecte = proiecte;
+	}
+
+	public Activitate update(Activitate na) {
+		this.nume = na.nume;
+		return this;
+	}
+
+	public Activitate detachProiecte() {
+		proiecte.forEach(proiect -> proiect.detachFacturi());
+		return this;
 	}
 
 }
