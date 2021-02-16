@@ -163,7 +163,7 @@ class FacturiTabel extends React.Component {
         dataField: 'titlu',
         text: 'Descriere',
         sort: true,
-        style: { whiteSpace: 'normal' },
+        style: { overflow: 'hide' },
       },
       {
         dataField: 'proiect.nume',

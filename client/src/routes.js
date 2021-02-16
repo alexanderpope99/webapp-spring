@@ -40,6 +40,7 @@ const ClientiTabel = React.lazy(() => import('./Demo/Facturare/Clienti/ClientiTa
 const Facturi = React.lazy(() => import('./Demo/Facturare/Facturi/Facturi'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Facturare/AprobareFacturi/FacturiAprobatorTabel'));
 const FacturiOperatorTabel = React.lazy(() => import('./Demo/Facturare/OperareFacturi/FacturiOperatorTabel'));
+const ActivitatiTabel = React.lazy(() => import('./Demo/Facturare/Activitati/ActivitatiTabel'));
 
 // CONFIGURARE
 const UserTabel = React.lazy(() => import('./Demo/Configurare/Utilizatori/UserTabel'));
@@ -155,6 +156,12 @@ const routes = [
     name: 'Tabel Facturi Operator',
     component: FacturiOperatorTabel,
   },
+	{
+		path: '/activitati',
+		exact: true,
+		name: 'Tabel Activitati',
+		component: ActivitatiTabel,
+	},
   {
     path: '/tables/angajati',
     exact: true,

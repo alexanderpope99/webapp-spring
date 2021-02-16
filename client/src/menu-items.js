@@ -142,6 +142,13 @@ var items = [
         url: '/facturi?tabel-facturi',
         icon: 'feather icon-file-text',
       },
+			{
+        id: 'activitati',
+        title: 'Activitati',
+        type: 'item',
+        url: '/activitati',
+        icon: 'feather icon-file-text',
+      },
       // {
       //   id: 'facturi-aprobator',
       //   title: 'Aprobare Facturi',

@@ -33,9 +33,9 @@ public class ProiectController {
 		return proiectService.findById(id);
 	}
 
-	@PostMapping
-	public Proiect createProiect(@RequestBody Proiect proiect) throws ResourceNotFoundException {
-		return proiectService.save(proiect);
+	@PostMapping("ida={ida}")
+	public Proiect createProiect(@PathVariable("ida") int idactivitate, @RequestBody Proiect proiect) throws ResourceNotFoundException {
+		return proiectService.save(proiect, idactivitate);
 	}
 
 	@PutMapping("{id}")
