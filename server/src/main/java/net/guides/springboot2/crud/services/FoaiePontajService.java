@@ -246,7 +246,7 @@ public class FoaiePontajService {
 			writerCell.setCellValue(0);
 
 			// * ore Co <- nu include CFP
-			int nrZileCO = realizariRetineri.getZilecolucratoare() - realizariRetineri.getZilecfplucratoare();
+			int nrZileCO = realizariRetineri.getZilecolucratoare();
 			writerCell = row.createCell(45);
 			writerCell.setCellValue(nrZileCO * norma);
 

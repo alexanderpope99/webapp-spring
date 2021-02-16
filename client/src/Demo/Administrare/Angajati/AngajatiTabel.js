@@ -77,16 +77,16 @@ class AngajatiTabel extends React.Component {
         }
         return (
           <tr key={ang.persoana.id}>
-            <th>{index + 1}</th>
-            <th>{ang.persoana.nume}</th>
-            <th>{ang.persoana.prenume}</th>
-            <th>{ang.contract.functie || '-'}</th>
-            <th>
+            <td>{index + 1}</td>
+            <td>{ang.persoana.nume}</td>
+            <td>{ang.persoana.prenume}</td>
+            <td>{ang.contract.functie || '-'}</td>
+            <td>
               {ang.contract.salariutarifar
                 ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu
                 : 'lipsă contract'}
-            </th>
-            <th className="d-inline-flex">
+            </td>
+            <td className="d-inline-flex">
               {/* REALIZARI/RETINERI BUTTON */}
               <OverlayTrigger
                 placement="bottom"
@@ -194,7 +194,7 @@ class AngajatiTabel extends React.Component {
                   </div>
                 )}
               </PopupState>
-            </th>
+            </td>
           </tr>
         );
       }),

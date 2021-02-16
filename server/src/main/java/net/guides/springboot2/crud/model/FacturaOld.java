@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "factura")
+@Table(name = "factura_old")
 public class FacturaOld implements Serializable {
 	private static final long serialVersionUID = 1L;
 

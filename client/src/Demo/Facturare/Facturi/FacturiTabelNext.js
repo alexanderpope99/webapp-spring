@@ -74,7 +74,7 @@ class FacturiTabel extends React.Component {
 	async delete(id) {
 		await axios
 			.delete(`${server.address}/factura/${id}`, { headers: authHeader() })
-			.then(this.getFacturi())
+			.then(this.getFacturi)
 			.catch((err) =>
 				this.setState({
 					showToast: true,
