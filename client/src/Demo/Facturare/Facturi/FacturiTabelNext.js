@@ -13,8 +13,8 @@ import { getSocSel } from '../../Resources/socsel';
 
 import authHeader from '../../../services/auth-header';
 import BootstrapTable from 'react-bootstrap-table-next';
-// import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 class FacturiTabel extends React.Component {
 	constructor(props) {
@@ -74,7 +74,7 @@ class FacturiTabel extends React.Component {
 	async delete(id) {
 		await axios
 			.delete(`${server.address}/factura/${id}`, { headers: authHeader() })
-			.then(this.getFacturi())
+			.then(this.getFacturi)
 			.catch((err) =>
 				this.setState({
 					showToast: true,

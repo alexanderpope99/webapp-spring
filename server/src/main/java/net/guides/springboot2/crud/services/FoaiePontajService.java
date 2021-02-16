@@ -61,7 +61,7 @@ public class FoaiePontajService {
 		Societate societate = societateRepository.findById(idsocietate)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id :: " + idsocietate));
 
-		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
+		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 
 		String statTemplateLocation = homeLocation + "/templates";
 
@@ -108,7 +108,7 @@ public class FoaiePontajService {
 		int nrAngajat = 0;
 		for (Angajat angajat : angajati) {
 			oreInZiua = new int[nrZileLuna + 1];
-			Arrays.fill(oreInZiua, 8);
+			Arrays.fill(oreInZiua, angajat.getContract().getNormalucru());
 
 			Persoana persoana = angajat.getPersoana();
 			Contract contract = angajat.getContract();
@@ -246,7 +246,7 @@ public class FoaiePontajService {
 			writerCell.setCellValue(0);
 
 			// * ore Co <- nu include CFP
-			int nrZileCO = realizariRetineri.getZilecolucratoare() - realizariRetineri.getZilecfplucratoare();
+			int nrZileCO = realizariRetineri.getZilecolucratoare();
 			writerCell = row.createCell(45);
 			writerCell.setCellValue(nrZileCO * norma);
 
