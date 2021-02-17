@@ -24,28 +24,33 @@ public class ProiectController {
 	private ProiectService proiectService;
 
 	@GetMapping
-	public List<Proiect> getAll() {
+	public List<Proiect> findAll() {
 		return proiectService.findAll();
 	}
 
 	@GetMapping("{id}")
-	public Proiect getProiectById(@PathVariable("id") int id) throws ResourceNotFoundException {
+	public Proiect findById(@PathVariable("id") int id) throws ResourceNotFoundException {
 		return proiectService.findById(id);
 	}
 
+	@GetMapping("ids={ids}")
+	public List<Proiect> findBySocietate_Id(@PathVariable("ids") int id) {
+		return proiectService.findBySocietate_Id(id);
+	}
+
 	@PostMapping("ida={ida}")
-	public Proiect createProiect(@PathVariable("ida") int idactivitate, @RequestBody Proiect proiect) throws ResourceNotFoundException {
+	public Proiect create(@PathVariable("ida") int idactivitate, @RequestBody Proiect proiect) throws ResourceNotFoundException {
 		return proiectService.save(proiect, idactivitate);
 	}
 
-	@PutMapping("{id}")
-	public Proiect updateProiect(@PathVariable("id") int id, @RequestBody Proiect proiect)
+	@PutMapping("ida={ida}/{id}")
+	public Proiect update(@PathVariable("ida") int idactivitate, @PathVariable("id") int id, @RequestBody Proiect proiect)
 			throws ResourceNotFoundException {
-		return proiectService.update(proiect, id);
+		return proiectService.update(proiect, id, idactivitate);
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteProiect(@PathVariable("id") int id) throws ResourceNotFoundException {
+	public Map<String, Boolean> delete(@PathVariable("id") int id) throws ResourceNotFoundException {
 		return proiectService.delete(id);
 	}
 }

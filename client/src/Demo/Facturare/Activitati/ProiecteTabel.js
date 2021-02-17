@@ -1,9 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 
-import { Row, Col, Card, Button, Modal, Form } from 'react-bootstrap';
-import { Trash2, Edit3, Plus } from 'react-feather';
+import { Row, Col, Card, Button, Toast, Modal, Form } from 'react-bootstrap';
+import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
@@ -18,26 +19,80 @@ export default class ProiecteTabel extends React.Component {
   constructor() {
     super();
 
-    this.onSubmit = this.onSubmit.bind(this);
+    this.init = this.init.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.getProiecte = this.getProiecte.bind(this);
+    this.renderProiecte = this.renderProiecte.bind(this);
 
     this.state = {
+      showToast: false,
+      toastMessage: '',
       showConfirm: false,
       modalMessage: '',
 
       showModal: false,
       isEdit: false,
 
-      showModalProiect: false,
-      isEditProiect: false,
-
       socsel: getSocSel(),
 
+      activitati: [],
       proiecte: [],
+			filter: null,
 
+      activitate: { id: null, nume: '' },
       id: null,
       nume: '',
     };
+  }
+
+  componentDidMount() {
+    this.init();
+  }
+
+  init() {
+    this.getActivitati();
+    this.getProiecte();
+  }
+
+  showError(error) {
+    this.setState({
+      showToast: true,
+      toastMessage: error,
+    });
+  }
+
+  async getActivitati() {
+    const activitati = await axios
+      .get(`${server.address}/activitate/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.showError('Nu am putut prelua activitatile: ' + err.response.data.message)
+      );
+    if (activitati) {
+      this.setState({ activitati: activitati });
+    }
+  }
+
+  async getProiecte() {
+    const proiecte = await axios
+      .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.showError('Nu am putut prelua proiectele: ' + err.response.data.message)
+      );
+    if (proiecte) {
+      this.setState({ proiecte: proiecte });
+    }
+  }
+
+  renderProiecte(noTimeout) {
+    if (noTimeout === 'no-timeout') {
+      this.getProiecte();
+    } else {
+      this.setState({ proiecte: [] });
+      setTimeout(this.getProiecte, 100);
+    }
   }
 
   edit(item) {
@@ -49,56 +104,61 @@ export default class ProiecteTabel extends React.Component {
       isEdit: true,
       id: item.id,
       nume: item.nume,
+      activitate: item.activitate,
     });
   }
 
-  async delete(index) {
-		var produse = this.state.produse;
-    const ok = await axios
-      .delete(`${server.address}/proiect/${produse[index].id}`, { headers: authHeader() })
-      .then((res) => res.status === '200')
-      .catch((err) =>
-        this.props.showError('Nu am putut sterge proiectul: ' + err.response.data.message)
-      );
-		if(ok) {
-			produse.splice(index, 1);
-		}
+  async delete(id) {
+    await axios
+      .delete(`${server.address}/proiect/${id}`, { headers: authHeader() })
+      .then(this.getActivitati)
+      .catch((err) => this.showError('Nu am putut sterge proiectul: ' + err.response.data.message));
   }
 
-  async onSubmit() {
-    const proiect_body = {
+  async onSubmit(e) {
+    e.preventDefault();
+    const proiect = {
       nume: this.state.nume,
     };
-    var proiect = false;
+    if (!this.state.activitate.id) {
+      this.showError('Selectați activitatea proiectului');
+      return;
+    }
+    var ok = false;
     if (this.state.isEdit) {
       proiect['id'] = this.state.id;
-      proiect = await axios
-        .put(`${server.address}/proiect/${this.state.id}`, proiect_body, { headers: authHeader() })
+      ok = await axios
+        .put(
+          `${server.address}/proiect/ida=${this.state.activitate.id}/${this.state.id}`,
+          proiect,
+          { headers: authHeader() }
+        )
         .then((res) => res.data)
         .catch((err) =>
-          this.props.showError('Nu am putut modifica proiectul: ' + err.response.data.message)
+          this.showError('Nu am putut modifica proiectul: ' + err.response.data.message)
         );
     } else {
-      proiect = await axios
-        .post(`${server.address}/proiect/ida=${this.state.socsel.id}`, proiect_body, {
+      ok = await axios
+        .post(`${server.address}/proiect/ida=${this.state.activitate.id}`, proiect, {
           headers: authHeader(),
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.props.showError('Nu am putut adauga proiectul: ' + err.response.data.message)
+          this.showError('Nu am putut adauga activitatea: ' + err.response.data.message)
         );
     }
 
-    if (proiect) {
+    if (ok) {
       this.setState(
         {
+          showToast: false,
+          toastMessage: '',
           showModal: false,
 
           showConfirm: true,
           modalMessage: this.state.isEdit ? 'Proiect modificat' : 'Proiect adăugat',
-					proiecte: [...this.state.proiecte, proiect],
         },
-        this.handleClose
+        this.getProiecte
       );
     }
   }
@@ -107,6 +167,7 @@ export default class ProiecteTabel extends React.Component {
     this.setState({
       id: null,
       nume: '',
+      activitate: { id: null, nume: '' },
     });
   }
 
@@ -120,6 +181,11 @@ export default class ProiecteTabel extends React.Component {
         },
         this.clearUserInput
       );
+    } else if (type === 'proiect') {
+      this.setState({
+        showModalProiect: false,
+        isEdit: false,
+      });
     } else {
       this.setState({ showModal: false, isEdit: false }, this.clearUserInput);
     }
@@ -158,7 +224,7 @@ export default class ProiecteTabel extends React.Component {
             >
               <Box p={2}>
                 <Typography>Sigur ștergeți proiectul?</Typography>
-                <Typography variant="caption">Facturile nu se vor sterge.</Typography>
+                <Typography variant="caption">SFacturile nu se vor șterge.</Typography>
                 <br />
                 <Button
                   variant="outline-danger"
@@ -181,7 +247,28 @@ export default class ProiecteTabel extends React.Component {
     </div>
   );
 
+  onChangeActivitate(e) {
+    if (e.target.value === '-') {
+      this.setState({ activitate: { id: null, nume: '' } });
+      return;
+    }
+    const selectedIndex = e.target.options.selectedIndex;
+    const id = e.target.options[selectedIndex].getAttribute('data-key');
+    // eslint-disable-next-line eqeqeq
+    const activitate = this.state.activitati.find((c) => c.id == id);
+    this.setState({ activitate: activitate ? activitate : { id: null, nume: '' } });
+  }
+
+	filterProiecteByActivitate() {
+		console.log(this.state.filter);
+		if(!this.state.filter)
+			return this.state.proiecte;
+		return this.state.proiecte.filter(proiect => proiect.activitate.nume === this.state.filter);
+	}
+
   render() {
+		const proiecteFiltered = this.filterProiecteByActivitate();
+
     const columns = [
       {
         dataField: '',
@@ -190,18 +277,43 @@ export default class ProiecteTabel extends React.Component {
       },
       {
         dataField: 'nume',
-        text: 'Nume',
+        text: 'Nume proiect',
         sort: true,
       },
-			{
-				dataField: 'actiuni',
-				text: '',
-				formatter: this.buttons,
-			}
+      {
+        dataField: 'activitate.nume',
+        text: 'Nume activitate',
+      },
+      {
+        dataField: 'actiuni',
+        text: 'Acțiuni',
+        formatter: this.buttons,
+      },
     ];
+
+    const activitatiComponent = this.state.activitati.map((activitate) => (
+      <option key={activitate.id} data-key={activitate.id}>
+        {activitate.nume}
+      </option>
+    ));
 
     return (
       <Aux>
+        {/* ERROR TOAST */}
+        <Toast
+          onClose={() => this.setState({ showToast: false })}
+          show={this.state.showToast}
+          delay={4000}
+          autohide
+          className="position-fixed"
+          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
+        >
+          <Toast.Header className="pr-2">
+            <strong className="mr-auto">Eroare</strong>
+          </Toast.Header>
+          <Toast.Body>{this.state.toastMessage}</Toast.Body>
+        </Toast>
+
         {/* CONFIRM MODAL */}
         <Modal show={this.state.showConfirm} onHide={() => this.hanldeClose('confirm')}>
           <Modal.Header closeButton>
@@ -214,31 +326,31 @@ export default class ProiecteTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* ADD/EDIT ACTIVITATE MODAL */}
-        <Modal show={this.state.showModal} onHide={this.handleClose}>
+        {/* ADD/EDIT MODAL */}
+        <Modal show={this.state.showModal} onHide={this.handleClose} size="sm">
           <Modal.Header closeButton>
-            <Modal.Title>Detalii activitate</Modal.Title>
+            <Modal.Title>Nume proiect</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group>
-              <Form.Label>Nume activitate</Form.Label>
-              <Form.Control
-                type="text"
-                value={this.state.nume}
-                onChange={(e) => this.setState({ nume: e.target.value })}
-              />
-            </Form.Group>
-            {this.state.isEdit ? (
-              <BootstrapTable
-                bootstrap4
-                keyField="idpersoana"
-                data={this.props.proiecte}
-                columns={columns}
-                wrapperClasses="table-responsive"
-                hover
-                bordered={false}
-              />
-            ) : null}
+            <Form onSubmit={this.onSubmit}>
+              <Form.Group>
+                <Form.Control
+                  as="select"
+                  value={this.state.activitate.nume}
+                  onChange={(e) => this.onChangeActivitate(e)}
+                >
+                  <option>-</option>
+                  {activitatiComponent}
+                </Form.Control>
+              </Form.Group>
+              <Form.Group>
+                <Form.Control
+                  type="text"
+                  value={this.state.nume}
+                  onChange={(e) => this.setState({ nume: e.target.value })}
+                />
+              </Form.Group>
+            </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.onSubmit}>
@@ -252,7 +364,7 @@ export default class ProiecteTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Proiecte</Card.Title>
+                <Card.Title as="h5">Activitati</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -261,13 +373,35 @@ export default class ProiecteTabel extends React.Component {
                 >
                   <Plus />
                 </Button>
+
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  className="float-right"
+                  onClick={this.renderProiecte}
+                >
+                  <RotateCw className="m-0 p-0" />
+                </Button>
+								<Row>
+									<Form.Group as={Col} sm="auto" className="mt-3 mb-0">
+										<Form.Label>Activitate</Form.Label>
+										<Form.Control
+											as="select"
+											value={this.state.activitateFilter}
+											onChange={e => this.setState({filter: e.target.value === 'Toate activitățile' ? null : e.target.value})}
+										>
+											<option>Toate activitățile</option>
+											{activitatiComponent}
+										</Form.Control>
+									</Form.Group>
+								</Row>
               </Card.Header>
               <Card.Body>
                 <BootstrapTable
                   bootstrap4
                   overflow
                   keyField="id"
-                  data={this.props.proiecte}
+                  data={proiecteFiltered}
                   columns={columns}
                   wrapperClasses="table-responsive"
                   hover

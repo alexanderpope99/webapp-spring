@@ -14,8 +14,6 @@ import { getSocSel } from '../../Resources/socsel';
 import { server } from '../../Resources/server-address';
 import authHeader from '../../../services/auth-header';
 
-import ProiectTabel from './ProiecteTabel';
-
 export default class ActivitatiTabel extends React.Component {
   constructor() {
     super();
@@ -105,7 +103,9 @@ export default class ActivitatiTabel extends React.Component {
       );
   }
 
-  async onSubmit() {
+  async onSubmit(e) {
+		e.preventDefault();
+
     const activitate = {
       nume: this.state.nume,
     };
@@ -160,14 +160,8 @@ export default class ActivitatiTabel extends React.Component {
         },
         this.clearUserInput
       );
-    } else if (type === 'proiect') {
-      this.setState({
-        showModalProiect: false,
-        proiect: null,
-				isEdit: false,
-      });
     } else {
-      this.setState({ showModal: false }, this.clearUserInput);
+      this.setState({ showModal: false, isEdit: false, }, this.clearUserInput);
     }
   }
 
@@ -205,7 +199,7 @@ export default class ActivitatiTabel extends React.Component {
               <Box p={2}>
                 <Typography>Sigur ștergeți activitatea?</Typography>
                 <Typography variant="caption">
-                  Facturile nu se vor șterge. Se vor șterge doar proiectele din activitate.
+                  Se vor șterge și proiectele aferente activității. Facturile nu se vor șterge.
                 </Typography>
                 <br />
                 <Button
@@ -278,11 +272,12 @@ export default class ActivitatiTabel extends React.Component {
         </Modal>
 
         {/* ADD/EDIT ACTIVITATE MODAL */}
-        <Modal show={this.state.showModal} onHide={this.handleClose} size="lg">
+        <Modal show={this.state.showModal} onHide={this.handleClose} size="sm">
           <Modal.Header closeButton>
             <Modal.Title>Detalii activitate</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+						<Form onSubmit={this.onSubmit}>
             <Form.Group>
               <Form.Label>Nume activitate</Form.Label>
               <Form.Control
@@ -291,9 +286,7 @@ export default class ActivitatiTabel extends React.Component {
                 onChange={(e) => this.setState({ nume: e.target.value })}
               />
             </Form.Group>
-            {this.state.isEdit ? (
-              <ProiectTabel showError={this.showError} proiecte={this.state.proiecte} />
-            ) : null}
+						</Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.onSubmit}>
@@ -305,12 +298,6 @@ export default class ActivitatiTabel extends React.Component {
         {/* TABLE */}
         <Row>
           <Col>
-            <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
-                {this.state.socsel.nume}
-              </Breadcrumb.Item>
-              <Breadcrumb.Item active>Activități</Breadcrumb.Item>
-            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Activitati</Card.Title>

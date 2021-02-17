@@ -144,9 +144,9 @@ var items = [
       },
 			{
         id: 'activitati',
-        title: 'Activitati',
+        title: 'Activități / Proiecte',
         type: 'item',
-        url: '/activitati',
+        url: '/activitati-proiecte',
         icon: 'feather icon-file-text',
       },
       // {
