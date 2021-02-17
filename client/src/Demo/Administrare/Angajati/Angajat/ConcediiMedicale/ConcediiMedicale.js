@@ -681,14 +681,13 @@ class CMTabel extends React.Component {
       console.log('dela/panala neselectat');
       return;
     }
-    // 2020-10
 
     let luna = this.state.dela.substring(5, 7);
 
     // get baza calcul + zile baza calcul + medie zilnica
     const baza_calcul = await axios
       .get(
-        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}`,
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}/${this.state.codboala.substring(0, 2)}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)

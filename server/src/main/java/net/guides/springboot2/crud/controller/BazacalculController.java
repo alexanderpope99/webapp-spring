@@ -37,10 +37,8 @@ public class BazacalculController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Bazacalcul> getBazacalculById(@PathVariable("id") int bazacalculId)
-			throws ResourceNotFoundException {
-		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
-				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
+	public ResponseEntity<Bazacalcul> getBazacalculById(@PathVariable("id") int bazacalculId) throws ResourceNotFoundException {
+		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
 		return ResponseEntity.ok().body(bazacalcul);
 	}
 
@@ -49,15 +47,13 @@ public class BazacalculController {
 		return bazacalculRepository.findByAngajat_IdpersoanaOrderByAnDescLunaDesc(ida);
 	}
 
-	@GetMapping("cm/{ida}/mo={luna}&y={an}")
-	public BazaCalculCMDTO getBazaCalculCMDTO(@PathVariable("ida") int ida, @PathVariable("luna") int luna,
-			@PathVariable("an") int an) {
-		return bazaCalculService.getBazaCalculCMDTO(luna, an, ida);
+	@GetMapping("cm/{ida}/mo={luna}&y={an}/{codboala}")
+	public BazaCalculCMDTO getBazaCalculCMDTO(@PathVariable("ida") int ida, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("codboala") String codboala) {
+		return bazaCalculService.getBazaCalculCMDTO(luna, an, ida, codboala);
 	}
 
 	@GetMapping("ida={ida}/mo={luna}&y={an}")
-	public Bazacalcul getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida, @PathVariable("luna") int luna,
-			@PathVariable("an") int an) {
+	public Bazacalcul getBazacalculByIdAndLunaAndAn(@PathVariable("ida") int ida, @PathVariable("luna") int luna, @PathVariable("an") int an) {
 		return bazacalculRepository.findByLunaAndAnAndAngajat_Idpersoana(luna, an, ida);
 	}
 
@@ -67,16 +63,13 @@ public class BazacalculController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<BazacalculDTO> updateBazacalcul(@PathVariable("id") int id,
-			@RequestBody BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
+	public ResponseEntity<BazacalculDTO> updateBazacalcul(@PathVariable("id") int id, @RequestBody BazacalculDTO bazacalculDTO) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(bazaCalculService.update(id, bazacalculDTO));
 	}
 
 	@DeleteMapping("{id}")
-	public Map<String, Boolean> deleteBazacalcul(@PathVariable("id") int bazacalculId)
-			throws ResourceNotFoundException {
-		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(
-				() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
+	public Map<String, Boolean> deleteBazacalcul(@PathVariable("id") int bazacalculId) throws ResourceNotFoundException {
+		Bazacalcul bazacalcul = bazacalculRepository.findById(bazacalculId).orElseThrow(() -> new ResourceNotFoundException("Bazacalcul not found for this id :: " + bazacalculId));
 
 		bazacalculRepository.delete(bazacalcul);
 		Map<String, Boolean> response = new HashMap<>();
