@@ -237,7 +237,7 @@ export default class ActivitatiTabel extends React.Component {
       },
       {
         dataField: 'actiuni',
-        text: '',
+        text: 'Acțiuni',
         formatter: this.buttons,
       },
     ];

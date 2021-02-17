@@ -31,7 +31,7 @@ public class ProiectService {
 	}
 
 	public List<Proiect> findBySocietate_Id(int idsocietate) {
-		return proiectRepository.findByActivitate_Societate_Id(idsocietate);
+		return proiectRepository.findByActivitate_Societate_IdOrderByNumeAsc(idsocietate);
 	}
 
 	public Proiect save(Proiect newProiect, int idactivitate) throws ResourceNotFoundException {

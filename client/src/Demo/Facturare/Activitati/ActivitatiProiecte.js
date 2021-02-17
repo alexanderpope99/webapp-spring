@@ -13,12 +13,13 @@ export default class Facturi extends React.Component {
     this.onSelectPill = this.onSelectPill.bind(this);
 
     this.tabelActivitati = React.createRef();
-    this.tableProiecte = React.createRef();
+    this.tabelProiecte = React.createRef();
 
     this.state = {
       socsel: getSocSel(),
 
       numarFactura: 0,
+      key: 'tabel-activitati',
     };
   }
   onSelectPill(key) {
@@ -26,8 +27,11 @@ export default class Facturi extends React.Component {
       this.tabelActivitati.current.getActivitati();
     }
     if (key === 'tabel-proiecte') {
-      this.tableProiecte.current.init();
+      this.tabelProiecte.current.init();
     }
+    this.setState({
+      key: key,
+    });
   }
 
   scrollToTopSmooth() {
@@ -54,11 +58,11 @@ export default class Facturi extends React.Component {
               activeKey={this.state.key}
               onSelect={(key) => this.onSelectPill(key)}
             >
-              <Tab eventKey="tabel-facturi" title="Activități">
-                <ActivitatiTabel ref={this.tabelFacturi} />
+              <Tab eventKey="tabel-activitati" title="Activități">
+                <ActivitatiTabel ref={this.tabelActivitati} />
               </Tab>
-              <Tab eventKey="emite-factura" title="Proiecte">
-                <ProiecteTabel ref={this.emiteFactura} />
+              <Tab eventKey="tabel-proiecte" title="Proiecte">
+                <ProiecteTabel ref={this.tabelProiecte} />
               </Tab>
             </Tabs>
           </Col>

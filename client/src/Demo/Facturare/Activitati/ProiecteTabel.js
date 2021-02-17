@@ -22,6 +22,7 @@ export default class ProiecteTabel extends React.Component {
     this.init = this.init.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.init = this.init.bind(this);
     this.getProiecte = this.getProiecte.bind(this);
     this.renderProiecte = this.renderProiecte.bind(this);
 
@@ -50,8 +51,8 @@ export default class ProiecteTabel extends React.Component {
     this.init();
   }
 
-  init() {
-    this.getActivitati();
+  async init() {
+    await this.getActivitati();
     this.getProiecte();
   }
 
@@ -88,10 +89,10 @@ export default class ProiecteTabel extends React.Component {
 
   renderProiecte(noTimeout) {
     if (noTimeout === 'no-timeout') {
-      this.getProiecte();
+      this.init();
     } else {
       this.setState({ proiecte: [] });
-      setTimeout(this.getProiecte, 100);
+      setTimeout(this.init, 100);
     }
   }
 
@@ -260,7 +261,6 @@ export default class ProiecteTabel extends React.Component {
   }
 
 	filterProiecteByActivitate() {
-		console.log(this.state.filter);
 		if(!this.state.filter)
 			return this.state.proiecte;
 		return this.state.proiecte.filter(proiect => proiect.activitate.nume === this.state.filter);
@@ -384,7 +384,6 @@ export default class ProiecteTabel extends React.Component {
                 </Button>
 								<Row>
 									<Form.Group as={Col} sm="auto" className="mt-3 mb-0">
-										<Form.Label>Activitate</Form.Label>
 										<Form.Control
 											as="select"
 											value={this.state.activitateFilter}

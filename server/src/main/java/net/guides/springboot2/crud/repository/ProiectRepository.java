@@ -9,5 +9,5 @@ import net.guides.springboot2.crud.model.Proiect;
 
 @Repository
 public interface ProiectRepository extends JpaRepository<Proiect, Integer> {
-	public List<Proiect> findByActivitate_Societate_Id(int idsocietate);
+	public List<Proiect> findByActivitate_Societate_IdOrderByNumeAsc(int idsocietate);
 }
