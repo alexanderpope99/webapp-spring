@@ -188,7 +188,7 @@ public class Factura implements Serializable {
 		this.scadenta = newFactura.scadenta;
 		this.totalfaratva = newFactura.totalfaratva;
 		this.tva = newFactura.tva;
-
+		this.proiect = newFactura.proiect;
 		return this;
 	}
 }

@@ -17,12 +17,19 @@ export default class EmitereFactura extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
+    const now = new Date();
+
     this.state = {
+      socsel: getSocSel(),
       showToast: false,
       toastMessage: '',
 
       clienti: [],
       activitati: [],
+      proiecte: [],
+
+      activitate: '-',
+      proiect: { id: null, nume: '' },
 
       today: new Date().toISOString().substring(0, 10),
 
@@ -37,7 +44,7 @@ export default class EmitereFactura extends React.Component {
       titlu: 'Cf. Contract vanzare-cumparare',
       produse: [],
       dataExpedierii: new Date().toISOString().substring(0, 10),
-      oraExpedierii: new Date().toLocaleTimeString().substring(0, 5),
+      oraExpedierii: now.getHours() + ':' + now.getMinutes(),
       scadenta: '',
       totalFaraTva: 0,
       totalTva: 0,
@@ -72,8 +79,35 @@ export default class EmitereFactura extends React.Component {
     return ultimulNumar + 1;
   }
 
-  componentDidMount() {
+  async getActivitatiProiecte() {
+    // const activitati = await axios
+    //   .get(`${server.address}/activitate/ids=${this.state.socsel.id}`, { headers: authHeader() })
+    //   .then((res) => res.data)
+    //   .catch((err) =>
+    //     this.showError('Nu am putut prelua activitatile: ' + err.response.data.message)
+    //   );
+    const proiecte = await axios
+      .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.showError('Nu am putut prelua proiectele: ' + err.response.data.message)
+      );
+    if (proiecte) {
+      var a = new Set();
+      for (let proiect of proiecte) {
+        a.add(proiect.activitate.nume);
+      }
+      this.setState({ activitati: [...a], proiecte: proiecte });
+    }
+  }
+
+  init() {
     this.getClienti();
+    this.getActivitatiProiecte();
+  }
+
+  componentDidMount() {
+    this.init();
   }
 
   fillForm(factura) {
@@ -81,6 +115,8 @@ export default class EmitereFactura extends React.Component {
       this.setState(
         {
           factura: null,
+					proiect: {id: null, nume: ''},
+					activitate: '-',
 
           id: null,
           serie: 'BVFZ',
@@ -103,6 +139,9 @@ export default class EmitereFactura extends React.Component {
       this.setState({
         factura: factura,
 
+				activitate: factura.proiect ? factura.proiect.activitate.nume : '-',
+				proiect: factura.proiect || {id: null, nume: ''},
+
         id: factura.id,
         serie: factura.serie,
         numar: factura.numar,
@@ -114,7 +153,7 @@ export default class EmitereFactura extends React.Component {
         produse: factura.produse,
         dataExpedierii: factura.dataexpedierii,
         oraExpedierii: factura.oraexpedierii,
-				scadenta: factura.scadenta,
+        scadenta: factura.scadenta,
         totalFaraTva: factura.totalfaratva,
         totalTva: factura.tva,
         totalCuTva: factura.totalcutva,
@@ -174,6 +213,26 @@ export default class EmitereFactura extends React.Component {
     return { totalFaraTva, totalTva, totalCuTva };
   }
 
+  onChangeActivitate(activitate) {
+    if (activitate === '-') {
+      console.log('nicio activ selectata');
+      return;
+    }
+    this.setState({ activitate: activitate });
+  }
+
+  onChangeProiect(e) {
+    if (e.target.value === '-') {
+      this.setState({ proiect: { id: null, nume: '' } });
+      return;
+    }
+    const selectedIndex = e.target.options.selectedIndex;
+    const id = e.target.options[selectedIndex].getAttribute('data-key');
+    // eslint-disable-next-line eqeqeq
+    const proiect = this.state.proiecte.find((item) => item.id == id);
+    this.setState({ proiect: proiect ? proiect : { id: null, nume: '' } });
+  }
+
   async onSubmit() {
     const factura = this.state.factura;
     const nrAvizInsotire = this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire;
@@ -196,10 +255,11 @@ export default class EmitereFactura extends React.Component {
       produse: this.state.produse,
       dataexpedierii: this.state.dataExpedierii,
       oraexpedierii: this.state.oraExpedierii,
-			scadenta: this.state.scadenta,
+      scadenta: this.state.scadenta,
       totalfaratva: totalFaraTva,
       tva: totalTva,
       totalcutva: totalCuTva,
+			proiect: this.state.proiect.id ? this.state.proiect : null,
     };
 
     var ok = false;
@@ -251,6 +311,17 @@ export default class EmitereFactura extends React.Component {
   render() {
     const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
 
+    const activitatiComponent = this.state.activitati.map((activitate, index) => (
+      <option key={index}>{activitate}</option>
+    ));
+    const proiecteComponent = this.state.proiecte
+      .filter((proiect) => proiect.activitate.nume === this.state.activitate)
+      .map((proiect, index) => (
+        <option key={index} data-key={proiect.id}>
+          {proiect.nume}
+        </option>
+      ));
+
     const produseComponent = this.state.produse.map((produs, index) => (
       <Row className="border rounded p-0 pt-2 mt-2 mb-2" key={index}>
         <Col md={12}>
@@ -261,7 +332,7 @@ export default class EmitereFactura extends React.Component {
         <Form.Group as={Col} sm="12">
           <Form.Label>Denumirea produselor sau serviciilor</Form.Label>
           <Form.Control
-						required
+            required
             as="textarea"
             value={produs.denumire}
             onChange={(e) => this.changeProdusAttribute(produs, 'denumire', e.target.value, index)}
@@ -312,6 +383,31 @@ export default class EmitereFactura extends React.Component {
             step="0.01"
             value={(produs.pretUnitar * produs.cantitate * 0.19).toFixed(2)}
           />
+        </Form.Group>
+
+        {/* CONTARE */}
+        <Form.Group as={Col} md="6">
+          <Form.Label>Activitatea</Form.Label>
+          <Form.Control
+            as="select"
+            value={this.state.activitate}
+            onChange={(e) => this.onChangeActivitate(e.target.value)}
+          >
+            <option>-</option>
+            {activitatiComponent}
+          </Form.Control>
+        </Form.Group>
+        <Form.Group as={Col} md="6">
+          <Form.Label>Proiect</Form.Label>
+          <Form.Control
+            disabled={this.state.activitate === '-'}
+            as="select"
+            value={this.state.proiect.nume}
+            onChange={(e) => this.onChangeProiect(e)}
+          >
+            <option>{this.state.activitate === '-' ? '--Selectati activitatea' : '-'}</option>
+            {proiecteComponent}
+          </Form.Control>
         </Form.Group>
         <Col md={12}>
           <Button

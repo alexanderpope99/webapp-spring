@@ -327,7 +327,7 @@ export default class ProiecteTabel extends React.Component {
         </Modal>
 
         {/* ADD/EDIT MODAL */}
-        <Modal show={this.state.showModal} onHide={this.handleClose} size="sm">
+        <Modal show={this.state.showModal} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Nume proiect</Modal.Title>
           </Modal.Header>

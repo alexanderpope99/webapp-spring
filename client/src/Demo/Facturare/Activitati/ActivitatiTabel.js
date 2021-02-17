@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import { Row, Col, Card, Button, Breadcrumb, Toast, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Toast, Modal, Form } from 'react-bootstrap';
 import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import BootstrapTable from 'react-bootstrap-table-next';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -272,7 +272,7 @@ export default class ActivitatiTabel extends React.Component {
         </Modal>
 
         {/* ADD/EDIT ACTIVITATE MODAL */}
-        <Modal show={this.state.showModal} onHide={this.handleClose} size="sm">
+        <Modal show={this.state.showModal} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Detalii activitate</Modal.Title>
           </Modal.Header>

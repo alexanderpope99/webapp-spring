@@ -44,8 +44,7 @@ public class ProiectController {
 	}
 
 	@PutMapping("ida={ida}/{id}")
-	public Proiect update(@PathVariable("ida") int idactivitate, @PathVariable("id") int id, @RequestBody Proiect proiect)
-			throws ResourceNotFoundException {
+	public Proiect update(@PathVariable("ida") int idactivitate, @PathVariable("id") int id, @RequestBody Proiect proiect) throws ResourceNotFoundException {
 		return proiectService.update(proiect, id, idactivitate);
 	}
 
