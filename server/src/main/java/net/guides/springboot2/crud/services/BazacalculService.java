@@ -128,7 +128,7 @@ public class BazacalculService {
 		if (bazeUltimele6Luni.size() < 6 && !special)
 			return new BazaCalculCMDTO(0, 0, 0);
 
-		int bazaCalcul = 0;
+		float bazaCalcul = 0;
 		int zilebazacalcul = 0;
 		for (Bazacalcul bc : bazeUltimele6Luni) {
 			bazaCalcul += bc.getSalariurealizat();
