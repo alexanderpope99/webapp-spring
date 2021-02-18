@@ -45,6 +45,8 @@ class FacturiTabel extends React.Component {
       aniFacturi: [],
       an: '',
       ultimulAn: today.getFullYear(),
+
+	  user: authService.getCurrentUser(),
     };
   }
 
@@ -66,6 +68,34 @@ class FacturiTabel extends React.Component {
     this.getFacturi();
     // this.getClienti();
   }
+
+  async creeazaFactura(e) {
+	  console.log(e);
+    const created = await fetch(
+      `${server.address}/factura/createfile/ids=${this.state.socsel.id}/${e.id}/${this.state.user.id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.state.user.accessToken}`,
+        },
+      }
+    )
+      .then((res) => res.ok)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea factură: ' + err.response.data.message,
+        })
+      );
+
+    if (created)
+      download(
+        `Factură - ${this.state.socsel.nume} - ${e.client.nume} - ${e.dataexpedierii} ${e.oraexpedierii}.xlsx`,
+        this.state.user.id
+      );
+  }
+
 
   async getFacturi() {
     const facturi = await axios
