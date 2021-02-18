@@ -391,11 +391,11 @@ export default class CaieteTabel extends React.Component {
               <Breadcrumb.Item href="/dashboard/societati">
                 {this.state.socsel.nume}
               </Breadcrumb.Item>
-              <Breadcrumb.Item active>Facturi</Breadcrumb.Item>
+              <Breadcrumb.Item active>Caiete</Breadcrumb.Item>
             </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Caiete</Card.Title>
+                <Card.Title as="h5">Caiete - {this.state.socsel.nume}</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
