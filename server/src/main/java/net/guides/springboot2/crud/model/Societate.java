@@ -86,16 +86,16 @@ public class Societate implements Serializable {
 	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Activitate> activitati;
 
-	@JsonBackReference(value = "caiet-societate")
-	@OneToOne(mappedBy= "societate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Caiet caiet;
+	@JsonBackReference(value = "caiete-societate")
+	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Caiet> caiete;
 
 	@Column(name = "numeimagine")
 	private String numeimagine;
 
 	@Column(name = "dimensiuneimagine")
 	private Long dimensiuneimagine;
-	
+
 	@JsonIgnore
 	@Lob
 	@Column(name = "imagine")
@@ -104,8 +104,7 @@ public class Societate implements Serializable {
 	public Societate() {
 	}
 
-	public Societate(String nume, Integer idcaen, String cif, Double capsoc, String regcom, Adresa adresa, String email,
-			String telefon, String fax) {
+	public Societate(String nume, Integer idcaen, String cif, Double capsoc, String regcom, Adresa adresa, String email, String telefon, String fax) {
 		this.nume = nume;
 		this.idcaen = idcaen;
 		this.cif = cif;
@@ -178,8 +177,8 @@ public class Societate implements Serializable {
 		return useri;
 	}
 
-	public Caiet getCaiet() {
-		return caiet;
+	public List<Caiet> getCaiete() {
+		return caiete;
 	}
 
 	// ! SETTERS
@@ -259,8 +258,8 @@ public class Societate implements Serializable {
 		this.clienti = clienti;
 	}
 
-	public void setCaiet(Caiet caiet) {
-		this.caiet = caiet;
+	public void setCaiete(List<Caiet> caiete) {
+		this.caiete = caiete;
 	}
 
 	// * Extra

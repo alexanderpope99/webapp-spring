@@ -39,10 +39,6 @@ export default class Facturi extends React.Component {
 		this.setState({ key: 'emite-factura' });
 	}
 
-	async cresteUltimulNumar() {
-		this.setState({ ultimulNumar: this.state.ultimulNumar + 1 })
-	}
-
 	scrollToTopSmooth() {
 		window.scrollTo({
 			top: 0,

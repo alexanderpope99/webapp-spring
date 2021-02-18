@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Client;
+import net.guides.springboot2.crud.model.Caiet;
 import net.guides.springboot2.crud.model.Factura;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.Produs;
@@ -39,6 +39,9 @@ public class FacturaService {
 	@Autowired
 	private ParametriiSalariuService parametriiSalariuService;
 
+	@Autowired
+	private CaietService caietService;
+	
 	private static double roundAvoid(double value, int places) {
 		double scale = Math.pow(10, places);
 		return Math.round(value * scale) / scale;
@@ -64,10 +67,12 @@ public class FacturaService {
 		return facturaRepository.findNumarFactura();
 	}
 	
-	public Factura save(Factura newFactura) {
+	public Factura save(Factura newFactura) throws ResourceNotFoundException {
 		for (Produs produs : newFactura.getProduse()) {
 			produs.setFactura(newFactura);
 		}
+		Caiet caiet = caietService.findBySerie(newFactura.getSerie());
+		newFactura.setCaiet(caiet);
 		return facturaRepository.save(newFactura);
 	}
 	

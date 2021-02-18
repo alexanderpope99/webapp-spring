@@ -33,6 +33,10 @@ public class CaietService {
 		return caietRepository.findBySocietate_Id(idsocietate);
 	}
 
+	public Caiet findBySerie(String serie) {
+		return caietRepository.findBySerie(serie);
+	}
+
 	public Caiet save(Caiet newCaiet, int idsocietate) throws ResourceNotFoundException {
 		Societate societate = societateService.findById(idsocietate);
 		newCaiet.setSocietate(societate);

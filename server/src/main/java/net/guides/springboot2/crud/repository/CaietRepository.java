@@ -10,4 +10,5 @@ import net.guides.springboot2.crud.model.Caiet;
 @Repository
 public interface CaietRepository extends JpaRepository<Caiet, Integer> {
 	public List<Caiet> findBySocietate_Id(int idsocietate);
+	public Caiet findBySerie(String serie);
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Button, Toast, Form } from 'react-bootstrap';
-import { Trash2, Edit3, RotateCw, Plus,Download } from 'react-feather';
+import { Trash2, Edit3, RotateCw, Plus, Download } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
@@ -24,8 +24,6 @@ class FacturiTabel extends React.Component {
 
     this.getFacturi = this.getFacturi.bind(this);
     this.renderFacturi = this.renderFacturi.bind(this);
-    this.creeazaFactura = this.creeazaFactura.bind(this);
-
 
     let today = new Date();
     this.state = {
@@ -177,7 +175,7 @@ class FacturiTabel extends React.Component {
         let lunaFactura = new Date(factura.dataexpedierii).getMonth() + 1;
         return lunaFactura == luna;
       });
-      console.log('facturi filtrate dupa luna ' + luna + ':', facturi);
+      // console.log('facturi filtrate dupa luna ' + luna + ':', facturi);
     }
     // console.log(facturi);
     return facturi;
@@ -185,13 +183,13 @@ class FacturiTabel extends React.Component {
 
   buttons = (cell, row, rowIndex, formatExtraData) => (
     <div className="d-inline-flex">
-	<Button
+      {/* <Button
     onClick={() => this.creeazaFactura(row)}
     variant="outline-secondary"
     className="m-1 p-1 rounded-circle border-0"
     >
         <Download size={20} />
-    </Button>
+    </Button> */}
       <Button
         onClick={() => this.props.edit(row)}
         variant="outline-secondary"
@@ -403,7 +401,11 @@ class FacturiTabel extends React.Component {
                     <Form.Control
                       as="select"
                       value={this.state.proiectFilter}
-                      onChange={(e) => this.setState({ proiectFilter: e.target.value === '-' ? '' : e.target.value })}
+                      onChange={(e) =>
+                        this.setState({
+                          proiectFilter: e.target.value === '-' ? '' : e.target.value,
+                        })
+                      }
                     >
                       <option>-</option>
                       {proiecteComponent}

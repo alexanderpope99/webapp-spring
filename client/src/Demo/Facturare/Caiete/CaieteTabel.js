@@ -44,7 +44,7 @@ export default class CaieteTabel extends React.Component {
       serie: '',
       primulNumar: '',
       ultimulNumar: '',
-      status: '',
+      status: 'ACTIV',
     };
   }
 
@@ -118,7 +118,7 @@ export default class CaieteTabel extends React.Component {
       serie: '',
       primulNumar: '',
       ultimulNumar: '',
-      status: '',
+      status: 'ACTIV',
 			societate: { id: null, nume: '' },
     });
   }
@@ -215,7 +215,7 @@ export default class CaieteTabel extends React.Component {
     const caiet = {
       serie: this.state.serie,
       primulnumar: this.state.primulNumar,
-      ultimulnumar: this.state.primulNumar,
+      ultimulnumar: this.state.ultimulNumar,
       status: this.state.status,
     };
     var ok = false;
@@ -272,6 +272,11 @@ export default class CaieteTabel extends React.Component {
       {
         dataField: 'ultimulnumar',
         text: 'Ultimul număr',
+        sort: true,
+      },
+			{
+        dataField: 'status',
+        text: 'Status',
         sort: true,
       },
       {
@@ -355,6 +360,18 @@ export default class CaieteTabel extends React.Component {
                   value={this.state.ultimulNumar}
                   onChange={(e) => this.setState({ ultimulNumar: e.target.value })}
                 />
+              </Form.Group>
+							<Form.Group>
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.status}
+                  onChange={(e) => this.setState({ status: e.target.value })}
+                >
+									<option>ACTIV</option>
+									<option>DEZACTIVAT</option>
+									<option>INCHIS</option>
+								</Form.Control>
               </Form.Group>
             </Form>
           </Modal.Body>
