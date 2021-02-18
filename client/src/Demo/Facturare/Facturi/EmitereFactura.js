@@ -27,7 +27,7 @@ export default class EmitereFactura extends React.Component {
       clienti: [],
       activitati: [],
       proiecte: [],
-      caiet: { id: null, serie: '' },
+      caiete: [],
 
       activitate: '-',
       proiect: { id: null, nume: '' },
@@ -38,7 +38,7 @@ export default class EmitereFactura extends React.Component {
 
       // datele facturii
       id: null,
-      serie: 'BVFZ',
+      serie: '',
       numar: 1,
       nrAvizInsotire: '-',
       client: { nume: '' },
@@ -59,7 +59,7 @@ export default class EmitereFactura extends React.Component {
 
   init() {
     this.getClienti();
-    this.getCaiet();
+    this.getCaiete();
     this.getActivitatiProiecte();
   }
 
@@ -76,13 +76,13 @@ export default class EmitereFactura extends React.Component {
     this.setState({ clienti: clienti ? clienti : [] });
   }
 
-  async getCaiet() {
-    const caiet = await axios
+  async getCaiete() {
+    const caiete = await axios
       .get(`${server.address}/caiet/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => this.showError('Nu am putut prelua caietul: ' + err.response.data.message));
-    if (caiet) {
-      this.setState({ serie: caiet.serie });
+    if (caiete) {
+      this.setState({ caiete: caiete });
     }
   }
 
@@ -125,7 +125,7 @@ export default class EmitereFactura extends React.Component {
           activitate: '-',
 
           id: null,
-          serie: 'BVFZ',
+          serie: '',
           numar: 1,
           today: new Date().toISOString().substring(0, 10),
           nrAvizInsotire: '-',
@@ -161,7 +161,7 @@ export default class EmitereFactura extends React.Component {
         totalFaraTva: factura.totalfaratva,
         totalTva: factura.tva,
         totalCuTva: factura.totalcutva,
-				status: factura.status || 'Neîncasată',
+        status: factura.status || 'Neîncasată',
       });
     }
   }
@@ -265,7 +265,7 @@ export default class EmitereFactura extends React.Component {
       tva: totalTva,
       totalcutva: totalCuTva,
       proiect: this.state.proiect.id ? this.state.proiect : null,
-			status: this.state.status || 'Neîncasată',
+      status: this.state.status || 'Neîncasată',
     };
 
     var ok = false;
@@ -433,6 +433,10 @@ export default class EmitereFactura extends React.Component {
       </option>
     ));
 
+    const seriiComponent = this.state.caiete.map((caiet) => (
+      <option key={caiet.serie}>{caiet.serie}</option>
+    ));
+
     return (
       <Aux>
         {/* ERROR TOAST */}
@@ -474,11 +478,15 @@ export default class EmitereFactura extends React.Component {
                 <Form.Group>
                   <Form.Label>Centru de Profit (in funcție de societatea selectată)</Form.Label>
                   <Form.Control
-                    // disabled={this.state.caiet}
-                    type="text"
+                    as="select"
                     value={this.state.serie}
-                    onChange={(e) => this.setState({ serie: e.target.value })}
-                  />
+                    onChange={(e) =>
+                      this.setState({ serie: e.target.value === '-' ? '' : e.target.value })
+                    }
+                  >
+                    <option>-</option>
+                    {seriiComponent}
+                  </Form.Control>
                 </Form.Group>
               </Col>
               <Col md={6} className="border rounded pt-3">

@@ -215,7 +215,7 @@ export default class CaieteTabel extends React.Component {
     const caiet = {
       serie: this.state.serie,
       primulnumar: this.state.primulNumar,
-      ultimulnumar: this.state.primulNumar,
+      ultimulnumar: this.state.ultimulNumar,
       status: this.state.status,
     };
     var ok = false;
@@ -372,7 +372,6 @@ export default class CaieteTabel extends React.Component {
 									<option>DEZACTIVAT</option>
 									<option>INCHIS</option>
 								</Form.Control>
-							
               </Form.Group>
             </Form>
           </Modal.Body>

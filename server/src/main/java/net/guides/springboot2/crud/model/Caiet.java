@@ -10,9 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -22,7 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "caiet")
+@Table(name = "caiet", uniqueConstraints = {@UniqueConstraint(columnNames = "serie")})
 public class Caiet implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,8 +45,7 @@ public class Caiet implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StatusCaiet status = StatusCaiet.ACTIV;
 
-	// @JsonBackReference(value = "caiet-societate")
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "idsocietate", nullable = false)
 	private Societate societate;
 

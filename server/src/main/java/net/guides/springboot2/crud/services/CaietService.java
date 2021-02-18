@@ -29,7 +29,7 @@ public class CaietService {
 		return caietRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Caiet not found for this id :: " + id));
 	}
 
-	public Caiet findBySocietate_Id(int idsocietate) {
+	public List<Caiet> findBySocietate_Id(int idsocietate) {
 		return caietRepository.findBySocietate_Id(idsocietate);
 	}
 
