@@ -133,7 +133,7 @@ var items = [
         title: 'Clienți',
         type: 'item',
         url: '/clienti',
-        icon: 'feather icon-file-text',
+        icon: 'feather icon-shopping-bag',
       },
       {
         id: 'facturi',
@@ -147,7 +147,7 @@ var items = [
         title: 'Activități / Proiecte',
         type: 'item',
         url: '/activitati-proiecte',
-        icon: 'feather icon-file-text',
+        icon: 'feather icon-git-pull-request',
       },
       // {
       //   id: 'facturi-aprobator',

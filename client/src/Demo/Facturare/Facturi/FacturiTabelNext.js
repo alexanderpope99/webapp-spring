@@ -183,12 +183,12 @@ class FacturiTabel extends React.Component {
       },
       {
         dataField: 'scadenta',
-        text: 'Scadenta',
+        text: 'Scadență',
         sort: true,
       },
       {
         dataField: 'statut',
-        text: 'Status',
+        text: 'Statut',
         sort: true,
       },
     ];
