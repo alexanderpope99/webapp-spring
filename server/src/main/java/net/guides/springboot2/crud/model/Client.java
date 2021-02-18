@@ -37,7 +37,7 @@ public class Client implements Serializable {
   private String nume;
 
   @Column(name = "statut")
-  private String statut = "Neîncasată";
+  private String statut;
   
   @Column(name = "nrregcom")
   private String nrregcom;

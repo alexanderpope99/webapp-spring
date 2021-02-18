@@ -52,6 +52,9 @@ public class Factura implements Serializable {
 	@Column(name = "tva")
 	private Float tva;
 
+	@Column(name = "status")
+	private String status;
+
 	@ManyToOne
 	@JoinColumn(name = "idclient")
 	private Client client;
@@ -157,6 +160,14 @@ public class Factura implements Serializable {
 
 	public void setTva(Float tva) {
 		this.tva = tva;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Float getTotalcutva() {

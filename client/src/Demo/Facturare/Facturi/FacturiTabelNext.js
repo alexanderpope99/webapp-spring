@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Button, Toast, Form } from 'react-bootstrap';
@@ -36,8 +37,9 @@ class FacturiTabel extends React.Component {
       clientFilter: '',
       proiecteNume: [],
       proiectFilter: '',
-      luna: '-',
-      an: '-',
+      luna: '',
+      aniFacturi: [],
+      an: '',
       ultimulAn: today.getFullYear(),
     };
   }
@@ -74,19 +76,20 @@ class FacturiTabel extends React.Component {
     if (facturi) {
       var clientiNume = new Set();
       var proiecteNume = new Set();
-      var ultimulAn = new Date().getFullYear();
+      var aniFacturi = new Set();
+      aniFacturi.add(new Date().getFullYear());
       for (let factura of facturi) {
         clientiNume.add(factura.client.nume);
         if (factura.proiect) proiecteNume.add(factura.proiect.nume);
         let anFactura = new Date(factura.dataexpedierii).getFullYear();
-        ultimulAn = Math.min(ultimulAn, anFactura);
+        aniFacturi.add(anFactura);
       }
 
       this.setState({
         facturi: facturi || [],
         clientiNume: [...clientiNume],
         proiecteNume: [...proiecteNume],
-        ultimulAn: ultimulAn,
+        aniFacturi: [...aniFacturi],
       });
     }
   }
@@ -110,6 +113,40 @@ class FacturiTabel extends React.Component {
           toastMessage: 'Nu am putut sterge factura: ' + err.response.data.message,
         })
       );
+  }
+
+  filterFacturi() {
+    const clientNume = this.state.clientFilter;
+    const proiectNume = this.state.proiectFilter;
+    const luna = this.state.luna;
+    const an = this.state.an;
+    var facturi = [...this.state.facturi];
+    if (clientNume) {
+      facturi = facturi.filter((factura) => factura.client.nume === clientNume);
+      // console.log('facturi filtrate dupa client ' + clientNume + ':', facturi);
+    }
+    if (proiectNume) {
+      facturi = facturi.filter((factura) =>
+        factura.proiect ? factura.proiect.nume === proiectNume : false
+      );
+      // console.log('facturi filtrate dupa proiect ' + proiectNume + ':', facturi);
+    }
+    if (an) {
+      facturi = facturi.filter((factura) => {
+        let anFactura = new Date(factura.dataexpedierii).getFullYear();
+        return anFactura == an;
+      });
+      // console.log('facturi filtrate dupa an ' + an + ':', facturi);
+    }
+    if (luna) {
+      facturi = facturi.filter((factura) => {
+        let lunaFactura = new Date(factura.dataexpedierii).getMonth() + 1;
+        return lunaFactura == luna;
+      });
+      console.log('facturi filtrate dupa luna ' + luna + ':', facturi);
+    }
+    // console.log(facturi);
+    return facturi;
   }
 
   buttons = (cell, row, rowIndex, formatExtraData) => (
@@ -218,8 +255,8 @@ class FacturiTabel extends React.Component {
         sort: true,
       },
       {
-        dataField: 'statut',
-        text: 'Statut',
+        dataField: 'status',
+        text: 'Status',
         sort: true,
       },
     ];
@@ -228,13 +265,15 @@ class FacturiTabel extends React.Component {
       <option key={index}>{client}</option>
     ));
 
+    const proiecteComponent = this.state.proiecteNume.map((proiect, index) => (
+      <option key={index}>{proiect}</option>
+    ));
+
     const luniComponent = luni.map((luna) => <option key={luna}>{luna}</option>);
 
-    const this_year = new Date().getFullYear();
-    var aniComponent = [];
-    for (let i = this.state.ultimulAn; i <= this_year + 1; ++i) {
-      aniComponent.push(<option key={i}>{i}</option>);
-    }
+    var aniComponent = this.state.aniFacturi.map((an) => <option key={an}>{an}</option>);
+
+    const facturiComponent = this.filterFacturi();
 
     return (
       <Aux>
@@ -286,7 +325,7 @@ class FacturiTabel extends React.Component {
                       value={this.state.clientFilter}
                       onChange={(e) =>
                         this.setState({
-                          clientFilter: e.target.value === 'Toți clienții' ? e.target.value : '',
+                          clientFilter: e.target.value === 'Toți clienții' ? '' : e.target.value,
                         })
                       }
                     >
@@ -299,7 +338,9 @@ class FacturiTabel extends React.Component {
                     <Form.Control
                       as="select"
                       value={this.state.an}
-                      onChange={(e) => this.setState({ an: e.target.value })}
+                      onChange={(e) =>
+                        this.setState({ an: e.target.value === '-' ? '' : e.target.value })
+                      }
                     >
                       <option>-</option>
                       {aniComponent}
@@ -309,11 +350,22 @@ class FacturiTabel extends React.Component {
                     <Form.Label>Luna</Form.Label>
                     <Form.Control
                       as="select"
-                      value={this.state.luna}
-                      onChange={(e) => this.setState({ luna: luni[e.target.selectedIndex - 1] })}
+                      value={luni[this.state.luna - 1]}
+                      onChange={(e) => this.setState({ luna: e.target.selectedIndex })}
                     >
                       <option>-</option>
                       {luniComponent}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group as={Col} sm="auto">
+                    <Form.Label>Proiect</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.proiectFilter}
+                      onChange={(e) => this.setState({ proiectFilter: e.target.value === '-' ? '' : e.target.value })}
+                    >
+                      <option>-</option>
+                      {proiecteComponent}
                     </Form.Control>
                   </Form.Group>
                 </Row>
@@ -323,7 +375,7 @@ class FacturiTabel extends React.Component {
                   bootstrap4
                   overflow
                   keyField="id"
-                  data={this.state.facturi}
+                  data={facturiComponent}
                   columns={columns}
                   wrapperClasses="table-responsive"
                   hover
