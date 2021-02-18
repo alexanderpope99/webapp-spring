@@ -41,6 +41,7 @@ const Facturi = React.lazy(() => import('./Demo/Facturare/Facturi/Facturi'));
 const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Facturare/AprobareFacturi/FacturiAprobatorTabel'));
 const FacturiOperatorTabel = React.lazy(() => import('./Demo/Facturare/OperareFacturi/FacturiOperatorTabel'));
 const ActivitatiProiecte = React.lazy(() => import('./Demo/Facturare/Activitati/ActivitatiProiecte'));
+const Caiete = React.lazy(() => import('./Demo/Facturare/Caiete/CaieteTabel'));
 // const ActivitatiTabel = React.lazy(() => import('./Demo/Facturare/Activitati/ActivitatiTabel'));
 // const ProiecteTabel = React.lazy(() => import('./Demo/Facturare/Activitati/ProiecteTabel'));
 
@@ -163,6 +164,12 @@ const routes = [
 		exact: true,
 		name: 'Activitati, Proiecte',
 		component: ActivitatiProiecte,
+	},
+	{
+		path: '/caiete',
+		exact: true,
+		name: 'Caiete',
+		component: Caiete,
 	},
 	// {
 	// 	path: '/activitati',

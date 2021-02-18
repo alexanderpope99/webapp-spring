@@ -22,7 +22,7 @@ export default class ActivitatiTabel extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.showError = this.showError.bind(this);
-    this.renderActivitati = this.renderActivitati.bind(this);
+    this.renderTable = this.renderTable.bind(this);
 
     this.state = {
       showToast: false,
@@ -72,7 +72,7 @@ export default class ActivitatiTabel extends React.Component {
     }
   }
 
-  renderActivitati(noTimeout) {
+  renderTable(noTimeout) {
     if (noTimeout === 'no-timeout') {
       this.getActivitati();
     } else {
@@ -260,7 +260,7 @@ export default class ActivitatiTabel extends React.Component {
         </Toast>
 
         {/* CONFIRM MODAL */}
-        <Modal show={this.state.showConfirm} onHide={() => this.hanldeClose('confirm')}>
+        <Modal show={this.state.showConfirm} onHide={() => this.handleClose('confirm')}>
           <Modal.Header closeButton>
             <Modal.Title>{this.state.modalMessage}</Modal.Title>
           </Modal.Header>
@@ -300,7 +300,7 @@ export default class ActivitatiTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Activitati</Card.Title>
+                <Card.Title as="h5">Activitati - {this.state.socsel.nume}</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -314,7 +314,7 @@ export default class ActivitatiTabel extends React.Component {
                   variant="outline-primary"
                   size="sm"
                   className="float-right"
-                  onClick={this.renderActivitati}
+                  onClick={this.renderTable}
                 >
                   <RotateCw className="m-0 p-0" />
                 </Button>

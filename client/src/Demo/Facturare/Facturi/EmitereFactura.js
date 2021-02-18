@@ -437,7 +437,7 @@ export default class EmitereFactura extends React.Component {
         </Toast>
 
         {/* CONFIRM MODAL */}
-        <Modal show={this.state.showModal} onHide={this.hanldeClose}>
+        <Modal show={this.state.showModal} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>{this.state.modalMessage}</Modal.Title>
           </Modal.Header>

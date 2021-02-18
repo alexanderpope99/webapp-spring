@@ -22,7 +22,7 @@ public class CaietService {
 	private SocietateService societateService;
 
 	public List<Caiet> findAll() {
-		return caietRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
+		return caietRepository.findAll(Sort.by(Sort.Direction.ASC, "serie"));
 	}
 
 	public Caiet findById(int id) throws ResourceNotFoundException {

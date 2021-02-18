@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Row, Col, Card, Button, Toast, Modal, Form } from 'react-bootstrap';
 import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import BootstrapTable from 'react-bootstrap-table-next';
-import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
@@ -15,16 +14,15 @@ import { getSocSel } from '../../Resources/socsel';
 import { server } from '../../Resources/server-address';
 import authHeader from '../../../services/auth-header';
 
-export default class ProiecteTabel extends React.Component {
+export default class CaieteTabel extends React.Component {
   constructor() {
     super();
 
-    this.init = this.init.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.getCaiete = this.getCaiete.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.init = this.init.bind(this);
-    this.getProiecte = this.getProiecte.bind(this);
-    this.renderProiecte = this.renderProiecte.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.showError = this.showError.bind(this);
+    this.renderTable = this.renderTable.bind(this);
 
     this.state = {
       showToast: false,
@@ -37,23 +35,22 @@ export default class ProiecteTabel extends React.Component {
 
       socsel: getSocSel(),
 
-      activitati: [],
-      proiecte: [],
-			filter: null,
+			caiete: [],
 
-      activitate: { id: null, nume: '' },
+      societati: [],
+      societate: { id: null, nume: '' },
+
       id: null,
-      nume: '',
+      serie: '',
+      primulNumar: '',
+      ultimulNumar: '',
+      status: '',
     };
   }
 
   componentDidMount() {
-    this.init();
-  }
-
-  async init() {
-    await this.getActivitati();
-    this.getProiecte();
+    this.getCaiete();
+		this.getSocietati();
   }
 
   showError(error) {
@@ -63,36 +60,32 @@ export default class ProiecteTabel extends React.Component {
     });
   }
 
-  async getActivitati() {
-    const activitati = await axios
-      .get(`${server.address}/activitate/ids=${this.state.socsel.id}`, { headers: authHeader() })
+	async getSocietati() {
+		const societati = await axios
+      .get(`${server.address}/societate`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) =>
-        this.showError('Nu am putut prelua activitatile: ' + err.response.data.message)
-      );
-    if (activitati) {
-      this.setState({ activitati: activitati });
+      .catch((err) => this.showError('Nu am putut prelua societatile: ' + err.response.data.message));
+    if (societati) {
+      this.setState({ societati: societati });
+    }
+	}
+
+  async getCaiete() {
+    const caiete = await axios
+      .get(`${server.address}/caiet`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => this.showError('Nu am putut prelua caietele: ' + err.response.data.message));
+    if (caiete) {
+      this.setState({ caiete: caiete });
     }
   }
 
-  async getProiecte() {
-    const proiecte = await axios
-      .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) =>
-        this.showError('Nu am putut prelua proiectele: ' + err.response.data.message)
-      );
-    if (proiecte) {
-      this.setState({ proiecte: proiecte });
-    }
-  }
-
-  renderProiecte(noTimeout) {
+  renderTable(noTimeout) {
     if (noTimeout === 'no-timeout') {
-      this.init();
+      this.getCaiete();
     } else {
-      this.setState({ proiecte: [] });
-      setTimeout(this.init, 100);
+      this.setState({ caiete: [] });
+      setTimeout(this.getCaiete, 100);
     }
   }
 
@@ -104,71 +97,29 @@ export default class ProiecteTabel extends React.Component {
       showModal: true,
       isEdit: true,
       id: item.id,
-      nume: item.nume,
-      activitate: item.activitate,
+      serie: item.serie,
+      primulNumar: item.primulnumar,
+      ultimulNumar: item.ultimulnumar,
+      status: item.status,
+			societate: item.societate,
     });
   }
 
   async delete(id) {
     await axios
-      .delete(`${server.address}/proiect/${id}`, { headers: authHeader() })
-      .then(this.getActivitati)
-      .catch((err) => this.showError('Nu am putut sterge proiectul: ' + err.response.data.message));
-  }
-
-  async onSubmit(e) {
-    e.preventDefault();
-    const proiect = {
-      nume: this.state.nume,
-    };
-    if (!this.state.activitate.id) {
-      this.showError('Selectați activitatea proiectului');
-      return;
-    }
-    var ok = false;
-    if (this.state.isEdit) {
-      proiect['id'] = this.state.id;
-      ok = await axios
-        .put(
-          `${server.address}/proiect/ida=${this.state.activitate.id}/${this.state.id}`,
-          proiect,
-          { headers: authHeader() }
-        )
-        .then((res) => res.data)
-        .catch((err) =>
-          this.showError('Nu am putut modifica proiectul: ' + err.response.data.message)
-        );
-    } else {
-      ok = await axios
-        .post(`${server.address}/proiect/ida=${this.state.activitate.id}`, proiect, {
-          headers: authHeader(),
-        })
-        .then((res) => res.data)
-        .catch((err) =>
-          this.showError('Nu am putut adauga activitatea: ' + err.response.data.message)
-        );
-    }
-
-    if (ok) {
-      this.setState(
-        {
-          showToast: false,
-          toastMessage: '',
-          showModal: false,
-
-          showConfirm: true,
-          modalMessage: this.state.isEdit ? 'Proiect modificat' : 'Proiect adăugat',
-        },
-        this.getProiecte
-      );
-    }
+      .delete(`${server.address}/caiet/${id}`, { headers: authHeader() })
+      .then(this.getCaiete)
+      .catch((err) => this.showError('Nu am putut sterge caietul: ' + err.response.data.message));
   }
 
   clearUserInput() {
     this.setState({
       id: null,
-      nume: '',
-      activitate: { id: null, nume: '' },
+      serie: '',
+      primulNumar: '',
+      ultimulNumar: '',
+      status: '',
+			societate: { id: null, nume: '' },
     });
   }
 
@@ -182,11 +133,6 @@ export default class ProiecteTabel extends React.Component {
         },
         this.clearUserInput
       );
-    } else if (type === 'proiect') {
-      this.setState({
-        showModalProiect: false,
-        isEdit: false,
-      });
     } else {
       this.setState({ showModal: false, isEdit: false }, this.clearUserInput);
     }
@@ -224,8 +170,8 @@ export default class ProiecteTabel extends React.Component {
               }}
             >
               <Box p={2}>
-                <Typography>Sigur ștergeți proiectul?</Typography>
-                <Typography variant="caption">SFacturile nu se vor șterge.</Typography>
+                <Typography>Sigur ștergeți caietul?</Typography>
+                <Typography variant="caption">Facturile nu se vor șterge.</Typography>
                 <br />
                 <Button
                   variant="outline-danger"
@@ -248,41 +194,85 @@ export default class ProiecteTabel extends React.Component {
     </div>
   );
 
-  onChangeActivitate(e) {
+  onChangeSocietate(e) {
     if (e.target.value === '-') {
-      this.setState({ activitate: { id: null, nume: '' } });
+      this.setState({ societate: { id: null, nume: '' } });
       return;
     }
     const selectedIndex = e.target.options.selectedIndex;
-    const id = e.target.options[selectedIndex].getAttribute('data-key');
-    // eslint-disable-next-line eqeqeq
-    const activitate = this.state.activitati.find((c) => c.id == id);
-    this.setState({ activitate: activitate ? activitate : { id: null, nume: '' } });
+    const societate = this.state.societati[selectedIndex - 1];
+    this.setState({ societate: societate ? societate : { id: null, nume: '' } });
   }
 
-	filterProiecteByActivitate() {
-		if(!this.state.filter)
-			return this.state.proiecte;
-		return this.state.proiecte.filter(proiect => proiect.activitate.nume === this.state.filter);
-	}
+  async onSubmit(e) {
+    e.preventDefault();
+
+		if(!this.state.societate.id) {
+			this.showError('Selectați o societate');
+			return;
+		}
+
+    const caiet = {
+      serie: this.state.serie,
+      primulnumar: this.state.primulNumar,
+      ultimulnumar: this.state.primulNumar,
+      status: this.state.status,
+    };
+    var ok = false;
+    if (this.state.isEdit) {
+      ok = await axios
+        .put(`${server.address}/caiet/ids=${this.state.societate.id}/${this.state.id}`, caiet, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) =>
+          this.showError('Nu am putut modifica caietul: ' + err.response.data.message)
+        );
+    } else {
+      ok = await axios
+        .post(`${server.address}/caiet/ids=${this.state.socsel.id}`, caiet, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) => this.showError('Nu am putut adauga caietul: ' + err.response.data.message));
+    }
+
+    if (ok) {
+      this.setState(
+        {
+          showToast: false,
+          toastMessage: '',
+          showModal: false,
+
+          showConfirm: true,
+          modalMessage: this.state.isEdit ? 'Caiet modificat' : 'Caiet adăugat',
+        },
+        this.getCaiete
+      );
+    }
+  }
 
   render() {
-		const proiecteFiltered = this.filterProiecteByActivitate();
-
     const columns = [
       {
-        dataField: '',
-        text: '#',
-        formatter: (cell, row, rowIndex) => rowIndex + 1,
-      },
-      {
-        dataField: 'nume',
-        text: 'Nume proiect',
+        dataField: 'societate.nume',
+        text: 'Societate',
         sort: true,
       },
       {
-        dataField: 'activitate.nume',
-        text: 'Nume activitate',
+        dataField: 'serie',
+        text: 'Serie',
+        sort: true,
+      },
+      {
+        dataField: 'primulnumar',
+        text: 'Primul număr',
+        sort: true,
+      },
+      {
+        dataField: 'ultimulnumar',
+        text: 'Ultimul număr',
+        sort: true,
       },
       {
         dataField: 'actiuni',
@@ -291,10 +281,8 @@ export default class ProiecteTabel extends React.Component {
       },
     ];
 
-    const activitatiComponent = this.state.activitati.map((activitate) => (
-      <option key={activitate.id} data-key={activitate.id}>
-        {activitate.nume}
-      </option>
+    const societatiComponent = this.state.societati.map((societate) => (
+      <option key={societate.id}>{societate.nume}</option>
     ));
 
     return (
@@ -329,25 +317,43 @@ export default class ProiecteTabel extends React.Component {
         {/* ADD/EDIT MODAL */}
         <Modal show={this.state.showModal} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Nume proiect</Modal.Title>
+            <Modal.Title>Detalii caiet</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={this.onSubmit}>
               <Form.Group>
+								<Form.Label>Societatea</Form.Label>
                 <Form.Control
                   as="select"
-                  value={this.state.activitate.nume}
-                  onChange={(e) => this.onChangeActivitate(e)}
+                  value={this.state.societate.nume}
+                  onChange={(e) => this.onChangeSocietate(e)}
                 >
                   <option>-</option>
-                  {activitatiComponent}
+                  {societatiComponent}
                 </Form.Control>
               </Form.Group>
               <Form.Group>
+                <Form.Label>Serie</Form.Label>
                 <Form.Control
                   type="text"
-                  value={this.state.nume}
-                  onChange={(e) => this.setState({ nume: e.target.value })}
+                  value={this.state.serie}
+                  onChange={(e) => this.setState({ serie: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Primul număr</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.primulNumar}
+                  onChange={(e) => this.setState({ primulNumar: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Ultimul număr</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={this.state.ultimulNumar}
+                  onChange={(e) => this.setState({ ultimulNumar: e.target.value })}
                 />
               </Form.Group>
             </Form>
@@ -364,7 +370,7 @@ export default class ProiecteTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Activitati</Card.Title>
+                <Card.Title as="h5">Caiete</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -378,31 +384,17 @@ export default class ProiecteTabel extends React.Component {
                   variant="outline-primary"
                   size="sm"
                   className="float-right"
-                  onClick={this.renderProiecte}
+                  onClick={this.renderTable}
                 >
                   <RotateCw className="m-0 p-0" />
                 </Button>
-								
-								{/* SORT FILTERS */}
-								<Row>
-									<Form.Group as={Col} sm="auto" className="mt-3 mb-0">
-										<Form.Control
-											as="select"
-											value={this.state.activitateFilter}
-											onChange={e => this.setState({filter: e.target.value === 'Toate activitățile' ? null : e.target.value})}
-										>
-											<option>Toate activitățile</option>
-											{activitatiComponent}
-										</Form.Control>
-									</Form.Group>
-								</Row>
               </Card.Header>
               <Card.Body>
                 <BootstrapTable
                   bootstrap4
                   overflow
                   keyField="id"
-                  data={proiecteFiltered}
+                  data={this.state.caiete}
                   columns={columns}
                   wrapperClasses="table-responsive"
                   hover

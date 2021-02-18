@@ -149,20 +149,13 @@ var items = [
         url: '/activitati-proiecte',
         icon: 'feather icon-git-pull-request',
       },
-      // {
-      //   id: 'facturi-aprobator',
-      //   title: 'Aprobare Facturi',
-      //   type: 'item',
-      //   url: '/facturi-aprobator',
-      //   icon: 'feather icon-file-text',
-      // },
-      // {
-      //   id: 'facturi-operator',
-      //   title: 'Operare Facturi',
-      //   type: 'item',
-      //   url: '/facturi-operator',
-      //   icon: 'feather icon-file-text',
-      // },
+			{
+        id: 'caiete',
+        title: 'Caiete',
+        type: 'item',
+        url: '/caiete',
+        icon: 'feather icon-git-pull-request',
+      },
     ],
   },
 

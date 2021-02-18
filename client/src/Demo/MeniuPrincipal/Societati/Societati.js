@@ -17,8 +17,6 @@ import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import authService from '../../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
-import Dropzone from 'react-dropzone-uploader';
-import { downloadImagineSocietate } from '../../Resources/download';
 
 const addSocietateComponent = (
   <Col md={6} xl={4}>

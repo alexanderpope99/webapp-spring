@@ -44,7 +44,7 @@ public class Caiet implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StatusCaiet status = StatusCaiet.ACTIV;
 
-	@JsonBackReference(value = "caiet-societate")
+	// @JsonBackReference(value = "caiet-societate")
 	@OneToOne
 	@JoinColumn(name = "idsocietate", nullable = false)
 	private Societate societate;
