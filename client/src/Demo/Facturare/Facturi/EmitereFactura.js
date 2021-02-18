@@ -44,7 +44,7 @@ export default class EmitereFactura extends React.Component {
       titlu: 'Cf. Contract vanzare-cumparare',
       produse: [],
       dataExpedierii: new Date().toISOString().substring(0, 10),
-      oraExpedierii: now.getHours() + ':' + now.getMinutes(),
+      oraExpedierii: ('00'+now.getHours()).slice(-2) + ':' + ('00'+now.getMinutes()).slice(-2),
       scadenta: '',
       totalFaraTva: 0,
       totalTva: 0,
@@ -80,12 +80,6 @@ export default class EmitereFactura extends React.Component {
   }
 
   async getActivitatiProiecte() {
-    // const activitati = await axios
-    //   .get(`${server.address}/activitate/ids=${this.state.socsel.id}`, { headers: authHeader() })
-    //   .then((res) => res.data)
-    //   .catch((err) =>
-    //     this.showError('Nu am putut prelua activitatile: ' + err.response.data.message)
-    //   );
     const proiecte = await axios
       .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
@@ -126,8 +120,6 @@ export default class EmitereFactura extends React.Component {
           client: { nume: '' },
           titlu: 'Cf. Contract vanzare-cumparare',
           produse: [],
-          dataExpedierii: new Date().toISOString().substring(0, 10),
-          oraExpedierii: new Date().toLocaleTimeString().substring(0, 5),
           scadenta: '',
           totalFaraTva: 0,
           totalTva: 0,
@@ -215,10 +207,10 @@ export default class EmitereFactura extends React.Component {
 
   onChangeActivitate(activitate) {
     if (activitate === '-') {
-      console.log('nicio activ selectata');
+			this.setState({activitate: '-', proiect: {id: null, nume: ''}});
       return;
     }
-    this.setState({ activitate: activitate });
+    this.setState({ activitate: activitate, proiect: {id: null, nume: ''} });
   }
 
   onChangeProiect(e) {

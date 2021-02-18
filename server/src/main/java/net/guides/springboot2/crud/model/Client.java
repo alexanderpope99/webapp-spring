@@ -33,11 +33,11 @@ public class Client implements Serializable {
   @Column(name = "numecomplet")
   private String numecomplet;
 
-  @Column(name = "nume")
+  @Column(name = "nume", nullable = false)
   private String nume;
 
   @Column(name = "statut")
-  private String statut;
+  private String statut = "Neîncasată";
   
   @Column(name = "nrregcom")
   private String nrregcom;

@@ -382,6 +382,8 @@ export default class ProiecteTabel extends React.Component {
                 >
                   <RotateCw className="m-0 p-0" />
                 </Button>
+								
+								{/* SORT FILTERS */}
 								<Row>
 									<Form.Group as={Col} sm="auto" className="mt-3 mb-0">
 										<Form.Control

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Card, Button, Toast } from 'react-bootstrap';
+import { Row, Col, Card, Button, Toast, Form } from 'react-bootstrap';
 import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
@@ -10,6 +10,7 @@ import Aux from '../../../hoc/_Aux';
 
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
+import { luni } from '../../Resources/calendar';
 
 import authHeader from '../../../services/auth-header';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -21,13 +22,23 @@ class FacturiTabel extends React.Component {
     this.getFacturi = this.getFacturi.bind(this);
     this.renderFacturi = this.renderFacturi.bind(this);
 
+    let today = new Date();
     this.state = {
       showToast: false,
       toastMessage: '',
 
       socsel: getSocSel(),
       facturi: [],
-      clienti: [],
+      today: today,
+
+      // filtre
+      clientiNume: [],
+      clientFilter: '',
+      proiecteNume: [],
+      proiectFilter: '',
+      luna: '-',
+      an: '-',
+      ultimulAn: today.getFullYear(),
     };
   }
 
@@ -36,13 +47,18 @@ class FacturiTabel extends React.Component {
       window.location.href = '/dashboard/societati';
       return;
     }
-    this.getFacturi();
+    this.init();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.factura !== prevProps.factura) {
-      this.getFacturi();
+      this.init();
     } else return;
+  }
+
+  init() {
+    this.getFacturi();
+    // this.getClienti();
   }
 
   async getFacturi() {
@@ -55,9 +71,24 @@ class FacturiTabel extends React.Component {
           toastMessage: 'Nu am putut prelua facturile: ' + err.response.data.message,
         })
       );
-    this.setState({
-      facturi: facturi || [],
-    });
+    if (facturi) {
+      var clientiNume = new Set();
+      var proiecteNume = new Set();
+      var ultimulAn = new Date().getFullYear();
+      for (let factura of facturi) {
+        clientiNume.add(factura.client.nume);
+        if (factura.proiect) proiecteNume.add(factura.proiect.nume);
+        let anFactura = new Date(factura.dataexpedierii).getFullYear();
+        ultimulAn = Math.min(ultimulAn, anFactura);
+      }
+
+      this.setState({
+        facturi: facturi || [],
+        clientiNume: [...clientiNume],
+        proiecteNume: [...proiecteNume],
+        ultimulAn: ultimulAn,
+      });
+    }
   }
 
   async renderFacturi(noTimeout) {
@@ -193,6 +224,18 @@ class FacturiTabel extends React.Component {
       },
     ];
 
+    const clientiComponent = this.state.clientiNume.map((client, index) => (
+      <option key={index}>{client}</option>
+    ));
+
+    const luniComponent = luni.map((luna) => <option key={luna}>{luna}</option>);
+
+    const this_year = new Date().getFullYear();
+    var aniComponent = [];
+    for (let i = this.state.ultimulAn; i <= this_year + 1; ++i) {
+      aniComponent.push(<option key={i}>{i}</option>);
+    }
+
     return (
       <Aux>
         {/* ERROR TOAST */}
@@ -215,7 +258,7 @@ class FacturiTabel extends React.Component {
           <Col>
             <Card>
               <Card.Header className="border-0">
-                <Card.Title as="h5">Facturi</Card.Title>
+                <Card.Title as="h5">Facturi pentru {this.state.socsel.nume}</Card.Title>
                 <Button
                   variant="outline-primary"
                   size="sm"
@@ -233,6 +276,47 @@ class FacturiTabel extends React.Component {
                 >
                   <RotateCw className="m-0 p-0" />
                 </Button>
+
+                {/* SORT FILTERS */}
+                <Row className="mt-5">
+                  <Form.Group as={Col} sm="auto">
+                    <Form.Label>Clientul</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.clientFilter}
+                      onChange={(e) =>
+                        this.setState({
+                          clientFilter: e.target.value === 'Toți clienții' ? e.target.value : '',
+                        })
+                      }
+                    >
+                      <option>Toți clienții</option>
+                      {clientiComponent}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group as={Col} sm="auto">
+                    <Form.Label>Anul</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.an}
+                      onChange={(e) => this.setState({ an: e.target.value })}
+                    >
+                      <option>-</option>
+                      {aniComponent}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group as={Col} sm="auto">
+                    <Form.Label>Luna</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.luna}
+                      onChange={(e) => this.setState({ luna: luni[e.target.selectedIndex - 1] })}
+                    >
+                      <option>-</option>
+                      {luniComponent}
+                    </Form.Control>
+                  </Form.Group>
+                </Row>
               </Card.Header>
               <Card.Body>
                 <BootstrapTable
