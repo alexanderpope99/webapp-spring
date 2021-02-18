@@ -86,6 +86,10 @@ public class Societate implements Serializable {
 	@OneToMany(mappedBy = "societate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Activitate> activitati;
 
+	@JsonBackReference(value = "caiet-societate")
+	@OneToOne(mappedBy= "societate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Caiet caiet;
+
 	@Column(name = "numeimagine")
 	private String numeimagine;
 
@@ -174,6 +178,10 @@ public class Societate implements Serializable {
 		return useri;
 	}
 
+	public Caiet getCaiet() {
+		return caiet;
+	}
+
 	// ! SETTERS
 	public void setCapsoc(Double capsoc) {
 		this.capsoc = capsoc;
@@ -250,6 +258,12 @@ public class Societate implements Serializable {
 	public void setClienti(List<Client> clienti) {
 		this.clienti = clienti;
 	}
+
+	public void setCaiet(Caiet caiet) {
+		this.caiet = caiet;
+	}
+
+	// * Extra
 
 	public void checkData() throws ResourceNotFoundException {
 		if (nume == null)

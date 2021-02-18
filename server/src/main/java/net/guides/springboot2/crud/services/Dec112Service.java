@@ -61,6 +61,7 @@ public class Dec112Service {
 	public boolean createDec112(int luna, int an, int idsocietate, int userID, int drec, String numeDeclarant, String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 		societate.checkData();
+		System.out.println(an);
 
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 		if (angajati.isEmpty())

@@ -66,6 +66,10 @@ public class Factura implements Serializable {
 	@JoinColumn(name = "idproiect")
 	private Proiect proiect;
 
+	@ManyToOne
+	@JoinColumn(name = "idcaiet")
+	private Caiet caiet;
+
 	public Integer getId() {
 		return id;
 	}
@@ -181,6 +185,16 @@ public class Factura implements Serializable {
 	public void setProduse(List<Produs> produse) {
 		this.produse = produse;
 	}
+
+	public Caiet getCaiet() {
+		return caiet;
+	}
+
+	public void setCaiet(Caiet caiet) {
+		this.caiet = caiet;
+	}
+
+	// ! OTHER
 
 	public void updateProduse(List<Produs> produse) {
 		this.produse.clear();
