@@ -154,7 +154,7 @@ var items = [
         title: 'Caiete',
         type: 'item',
         url: '/caiete',
-        icon: 'feather icon-git-pull-request',
+        icon: 'feather icon-layers',
       },
     ],
   },
