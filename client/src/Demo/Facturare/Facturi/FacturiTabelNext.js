@@ -1,17 +1,19 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Button, Toast } from 'react-bootstrap';
-import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
+import { Trash2, Edit3, RotateCw, Plus,Download } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography/Typography';
 import Aux from '../../../hoc/_Aux';
+import { download } from '../../Resources/download';
 
 import { server } from '../../Resources/server-address';
 import { getSocSel } from '../../Resources/socsel';
 
 import authHeader from '../../../services/auth-header';
+import authService from '../../../services/auth.service';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 class FacturiTabel extends React.Component {
@@ -20,6 +22,8 @@ class FacturiTabel extends React.Component {
 
     this.getFacturi = this.getFacturi.bind(this);
     this.renderFacturi = this.renderFacturi.bind(this);
+    this.creeazaFactura = this.creeazaFactura.bind(this);
+
 
     this.state = {
       showToast: false,
@@ -28,6 +32,7 @@ class FacturiTabel extends React.Component {
       socsel: getSocSel(),
       facturi: [],
       clienti: [],
+	  user: authService.getCurrentUser(),
     };
   }
 
@@ -81,8 +86,34 @@ class FacturiTabel extends React.Component {
       );
   }
 
+  async creeazaFactura(row) {
+	  console.log( `${server.address}/factura/createfile/ids=${this.state.socsel.id}/${row.id}/${this.state.user.id}`);
+	const created = await axios
+      .get(
+        `${server.address}/factura/createfile/ids=${this.state.socsel.id}/${row.id}/${this.state.user.id}`,
+        { headers: authHeader() }
+      )
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut crea factura '+err.response.data.message,
+        })
+	  );
+
+    if (created)
+      download(`Factură - ${this.state.socsel.nume} - ${row.client.nume} - ${row.dataexpedierii} ${row.oraexpedierii}.xlsx`, this.state.user.id);
+  }
+
   buttons = (cell, row, rowIndex, formatExtraData) => (
     <div className="d-inline-flex">
+	<Button
+    onClick={() => this.creeazaFactura(row)}
+    variant="outline-secondary"
+    className="m-1 p-1 rounded-circle border-0"
+    >
+        <Download size={20} />
+    </Button>
       <Button
         onClick={() => this.props.edit(row)}
         variant="outline-secondary"

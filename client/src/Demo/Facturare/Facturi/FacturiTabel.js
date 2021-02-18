@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Table, Button, Toast } from 'react-bootstrap';
-import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
+import { Trash2, Edit3, RotateCw, Plus,Printer } from 'react-feather';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
@@ -73,6 +73,13 @@ class FacturiTabel extends React.Component {
       <tr key={item.id}>
         <td>
           <div className="d-flex">
+		  <Button
+              onClick={() => this.props.edit(item)}
+              variant="outline-secondary"
+              className="m-1 p-1 rounded-circle border-0"
+            >
+              <Printer size={20} />
+            </Button>
             <Button
               onClick={() => this.props.edit(item)}
               variant="outline-secondary"
