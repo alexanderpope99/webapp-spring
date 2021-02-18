@@ -24,6 +24,7 @@ class FacturiTabel extends React.Component {
 
     this.getFacturi = this.getFacturi.bind(this);
     this.renderFacturi = this.renderFacturi.bind(this);
+    this.creeazaFactura = this.creeazaFactura.bind(this);
 
     let today = new Date();
     this.state = {
@@ -183,13 +184,13 @@ class FacturiTabel extends React.Component {
 
   buttons = (cell, row, rowIndex, formatExtraData) => (
     <div className="d-inline-flex">
-      {/* <Button
+      <Button
     onClick={() => this.creeazaFactura(row)}
     variant="outline-secondary"
     className="m-1 p-1 rounded-circle border-0"
     >
         <Download size={20} />
-    </Button> */}
+    </Button>
       <Button
         onClick={() => this.props.edit(row)}
         variant="outline-secondary"
