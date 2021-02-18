@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -41,7 +43,7 @@ public class FacturaService {
 
 	@Autowired
 	private CaietService caietService;
-	
+
 	private static double roundAvoid(double value, int places) {
 		double scale = Math.pow(10, places);
 		return Math.round(value * scale) / scale;
@@ -102,6 +104,7 @@ public class FacturaService {
 		Sheet facturaWb = workbook.getSheetAt(0);
 
 		Client client=factura.getClient();
+		LocalDate dataExpedierii=factura.getDataexpedierii();
 
 		Row row=facturaWb.getRow(1);
 		Cell writerCell = row.getCell(11);
@@ -109,7 +112,7 @@ public class FacturaService {
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(factura.getNumar());
 		writerCell = row.getCell(16);
-		writerCell.setCellValue(factura.getDataexpedierii());
+		writerCell.setCellValue(dataExpedierii.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
 		row=facturaWb.getRow(8);
 		writerCell = row.getCell(4);
@@ -174,7 +177,7 @@ public class FacturaService {
 		writerCell.setCellValue(societate.getCapsoc());
 		row=facturaWb.getRow(20);
 		writerCell = row.getCell(4);
-		writerCell.setCellValue(parametriiSalariu.getTva());
+		writerCell.setCellValue(String.valueOf(parametriiSalariu.getTva())+" %");
 
 		int i=1;
 		float sumFaraTva=0,sumTva=0;
