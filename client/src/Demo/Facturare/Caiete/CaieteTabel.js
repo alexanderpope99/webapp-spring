@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import { Row, Col, Card, Button, Toast, Modal, Form } from 'react-bootstrap';
+import { Row, Col, Card, Button, Toast, Modal, Form, Breadcrumb } from 'react-bootstrap';
 import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import BootstrapTable from 'react-bootstrap-table-next';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
@@ -35,7 +35,7 @@ export default class CaieteTabel extends React.Component {
 
       socsel: getSocSel(),
 
-			caiete: [],
+      caiete: [],
 
       societati: [],
       societate: { id: null, nume: '' },
@@ -50,7 +50,7 @@ export default class CaieteTabel extends React.Component {
 
   componentDidMount() {
     this.getCaiete();
-		this.getSocietati();
+    this.getSocietati();
   }
 
   showError(error) {
@@ -60,15 +60,17 @@ export default class CaieteTabel extends React.Component {
     });
   }
 
-	async getSocietati() {
-		const societati = await axios
+  async getSocietati() {
+    const societati = await axios
       .get(`${server.address}/societate`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => this.showError('Nu am putut prelua societatile: ' + err.response.data.message));
+      .catch((err) =>
+        this.showError('Nu am putut prelua societatile: ' + err.response.data.message)
+      );
     if (societati) {
       this.setState({ societati: societati });
     }
-	}
+  }
 
   async getCaiete() {
     const caiete = await axios
@@ -101,7 +103,7 @@ export default class CaieteTabel extends React.Component {
       primulNumar: item.primulnumar,
       ultimulNumar: item.ultimulnumar,
       status: item.status,
-			societate: item.societate,
+      societate: item.societate,
     });
   }
 
@@ -119,7 +121,7 @@ export default class CaieteTabel extends React.Component {
       primulNumar: '',
       ultimulNumar: '',
       status: 'ACTIV',
-			societate: { id: null, nume: '' },
+      societate: { id: null, nume: '' },
     });
   }
 
@@ -207,10 +209,10 @@ export default class CaieteTabel extends React.Component {
   async onSubmit(e) {
     e.preventDefault();
 
-		if(!this.state.societate.id) {
-			this.showError('Selectați o societate');
-			return;
-		}
+    if (!this.state.societate.id) {
+      this.showError('Selectați o societate');
+      return;
+    }
 
     const caiet = {
       serie: this.state.serie,
@@ -274,7 +276,7 @@ export default class CaieteTabel extends React.Component {
         text: 'Ultimul număr',
         sort: true,
       },
-			{
+      {
         dataField: 'status',
         text: 'Status',
         sort: true,
@@ -327,7 +329,7 @@ export default class CaieteTabel extends React.Component {
           <Modal.Body>
             <Form onSubmit={this.onSubmit}>
               <Form.Group>
-								<Form.Label>Societatea</Form.Label>
+                <Form.Label>Societatea</Form.Label>
                 <Form.Control
                   as="select"
                   value={this.state.societate.nume}
@@ -361,17 +363,17 @@ export default class CaieteTabel extends React.Component {
                   onChange={(e) => this.setState({ ultimulNumar: e.target.value })}
                 />
               </Form.Group>
-							<Form.Group>
+              <Form.Group>
                 <Form.Label>Status</Form.Label>
                 <Form.Control
                   as="select"
                   value={this.state.status}
                   onChange={(e) => this.setState({ status: e.target.value })}
                 >
-									<option>ACTIV</option>
-									<option>DEZACTIVAT</option>
-									<option>INCHIS</option>
-								</Form.Control>
+                  <option>ACTIV</option>
+                  <option>DEZACTIVAT</option>
+                  <option>INCHIS</option>
+                </Form.Control>
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -385,6 +387,12 @@ export default class CaieteTabel extends React.Component {
         {/* TABLE */}
         <Row>
           <Col>
+            <Breadcrumb style={{ fontSize: '12px' }}>
+              <Breadcrumb.Item href="/dashboard/societati">
+                {this.state.socsel.nume}
+              </Breadcrumb.Item>
+              <Breadcrumb.Item active>Facturi</Breadcrumb.Item>
+            </Breadcrumb>
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Caiete</Card.Title>

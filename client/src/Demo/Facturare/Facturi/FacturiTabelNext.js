@@ -24,6 +24,7 @@ class FacturiTabel extends React.Component {
 
     this.getFacturi = this.getFacturi.bind(this);
     this.renderFacturi = this.renderFacturi.bind(this);
+    this.creeazaFactura = this.creeazaFactura.bind(this);
 
     let today = new Date();
     this.state = {
@@ -44,7 +45,7 @@ class FacturiTabel extends React.Component {
       an: '',
       ultimulAn: today.getFullYear(),
 
-	  user: authService.getCurrentUser(),
+      user: authService.getCurrentUser(),
     };
   }
 
@@ -68,7 +69,7 @@ class FacturiTabel extends React.Component {
   }
 
   async creeazaFactura(e) {
-	  console.log(e);
+    console.log(e);
     const created = await fetch(
       `${server.address}/factura/createfile/ids=${this.state.socsel.id}/${e.id}/${this.state.user.id}`,
       {
@@ -93,7 +94,6 @@ class FacturiTabel extends React.Component {
         this.state.user.id
       );
   }
-
 
   async getFacturi() {
     const facturi = await axios
@@ -183,13 +183,13 @@ class FacturiTabel extends React.Component {
 
   buttons = (cell, row, rowIndex, formatExtraData) => (
     <div className="d-inline-flex">
-      {/* <Button
-    onClick={() => this.creeazaFactura(row)}
-    variant="outline-secondary"
-    className="m-1 p-1 rounded-circle border-0"
-    >
+      <Button
+        onClick={() => this.creeazaFactura(row)}
+        variant="outline-secondary"
+        className="m-1 p-1 rounded-circle border-0"
+      >
         <Download size={20} />
-    </Button> */}
+      </Button>
       <Button
         onClick={() => this.props.edit(row)}
         variant="outline-secondary"
