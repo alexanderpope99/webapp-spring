@@ -27,6 +27,7 @@ export default class EmitereFactura extends React.Component {
       clienti: [],
       activitati: [],
       proiecte: [],
+      caiet: { id: null, serie: '' },
 
       activitate: '-',
       proiect: { id: null, nume: '' },
@@ -44,12 +45,22 @@ export default class EmitereFactura extends React.Component {
       titlu: 'Cf. Contract vanzare-cumparare',
       produse: [],
       dataExpedierii: new Date().toISOString().substring(0, 10),
-      oraExpedierii: ('00'+now.getHours()).slice(-2) + ':' + ('00'+now.getMinutes()).slice(-2),
+      oraExpedierii: ('00' + now.getHours()).slice(-2) + ':' + ('00' + now.getMinutes()).slice(-2),
       scadenta: '',
       totalFaraTva: 0,
       totalTva: 0,
       totalCuTva: 0,
     };
+  }
+
+  componentDidMount() {
+    this.init();
+  }
+
+  init() {
+    this.getClienti();
+    this.getCaiet();
+    this.getActivitatiProiecte();
   }
 
   async getClienti() {
@@ -63,6 +74,16 @@ export default class EmitereFactura extends React.Component {
         })
       );
     this.setState({ clienti: clienti ? clienti : [] });
+  }
+
+  async getCaiet() {
+    const caiet = await axios
+      .get(`${server.address}/caiet/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => this.showError('Nu am putut prelua caietul: ' + err.response.data.message));
+    if (caiet) {
+      this.setState({ serie: caiet.serie });
+    }
   }
 
   async getNumarFactura() {
@@ -95,22 +116,13 @@ export default class EmitereFactura extends React.Component {
     }
   }
 
-  init() {
-    this.getClienti();
-    this.getActivitatiProiecte();
-  }
-
-  componentDidMount() {
-    this.init();
-  }
-
   fillForm(factura) {
     if (!factura) {
       this.setState(
         {
           factura: null,
-					proiect: {id: null, nume: ''},
-					activitate: '-',
+          proiect: { id: null, nume: '' },
+          activitate: '-',
 
           id: null,
           serie: 'BVFZ',
@@ -131,8 +143,8 @@ export default class EmitereFactura extends React.Component {
       this.setState({
         factura: factura,
 
-				activitate: factura.proiect ? factura.proiect.activitate.nume : '-',
-				proiect: factura.proiect || {id: null, nume: ''},
+        activitate: factura.proiect ? factura.proiect.activitate.nume : '-',
+        proiect: factura.proiect || { id: null, nume: '' },
 
         id: factura.id,
         serie: factura.serie,
@@ -149,6 +161,7 @@ export default class EmitereFactura extends React.Component {
         totalFaraTva: factura.totalfaratva,
         totalTva: factura.tva,
         totalCuTva: factura.totalcutva,
+				status: factura.status || 'Neîncasată',
       });
     }
   }
@@ -207,10 +220,10 @@ export default class EmitereFactura extends React.Component {
 
   onChangeActivitate(activitate) {
     if (activitate === '-') {
-			this.setState({activitate: '-', proiect: {id: null, nume: ''}});
+      this.setState({ activitate: '-', proiect: { id: null, nume: '' } });
       return;
     }
-    this.setState({ activitate: activitate, proiect: {id: null, nume: ''} });
+    this.setState({ activitate: activitate, proiect: { id: null, nume: '' } });
   }
 
   onChangeProiect(e) {
@@ -251,7 +264,8 @@ export default class EmitereFactura extends React.Component {
       totalfaratva: totalFaraTva,
       tva: totalTva,
       totalcutva: totalCuTva,
-			proiect: this.state.proiect.id ? this.state.proiect : null,
+      proiect: this.state.proiect.id ? this.state.proiect : null,
+			status: this.state.status || 'Neîncasată',
     };
 
     var ok = false;
@@ -448,6 +462,7 @@ export default class EmitereFactura extends React.Component {
           </Modal.Footer>
         </Modal>
 
+        {/* TABLE */}
         <Card>
           <Card.Header className="border-0">
             <Card.Title as="h5">Emitere factură fiscală</Card.Title>
@@ -457,19 +472,13 @@ export default class EmitereFactura extends React.Component {
             <Row>
               <Col md={3} className="border rounded pt-2">
                 <Form.Group>
-                  <Form.Label>Centru de Profit</Form.Label>
+                  <Form.Label>Centru de Profit (in funcție de societatea selectată)</Form.Label>
                   <Form.Control
-                    as="select"
+                    // disabled={this.state.caiet}
+                    type="text"
                     value={this.state.serie}
                     onChange={(e) => this.setState({ serie: e.target.value })}
-                  >
-                    <option>BVFZ</option>
-                    <option>NRM</option>
-                    <option>SMT</option>
-                    <option>ING</option>
-                    <option>UCS</option>
-                    <option>FFBN</option>
-                  </Form.Control>
+                  />
                 </Form.Group>
               </Col>
               <Col md={6} className="border rounded pt-3">

@@ -34,7 +34,7 @@ public class CaietController {
 	}
 
 	@GetMapping("ids={ids}")
-	public List<Caiet> findBySocietate_Id(@PathVariable("ids") int idsocietate) throws ResourceNotFoundException {
+	public Caiet findBySocietate_Id(@PathVariable("ids") int idsocietate) throws ResourceNotFoundException {
 		return caietService.findBySocietate_Id(idsocietate);
 	}
 

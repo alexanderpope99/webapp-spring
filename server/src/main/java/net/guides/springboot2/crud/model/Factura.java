@@ -214,6 +214,7 @@ public class Factura implements Serializable {
 		this.totalfaratva = newFactura.totalfaratva;
 		this.tva = newFactura.tva;
 		this.proiect = newFactura.proiect;
+		this.status = newFactura.status;
 		return this;
 	}
 }

@@ -24,7 +24,6 @@ class FacturiTabel extends React.Component {
 
     this.getFacturi = this.getFacturi.bind(this);
     this.renderFacturi = this.renderFacturi.bind(this);
-    this.creeazaFactura = this.creeazaFactura.bind(this);
 
 
     let today = new Date();

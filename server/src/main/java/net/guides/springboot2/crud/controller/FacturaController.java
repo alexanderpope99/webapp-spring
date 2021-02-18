@@ -52,7 +52,7 @@ public class FacturaController {
 	}
 
 	@PostMapping
-	public Factura save(@RequestBody Factura newFactura) {
+	public Factura save(@RequestBody Factura newFactura) throws ResourceNotFoundException {
 		return facturaService.save(newFactura);
 	}
 

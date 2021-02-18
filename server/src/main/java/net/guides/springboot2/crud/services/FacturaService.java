@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Caiet;
 import net.guides.springboot2.crud.model.Factura;
 import net.guides.springboot2.crud.model.Produs;
 import net.guides.springboot2.crud.model.Societate;
@@ -33,6 +34,8 @@ public class FacturaService {
 	@Autowired
 	private SocietateRepository societateRepository;
 
+	@Autowired
+	private CaietService caietService;
 	
 	FacturaService() {
 	}
@@ -53,10 +56,12 @@ public class FacturaService {
 		return facturaRepository.findNumarFactura();
 	}
 	
-	public Factura save(Factura newFactura) {
+	public Factura save(Factura newFactura) throws ResourceNotFoundException {
 		for (Produs produs : newFactura.getProduse()) {
 			produs.setFactura(newFactura);
 		}
+		Caiet caiet = caietService.findBySerie(newFactura.getSerie());
+		newFactura.setCaiet(caiet);
 		return facturaRepository.save(newFactura);
 	}
 	
