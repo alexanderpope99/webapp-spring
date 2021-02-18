@@ -54,7 +54,7 @@ public class FacturaService {
 	}
 	
 	public Factura save(Factura newFactura) {
-		for(Produs produs : newFactura.getProduse()) {
+		for (Produs produs : newFactura.getProduse()) {
 			produs.setFactura(newFactura);
 		}
 		return facturaRepository.save(newFactura);

@@ -92,8 +92,6 @@ class ParametriiSalarii extends React.Component {
         })
       );
 
-    console.log(parametriiSalarii);
-
     this.state.parametriiSalarii = parametriiSalarii;
 
     if (parametriiSalarii.length !== 0) {

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Row, Col, Card, Button, Toast, Modal, Form } from 'react-bootstrap';
 import { Trash2, Edit3, RotateCw, Plus } from 'react-feather';
 import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@material-ui/core/Popover';
 import Box from '@material-ui/core/Box';
@@ -14,15 +15,16 @@ import { getSocSel } from '../../Resources/socsel';
 import { server } from '../../Resources/server-address';
 import authHeader from '../../../services/auth-header';
 
-export default class ActivitatiTabel extends React.Component {
+export default class ProiecteTabel extends React.Component {
   constructor() {
     super();
 
-    this.getActivitati = this.getActivitati.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.init = this.init.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.showError = this.showError.bind(this);
-    this.renderActivitati = this.renderActivitati.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.init = this.init.bind(this);
+    this.getProiecte = this.getProiecte.bind(this);
+    this.renderProiecte = this.renderProiecte.bind(this);
 
     this.state = {
       showToast: false,
@@ -33,24 +35,25 @@ export default class ActivitatiTabel extends React.Component {
       showModal: false,
       isEdit: false,
 
-      showModalProiect: false,
-      isEditProiect: false,
-
       socsel: getSocSel(),
 
       activitati: [],
+      proiecte: [],
+			filter: null,
 
+      activitate: { id: null, nume: '' },
       id: null,
       nume: '',
-      proiecte: [],
-
-      proiect_id: '',
-      proiect_nume: '',
     };
   }
 
   componentDidMount() {
-    this.getActivitati();
+    this.init();
+  }
+
+  async init() {
+    await this.getActivitati();
+    this.getProiecte();
   }
 
   showError(error) {
@@ -72,12 +75,24 @@ export default class ActivitatiTabel extends React.Component {
     }
   }
 
-  renderActivitati(noTimeout) {
+  async getProiecte() {
+    const proiecte = await axios
+      .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.showError('Nu am putut prelua proiectele: ' + err.response.data.message)
+      );
+    if (proiecte) {
+      this.setState({ proiecte: proiecte });
+    }
+  }
+
+  renderProiecte(noTimeout) {
     if (noTimeout === 'no-timeout') {
-      this.getActivitati();
+      this.init();
     } else {
-      this.setState({ activitati: [] });
-      setTimeout(this.getActivitati, 100);
+      this.setState({ proiecte: [] });
+      setTimeout(this.init, 100);
     }
   }
 
@@ -87,40 +102,47 @@ export default class ActivitatiTabel extends React.Component {
       modalMessage: '',
 
       showModal: true,
-			isEdit: true,
+      isEdit: true,
       id: item.id,
       nume: item.nume,
-      proiecte: item.proiecte,
+      activitate: item.activitate,
     });
   }
 
   async delete(id) {
     await axios
-      .delete(`${server.address}/activitate/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/proiect/${id}`, { headers: authHeader() })
       .then(this.getActivitati)
-      .catch((err) =>
-        this.showError('Nu am putut sterge activitatea: ' + err.response.data.message)
-      );
+      .catch((err) => this.showError('Nu am putut sterge proiectul: ' + err.response.data.message));
   }
 
   async onSubmit(e) {
-		e.preventDefault();
-
-    const activitate = {
+    e.preventDefault();
+    const proiect = {
       nume: this.state.nume,
     };
+    if (!this.state.activitate.id) {
+      this.showError('Selectați activitatea proiectului');
+      return;
+    }
     var ok = false;
     if (this.state.isEdit) {
-      activitate['id'] = this.state.id;
+      proiect['id'] = this.state.id;
       ok = await axios
-        .put(`${server.address}/activitate/${this.state.id}`, activitate, { headers: authHeader() })
+        .put(
+          `${server.address}/proiect/ida=${this.state.activitate.id}/${this.state.id}`,
+          proiect,
+          { headers: authHeader() }
+        )
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut modifica activitatea: ' + err.response.data.message)
+          this.showError('Nu am putut modifica proiectul: ' + err.response.data.message)
         );
     } else {
       ok = await axios
-        .post(`${server.address}/activitate/ids=${this.state.socsel.id}`, activitate, { headers: authHeader() })
+        .post(`${server.address}/proiect/ida=${this.state.activitate.id}`, proiect, {
+          headers: authHeader(),
+        })
         .then((res) => res.data)
         .catch((err) =>
           this.showError('Nu am putut adauga activitatea: ' + err.response.data.message)
@@ -135,9 +157,9 @@ export default class ActivitatiTabel extends React.Component {
           showModal: false,
 
           showConfirm: true,
-          modalMessage: this.state.isEdit ? 'Activitate modificată' : 'Activitate adăugată',
+          modalMessage: this.state.isEdit ? 'Proiect modificat' : 'Proiect adăugat',
         },
-        this.getActivitati
+        this.getProiecte
       );
     }
   }
@@ -146,7 +168,7 @@ export default class ActivitatiTabel extends React.Component {
     this.setState({
       id: null,
       nume: '',
-      proiecte: [],
+      activitate: { id: null, nume: '' },
     });
   }
 
@@ -156,12 +178,17 @@ export default class ActivitatiTabel extends React.Component {
         {
           showConfirm: false,
           modalMessage: '',
-					isEdit: false,
+          isEdit: false,
         },
         this.clearUserInput
       );
+    } else if (type === 'proiect') {
+      this.setState({
+        showModalProiect: false,
+        isEdit: false,
+      });
     } else {
-      this.setState({ showModal: false, isEdit: false, }, this.clearUserInput);
+      this.setState({ showModal: false, isEdit: false }, this.clearUserInput);
     }
   }
 
@@ -197,10 +224,8 @@ export default class ActivitatiTabel extends React.Component {
               }}
             >
               <Box p={2}>
-                <Typography>Sigur ștergeți activitatea?</Typography>
-                <Typography variant="caption">
-                  Se vor șterge și proiectele aferente activității. Facturile nu se vor șterge.
-                </Typography>
+                <Typography>Sigur ștergeți proiectul?</Typography>
+                <Typography variant="caption">SFacturile nu se vor șterge.</Typography>
                 <br />
                 <Button
                   variant="outline-danger"
@@ -223,7 +248,27 @@ export default class ActivitatiTabel extends React.Component {
     </div>
   );
 
+  onChangeActivitate(e) {
+    if (e.target.value === '-') {
+      this.setState({ activitate: { id: null, nume: '' } });
+      return;
+    }
+    const selectedIndex = e.target.options.selectedIndex;
+    const id = e.target.options[selectedIndex].getAttribute('data-key');
+    // eslint-disable-next-line eqeqeq
+    const activitate = this.state.activitati.find((c) => c.id == id);
+    this.setState({ activitate: activitate ? activitate : { id: null, nume: '' } });
+  }
+
+	filterProiecteByActivitate() {
+		if(!this.state.filter)
+			return this.state.proiecte;
+		return this.state.proiecte.filter(proiect => proiect.activitate.nume === this.state.filter);
+	}
+
   render() {
+		const proiecteFiltered = this.filterProiecteByActivitate();
+
     const columns = [
       {
         dataField: '',
@@ -232,8 +277,12 @@ export default class ActivitatiTabel extends React.Component {
       },
       {
         dataField: 'nume',
-        text: 'Nume',
+        text: 'Nume proiect',
         sort: true,
+      },
+      {
+        dataField: 'activitate.nume',
+        text: 'Nume activitate',
       },
       {
         dataField: 'actiuni',
@@ -241,6 +290,12 @@ export default class ActivitatiTabel extends React.Component {
         formatter: this.buttons,
       },
     ];
+
+    const activitatiComponent = this.state.activitati.map((activitate) => (
+      <option key={activitate.id} data-key={activitate.id}>
+        {activitate.nume}
+      </option>
+    ));
 
     return (
       <Aux>
@@ -271,22 +326,31 @@ export default class ActivitatiTabel extends React.Component {
           </Modal.Footer>
         </Modal>
 
-        {/* ADD/EDIT ACTIVITATE MODAL */}
+        {/* ADD/EDIT MODAL */}
         <Modal show={this.state.showModal} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Detalii activitate</Modal.Title>
+            <Modal.Title>Nume proiect</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-						<Form onSubmit={this.onSubmit}>
-            <Form.Group>
-              <Form.Label>Nume activitate</Form.Label>
-              <Form.Control
-                type="text"
-                value={this.state.nume}
-                onChange={(e) => this.setState({ nume: e.target.value })}
-              />
-            </Form.Group>
-						</Form>
+            <Form onSubmit={this.onSubmit}>
+              <Form.Group>
+                <Form.Control
+                  as="select"
+                  value={this.state.activitate.nume}
+                  onChange={(e) => this.onChangeActivitate(e)}
+                >
+                  <option>-</option>
+                  {activitatiComponent}
+                </Form.Control>
+              </Form.Group>
+              <Form.Group>
+                <Form.Control
+                  type="text"
+                  value={this.state.nume}
+                  onChange={(e) => this.setState({ nume: e.target.value })}
+                />
+              </Form.Group>
+            </Form>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.onSubmit}>
@@ -314,17 +378,31 @@ export default class ActivitatiTabel extends React.Component {
                   variant="outline-primary"
                   size="sm"
                   className="float-right"
-                  onClick={this.renderActivitati}
+                  onClick={this.renderProiecte}
                 >
                   <RotateCw className="m-0 p-0" />
                 </Button>
+								
+								{/* SORT FILTERS */}
+								<Row>
+									<Form.Group as={Col} sm="auto" className="mt-3 mb-0">
+										<Form.Control
+											as="select"
+											value={this.state.activitateFilter}
+											onChange={e => this.setState({filter: e.target.value === 'Toate activitățile' ? null : e.target.value})}
+										>
+											<option>Toate activitățile</option>
+											{activitatiComponent}
+										</Form.Control>
+									</Form.Group>
+								</Row>
               </Card.Header>
               <Card.Body>
                 <BootstrapTable
                   bootstrap4
                   overflow
                   keyField="id"
-                  data={this.state.activitati}
+                  data={proiecteFiltered}
                   columns={columns}
                   wrapperClasses="table-responsive"
                   hover

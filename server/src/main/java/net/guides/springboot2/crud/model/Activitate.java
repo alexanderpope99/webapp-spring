@@ -35,6 +35,7 @@ public class Activitate implements Serializable {
 	@JoinColumn(name = "idsocietate", nullable = false)
 	private Societate societate;
 
+	@JsonBackReference(value = "proiect-activitate")
 	@OneToMany(mappedBy = "activitate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Proiect> proiecte;
 

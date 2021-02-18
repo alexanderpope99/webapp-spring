@@ -37,28 +37,24 @@ public class ProdusController {
 
 	@GetMapping("{id}")
 	public ResponseEntity<Produs> getProdusById(@PathVariable("id") int id) throws ResourceNotFoundException {
-		Produs produs = produsRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Produs not found for this id :: " + id));
+		Produs produs = produsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Produs not found for this id :: " + id));
 
 		return ResponseEntity.ok().body(produs);
 	}
 
-
 	@PostMapping
-	public Produs createProdus(@RequestBody ProdusDTO produsDTO) throws ResourceNotFoundException {
+	public Produs createProdus(@RequestBody ProdusDTO produsDTO) {
 		return produsService.save(produsDTO);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Produs> updateProdus(@PathVariable("id") int acId, @RequestBody ProdusDTO acDTO)
-			throws ResourceNotFoundException {
+	public ResponseEntity<Produs> updateProdus(@PathVariable("id") int acId, @RequestBody ProdusDTO acDTO) {
 		return ResponseEntity.ok(produsService.update(acId, acDTO));
 	}
 
 	@DeleteMapping("{id}")
 	public Map<String, Boolean> deleteProdus(@PathVariable("id") int id) throws ResourceNotFoundException {
-		Produs produs = produsRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Produs not found for this id :: " + id));
+		Produs produs = produsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Produs not found for this id :: " + id));
 
 		produsRepository.delete(produs);
 		Map<String, Boolean> response = new HashMap<>();

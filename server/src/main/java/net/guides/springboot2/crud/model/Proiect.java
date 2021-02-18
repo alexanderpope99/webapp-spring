@@ -29,7 +29,6 @@ public class Proiect implements Serializable {
 	@Column(name = "nume")
 	private String nume;
 
-	@JsonBackReference(value = "proiect-activitate")
 	@ManyToOne
 	@JoinColumn(name = "idactivitate", nullable = false)
 	private Activitate activitate;
@@ -72,7 +71,6 @@ public class Proiect implements Serializable {
 
 	public Proiect update(Proiect np) { // np = newProiect
 		this.nume = np.nume;
-		this.activitate = np.activitate;
 		return this;
 	}
 

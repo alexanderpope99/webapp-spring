@@ -52,6 +52,9 @@ public class Factura implements Serializable {
 	@Column(name = "tva")
 	private Float tva;
 
+	@Column(name = "status")
+	private String status;
+
 	@ManyToOne
 	@JoinColumn(name = "idclient")
 	private Client client;
@@ -62,6 +65,10 @@ public class Factura implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "idproiect")
 	private Proiect proiect;
+
+	@ManyToOne
+	@JoinColumn(name = "idcaiet")
+	private Caiet caiet;
 
 	public Integer getId() {
 		return id;
@@ -159,6 +166,14 @@ public class Factura implements Serializable {
 		this.tva = tva;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public Float getTotalcutva() {
 		return totalfaratva + tva;
 	}
@@ -170,6 +185,16 @@ public class Factura implements Serializable {
 	public void setProduse(List<Produs> produse) {
 		this.produse = produse;
 	}
+
+	public Caiet getCaiet() {
+		return caiet;
+	}
+
+	public void setCaiet(Caiet caiet) {
+		this.caiet = caiet;
+	}
+
+	// ! OTHER
 
 	public void updateProduse(List<Produs> produse) {
 		this.produse.clear();
@@ -188,7 +213,7 @@ public class Factura implements Serializable {
 		this.scadenta = newFactura.scadenta;
 		this.totalfaratva = newFactura.totalfaratva;
 		this.tva = newFactura.tva;
-
+		this.proiect = newFactura.proiect;
 		return this;
 	}
 }

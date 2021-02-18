@@ -30,7 +30,7 @@ public class ActivitateService {
 	}
 
 	public List<Activitate> findBySocietate_Id(int id) {
-		return activitateRepository.findBySocietate_Id(id);
+		return activitateRepository.findBySocietate_IdOrderByNume(id);
 	}
 
 	public Activitate save(Activitate newActivitate, int idsocietate) throws ResourceNotFoundException {

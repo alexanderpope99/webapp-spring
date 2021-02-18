@@ -681,14 +681,13 @@ class CMTabel extends React.Component {
       console.log('dela/panala neselectat');
       return;
     }
-    // 2020-10
 
     let luna = this.state.dela.substring(5, 7);
 
     // get baza calcul + zile baza calcul + medie zilnica
     const baza_calcul = await axios
       .get(
-        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}`,
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}/${this.state.codboala.substring(0, 2)}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
@@ -700,21 +699,19 @@ class CMTabel extends React.Component {
             err.response.data.message,
         })
       );
-
     if (baza_calcul) {
-      console.log(Math.round(baza_calcul.mediezilnica));
       this.setState({
         bazacalcul: baza_calcul.bazacalcul,
         zilebazacalcul: baza_calcul.zilebazacalcul,
-        mediezilnica: baza_calcul.mediezilnica,
+        mediezilnica: baza_calcul.mediezilnica.toFixed(4),
         indemnizatiefirma: Math.round(
           this.state.zilefirma *
-            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
             (this.state.procent / 100)
         ),
         indemnizatiefnuass: Math.round(
           this.state.zilefnuass *
-            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
             (this.state.procent / 100)
         ),
         indemnizatiefaambp: Math.round(
@@ -916,7 +913,7 @@ class CMTabel extends React.Component {
                   <Form.Group id="bazacalculplafonata" as={Col} md="6">
                     <Form.Label>Bază calcul plafonată (RON)</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="number"
                       value={this.state.bazacalculplafonata}
                       onChange={(e) => {
                         this.setState({ bazacalculplafonata: e.target.value });
@@ -926,7 +923,7 @@ class CMTabel extends React.Component {
                   <Form.Group id="zilebazacalcul" as={Col} md="6">
                     <Form.Label>Zile bază calcul</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="number"
                       value={this.state.zilebazacalcul}
                       onChange={(e) => {
                         this.setState({ zilebazacalcul: e.target.value });
@@ -936,7 +933,8 @@ class CMTabel extends React.Component {
                   <Form.Group id="mediezilnica" as={Col} md="6">
                     <Form.Label>Medie zilnică (RON)</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="number"
+											step="0.0001"
                       value={this.state.mediezilnica}
                       onChange={(e) => {
                         this.setState({ mediezilnica: e.target.value });

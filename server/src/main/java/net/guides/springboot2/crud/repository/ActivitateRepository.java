@@ -9,5 +9,5 @@ import net.guides.springboot2.crud.model.Activitate;
 
 @Repository
 public interface ActivitateRepository extends JpaRepository<Activitate, Integer> {
-	public List<Activitate> findBySocietate_Id(int id);
+	public List<Activitate> findBySocietate_IdOrderByNume(int id);
 }

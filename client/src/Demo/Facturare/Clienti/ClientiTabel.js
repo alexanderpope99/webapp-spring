@@ -157,6 +157,14 @@ export default class ClientiTabel extends React.Component {
   }
 
   async onSubmit() {
+		if(!this.state.nume) {
+			this.setState({
+				showToast: true,
+				toastMessage: 'Clientul trebuie sa aibă un nume'
+			})
+			return;
+		}
+
     const client = {
       numecomplet: this.state.numecomplet || '',
       nume: this.state.nume || '',

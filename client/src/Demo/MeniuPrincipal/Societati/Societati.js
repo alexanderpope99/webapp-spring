@@ -650,7 +650,7 @@ class Societati extends React.Component {
                     Mai multe detalii
                   </Button>
                 </Form.Group>
-                <Form.Group as={Col} md="12">
+                {/* <Form.Group as={Col} md="12">
                   <Form.Label>Imagine</Form.Label>
                   {this.state.numefisier ? (
                     <div>
@@ -673,12 +673,12 @@ class Societati extends React.Component {
                     </div>
                   ) : (
                     <Dropzone
-                      inputContent="Pune imaginea aici"
+                      inputContent="Imagine/Logo"
                       onChangeStatus={handleChangeStatus}
                       maxFiles={1}
                     />
                   )}
-                </Form.Group>
+                </Form.Group> */}
               </Row>
             </Form>
           </Modal.Body>
