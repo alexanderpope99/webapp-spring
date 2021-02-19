@@ -6,13 +6,18 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.dto.SocietateDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
+import net.guides.springboot2.crud.model.Fisier;
 import net.guides.springboot2.crud.model.Societate;
+import net.guides.springboot2.crud.repository.FisierRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
 public class SocietateService {
 	@Autowired
 	private SocietateRepository societateRepository;
+
+	@Autowired
+	private FisierRepository fisierRepository;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -23,9 +28,13 @@ public class SocietateService {
 	}
 
 	public Societate save(SocietateDTO societateDTO) throws ResourceNotFoundException {
+		Fisier fisier = fisierRepository.findById(societateDTO.getIdimagine())
+		.orElseThrow(() -> new ResourceNotFoundException("Nu există user cu id: " +societateDTO.getIdimagine()));
 		Societate societate = modelMapper.map(societateDTO, Societate.class);
+		societate.setImagine(fisier);
 
-		return societateRepository.save(societate);
+		societate = societateRepository.save(societate);
+		return societate;
 	}
 
 	public Societate update(int societateId, SocietateDTO newSocietateDTO) throws ResourceNotFoundException {
@@ -48,16 +57,4 @@ public class SocietateService {
 		societateRepository.delete(societate);
 	}
 
-	public Societate updateKeepOldFile(int societateId, SocietateDTO newSocietateDTO) throws ResourceNotFoundException {
-		newSocietateDTO.setId(societateId);
-		Societate oldSocietate = societateRepository.findById(societateId)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + societateId));
-
-		Societate societate = modelMapper.map(newSocietateDTO, Societate.class);
-		societate.setImagine(oldSocietate.getImagine());
-		societate.setNumeimagine(oldSocietate.getNumeimagine());
-		societate.setDimensiuneimagine(oldSocietate.getDimensiuneimagine());
-
-		return societateRepository.save(societate);
-	}
 }

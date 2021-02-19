@@ -53,11 +53,11 @@ async function downloadFactura(fileName, idfactura) {
   }
 }
 
-async function downloadImagineSocietate(fileName, idsocietate) {
+async function downloadImagineSocietate(fileName,id) {
 	// const token = this.state.user.accessToken;
 	console.log('trying to download...');
   
-	const blob = await fetch(`${server.address}/societate/file/${idsocietate}`, {
+	const blob = await fetch(`${server.address}/fisier/${id}`, {
 	  method: 'GET',
 	  headers: {
 		'Content-Type': 'application/octet-stream',

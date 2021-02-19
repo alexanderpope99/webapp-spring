@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -90,16 +89,11 @@ public class Societate implements Serializable {
 	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Caiet> caiete;
 
-	@Column(name = "numeimagine")
-	private String numeimagine;
-
-	@Column(name = "dimensiuneimagine")
-	private Long dimensiuneimagine;
-
 	@JsonIgnore
-	@Lob
-	@Column(name = "imagine")
-	private byte[] imagine;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idimagine", referencedColumnName = "id")
+	private Fisier imagine;
+
 
 	public Societate() {
 	}
@@ -277,27 +271,11 @@ public class Societate implements Serializable {
 		this.contbancar.remove(contBancar);
 	}
 
-	public Long getDimensiuneimagine() {
-		return dimensiuneimagine;
-	}
-
-	public void setDimensiuneimagine(Long dimensiuneimagine) {
-		this.dimensiuneimagine = dimensiuneimagine;
-	}
-
-	public byte[] getImagine() {
+	public Fisier getImagine() {
 		return imagine;
 	}
 
-	public void setImagine(byte[] imagine) {
+	public void setImagine(Fisier imagine) {
 		this.imagine = imagine;
-	}
-
-	public String getNumeimagine() {
-		return numeimagine;
-	}
-
-	public void setNumeimagine(String numeimagine) {
-		this.numeimagine = numeimagine;
 	}
 }

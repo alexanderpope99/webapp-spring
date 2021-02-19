@@ -9,8 +9,11 @@ import { judete, sectoare } from '../../Resources/judete';
 import { server } from '../../Resources/server-address';
 import { getSocSel, setSocSel } from '../../Resources/socsel';
 
+import { downloadImagineSocietate } from '../../Resources/download';
 import authHeader from '../../../services/auth-header';
 import authService from '../../../services/auth.service';
+import 'react-dropzone-uploader/dist/styles.css';
+import Dropzone from 'react-dropzone-uploader';
 
 const judeteOptions = judete.map((judet, index) => {
   return <option key={index}>{judet}</option>;
@@ -62,6 +65,10 @@ class Societate extends React.Component {
 
       showToast: false,
       toastMessage: '',
+	  
+	  fisier:null,
+	  numefisier:'',
+	  idfisier:'',
     };
   }
 
@@ -84,6 +91,10 @@ class Societate extends React.Component {
 
       centreCost: [], // array containing CentruCost objects
       centruCost: null, // details for add/edit modal
+
+	  fisier:null,
+	  numefisier:'',
+	  idfisier:'',
     });
   }
 
@@ -140,6 +151,10 @@ class Societate extends React.Component {
           email: societate.email || '',
           telefon: societate.telefon || '',
           fax: societate.fax || '',
+
+		  fisier:societate.imagine || null,
+		  numefisier:societate.imagine ? societate.imagine.nume : null,
+		  idfisier:societate.imagine ? societate.imagine.id : null,
         },
         () => this.onChangeLocalitate(societate.adresa.localitate)
       );
@@ -154,6 +169,9 @@ class Societate extends React.Component {
         email: societate.email || '',
         telefon: societate.telefon || '',
         fax: societate.fax || '',
+		fisier:societate.imagine || null,
+		numefisier:societate.imagine ? societate.imagine.nume : null,
+		idfisier:societate.imagine ? societate.imagine.id : null,
       });
     }
   }
@@ -167,6 +185,30 @@ class Societate extends React.Component {
       e.preventDefault();
     } catch (err) {
       console.log(err);
+    }
+
+	const formData = new FormData();
+    if (this.state.numefisier) formData.append('fisier', this.state.fisier);
+
+	// MAI TREBUIE LUCRAT AICI PUȚIN
+    if (this.state.numefisier) {
+      // put
+      await axios
+        .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) => console.error(err));
+    } else {
+      //post
+      await axios
+        .post(`${server.address}/fisier/upload`, formData, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) =>
+          this.setState({ showToast: true, toastMessage: err.response.data.message })
+        );
     }
 
     let adresa_body = {
@@ -188,6 +230,7 @@ class Societate extends React.Component {
       email: this.state.email || null,
       telefon: this.state.telefon || null,
       fax: this.state.fax || null,
+	  idimagine:this.state.idfisier || null,
 
       centreCost: null,
     };
@@ -229,6 +272,15 @@ class Societate extends React.Component {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
     };
+
+	const handleChangeStatus = ({ file }, status) => {
+		if (status === 'done') {
+		  console.log(status, file);
+		  
+
+		  this.setState({ fisier: file, numefisier: file.name });
+		}
+	  };
 
     return (
       <Aux>
@@ -411,6 +463,33 @@ class Societate extends React.Component {
                         }
                       />
                     </Form.Group>
+					<Form.Group as={Col} md="12">
+                  <Form.Label>Imagine</Form.Label>
+                  {this.state.numefisier ? (
+                    <div>
+                      <Button
+                        variant="dark"
+                        onClick={() => downloadImagineSocietate(this.state.numefisier, this.state.idfisier)}
+                      >
+                        {this.state.numefisier}
+                      </Button>
+                      <Button
+                        variant="link"
+                        onClick={() =>
+                          this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
+                        }
+                      >
+                        Șterge
+                      </Button>
+                    </div>
+                  ) : (
+                    <Dropzone
+                      inputContent="Puneți imaginea aici"
+                      onChangeStatus={handleChangeStatus}
+                      maxFiles={1}
+                    />
+                  )}
+                </Form.Group>
                   </Row>
 
                   {this.state.isEdit ? (

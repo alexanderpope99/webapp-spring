@@ -1,0 +1,34 @@
+package net.guides.springboot2.crud.services;
+
+import java.io.IOException;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StringUtils;
+
+import net.guides.springboot2.crud.model.Fisier;
+import net.guides.springboot2.crud.repository.FisierRepository;
+
+@Service
+public class FisierService {
+
+  @Autowired
+  private FisierRepository fisierRepository;
+
+  public Fisier store(MultipartFile file) throws IOException {
+    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    Fisier fisier = new Fisier(fileName, file.getContentType(), file.getBytes());
+
+    return fisierRepository.saveAndFlush(fisier);
+  }
+
+  public Fisier getFile(int id) {
+    return fisierRepository.findById(id).get();
+  }
+  
+  public Stream<Fisier> getAllFiles() {
+    return fisierRepository.findAll().stream();
+  }
+}

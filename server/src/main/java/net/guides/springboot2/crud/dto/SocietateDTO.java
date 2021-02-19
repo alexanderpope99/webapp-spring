@@ -1,13 +1,12 @@
 package net.guides.springboot2.crud.dto;
 
-import java.io.IOException;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.ContBancar;
+import net.guides.springboot2.crud.model.Fisier;
 
 public class SocietateDTO {
 
@@ -35,32 +34,25 @@ public class SocietateDTO {
 
 	private Integer nrangajati;
 
-	private MultipartFile imagine;
+	private Fisier imagine;
 
-	public void setImagine(MultipartFile imagine) {
+	private int idimagine;
+
+	public int getIdimagine() {
+		if (imagine == null)
+			return idimagine;
+		else
+			return imagine.getId();
+	}
+
+	public void setImagine(Fisier imagine) {
 		this.imagine = imagine;
 	}
-
-	public byte[] getImagine() throws IOException {
-		if (imagine != null)
-			return imagine.getBytes();
-		// returns empty array instead of null
-		else
-			return new byte[0];
+	public void setIdimagine(int idimagine) {
+		this.idimagine = idimagine;
 	}
-
-	public String getNumeimagine() {
-		if (imagine != null)
-			return imagine.getOriginalFilename();
-		else
-			return null;
-	}
-
-	public long getDimensiuneimagine() {
-		if (imagine != null)
-			return imagine.getSize();
-		else
-			return 0;
+	public void setIdangajat(Fisier imagine) {
+		this.idimagine = imagine.getId();
 	}
 
 	public Double getCapsoc() {
@@ -133,6 +125,10 @@ public class SocietateDTO {
 
 	public void setAdresa(Adresa adresa) {
 		this.adresa = adresa;
+	}
+
+	public Fisier getImagine() {
+		return imagine;
 	}
 
 	public String getFax() {
