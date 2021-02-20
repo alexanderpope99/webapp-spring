@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.ERole;
 import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.User;
+import net.guides.springboot2.crud.payload.response.JwtResponse;
 import net.guides.springboot2.crud.repository.RoleRepository;
 import net.guides.springboot2.crud.repository.UserRepository;
 import net.guides.springboot2.crud.services.UserService;
@@ -80,6 +83,11 @@ public class UserController {
 	@GetMapping("/superior/{usrid}")
 	public List<PersoanaDTO> getSuperiorByUserId(@PathVariable("usrid") int usrid) {
 		return userRepository.getSuperiorByUserId(usrid);
+	}
+
+	@GetMapping("/from-cookie")
+	public JwtResponse getUserFromCookies(HttpServletRequest request) {
+		return userService.userFromCookies(request);
 	}
 
 	@PostMapping("/roles/{usrid}&{roleid}")

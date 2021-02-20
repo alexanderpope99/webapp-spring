@@ -31,9 +31,9 @@ class AdminLayout extends Component {
   }
 
   render() {
-		console.log('AdminLayout')
+		console.log('AdminLayout');
 
-    const menu = routes.map((route, index) => {
+    const pageContents = routes.map((route, index) => {
       return route.component ? (
         <Route
           key={index}
@@ -61,7 +61,7 @@ class AdminLayout extends Component {
                         {sessionStorage.getItem('user') === null ? (
                           <Redirect to="/auth/signin-1" />
                         ) : (
-                          menu
+                          pageContents
                         )}
                         <Redirect from="/" to={this.props.defaultPath} />
                       </Switch>

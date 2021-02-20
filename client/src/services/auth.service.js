@@ -8,17 +8,30 @@ class AuthService {
 
   constructor() {
     this.init();
-    // this.token = null;
     this.roles = [];
     this.user = null;
-    // this.id = null;
-    // this.gen = false;
-    // this.email = null;
+
+    console.log('auth.service constructed now');
   }
 
   async init() {
-    this.token = await this.getTokenFromCookie();
-    console.log(this.token);
+    if (!this.token) {
+      this.token = await this.getTokenFromCookie();
+    }
+  }
+
+  getRoles() {
+    return this.roles;
+  }
+
+  getToken() {
+    return this.token;
+  }
+
+  async getCurrentUser() {
+    const user = await axios.get(`${server.address}/user/from-cookie`, { withCredentials: true }).then(res => res.data).catch(err => console.error(err));
+    console.log('user from cookies:', user);
+    return user;
   }
 
   async login(username, password) {
@@ -30,20 +43,19 @@ class AuthService {
       },
       { withCredentials: true }
     );
+
     if (response.data.accessToken) {
-      const body = {
+
+      this.roles = response.data.roles;
+      this.token = response.data.accessToken;
+      this.user = {
+        id: response.data.id,
         username: response.data.username,
         email: response.data.email,
-        roles: response.data.roles,
-        accessToken: response.data.accessToken,
-        id: response.data.id,
         gen: response.data.gen,
       };
 
-      this.roles = response.data.roles;
-      this.token = response.data.token;
-      this.user = body;
-      sessionStorage.setItem('user', JSON.stringify(body));
+      sessionStorage.setItem('user', JSON.stringify(response.data));
     }
     return response.data;
   }
@@ -89,8 +101,8 @@ class AuthService {
     return ok;
   }
 
-  getCurrentUser() {
-    return this.user;
+  setUser(user) {
+    sessionStorage.setItem('user', JSON.stringify(user));
   }
 
   async getTokenFromCookie() {
@@ -116,28 +128,23 @@ class AuthService {
       .catch((err) => console.log(err));
   }
 
-  getRoles() {
-    return this.roles;
-  }
-
   isAdmin() {
+    console.log('isAdmin:', this.roles);
     return this.roles.includes('ROLE_ADMIN');
   }
 
   isDirectorOrContabil() {
+    console.log('isDirectorOrContabil:', this.roles);
     return this.roles.includes('ROLE_DIRECTOR') || this.roles.includes('ROLE_CONTABIL');
   }
 
   isAngajatSimplu() {
+    console.log('isAngajatSimplu:', this.roles);
     return !(
       this.roles.includes('ROLE_ADMIN') ||
       this.roles.includes('ROLE_DIRECTOR') ||
       this.roles.includes('ROLE_CONTABIL')
     );
-  }
-
-  setUser(user) {
-    sessionStorage.setItem('user', JSON.stringify(user));
   }
 }
 

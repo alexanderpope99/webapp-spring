@@ -8,6 +8,7 @@ import Loader from './layout/Loader';
 import Aux from '../hoc/_Aux';
 import ScrollToTop from './layout/ScrollToTop';
 import routes from '../route';
+import authService from '../services/auth.service';
 
 const AdminLayout = Loadable({
   loader: () => import('./layout/AdminLayout'),
@@ -15,9 +16,29 @@ const AdminLayout = Loadable({
 });
 
 class App extends Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      user: null,
+    }
+  }
+
+  componentDidMount() {
+    this.init();
+  }
+
+  async init() {
+    const user = await authService.getCurrentUser();
+    if(user)
+      this.setState({ user: user });
+    // else window.location.href = "/auth/signin-1"
+  }
+
   render() {
     // singin-1 and singup-1 pages
-    const menu = routes.map((route, index) => {
+    const login = routes.map((route, index) => {
       return route.component ? (
         <Route
           key={index}
@@ -27,16 +48,15 @@ class App extends Component {
           render={(props) => <route.component {...props} />}
         />
       ) : null;
-		});
-		console.log('App')
+    });
+
     return (
       <Aux>
         <ScrollToTop>
           <Suspense fallback={<Loader />}>
             <Switch>
-							{/* singin-1 and singup-1 pages */}
-              {menu}
-              {sessionStorage.getItem('user') === null ? <Redirect to="/auth/signin-1" /> : null}
+              {login}
+              {/* {this.state.user ? null : <Redirect to="/auth/signin-1" />} */}
               <Route path="/" component={AdminLayout} />
             </Switch>
           </Suspense>

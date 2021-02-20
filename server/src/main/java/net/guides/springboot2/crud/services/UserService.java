@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +20,7 @@ import net.guides.springboot2.crud.model.Role;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.model.User;
 import net.guides.springboot2.crud.payload.request.SignupRequest;
+import net.guides.springboot2.crud.payload.response.JwtResponse;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.RoleRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
@@ -52,8 +56,7 @@ public class UserService {
 
 	public UserDTO findById(int id) {
 		modelMapper.typeMap(User.class, UserDTO.class).addMapping(User::getSocietati, UserDTO::setSocietatiClass);
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Error: ROLE_ANGAJAT not in database"));
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found for this id :: " + id));
 		return modelMapper.map(user, UserDTO.class);
 	}
 
@@ -72,14 +75,12 @@ public class UserService {
 	}
 
 	public void createNewUser(SignupRequest signUpRequest) {
-		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
 		user.setGen(signUpRequest.isGen());
 
 		List<Role> roles = new ArrayList<>();
 
-		Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT)
-				.orElseThrow(() -> new RuntimeException("Error: ROLE_ANGAJAT not in database"));
+		Role angajatRole = roleRepository.findByName(ERole.ROLE_ANGAJAT).orElseThrow(() -> new RuntimeException("Error: ROLE_ANGAJAT not in database"));
 		roles.add(angajatRole);
 
 		user.setRoles(roles);
@@ -117,8 +118,7 @@ public class UserService {
 
 		// convert from UserDTO.SocietateJSON to User.Societate
 		List<Societate> newSocietati = new ArrayList<>();
-		newUserDTO.getSocietati()
-				.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
+		newUserDTO.getSocietati().forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
 		newUser.setSocietati(newSocietati);
 
 		int newUserId = userRepository.save(newUser).getId();
@@ -128,8 +128,7 @@ public class UserService {
 
 	public UserDTO update(UserDTO newUserDTO, int idsocietate) throws ResourceNotFoundException {
 		// unassign angajat.user
-		User oldUser = userRepository.findById(newUserDTO.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + newUserDTO.getId()));
+		User oldUser = userRepository.findById(newUserDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + newUserDTO.getId()));
 
 		// keep old password :: newUserDTO doesn't have password
 		User newUser = modelMapper.map(newUserDTO, User.class);
@@ -160,10 +159,9 @@ public class UserService {
 		newUser.setAngajati(newAngajati);
 
 		// set societati
-		if(idsocietate > 0) {
+		if (idsocietate > 0) {
 			List<Societate> newSocietati = new ArrayList<>();
-			newUserDTO.getSocietati()
-					.forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
+			newUserDTO.getSocietati().forEach(societate -> societateRepository.findById(societate.getId()).ifPresent(newSocietati::add));
 			newUser.setSocietati(newSocietati);
 		}
 
@@ -174,8 +172,7 @@ public class UserService {
 	} // update
 
 	public void delete(int userId) throws ResourceNotFoundException {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
 		user.getAngajati().forEach(angajat -> angajat.setUser(null));
 
@@ -190,18 +187,14 @@ public class UserService {
 		initService.init();
 
 		// Create new user with roles admin, director, contabil
-		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
 		user.setGen(signUpRequest.isGen());
 
 		List<Role> roles = new ArrayList<>();
 
-		Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-				.orElseThrow(() -> new RuntimeException("Error: ROLE_ADMIN not in database"));
-		Role directorRole = roleRepository.findByName(ERole.ROLE_DIRECTOR)
-				.orElseThrow(() -> new RuntimeException("Error: ROLE_DIRECTOR not in database"));
-		Role contabilRole = roleRepository.findByName(ERole.ROLE_CONTABIL)
-				.orElseThrow(() -> new RuntimeException("Error: ROLE_CONTABIL not in database"));
+		Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: ROLE_ADMIN not in database"));
+		Role directorRole = roleRepository.findByName(ERole.ROLE_DIRECTOR).orElseThrow(() -> new RuntimeException("Error: ROLE_DIRECTOR not in database"));
+		Role contabilRole = roleRepository.findByName(ERole.ROLE_CONTABIL).orElseThrow(() -> new RuntimeException("Error: ROLE_CONTABIL not in database"));
 
 		roles.add(adminRole);
 		roles.add(directorRole);
@@ -209,5 +202,33 @@ public class UserService {
 
 		user.setRoles(roles);
 		userRepository.save(user);
+	}
+
+	public JwtResponse userFromCookies(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies == null)
+			return null;
+
+		UserDTO user = null;
+		String jwt = "";
+		for (Cookie cookie : cookies) {
+			if (cookie != null && cookie.getName().equals("id")) {
+				user = findById(Integer.parseInt(cookie.getValue()));
+				break;
+			}
+			if (cookie != null && cookie.getName().equals("token")) {
+				jwt = cookie.getValue();
+			}
+		}
+
+		if (user != null) {
+			List<String> roles = new ArrayList<>();
+			for (Role role : user.getRoles()) {
+				roles.add(role.getName().name());
+			}
+			return new JwtResponse(jwt, user.getId(), user.getUsername(), user.getEmail(), roles, user.isGen());
+		}
+
+		return null;
 	}
 }
