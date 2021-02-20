@@ -11,6 +11,7 @@ public class CookieService {
 	public HttpServletResponse setCookie(String key, String value, HttpServletResponse response) {
 		Cookie cookie = new Cookie(key, value);
 		cookie.setPath("/");
+		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
 		return response;
 	}

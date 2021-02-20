@@ -5,6 +5,22 @@ const API_URL = `${server.address}/api/auth/`;
 const URL = `${server.address}`;
 
 class AuthService {
+
+  constructor() {
+    this.init();
+    // this.token = null;
+    this.roles = [];
+    this.user = null;
+    // this.id = null;
+    // this.gen = false;
+    // this.email = null;
+  }
+
+  async init() {
+    this.token = await this.getTokenFromCookie();
+    console.log(this.token);
+  }
+
   async login(username, password) {
     const response = await axios.post(
       API_URL + 'signin',
@@ -18,8 +34,15 @@ class AuthService {
       const body = {
         username: response.data.username,
         email: response.data.email,
+        roles: response.data.roles,
+        accessToken: response.data.accessToken,
+        id: response.data.id,
         gen: response.data.gen,
       };
+
+      this.roles = response.data.roles;
+      this.token = response.data.token;
+      this.user = body;
       sessionStorage.setItem('user', JSON.stringify(body));
     }
     return response.data;
@@ -67,7 +90,7 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return JSON.parse(sessionStorage.getItem('user'));
+    return this.user;
   }
 
   async getTokenFromCookie() {
@@ -78,10 +101,12 @@ class AuthService {
   }
 
   async getRolesFromCookie() {
-    return await axios
+    const roles = await axios
       .get(URL + '/cookie/roles', { withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.log(err));
+    console.log('roles:', roles);
+    return roles;
   }
 
   async getIdFromCookie() {
@@ -91,21 +116,23 @@ class AuthService {
       .catch((err) => console.log(err));
   }
 
+  getRoles() {
+    return this.roles;
+  }
+
   isAdmin() {
-    return this.getRolesFromCookie().includes('ROLE_ADMIN');
+    return this.roles.includes('ROLE_ADMIN');
   }
 
   isDirectorOrContabil() {
-    const roles = this.gerRolesFromCookie();
-    return roles.includes('ROLE_DIRECTOR') || roles.includes('ROLE_CONTABIL');
+    return this.roles.includes('ROLE_DIRECTOR') || this.roles.includes('ROLE_CONTABIL');
   }
 
   isAngajatSimplu() {
-    const roles = this.gerRolesFromCookie();
     return !(
-      roles.includes('ROLE_ADMIN') ||
-      roles.includes('ROLE_DIRECTOR') ||
-      roles.includes('ROLE_CONTABIL')
+      this.roles.includes('ROLE_ADMIN') ||
+      this.roles.includes('ROLE_DIRECTOR') ||
+      this.roles.includes('ROLE_CONTABIL')
     );
   }
 

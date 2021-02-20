@@ -20,18 +20,11 @@ class SignUp1 extends React.Component {
   async handleClick(e) {
     e.preventDefault();
 
-    AuthService.login(this.state.username, this.state.password).then(
-      () => {
-        this.props.history.push('/profile');
-        window.location.href = '/dashboard/societati';
-      },
-      (error) => {
-        this.setState({ show: true });
-      }
-    );
+    await AuthService.login(this.state.username, this.state.password);
+    const roles = AuthService.getRoles();
+    console.log(roles);
   }
   render() {
-		console.log('SignIn');
     if (sessionStorage.getItem('user') !== null) return <Redirect to="/auth/signin-1" />;
     else
       return (
@@ -47,6 +40,7 @@ class SignUp1 extends React.Component {
                 </Button>
               </Modal.Footer>
             </Modal>
+
             <div className="auth-wrapper">
               <div className="auth-content">
                 <div className="auth-bg">

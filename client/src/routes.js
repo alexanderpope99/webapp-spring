@@ -6,12 +6,16 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-const isAngajatSimplu = authService.isAngajatSimplu();
-const isAdmin = authService.isAdmin();
-const isDirectorContabil = authService.isDirectorOrContabil();
-console.log('angajat simplu:', isAngajatSimplu);
-console.log('admin:', isAdmin);
-console.log('director/contabil:', isDirectorContabil);
+// const isAngajatSimplu = authService.isAngajatSimplu();
+// const isAdmin = authService.isAdmin();
+// const isDirectorContabil = authService.isDirectorOrContabil();
+// console.log('angajat simplu:', isAngajatSimplu);
+// console.log('admin:', isAdmin);
+// console.log('director/contabil:', isDirectorContabil);
+
+const isAngajatSimplu = false;
+const isAdmin = true;
+const isDirectorContabil = true;
 
 const Societati = React.lazy(() => import('./Demo/Dashboard/Societati'));
 const SocietatiView = React.lazy(() => import('./Demo/Dashboard/SocietatiView'));
