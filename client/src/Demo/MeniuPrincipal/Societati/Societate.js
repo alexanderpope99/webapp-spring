@@ -484,7 +484,7 @@ class Societate extends React.Component {
                         </div>
                       ) : (
                           <Dropzone
-                            inputContent="Puneți imaginea aici"
+                            inputContent="Imagine / Logo"
                             onChangeStatus={handleChangeStatus}
                             maxFiles={1}
                           />
