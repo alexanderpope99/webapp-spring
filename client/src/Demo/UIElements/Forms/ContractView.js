@@ -156,7 +156,7 @@ class ContractView extends React.Component {
 
     const superiori = await axios
       .get(`${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) =>
         res.data
@@ -180,7 +180,7 @@ class ContractView extends React.Component {
   async getCentreCost() {
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
@@ -202,7 +202,7 @@ class ContractView extends React.Component {
 
     const angajat = await axios
       .get(`${server.address}/angajat/expand/${angajatsel.idpersoana}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>

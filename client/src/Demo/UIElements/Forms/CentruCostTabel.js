@@ -201,7 +201,7 @@ class CentruCostTabel extends React.Component {
     if (!this.state.socsel) return;
 
     const centreCost = await axios
-      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, { withCredentials: true })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
         this.setState({
@@ -217,7 +217,7 @@ class CentruCostTabel extends React.Component {
 
   async deleteCC(id) {
     await axios
-      .delete(`${server.address}/centrucost/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/centrucost/${id}`, { withCredentials: true })
       .then(this.fillTable)
       .catch((err) =>
         this.setState({
@@ -243,7 +243,7 @@ class CentruCostTabel extends React.Component {
       .post(
         `${server.address}/centrucost/ids=${this.state.socsel.id}/${this.state.adresaSocietatii}`,
         centruCost,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -283,7 +283,7 @@ class CentruCostTabel extends React.Component {
       .put(
         `${server.address}/centrucost/${this.state.id}/${this.state.adresaSocietatii}`,
         centruCost,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.status === 200)
       .catch((err) =>

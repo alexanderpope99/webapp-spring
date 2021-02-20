@@ -57,7 +57,6 @@ const Profile = React.lazy(() => import('./Demo/Edit/Profile'));
 
 
 const routes = [
-	// LOGIN?
 
 	// CARDS
 	{

@@ -220,7 +220,7 @@ class RealizariRetineriView extends React.Component {
     const rr = await axios
       .get(
         `${server.address}/realizariretineri/luni-ani/ids=${this.state.socsel.id}&idu=${this.state.user.id}`,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
@@ -247,7 +247,7 @@ class RealizariRetineriView extends React.Component {
     const angajati = await axios
       .get(
         `${server.address}/angajat/socid=${this.state.socsel.id}/usrid=${this.state.user.id}&c`,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
@@ -288,7 +288,7 @@ class RealizariRetineriView extends React.Component {
     // if already calculated, gets existing data, if idstat does not exist for (idc, mo, y) => calc => saves to DB
     const data = await axios
       .get(`${server.address}/realizariretineri/get/idc=${contract.id}&mo=${luna}&y=${an}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
@@ -380,7 +380,7 @@ class RealizariRetineriView extends React.Component {
   async getTotalPensie() {
     const totalpensiefacan = await axios
       .get(`${server.address}/retineri/${this.state.contract.id}/pensiefac/${this.state.an}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
@@ -422,7 +422,7 @@ class RealizariRetineriView extends React.Component {
   async getOresuplimentare(idc, luna, an) {
     const oresuplimentare = await axios
       .get(`${server.address}/oresuplimentare/api/idc=${idc}&mo=${luna}&y=${an}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -528,7 +528,7 @@ class RealizariRetineriView extends React.Component {
     const ok = await axios
       .get(
         `${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}/get`,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.status === 200)
       .catch((err) =>

@@ -40,7 +40,7 @@ class PersoaneTabel extends React.Component {
     setAngajatSel(null);
 
     axios
-      .delete(`${server.address}/angajat/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/angajat/${id}`, { withCredentials: true })
       .then((response) => response.data)
       .then(() => {
         // console.log(response);
@@ -137,7 +137,7 @@ class PersoaneTabel extends React.Component {
 
   async onRefresh() {
     const persoane = await axios
-      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({

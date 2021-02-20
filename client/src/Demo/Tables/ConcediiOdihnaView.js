@@ -76,7 +76,7 @@ class ConcediiOdihnaView extends React.Component {
 
     if (angajatSel) {
       let angajat = await axios
-        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { withCredentials: true })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
           this.setState({
@@ -201,7 +201,7 @@ class ConcediiOdihnaView extends React.Component {
     }
 
     const concedii = await axios
-      .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
+      .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { withCredentials: true })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) =>

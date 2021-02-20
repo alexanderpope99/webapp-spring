@@ -138,7 +138,7 @@ class ConcediiMedicaleView extends React.Component {
 
     if (angajatSel) {
       let angajat = await axios
-        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { withCredentials: true })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
           this.setState({
@@ -270,7 +270,7 @@ class ConcediiMedicaleView extends React.Component {
     }
 
     const cm = await axios
-      .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
+      .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { withCredentials: true })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) =>
@@ -334,7 +334,7 @@ class ConcediiMedicaleView extends React.Component {
 
   async deleteCM(id) {
     await axios
-      .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/cm/${id}`, { withCredentials: true })
       .then(this.fillTable)
       .catch((err) =>
         this.setState({

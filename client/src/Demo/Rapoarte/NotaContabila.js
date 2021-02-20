@@ -53,7 +53,7 @@ class NotaContabila extends React.Component {
     const created = await axios
       .get(
         `${server.address}/notacontabila/${this.state.socsel.id}/mo=${luna.nr}&y=${an}/${this.state.user.id}`,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.data)
       .catch((err) =>

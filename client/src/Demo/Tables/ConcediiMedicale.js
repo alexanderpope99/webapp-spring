@@ -154,7 +154,7 @@ class CMTabel extends React.Component {
 
     if (angajatSel) {
       let angajat = await axios
-        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { withCredentials: true })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
           this.setState({
@@ -286,7 +286,7 @@ class CMTabel extends React.Component {
 		}
 
     const cm = await axios
-      .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
+      .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { withCredentials: true })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) =>
@@ -350,7 +350,7 @@ class CMTabel extends React.Component {
 
   async deleteCM(id) {
     await axios
-      .delete(`${server.address}/cm/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/cm/${id}`, { withCredentials: true })
       .then(this.fillTable)
       .catch((err) =>
         this.setState({
@@ -403,7 +403,7 @@ class CMTabel extends React.Component {
 		};
 
     let ok = await axios
-      .post(`${server.address}/cm`, cm_body, { headers: authHeader() })
+      .post(`${server.address}/cm`, cm_body, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
@@ -462,7 +462,7 @@ class CMTabel extends React.Component {
 
     let ok = await axios
       .put(`${server.address}/cm/${this.state.id}`, cm_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -677,7 +677,7 @@ class CMTabel extends React.Component {
     const baza_calcul = await axios
       .get(
         `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}`,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.data)
       .catch((err) =>

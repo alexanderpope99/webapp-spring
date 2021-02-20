@@ -9,7 +9,6 @@ import AuthService from '../../../services/auth.service';
 class SignUp1 extends React.Component {
   constructor() {
     super();
-    if (sessionStorage.getItem('user') !== null) window.location.href = '/dashboard/societati';
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       username: '',

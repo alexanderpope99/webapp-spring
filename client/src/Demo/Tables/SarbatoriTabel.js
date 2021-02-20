@@ -75,7 +75,7 @@ class SarbatoriTabel extends React.Component {
   async fillTable() {
     //? fetch must be with idcontract
     const sarbatori = await axios
-      .get(`${server.address}/sarbatori`, { headers: authHeader() })
+      .get(`${server.address}/sarbatori`, { withCredentials: true })
       .then((res) => (res.status !== 200 ? null : res.data))
       .catch((err) =>
         this.setState({
@@ -134,7 +134,7 @@ class SarbatoriTabel extends React.Component {
 
   async deleteSarbatoare(id) {
     await axios
-      .delete(`${server.address}/sarbatori/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/sarbatori/${id}`, { withCredentials: true })
       .then(this.fillTable)
       .catch((err) =>
         this.setState({
@@ -157,7 +157,7 @@ class SarbatoriTabel extends React.Component {
     if (this.state.isEdit) {
       ok = await axios
         .put(`${server.address}/sarbatori/${this.state.id}`, sarbatoare_body, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.status === 200)
         .catch((err) =>
@@ -168,7 +168,7 @@ class SarbatoriTabel extends React.Component {
         );
     } else {
       ok = await axios
-        .post(`${server.address}/sarbatori`, sarbatoare_body, { headers: authHeader() })
+        .post(`${server.address}/sarbatori`, sarbatoare_body, { withCredentials: true })
         .then((res) => res.status === 200)
         .catch((err) =>
           this.setState({
@@ -295,7 +295,7 @@ class SarbatoriTabel extends React.Component {
       .post(
         `${server.address}/sarbatori/init/${this.state.adauga_an}`,
         {},
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>

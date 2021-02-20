@@ -10,6 +10,8 @@ import ScrollToTop from './layout/ScrollToTop';
 import routes from '../route';
 import authService from '../services/auth.service';
 
+import Societati from '../Demo/Dashboard/Societati';
+
 const AdminLayout = Loadable({
   loader: () => import('./layout/AdminLayout'),
   loading: Loader,
@@ -50,14 +52,17 @@ class App extends Component {
       ) : null;
     });
 
+    
     return (
       <Aux>
         <ScrollToTop>
           <Suspense fallback={<Loader />}>
             <Switch>
               {login}
-              {/* {this.state.user ? null : <Redirect to="/auth/signin-1" />} */}
+              {/* if user is missing, redirect */}
+              {/* {this.state.user ? <Redirect to="/dashboard/societati" /> : <Redirect to="/auth/signin-1" />} */}
               <Route path="/" component={AdminLayout} />
+              {/* <Societati /> */}
             </Switch>
           </Suspense>
         </ScrollToTop>

@@ -62,7 +62,7 @@ class BazaCalculView extends React.Component {
     let angajatSel = getAngajatSel();
     if (angajatSel) {
       let angajat = await axios
-        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { withCredentials: true })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
           this.setState({
@@ -103,7 +103,7 @@ class BazaCalculView extends React.Component {
     if (this.state.angajat) {
       const bazacalcul = await axios
         .get(`${server.address}/bazacalcul/ida=${this.state.angajat.idpersoana}`, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.data)
         .catch((err) =>

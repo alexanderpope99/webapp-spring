@@ -119,7 +119,7 @@ class ViewPersoana extends React.Component {
   async getAngajat() {
     return await axios
       .get(`${server.address}/angajat/socid=${this.state.socsel.id}/usrid=${this.state.user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>

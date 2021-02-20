@@ -23,7 +23,7 @@ class Hidden extends React.Component {
 
   async fixContracte() {
     const ok = await axios
-      .get(`${server.address}/contract/fix-missing-values`, { headers: authHeader() })
+      .get(`${server.address}/contract/fix-missing-values`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (ok) {

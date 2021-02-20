@@ -102,7 +102,7 @@ class FacturiAprobatorTabel extends React.Component {
 
   async approveFactura(fact) {
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/aproba`, { headers: authHeader() })
+      .get(`${server.address}/factura/${fact.id}/aproba`, { withCredentials: true })
       .then((response) => response.status === 200)
       .catch((err) =>
         this.setState({
@@ -123,7 +123,7 @@ class FacturiAprobatorTabel extends React.Component {
 
   async rejectFactura(fact) {
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/respinge`, { headers: authHeader() })
+      .get(`${server.address}/factura/${fact.id}/respinge`, { withCredentials: true })
       .then((response) => response.status === 200)
       .catch((err) =>
         this.setState({
@@ -145,7 +145,7 @@ class FacturiAprobatorTabel extends React.Component {
   async postponeFactura(fact) {
     console.log(`${server.address}/factura/${fact.id}/amana`);
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/amana`, { headers: authHeader() })
+      .get(`${server.address}/factura/${fact.id}/amana`, { withCredentials: true })
       .then((response) => response.status === 200)
       .catch((err) =>
         this.setState({
@@ -297,7 +297,7 @@ class FacturiAprobatorTabel extends React.Component {
   async onRefresh() {
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -309,7 +309,7 @@ class FacturiAprobatorTabel extends React.Component {
 
     const aprobatori = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}&c`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -321,7 +321,7 @@ class FacturiAprobatorTabel extends React.Component {
 
     const fact = await axios
       .get(`${server.address}/factura/idsocuid/${this.state.socsel.id}&${this.state.user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -377,7 +377,7 @@ class FacturiAprobatorTabel extends React.Component {
     };
     const ok = await axios
       .put(`${server.address}/factura/${this.state.id}/obs&codp`, factura_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -404,7 +404,7 @@ class FacturiAprobatorTabel extends React.Component {
     };
     const ok = await axios
       .put(`${server.address}/factura/${this.state.id}/obs&codp`, factura_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>

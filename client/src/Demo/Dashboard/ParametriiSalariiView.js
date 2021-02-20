@@ -38,7 +38,7 @@ class ParametriiSalariiView extends React.Component {
 
   deleteParametrii(id) {
     axios
-      .delete(`${server.address}/parametriisalariu/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/parametriisalariu/${id}`, { withCredentials: true })
       .then((response) => response.data)
       .then(() => {
         // console.log(response);
@@ -98,7 +98,7 @@ class ParametriiSalariiView extends React.Component {
     // e.preventDefault();
 
     let parametriiSalarii = await axios
-      .get(`${server.address}/parametriisalariu/`, { headers: authHeader() })
+      .get(`${server.address}/parametriisalariu/`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
@@ -142,7 +142,7 @@ class ParametriiSalariiView extends React.Component {
           valtichet: this.state.valtichet,
           date: this.state.date,
         },
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.data)
       .catch((err) =>

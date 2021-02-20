@@ -138,7 +138,7 @@ class EditPersoana extends React.Component {
   async getNumeintreg() {
     const persoane = await axios
       .get(`${server.address}/persoana/ids=${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -251,7 +251,7 @@ class EditPersoana extends React.Component {
     }
 
     const persoana = await axios
-      .get(`${server.address}/persoana/${id}`, { headers: authHeader() })
+      .get(`${server.address}/persoana/${id}`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
@@ -354,7 +354,7 @@ class EditPersoana extends React.Component {
 
     // update persoana
     await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, {
-      headers: authHeader(),
+      withCredentials: true,
     });
 
     // refresh numele angajatilor

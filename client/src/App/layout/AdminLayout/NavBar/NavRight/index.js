@@ -54,7 +54,7 @@ class NavRight extends Component {
   async onRefresh() {
     // const notificari = await axios
     //   .get(`${server.address}/notificare/userid/${this.state.user.id}/unread`, {
-    //     headers: authHeader(),
+    //     withCredentials: true,
     //   })
     //   .then((res) => res.data)
     //   .catch((err) => console.error(err));
@@ -66,7 +66,7 @@ class NavRight extends Component {
 
     const curs = await axios
       .get(`${server.address}/webparse/cursbnr`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -84,7 +84,7 @@ class NavRight extends Component {
 
   async readNotification(e) {
     await axios
-      .get(`${server.address}/notificare/${e.id}/read`, { headers: authHeader() })
+      .get(`${server.address}/notificare/${e.id}/read`, { withCredentials: true })
       .then(this.onRefresh)
       .catch((err) =>
         this.setState({
@@ -97,7 +97,7 @@ class NavRight extends Component {
   async readAllNotifications() {
     this.state.notificari.forEach(async (noti) => {
       axios
-        .get(`${server.address}/notificare/${noti.id}/read`, { headers: authHeader() })
+        .get(`${server.address}/notificare/${noti.id}/read`, { withCredentials: true })
         .then(this.onRefresh)
         .catch((err) =>
           this.setState({

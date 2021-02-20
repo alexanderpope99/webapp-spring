@@ -10,15 +10,15 @@ class UserService {
   }
 
   getUserBoard() {
-    return axios.get(API_URL + 'user', { headers: authHeader() });
+    return axios.get(API_URL + 'user', { withCredentials: true });
   }
 
   getModeratorBoard() {
-    return axios.get(API_URL + 'mod', { headers: authHeader() });
+    return axios.get(API_URL + 'mod', { withCredentials: true });
   }
 
   getAdminBoard() {
-    return axios.get(API_URL + 'admin', { headers: authHeader() });
+    return axios.get(API_URL + 'admin', { withCredentials: true });
   }
 }
 

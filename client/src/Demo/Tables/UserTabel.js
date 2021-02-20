@@ -84,7 +84,7 @@ class UserTabel extends React.Component {
 
   async getAngajatiFaraUser() {
     return await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&nu`, { headers: authHeader() })
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}&nu`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
@@ -97,7 +97,7 @@ class UserTabel extends React.Component {
   async init() {
     // get all societati
     var all_societati = await axios
-      .get(`${server.address}/societate`, { headers: authHeader() })
+      .get(`${server.address}/societate`, { withCredentials: true })
       .then((res) =>
         res.data ? res.data.map((societate) => ({ key: societate.id, label: societate.nume })) : []
       )
@@ -109,7 +109,7 @@ class UserTabel extends React.Component {
       );
     // get all roles
     var all_roles = await axios
-      .get(`${server.address}/role`, { headers: authHeader() })
+      .get(`${server.address}/role`, { withCredentials: true })
       .then((res) => (res.data ? res.data.map((role) => ({ key: role.id, label: role.name })) : []))
       .catch((err) =>
         this.setState({
@@ -122,7 +122,7 @@ class UserTabel extends React.Component {
       all_angajati_of_socsel_nouser = [];
     if (this.state.socsel) {
       all_angajati_of_socsel = await axios
-        .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { withCredentials: true })
         .then((res) => res.data)
         .catch((err) =>
           this.setState({
@@ -167,7 +167,7 @@ class UserTabel extends React.Component {
         : `${server.address}/user/${user.id}`;
       const ok = await axios
         .put(endpoint, user, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.status === 200)
         .catch((err) =>
@@ -188,7 +188,7 @@ class UserTabel extends React.Component {
       }
     } else if (method === 'post') {
       const ok = await axios
-        .post(`${server.address}/user`, user, { headers: authHeader() })
+        .post(`${server.address}/user`, user, { withCredentials: true })
         .then((res) => res.status === 200)
         .catch((err) =>
           this.setState({
@@ -323,7 +323,7 @@ class UserTabel extends React.Component {
 
   async deleteUser(id) {
     await axios
-      .delete(`${server.address}/user/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/user/${id}`, { withCredentials: true })
       .then(this.onRefresh)
       .catch((err) =>
         this.setState({
@@ -338,7 +338,7 @@ class UserTabel extends React.Component {
     // get users
     if (socsel) {
       const users = await axios
-        .get(`${server.address}/user/ids=${socsel.id}`, { headers: authHeader() })
+        .get(`${server.address}/user/ids=${socsel.id}`, { withCredentials: true })
         .then((res) => res.data)
         .catch((err) =>
           this.setState({
@@ -359,7 +359,7 @@ class UserTabel extends React.Component {
       }
     } else {
       const users = await axios
-        .get(`${server.address}/user/nos`, { headers: authHeader() })
+        .get(`${server.address}/user/nos`, { withCredentials: true })
         .then((res) => res.data)
         .catch((err) =>
           this.setState({

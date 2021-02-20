@@ -118,7 +118,7 @@ class AddSocietate extends React.Component {
     // if (!this.state.socsel) window.location.href = '/dashboard/societati';
 
     const societate = await axios
-      .get(`${server.address}/societate/${this.state.socsel.id}`, { headers: authHeader() })
+      .get(`${server.address}/societate/${this.state.socsel.id}`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
@@ -199,7 +199,7 @@ class AddSocietate extends React.Component {
       // put
       ok = await axios
         .put(`${server.address}/societate/${this.state.id}`, societate_body, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.status === 200)
         .catch((err) => console.error(err));
@@ -207,7 +207,7 @@ class AddSocietate extends React.Component {
       //post
       ok = await axios
         .post(`${server.address}/societate/${user.id}`, societate_body, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.status === 200)
         .catch((err) =>

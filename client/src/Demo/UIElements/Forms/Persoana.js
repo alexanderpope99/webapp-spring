@@ -165,7 +165,7 @@ class Persoana extends React.Component {
       .post(
         `${server.address}/angajat`,
         { idpersoana: idpersoana, idsocietate: this.state.socsel.id },
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .catch((err) => console.error(err));
     console.log(idpersoana, this.state.socsel);
@@ -210,7 +210,7 @@ class Persoana extends React.Component {
 
     const persoana = await axios
       .post(`${server.address}/angajat/ids=${this.state.socsel.id}/0`, angajat_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>

@@ -1,5 +1,7 @@
 import AuthService from './services/auth.service';
-const user = AuthService.getCurrentUser();
+
+const user = AuthService.user;
+console.log('menu items:', user);
 
 var items = [
   // DASHBOARD

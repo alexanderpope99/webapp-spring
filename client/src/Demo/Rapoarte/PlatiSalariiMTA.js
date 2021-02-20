@@ -85,7 +85,7 @@ class PlatiSalariiMTA extends React.Component {
 		let luna = this.state.luna;
 		let an = this.state.an;
 
-		const created = await axios.get(`${server.address}/mta/${this.state.socsel.id}&mo=${luna.nr}&y=${an}/${this.state.user.id}`, { headers: authHeader() })
+		const created = await axios.get(`${server.address}/mta/${this.state.socsel.id}&mo=${luna.nr}&y=${an}/${this.state.user.id}`, { withCredentials: true })
 			.then((res) => res.status === 200)
 			.catch((err) =>
 				this.setState({

@@ -33,7 +33,7 @@ class SocietatiTabel extends React.Component {
     // id = id.replace('"', '');
     // console.log(id);
     const response = axios
-      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/societate/${id}`, { withCredentials: true })
       .then((res) => res.data)
       .then(() => {
         console.log(response);
@@ -116,12 +116,12 @@ class SocietatiTabel extends React.Component {
     let uri = `${server.address}/societate/user/${user.id}`;
     if (user.roles.includes('ROLE_DIRECTOR')) uri = `${server.address}/societate/`;
 
-    let societati = await axios.get(uri, { headers: authHeader() }).then((res) => res.data);
+    let societati = await axios.get(uri, { withCredentials: true }).then((res) => res.data);
 
     societati = await Promise.all(
       societati.map(async (societate) => {
         let nrAngajati = await axios
-          .get(`${server.address}/angajat/ids=${societate.id}/count`, { headers: authHeader() })
+          .get(`${server.address}/angajat/ids=${societate.id}/count`, { withCredentials: true })
           .then((res) => res.data);
 
         return { ...societate, nrangajati: nrAngajati };

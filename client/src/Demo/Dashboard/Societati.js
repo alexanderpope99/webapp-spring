@@ -97,6 +97,20 @@ class Societati extends React.Component {
     });
   }
 
+  async componentDidMount() {
+    const user = await authService.getCurrentUser();
+    // console.log(user);
+    let today = new Date();
+    this.setState({
+      today: today,
+      luna: today.getMonth(),
+      an: today.getFullYear(),
+      user: user,
+      canAddSocietate: this.getAdaugaSocietatePermission(user),
+    }, () => { console.log(this.state.user); this.getSocietati() });
+    // await this.getSocietati();
+  }
+
   onChangeLocalitate(localitate) {
     if (!localitate) return;
     if (
@@ -134,36 +148,24 @@ class Societati extends React.Component {
       });
   }
 
-  getAdaugaSocietatePermission() {
-    const user = this.state.user;
+  getAdaugaSocietatePermission(user) {
     if (!user) return;
 
     if (user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR')) return true;
     return false;
   }
 
-  async componentDidMount() {
-    await this.getSocietati();
-    let today = new Date();
-    this.setState({
-      today: today,
-      luna: today.getMonth(),
-      an: today.getFullYear(),
-      canAddSocietate: this.getAdaugaSocietatePermission(),
-      // user: authService.getCurrentUser(),
-    });
-  }
-
   async getSocietati() {
     this.clearFields();
-    const user = authService.getCurrentUser();
+    const user = this.state.user;
     let uri = `${server.address}/societate/user/${user.id}`;
+    // console.log(user);
     if (user.roles.includes('ROLE_DIRECTOR')) {
       uri = `${server.address}/societate/`;
     }
     const societati_res = await axios
       .get(uri, {
-        headers: authHeader(),
+        withCredentials: true
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -223,7 +225,7 @@ class Societati extends React.Component {
 
   async deleteSocietate(id) {
     axios
-      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/societate/${id}`, { withCredentials: true })
       .then(() => {
         // alert(`Deleted ${id}`);
         setSocSel(null);
@@ -273,7 +275,7 @@ class Societati extends React.Component {
 
     const created = await axios
       .get(`${server.address}/stat/${socsel.id}/mo=${luna + 1}&y=${an}&i=-/${user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -296,11 +298,10 @@ class Societati extends React.Component {
 
     const created = await axios
       .get(
-        `${server.address}/dec112/${this.state.socsel.id}/mo=${
-          luna + 1
+        `${server.address}/dec112/${this.state.socsel.id}/mo=${luna + 1
         }&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
         {
-          headers: authHeader(),
+          withCredentials: true,
         }
       )
       .then((res) => res.status === 200)
@@ -324,7 +325,7 @@ class Societati extends React.Component {
 
     const created = await axios
       .get(`${server.address}/mta/${socsel.id}&mo=${luna + 1}&y=${an}/${user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -369,7 +370,7 @@ class Societati extends React.Component {
     // UPDATE SOCIETATE
     await axios
       .put(`${server.address}/societate/${this.state.id}`, societate_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then(() => {
         this.setState(
@@ -405,8 +406,8 @@ class Societati extends React.Component {
             onClick={
               this.state.societati[key].opacity === '.3'
                 ? () => {
-                    this.select(key);
-                  }
+                  this.select(key);
+                }
                 : null
             }
           >

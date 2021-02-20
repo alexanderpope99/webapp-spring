@@ -72,7 +72,7 @@ class BazaCalcul extends React.Component {
     let angajatSel = getAngajatSel();
     if (angajatSel) {
       let angajat = await axios
-        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { withCredentials: true })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
           this.setState({
@@ -100,7 +100,7 @@ class BazaCalcul extends React.Component {
     };
 
     let ok = await axios
-      .post(`${server.address}/bazacalcul`, bazacalcul_body, { headers: authHeader() })
+      .post(`${server.address}/bazacalcul`, bazacalcul_body, { withCredentials: true })
       .then((res) => res.status === 200)
       .catch((err) =>
         this.setState({
@@ -132,7 +132,7 @@ class BazaCalcul extends React.Component {
 
     const ok = await axios
       .put(`${server.address}/bazacalcul/${idbazacalcul}`, bazacalcul_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -168,7 +168,7 @@ class BazaCalcul extends React.Component {
 
   async deleteBazaCalcul(idbazacalcul) {
     axios
-      .delete(`${server.address}/bazacalcul/${idbazacalcul}`, { headers: authHeader() })
+      .delete(`${server.address}/bazacalcul/${idbazacalcul}`, { withCredentials: true })
       .then((response) => response.data)
       .then(this.fillTable)
       .catch((err) =>
@@ -263,7 +263,7 @@ class BazaCalcul extends React.Component {
     if (this.state.angajat) {
       const bazacalcul = await axios
         .get(`${server.address}/bazacalcul/ida=${this.state.angajat.idpersoana}`, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.data)
         .catch((err) =>

@@ -249,7 +249,7 @@ class RealizariRetineri extends React.Component {
 	async setPersoane() {
 		//* only people with contract <- &c flag
 		const persoane = await axios
-			.get(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, { headers: authHeader() })
+			.get(`${server.address}/persoana/ids=${this.state.socsel.id}&c`, { withCredentials: true })
 			.then((res) => (res.status === 200 ? res.data : null))
 			.catch((err) =>
 				this.setState({
@@ -272,7 +272,7 @@ class RealizariRetineri extends React.Component {
 	async getTotalPensie() {
 		const totalpensiefacan = await axios
 			.get(`${server.address}/retineri/${this.state.idcontract}/pensiefac/${this.state.an}`, {
-				headers: authHeader(),
+				withCredentials: true,
 			})
 			.then((res) => (res.status === 200 ? res.data : null))
 			.catch((err) => console.error(err));
@@ -299,7 +299,7 @@ class RealizariRetineri extends React.Component {
 
 		// get contract by idpersoana :: contract body needed for 4 fields
 		const contract = await axios
-			.get(`${server.address}/contract/idp=${idpersoana}`, { headers: authHeader() })
+			.get(`${server.address}/contract/idp=${idpersoana}`, { withCredentials: true })
 			.then((res) => (res.status === 200 ? res.data : null))
 			.catch((err) =>
 				this.setState({
@@ -319,7 +319,7 @@ class RealizariRetineri extends React.Component {
 				`${server.address}/realizariretineri/save/idc=${contract.id}&mo=${luna}&y=${an}`,
 				{ body: null },
 				{
-					headers: authHeader(),
+					withCredentials: true,
 				}
 			)
 			.then((res) => (res.status === 200 ? res.data : null))
@@ -474,7 +474,7 @@ class RealizariRetineri extends React.Component {
 						imprumuturi: this.state.imprumuturi || 0,
 					},
 					{
-						headers: authHeader(),
+						withCredentials: true,
 					}
 				)
 				.then((res) => res.status === 200)
@@ -496,7 +496,7 @@ class RealizariRetineri extends React.Component {
 			.put(
 				`${server.address}/realizariretineri/update/calc`,
 				rrDetails,
-				{ headers: authHeader() }
+				{ withCredentials: true }
 			)
 			.then((res) => (res.status === 200 ? res.data : null))
 			.catch((err) =>
@@ -541,7 +541,7 @@ class RealizariRetineri extends React.Component {
 			.put(
 				`${server.address}/realizariretineri/recalc/ultimele6/idc=${this.state.idcontract}&mo=${luna.nr}&y=${an}`,
 				{},
-				{ headers: authHeader() }
+				{ withCredentials: true }
 			)
 			.then((res) => res.status === 200)
 			.catch((err) =>
@@ -576,7 +576,7 @@ class RealizariRetineri extends React.Component {
 			.put(
 				`${server.address}/realizariretineri/recalc/societate/ids=${this.state.socsel.id}&mo=${luna.nr}&y=${an}`,
 				{},
-				{ headers: authHeader() }
+				{ withCredentials: true }
 			)
 			.then((res) => res.status === 200)
 			.catch((err) =>
@@ -610,7 +610,7 @@ class RealizariRetineri extends React.Component {
 		let luna = this.state.luna.nr;
 		let an = this.state.an;
 		let nrTichete = await axios
-			.get(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, { headers: authHeader() })
+			.get(`${server.address}/tichete/nr/idc=${idc}&mo=${luna}&y=${an}`, { withCredentials: true })
 			.then((res) => res.data)
 			.catch((err) =>
 				this.setState({
@@ -629,7 +629,7 @@ class RealizariRetineri extends React.Component {
 
 	async preiaCursCurent() {
 		let curs = await axios
-			.get(`${server.address}/webparse/cursbnr`, { headers: authHeader() })
+			.get(`${server.address}/webparse/cursbnr`, { withCredentials: true })
 			.then((res) => res.data)
 			.catch((err) =>
 				this.setState({
@@ -648,7 +648,7 @@ class RealizariRetineri extends React.Component {
 	async getOresuplimentare(idc, luna, an) {
 		const oresuplimentare = await axios
 			.get(`${server.address}/oresuplimentare/api/idc=${idc}&mo=${luna}&y=${an}`, {
-				headers: authHeader(),
+				withCredentials: true,
 			})
 			.then((res) => res.data)
 			.catch((err) =>
@@ -687,7 +687,7 @@ class RealizariRetineri extends React.Component {
 
 		await axios
 			.post(`${server.address}/oresuplimentare`, ore_body, {
-				headers: authHeader(),
+				withCredentials: true,
 			})
 			.then(this.renderTabelore)
 			.catch((err) =>
@@ -702,7 +702,7 @@ class RealizariRetineri extends React.Component {
 
 	async deleteOra(id) {
 		await axios
-			.delete(`${server.address}/oresuplimentare/${id}`, { headers: authHeader() })
+			.delete(`${server.address}/oresuplimentare/${id}`, { withCredentials: true })
 			.then(this.renderTabelore)
 			.catch((err) =>
 				this.setState({
@@ -792,7 +792,7 @@ class RealizariRetineri extends React.Component {
 		const ok = await axios
 			.get(
 				`${server.address}/stat/${this.state.socsel.id}/individual/ida=${idangajat}&mo=${luna.nr}&y=${an}/${user.id}`,
-				{ headers: authHeader() }
+				{ withCredentials: true }
 			)
 			.then((res) => res.status === 200)
 			.catch((err) =>

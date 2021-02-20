@@ -46,7 +46,7 @@ class AngajatiTabelView extends React.Component {
 
   deleteAngajat(id) {
     axios
-      .delete(`${server.address}/angajat/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/angajat/${id}`, { withCredentials: true })
       .then((response) => response.data)
       .then(() => {
         // console.log(response);
@@ -81,7 +81,7 @@ class AngajatiTabelView extends React.Component {
 
   async onRefresh() {
     const angajati = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({

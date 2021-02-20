@@ -171,7 +171,7 @@ class Contract extends React.Component {
 
     const superiori = await axios
       .get(`${server.address}/angajat/superiori-posibili/${this.state.angajatsel.idpersoana}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) =>
         res.data
@@ -195,7 +195,7 @@ class Contract extends React.Component {
   async getCentreCost() {
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => (res.status === 200 ? res.data : null))
       .catch((err) =>
@@ -217,7 +217,7 @@ class Contract extends React.Component {
 
     const angajat = await axios
       .get(`${server.address}/angajat/expand/${angajatsel.idpersoana}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -399,7 +399,7 @@ class Contract extends React.Component {
     if (this.state.angajat.contract) {
       contract = await axios
         .put(`${server.address}/contract/${this.state.id}`, contract_body, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
@@ -411,7 +411,7 @@ class Contract extends React.Component {
     } else {
       contract = await axios
         .post(`${server.address}/contract/${this.state.angajat.idpersoana}`, contract_body, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
@@ -429,7 +429,7 @@ class Contract extends React.Component {
           .put(
             `${server.address}/angajat/superior/${this.state.angajat.idpersoana}&${this.state.superior.id}`,
             {},
-            { headers: authHeader() }
+            { withCredentials: true }
           )
           .then((res) => res.status === 200)
           .catch((err) =>

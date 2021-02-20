@@ -57,7 +57,7 @@ class Stat extends React.Component {
     const created = await axios
       .get(
         `${server.address}/stat/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&i=${i}/${this.state.user.id}`,
-        { headers: authHeader() }
+        { withCredentials: true }
       )
       .then((res) => res.data)
       .catch((err) =>

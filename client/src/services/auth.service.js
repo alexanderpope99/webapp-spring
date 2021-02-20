@@ -11,7 +11,7 @@ class AuthService {
     this.roles = [];
     this.user = null;
 
-    console.log('auth.service constructed now');
+    console.log('auth.service constructed');
   }
 
   async init() {
@@ -30,8 +30,15 @@ class AuthService {
 
   async getCurrentUser() {
     const user = await axios.get(`${server.address}/user/from-cookie`, { withCredentials: true }).then(res => res.data).catch(err => console.error(err));
-    console.log('user from cookies:', user);
+    this.user = user;
+    this.token = user.accessToken;
+    this.roles = user.roles;
+    // console.log('user from cookies:', user);
     return user;
+  }
+
+  getCurrentUserSession() {
+    return JSON.parse(sessionStorage.getItem('user'));
   }
 
   async login(username, password) {
@@ -55,7 +62,7 @@ class AuthService {
         gen: response.data.gen,
       };
 
-      sessionStorage.setItem('user', JSON.stringify(response.data));
+      // sessionStorage.setItem('user', JSON.stringify(response.data));
     }
     return response.data;
   }
@@ -89,20 +96,16 @@ class AuthService {
     ok = await axios
       .put(API_URL + `update-profile/${uid}`, { email: email, gen: gen })
       .then((res) => res.status === 200)
-      .catch((err) => console.error('auth.service.js :: line: 44\n', err));
+      .catch((err) => console.error(err));
     if (ok) {
       console.log('Updated profile!');
-      let user = JSON.parse(sessionStorage.getItem('user'));
+      let user = await this.getCurrentUser();
       user.gen = gen;
       user.email = email;
-      sessionStorage.setItem('user', JSON.stringify(user));
+      // sessionStorage.setItem('user', JSON.stringify(user));
       window.location.reload();
     }
     return ok;
-  }
-
-  setUser(user) {
-    sessionStorage.setItem('user', JSON.stringify(user));
   }
 
   async getTokenFromCookie() {

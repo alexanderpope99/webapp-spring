@@ -132,7 +132,7 @@ class Dec112 extends React.Component {
 			.get(
 				`${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
 				{
-					headers: authHeader(),
+					withCredentials: true,
 				}
 			)
 			.then((res) => res.status === 200)
@@ -159,7 +159,7 @@ class Dec112 extends React.Component {
 			.get(
 				`${server.address}/dec112/${this.state.socsel.id}/mo=${luna.nr}&y=${an}&drec=${d_rec}&numeDec=${numeDec}&prenumeDec=${prenumeDec}&functieDec=${functieDec}/${this.state.user.id}`,
 				{
-					headers: authHeader(),
+					withCredentials: true,
 				}
 			)
 			.then((res) => res.status === 200)

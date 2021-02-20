@@ -60,7 +60,7 @@ class AddUser extends React.Component {
     };
     // ADD User TO DATABASE
     await axios
-      .post(`${server.address}/user`, user_body, { headers: authHeader() })
+      .post(`${server.address}/user`, user_body, { withCredentials: true })
       .then((user) => user.data)
       .then(() => {
         this.setState({

@@ -21,7 +21,7 @@ class Notificari extends React.Component {
   async onRefresh() {
     // eslint-disable-next-line no-unused-vars
     const notificari = await axios
-      .get(`${server.address}/notificare/userid/${this.state.user.id}`, { headers: authHeader() })
+      .get(`${server.address}/notificare/userid/${this.state.user.id}`, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) => console.error(err));
   }

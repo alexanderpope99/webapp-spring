@@ -156,7 +156,7 @@ class SocietatiView extends React.Component {
     }
     const societati_res = await axios
       .get(uri, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -206,7 +206,7 @@ class SocietatiView extends React.Component {
 
   async deleteSocietate(id) {
     axios
-      .delete(`${server.address}/societate/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/societate/${id}`, { withCredentials: true })
       .then(() => {
         // alert(`Deleted ${id}`);
         setSocSel(null);
@@ -254,7 +254,7 @@ class SocietatiView extends React.Component {
 
     const created = await axios
       .get(`${server.address}/stat/${socsel.id}/mo=${luna + 1}&y=${an}&i=-/${user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -279,7 +279,7 @@ class SocietatiView extends React.Component {
           luna + 1
         }&y=${an}&drec=0&numeDec=-}&prenumeDec=-&functieDec=-/${this.state.user.id}`,
         {
-          headers: authHeader(),
+          withCredentials: true,
         }
       )
       .then((res) => res.status === 200)
@@ -301,7 +301,7 @@ class SocietatiView extends React.Component {
 
     const created = await axios
       .get(`${server.address}/mta/${socsel.id}&mo=${luna + 1}&y=${an}/${user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -344,7 +344,7 @@ class SocietatiView extends React.Component {
     // UPDATE SOCIETATE
     await axios
       .put(`${server.address}/societate/${this.state.id}`, societate_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then(() => {
         this.setState(

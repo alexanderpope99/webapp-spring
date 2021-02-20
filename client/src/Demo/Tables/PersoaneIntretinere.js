@@ -67,7 +67,7 @@ class PersoaneIntretinereTabel extends React.Component {
     let angajatSel = getAngajatSel();
     if (angajatSel) {
       let angajat = await axios
-        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { headers: authHeader() })
+        .get(`${server.address}/angajat/${angajatSel.idpersoana}`, { withCredentials: true })
         .then((res) => (res.status === 200 ? res.data : null))
         .catch((err) =>
           this.setState({
@@ -99,7 +99,7 @@ class PersoaneIntretinereTabel extends React.Component {
     };
 
     let ok = await axios
-      .post(`${server.address}/persoanaintretinere`, persoana_body, { headers: authHeader() })
+      .post(`${server.address}/persoanaintretinere`, persoana_body, { withCredentials: true })
       .then((res) => res.status === 200)
       .catch((err) =>
         this.setState({
@@ -134,7 +134,7 @@ class PersoaneIntretinereTabel extends React.Component {
 
     const ok = await axios
       .put(`${server.address}/persoanaintretinere/${idpers}`, persoana_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -174,7 +174,7 @@ class PersoaneIntretinereTabel extends React.Component {
 
   async deletePersoana(id) {
     axios
-      .delete(`${server.address}/persoanaintretinere/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/persoanaintretinere/${id}`, { withCredentials: true })
       .then((response) => response.data)
       .then(this.fillTable)
       .catch((err) =>
@@ -211,7 +211,7 @@ class PersoaneIntretinereTabel extends React.Component {
     if (this.state.angajat) {
       const persoane = await axios
         .get(`${server.address}/persoanaintretinere/ida=${this.state.angajat.idpersoana}`, {
-          headers: authHeader(),
+          withCredentials: true,
         })
         .then((res) => res.data)
         .catch((err) =>

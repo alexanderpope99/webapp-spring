@@ -91,7 +91,7 @@ class CereriConcediuTabel extends React.Component {
     };
 
     let ok = await axios
-      .post(`${server.address}/cerericoncediu`, cerereConcediu_body, { headers: authHeader() })
+      .post(`${server.address}/cerericoncediu`, cerereConcediu_body, { withCredentials: true })
       .then((res) => res.status === 200)
       .catch((res) => res.status === 200)
       .catch((err) =>
@@ -127,7 +127,7 @@ class CereriConcediuTabel extends React.Component {
 
     const ok = await axios
       .put(`${server.address}/cerericoncediu/${idcerere}`, cerereConcediu_body, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((res) => res.status === 200)
@@ -151,7 +151,7 @@ class CereriConcediuTabel extends React.Component {
   async getZileCoDisponibile() {
     const angajat = await axios
       .get(`${server.address}/angajat/socid=${this.state.socsel.id}/usrid=${this.state.user.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -165,7 +165,7 @@ class CereriConcediuTabel extends React.Component {
     });
     await axios
       .get(`${server.address}/co/zilecodisponibile/idc=${angajat.contract.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => this.setState({ zile_co_disponibile: res.data }))
       .catch((err) =>
@@ -208,7 +208,7 @@ class CereriConcediuTabel extends React.Component {
 
   async deleteCerere(id) {
     await axios
-      .delete(`${server.address}/cerericoncediu/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/cerericoncediu/${id}`, { withCredentials: true })
       .then((response) => response.data)
       .then(this.onRefresh)
       .catch((res) => res.status === 200)
@@ -319,7 +319,7 @@ class CereriConcediuTabel extends React.Component {
       .get(
         `${server.address}/cerericoncediu/usersoc/${this.state.user.id}&${this.state.socsel.id}`,
         {
-          headers: authHeader(),
+          withCredentials: true,
         }
       )
       .then((res) => res.data)

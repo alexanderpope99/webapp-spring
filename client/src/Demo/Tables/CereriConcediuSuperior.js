@@ -34,7 +34,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
 
   async approveCerereConcediu(cer) {
     axios
-      .put(`${server.address}/cerericoncediu/statusappr/${cer.id}`, {}, { headers: authHeader() })
+      .put(`${server.address}/cerericoncediu/statusappr/${cer.id}`, {}, { withCredentials: true })
       .then((response) => response.data)
       .then(this.onRefresh)
       .catch((err) =>
@@ -47,7 +47,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
 
   async rejectCerereConcediu(cer) {
     axios
-      .put(`${server.address}/cerericoncediu/statusrej/${cer.id}`, {}, { headers: authHeader() })
+      .put(`${server.address}/cerericoncediu/statusrej/${cer.id}`, {}, { withCredentials: true })
       .then((response) => response.data)
       .then(this.onRefresh)
       .catch((err) =>
@@ -186,7 +186,7 @@ class CereriConcediuSuperiorTabel extends React.Component {
   async onRefresh() {
     let cereriConcediu = await axios
       .get(`${server.address}/cerericoncediu/soc/${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>

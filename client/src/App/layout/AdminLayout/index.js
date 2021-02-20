@@ -31,8 +31,6 @@ class AdminLayout extends Component {
   }
 
   render() {
-		console.log('AdminLayout');
-
     const pageContents = routes.map((route, index) => {
       return route.component ? (
         <Route
@@ -57,13 +55,7 @@ class AdminLayout extends Component {
                 <div className="main-body">
                   <div className="page-wrapper">
                     <Suspense fallback={<Loader />}>
-                      <Switch>
-                        {sessionStorage.getItem('user') === null ? (
-                          <Redirect to="/auth/signin-1" />
-                        ) : (
-                          pageContents
-                        )}
-                        <Redirect from="/" to={this.props.defaultPath} />
+                      <Switch>{pageContents}<Redirect from="/" to={this.props.defaultPath} />
                       </Switch>
                     </Suspense>
                   </div>

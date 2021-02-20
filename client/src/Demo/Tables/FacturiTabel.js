@@ -114,7 +114,7 @@ class FacturiTabel extends React.Component {
     }
 
     let ok = await axios
-      .post(`${server.address}/factura/`, formData, { headers: authHeader() })
+      .post(`${server.address}/factura/`, formData, { withCredentials: true })
       .then((res) => res.data)
       .catch((err) =>
         this.setState({
@@ -170,7 +170,7 @@ class FacturiTabel extends React.Component {
 
     const ok = await axios
       .put(`${server.address}/factura/${idfactura}/${withFileUri}`, formData, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.status === 200)
       .catch((err) =>
@@ -226,7 +226,7 @@ class FacturiTabel extends React.Component {
 
   async deleteFactura(id) {
     await axios
-      .delete(`${server.address}/factura/${id}`, { headers: authHeader() })
+      .delete(`${server.address}/factura/${id}`, { withCredentials: true })
       .then(this.onRefresh)
       .catch((err) =>
         this.setState({
@@ -374,7 +374,7 @@ class FacturiTabel extends React.Component {
   async onRefresh() {
     const centreCost = await axios
       .get(`${server.address}/centrucost/ids=${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -385,7 +385,7 @@ class FacturiTabel extends React.Component {
       );
     const aprobatori = await axios
       .get(`${server.address}/angajat/ids=${this.state.socsel.id}&u`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
@@ -396,7 +396,7 @@ class FacturiTabel extends React.Component {
       );
     const fact = await axios
       .get(`${server.address}/factura/idsoc/${this.state.socsel.id}`, {
-        headers: authHeader(),
+        withCredentials: true,
       })
       .then((res) => res.data)
       .catch((err) =>
