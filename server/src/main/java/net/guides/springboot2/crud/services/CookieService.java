@@ -10,7 +10,7 @@ public class CookieService {
 
 	public HttpServletResponse setCookie(String key, String value, HttpServletResponse response) {
 		Cookie cookie = new Cookie(key, value);
-		cookie.setPath("/cookie/" + key);
+		cookie.setPath("/");
 		response.addCookie(cookie);
 		return response;
 	}
@@ -18,7 +18,7 @@ public class CookieService {
 	public HttpServletResponse deleteCookie(String key, HttpServletResponse response) {
 		Cookie cookie = new Cookie(key, null);
 		cookie.setMaxAge(0);
-		cookie.setPath("/cookie/" + key);
+		cookie.setPath("/");
 		response.addCookie(cookie);
 		return response;
 	}
