@@ -65,10 +65,10 @@ class Societate extends React.Component {
 
       showToast: false,
       toastMessage: '',
-	  
-	  fisier:null,
-	  numefisier:'',
-	  idfisier:'',
+
+      fisier: null,
+      numefisier: '',
+      idfisier: '',
     };
   }
 
@@ -92,9 +92,9 @@ class Societate extends React.Component {
       centreCost: [], // array containing CentruCost objects
       centruCost: null, // details for add/edit modal
 
-	  fisier:null,
-	  numefisier:'',
-	  idfisier:'',
+      fisier: null,
+      numefisier: '',
+      idfisier: '',
     });
   }
 
@@ -152,9 +152,9 @@ class Societate extends React.Component {
           telefon: societate.telefon || '',
           fax: societate.fax || '',
 
-		  fisier:societate.imagine || null,
-		  numefisier:societate.imagine ? societate.imagine.nume : null,
-		  idfisier:societate.imagine ? societate.imagine.id : null,
+          fisier: societate.imagine || null,
+          numefisier: societate.imagine ? societate.imagine.nume : null,
+          idfisier: societate.imagine ? societate.imagine.id : null,
         },
         () => this.onChangeLocalitate(societate.adresa.localitate)
       );
@@ -169,9 +169,9 @@ class Societate extends React.Component {
         email: societate.email || '',
         telefon: societate.telefon || '',
         fax: societate.fax || '',
-		fisier:societate.imagine || null,
-		numefisier:societate.imagine ? societate.imagine.nume : null,
-		idfisier:societate.imagine ? societate.imagine.id : null,
+        fisier: societate.imagine || null,
+        numefisier: societate.imagine ? societate.imagine.nume : null,
+        idfisier: societate.imagine ? societate.imagine.id : null,
       });
     }
   }
@@ -187,10 +187,10 @@ class Societate extends React.Component {
       console.log(err);
     }
 
-	const formData = new FormData();
+    const formData = new FormData();
     if (this.state.numefisier) formData.append('fisier', this.state.fisier);
 
-	// MAI TREBUIE LUCRAT AICI PUȚIN
+    // MAI TREBUIE LUCRAT AICI PUȚIN
     if (this.state.numefisier) {
       // put
       await axios
@@ -230,7 +230,7 @@ class Societate extends React.Component {
       email: this.state.email || null,
       telefon: this.state.telefon || null,
       fax: this.state.fax || null,
-	  idimagine:this.state.idfisier || null,
+      idimagine: this.state.idfisier || null,
 
       centreCost: null,
     };
@@ -273,14 +273,14 @@ class Societate extends React.Component {
       return sectoareOptions;
     };
 
-	const handleChangeStatus = ({ file }, status) => {
-		if (status === 'done') {
-		  console.log(status, file);
-		  
+    const handleChangeStatus = ({ file }, status) => {
+      if (status === 'done') {
+        console.log(status, file);
 
-		  this.setState({ fisier: file, numefisier: file.name });
-		}
-	  };
+
+        this.setState({ fisier: file, numefisier: file.name });
+      }
+    };
 
     return (
       <Aux>
@@ -463,39 +463,39 @@ class Societate extends React.Component {
                         }
                       />
                     </Form.Group>
-					<Form.Group as={Col} md="12">
-                  <Form.Label>Imagine</Form.Label>
-                  {this.state.numefisier ? (
-                    <div>
-                      <Button
-                        variant="dark"
-                        onClick={() => downloadImagineSocietate(this.state.numefisier, this.state.idfisier)}
-                      >
-                        {this.state.numefisier}
+                    <Form.Group as={Col} md="12">
+                      <Form.Label>Imagine</Form.Label>
+                      {this.state.numefisier ? (
+                        <div>
+                          <Button
+                            variant="dark"
+                            onClick={() => downloadImagineSocietate(this.state.numefisier, this.state.idfisier)}
+                          >
+                            {this.state.numefisier}
+                          </Button>
+                          <Button
+                            variant="link"
+                            onClick={() =>
+                              this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
+                            }
+                          >
+                            Șterge
                       </Button>
-                      <Button
-                        variant="link"
-                        onClick={() =>
-                          this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
-                        }
-                      >
-                        Șterge
-                      </Button>
-                    </div>
-                  ) : (
-                    <Dropzone
-                      inputContent="Puneți imaginea aici"
-                      onChangeStatus={handleChangeStatus}
-                      maxFiles={1}
-                    />
-                  )}
-                </Form.Group>
+                        </div>
+                      ) : (
+                          <Dropzone
+                            inputContent="Puneți imaginea aici"
+                            onChangeStatus={handleChangeStatus}
+                            maxFiles={1}
+                          />
+                        )}
+                    </Form.Group>
                   </Row>
 
                   {this.state.isEdit ? (
                     <React.Fragment>
                       {/* CONT BANCAR */}
-											<Col md={12}>
+                      <Col md={12}>
                         <Card className="mt-2">
                           <Card.Header
                             style={{ cursor: 'pointer' }}
@@ -523,9 +523,9 @@ class Societate extends React.Component {
                           </Collapse>
                         </Card>
                       </Col>
-                      
-											{/* CENTRE COST */}
-											<Col md={12}>
+
+                      {/* CENTRE COST */}
+                      <Col md={12}>
                         <Card className="mt-2">
                           <Card.Header
                             style={{ cursor: 'pointer' }}

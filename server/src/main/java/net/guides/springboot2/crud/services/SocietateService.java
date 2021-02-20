@@ -23,13 +23,11 @@ public class SocietateService {
 	private ModelMapper modelMapper;
 
 	public Societate findById(int idsocietate) throws ResourceNotFoundException {
-		return societateRepository.findById(idsocietate)
-		.orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+		return societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 	}
 
 	public Societate save(SocietateDTO societateDTO) throws ResourceNotFoundException {
-		Fisier fisier = fisierRepository.findById(societateDTO.getIdimagine())
-		.orElseThrow(() -> new ResourceNotFoundException("Nu există user cu id: " +societateDTO.getIdimagine()));
+		Fisier fisier = fisierRepository.findById(societateDTO.getIdimagine()).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + societateDTO.getIdimagine()));
 		Societate societate = modelMapper.map(societateDTO, Societate.class);
 		societate.setImagine(fisier);
 

@@ -90,7 +90,7 @@ public class Societate implements Serializable {
 	private List<Caiet> caiete;
 
 	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idimagine", referencedColumnName = "id")
 	private Fisier imagine;
 
