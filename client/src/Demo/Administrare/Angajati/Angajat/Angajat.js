@@ -132,10 +132,12 @@ class Angajat extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>
                 {this.state.socsel.nume}
               </Breadcrumb.Item>
-              <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/tables/angajati' }}>
+                Angajați
+              </Breadcrumb.Item>
               <Breadcrumb.Item active>Detalii angajat</Breadcrumb.Item>
             </Breadcrumb>
             <h5 className="m-0">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { Row, Col, Card, Button, Toast, Modal, Form, Breadcrumb } from 'react-bootstrap';
@@ -388,7 +389,7 @@ export default class CaieteTabel extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>
                 {this.state.socsel.nume}
               </Breadcrumb.Item>
               <Breadcrumb.Item active>Caiete</Breadcrumb.Item>

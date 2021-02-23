@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Row,
 	Col,
@@ -720,8 +721,8 @@ class RealizariRetineriView extends React.Component {
         </Modal>
 
         <Breadcrumb style={{ fontSize: '12px' }}>
-          <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
-          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>{this.state.socsel.nume}</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/tables/angajati' }}>Angajați</Breadcrumb.Item>
           <Breadcrumb.Item active>Realizări & Rețineri</Breadcrumb.Item>
         </Breadcrumb>
 

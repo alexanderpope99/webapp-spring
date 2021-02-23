@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Col, Card, Table, Button, Modal, Form, Breadcrumb, Toast } from 'react-bootstrap';
 import { Trash2, Edit3, Plus, RotateCw } from 'react-feather';
@@ -13,6 +14,7 @@ import { getSocSel } from '../../Resources/socsel';
 import { judete, sectoare } from '../../Resources/judete';
 
 import authHeader from '../../../services/auth-header';
+
 
 export default class ClientiTabel extends React.Component {
   constructor() {
@@ -533,7 +535,7 @@ export default class ClientiTabel extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>
                 {this.state.socsel.nume}
               </Breadcrumb.Item>
               <Breadcrumb.Item active>Clienți</Breadcrumb.Item>

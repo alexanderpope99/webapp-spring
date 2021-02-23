@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Row, Col, Tabs, Tab, Breadcrumb } from 'react-bootstrap';
 import Aux from '../../../hoc/_Aux';
 import ActivitatiTabel from './ActivitatiTabel';
@@ -48,7 +49,7 @@ export default class Facturi extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>
                 {this.state.socsel.nume}
               </Breadcrumb.Item>
               <Breadcrumb.Item active>Facturi</Breadcrumb.Item>

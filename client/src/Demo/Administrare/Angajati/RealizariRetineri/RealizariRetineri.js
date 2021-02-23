@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -1096,8 +1097,12 @@ class RealizariRetineri extends React.Component {
         </Modal>
 
         <Breadcrumb style={{ fontSize: '12px' }}>
-          <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
-          <Breadcrumb.Item href="/tables/angajati">Angajați</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>
+            {this.state.socsel.nume}
+          </Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/tables/angajati' }}>
+            Angajați
+          </Breadcrumb.Item>
           <Breadcrumb.Item active>Realizări & Rețineri</Breadcrumb.Item>
         </Breadcrumb>
 
@@ -1159,9 +1164,11 @@ class RealizariRetineri extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button href="/forms/angajat" variant="outline-info" className="pb-0">
-                    <Info size={20} className="m-0" />
-                  </Button>
+                  <Link to="/forms/angajat">
+                    <Button variant="outline-info" className="pb-2">
+                      <Info size={20} className="m-0" />
+                    </Button>
+                  </Link>
                 </OverlayTrigger>
               </InputGroup.Append>
             </InputGroup>
@@ -1447,7 +1454,7 @@ class RealizariRetineri extends React.Component {
                     </Col>
                     <Col md={6}>
                       <Form.Group id="restplata">
-                        <Form.Label>Rest de plată brut</Form.Label>
+                        <Form.Label>Rest de plată net</Form.Label>
                         <Form.Control
                           type="text"
                           disabled
@@ -1648,22 +1655,6 @@ class RealizariRetineri extends React.Component {
                             <Form.Group id="zileplatite" as={Col} md="6">
                               <Form.Label>Zile plătite</Form.Label>
                               <Form.Control type="number" value={this.state.zileplatite} disabled />
-                            </Form.Group>
-                            <Form.Group id="restplatanet" as={Col} md="6">
-                              <Form.Label>Rest plata net</Form.Label>
-                              <Form.Control
-                                type="number"
-                                value={this.state.restplata - this.state.valoaretichete}
-                                disabled
-                              />
-                            </Form.Group>
-                            <Form.Group id="zileconeefectuat" as={Col} md="6">
-                              <Form.Label>Rest plata net</Form.Label>
-                              <Form.Control
-                                type="number"
-                                value={this.state.restplata - this.state.valoaretichete}
-                                disabled
-                              />
                             </Form.Group>
                           </Row>
                         </Card.Body>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Aux from '../../hoc/_Aux';
 import { Breadcrumb } from 'react-bootstrap';
 import { getSocSel } from '../Resources/socsel';
@@ -24,7 +25,7 @@ class Rapoarte extends React.Component {
     return (
       <Aux>
         <Breadcrumb style={{ fontSize: '12px' }}>
-          <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>{this.state.socsel.nume}</Breadcrumb.Item>
           <Breadcrumb.Item active>Rapoarte</Breadcrumb.Item>
         </Breadcrumb>
         <Stat />

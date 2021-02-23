@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import {
   Row,
   Col,
   Card,
   Button,
-  Table,
   OverlayTrigger,
   Tooltip,
   Breadcrumb,
@@ -230,20 +230,23 @@ class AngajatiTabel extends React.Component {
           </Tooltip>
         }
       >
-        <Button
-          disabled={!row.contract.id}
-          onClick={() => {
+        <Link
+          to="/forms/realizari-retineri"
+          onClick={() =>
             setAngajatSel({
               idpersoana: row.persoana.id,
               numeintreg: row.persoana.nume + ' ' + row.persoana.prenume,
-            });
-            window.location.href = `/forms/realizari-retineri`;
-          }}
-          variant="outline-secondary"
-          className="ml-2 p-1 rounded-circle border-0"
+            })
+          }
         >
-          <FileText size={20} />
-        </Button>
+          <Button
+            disabled={!row.contract.id}
+            variant="outline-secondary"
+            className="ml-2 p-1 rounded-circle border-0"
+          >
+            <FileText size={20} />
+          </Button>
+        </Link>
       </OverlayTrigger>
 
       {/* DATE PERSONALE BUTTON */}
@@ -255,19 +258,16 @@ class AngajatiTabel extends React.Component {
           </Tooltip>
         }
       >
-        <Button
-          onClick={() => {
-            setAngajatSel({
+				<Link to="/forms/angajat" onClick={() => setAngajatSel({
               idpersoana: row.persoana.id,
               numeintreg: row.persoana.nume + ' ' + row.persoana.prenume,
-            });
-            window.location.href = `/forms/angajat`;
-          }}
+            })}>
+        <Button
           variant="outline-secondary"
           className="ml-2 p-1 rounded-circle border-0"
         >
           <Info size={20} />
-        </Button>
+        </Button></Link>
       </OverlayTrigger>
 
       <PopupState variant="popover" popupId="demo-popup-popover">
@@ -333,7 +333,7 @@ class AngajatiTabel extends React.Component {
         dataField: 'any',
         text: '#',
         formatter: (cell, row, rowIndex) => rowIndex + 1,
-				headerStyle: {width: '50px'},
+        headerStyle: { width: '50px' },
       },
       {
         dataField: 'persoana.nume',
@@ -381,8 +381,8 @@ class AngajatiTabel extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">
-                {this.state.socsel ? this.state.socsel.nume : ''}
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>
+                {this.state.socsel ? this.state.socsel.nume : 'Societate'}
               </Breadcrumb.Item>
               <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
             </Breadcrumb>
@@ -418,14 +418,15 @@ class AngajatiTabel extends React.Component {
                     </Tooltip>
                   }
                 >
-                  <Button
-                    href="/forms/add-persoana"
-                    variant="outline-info"
-                    size="sm"
-                    style={{ fontSize: '1.25rem', float: 'right' }}
-                  >
-                    <UserPlus className="m-0 p-0" />
-                  </Button>
+                  <Link to="/forms/add-persoana">
+                    <Button
+                      variant="outline-info"
+                      size="sm"
+                      style={{ fontSize: '1.25rem', float: 'right' }}
+                    >
+                      <UserPlus className="m-0 p-0" />
+                    </Button>
+                  </Link>
                 </OverlayTrigger>
               </Card.Header>
               <Card.Body>

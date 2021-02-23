@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Dropdown, Toast } from 'react-bootstrap';
 
 import Aux from '../../../../../hoc/_Aux';
@@ -191,24 +192,6 @@ class NavRight extends Component {
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
         <ul className="navbar-nav ml-auto">
-          {/* <li>
-            <Dropdown onClick={(e) => e.stopPropagation()}>
-              <Dropdown.Toggle variant="link" id="dropdown-basic">
-                {notificari.length > 0 ? (
-                  <Circle style={{ width: '7.5', height: '7.5' }} fill="red" />
-                ) : (
-                  ''
-                )}
-                <Bell size={20} />
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="notification">
-                <div className="noti-head">
-                  <h6 className="d-inline-block m-b-0">Notificări</h6>
-                </div>
-                <ul className="noti-body">{notificari}</ul>
-              </Dropdown.Menu>
-            </Dropdown>
-          </li> */}
           <li>
             <Dropdown onClick={(e) => this.onClickInfo(e)}>
               <Dropdown.Toggle variant="link" id="dropdown-basic">
@@ -255,9 +238,9 @@ class NavRight extends Component {
                 </div>
                 <ul className="pro-body">
                   <li>
-                    <a href="/edit/profile" className="dropdown-item">
+										<Link to="/edit/profile" className="dropdown-item">
                       <i className="feather icon-user" /> Profil
-                    </a>
+										</Link>
                   </li>
                 </ul>
               </Dropdown.Menu>

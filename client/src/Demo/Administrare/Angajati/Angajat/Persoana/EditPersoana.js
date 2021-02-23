@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -353,7 +354,9 @@ class EditPersoana extends React.Component {
     };
 
     // update persoana
-    await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, { headers: authHeader() });
+    await axios.put(`${server.address}/persoana/${this.state.id}`, persoana_body, {
+      headers: authHeader(),
+    });
 
     // refresh numele angajatilor
     this.getNumeintreg();
@@ -395,6 +398,7 @@ class EditPersoana extends React.Component {
 
     return (
       <Aux>
+        {/* ERROR TOAST */}
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
@@ -406,6 +410,8 @@ class EditPersoana extends React.Component {
           </Toast.Header>
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
+
+        {/* CONFIRM MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Mesaj</Modal.Title>
@@ -442,13 +448,11 @@ class EditPersoana extends React.Component {
                         </Tooltip>
                       }
                     >
-                      <Button
-                        href="/forms/realizari-retineri"
-                        variant="outline-info"
-                        className="pb-0"
-                      >
-                        <FileText size={20} className="m-0" />
-                      </Button>
+                      <Link to="/forms/realizari-retineri">
+                        <Button variant="outline-info" className="pb-2">
+                          <FileText size={20} className="m-0" />
+                        </Button>
+                      </Link>
                     </OverlayTrigger>
                   </InputGroup.Append>
                   <InputGroup.Append>
@@ -461,9 +465,11 @@ class EditPersoana extends React.Component {
                         </Tooltip>
                       }
                     >
-                      <Button href="/forms/add-persoana" variant="outline-info" className="pb-0">
-                        <UserPlus size={20} className="m-0" />
-                      </Button>
+                      <Link to="/forms/add-persoana">
+                        <Button variant="outline-info" className="pb-2">
+                          <UserPlus size={20} className="m-0" />
+                        </Button>
+                      </Link>
                     </OverlayTrigger>
                   </InputGroup.Append>
                 </InputGroup>

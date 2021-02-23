@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Row, Col, Tabs, Tab, Button, Modal, Breadcrumb } from 'react-bootstrap';
 
 import Aux from '../../../../hoc/_Aux';
@@ -119,7 +120,7 @@ class AngajatSimplu extends React.Component {
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
-              <Breadcrumb.Item href="/dashboard/societati">{this.state.socsel.nume}</Breadcrumb.Item>
+              <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/dashboard/societati' }}>{this.state.socsel.nume}</Breadcrumb.Item>
               <Breadcrumb.Item active>Angajați</Breadcrumb.Item>
               <Breadcrumb.Item active>Detalii angajat</Breadcrumb.Item>
             </Breadcrumb>
