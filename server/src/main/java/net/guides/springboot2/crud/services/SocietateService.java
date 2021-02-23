@@ -43,8 +43,10 @@ public class SocietateService {
 
 	public Societate postWithImagine(Societate societate,int uid,int fisierId) throws ResourceNotFoundException {
 		societate.checkData();
+		if(fisierId!=0){
 		Fisier fisier=fisierService.findById(fisierId);
 		societate.setImagine(fisier);
+		} else societate.setImagine(null);
 		Societate newSoc = societateRepository.save(societate);
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error"));
 		user.addSocietate(newSoc);
@@ -55,8 +57,11 @@ public class SocietateService {
 
 	public Societate putWithImagine(int idSoc, Societate newSocietate,int fisierId) throws ResourceNotFoundException {
 		Societate societate=findById(idSoc);
+		if(fisierId!=0){
 		Fisier fisier=fisierService.findById(fisierId);
 		newSocietate.setImagine(fisier);
+		}
+		else newSocietate.setImagine(null);
 		societate.update(newSocietate);
 
 		return societateRepository.save(societate);

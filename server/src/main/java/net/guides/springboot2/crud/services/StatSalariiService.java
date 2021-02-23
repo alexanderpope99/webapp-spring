@@ -349,7 +349,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getImpozit());
 				writerCell = row2.createCell(18); // rest plata brut
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getVenitnet() + realizariRetineri.getValoaretichete() + realizariRetineri.getImpozit());
+				writerCell.setCellValue(realizariRetineri.getRestplatabrut());
 				writerCell = row3.createCell(18); // alte retineri
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(retineri.getImprumuturi());

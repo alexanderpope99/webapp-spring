@@ -209,7 +209,8 @@ class Societate extends React.Component {
     const formData = new FormData();
     if (this.state.numefisier) formData.append('file', this.state.fisier);
 
-    if (this.state.existaImagine) {
+    if (this.state.fisier) {
+		if(this.state.existaImagine){
 		// put
 		await axios
         .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
@@ -219,7 +220,8 @@ class Societate extends React.Component {
 		.catch((err) =>
 		this.setState({ showToast: true, toastMessage: err.response.data.message })
 		);
-    } else {
+	}
+	else{
 		//post
 		const file=await axios
         .post(`${server.address}/fisier/upload`, formData, {
@@ -230,6 +232,7 @@ class Societate extends React.Component {
 		this.setState({ showToast: true, toastMessage: err.response.data.message })
         );
 		this.setState({idfisier:file.fileId});
+	}
     }
 
     let adresa_body = {
@@ -289,7 +292,6 @@ class Societate extends React.Component {
   }
 
   render() {
-	  console.log(this.state.fisier);
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
@@ -498,7 +500,7 @@ class Societate extends React.Component {
                           <Button
                             variant="link"
                             onClick={() =>
-                              this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
+                              this.setState({ idfisier:null,fisier: null, numefisier: null,existaImagine:false })
                             }
                           >
                             Șterge

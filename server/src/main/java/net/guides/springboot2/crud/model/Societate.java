@@ -89,7 +89,7 @@ public class Societate implements Serializable {
 	private List<Caiet> caiete;
 
 	@JsonBackReference(value = "imagine-societate")
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
 	@JoinColumn(name = "idimagine", referencedColumnName = "id")
 	private Fisier imagine;
 
