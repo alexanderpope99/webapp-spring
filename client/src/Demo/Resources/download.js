@@ -57,7 +57,7 @@ async function downloadImagineSocietate(fileName,id) {
 	// const token = this.state.user.accessToken;
 	console.log('trying to download...');
   
-	const blob = await fetch(`${server.address}/fisier/${id}`, {
+	const blob = await fetch(`${server.address}/fisier/download/${id}`, {
 	  method: 'GET',
 	  headers: {
 		'Content-Type': 'application/octet-stream',

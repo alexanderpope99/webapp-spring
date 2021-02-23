@@ -93,8 +93,8 @@ class Societate extends React.Component {
       centruCost: null, // details for add/edit modal
 
       fisier: null,
-      numefisier: '',
-      idfisier: '',
+      numefisier: null,
+      idfisier: null,
     });
   }
 
@@ -133,6 +133,25 @@ class Societate extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
+	if(societate.idimagine)
+	{
+		const imagine = await axios
+		.get(`${server.address}/fisier/${societate.idimagine}`, { headers: authHeader() })
+		.then((res) => res.data)
+		.catch((err) => console.error(err));
+
+		const download = await axios
+		.get(`${server.address}/fisier/download/${societate.idimagine}`, { headers: authHeader() })
+		.then((res) => res.data)
+		.catch((err) => console.error(err));
+		this.setState(
+			{
+				fisier: download,
+				numefisier:imagine.name,
+				idfisier:societate.idimagine
+			});
+	}
+
     // console.log(societate.adresa.id);
     if (societate.adresa)
       this.setState(
@@ -151,10 +170,6 @@ class Societate extends React.Component {
           email: societate.email || '',
           telefon: societate.telefon || '',
           fax: societate.fax || '',
-
-          fisier: societate.imagine || null,
-          numefisier: societate.imagine ? societate.imagine.nume : null,
-          idfisier: societate.imagine ? societate.imagine.id : null,
         },
         () => this.onChangeLocalitate(societate.adresa.localitate)
       );
@@ -169,9 +184,6 @@ class Societate extends React.Component {
         email: societate.email || '',
         telefon: societate.telefon || '',
         fax: societate.fax || '',
-        fisier: societate.imagine || null,
-        numefisier: societate.imagine ? societate.imagine.nume : null,
-        idfisier: societate.imagine ? societate.imagine.id : null,
       });
     }
   }
@@ -188,17 +200,19 @@ class Societate extends React.Component {
     }
 
     const formData = new FormData();
-    if (this.state.numefisier) formData.append('fisier', this.state.fisier);
+    if (this.state.numefisier) formData.append('file', this.state.fisier);
 
-    // MAI TREBUIE LUCRAT AICI PUȚIN
     if (this.state.numefisier) {
+		console.log("am intrat aici");
       // put
       await axios
         .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
           headers: authHeader(),
         })
         .then((res) => res.status === 200)
-        .catch((err) => console.error(err));
+		.catch((err) =>
+		this.setState({ showToast: true, toastMessage: err.response.data.message })
+	  );
     } else {
       //post
       await axios
@@ -464,7 +478,6 @@ class Societate extends React.Component {
                       />
                     </Form.Group>
                     <Form.Group as={Col} md="12">
-                      <Form.Label>Imagine</Form.Label>
                       {this.state.numefisier ? (
                         <div>
                           <Button

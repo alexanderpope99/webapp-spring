@@ -1,6 +1,7 @@
 package net.guides.springboot2.crud.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +56,14 @@ public class SocietateController {
 	@GetMapping
 	public List<SocietateDTO> getAll() {
 		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
-		List<SocietateDTO> societatiDTO = societati.stream().map(soc -> modelMapper.map(soc, SocietateDTO.class))
-				.collect(Collectors.toList());
+		List<SocietateDTO> societatiDTO = new ArrayList<>();
+		for(Societate soc: societati)
+		{
+			SocietateDTO societateDTO=modelMapper.map(soc, SocietateDTO.class);
+			if(soc.getImagine()!=null)societateDTO.setIdimagine(soc.getImagine().getId());
+			else societateDTO.setIdimagine(null);
+			societatiDTO.add(societateDTO);
+		}
 		for (int i = 0; i < societati.size(); ++i) {
 			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati());
 		}
@@ -69,6 +76,8 @@ public class SocietateController {
 		Societate societate = societateRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Societate not found for this id :: " + id));
 		SocietateDTO societateDTO = modelMapper.map(societate, SocietateDTO.class);
+		if(societate.getImagine()!=null)societateDTO.setIdimagine(societate.getImagine().getId());
+			else societateDTO.setIdimagine(null);
 		societateDTO.setNrangajati(societate.getAngajati().size());
 		return ResponseEntity.ok().body(societateDTO);
 	}

@@ -349,7 +349,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getImpozit());
 				writerCell = row2.createCell(18); // rest plata brut
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
+				writerCell.setCellValue(realizariRetineri.getVenitnet() + realizariRetineri.getValoaretichete()+realizariRetineri.getImpozit());
 				writerCell = row3.createCell(18); // alte retineri
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(retineri.getImprumuturi());
@@ -363,7 +363,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(retineri.getAvansnet());
 				writerCell = row3.createCell(19); // rest plata net
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit() - realizariRetineri.getValoaretichete());
+				writerCell.setCellValue(realizariRetineri.getVenitnet() -retineri.getAvansnet()-realizariRetineri.getImpozit());
 
 				// * set borders
 				String cellRange = "$A$" + (15 + nrAngajat * 3) + ":$U$" + (17 + nrAngajat * 3);
@@ -738,7 +738,7 @@ public class StatSalariiService {
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row4.createCell(4); // CAM 2.25%
 			writerCell.setCellStyle(salariu10Style);
-			writerCell.setCellValue(stat.getRow(totalRowNr).getCell(11).getNumericCellValue());
+			writerCell.setCellValue(stat.getRow(totalRowNr+1).getCell(14).getNumericCellValue()-stat.getRow(totalRowNr).getCell(14).getNumericCellValue());
 			cellRange = "$E$" + (rowNr + 4) + ":$H$" + (rowNr + 4);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row5.createCell(4); // CAM 0.3375%
@@ -1207,7 +1207,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row2.getCell(18); // rest plata brut
-			writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit());
+			writerCell.setCellValue(realizariRetineri.getVenitnet() + realizariRetineri.getValoaretichete()-realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.getCell(18); // alte retineri
 			writerCell.setCellStyle(salariuStyle);
@@ -1222,7 +1222,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(retineri.getAvansnet());
 			writerCell = row3.getCell(19); // rest plata net
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getVenitnet() + retineri.getAvansnet() - realizariRetineri.getImpozit() - realizariRetineri.getValoaretichete());
+			writerCell.setCellValue(realizariRetineri.getVenitnet() -retineri.getAvansnet()-realizariRetineri.getImpozit());
 
 			// * set borders
 			String cellRange = "$A$15:$U$17";
