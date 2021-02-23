@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -51,8 +52,8 @@ public class FluturasSalariuService {
 		writerCell.setCellValue(societate.getNume()); // nume soc
 		// data creeari fisierului
 		writerCell = sheet.getRow(2).getCell(8);
-		LocalDate today = LocalDate.now();
-		writerCell.setCellValue(String.format("%d/%d/%d", today.getDayOfMonth(), today.getMonthValue(), today.getYear()));
+		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyy"));
+		writerCell.setCellValue(String.format("%s", today));
 
 		// nume angajat
 		writerCell = sheet.getRow(3).getCell(0);

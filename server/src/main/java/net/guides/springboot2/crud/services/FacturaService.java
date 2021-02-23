@@ -44,13 +44,11 @@ public class FacturaService {
 	@Autowired
 	private CaietService caietService;
 
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
+
 	private static double roundAvoid(double value, int places) {
 		double scale = Math.pow(10, places);
 		return Math.round(value * scale) / scale;
-	}
-
-	
-	FacturaService() {
 	}
 	
 	public List<Factura> findAll() {
@@ -89,8 +87,6 @@ public class FacturaService {
 		facturaRepository.delete(factura);
 	}
 	
-	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
-
 	public boolean createFactura(int ids,int id,int uid) throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById(ids).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + ids));

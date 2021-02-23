@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Edit3, Trash2, RotateCw } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
@@ -501,9 +502,9 @@ class COTabel extends React.Component {
       ));
     }
 
-    const yearsComponent = this.state.ani_cu_concediu.sort().map((an, index) => (
-      <option key={index}>{an}</option>
-    ));
+    const yearsComponent = this.state.ani_cu_concediu
+      .sort()
+      .map((an, index) => <option key={index}>{an}</option>);
 
     const angajatContract = this.state.angajat && this.state.angajat.idcontract;
 
@@ -605,9 +606,9 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-            <Button variant="link" href="/forms/realizari-retineri">
-              Către realizări/rețineri
-            </Button>
+            <Link to="/forms/realizari-retineri">
+              <Button variant="link">Către realizări/rețineri</Button>
+            </Link>
 
             <Button variant="outline-info" onClick={this.handleClose}>
               Închide
