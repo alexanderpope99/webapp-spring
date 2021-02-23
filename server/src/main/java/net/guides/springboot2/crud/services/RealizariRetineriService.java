@@ -17,6 +17,7 @@ import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Retineri;
 import net.guides.springboot2.crud.model.Angajat;
+import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
@@ -168,9 +169,13 @@ public class RealizariRetineriService {
 		}
 		int zileCM = cmService.getZileCM(luna, an, idcontract);
 		int valCM = 0, zileCMLucratoare = 0;
+		int valCMFNUASS = 0, valCMFAAMBP = 0;
 		if (zileCM > 0) {
 			valCM = cmService.getValCM(luna, an, idcontract);
 			zileCMLucratoare = cmService.getZileCMLucratoare(luna, an, idcontract);
+			List<CM> concediiMedicale = cmService.getCMInLunaAnul(luna, an, idcontract);
+			valCMFNUASS= cmService.getValcmFNUASS(concediiMedicale);
+			valCMFAAMBP = cmService.getValcmFAAMBP(concediiMedicale);
 		}
 
 		int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
@@ -192,7 +197,7 @@ public class RealizariRetineriService {
 		// totalDrepturi nu include tichete || venitBrut = totalDrepturi + tichete
 		this.casSalariu = Math.round(totalDrepturi * parametriiSalariu.getCas() / 100);
 		this.cassSalariu = Math.round((totalDrepturi - valCM) * parametriiSalariu.getCass() / 100);
-		float camSalariu = Math.round(totalDrepturi * parametriiSalariu.getCam() / 100);
+		float camSalariu = Math.round((totalDrepturi - valCMFNUASS) * parametriiSalariu.getCam() / 100);
 
 		int nrPersoaneIntretinere = persoaneIntretinereService.getNrPersoaneIntretinere(contract.getId());
 
@@ -206,6 +211,8 @@ public class RealizariRetineriService {
 		RealizariRetineri rr = new RealizariRetineri(contract, luna, an, nrTichete, zileCO, zileCOLucratoare, zileCM, zileCMLucratoare, zileCFP, zileCFPLucratoare, duratazilucru, norma, zileLucrate, oreLucrate, (int) totalDrepturi, salariuPeZi, salariuPeOra, casSalariu, cassSalariu, camSalariu, impozit, valoareTichete, restPlata, nrPersoaneIntretinere, (int) this.deducere, primaBruta, totalOreSuplimentare);
 
 		rr.setValcm(valCM);
+		rr.setValcmfaambp(valCMFAAMBP);
+		rr.setValcmfnuass(valCMFNUASS);
 		rr.setZileplatite(zilePlatite);
 		rr.setSalariurealizat(salariuRealizat);
 		rr.setVenitnet(Math.round(venitNet));

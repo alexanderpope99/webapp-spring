@@ -58,6 +58,10 @@ public class RealizariRetineri implements Serializable {
 
 	@Column(name = "valcm", nullable = false)
 	private Integer valcm = 0;
+	@Column(name = "valcmfnuass")
+	private Integer valcmfnuass = 0;
+	@Column(name = "valcmfaambp")
+	private Integer valcmfaambp = 0;
 	@Column(name = "valco", nullable = false)
 	private Integer valco = 0;
 
@@ -499,6 +503,26 @@ public class RealizariRetineri implements Serializable {
 	}
 	public void setRetineri(Retineri retineri) {
 		this.retineri = retineri;
+	}
+
+	public int getValcmsocietate() {
+		return valcm - getValcmfaambp() - getValcmfnuass();
+	}
+
+	public int getValcmfaambp() {
+		return valcmfaambp == null ? 0 : valcmfaambp ;
+	}
+
+	public void setValcmfaambp(Integer valcmfaambp) {
+		this.valcmfaambp = valcmfaambp;
+	}
+
+	public int getValcmfnuass() {
+		return valcmfnuass == null ? 0 : valcmfnuass;
+	}
+
+	public void setValcmfnuass(Integer valcmfnuass) {
+		this.valcmfnuass = valcmfnuass;
 	}
 
 	// ! OTHER
