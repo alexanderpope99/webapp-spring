@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Row, Col, Card, Button, Modal, Form, Toast } from 'react-bootstrap';
 import Aux from '../../../hoc/_Aux';
 import axios from 'axios';
@@ -184,7 +185,8 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage:'Nu am putut prelua societățile din baza de date: ' + err.response.data.message,
+          toastMessage:
+            'Nu am putut prelua societățile din baza de date: ' + err.response.data.message,
         })
       );
 
@@ -433,19 +435,20 @@ class Societati extends React.Component {
                   onClick={() => this.editSocietate(this.state.societati[key])}
                 />
 
-                <Users
-                  className="d-flex justify-content-around float float-right m-2"
-                  visibility={showButtons ? 'visible' : 'hidden'}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => (window.location.href = '/tables/angajati')}
-                />
-
-                <FileText
-                  className="d-flex justify-content-around float float-right m-2"
-                  visibility={showButtons ? 'visible' : 'hidden'}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => (window.location.href = '/rapoarte')}
-                />
+                <Link to="/tables/angajati">
+                  <Users
+                    className="d-flex justify-content-around float float-right m-2"
+                    visibility={showButtons ? 'visible' : 'hidden'}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Link>
+                <Link to="/rapoarte">
+                  <FileText
+                    className="d-flex justify-content-around float float-right m-2"
+                    visibility={showButtons ? 'visible' : 'hidden'}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Link>
               </div>
             </Card.Body>
           </Card>
@@ -475,6 +478,7 @@ class Societati extends React.Component {
 
     return (
       <Aux>
+        {/* ERROR TOAST */}
         <Toast
           onClose={() => this.setState({ showToast: false })}
           show={this.state.showToast}
@@ -643,39 +647,12 @@ class Societati extends React.Component {
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label> </Form.Label>
-                  <Button href="/forms/add-societate?isEdit" variant="outline-primary" block>
-                    Mai multe detalii
-                  </Button>
+                  <Link to="/forms/add-societate?isEdit">
+                    <Button variant="outline-primary" block>
+                      Mai multe detalii
+                    </Button>
+                  </Link>
                 </Form.Group>
-                {/* <Form.Group as={Col} md="12">
-                  <Form.Label>Imagine</Form.Label>
-                  {this.state.numefisier ? (
-                    <div>
-                      <Button
-                        variant="dark"
-                        onClick={() =>
-                          downloadImagineSocietate(this.state.numefisier, this.state.id)
-                        }
-                      >
-                        {this.state.numefisier}
-                      </Button>
-                      <Button
-                        variant="link"
-                        onClick={() =>
-                          this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
-                        }
-                      >
-                        Șterge
-                      </Button>
-                    </div>
-                  ) : (
-                    <Dropzone
-                      inputContent="Imagine/Logo"
-                      onChangeStatus={handleChangeStatus}
-                      maxFiles={1}
-                    />
-                  )}
-                </Form.Group> */}
               </Row>
             </Form>
           </Modal.Body>
