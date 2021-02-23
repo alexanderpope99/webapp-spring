@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.StringUtils;
 
+import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Fisier;
 import net.guides.springboot2.crud.repository.FisierRepository;
 
@@ -16,6 +17,10 @@ public class FisierService {
 
   @Autowired
   private FisierRepository fisierRepository;
+
+  public Fisier findById(int id) throws ResourceNotFoundException {
+    return fisierRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Nu există fișier cu id: "+id));
+  }
 
   public Fisier store(MultipartFile file) throws IOException {
     String fileName = StringUtils.cleanPath(file.getOriginalFilename());

@@ -157,4 +157,5 @@ public class User implements Serializable {
 	public void setCereriConcedius(List<CereriConcediu> cereriConcedius) {
 		this.cereriConcedius = cereriConcedius;
 	}
+
 }

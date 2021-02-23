@@ -277,4 +277,20 @@ public class Societate implements Serializable {
 	public void setImagine(Fisier imagine) {
 		this.imagine = imagine;
 	}
+
+	public Societate update(Societate newSoc) {
+		this.nume=newSoc.nume;
+		this.idcaen=newSoc.idcaen;
+		this.cif=newSoc.cif;
+		this.capsoc=newSoc.capsoc;
+		this.regcom=newSoc.regcom;
+		this.adresa=newSoc.adresa;
+		this.email=newSoc.email;
+		this.telefon=newSoc.telefon;
+		this.fax=newSoc.fax;
+		this.fax=newSoc.fax;
+		this.imagine=newSoc.imagine;
+		return this;
+		
+	}
 }

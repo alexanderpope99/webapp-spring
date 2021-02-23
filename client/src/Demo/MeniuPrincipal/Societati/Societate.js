@@ -69,6 +69,7 @@ class Societate extends React.Component {
       fisier: null,
       numefisier: '',
       idfisier: '',
+	  existaImagine:false,
     };
   }
 
@@ -148,7 +149,8 @@ class Societate extends React.Component {
 			{
 				fisier: download,
 				numefisier:imagine.name,
-				idfisier:societate.idimagine
+				idfisier:societate.idimagine,
+				existaImagine:true
 			});
 	}
 
@@ -202,7 +204,7 @@ class Societate extends React.Component {
     const formData = new FormData();
     if (this.state.numefisier) formData.append('file', this.state.fisier);
 
-    if (this.state.numefisier) {
+    if (this.state.existaImagine) {
 		console.log("am intrat aici");
       // put
       await axios
@@ -244,18 +246,18 @@ class Societate extends React.Component {
       email: this.state.email || null,
       telefon: this.state.telefon || null,
       fax: this.state.fax || null,
-      idimagine: this.state.idfisier || null,
+      idimagine: this.state.idfisier || 0,
 
       centreCost: null,
     };
 
     const user = authService.getCurrentUser();
-
+	var uri=this.state.idfisier ? `/imageid=${this.state.idfisier}` : '';
     var ok;
     if (this.state.isEdit) {
       // put
       ok = await axios
-        .put(`${server.address}/societate/${this.state.id}`, societate_body, {
+        .put(`${server.address}/societate/${this.state.id}${uri}`, societate_body, {
           headers: authHeader(),
         })
         .then((res) => res.status === 200)
@@ -263,7 +265,7 @@ class Societate extends React.Component {
     } else {
       //post
       ok = await axios
-        .post(`${server.address}/societate/${user.id}`, societate_body, {
+        .post(`${server.address}/societate/${user.id}${uri}`, societate_body, {
           headers: authHeader(),
         })
         .then((res) => res.status === 200)

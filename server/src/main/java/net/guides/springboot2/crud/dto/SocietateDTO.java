@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import net.guides.springboot2.crud.model.Adresa;
-import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.ContBancar;
 import net.guides.springboot2.crud.model.Fisier;
 
@@ -136,9 +135,6 @@ public class SocietateDTO {
 		this.nrangajati = nrangajati;
 	}
 
-	public void setNrangajati(List<Angajat> angajati) {
-		this.nrangajati = angajati.size();
-	}
 
 	public void setContbancar(List<ContBancar> contbancar) {
 		this.contbancar = contbancar;

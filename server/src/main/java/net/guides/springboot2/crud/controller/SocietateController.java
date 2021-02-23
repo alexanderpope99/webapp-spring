@@ -1,7 +1,6 @@
 package net.guides.springboot2.crud.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,20 +53,8 @@ public class SocietateController {
 	private CentralizatorService centralizatorService;
 
 	@GetMapping
-	public List<SocietateDTO> getAll() {
-		List<Societate> societati = societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
-		List<SocietateDTO> societatiDTO = new ArrayList<>();
-		for(Societate soc: societati)
-		{
-			SocietateDTO societateDTO=modelMapper.map(soc, SocietateDTO.class);
-			if(soc.getImagine()!=null)societateDTO.setIdimagine(soc.getImagine().getId());
-			else societateDTO.setIdimagine(null);
-			societatiDTO.add(societateDTO);
-		}
-		for (int i = 0; i < societati.size(); ++i) {
-			societatiDTO.get(i).setNrangajati(societati.get(i).getAngajati());
-		}
-		return societatiDTO;
+	public List<Societate> getAll() {
+		return societateRepository.findAll(Sort.by(Sort.Direction.ASC, "nume"));
 	}
 
 	@GetMapping("{id}")
@@ -129,12 +116,16 @@ public class SocietateController {
 		societate.checkData();
 		Societate newSoc = societateRepository.save(societate);
 		User user = userRepository.findById(uid).orElseThrow(() -> new RuntimeException("Error"));
-		List<Societate> societati = user.getSocietati();
-		societati.add(newSoc);
-		user.setSocietati(societati);
+		user.addSocietate(newSoc);
 		userRepository.save(user);
 
 		return newSoc;
+	}
+
+	@PostMapping("/{uid}/imageid={id}")
+	public Societate createSocietateWithImagine(@RequestBody Societate societate, @PathVariable("uid") int uid, @PathVariable("id") int id)
+			throws ResourceNotFoundException {
+		return societateService.postWithImagine(societate, uid, id);
 	}
 
 	@PutMapping("{id}")
@@ -146,6 +137,13 @@ public class SocietateController {
 		final Societate updatedSocietate = societateRepository.save(newSocietate);
 
 		return ResponseEntity.ok().body(updatedSocietate);
+	}
+
+	@PutMapping("{id}/imageid={iid}")
+	public Societate putSocietateWithImagine(@PathVariable("id") int id,
+			@RequestBody Societate newSocietate,@PathVariable("iid") int iid) throws ResourceNotFoundException {
+				return societateService.putWithImagine(id,newSocietate, iid);
+
 	}
 
 
