@@ -1207,7 +1207,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getImpozit());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row2.getCell(18); // rest plata brut
-			writerCell.setCellValue(realizariRetineri.getVenitnet() + realizariRetineri.getValoaretichete()-realizariRetineri.getImpozit());
+			writerCell.setCellValue(realizariRetineri.getRestplatabrut());
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.getCell(18); // alte retineri
 			writerCell.setCellStyle(salariuStyle);

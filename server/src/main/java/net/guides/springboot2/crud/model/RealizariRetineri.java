@@ -501,12 +501,18 @@ public class RealizariRetineri implements Serializable {
 		this.retineri = retineri;
 	}
 
+	// ! OTHER
+
 	public int getCheltuieliangajator() {
 		return Math.round(restplata + cam + valoaretichete);
 	}
 
 	public int getVenitbrut() {
 		return Math.round(totaldrepturi + valoaretichete);
+	}
+
+	public int getRestplatabrut() {
+		return Math.round(venitnet + valoaretichete - impozit);
 	}
 
 	public void addOreSuplimentare(Oresuplimentare oresuplimentare) {

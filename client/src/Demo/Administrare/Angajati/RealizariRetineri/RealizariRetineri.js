@@ -128,6 +128,7 @@ class RealizariRetineri extends React.Component {
       valoaretichete: '',
       impozit: '',
       restplata: '',
+      restplatabrut: '',
 
       // detalii
       bazaimpozit: '',
@@ -192,6 +193,7 @@ class RealizariRetineri extends React.Component {
       valoaretichete: '',
       impozit: '',
       restplata: '',
+      restplatabrut: '',
       detalii: null,
 
       // detalii
@@ -401,6 +403,7 @@ class RealizariRetineri extends React.Component {
         valoaretichete: data.valoaretichete || 0,
         impozit: data.impozit || 0,
         restplata: data.restplata || 0,
+        restplatabrut: data.restplatabrut || 0,
         cam: data.cam || 0,
 
         //* detalii
@@ -1442,7 +1445,7 @@ class RealizariRetineri extends React.Component {
                     Total
                   </Typography>
                   <Row>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group id="totaltrepturi">
                         <Form.Label>Total drepturi</Form.Label>
                         <Form.Control
@@ -1452,9 +1455,19 @@ class RealizariRetineri extends React.Component {
                         />
                       </Form.Group>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <Form.Group id="restplata">
-                        <Form.Label>Rest de plată net</Form.Label>
+                        <Form.Label>Rest de plată brut</Form.Label>
+                        <Form.Control
+                          type="text"
+                          disabled
+                          value={this.numberWithCommas(this.state.restplatabrut)}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                      <Form.Group id="restplata">
+                        <Form.Label>Rest de plată net (fără tichete)</Form.Label>
                         <Form.Control
                           type="text"
                           disabled
