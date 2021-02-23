@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Card, Form, Button, Modal, Collapse, Toast,Image } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, Modal, Collapse, Toast, Image } from 'react-bootstrap';
+import { Download } from 'react-feather';
 import Aux from '../../../hoc/_Aux';
 import CentruCostTabel from './CentruCostTabel';
 import ContBancarTabel from './ContBancarTabel';
@@ -69,7 +70,7 @@ class Societate extends React.Component {
       fisier: null,
       numefisier: '',
       idfisier: '',
-	  existaImagine:false,
+      existaImagine: false,
     };
   }
 
@@ -134,30 +135,28 @@ class Societate extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
-	if(societate.idimagine)
-	{
-		const imagine = await axios
-		.get(`${server.address}/fisier/${societate.idimagine}`, { headers: authHeader() })
-		.then((res) => res.data)
-		.catch((err) => console.error(err));
+    if (societate.idimagine) {
+      const imagine = await axios
+        .get(`${server.address}/fisier/${societate.idimagine}`, { headers: authHeader() })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
 
-		const download=await fetch(`${server.address}/fisier/download/${societate.idimagine}`, {
-			method: 'GET',
-			headers: {
-			  'Content-Type': 'application/octet-stream',
-			  ...authHeader(),
-			},
-		  })
-			.then((res) => (res.ok ? res.blob() : null))
-				.catch((err) => console.error(err));
-		this.setState(
-			{
-				fisier: download,
-				numefisier:imagine.name,
-				idfisier:societate.idimagine,
-				existaImagine:true
-			});
-	}
+      const download = await fetch(`${server.address}/fisier/download/${societate.idimagine}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          ...authHeader(),
+        },
+      })
+        .then((res) => (res.ok ? res.blob() : null))
+        .catch((err) => console.error(err));
+      this.setState({
+        fisier: download,
+        numefisier: imagine.name,
+        idfisier: societate.idimagine,
+        existaImagine: true,
+      });
+    }
 
     // console.log(societate.adresa.id);
     if (societate.adresa)
@@ -210,26 +209,26 @@ class Societate extends React.Component {
     if (this.state.numefisier) formData.append('file', this.state.fisier);
 
     if (this.state.existaImagine) {
-		// put
-		await axios
+      // put
+      await axios
         .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
-			headers: authHeader(),
+          headers: authHeader(),
         })
         .then((res) => res.status === 200)
-		.catch((err) =>
-		this.setState({ showToast: true, toastMessage: err.response.data.message })
-		);
+        .catch((err) =>
+          this.setState({ showToast: true, toastMessage: err.response.data.message })
+        );
     } else {
-		//post
-		const file=await axios
+      //post
+      const file = await axios
         .post(`${server.address}/fisier/upload`, formData, {
           headers: authHeader(),
         })
         .then((res) => res.data)
         .catch((err) =>
-		this.setState({ showToast: true, toastMessage: err.response.data.message })
+          this.setState({ showToast: true, toastMessage: err.response.data.message })
         );
-		this.setState({idfisier:file.fileId});
+      this.setState({ idfisier: file.fileId });
     }
 
     let adresa_body = {
@@ -257,7 +256,7 @@ class Societate extends React.Component {
     };
 
     const user = authService.getCurrentUser();
-	var uri=this.state.idfisier ? `/imageid=${this.state.idfisier}` : '';
+    var uri = this.state.idfisier ? `/imageid=${this.state.idfisier}` : '';
     var ok;
     if (this.state.isEdit) {
       // put
@@ -289,7 +288,6 @@ class Societate extends React.Component {
   }
 
   render() {
-	  console.log(this.state.fisier);
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
@@ -298,7 +296,6 @@ class Societate extends React.Component {
     const handleChangeStatus = ({ file }, status) => {
       if (status === 'done') {
         console.log(status, file);
-
 
         this.setState({ fisier: file, numefisier: file.name });
       }
@@ -485,32 +482,57 @@ class Societate extends React.Component {
                         }
                       />
                     </Form.Group>
+
+                    {/* IMAGINE */}
                     <Form.Group as={Col} md="12">
                       {this.state.numefisier ? (
-                        <div>
-							<Image className="border p-3" fluid style={{height:200,weight:200}} src={window.URL.createObjectURL(this.state.fisier)}/>
-                          <Button
-                            variant="dark"
-                            onClick={() => downloadImagineSocietate(this.state.numefisier, this.state.idfisier)}
+                        <Col>
+                          <ul
+                            className="list-group list-group-flush"
+                            style={{ listStyleType: 'none' }}
                           >
-                            {this.state.numefisier}
-                          </Button>
-                          <Button
-                            variant="link"
-                            onClick={() =>
-                              this.setState({ fisier: undefined, numefisier: undefined, sterge: true })
-                            }
-                          >
-                            Șterge
-                      	</Button>
-                        </div>
+                            <li className="mb-2">
+                              <Image
+                                fluid
+                                style={{ height: 200 }}
+                                src={window.URL.createObjectURL(this.state.fisier)}
+                              />
+                            </li>
+                            <li>
+                              <Button
+															className="p-2 pl-3 pr-3"
+                                variant="dark"
+                                onClick={() =>
+                                  downloadImagineSocietate(
+                                    this.state.numefisier,
+                                    this.state.idfisier
+                                  )
+                                }
+                              >
+                                {this.state.numefisier}  <Download size={20}/>
+                              </Button>
+                              <Button
+                                variant="link"
+                                onClick={() =>
+                                  this.setState({
+                                    fisier: undefined,
+                                    numefisier: undefined,
+                                    sterge: true,
+                                  })
+                                }
+                              >
+                                Șterge
+                              </Button>
+                            </li>
+                          </ul>
+                        </Col>
                       ) : (
-                          <Dropzone
-                            inputContent="Imagine / Logo"
-                            onChangeStatus={handleChangeStatus}
-                            maxFiles={1}
-                          />
-                        )}
+                        <Dropzone
+                          inputContent="Imagine / Logo"
+                          onChangeStatus={handleChangeStatus}
+                          maxFiles={1}
+                        />
+                      )}
                     </Form.Group>
                   </Row>
 
