@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
 import { Edit3, RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
@@ -1100,9 +1101,9 @@ class CMTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-            <Button variant="link" href="/forms/realizari-retineri">
-              Către realizări/rețineri
-            </Button>
+					<Link to="/forms/realizari-retineri">
+              <Button variant="link">Către realizări/rețineri</Button>
+            </Link>
             <Button variant="outline-info" onClick={this.handleClose}>
               Închide
             </Button>
