@@ -536,7 +536,7 @@ public class RealizariRetineri implements Serializable {
 	}
 
 	public int getRestplatabrut() {
-		return Math.round(venitnet + valoaretichete - impozit);
+		return Math.round(venitnet - impozit);
 	}
 
 	public void addOreSuplimentare(Oresuplimentare oresuplimentare) {
