@@ -62,7 +62,14 @@ public class FisierController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<byte[]> getFile(@PathVariable int id) {
+	public ResponseEntity<ResponseFile> getFile(@PathVariable int id) {
+		Fisier fisier = fisierService.getFile(id);
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/fisier/").path(String.valueOf(fisier.getId())).toUriString();
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseFile(fisier.getNume(), fileDownloadUri, fisier.getType(), fisier.getData().length));
+	}
+
+	@GetMapping("/download/{id}")
+	public ResponseEntity<byte[]> downloadFile(@PathVariable int id) {
 		Fisier fisier = fisierService.getFile(id);
 
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fisier.getNume() + "\"").body(fisier.getData());

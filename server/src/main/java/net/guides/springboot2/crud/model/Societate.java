@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 
@@ -89,7 +88,7 @@ public class Societate implements Serializable {
 	@OneToMany(mappedBy = "societate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Caiet> caiete;
 
-	@JsonIgnore
+	@JsonBackReference(value = "imagine-societate")
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idimagine", referencedColumnName = "id")
 	private Fisier imagine;

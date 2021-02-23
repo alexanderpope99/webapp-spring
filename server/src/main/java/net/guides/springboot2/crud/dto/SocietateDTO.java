@@ -34,21 +34,13 @@ public class SocietateDTO {
 
 	private Integer nrangajati;
 
-	private Fisier imagine;
+	private Integer idimagine;
 
-	private int idimagine;
-
-	public int getIdimagine() {
-		if (imagine == null)
-			return idimagine;
-		else
-			return imagine.getId();
+	public Integer getIdimagine() {
+		return idimagine;
 	}
 
-	public void setImagine(Fisier imagine) {
-		this.imagine = imagine;
-	}
-	public void setIdimagine(int idimagine) {
+	public void setIdimagine(Integer idimagine) {
 		this.idimagine = idimagine;
 	}
 	public void setIdangajat(Fisier imagine) {
@@ -127,9 +119,6 @@ public class SocietateDTO {
 		this.adresa = adresa;
 	}
 
-	public Fisier getImagine() {
-		return imagine;
-	}
 
 	public String getFax() {
 		return fax;

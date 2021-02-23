@@ -1413,7 +1413,7 @@ public class Dec112Service {
 
 			transformer.transform(source, result);
 
-			var pdfReader = new PdfReader(homeLocation + "templates/D112.pdf");
+			var pdfReader = new PdfReader(homeLocation + "templates/D112_"+an+".pdf");
 			String newFileLocationPDF = String.format("%s/downloads/%d/Declaratia 112 - %s - %s %d.pdf", homeLocation, userID, societate.getNume(), lunaNume, an);
 			var outputStream = new FileOutputStream(newFileLocationPDF);
 
