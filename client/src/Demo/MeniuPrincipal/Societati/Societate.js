@@ -508,6 +508,7 @@ class Societate extends React.Component {
                         </div>
                       ) : (
                           <Dropzone
+						 	accept="image/*"
                             inputContent="Imagine / Logo"
                             onChangeStatus={handleChangeStatus}
                             maxFiles={1}
