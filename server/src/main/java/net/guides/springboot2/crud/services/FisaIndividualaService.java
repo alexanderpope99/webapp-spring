@@ -91,10 +91,10 @@ public class FisaIndividualaService {
 		writerCell.setCellValue(contract.getNr());
 		// data angajarii
 		writerCell = row.getCell(12);
-		writerCell.setCellValue(contract.getData());
+		writerCell.setCellValue(contract.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		// data incetarii activ.
 		writerCell = row.getCell(15);
-		writerCell.setCellValue(contract.getUltimazilucru());
+		writerCell.setCellValue(contract.getUltimazilucru().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
 		// get styles | create styles
 		CellStyle lunaStyle = sheet.getRow(8).getCell(0).getCellStyle();

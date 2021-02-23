@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -91,8 +92,9 @@ public class AdeverintaVenitService {
 
 		writerCell = sheet.getRow(18).getCell(0);
 		YearMonth yearMonthObject = YearMonth.of(an, lunaPanala);
-		int daysInMonth = yearMonthObject.lengthOfMonth();
-		writerCell.setCellValue(String.format("Perioada: 01/%d/%d - %d/%d/%d", lunaDela, an, daysInMonth, lunaPanala, an));
+		String dela = LocalDate.of(an, lunaDela, 1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		String panala = LocalDate.of(an, lunaPanala, yearMonthObject.lengthOfMonth()).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		writerCell.setCellValue(String.format("Perioada: %s - %s", dela, panala));
 
 		DataFormat format = workbook.createDataFormat();
 		CellStyle total = sheet.getRow(24).getCell(1).getCellStyle();
