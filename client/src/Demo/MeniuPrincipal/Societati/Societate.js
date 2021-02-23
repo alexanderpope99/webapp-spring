@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col, Card, Form, Button, Modal, Collapse, Toast } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, Modal, Collapse, Toast,Image } from 'react-bootstrap';
 import Aux from '../../../hoc/_Aux';
 import CentruCostTabel from './CentruCostTabel';
 import ContBancarTabel from './ContBancarTabel';
@@ -141,10 +141,15 @@ class Societate extends React.Component {
 		.then((res) => res.data)
 		.catch((err) => console.error(err));
 
-		const download = await axios
-		.get(`${server.address}/fisier/download/${societate.idimagine}`, { headers: authHeader() })
-		.then((res) => res.data)
-		.catch((err) => console.error(err));
+		const download=await fetch(`${server.address}/fisier/download/${societate.idimagine}`, {
+			method: 'GET',
+			headers: {
+			  'Content-Type': 'application/octet-stream',
+			  ...authHeader(),
+			},
+		  })
+			.then((res) => (res.ok ? res.blob() : null))
+				.catch((err) => console.error(err));
 		this.setState(
 			{
 				fisier: download,
@@ -205,26 +210,26 @@ class Societate extends React.Component {
     if (this.state.numefisier) formData.append('file', this.state.fisier);
 
     if (this.state.existaImagine) {
-		console.log("am intrat aici");
-      // put
-      await axios
+		// put
+		await axios
         .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
-          headers: authHeader(),
+			headers: authHeader(),
         })
         .then((res) => res.status === 200)
 		.catch((err) =>
 		this.setState({ showToast: true, toastMessage: err.response.data.message })
-	  );
+		);
     } else {
-      //post
-      await axios
+		//post
+		const file=await axios
         .post(`${server.address}/fisier/upload`, formData, {
           headers: authHeader(),
         })
-        .then((res) => res.status === 200)
+        .then((res) => res.data)
         .catch((err) =>
-          this.setState({ showToast: true, toastMessage: err.response.data.message })
+		this.setState({ showToast: true, toastMessage: err.response.data.message })
         );
+		this.setState({idfisier:file.fileId});
     }
 
     let adresa_body = {
@@ -284,6 +289,7 @@ class Societate extends React.Component {
   }
 
   render() {
+	  console.log(this.state.fisier);
     const judeteComponent = () => {
       if (this.state.tipJudet === 'Județ') return judeteOptions;
       return sectoareOptions;
@@ -482,6 +488,7 @@ class Societate extends React.Component {
                     <Form.Group as={Col} md="12">
                       {this.state.numefisier ? (
                         <div>
+							<Image className="border p-3" fluid style={{height:200,weight:200}} src={window.URL.createObjectURL(this.state.fisier)}/>
                           <Button
                             variant="dark"
                             onClick={() => downloadImagineSocietate(this.state.numefisier, this.state.idfisier)}
@@ -495,7 +502,7 @@ class Societate extends React.Component {
                             }
                           >
                             Șterge
-                      </Button>
+                      	</Button>
                         </div>
                       ) : (
                           <Dropzone
