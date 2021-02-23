@@ -1347,7 +1347,7 @@ public class Dec112Service {
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_14"); // baza calcul impozit (venitBrut + tichete - cas - cass)
-				childElement.appendChild(doc.createTextNode(contract.isCalculdeduceri() ? String.valueOf(realizariRetineri.getTotaldrepturi() + realizariRetineri.getValoaretichete() - realizariRetineri.getCas() - realizariRetineri.getCass() - realizariRetineri.getDeducere()) : "0"));
+				childElement.appendChild(doc.createTextNode(contract.isCalculdeduceri() ? String.valueOf(realizariRetineri.getBazaimpozit()) : "0"));
 				sbfrmSectiuneaE3.appendChild(childElement);
 
 				childElement = doc.createElement("E3_15"); // de completat impozit, adica baza calcul impozit
