@@ -21,17 +21,18 @@ import 'react-dropzone-uploader/dist/styles.css';
 
 const addSocietateComponent = (
   <Col md={6} xl={4}>
-    <Card
-      style={{
-        opacity: 0.4,
-        cursor: 'pointer',
-      }}
-      onClick={() => (window.location.href = '/forms/add-societate')}
-    >
-      <Card.Body className="mt-2 d-flex justify-content-center align-items-center">
-        <PlusCircle style={{ width: '80px', height: '80px' }} />
-      </Card.Body>
-    </Card>
+    <Link to="/forms/add-societate">
+      <Card
+        style={{
+          opacity: 0.4,
+          cursor: 'pointer',
+        }}
+      >
+        <Card.Body className="mt-2 d-flex justify-content-center align-items-center">
+          <PlusCircle style={{ width: '80px', height: '80px' }} />
+        </Card.Body>
+      </Card>
+    </Link>
   </Col>
 );
 
@@ -467,13 +468,6 @@ class Societati extends React.Component {
     const list = () => {
       if (this.state.capitala === 'Județ') return judeteObj;
       return sectoareObj;
-    };
-
-    const handleChangeStatus = ({ file }, status) => {
-      if (status === 'done') {
-        console.log(status, file);
-        this.setState({ fisier: file, numefisier: file.name });
-      }
     };
 
     return (
