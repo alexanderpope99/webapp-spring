@@ -24,7 +24,7 @@ const CereriConcediuSuperior = React.lazy(() => import('./Demo/CereriConcediu/Ce
 
 // ADMINISTRARE
 // 		ANGAJATI
-const AngajatiTabel = React.lazy(() => import('./Demo/Administrare/Angajati/AngajatiTabel'));
+const AngajatiTabel = React.lazy(() => import('./Demo/Administrare/Angajati/AngajatiTabelOld'));
 const AngajatiTabelView = React.lazy(() => import('./Demo/Administrare/Angajati/AngajatiTabelView'));
 // 			DETALII ANGAJAT
 const Angajat = React.lazy(() => import('./Demo/Administrare/Angajati/Angajat/Angajat'));
