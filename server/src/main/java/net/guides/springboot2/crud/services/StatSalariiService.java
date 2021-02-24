@@ -335,7 +335,7 @@ public class StatSalariiService {
 
 				// *
 				writerCell = row1.createCell(17); // pensie pilon 3
-				writerCell.setCellValue(0);
+				writerCell.setCellValue(retineri.getTotalPensiiFacultativeRON());
 				writerCell = row2.createCell(17); // venit net
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(realizariRetineri.getVenitnet());
@@ -352,7 +352,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getRestplatabrut());
 				writerCell = row3.createCell(18); // alte retineri
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(retineri.getImprumuturi());
+				writerCell.setCellValue(retineri.getAlteRetineri());
 
 				// *
 				writerCell = row1.createCell(19); // sume neimpozabile
@@ -363,7 +363,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(retineri.getAvansnet());
 				writerCell = row3.createCell(19); // rest plata net
 				writerCell.setCellStyle(salariuStyle);
-				writerCell.setCellValue(realizariRetineri.getVenitnet() - retineri.getAvansnet() - realizariRetineri.getImpozit());
+				writerCell.setCellValue(realizariRetineri.getRestplata());
 
 				// * set borders
 				String cellRange = "$A$" + (15 + nrAngajat * 3) + ":$U$" + (17 + nrAngajat * 3);
@@ -1191,7 +1191,7 @@ public class StatSalariiService {
 
 			// *
 			writerCell = row1.getCell(17); // pensie pilon 3
-			writerCell.setCellValue(0);
+			writerCell.setCellValue(retineri.getTotalPensiiFacultativeRON());
 			writerCell = row2.getCell(17); // venit net
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getVenitnet());
@@ -1209,7 +1209,7 @@ public class StatSalariiService {
 			writerCell.setCellStyle(salariuStyle);
 			writerCell = row3.getCell(18); // alte retineri
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(retineri.getImprumuturi());
+			writerCell.setCellValue(retineri.getAlteRetineri());
 
 			// *
 			writerCell = row1.getCell(19); // sume neimpozabile
@@ -1220,7 +1220,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(retineri.getAvansnet());
 			writerCell = row3.getCell(19); // rest plata net
 			writerCell.setCellStyle(salariuStyle);
-			writerCell.setCellValue(realizariRetineri.getVenitnet() - retineri.getAvansnet() - realizariRetineri.getImpozit());
+			writerCell.setCellValue(realizariRetineri.getRestplata());
 
 			// * set borders
 			String cellRange = "$A$15:$U$17";
