@@ -118,6 +118,21 @@ public class COService {
 		return save(newCoDTO);
 	}
 
+	public Map<String, Boolean> fixConcedii() throws ResourceNotFoundException {
+		List<CO> co = coRepository.findAll();
+
+		for(CO concediu: co)
+		{
+			if(concediu.getDela().getYear()<1900 || concediu.getPanala().getYear()<1900)
+				coRepository.delete(concediu);
+		}
+
+
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return response;
+	}
+
 	public Map<String, Boolean> delete(int coId) throws ResourceNotFoundException {
 		CO co = coRepository.findById(coId)
 				.orElseThrow(() -> new ResourceNotFoundException("Nu există CO cu id: " + coId));

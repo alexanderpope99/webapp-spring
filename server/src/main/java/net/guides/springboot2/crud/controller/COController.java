@@ -75,6 +75,11 @@ public class COController {
 		return ResponseEntity.ok().body(coService.getZileCODisponibile(idcontract));
 	}
 
+	@GetMapping("/fix--concedii")
+	public Map<String, Boolean> fixConcedii() throws ResourceNotFoundException {
+		return coService.fixConcedii();
+	}
+
 	// @PostMapping("/check-overlap")
 	// public CODTO checkIfOverlapsWithExisting(@RequestBody CODTO co) {
 	// 	return coService.overlapsResponse(co);

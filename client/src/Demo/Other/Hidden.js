@@ -12,6 +12,7 @@ class Hidden extends React.Component {
 
 		this.fixContracte = this.fixContracte.bind(this);
 		this.initRoles = this.initRoles.bind(this);
+		this.solveConcedii = this.solveConcedii.bind(this);
 
 		this.state = {
 			toastMessage: '',
@@ -31,6 +32,23 @@ class Hidden extends React.Component {
 		} else {
 			this.setState({
 				toastMessage: 'O valoare care nu poate fi predefinita lipseste. Aceasta poate fi  ',
+				showToast: true,
+			})
+		}
+	}
+
+	async solveConcedii() {
+		const ok = await axios.get(`${server.address}/co/fix--concedii`, {headers: authHeader()})
+			.then(res => res.data)
+			.catch(err => console.error(err));
+		if(ok) {
+			this.setState({
+				toastMessage: 'Concediile au fost rezolvate',
+				showToast: true,
+			})
+		} else {
+			this.setState({
+				toastMessage: 'A apărut o eroare',
 				showToast: true,
 			})
 		}
@@ -67,6 +85,7 @@ class Hidden extends React.Component {
 
         <Button onClick={this.fixContracte}>Introdu date prestabilite in contracte acolo unde lipsesc</Button>
         <Button onClick={this.initRoles}>Initializeaza rolurile</Button>
+		<Button onClick={this.solveConcedii}>Repară concediile</Button>
       </Aux>
     );
   }
