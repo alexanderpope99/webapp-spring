@@ -240,7 +240,7 @@ class AngajatiTabel extends React.Component {
           }
         >
           <Button
-            disabled={!row.contract.id}
+            disabled={!row.contract}
             variant="outline-secondary"
             className="ml-2 p-1 rounded-circle border-0"
           >
