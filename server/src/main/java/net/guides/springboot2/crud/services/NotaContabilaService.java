@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.dto.NotaContabilaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
-import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
@@ -50,9 +47,7 @@ public class NotaContabilaService {
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
-		// nr mediu salariati = total_nr_ore * / 8;
-		// List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
-		int nrMediuAngajati = Math.round(contractRepository.getSumaNormaLucruSocietate(idsocietate, "valid") / 8);
+		int nrMediuAngajati = Math.round(contractRepository.getSumaNormaLucruSocietate(idsocietate) / 8) - contractRepository.countByGradinvaliditateAndAngajat_Societate_Id("invalid", idsocietate);
 
 		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 

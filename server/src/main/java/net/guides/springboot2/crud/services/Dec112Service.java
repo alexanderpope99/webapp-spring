@@ -56,7 +56,7 @@ public class Dec112Service {
 	@Autowired
 	private CMService cmService;
 
-	private String homeLocation = "server/src/main/java/net/guides/springboot2/crud/";
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createDec112(int luna, int an, int idsocietate, int userID, int drec, String numeDeclarant, String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
@@ -873,7 +873,7 @@ public class Dec112Service {
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("B1_7"); // ore suspendate in luna
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilecm() * realizariRetineri.getDuratazilucru())));
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilecmlucratoare() * realizariRetineri.getDuratazilucru())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("B1_15"); // total zile lucrate
