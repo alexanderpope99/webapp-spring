@@ -325,7 +325,7 @@ class CMTabel extends React.Component {
       let an;
       for (let c of cm) {
         if (c.dela) {
-          an = c.dela.substring(0, 4);
+          an = Number(c.dela.substring(0, 4));
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
         }
       }

@@ -242,9 +242,8 @@ class COTabel extends React.Component {
   }
 
   onChangeDela(dela) {
-    if (!this.state.dela || dela > this.state.panala)
-      this.setState({ dela: dela, panala: dela, validated: true });
-    else this.setState({ dela: dela, validated: true });
+		this.setState({ dela: dela, validated: true }, this.setNrZile);
+
   }
   onChangePanala(panala) {
     this.setState({ panala: panala, validated: true }, this.setNrZile);
@@ -284,6 +283,7 @@ class COTabel extends React.Component {
       );
 
     if (concedii) {
+			console.log(concedii);
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
       var an;
@@ -304,7 +304,7 @@ class COTabel extends React.Component {
       // add luni in luni_cu_concediu
       for (let c of concedii) {
         if (c.dela) {
-          an = c.dela.substring(0, 4);
+          an = Number(c.dela.substring(0, 4));
           luni_cu_concediu[an].add(Number(c.dela.substring(5, 7)));
         }
       }
