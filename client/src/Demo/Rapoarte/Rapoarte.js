@@ -29,13 +29,13 @@ class Rapoarte extends React.Component {
           <Breadcrumb.Item active>Rapoarte</Breadcrumb.Item>
         </Breadcrumb>
         <Stat />
+        <NotaContabila />
+        <Dec112 />
+        <PlatiSalariiMTA />
+        <Pontaj />
         <Tichete />
         <ListaAngajati />
         <Centralizator />
-        <NotaContabila />
-        <Pontaj />
-        <Dec112 />
-        <PlatiSalariiMTA />
       </Aux>
     );
   }
