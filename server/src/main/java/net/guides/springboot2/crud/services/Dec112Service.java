@@ -720,7 +720,6 @@ public class Dec112Service {
 				}
 
 				// -------SECTIUNEA A------ salariat normal, fara concediu medical in luna
-				// respectiva
 				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, contract.getId()));
 
 				if (contract.getTip().compareTo("Contract de munca") == 0 && realizariRetineri.getZilecm() == 0) {
@@ -808,7 +807,6 @@ public class Dec112Service {
 				// -----------END SECTIUNEA A-------
 
 				// -------SECTIUNEA B------ salariat normal + are concediu medical in luna
-				// respectiva
 				if (contract.getTip().compareTo("Contract de munca") == 0 && realizariRetineri.getZilecm() != 0) {
 					sectiune = "B";
 					Element sfmButoaneB = doc.createElement("sfmButoane");
@@ -1128,9 +1126,7 @@ public class Dec112Service {
 					}
 				}
 
-				// ---------SECTIUNEA C-------------avem salariatii care nu au contract de
-				// munca,
-				// dar care au venituri assimilate salariilor.
+				// ---------SECTIUNEA C-------------avem salariatii care nu au contract de munca, dar care au venituri assimilate salariilor.
 				// Aici pot fi incluse contractele de administrare.
 				if (contract.getTip().compareTo("Contract de administrator") == 0) {
 					sectiune = "C";

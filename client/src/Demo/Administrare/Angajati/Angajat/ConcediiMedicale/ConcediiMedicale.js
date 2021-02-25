@@ -206,9 +206,7 @@ class CMTabel extends React.Component {
   }
 
   onChangeDela(dela) {
-    if (!this.state.dela || dela > this.state.panala)
-      this.setState({ dela: dela, panala: dela, validated: true }, this.setNrZile);
-    else this.setState({ dela: dela, validated: true }, this.setNrZile);
+		this.setState({ dela: dela, validated: true }, this.setNrZile);
   }
   onChangePanala(panala) {
     this.setState({ panala: panala, validated: true }, this.setNrZile);
