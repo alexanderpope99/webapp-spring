@@ -64,7 +64,9 @@ class AngajatiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge angajatul PDF: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge angajatul PDF: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -209,12 +211,14 @@ class AngajatiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua lista de angajați: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua lista de angajați: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
     this.setState({
-      angajati: angajati,
+      angajati: angajati || [],
     });
 
     this.renderAngajati();

@@ -97,7 +97,9 @@ class CereriConcediuTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga cereri concediu: ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga cereri concediu: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (ok) {
@@ -134,7 +136,9 @@ class CereriConcediuTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza cereri concediu: ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza cereri concediu: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -157,7 +161,9 @@ class CereriConcediuTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua angajatul: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua angajatul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     this.setState({
@@ -172,7 +178,9 @@ class CereriConcediuTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua zilele de concediu disponibile: ' + err.response.data.message,
+            'Nu am putut prelua zilele de concediu disponibile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -215,7 +223,9 @@ class CereriConcediuTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge cererea: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge cererea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -326,7 +336,9 @@ class CereriConcediuTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua cererile de concediu: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua cererile de concediu: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (cereriConcediu) {

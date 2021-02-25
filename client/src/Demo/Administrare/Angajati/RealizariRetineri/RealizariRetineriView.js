@@ -228,7 +228,9 @@ class RealizariRetineriView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua realizari/retineri corespunzatoare: ' + err.response.data.message,
+            'Nu am putut prelua realizari/retineri corespunzatoare: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -254,7 +256,9 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua persoana: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua persoana: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (!angajati) return;
@@ -296,7 +300,9 @@ class RealizariRetineriView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua sau calcula realizari retineri: ' + err.response.data.message,
+            'Nu am putut prelua sau calcula realizari retineri: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (!data) {
@@ -388,7 +394,9 @@ class RealizariRetineriView extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua totalul de pensie facultativă: ' + err.response.data.message,
+            'Nu am putut prelua totalul de pensie facultativă: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -429,7 +437,9 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua orele suplimentare: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua orele suplimentare: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -512,7 +522,9 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut descărca ștatul: ' + err.response.data.message,
+          toastMessage: 'Nu am putut descărca ștatul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -535,7 +547,9 @@ class RealizariRetineriView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua ștatul individual: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua ștatul individual: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 		console.log(ok);

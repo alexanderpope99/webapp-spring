@@ -67,7 +67,9 @@ class BazaCalculView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am prelua angajatul: ' + err.response.data.message,
+            toastMessage: 'Nu am prelua angajatul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (angajat)
@@ -109,7 +111,9 @@ class BazaCalculView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua baza calcul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua baza calcul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (bazacalcul) {

@@ -65,7 +65,9 @@ export default class ActivitatiTabel extends React.Component {
       .get(`${server.address}/activitate/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) =>
-        this.showError('Nu am putut prelua activitatile: ' + err.response.data.message)
+        this.showError('Nu am putut prelua activitatile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
       );
     if (activitati) {
       this.setState({ activitati: activitati });
@@ -99,7 +101,9 @@ export default class ActivitatiTabel extends React.Component {
       .delete(`${server.address}/activitate/${id}`, { headers: authHeader() })
       .then(this.getActivitati)
       .catch((err) =>
-        this.showError('Nu am putut sterge activitatea: ' + err.response.data.message)
+        this.showError('Nu am putut sterge activitatea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
       );
   }
 
@@ -116,14 +120,18 @@ export default class ActivitatiTabel extends React.Component {
         .put(`${server.address}/activitate/${this.state.id}`, activitate, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut modifica activitatea: ' + err.response.data.message)
+          this.showError('Nu am putut modifica activitatea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
         );
     } else {
       ok = await axios
         .post(`${server.address}/activitate/ids=${this.state.socsel.id}`, activitate, { headers: authHeader() })
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut adauga activitatea: ' + err.response.data.message)
+          this.showError('Nu am putut adauga activitatea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
         );
     }
 

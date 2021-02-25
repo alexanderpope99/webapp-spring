@@ -64,13 +64,16 @@ class AngajatiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge angajatul PDF: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge angajatul PDF: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
 
   // function to create react component with fetched data
   renderAngajati() {
+		if(!this.state.angajati) return;
     this.setState({
       angajatiComponent: this.state.angajati.map((ang, index) => {
         for (let key in ang) {
@@ -209,15 +212,22 @@ class AngajatiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua lista de angajați: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua lista de angajați: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
-
-    this.setState({
-      angajati: angajati,
-    });
-
-    this.renderAngajati();
+		console.log(angajati);
+		return;
+		if(angajati) {
+			this.setState({
+				angajati: angajati,
+			}, this.renderAngajati);
+		} else {
+			this.setState({
+				angajati: [],
+			})
+		}
   }
 
   buttons = (cell, row, rowIndex) => (

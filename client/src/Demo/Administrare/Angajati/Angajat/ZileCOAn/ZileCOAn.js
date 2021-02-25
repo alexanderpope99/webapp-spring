@@ -71,7 +71,9 @@ class ZileCOAn extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul\n' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (angajat)
@@ -98,7 +100,9 @@ class ZileCOAn extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga zilele de concediu\n' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga zilele de concediu\n' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -130,7 +134,9 @@ class ZileCOAn extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza zilele de concediu\n' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza zilele de concediu\n' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -165,7 +171,9 @@ class ZileCOAn extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge zile concediu\n' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge zile concediu\n' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -258,7 +266,9 @@ class ZileCOAn extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua zilele concediu\n' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua zilele concediu\n' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (zilecoan) {

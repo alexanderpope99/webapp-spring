@@ -226,9 +226,9 @@ class Societate extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.setState({ showToast: true, toastMessage: err.response.data.message })
+          this.setState({ showToast: true, toastMessage: err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server' })
         );
-      this.setState({ idfisier: file.fileId });
+      this.setState({ idfisier: file ? file.fileId : null });
     }
 
     let adresa_body = {
@@ -274,7 +274,7 @@ class Societate extends React.Component {
         })
         .then((res) => res.status === 200)
         .catch((err) =>
-          this.setState({ showToast: true, toastMessage: err.response.data.message })
+          this.setState({ showToast: true, toastMessage: err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server' })
         );
     }
     if (ok) {

@@ -91,7 +91,9 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua angajații fără user: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua angajații fără user: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -106,7 +108,9 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua societățile: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua societățile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     // get all roles
@@ -116,7 +120,9 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua role-urile: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua role-urile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -129,7 +135,9 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajații: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajații: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
 
@@ -138,10 +146,10 @@ class UserTabel extends React.Component {
 
     this.setState(
       {
-        all_roles: all_roles,
-        all_societati: all_societati,
-        all_angajati_of_socsel: all_angajati_of_socsel,
-        all_angajati_of_socsel_nouser: all_angajati_of_socsel_nouser,
+        all_roles: all_roles || [],
+        all_societati: all_societati || [],
+        all_angajati_of_socsel: all_angajati_of_socsel || [],
+        all_angajati_of_socsel_nouser: all_angajati_of_socsel_nouser || [],
       },
       this.onRefresh
     );
@@ -175,7 +183,9 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut actualiza user-ul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut actualiza user-ul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (ok) {
@@ -195,7 +205,9 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut creea user-ul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut creea user-ul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (ok) {
@@ -330,7 +342,9 @@ class UserTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge user-ul: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge user-ul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -345,7 +359,9 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua userii: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua userii: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       const all_angajati_of_socsel_nouser = await this.getAngajatiFaraUser();
@@ -353,8 +369,8 @@ class UserTabel extends React.Component {
       if (users) {
         this.setState(
           {
-            users: users,
-            all_angajati_of_socsel_nouser: all_angajati_of_socsel_nouser,
+            users: users || [],
+            all_angajati_of_socsel_nouser: all_angajati_of_socsel_nouser || [],
           },
           this.renderUsers
         );
@@ -366,13 +382,15 @@ class UserTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua userii fără societate: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua userii fără societate: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (users) {
         this.setState(
           {
-            users: users,
+            users: users || [],
             all_angajati_of_socsel_nouser: [],
           },
           this.renderUsers

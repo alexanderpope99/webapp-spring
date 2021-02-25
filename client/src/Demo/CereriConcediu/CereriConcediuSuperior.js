@@ -40,7 +40,9 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut aproba cererea de concediu: ' + err.response.data.message,
+          toastMessage: 'Nu am putut aproba cererea de concediu: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -53,7 +55,9 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut respinge cererea de concediu: ' + err.response.data.message,
+          toastMessage: 'Nu am putut respinge cererea de concediu: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -192,7 +196,9 @@ class CereriConcediuSuperiorTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua cererile de concediu: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua cererile de concediu: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 

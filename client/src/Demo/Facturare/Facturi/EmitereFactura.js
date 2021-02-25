@@ -70,7 +70,9 @@ export default class EmitereFactura extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua clienții: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua clienții: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     this.setState({ clienti: clienti ? clienti : [] });
@@ -80,7 +82,9 @@ export default class EmitereFactura extends React.Component {
     const caiete = await axios
       .get(`${server.address}/caiet/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => this.showError('Nu am putut prelua caietul: ' + err.response.data.message));
+      .catch((err) => this.showError('Nu am putut prelua caietul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server')));
     if (caiete) {
       this.setState({ caiete: caiete });
     }
@@ -93,7 +97,9 @@ export default class EmitereFactura extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua clienții: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua clienții: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     this.setState({ numar: ultimulNumar + 1 });
@@ -105,7 +111,9 @@ export default class EmitereFactura extends React.Component {
       .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) =>
-        this.showError('Nu am putut prelua proiectele: ' + err.response.data.message)
+        this.showError('Nu am putut prelua proiectele: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
       );
     if (proiecte) {
       var a = new Set();
@@ -277,7 +285,9 @@ export default class EmitereFactura extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga factura: ' + err.response.data.message,
+            toastMessage: 'Nu am putut adăuga factura: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     } else {
@@ -288,7 +298,9 @@ export default class EmitereFactura extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut modifica factura: ' + err.response.data.message,
+            toastMessage: 'Nu am putut modifica factura: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     }
@@ -313,6 +325,13 @@ export default class EmitereFactura extends React.Component {
       this.props.scrollToTopSmooth
     );
   }
+
+	showError(message) {
+		this.setState({
+			showToast: true,
+			toastMessage: message,
+		});
+	}
 
   render() {
     const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();

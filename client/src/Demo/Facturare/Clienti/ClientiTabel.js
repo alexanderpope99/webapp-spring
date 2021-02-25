@@ -99,7 +99,9 @@ export default class ClientiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua clientii: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua clientii: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (clienti) this.setState({ clienti: clienti }, this.clearFields);
@@ -153,7 +155,9 @@ export default class ClientiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge clientul: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge clientul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -199,7 +203,9 @@ export default class ClientiTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut modifica clientul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut modifica clientul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     } else {
@@ -211,7 +217,9 @@ export default class ClientiTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga clientul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut adăuga clientul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     }

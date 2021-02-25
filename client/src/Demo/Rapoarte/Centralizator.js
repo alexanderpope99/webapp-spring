@@ -70,7 +70,9 @@ class Centralizator extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea centralizator '+this.state.pentru.toLowerCase() +" "+this.state.tip.toLowerCase() + err.response.data.message,
+          toastMessage: 'Nu am putut crea centralizator '+this.state.pentru.toLowerCase() +" "+this.state.tip.toLowerCase()(err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
 	  );
 	  console.log(`Centralizator ${this.state.pentru} ${this.state.tip} - ${this.state.socsel.nume} - ${luna.nume} ${an}.xlsx`)

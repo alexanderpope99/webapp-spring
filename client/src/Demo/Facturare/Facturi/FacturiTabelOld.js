@@ -120,7 +120,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga factura: ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga factura: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (ok) {
@@ -177,7 +179,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza factura: ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza factura: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -232,7 +236,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge factura: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge factura: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     // if(ok) this.onRefresh();
@@ -381,7 +387,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua centrele de cost: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     const aprobatori = await axios
@@ -392,7 +400,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua aprobatorii: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua aprobatorii: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     const fact = await axios
@@ -403,7 +413,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua facturile: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua facturile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (centreCost) {

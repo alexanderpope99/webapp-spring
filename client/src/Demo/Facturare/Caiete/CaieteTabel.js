@@ -66,7 +66,9 @@ export default class CaieteTabel extends React.Component {
       .get(`${server.address}/societate`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) =>
-        this.showError('Nu am putut prelua societatile: ' + err.response.data.message)
+        this.showError('Nu am putut prelua societatile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
       );
     if (societati) {
       this.setState({ societati: societati });
@@ -77,7 +79,9 @@ export default class CaieteTabel extends React.Component {
     const caiete = await axios
       .get(`${server.address}/caiet`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => this.showError('Nu am putut prelua caietele: ' + err.response.data.message));
+      .catch((err) => this.showError('Nu am putut prelua caietele: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server')));
     if (caiete) {
       this.setState({ caiete: caiete });
     }
@@ -112,7 +116,9 @@ export default class CaieteTabel extends React.Component {
     await axios
       .delete(`${server.address}/caiet/${id}`, { headers: authHeader() })
       .then(this.getCaiete)
-      .catch((err) => this.showError('Nu am putut sterge caietul: ' + err.response.data.message));
+      .catch((err) => this.showError('Nu am putut sterge caietul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server')));
   }
 
   clearUserInput() {
@@ -229,7 +235,9 @@ export default class CaieteTabel extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut modifica caietul: ' + err.response.data.message)
+          this.showError('Nu am putut modifica caietul: '(err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server').message)
         );
     } else {
       ok = await axios
@@ -237,7 +245,9 @@ export default class CaieteTabel extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-        .catch((err) => this.showError('Nu am putut adauga caietul: ' + err.response.data.message));
+        .catch((err) => this.showError('Nu am putut adauga caietul: '(err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server').message));
     }
 
     if (ok) {

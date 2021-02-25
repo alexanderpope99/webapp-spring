@@ -72,7 +72,9 @@ class PersoaneIntretinereTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am prelua angajatul: ' + err.response.data.message,
+            toastMessage: 'Nu am prelua angajatul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (angajat)
@@ -104,7 +106,9 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga persoana întreținere: ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga persoana întreținere: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (ok) {
@@ -140,7 +144,9 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut modifica persoana întreținere: ' + err.response.data.message,
+          toastMessage: 'Nu am putut modifica persoana întreținere: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -180,7 +186,9 @@ class PersoaneIntretinereTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge persoana întreținere: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge persoana întreținere: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -217,7 +225,9 @@ class PersoaneIntretinereTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua persoanele întreținere: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua persoanele întreținere: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (persoane) {

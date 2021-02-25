@@ -84,7 +84,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea factură: ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea factură: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -102,7 +104,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua facturile: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua facturile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (facturi) {
@@ -142,7 +146,9 @@ class FacturiTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut sterge factura: ' + err.response.data.message,
+          toastMessage: 'Nu am putut sterge factura: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }

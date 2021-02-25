@@ -74,7 +74,9 @@ class AddUser extends React.Component {
         this.setState({
           show: true,
           modalTitle: 'Eroare',
-          message: 'Eroare la adăugarea user-ului: ' + err.response.data.message,
+          message: 'Eroare la adăugarea user-ului: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }

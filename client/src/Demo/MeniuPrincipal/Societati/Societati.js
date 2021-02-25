@@ -197,9 +197,9 @@ class Societati extends React.Component {
       societati_res.forEach((societate) => {
         societati[societate.nume] = { opacity: '.3', ...societate };
       });
+			let selected = getSocSel();
+			if (selected) this.select(selected.nume);
     }
-    let selected = getSocSel();
-    if (selected) this.select(selected.nume);
   }
 
   unselectAll() {
@@ -250,7 +250,9 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut șterge societatea: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge societatea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -296,7 +298,9 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut crea ștat salarii: ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea ștat salarii: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -324,7 +328,9 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut crea Declarația 112: ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea Declarația 112: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -347,7 +353,9 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut crea MTA: ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea MTA: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -401,7 +409,9 @@ class Societati extends React.Component {
           showToast: true,
           toastColor: 'white',
           toastTitle: 'Eroare',
-          toastMessage: 'Nu am putut actualiza societatea: ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza societatea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }

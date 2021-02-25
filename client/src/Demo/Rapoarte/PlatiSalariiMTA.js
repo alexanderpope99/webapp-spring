@@ -61,10 +61,12 @@ class PlatiSalariiMTA extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua conturile societății: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua conturile societății: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
 			);
-    if (conturi.length > 0) this.setState({ conturiBancare: conturi, idContBancar: conturi[0].id, numeBanca: conturi[0].numebanca });
+    if (conturi && conturi.length > 0) this.setState({ conturiBancare: conturi, idContBancar: conturi[0].id, numeBanca: conturi[0].numebanca });
 	}
 	
 	getMTAFormat(numeBanca) {
@@ -98,7 +100,9 @@ class PlatiSalariiMTA extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea MTA: ' + err.response.data.message,
+          toastMessage: 'Nu am putut crea MTA: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 

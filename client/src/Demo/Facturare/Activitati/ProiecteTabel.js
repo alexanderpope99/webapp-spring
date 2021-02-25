@@ -68,7 +68,9 @@ export default class ProiecteTabel extends React.Component {
       .get(`${server.address}/activitate/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) =>
-        this.showError('Nu am putut prelua activitatile: ' + err.response.data.message)
+        this.showError('Nu am putut prelua activitatile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
       );
     if (activitati) {
       this.setState({ activitati: activitati });
@@ -80,7 +82,9 @@ export default class ProiecteTabel extends React.Component {
       .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) =>
-        this.showError('Nu am putut prelua proiectele: ' + err.response.data.message)
+        this.showError('Nu am putut prelua proiectele: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
       );
     if (proiecte) {
       this.setState({ proiecte: proiecte });
@@ -113,7 +117,9 @@ export default class ProiecteTabel extends React.Component {
     await axios
       .delete(`${server.address}/proiect/${id}`, { headers: authHeader() })
       .then(this.getActivitati)
-      .catch((err) => this.showError('Nu am putut sterge proiectul: ' + err.response.data.message));
+      .catch((err) => this.showError('Nu am putut sterge proiectul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server')));
   }
 
   async onSubmit(e) {
@@ -136,7 +142,9 @@ export default class ProiecteTabel extends React.Component {
         )
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut modifica proiectul: ' + err.response.data.message)
+          this.showError('Nu am putut modifica proiectul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
         );
     } else {
       ok = await axios
@@ -145,7 +153,9 @@ export default class ProiecteTabel extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut adauga activitatea: ' + err.response.data.message)
+          this.showError('Nu am putut adauga activitatea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'))
         );
     }
 

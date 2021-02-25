@@ -143,7 +143,9 @@ class ConcediiMedicaleView extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (angajat) {
@@ -276,7 +278,9 @@ class ConcediiMedicaleView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua concediile medicale: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua concediile medicale: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (cm) {
@@ -339,7 +343,9 @@ class ConcediiMedicaleView extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul medical: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge concediul medical: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }

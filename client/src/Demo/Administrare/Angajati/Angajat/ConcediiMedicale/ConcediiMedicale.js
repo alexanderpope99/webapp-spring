@@ -153,7 +153,9 @@ class CMTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul: ' + err.response.data.message,
+            toastMessage: 'Nu am putut prelua angajatul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (angajat) {
@@ -174,7 +176,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua sărbătorile: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua sărbătorile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (sarbatori) this.setState({ sarbatori: sarbatori });
@@ -372,7 +376,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul medical: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge concediul medical: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -424,7 +430,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga concediul: ' + err.response.data.message,
+          toastMessage: 'Nu am putut adăuga concediul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -484,7 +492,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza concediul: ' + err.response.data.message,
+          toastMessage: 'Nu am putut actualiza concediul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 

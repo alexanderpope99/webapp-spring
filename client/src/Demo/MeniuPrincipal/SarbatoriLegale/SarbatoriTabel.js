@@ -79,7 +79,9 @@ class SarbatoriTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua sărbătorile: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua sărbătorile: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -138,7 +140,9 @@ class SarbatoriTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge sărbătoarea: ' + err.response.data.message,
+          toastMessage: 'Nu am putut șterge sărbătoarea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -162,7 +166,9 @@ class SarbatoriTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut actualiza sărbătoarea: ' + err.response.data.message,
+            toastMessage: 'Nu am putut actualiza sărbătoarea: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     } else {
@@ -172,7 +178,9 @@ class SarbatoriTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga sărbătoare: ' + err.response.data.message,
+            toastMessage: 'Nu am putut adăuga sărbătoare: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     }

@@ -69,7 +69,9 @@ class AdeverintaVenit extends React.Component {
 		  .catch((err) =>
 		    this.setState({
 		      showToast: true,
-		      toastMessage: 'Nu am putut crea fisierul: ' + err.response.data.message,
+		      toastMessage: 'Nu am putut crea fisierul: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
 		    })
 		  );
 

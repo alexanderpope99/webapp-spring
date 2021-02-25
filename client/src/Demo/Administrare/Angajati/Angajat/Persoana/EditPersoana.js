@@ -146,7 +146,9 @@ class EditPersoana extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua persoanele din baza de date: ' + err.response.data.message,
+            'Nu am putut prelua persoanele din baza de date: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 
@@ -257,7 +259,9 @@ class EditPersoana extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua persoana : ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua persoana : ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 

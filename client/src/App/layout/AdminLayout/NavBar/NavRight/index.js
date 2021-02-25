@@ -90,7 +90,9 @@ class NavRight extends Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut citi notificările: ' + err.response.data.message,
+          toastMessage: 'Nu am putut citi notificările: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -103,7 +105,9 @@ class NavRight extends Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut citi toate notificările: ' + err.response.data.message,
+            toastMessage: 'Nu am putut citi toate notificările: ' + (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     });
