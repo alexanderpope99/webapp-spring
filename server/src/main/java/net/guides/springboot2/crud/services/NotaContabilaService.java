@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -19,8 +21,11 @@ import org.springframework.stereotype.Service;
 import net.guides.springboot2.crud.dto.NotaContabilaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
+import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.ParametriiSalariu;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
+import net.guides.springboot2.crud.repository.ContractRepository;
 import net.guides.springboot2.crud.repository.RealizariRetineriRepository;
 import net.guides.springboot2.crud.repository.RetineriRepository;
 import net.guides.springboot2.crud.repository.SocietateRepository;
@@ -34,11 +39,25 @@ public class NotaContabilaService {
 	@Autowired
 	private AdresaRepository adresaRepository;
 	@Autowired
-	RealizariRetineriRepository realizariRetineriRepository;
+	private RealizariRetineriRepository realizariRetineriRepository;
 	@Autowired
-	RetineriRepository retineriRepository;
+	private RetineriRepository retineriRepository;
+	@Autowired
+	private ContractRepository contractRepository;
+	@Autowired
+	private ParametriiSalariuService parametriiSalariuService;
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
+
+	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
+		// nr mediu salariati = total_nr_ore * / 8;
+		// List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
+		int nrMediuAngajati = Math.round(contractRepository.getSumaNormaLucruSocietate(idsocietate, "valid") / 8);
+
+		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
+
+		return (float) ((nrMediuAngajati * 0.04) * parametriiSalariu.getSalariumin());
+	}
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
 
@@ -93,13 +112,12 @@ public class NotaContabilaService {
 
 		// * CAS 25% angajat
 		writerCell = stat.getRow(22).getCell(5);
-		long cas25 = notaContabila.getCas25();
+		long cas25 = notaContabila.getCas25() - Math.round(notaContabila.getValCM() * 0.25);
 		writerCell.setCellValue(cas25);
 
 		// * CASS 10% angajat
 		writerCell = stat.getRow(24).getCell(5);
-		long cass10 = notaContabila.getCass10();
-		writerCell.setCellValue(cass10);
+		writerCell.setCellValue(notaContabila.getCass10() - Math.round(notaContabila.getValCM() * 0.065)); 
 
 		// * Impozit
 		writerCell = stat.getRow(25).getCell(5);
@@ -110,6 +128,9 @@ public class NotaContabilaService {
 		writerCell = stat.getRow(32).getCell(5);
 		long cam = notaContabila.getCam();
 		writerCell.setCellValue(cam);
+
+		writerCell = stat.getRow(38).getCell(5);
+		writerCell.setCellValue(getFonduriHandicap(luna, an, idsocietate));
 
 		/* ------ ENDING ------ **/
 		FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();

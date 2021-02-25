@@ -73,7 +73,7 @@ class NavRight extends Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua cursul valutar.: ' + err.response.data.message,
+          toastMessage: 'Nu am putut prelua cursul valutar.: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 

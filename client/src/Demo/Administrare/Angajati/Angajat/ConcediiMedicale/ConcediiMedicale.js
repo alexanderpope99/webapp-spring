@@ -177,7 +177,7 @@ class CMTabel extends React.Component {
           toastMessage: 'Nu am putut prelua sărbătorile: ' + err.response.data.message,
         })
       );
-    if(sarbatori) this.setState({sarbatori: sarbatori});
+    if (sarbatori) this.setState({ sarbatori: sarbatori });
   }
 
   componentDidMount() {
@@ -206,7 +206,7 @@ class CMTabel extends React.Component {
   }
 
   onChangeDela(dela) {
-		this.setState({ dela: dela, validated: true }, this.setNrZile);
+    this.setState({ dela: dela, validated: true }, this.setNrZile);
   }
   onChangePanala(panala) {
     this.setState({ panala: panala, validated: true }, this.setNrZile);
@@ -233,7 +233,7 @@ class CMTabel extends React.Component {
         date1,
         date2,
         this.state.codboala.substring(0, 2),
-        this.state.sarbatori,
+        this.state.sarbatori
       );
       if (this.state.mediezilnica) {
         indemnizatiefirma = Math.round(
@@ -299,7 +299,11 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelau concediile medicale: ' + err.response.data.message,
+          toastMessage:
+            'Nu am putut prelau concediile medicale: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (cm) {
@@ -356,8 +360,8 @@ class CMTabel extends React.Component {
   }
 
   correctNumber(numberStr) {
-		if(!numberStr) return 0;
-		if(typeof(numberStr) == 'number') return numberStr;
+    if (!numberStr) return 0;
+    if (typeof numberStr == 'number') return numberStr;
     return Number(numberStr.replace(/,/g, '.'));
   }
 
@@ -686,7 +690,9 @@ class CMTabel extends React.Component {
     // get baza calcul + zile baza calcul + medie zilnica
     const baza_calcul = await axios
       .get(
-        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an}/${this.state.codboala.substring(0, 2)}`,
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${
+          this.state.an
+        }/${this.state.codboala.substring(0, 2)}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
@@ -933,7 +939,7 @@ class CMTabel extends React.Component {
                     <Form.Label>Medie zilnică (RON)</Form.Label>
                     <Form.Control
                       type="number"
-											step="0.0001"
+                      step="0.0001"
                       value={this.state.mediezilnica}
                       onChange={(e) => {
                         this.setState({ mediezilnica: e.target.value });
@@ -1099,7 +1105,7 @@ class CMTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
-					<Link to="/forms/realizari-retineri">
+            <Link to="/forms/realizari-retineri">
               <Button variant="link">Către realizări/rețineri</Button>
             </Link>
             <Button variant="outline-info" onClick={this.handleClose}>

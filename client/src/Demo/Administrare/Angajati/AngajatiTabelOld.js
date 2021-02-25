@@ -97,6 +97,7 @@ class AngajatiTabel extends React.Component {
                   </Tooltip>
                 }
               >
+								<Link to="/forms/realizari-retineri">
                 <Button
                   disabled={!ang.contract.id}
                   onClick={() => {
@@ -104,13 +105,12 @@ class AngajatiTabel extends React.Component {
                       idpersoana: ang.persoana.id,
                       numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
                     });
-                    window.location.href = `/forms/realizari-retineri`;
                   }}
                   variant="outline-secondary"
                   className="ml-2 p-1 rounded-circle border-0"
                 >
                   <FileText size={20} />
-                </Button>
+                </Button></Link>
               </OverlayTrigger>
 
               {/* DATE PERSONALE BUTTON */}
@@ -122,19 +122,19 @@ class AngajatiTabel extends React.Component {
                   </Tooltip>
                 }
               >
+								<Link to="/forms/angajat">
                 <Button
                   onClick={() => {
                     setAngajatSel({
                       idpersoana: ang.persoana.id,
                       numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
                     });
-                    window.location.href = `/forms/angajat`;
                   }}
                   variant="outline-secondary"
                   className="ml-2 p-1 rounded-circle border-0"
                 >
                   <Info size={20} />
-                </Button>
+                </Button></Link>
               </OverlayTrigger>
 
               <PopupState variant="popover" popupId="demo-popup-popover">

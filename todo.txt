@@ -51,8 +51,7 @@ SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TODO: {
-	* -> add sorting and filtering to tables on frontend 
-	do not accept concedii <1900 
+	nr mediu - pers cu handicap * 4%
 }
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

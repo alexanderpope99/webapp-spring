@@ -187,7 +187,7 @@ class Societati extends React.Component {
           toastColor: 'white',
           toastTitle: 'Eroare',
           toastMessage:
-            'Nu am putut prelua societățile din baza de date: ' + err.response.data.message,
+            'Nu am putut prelua societățile din baza de date: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
 

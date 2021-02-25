@@ -15,6 +15,7 @@ const AdminLayout = Loadable({
 });
 
 class App extends Component {
+
   render() {
     // singin-1 and singup-1 pages
     const menu = routes.map((route, index) => {

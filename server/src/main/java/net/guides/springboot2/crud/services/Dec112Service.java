@@ -56,7 +56,7 @@ public class Dec112Service {
 	@Autowired
 	private CMService cmService;
 
-	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
+	private String homeLocation = "server/src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createDec112(int luna, int an, int idsocietate, int userID, int drec, String numeDeclarant, String prenumeDeclarant, String functieDeclarant) throws IOException, ResourceNotFoundException {
 		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
@@ -720,9 +720,9 @@ public class Dec112Service {
 				}
 
 				// -------SECTIUNEA A------ salariat normal, fara concediu medical in luna
-				RealizariRetineri realizariRetineri = (realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, contract.getId()));
+				RealizariRetineri realizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, contract.getId());
 
-				if (contract.getTip().compareTo("Contract de munca") == 0 && realizariRetineri.getZilecm() == 0) {
+				if ((contract.getTip().compareTo("Contract de munca") == 0 || contract.getTip().compareTo("Contract de muncă") == 0) && realizariRetineri.getZilecm() == 0) {
 					sectiune = "A";
 					Element sfmButoaneA = doc.createElement("sfmButoane");
 					sbfrmPage1Asig.appendChild(sfmButoaneA);
@@ -807,7 +807,7 @@ public class Dec112Service {
 				// -----------END SECTIUNEA A-------
 
 				// -------SECTIUNEA B------ salariat normal + are concediu medical in luna
-				if (contract.getTip().compareTo("Contract de munca") == 0 && realizariRetineri.getZilecm() != 0) {
+				if ((contract.getTip().compareTo("Contract de munca") == 0 || contract.getTip().compareTo("Contract de muncă") == 0) && realizariRetineri.getZilecm() != 0) {
 					sectiune = "B";
 					Element sfmButoaneB = doc.createElement("sfmButoane");
 					sbfrmPage1Asig.appendChild(sfmButoaneB);
