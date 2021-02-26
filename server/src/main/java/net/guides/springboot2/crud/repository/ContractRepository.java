@@ -14,7 +14,7 @@ public interface ContractRepository extends JpaRepository<Contract, Integer> {
 	@Query(value = "SELECT a.contract FROM Angajat a WHERE a.idpersoana = ?1")
 	public Optional<Contract> findByIdPersoana(int idpersoana);
 
-	public List<Contract> findBySocietate_Id(int idsocietate);
+	public List<Contract> findByAngajat_Societate_Id(int idsocietate);
 	
 	public int countByGradinvaliditateAndAngajat_Societate_Id(String gradinvaliditate, int idsocietate);
 

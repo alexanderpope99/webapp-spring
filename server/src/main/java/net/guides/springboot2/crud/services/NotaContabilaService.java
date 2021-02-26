@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -52,7 +51,7 @@ public class NotaContabilaService {
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
-		List<Contract> contracte = contractRepository.findBySocietate_Id(idsocietate);
+		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
 		List<RealizariRetineri> rr = realizariRetineriRepository.findByLunaAndAnAndContract_Angajat_Societate_Id(luna, an, idsocietate);
 		if(contracte.size() != rr.size())
 			throw new ResourceNotFoundException("Nu toti angajatii au salariile calculate in " + luna + " " + an + ".");
