@@ -349,4 +349,5 @@ public class ContractDTO {
 	public void setZilecoan(Integer zilecoan) {
 		this.zilecoan = zilecoan;
 	}
+
 }

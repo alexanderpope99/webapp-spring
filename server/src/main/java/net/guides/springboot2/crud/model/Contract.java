@@ -120,6 +120,10 @@ public class Contract implements Serializable {
 	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CM> concediiMedicale;
 
+	@JsonBackReference(value = "suspendare-contract")
+	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Suspendare> suspendari;
+
 	public Contract() {
 	}
 
@@ -443,6 +447,14 @@ public class Contract implements Serializable {
 
 	public void setAngajat(Angajat angajat) {
 		this.angajat = angajat;
+	}
+
+	public List<Suspendare> getSuspendari() {
+		return suspendari;
+	}
+
+	public void setSuspendari(List<Suspendare> suspendari) {
+		this.suspendari = suspendari;
 	}
 
 	public void checkData() throws ResourceNotFoundException {

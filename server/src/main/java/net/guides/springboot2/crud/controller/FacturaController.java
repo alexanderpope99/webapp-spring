@@ -1,6 +1,5 @@
 package net.guides.springboot2.crud.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class FacturaController {
 	}
 
 	@GetMapping("/createfile/ids={ids}/{id}/{uid}")
-	public boolean createFactura(@PathVariable("id") int id,@PathVariable("ids") int ids,@PathVariable("uid") int uid) throws IOException,ResourceNotFoundException {
+	public boolean createFactura(@PathVariable("id") int id,@PathVariable("ids") int ids,@PathVariable("uid") int uid) throws Exception {
 		return facturaService.createFactura(ids,id,uid);
 	}
 

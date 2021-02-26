@@ -10,7 +10,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -50,23 +56,23 @@ public class FacturaService {
 		double scale = Math.pow(10, places);
 		return Math.round(value * scale) / scale;
 	}
-	
+
 	public List<Factura> findAll() {
 		return facturaRepository.findAll(Sort.by(Sort.Direction.DESC, "dataexpedierii", "numar"));
 	}
-	
+
 	public Factura findById(int id) throws ResourceNotFoundException {
 		return facturaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + id));
 	}
-	
+
 	public List<Factura> findBySocietate_Id(int idsocietate) {
 		return facturaRepository.findByClient_Societate_IdOrderByDataexpedieriiDescNumarDesc(idsocietate);
 	}
-	
+
 	public int findNumarFactura() {
 		return facturaRepository.findNumarFactura();
 	}
-	
+
 	public Factura save(Factura newFactura) throws ResourceNotFoundException {
 		for (Produs produs : newFactura.getProduse()) {
 			produs.setFactura(newFactura);
@@ -75,32 +81,50 @@ public class FacturaService {
 		newFactura.setCaiet(caiet);
 		return facturaRepository.save(newFactura);
 	}
-	
+
 	public Factura update(Factura newFactura, int id) throws ResourceNotFoundException {
 		Factura factura = findById(id);
 		return save(factura.update(newFactura));
 	}
-	
+
 	public void delete(int facturaId) throws ResourceNotFoundException {
 		Factura factura = facturaRepository.findById(facturaId).orElseThrow(() -> new ResourceNotFoundException("Factura not found for this id :: " + facturaId));
-		
+
 		facturaRepository.delete(factura);
 	}
-	
-	public boolean createFactura(int ids,int id,int uid) throws IOException, ResourceNotFoundException {
+
+	@Transactional
+	public boolean createFactura(int ids, int id, int uid) throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById(ids).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + ids));
 		Factura factura = facturaRepository.findById(id).get();
 		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
-		
+
 		String facturaTemplate = homeLocation + "/templates";
 
 		FileInputStream file = new FileInputStream(new File(facturaTemplate, "FacturaTemplate.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
+
+		int pictureIdx = workbook.addPicture(societate.getImagine().getData(), Workbook.PICTURE_TYPE_JPEG);
+
+		CreationHelper helper = workbook.getCreationHelper();
+
 		Sheet facturaWb = workbook.getSheetAt(0);
+
+		Drawing<?> drawing = facturaWb.createDrawingPatriarch();
+		
+		ClientAnchor my_anchor = helper.createClientAnchor();
 
 		Client client=factura.getClient();
 		LocalDate dataExpedierii=factura.getDataexpedierii();
+
+		my_anchor.setCol1(1);
+        my_anchor.setRow1(3);
+
+
+		Picture  my_picture = drawing.createPicture(my_anchor, pictureIdx);
+		my_picture.resize();
+
 
 		Row row=facturaWb.getRow(1);
 		Cell writerCell = row.getCell(11);
