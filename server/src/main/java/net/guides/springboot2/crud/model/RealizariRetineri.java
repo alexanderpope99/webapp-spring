@@ -121,6 +121,9 @@ public class RealizariRetineri implements Serializable {
 	@Column(name = "nroresuplimentare", nullable = false)
 	private Integer nroresuplimentare = 0;
 
+	@Column(name = "coneefectuat")
+	private Integer coneefectuat = 0;
+
 	@JsonBackReference(value = "stat-contract")
 	@ManyToOne
 	@JoinColumn(name = "idcontract", referencedColumnName = "id", nullable = false)
@@ -350,6 +353,10 @@ public class RealizariRetineri implements Serializable {
 		return retineri;
 	}
 
+	public Integer getConeefectuat() {
+		return coneefectuat;
+	}
+
 	// ! SETTERS
 	public void setNrtichete(Integer nrtichete) {
 		this.nrtichete = nrtichete;
@@ -523,6 +530,10 @@ public class RealizariRetineri implements Serializable {
 
 	public void setValcmfnuass(Integer valcmfnuass) {
 		this.valcmfnuass = valcmfnuass;
+	}
+
+	public void setConeefectuat(Integer coneefectuat) {
+		this.coneefectuat = coneefectuat;
 	}
 
 	// ! OTHER

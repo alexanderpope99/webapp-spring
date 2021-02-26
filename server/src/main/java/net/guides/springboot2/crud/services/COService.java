@@ -96,8 +96,7 @@ public class COService {
 		int luna = co.getDela().getMonthValue();
 		int an = co.getDela().getYear();
 
-		Contract contract = contractRepository.findById(coDTO.getIdcontract())
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id:" + coDTO.getIdcontract()));
+		Contract contract = contractRepository.findById(coDTO.getIdcontract()).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id:" + coDTO.getIdcontract()));
 
 		co.setContract(contract);
 		// verifica ca nu se suprapune cu alt concediu
@@ -107,7 +106,7 @@ public class COService {
 		coRepository.save(co);
 
 		// update salariu
-		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
+		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1, -1);
 
 		coDTO.setId(co.getId());
 		return coDTO;
@@ -121,12 +120,10 @@ public class COService {
 	public Map<String, Boolean> fixConcedii() throws ResourceNotFoundException {
 		List<CO> co = coRepository.findAll();
 
-		for(CO concediu: co)
-		{
-			if(concediu.getDela().getYear()<1900 || concediu.getPanala().getYear()<1900)
+		for (CO concediu : co) {
+			if (concediu.getDela().getYear() < 1900 || concediu.getPanala().getYear() < 1900)
 				coRepository.delete(concediu);
 		}
-
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -134,13 +131,11 @@ public class COService {
 	}
 
 	public Map<String, Boolean> delete(int coId) throws ResourceNotFoundException {
-		CO co = coRepository.findById(coId)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există CO cu id: " + coId));
+		CO co = coRepository.findById(coId).orElseThrow(() -> new ResourceNotFoundException("Nu există CO cu id: " + coId));
 
 		coRepository.delete(co);
 
-		realizaiRetineriService.recalcRealizariRetineri(co.getDela().getMonthValue(), co.getDela().getYear(),
-				co.getContract().getId(), -1, -1, -1);
+		realizaiRetineriService.recalcRealizariRetineri(co.getDela().getMonthValue(), co.getDela().getYear(), co.getContract().getId(), -1, -1, -1, -1);
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -149,8 +144,7 @@ public class COService {
 
 	public int getZileCODisponibile(int idcontract) throws ResourceNotFoundException {
 		// get contract -> zilecoan
-		Contract contract = contractRepository.findById(idcontract)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id " + idcontract));
+		Contract contract = contractRepository.findById(idcontract).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id " + idcontract));
 
 		int zilecodisponibile = 0;
 		// get concedii odihna (cu plata)
@@ -277,8 +271,7 @@ public class COService {
 
 			for (int i = 1; i <= nrZileLuna; ++i) {
 				day = LocalDate.of(an, luna, i);
-				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0 && day.getDayOfWeek().getValue() != 6
-						&& day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
+				if (day.compareTo(dela) >= 0 && day.compareTo(panala) <= 0 && day.getDayOfWeek().getValue() != 6 && day.getDayOfWeek().getValue() != 7 && !sarbatori.contains(day))
 					zileC++;
 			}
 		}

@@ -465,6 +465,8 @@ public class Contract implements Serializable {
 		this.realizariRetineri = realizariRetineri;
 	}
 
+	// ! OTHER
+
 	public void checkData() throws ResourceNotFoundException {
 		if (angajat == null)
 			return;
@@ -504,5 +506,15 @@ public class Contract implements Serializable {
 		checkData();
 
 		return this;
+	}
+
+	public boolean isSuspendat(int luna, int an) {
+		for(Suspendare suspendare : suspendari) {
+			if((suspendare.getDela().getMonthValue() <= luna) && suspendare.getDela().getYear() == an) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

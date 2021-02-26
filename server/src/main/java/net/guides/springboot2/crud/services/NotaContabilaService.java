@@ -66,7 +66,9 @@ public class NotaContabilaService {
 		for(int i = 0; i < contracte.size(); ++i) {
 			if(contracte.get(i).getGradinvaliditate().compareTo("invalid") == 0)
 				cuHandicap++;
-			else
+			else if (contracte.get(i).isSuspendat(luna, an)) {
+				continue;
+			} else
 				nrMediuSalariati += contracte.get(i).getNormalucru() * rr.get(i).getZilecontract() / daysInMonth;
 		}
 		nrMediuSalariati /= 8;
