@@ -28,4 +28,6 @@ public interface RealizariRetineriRepository extends JpaRepository<RealizariReti
 
 	public List<RealizariRetineri> findLunaByAnAndContract_IdOrderByLunaAsc(int an, int idcontract);
 
+	public List<RealizariRetineri> findByLunaAndAnAndContract_Angajat_Societate_Id(int luna, int an, int idsocietate);
+
 }

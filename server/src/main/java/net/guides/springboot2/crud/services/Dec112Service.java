@@ -884,9 +884,9 @@ public class Dec112Service {
 					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
-					childElement = doc.createElement("B1_10"); // baza calcul indemnizatie somaj (total drepturi
-					// probabil)
-					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
+					childElement = doc.createElement("B1_10"); // baza calcul indemnizatie somaj (total drepturi probabil)
+					// childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getTotaldrepturi())));
+					childElement.appendChild(doc.createTextNode(""));
 					sbfrmSectiuneaB1.appendChild(childElement);
 
 					childElement = doc.createElement("tfNrCrt");
@@ -933,7 +933,7 @@ public class Dec112Service {
 					sbfrmSectiuneaB3.appendChild(childElement);
 
 					childElement = doc.createElement("B3_6");
-					childElement.appendChild(doc.createTextNode(""));
+					childElement.appendChild(doc.createTextNode(String.valueOf(realizariRetineri.getZilecmlucratoare())));
 					sbfrmSectiuneaB3.appendChild(childElement);
 
 					childElement = doc.createElement("B3_7");
