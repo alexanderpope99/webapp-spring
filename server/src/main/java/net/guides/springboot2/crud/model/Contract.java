@@ -445,6 +445,14 @@ public class Contract implements Serializable {
 		this.angajat = angajat;
 	}
 
+	public List<RealizariRetineri> getRealizariRetineri() {
+		return realizariRetineri;
+	}
+
+	public void setRealizariRetineri(List<RealizariRetineri> realizariRetineri) {
+		this.realizariRetineri = realizariRetineri;
+	}
+
 	public void checkData() throws ResourceNotFoundException {
 		if (angajat == null)
 			return;

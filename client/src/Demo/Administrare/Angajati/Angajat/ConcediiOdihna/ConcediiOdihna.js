@@ -544,11 +544,11 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form noValidate onSubmit={this.state.isEdit ? this.updateCO : this.addCO}>
-              <Form.Group id="zilecodisponibile">
+              {/* <Form.Group id="zilecodisponibile">
                 <Form.Label>
                   {`${this.state.zile_co_disponibile} zile concediu de odihnă disponibile`}
                 </Form.Label>
-              </Form.Group>
+              </Form.Group> */}
 
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
