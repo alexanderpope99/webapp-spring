@@ -42,6 +42,11 @@ public class SuspendareController {
 		return ResponseEntity.ok().body(suspendare);
 	}
 
+	@GetMapping("/idc={id}")
+	public List<Suspendare> getSuspendareByIdcontract(@PathVariable("id") int contractId) throws ResourceNotFoundException {
+		return suspendareService.findByContractId(contractId);
+	}
+
 	@PostMapping("/idc={id}")
 	public Suspendare createSuspendare(@RequestBody Suspendare suspendare,@PathVariable("id") int id) throws ResourceNotFoundException {
 		return suspendareService.save(suspendare,id);

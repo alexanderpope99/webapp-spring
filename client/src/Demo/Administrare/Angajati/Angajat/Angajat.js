@@ -148,7 +148,7 @@ class Angajat extends React.Component {
                 ? ' *niciun angajat selectat'
                 : ''}
               <Link to="/forms/realizari-retineri" className="float-right">
-                Realizari / Retineri
+                Realizări / Rețineri
               </Link>
             </h5>
 
@@ -200,9 +200,9 @@ class Angajat extends React.Component {
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
-              <Tab eventKey="zc" title="Zile CO An">
+              {/* <Tab eventKey="zc" title="Zile CO An">
                 <ZileCOAn ref={this.zc} scrollToTopSmooth={this.scrollToTopSmooth} />
-              </Tab>
+              </Tab> */}
 
               <Tab eventKey="rapoarte" title="Rapoarte">
                 <RapoarteIndividuale
