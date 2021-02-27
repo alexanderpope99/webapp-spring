@@ -23,7 +23,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
-import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
@@ -64,7 +63,6 @@ public class NotaContabilaService {
 		for(Contract contract : contracte) {
 			if(contract.getGradinvaliditate().compareTo("invalid") == 0)
 				cuHandicap++;
-			else if (contract.isSuspendat(luna, an)) continue;
 			else {
 				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * (contract.getZileAngajare(luna, an) / daysInMonth);
 			}
@@ -76,7 +74,7 @@ public class NotaContabilaService {
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
 
-		Societate societate = societateRepository.findById((int) idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(() -> new ResourceNotFoundException("Nu există adresă pentru societatea: " + societate.getNume()));
 
 		String statTemplateLocation = homeLocation + "/templates";
@@ -144,6 +142,7 @@ public class NotaContabilaService {
 		long cam = notaContabila.getCam();
 		writerCell.setCellValue(cam);
 
+		// * Fond Handicap
 		writerCell = stat.getRow(38).getCell(5);
 		writerCell.setCellValue(getFonduriHandicap(luna, an, idsocietate));
 
