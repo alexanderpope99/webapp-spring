@@ -59,7 +59,7 @@ class NotaContabila extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea nota contabilă: '(err.response
+          toastMessage: 'Nu am putut crea nota contabilă: ' + (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server').message,
         })

@@ -52,9 +52,6 @@ public class NotaContabilaService {
 
 	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
 		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
-		List<RealizariRetineri> rr = realizariRetineriRepository.findByLunaAndAnAndContract_Angajat_Societate_Id(luna, an, idsocietate);
-		if(contracte.size() != rr.size())
-			throw new ResourceNotFoundException("Nu toti angajatii au salariile calculate in " + luna + " " + an + ".");
 
 		// contracte.removeIf(contract )
 		ParametriiSalariu ps = parametriiSalariuService.getParametriiSalariu();
@@ -63,18 +60,18 @@ public class NotaContabilaService {
 
 		float nrMediuSalariati = 0f;
 		int cuHandicap = 0;
-		for(int i = 0; i < contracte.size(); ++i) {
-			if(contracte.get(i).getGradinvaliditate().compareTo("invalid") == 0)
-				cuHandicap++;
-			else if (contracte.get(i).isSuspendat(luna, an)) {
-				continue;
-			} else
-				nrMediuSalariati += contracte.get(i).getNormalucru() * rr.get(i).getZilecontract() / daysInMonth;
-		}
-		nrMediuSalariati /= 8;
-		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
 
-		return (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
+		for(Contract contract : contracte) {
+			if(contract.getGradinvaliditate().compareTo("invalid") == 0)
+				cuHandicap++;
+			else if (contract.isSuspendat(luna, an)) continue;
+			else {
+				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * (contract.getZileAngajare(luna, an) / daysInMonth);
+			}
+		}
+		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
+		float fondHandicap = (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
+		return fondHandicap < 0 ? 0 : fondHandicap;
 	}
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {

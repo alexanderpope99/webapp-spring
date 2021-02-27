@@ -19,6 +19,7 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @Entity
@@ -516,5 +517,22 @@ public class Contract implements Serializable {
 		}
 
 		return false;
+	}
+
+	public RealizariRetineri getRealizariRetineri(int luna, int an) throws ResourceNotFoundException {
+		for(RealizariRetineri rr : realizariRetineri) {
+			if (rr.getLuna() == luna && rr.getAn() == an)
+				return rr;
+		}
+		throw new ResourceNotFoundException(angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an );
+	}
+
+	public int getZileAngajare(int luna, int an) {
+		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
+		if(luna == data.getMonthValue() && an == data.getYear()) {
+			return daysInMonth - data.getDayOfMonth() + 1;
+		} else if (ultimazilucru != null && luna == ultimazilucru.getMonthValue() && an == ultimazilucru.getYear()) {
+			return daysInMonth - ultimazilucru.getDayOfMonth() + 1;
+		} else return daysInMonth;
 	}
 }

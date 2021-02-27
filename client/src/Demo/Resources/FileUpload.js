@@ -31,7 +31,7 @@ class FileUpload extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut încărca fișierul: '(err.response
+          toastMessage: 'Nu am putut încărca fișierul: ' + (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server').message,
         })
