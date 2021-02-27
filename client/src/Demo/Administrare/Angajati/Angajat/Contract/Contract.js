@@ -10,8 +10,13 @@ import {
   DropdownButton,
   Dropdown,
   Toast,
+  Table,
 } from 'react-bootstrap';
+import { Trash2 } from 'react-feather';
 import Typography from '@material-ui/core/Typography/Typography';
+import Box from '@material-ui/core/Box';
+import Popover from '@material-ui/core/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { server } from '../../../../Resources/server-address';
 import { getSocSel } from '../../../../Resources/socsel';
 import { case_de_sanatate, judete } from '../../../../Resources/judete';
@@ -30,6 +35,7 @@ class Contract extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
+    this.getSuspendari = this.getSuspendari.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -71,6 +77,7 @@ class Contract extends React.Component {
       pensionar: false,
 
       show: false,
+      showSuspendare: false,
       modalMessage: '', //text
 
       // superior
@@ -84,6 +91,8 @@ class Contract extends React.Component {
 
       showToast: false,
       toastMessage: '',
+
+      suspendari: [],
     };
   }
 
@@ -125,11 +134,14 @@ class Contract extends React.Component {
       pensionar: false,
 
       show: false,
+      showSuspendare: false,
       modalMessage: '', //text
 
       angajat: null,
       superior: null,
       centruCost: null,
+
+      suspendari: [],
     });
   }
 
@@ -138,6 +150,7 @@ class Contract extends React.Component {
       {
         show: false,
         modalMessage: '',
+        showSuspendare: false,
       },
       this.props.scrollToTopSmooth
     );
@@ -185,7 +198,8 @@ class Contract extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua angajații superiori posibili: ' + (err.response
+            'Nu am putut prelua angajații superiori posibili: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -203,7 +217,9 @@ class Contract extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua centrele de cost: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua centrele de cost: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -212,9 +228,33 @@ class Contract extends React.Component {
     if (centreCost) this.setState({ centreCost: centreCost });
   }
 
+  async getSuspendari() {
+	  if(!this.state.id)return;
+    const suspendari = await axios
+      .get(`${server.address}/suspendare/idc=${this.state.id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua suspendările: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+	  if(suspendari)
+	  this.setState({
+		  suspendari:suspendari,
+	  })
+  }
+
   async fillForm() {
     this.getSuperiori();
     this.getCentreCost();
+	this.getSuspendari();
 
     const angajatsel = getAngajatSel();
     if (!angajatsel) return;
@@ -227,7 +267,9 @@ class Contract extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua angajații: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua angajații: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -244,8 +286,7 @@ class Contract extends React.Component {
         : null;
       let centruCost = contract.centrucost
         ? { id: contract.centrucost.id, nume: contract.centrucost.nume }
-		: null;
-		
+        : null;
 
       this.setState(
         {
@@ -288,7 +329,15 @@ class Contract extends React.Component {
           pensionar: contract.pensionar || false,
           spor: contract.spor || '',
         },
-        () => console.log('idangajat:', angajat.idpersoana, '\tidcontract:', contract.id,'\tultimazilucru:',contract.ultimazilucru)
+        () =>
+          console.log(
+            'idangajat:',
+            angajat.idpersoana,
+            '\tidcontract:',
+            contract.id,
+            '\tultimazilucru:',
+            contract.ultimazilucru
+          )
       );
     } else {
       // nu are contract
@@ -411,9 +460,11 @@ class Contract extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut actualiza contractul: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            toastMessage:
+              'Nu am putut actualiza contractul: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     } else {
@@ -425,9 +476,11 @@ class Contract extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga contractul: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            toastMessage:
+              'Nu am putut adăuga contractul: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     }
@@ -445,9 +498,11 @@ class Contract extends React.Component {
           .catch((err) =>
             this.setState({
               showToast: true,
-              toastMessage: 'Nu am putut actualiza superiorul: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+              toastMessage:
+                'Nu am putut actualiza superiorul: ' +
+                (err.response
+                  ? err.response.data.message
+                  : 'Nu s-a putut stabili conexiunea la server'),
             })
           );
       }
@@ -493,6 +548,66 @@ class Contract extends React.Component {
       </option>
     ));
 
+    const tabel_ore = this.state.suspendari.map((sus, index) => {
+      for (let key in sus) if (!sus[key]) sus[key] = '-';
+
+      return (
+        <tr key={sus.id}>
+          <th>{sus.dela}</th>
+          <th>{sus.panala}</th>
+          <th className="d-inline-flex flex-row justify-content-around">
+            <PopupState variant="popover" popupId="demo-popup-popover">
+              {(popupState) => (
+                <div>
+                  <Button
+                    variant="outline-secondary"
+                    className="m-0 p-1 rounded-circle border-0"
+                    {...bindTrigger(popupState)}
+                  >
+                    <Trash2 fontSize="small" />
+                  </Button>
+                  <Popover
+                    {...bindPopover(popupState)}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                  >
+                    <Box p={2}>
+                      <Typography>Confirmare ștergere</Typography>
+                      <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
+                      <br />
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => {
+                          popupState.close();
+                          console.log('Am șters șmecherie');
+                        }}
+                        className="mt-2 "
+                      >
+                        Da
+                      </Button>
+                      <Button
+                        variant="outline-persondary"
+                        onClick={popupState.close}
+                        className="mt-2"
+                      >
+                        Nu
+                      </Button>
+                    </Box>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
+          </th>
+        </tr>
+      );
+    });
+
     return (
       <React.Fragment>
         <Toast
@@ -506,7 +621,7 @@ class Contract extends React.Component {
           </Toast.Header>
           <Toast.Body>
             {this.state.toastMessage}
-            <Button variant="light">Repara scriind valori predefinite</Button>
+            {/* <Button variant="light">Repara scriind valori predefinite</Button> */}
           </Toast.Body>
         </Toast>
 
@@ -520,6 +635,24 @@ class Contract extends React.Component {
               OK
             </Button>
           </Modal.Footer>
+        </Modal>
+
+        <Modal size="lg" show={this.state.showSuspendare} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Suspendări Contract</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Salut
+            <Table responsive hover>
+              <thead>
+                <tr>
+                  <th>De la</th>
+                  <th>Până la</th>
+                </tr>
+              </thead>
+              <tbody>{tabel_ore}</tbody>
+            </Table>
+          </Modal.Body>
         </Modal>
 
         <Form onSubmit={(e) => this.onSubmit(e)}>
@@ -539,20 +672,30 @@ class Contract extends React.Component {
             <Col md={6}>
               <Form.Group controlId="tip">
                 <Form.Label>Model Contract</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.modelContract}
-                  onChange={(e) => {
-                    this.setState({ modelContract: e.target.value });
-                  }}
-                >
-                  <option>Contract de munca</option>
-                  <option>Contract de administrator</option>
-                  <option>Contract suspendat</option>
-                  <option>Convenție civilă</option>
-                  <option>Drepturi de autor</option>
-                  <option>Figuranți / Zilieri</option>
-                </Form.Control>
+                <InputGroup>
+                  <Form.Control
+                    as="select"
+                    value={this.state.modelContract}
+                    onChange={(e) => {
+                      this.setState({ modelContract: e.target.value });
+                    }}
+                  >
+                    <option>Contract de muncă</option>
+                    <option>Contract de administrator</option>
+                    <option>Convenție civilă</option>
+                    <option>Drepturi de autor</option>
+                    <option>Figuranți / Zilieri</option>
+                  </Form.Control>
+                  <InputGroup.Append>
+                    <Button
+                      variant="outline-info"
+                      disabled={!this.state.angajatsel || !this.state.id}
+                      onClick={() => this.setState({showSuspendare:true})}
+                    >
+                      Suspendări
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
               </Form.Group>
             </Col>
             {/* <Col md={12} /> */}

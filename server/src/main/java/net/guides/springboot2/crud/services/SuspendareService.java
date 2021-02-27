@@ -29,6 +29,11 @@ public class SuspendareService {
 		return suspendareRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Suspendare not found for this id: "+id));
 	} 
 
+	public List<Suspendare> findByContractId(int id) throws ResourceNotFoundException{
+		Contract contract=contractService.findById(id);
+		return contract.getSuspendari();
+	}
+
 	public Suspendare save(Suspendare suspendare, int idcontract) throws ResourceNotFoundException {
 		Contract contract=contractService.findById(idcontract);
 		suspendare.setContract(contract);
