@@ -145,7 +145,7 @@ public class RealizariRetineriService {
 		bazaImpozit = 0;
 		impozitScutit = 0;
 
-		int zileContract = zileService.getNrZileLucratoareContract(luna, an, contract);
+		int zileContract = zileService.getZileContract(contract, luna, an);
 		// contractul nu a inceput
 		if (zileContract == 0) {
 			// returneaza retineri cu valori de 0

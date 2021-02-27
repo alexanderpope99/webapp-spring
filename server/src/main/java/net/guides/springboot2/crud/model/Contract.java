@@ -510,6 +510,25 @@ public class Contract implements Serializable {
 		return this;
 	}
 
+	public RealizariRetineri getRealizariRetineri(int luna, int an) throws ResourceNotFoundException {
+		for (RealizariRetineri rr : realizariRetineri) {
+			if (rr.getLuna() == luna && rr.getAn() == an)
+				return rr;
+		}
+		throw new ResourceNotFoundException(angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an);
+	}
+
+	public int getZileAngajare(int luna, int an) {
+		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth() - getZileSuspendat(luna, an);
+
+		if (luna == data.getMonthValue() && an == data.getYear()) {
+			return daysInMonth - data.getDayOfMonth() + 1;
+		} else if (ultimazilucru != null && luna == ultimazilucru.getMonthValue() && an == ultimazilucru.getYear()) {
+			return daysInMonth - ultimazilucru.getDayOfMonth() + 1;
+		} else
+			return daysInMonth;
+	}
+
 	public int getZileSuspendat(int luna, int an) {
 
 		if(suspendari.isEmpty()) return 0;
@@ -555,22 +574,58 @@ public class Contract implements Serializable {
 		return zileSuspendat;
 	}
 
-	public RealizariRetineri getRealizariRetineri(int luna, int an) throws ResourceNotFoundException {
-		for (RealizariRetineri rr : realizariRetineri) {
-			if (rr.getLuna() == luna && rr.getAn() == an)
-				return rr;
+	public LocalDate[] getPerioadaSuspendat(int luna, int an) {
+		if(suspendari.isEmpty()) return new LocalDate[0];
+
+		LocalDate[] perioadaSuspendare = new LocalDate[2];
+		
+		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
+
+		LocalDate monthStart = LocalDate.of(an, luna, 1);
+		LocalDate monthEnd = LocalDate.of(an, luna, daysInMonth);
+
+		for (Suspendare suspendare : suspendari) {
+			LocalDate suspendareStart = suspendare.getDela();
+			LocalDate suspendareEnd = suspendare.getPanala();
+
+			if (suspendareEnd != null) {
+				if(monthStart.compareTo(suspendareStart) <= 0) {
+					perioadaSuspendare[0] = suspendareStart;
+					perioadaSuspendare[1] = monthEnd;
+					return perioadaSuspendare;
+				}
+				else return new LocalDate[0];
+			} else {
+				// suspendarea s-a terminat deja
+				if (monthStart.compareTo((suspendareEnd)) > 0)
+					return new LocalDate[0];
+
+				// suspendarea cuprinde luna
+				if (monthStart.compareTo(suspendareStart) >= 0 && monthEnd.compareTo(suspendareEnd) <= 0) {
+					perioadaSuspendare[0] = monthStart;
+					perioadaSuspendare[1] = monthEnd;
+				}
+
+				// suspendarea se termina dar nu incepe in luna
+				else if (monthStart.compareTo(suspendareStart) >= 0 && monthEnd.compareTo(suspendareEnd) >= 0) {
+					perioadaSuspendare[0] = monthStart;
+					perioadaSuspendare[1] = suspendareEnd;
+				}
+
+				// suspendarea incepe dar nu se termina in luna
+				else if (monthStart.compareTo(suspendareStart) <= 0 && monthEnd.compareTo(suspendareEnd) <= 0) {
+					perioadaSuspendare[0] = suspendareStart;
+					perioadaSuspendare[1] = monthEnd;
+				}
+
+				// luna cuprinde suspendarea
+				else if (monthStart.compareTo(suspendareStart) <= 0 && monthEnd.compareTo(suspendareEnd) >= 0) {
+					perioadaSuspendare[0] = suspendareStart;
+					perioadaSuspendare[1] = suspendareEnd;
+				}
+			}
 		}
-		throw new ResourceNotFoundException(angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an);
-	}
 
-	public int getZileAngajare(int luna, int an) {
-		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth() - getZileSuspendat(luna, an);
-
-		if (luna == data.getMonthValue() && an == data.getYear()) {
-			return daysInMonth - data.getDayOfMonth() + 1;
-		} else if (ultimazilucru != null && luna == ultimazilucru.getMonthValue() && an == ultimazilucru.getYear()) {
-			return daysInMonth - ultimazilucru.getDayOfMonth() + 1;
-		} else
-			return daysInMonth;
+		return perioadaSuspendare;
 	}
 }
