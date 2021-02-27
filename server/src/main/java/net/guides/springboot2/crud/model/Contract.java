@@ -529,51 +529,6 @@ public class Contract implements Serializable {
 			return daysInMonth;
 	}
 
-	public int getZileSuspendat(int luna, int an) {
-
-		if(suspendari.isEmpty()) return 0;
-
-		int zileSuspendat = 0;
-		
-		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
-
-		LocalDate monthStart = LocalDate.of(an, luna, 1);
-		LocalDate monthEnd = LocalDate.of(an, luna, daysInMonth);
-
-		for (Suspendare suspendare : suspendari) {
-			LocalDate suspendareStart = suspendare.getDela();
-			LocalDate suspendareEnd = suspendare.getPanala();
-
-			if (suspendareEnd != null) {
-				if(monthStart.compareTo(suspendareStart) <= 0)
-					return (int) ChronoUnit.DAYS.between(suspendareStart, monthEnd);
-				else return 0;
-			} else {
-				// suspendarea s-a terminat deja
-				if (monthStart.compareTo((suspendareEnd)) > 0)
-					zileSuspendat += 0;
-
-				// suspendarea cuprinde luna
-				if (monthStart.compareTo(suspendareStart) >= 0 && monthEnd.compareTo(suspendareEnd) <= 0)
-					zileSuspendat += daysInMonth;
-
-				// suspendarea se termina dar nu incepe in luna
-				else if (monthStart.compareTo(suspendareStart) >= 0 && monthEnd.compareTo(suspendareEnd) >= 0)
-					zileSuspendat += (int) ChronoUnit.DAYS.between(monthStart, suspendareEnd);
-
-				// suspendarea incepe dar nu se termina in luna
-				else if (monthStart.compareTo(suspendareStart) <= 0 && monthEnd.compareTo(suspendareEnd) <= 0)
-					zileSuspendat += (int) ChronoUnit.DAYS.between(suspendareStart, monthEnd);
-
-				// luna cuprinde suspendarea
-				else if (monthStart.compareTo(suspendareStart) <= 0 && monthEnd.compareTo(suspendareEnd) >= 0)
-					zileSuspendat += (int) ChronoUnit.DAYS.between(suspendareStart, suspendareEnd);
-			}
-		}
-
-		return zileSuspendat;
-	}
-
 	public LocalDate[] getPerioadaSuspendat(int luna, int an) {
 		if(suspendari.isEmpty()) return new LocalDate[0];
 
@@ -627,5 +582,11 @@ public class Contract implements Serializable {
 		}
 
 		return perioadaSuspendare;
+	}
+
+	public int getZileSuspendat(int luna, int an) {
+		LocalDate[] perioadaSuspendat = getPerioadaSuspendat(luna, an);
+		if(perioadaSuspendat.length == 0) return 0;
+		else return (int)ChronoUnit.DAYS.between(perioadaSuspendat[0], perioadaSuspendat[1]);
 	}
 }

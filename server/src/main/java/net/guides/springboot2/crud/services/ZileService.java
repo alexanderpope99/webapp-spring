@@ -97,6 +97,8 @@ public class ZileService {
 	}
 
 	public int getZileSuspendatLucratoare(Contract contract, int luna, int an) {
+		if(contract.getSuspendari().isEmpty()) return 0;
+		
 		LocalDate[] perioadaSuspendare = contract.getPerioadaSuspendat(luna, an);
 
 		if(perioadaSuspendare.length == 0) return 0;
