@@ -695,7 +695,8 @@ class Contract extends React.Component {
             {/* <Button variant="light">Repara scriind valori predefinite</Button> */}
           </Toast.Body>
         </Toast>
-
+				
+				{/* CONFIRM MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>{this.state.modalMessage}</Modal.Title>

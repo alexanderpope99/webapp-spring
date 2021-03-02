@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -529,64 +530,78 @@ public class Contract implements Serializable {
 			return daysInMonth;
 	}
 
-	public LocalDate[] getPerioadaSuspendat(int luna, int an) {
-		if(suspendari.isEmpty()) return new LocalDate[0];
+	public List<LocalDate[]> getPerioadaSuspendat(int luna, int an) {
+		if (suspendari.isEmpty())
+			return new ArrayList<>();
 
+		List<LocalDate[]> suspendariInLuna = new ArrayList<>();
 		LocalDate[] perioadaSuspendare = new LocalDate[2];
-		
+
 		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
 
 		LocalDate monthStart = LocalDate.of(an, luna, 1);
 		LocalDate monthEnd = LocalDate.of(an, luna, daysInMonth);
 
-		for (Suspendare suspendare : suspendari) {
+		for (Suspendare suspendare : this.suspendari) {
 			LocalDate suspendareStart = suspendare.getDela();
 			LocalDate suspendareEnd = suspendare.getPanala();
 
-			if (suspendareEnd != null) {
-				if(monthStart.compareTo(suspendareStart) <= 0) {
+			if (suspendareEnd == null) {
+				if (suspendareStart.compareTo(monthStart) < 0)
+					perioadaSuspendare[0] = monthStart;
+				else
 					perioadaSuspendare[0] = suspendareStart;
-					perioadaSuspendare[1] = monthEnd;
-					return perioadaSuspendare;
-				}
-				else return new LocalDate[0];
+				perioadaSuspendare[1] = monthEnd;
+				suspendariInLuna.add(perioadaSuspendare);
+				return suspendariInLuna;
 			} else {
-				// suspendarea s-a terminat deja
-				if (monthStart.compareTo((suspendareEnd)) > 0)
-					return new LocalDate[0];
+				// suspendarea s-a terminat inainte de luna, sau nu a inceput inca
+				if (monthStart.compareTo(suspendareEnd) > 0 || suspendareStart.compareTo(monthEnd) > 0)
+					continue;
 
 				// suspendarea cuprinde luna
 				if (monthStart.compareTo(suspendareStart) >= 0 && monthEnd.compareTo(suspendareEnd) <= 0) {
 					perioadaSuspendare[0] = monthStart;
 					perioadaSuspendare[1] = monthEnd;
+					suspendariInLuna.add(perioadaSuspendare);
 				}
 
 				// suspendarea se termina dar nu incepe in luna
 				else if (monthStart.compareTo(suspendareStart) >= 0 && monthEnd.compareTo(suspendareEnd) >= 0) {
 					perioadaSuspendare[0] = monthStart;
 					perioadaSuspendare[1] = suspendareEnd;
+					suspendariInLuna.add(perioadaSuspendare);
 				}
 
 				// suspendarea incepe dar nu se termina in luna
 				else if (monthStart.compareTo(suspendareStart) <= 0 && monthEnd.compareTo(suspendareEnd) <= 0) {
 					perioadaSuspendare[0] = suspendareStart;
 					perioadaSuspendare[1] = monthEnd;
+					suspendariInLuna.add(perioadaSuspendare);
 				}
 
 				// luna cuprinde suspendarea
 				else if (monthStart.compareTo(suspendareStart) <= 0 && monthEnd.compareTo(suspendareEnd) >= 0) {
 					perioadaSuspendare[0] = suspendareStart;
 					perioadaSuspendare[1] = suspendareEnd;
+					suspendariInLuna.add(perioadaSuspendare);
 				}
 			}
 		}
 
-		return perioadaSuspendare;
+		return suspendariInLuna;
 	}
 
 	public int getZileSuspendat(int luna, int an) {
-		LocalDate[] perioadaSuspendat = getPerioadaSuspendat(luna, an);
-		if(perioadaSuspendat.length == 0) return 0;
-		else return (int)ChronoUnit.DAYS.between(perioadaSuspendat[0], perioadaSuspendat[1]);
+		List<LocalDate[]> perioadeSuspendari = getPerioadaSuspendat(luna, an);
+		if (perioadeSuspendari.isEmpty())
+			return 0;
+		else {
+			int zileSuspendare = 0;
+			for(LocalDate[] perioada : perioadeSuspendari) {
+				zileSuspendare += ChronoUnit.DAYS.between(perioada[0], perioada[1]);
+			}
+			return zileSuspendare;
+		}
 	}
 }
