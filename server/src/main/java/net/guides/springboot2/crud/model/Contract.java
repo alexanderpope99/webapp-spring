@@ -546,7 +546,12 @@ public class Contract implements Serializable {
 			LocalDate suspendareStart = suspendare.getDela();
 			LocalDate suspendareEnd = suspendare.getPanala();
 
+			// daca suspendarea e pe perioada nedeterminata
 			if (suspendareEnd == null) {
+				// nu include nici o zi din luna
+				if (suspendareStart.compareTo(monthEnd) > 0) continue;
+
+				// suspendarea nu include luna
 				if (suspendareStart.compareTo(monthStart) < 0)
 					perioadaSuspendare[0] = monthStart;
 				else
@@ -556,7 +561,7 @@ public class Contract implements Serializable {
 				return suspendariInLuna;
 			} else {
 				// suspendarea s-a terminat inainte de luna, sau nu a inceput inca
-				if (monthStart.compareTo(suspendareEnd) > 0 || suspendareStart.compareTo(monthEnd) > 0)
+				if (monthStart.compareTo(suspendareEnd) > 0 || monthEnd.compareTo(suspendareStart) < 0)
 					continue;
 
 				// suspendarea cuprinde luna
@@ -598,7 +603,7 @@ public class Contract implements Serializable {
 			return 0;
 		else {
 			int zileSuspendare = 0;
-			for(LocalDate[] perioada : perioadeSuspendari) {
+			for (LocalDate[] perioada : perioadeSuspendari) {
 				zileSuspendare += ChronoUnit.DAYS.between(perioada[0], perioada[1]);
 			}
 			return zileSuspendare;
