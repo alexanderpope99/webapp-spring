@@ -189,7 +189,7 @@ public class RealizariRetineriService {
 		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCOLucratoare - zileCFPLucratoare - zileCMLucratoare));
 
 		float valCO = (zileCOLucratoare) * salariuPeZi;
-		float totalDrepturi = salariuRealizat + valCM + valCO + primaBruta + totalOreSuplimentare;
+		float totalDrepturi = salariuRealizat + valCM + valCO + primaBruta + totalOreSuplimentare + coNeefectuat;
 
 		float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
 

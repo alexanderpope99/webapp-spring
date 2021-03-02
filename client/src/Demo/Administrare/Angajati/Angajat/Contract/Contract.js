@@ -96,6 +96,7 @@ class Contract extends React.Component {
       suspendari: [],
       suspendareDeLa: '',
       suspendarePanaLa: '',
+      suspendareId: '',
     };
   }
 
@@ -148,18 +149,17 @@ class Contract extends React.Component {
       suspendari: [],
       suspendareDeLa: '',
       suspendarePanaLa: '',
+      suspendareId: '',
     });
   }
 
   handleClose() {
-    this.setState(
-      {
-        show: false,
-        modalMessage: '',
-        showSuspendare: false,
-        showSuspendare2: false,
-      }
-    );
+    this.setState({
+      show: false,
+      modalMessage: '',
+      showSuspendare: false,
+      showSuspendare2: false,
+    });
   }
 
   getNumeNorma(nrOre) {
@@ -275,7 +275,7 @@ class Contract extends React.Component {
           angajat: angajat,
           superior: superior,
           angajatsel: getAngajatSel(),
-					suspendari: contract.suspendari || [],
+          suspendari: contract.suspendari || [],
 
           id: contract.id,
           modelContract: contract.tip || 'Contract de muncă', //text
@@ -312,13 +312,7 @@ class Contract extends React.Component {
           pensionar: contract.pensionar || false,
           spor: contract.spor || '',
         },
-        () =>
-          console.log(
-            'idangajat:',
-            angajat.idpersoana,
-            '\tidcontract:',
-            contract.id,
-          )
+        () => console.log('idangajat:', angajat.idpersoana, '\tidcontract:', contract.id)
       );
     } else {
       // nu are contract
@@ -378,6 +372,12 @@ class Contract extends React.Component {
   }
 
   async addSuspendare(deLa, PanaLa) {
+
+		if(!deLa) {
+			this.setState({showToast: true, toastMessage: 'Selectați o data de începere a suspendării'});
+			return;
+		}
+
     var suspendare = await axios
       .post(
         `${server.address}/suspendare/idc=${this.state.id}`,
@@ -419,6 +419,38 @@ class Contract extends React.Component {
       );
 
     if (suspendare) this.fillForm();
+  }
+
+  async editSuspendare() {
+    var suspendare = await axios
+      .put(
+        `${server.address}/suspendare/${this.state.suspendareId}`,
+        { dela: this.state.suspendareDeLa, panala: this.state.suspendarePanaLa },
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => (res.status === 200 ? res.data : null))
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut modifica suspendarea: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+
+    if (suspendare) {
+      this.setState({
+        showSuspendare2: false,
+        suspendareDeLa: '',
+        suspendarePanaLa: '',
+        suspendareId: '',
+      });
+      this.fillForm();
+    }
   }
 
   async onSubmit(e) {
@@ -585,7 +617,14 @@ class Contract extends React.Component {
               {(popupState) => (
                 <div>
                   <Button
-                    onClick={() => this.setState({ showSuspendare2: true })}
+                    onClick={() =>
+                      this.setState({
+                        suspendareId: sus.id,
+                        suspendareDeLa: sus.dela,
+                        suspendarePanaLa: sus.panala === '-' ? '' : sus.panala,
+                        showSuspendare2: true,
+                      })
+                    }
                     variant="outline-secondary"
                     className="m-1 p-1 rounded-circle border-0"
                   >
@@ -668,10 +707,12 @@ class Contract extends React.Component {
           </Modal.Footer>
         </Modal>
 
-				{/* EDIT SUSPENDARE */}
+        {/* EDIT MODAL */}
         <Modal
           show={this.state.showSuspendare2}
-          onHide={() => this.setState({ showSuspendare2: false })}
+          onHide={() =>
+            this.setState({ showSuspendare2: false, suspendareDeLa: '', suspendarePanaLa: '' })
+          }
         >
           <Modal.Header closeButton>
             <Modal.Title>Modifică Suspendarea</Modal.Title>
@@ -702,15 +743,15 @@ class Contract extends React.Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={() => this.setState({ showSuspendare2: false })}>
+            <Button variant="primary" onClick={() => this.editSuspendare()}>
               OK
             </Button>
           </Modal.Footer>
         </Modal>
 
-				{/* TABEL SUSPENDARI */}
+        {/* TABEL SUSPENDARI */}
         <Modal
-          style={this.state.showSuspendare2 ? { filter: 'blur(3px) brightness(0.7)' } : {}}
+          style={this.state.showSuspendare2 ? { filter: 'blur(3px) brightness(0.7)' } : ''}
           size="lg"
           show={this.state.showSuspendare}
           onHide={this.handleClose}
@@ -744,8 +785,8 @@ class Contract extends React.Component {
                 <Form.Label> </Form.Label>
                 <Button
                   className="display-flex m-0"
-                  onClick={async () =>
-                    await this.addSuspendare(this.state.suspendareDeLa, this.state.suspendarePanaLa)
+                  onClick={() =>
+                    this.addSuspendare(this.state.suspendareDeLa, this.state.suspendarePanaLa)
                   }
                 >
                   +
