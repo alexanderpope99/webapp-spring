@@ -7,4 +7,5 @@ import net.guides.springboot2.crud.model.Suspendare;
 
 @Repository
 public interface SuspendareRepository extends JpaRepository<Suspendare, Integer> {
+	List<Suspendare> findByContract_IdOrderByDelaAsc(int id);
 }
