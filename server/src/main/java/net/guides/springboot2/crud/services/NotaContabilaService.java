@@ -23,7 +23,6 @@ import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
-import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
@@ -52,9 +51,6 @@ public class NotaContabilaService {
 
 	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
 		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
-		List<RealizariRetineri> rr = realizariRetineriRepository.findByLunaAndAnAndContract_Angajat_Societate_Id(luna, an, idsocietate);
-		if(contracte.size() != rr.size())
-			throw new ResourceNotFoundException("Nu toti angajatii au salariile calculate in " + luna + " " + an + ".");
 
 		// contracte.removeIf(contract )
 		ParametriiSalariu ps = parametriiSalariuService.getParametriiSalariu();
@@ -63,21 +59,22 @@ public class NotaContabilaService {
 
 		float nrMediuSalariati = 0f;
 		int cuHandicap = 0;
-		for(int i = 0; i < contracte.size(); ++i) {
-			if(contracte.get(i).getGradinvaliditate().compareTo("invalid") == 0)
-				cuHandicap++;
-			else
-				nrMediuSalariati += contracte.get(i).getNormalucru() * rr.get(i).getZilecontract() / daysInMonth;
-		}
-		nrMediuSalariati /= 8;
-		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
 
-		return (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
+		for(Contract contract : contracte) {
+			if(contract.getGradinvaliditate().compareTo("invalid") == 0)
+				cuHandicap++;
+			else {
+				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * (contract.getZileAngajare(luna, an) / daysInMonth);
+			}
+		}
+		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
+		float fondHandicap = (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
+		return fondHandicap < 0 ? 0 : fondHandicap;
 	}
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
 
-		Societate societate = societateRepository.findById((int) idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
+		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
 		Adresa adresaSocietate = adresaRepository.findById(societate.getAdresa().getId()).orElseThrow(() -> new ResourceNotFoundException("Nu există adresă pentru societatea: " + societate.getNume()));
 
 		String statTemplateLocation = homeLocation + "/templates";
@@ -145,6 +142,7 @@ public class NotaContabilaService {
 		long cam = notaContabila.getCam();
 		writerCell.setCellValue(cam);
 
+		// * Fond Handicap
 		writerCell = stat.getRow(38).getCell(5);
 		writerCell.setCellValue(getFonduriHandicap(luna, an, idsocietate));
 

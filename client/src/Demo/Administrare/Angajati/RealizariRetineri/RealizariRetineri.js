@@ -94,7 +94,7 @@ class RealizariRetineri extends React.Component {
       zilecfplucratoare: '',
       zileinvoire: 0, // user input
       primabruta: 0, // user input
-      zilelibere: 0, // user input
+      coneefectuat: 0, // user input
       salariupezi: 0,
       salariupeora: 0,
 
@@ -160,7 +160,7 @@ class RealizariRetineri extends React.Component {
       zilecfplucratoare: '',
       zileinvoire: 0, // user input
       primabruta: 0, // user input
-      zilelibere: 0, // user input
+      coneefectuat: 0, // user input
       salariupezi: 0,
       salariupeora: 0,
 
@@ -210,7 +210,7 @@ class RealizariRetineri extends React.Component {
       oresuplimentare: [],
       zileinvoire: 0,
       primabruta: 0,
-      zilelibere: 0,
+      coneefectuat: 0,
 
       avansnet: 0,
       cursValutar: 0,
@@ -293,8 +293,6 @@ class RealizariRetineri extends React.Component {
     let an = this.state.an;
     let luna = this.state.luna.nr;
 
-    console.log(an, luna);
-
     // get idpersoana from select component
     const idpersoana = this.state.selected_angajat ? this.state.selected_angajat.idpersoana : null;
     if (!idpersoana) {
@@ -317,7 +315,6 @@ class RealizariRetineri extends React.Component {
               : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
-    console.log('contract:', contract);
     if (!contract) return;
 
     // if already calculated, gets existing data, if idstat does not exist for (idc, mo, y) => calc => saves to DB
@@ -386,6 +383,7 @@ class RealizariRetineri extends React.Component {
         zilecfp: data.zilecfp || 0,
         zilecfplucratoare: data.zilecfplucratoare || 0,
         zilec: data.zilec || 0,
+				coneefectuat: data.coneefectuat || 0,
 
         //* retineri
         idretineri: retineri.id,
@@ -498,10 +496,11 @@ class RealizariRetineri extends React.Component {
       primaBruta: this.state.primabruta || 0,
       nrTichete: this.state.nrtichete || 0,
       totalOreSuplimentare: this.state.totaloresuplimentare || 0,
+			coNeefectuat: this.state.coneefectuat || 0,
     };
 
     //* 2. recalculare realizariRetineri
-    console.log(this.state.idcontract);
+    // console.log(this.state.idcontract);
     const data = await axios
       .put(`${server.address}/realizariretineri/update/calc`, rrDetails, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
@@ -1319,12 +1318,12 @@ class RealizariRetineri extends React.Component {
                     </Col>
                     <Col md={6}>
                       <Form.Group id="zilecfp">
-                        <Form.Label>Zile libere</Form.Label>
+                        <Form.Label>Concediu neefectuat</Form.Label>
                         <Form.Control
                           type="number"
                           min="0"
-                          value={this.state.zilelibere}
-                          onChange={(e) => this.setState({ zilelibere: e.target.value })}
+                          value={this.state.coneefectuat}
+                          onChange={(e) => this.setState({ coneefectuat: e.target.value })}
                         />
                       </Form.Group>
                     </Col>

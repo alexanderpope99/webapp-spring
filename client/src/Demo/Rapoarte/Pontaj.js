@@ -62,7 +62,7 @@ class Pontaj extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea foaie pontaj: '(err.response
+          toastMessage: 'Nu am putut crea foaie pontaj: ' + (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server').message,
         })

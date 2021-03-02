@@ -56,7 +56,7 @@ public class CMService {
 		int an = cm.getDela().getYear();
 
 		// update salariu
-		realizariRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1);
+		realizariRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1, -1);
 
 		// return updated cm
 		cmDTO.setId(cm.getId());
@@ -74,7 +74,7 @@ public class CMService {
 
 		cmRepository.delete(cm);
 
-		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(), cm.getContract().getId(), -1, -1, -1);
+		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(), cm.getContract().getId(), -1, -1, -1, -1);
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

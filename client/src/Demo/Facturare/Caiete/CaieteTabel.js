@@ -235,7 +235,7 @@ export default class CaieteTabel extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.showError('Nu am putut modifica caietul: '(err.response
+          this.showError('Nu am putut modifica caietul: ' + (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server').message)
         );
@@ -245,7 +245,7 @@ export default class CaieteTabel extends React.Component {
           headers: authHeader(),
         })
         .then((res) => res.data)
-        .catch((err) => this.showError('Nu am putut adauga caietul: '(err.response
+        .catch((err) => this.showError('Nu am putut adauga caietul: ' + (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server').message));
     }

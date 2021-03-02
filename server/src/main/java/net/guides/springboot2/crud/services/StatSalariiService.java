@@ -275,7 +275,7 @@ public class StatSalariiService {
 				writerCell.setCellStyle(salariuStyle);
 				writerCell.setCellValue(realizariRetineri.getValco());
 				writerCell = row3.createCell(11); // CO neefect.
-				writerCell.setCellValue(0);
+				writerCell.setCellValue(realizariRetineri.getConeefectuat());
 
 				// * CM valoare
 				// int valcmfnuass = cmService.getValcmFNUASS(concediiMedicale);
@@ -1133,7 +1133,7 @@ public class StatSalariiService {
 			writerCell.setCellStyle(salariuStyle);
 			writerCell.setCellValue(realizariRetineri.getZilecolucratoare() * realizariRetineri.getSalariupezi());
 			writerCell = row3.getCell(11); // CO neefect.
-			writerCell.setCellValue(0);
+			writerCell.setCellValue(realizariRetineri.getConeefectuat());
 
 			// * CM valoare
 			writerCell = row1.getCell(12); // cm societate

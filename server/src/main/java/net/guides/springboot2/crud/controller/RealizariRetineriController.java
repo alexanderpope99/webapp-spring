@@ -2,7 +2,6 @@ package net.guides.springboot2.crud.controller;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.guides.springboot2.crud.dto.LuniCuSalarii;
 import net.guides.springboot2.crud.dto.RRDetails;
-import net.guides.springboot2.crud.dto.RealizariRetineriDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.payload.response.MessageResponse;
@@ -29,9 +27,6 @@ public class RealizariRetineriController {
 	private RealizariRetineriService realizariRetineriService;
 	@Autowired
 	private AngajatRepository angajatRepository;
-
-	@Autowired
-	private ModelMapper modelMapper;
 
 	@GetMapping("get/idc={id}&mo={luna}&y={an}")
 	public RealizariRetineri getRealizariRetineriByIdcontract(@PathVariable("id") int idcontract,
@@ -54,16 +49,6 @@ public class RealizariRetineriController {
 		int idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 
-	}
-
-	// just a calculator
-	@GetMapping("calc/idc={id}&mo={luna}&y={an}&pb={pb}&nrt={nrt}&tos={tos}")
-	public RealizariRetineriDTO calcRealizariRetineri(@PathVariable("id") int idcontract,
-			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an,
-			@PathVariable("pb") Integer primabruta, @PathVariable("nrt") Integer nrTichete,
-			@PathVariable("tos") Integer totalOreSuplimentare) throws ResourceNotFoundException {
-		return modelMapper.map(realizariRetineriService.calcRealizariRetineri(idcontract, luna, an, primabruta,
-				nrTichete, totalOreSuplimentare), RealizariRetineriDTO.class);
 	}
 
 	// * CALCULEAZA pt un angajat pe o luna

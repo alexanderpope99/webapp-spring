@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  Row,
-  Col,
-  Form,
-  Button,
-  Modal,
-  FormControl,
-  InputGroup,
-  DropdownButton,
-  Dropdown,
-  Toast,
-  Table,
+	Row,
+	Col,
+	Form,
+	Button,
+	Modal,
+	FormControl,
+	InputGroup,
+	DropdownButton,
+	Dropdown,
+	Toast,
+	Table,
 } from 'react-bootstrap';
 import { Trash2,Edit3 } from 'react-feather';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -25,7 +25,7 @@ import authHeader from '../../../../../services/auth-header';
 import { getAngajatSel } from '../../../../Resources/angajatsel';
 
 const case_de_sanatate_component = case_de_sanatate.map((casa, index) => (
-  <option key={index}>{casa}</option>
+	<option key={index}>{casa}</option>
 ));
 
 class Contract extends React.Component {
@@ -650,48 +650,48 @@ class Contract extends React.Component {
                       >
                         Da
                       </Button>
-                      <Button
-                        variant="outline-persondary"
-                        onClick={popupState.close}
-                        className="mt-2"
-                      >
-                        Nu
+											<Button
+												variant="outline-persondary"
+												onClick={popupState.close}
+												className="mt-2"
+											>
+												Nu
                       </Button>
-                    </Box>
-                  </Popover>
-                </div>
-              )}
-            </PopupState>
-          </th>
-        </tr>
-      );
-    });
+										</Box>
+									</Popover>
+								</div>
+							)}
+						</PopupState>
+					</th>
+				</tr>
+			);
+		});
 
-    return (
-      <React.Fragment>
-        <Toast
-          onClose={() => this.setState({ showToast: false })}
-          show={this.state.showToast}
-          className="position-fixed"
-          style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
-        >
-          <Toast.Header className="pr-2">
-            <strong className="mr-auto">Eroare</strong>
-          </Toast.Header>
-          <Toast.Body>
-            {this.state.toastMessage}
-            {/* <Button variant="light">Repara scriind valori predefinite</Button> */}
-          </Toast.Body>
-        </Toast>
+		return (
+			<React.Fragment>
+				<Toast
+					onClose={() => this.setState({ showToast: false })}
+					show={this.state.showToast}
+					className="position-fixed"
+					style={{ top: '10px', right: '5px', zIndex: '9999', background: 'white' }}
+				>
+					<Toast.Header className="pr-2">
+						<strong className="mr-auto">Eroare</strong>
+					</Toast.Header>
+					<Toast.Body>
+						{this.state.toastMessage}
+						{/* <Button variant="light">Repara scriind valori predefinite</Button> */}
+					</Toast.Body>
+				</Toast>
 
-        <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={this.handleClose}>
-              OK
+				<Modal show={this.state.show} onHide={this.handleClose}>
+					<Modal.Header closeButton>
+						<Modal.Title>Mesaj</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>{this.state.modalMessage}</Modal.Body>
+					<Modal.Footer>
+						<Button variant="primary" onClick={this.handleClose}>
+							OK
             </Button>
           </Modal.Footer>
         </Modal>
@@ -822,289 +822,289 @@ class Contract extends React.Component {
                     >
                       Suspendări
                     </Button>
-                  </InputGroup.Append>
-                </InputGroup>
-              </Form.Group>
-            </Col>
-            {/* <Col md={12} /> */}
-            <Col md={3}>
-              <Form.Group controlId="nrcontract">
-                <Form.Label>Număr contract</Form.Label>
-                <Form.Control
-                  required
-                  type="text"
-                  placeholder="Număr contract"
-                  value={this.state.numărContract || ''}
-                  onChange={(e) => {
-                    this.setState({ numărContract: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            {/* <Col md={12} /> */}
-            <Col md={3}>
-              <Form.Group controlId="marca">
-                <Form.Label>Marca</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Marca"
-                  value={this.state.marca || ''}
-                  onChange={(e) => {
-                    this.setState({ marca: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
+									</InputGroup.Append>
+								</InputGroup>
+							</Form.Group>
+						</Col>
+						{/* <Col md={12} /> */}
+						<Col md={3}>
+							<Form.Group controlId="nrcontract">
+								<Form.Label>Număr contract</Form.Label>
+								<Form.Control
+									required
+									type="text"
+									placeholder="Număr contract"
+									value={this.state.numărContract || ''}
+									onChange={(e) => {
+										this.setState({ numărContract: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						{/* <Col md={12} /> */}
+						<Col md={3}>
+							<Form.Group controlId="marca">
+								<Form.Label>Marca</Form.Label>
+								<Form.Control
+									type="text"
+									placeholder="Marca"
+									value={this.state.marca || ''}
+									onChange={(e) => {
+										this.setState({ marca: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group controlId="dataincepere">
-                <Form.Label>Data începere activitate</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.dataIncepere || ''}
-                  onChange={(e) => {
-                    this.setState({ dataIncepere: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="datacontract">
-                <Form.Label>Data contract</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={this.state.dataContract || ''}
-                  selected={this.state.dataContract}
-                  onChange={(e) => {
-                    this.setState({ dataContract: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
-              <Form.Group id="functiedabaza">
-                <Form.Label>
-                  <Form.Check
-                    custom
-                    type="switch"
-                    id="functieDeBazaCheck"
-                    label="Funcție de bază"
-                    checked={this.state.functieBaza || false}
-                    onChange={(e) => {
-                      this.setState({ functieBaza: e.target.checked });
-                    }}
-                    size="sm"
-                  />
-                </Form.Label>
-              </Form.Group>
-            </Col>
-            <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
-              <Form.Group controlId="calculdeduceri">
-                <Form.Check
-                  custom
-                  type="switch"
-                  id="deduceriCheck"
-                  label="Platește impozit"
-                  checked={this.state.calculdeduceri || false}
-                  onChange={(e) => {
-                    this.setState({ calculdeduceri: e.target.checked });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
-              <Form.Group controlId="studiisuperioare">
-                <Form.Check
-                  custom
-                  type="switch"
-                  id="studiiSuperioareCheck"
-                  label="Studii superioare"
-                  checked={this.state.studiiSuperioare || false}
-                  onChange={(e) => {
-                    this.setState({
-                      studiiSuperioare: e.target.checked,
-                    });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
-              <Form.Group id="pensionar">
-                <Form.Check
-                  custom
-                  type="switch"
-                  id="pensionarCheck"
-                  label="Pensionar"
-                  checked={this.state.pensionar || false}
-                  onChange={(e) => {
-                    this.setState({ pensionar: e.target.checked });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={12} />
+						<Col md={6}>
+							<Form.Group controlId="dataincepere">
+								<Form.Label>Data începere activitate</Form.Label>
+								<Form.Control
+									type="date"
+									value={this.state.dataIncepere || ''}
+									onChange={(e) => {
+										this.setState({ dataIncepere: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						<Col md={6}>
+							<Form.Group controlId="datacontract">
+								<Form.Label>Data contract</Form.Label>
+								<Form.Control
+									type="date"
+									value={this.state.dataContract || ''}
+									selected={this.state.dataContract}
+									onChange={(e) => {
+										this.setState({ dataContract: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						<Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
+							<Form.Group id="functiedabaza">
+								<Form.Label>
+									<Form.Check
+										custom
+										type="switch"
+										id="functieDeBazaCheck"
+										label="Funcție de bază"
+										checked={this.state.functieBaza || false}
+										onChange={(e) => {
+											this.setState({ functieBaza: e.target.checked });
+										}}
+										size="sm"
+									/>
+								</Form.Label>
+							</Form.Group>
+						</Col>
+						<Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
+							<Form.Group controlId="calculdeduceri">
+								<Form.Check
+									custom
+									type="switch"
+									id="deduceriCheck"
+									label="Platește impozit"
+									checked={this.state.calculdeduceri || false}
+									onChange={(e) => {
+										this.setState({ calculdeduceri: e.target.checked });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						<Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
+							<Form.Group controlId="studiisuperioare">
+								<Form.Check
+									custom
+									type="switch"
+									id="studiiSuperioareCheck"
+									label="Studii superioare"
+									checked={this.state.studiiSuperioare || false}
+									onChange={(e) => {
+										this.setState({
+											studiiSuperioare: e.target.checked,
+										});
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						<Col md={3} style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
+							<Form.Group id="pensionar">
+								<Form.Check
+									custom
+									type="switch"
+									id="pensionarCheck"
+									label="Pensionar"
+									checked={this.state.pensionar || false}
+									onChange={(e) => {
+										this.setState({ pensionar: e.target.checked });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						<Col md={12} />
 
-            <Col md={6}>
-              <Form.Group id="normalucru">
-                <Form.Label>Normă de lucru</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.normăLucru.nume || 'Normă întreagă'}
-                  onChange={(e) => {
-                    this.setState(
-                      {
-                        normăLucru: {
-                          nrOre: 8 - e.target.options.selectedIndex,
-                          nume: e.target.value,
-                        },
-                      },
-                      () => console.log(this.state.normăLucru)
-                    );
-                  }}
-                >
-                  <option>Normă întreagă</option>
-                  <option>Normă parțială 7/8</option>
-                  <option>Normă parțială 6/8</option>
-                  <option>Normă parțială 5/8</option>
-                  <option>Normă parțială 4/8</option>
-                  <option>Normă parțială 3/8</option>
-                  <option>Normă parțială 2/8</option>
-                  <option>Normă parțială 1/8</option>
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group id="zilecoan">
-                <Form.Label>Zile CO/an</Form.Label>
-                <Form.Control
-                  placeholder="0"
-                  type="number"
-                  value={this.state.zileCOan || 0}
-                  onChange={(e) => {
-                    this.setState({ zileCOan: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
+						<Col md={6}>
+							<Form.Group id="normalucru">
+								<Form.Label>Normă de lucru</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.normăLucru.nume || 'Normă întreagă'}
+									onChange={(e) => {
+										this.setState(
+											{
+												normăLucru: {
+													nrOre: 8 - e.target.options.selectedIndex,
+													nume: e.target.value,
+												},
+											},
+											() => console.log(this.state.normăLucru)
+										);
+									}}
+								>
+									<option>Normă întreagă</option>
+									<option>Normă parțială 7/8</option>
+									<option>Normă parțială 6/8</option>
+									<option>Normă parțială 5/8</option>
+									<option>Normă parțială 4/8</option>
+									<option>Normă parțială 3/8</option>
+									<option>Normă parțială 2/8</option>
+									<option>Normă parțială 1/8</option>
+								</Form.Control>
+							</Form.Group>
+						</Col>
+						<Col md={6}>
+							<Form.Group id="zilecoan">
+								<Form.Label>Zile CO/an</Form.Label>
+								<Form.Control
+									placeholder="0"
+									type="number"
+									value={this.state.zileCOan || 0}
+									onChange={(e) => {
+										this.setState({ zileCOan: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group id="salariu">
-                <Form.Label>Salariu</Form.Label>
-                <InputGroup>
-                  <FormControl
-                    type="number"
-                    required
-                    placeholder="Salariu"
-                    aria-label="Salariu"
-                    aria-describedby="basic-addon2"
-                    value={this.state.salariu || 0}
-                    onChange={(e) => this.setState({ salariu: e.target.value })}
-                  />
+						<Col md={6}>
+							<Form.Group id="salariu">
+								<Form.Label>Salariu</Form.Label>
+								<InputGroup>
+									<FormControl
+										type="number"
+										required
+										placeholder="Salariu"
+										aria-label="Salariu"
+										aria-describedby="basic-addon2"
+										value={this.state.salariu || 0}
+										onChange={(e) => this.setState({ salariu: e.target.value })}
+									/>
 
-                  <DropdownButton
-                    as={InputGroup.Append}
-                    title={this.state.monedăSalariu || 'RON'}
-                    id="monedasalariu"
-                  >
-                    <Dropdown.Item
-                      onClick={() =>
-                        this.setState({
-                          monedăSalariu: 'RON',
-                        })
-                      }
-                    >
-                      RON
+									<DropdownButton
+										as={InputGroup.Append}
+										title={this.state.monedăSalariu || 'RON'}
+										id="monedasalariu"
+									>
+										<Dropdown.Item
+											onClick={() =>
+												this.setState({
+													monedăSalariu: 'RON',
+												})
+											}
+										>
+											RON
                     </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() =>
-                        this.setState({
-                          monedăSalariu: 'EUR',
-                        })
-                      }
-                    >
-                      EUR
+										<Dropdown.Item
+											onClick={() =>
+												this.setState({
+													monedăSalariu: 'EUR',
+												})
+											}
+										>
+											EUR
                     </Dropdown.Item>
-                  </DropdownButton>
-                </InputGroup>
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group id="conditiidemunca">
-                <Form.Label>Condiții de muncă</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.condițiiMuncă || 'Normale'}
-                  onChange={(e) => {
-                    this.setState({ condițiiMuncă: e.target.value });
-                  }}
-                >
-                  <option>Normale</option>
-                  <option>Deosebite</option>
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            <Col md={12} className="border rounded pt-3">
-              <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
-                Cont bancar
+									</DropdownButton>
+								</InputGroup>
+							</Form.Group>
+						</Col>
+						<Col md={6}>
+							<Form.Group id="conditiidemunca">
+								<Form.Label>Condiții de muncă</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.condițiiMuncă || 'Normale'}
+									onChange={(e) => {
+										this.setState({ condițiiMuncă: e.target.value });
+									}}
+								>
+									<option>Normale</option>
+									<option>Deosebite</option>
+								</Form.Control>
+							</Form.Group>
+						</Col>
+						<Col md={12} className="border rounded pt-3">
+							<Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+								Cont bancar
               </Typography>
-              <Row>
-                <Col md={6}>
-                  <Form.Group id="iban">
-                    <Form.Label>IBAN</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.iban || ''}
-                      style={{ fontFamily: 'Consolas, Courier New' }}
-                      onChange={(e) => {
-                        this.setState({ iban: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="numebanca">
-                    <Form.Label>Nume bancă</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={this.state.numebanca || ''}
-                      onChange={(e) => {
-                        this.setState({ numebanca: e.target.value });
-                      }}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="punctdelucru">
-                <Form.Label>Punct de lucru</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.punctDeLucru || '-'}
-                  onChange={(e) => {
-                    this.setState({ punctDeLucru: e.target.value });
-                  }}
-                >
-                  <option>-</option>
-                  {/* TODO fetch names from db and list here */}
-                  {/* TODO 'add punct de lucru' button */}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="centrucost">
-                <Form.Label>Centre de cost</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.centruCost ? this.state.centruCost.nume : '-'}
-                  onChange={(e) => this.onChangeCentruCost(e)}
-                >
-                  <option>-</option>
-                  {centreCostComponent}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            {/* <Col md={6}>
+							<Row>
+								<Col md={6}>
+									<Form.Group id="iban">
+										<Form.Label>IBAN</Form.Label>
+										<Form.Control
+											type="text"
+											value={this.state.iban || ''}
+											style={{ fontFamily: 'Consolas, Courier New' }}
+											onChange={(e) => {
+												this.setState({ iban: e.target.value });
+											}}
+										/>
+									</Form.Group>
+								</Col>
+								<Col md={6}>
+									<Form.Group controlId="numebanca">
+										<Form.Label>Nume bancă</Form.Label>
+										<Form.Control
+											type="text"
+											value={this.state.numebanca || ''}
+											onChange={(e) => {
+												this.setState({ numebanca: e.target.value });
+											}}
+										/>
+									</Form.Group>
+								</Col>
+							</Row>
+						</Col>
+						<Col md={6}>
+							<Form.Group controlId="punctdelucru">
+								<Form.Label>Punct de lucru</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.punctDeLucru || '-'}
+									onChange={(e) => {
+										this.setState({ punctDeLucru: e.target.value });
+									}}
+								>
+									<option>-</option>
+									{/* TODO fetch names from db and list here */}
+									{/* TODO 'add punct de lucru' button */}
+								</Form.Control>
+							</Form.Group>
+						</Col>
+						<Col md={6}>
+							<Form.Group controlId="centrucost">
+								<Form.Label>Centre de cost</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.centruCost ? this.state.centruCost.nume : '-'}
+									onChange={(e) => this.onChangeCentruCost(e)}
+								>
+									<option>-</option>
+									{centreCostComponent}
+								</Form.Control>
+							</Form.Group>
+						</Col>
+						{/* <Col md={6}>
               <Form.Group controlId="echipa">
                 <Form.Label>Echipa</Form.Label>
                 <Typeahead
@@ -1135,241 +1135,241 @@ class Contract extends React.Component {
               </Form.Group>
             </Col> */}
 
-            <Col md={12} />
-            <Col md={1}>
-              <Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
-                <Form.Check
-                  custom
-                  type="switch"
-                  id="sindicatCheck"
-                  label="Sindicat"
-                  checked={this.state.sindicat}
-                  onChange={(e) => {
-                    this.setState({ sindicat: e.target.checked });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            {this.state.sindicat ? (
-              <Col md={3}>
-                <Form.Group id="cotizatiesindicat">
-                  <Form.Label>Cotizație sindicat</Form.Label>
-                  <Form.Control
-                    placeholder="0"
-                    value={this.state.cotizațieSindicat}
-                    onChange={(e) => {
-                      this.setState({ cotizațieSindicat: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-              </Col>
-            ) : null}
-            <Col md={2} />
-            <Col md={1.5}>
-              <Form.Group
-                id="pensieprivata"
-                style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}
-              >
-                <Form.Check
-                  custom
-                  type="switch"
-                  id="pensiePrivataCheck"
-                  label="Pensie privată"
-                  checked={this.state.pensiePrivată}
-                  onChange={(e) => {
-                    this.setState({ pensiePrivată: e.target.checked });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            {this.state.pensiePrivată ? (
-              <Col md={3}>
-                <Form.Group id="cotizatiepensieprivata">
-                  <Form.Label>Cotizație pensie privată</Form.Label>
-                  <Form.Control
-                    placeholder="0"
-                    value={this.state.cotizațiePensie}
-                    onChange={(e) => {
-                      this.setState({
-                        cotizațiePensie: e.target.value,
-                      });
-                    }}
-                  />
-                </Form.Group>
-              </Col>
-            ) : null}
-            <Col md={12} />
+						<Col md={12} />
+						<Col md={1}>
+							<Form.Group id="sindicat" style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}>
+								<Form.Check
+									custom
+									type="switch"
+									id="sindicatCheck"
+									label="Sindicat"
+									checked={this.state.sindicat}
+									onChange={(e) => {
+										this.setState({ sindicat: e.target.checked });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						{this.state.sindicat ? (
+							<Col md={3}>
+								<Form.Group id="cotizatiesindicat">
+									<Form.Label>Cotizație sindicat</Form.Label>
+									<Form.Control
+										placeholder="0"
+										value={this.state.cotizațieSindicat}
+										onChange={(e) => {
+											this.setState({ cotizațieSindicat: e.target.value });
+										}}
+									/>
+								</Form.Group>
+							</Col>
+						) : null}
+						<Col md={2} />
+						<Col md={1.5}>
+							<Form.Group
+								id="pensieprivata"
+								style={{ paddingTop: '2.5rem', paddingBottom: '0.5rem' }}
+							>
+								<Form.Check
+									custom
+									type="switch"
+									id="pensiePrivataCheck"
+									label="Pensie privată"
+									checked={this.state.pensiePrivată}
+									onChange={(e) => {
+										this.setState({ pensiePrivată: e.target.checked });
+									}}
+								/>
+							</Form.Group>
+						</Col>
+						{this.state.pensiePrivată ? (
+							<Col md={3}>
+								<Form.Group id="cotizatiepensieprivata">
+									<Form.Label>Cotizație pensie privată</Form.Label>
+									<Form.Control
+										placeholder="0"
+										value={this.state.cotizațiePensie}
+										onChange={(e) => {
+											this.setState({
+												cotizațiePensie: e.target.value,
+											});
+										}}
+									/>
+								</Form.Group>
+							</Col>
+						) : null}
+						<Col md={12} />
 
-            <Col md={6}>
-              <Form.Group id="sporuri">
-                <Form.Label>Sporuri permanente</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.spor}
-                  onChange={(e) => {
-                    this.setState({ spor: e.target.value });
-                  }}
-                >
-                  <option>-</option>
-                  <option>Spor sărbători legale</option>
-                  <option>Spor ore de noapte</option>
-                  <option>Spor de weekend</option>
-                </Form.Control>
-              </Form.Group>
-            </Col>
+						<Col md={6}>
+							<Form.Group id="sporuri">
+								<Form.Label>Sporuri permanente</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.spor}
+									onChange={(e) => {
+										this.setState({ spor: e.target.value });
+									}}
+								>
+									<option>-</option>
+									<option>Spor sărbători legale</option>
+									<option>Spor ore de noapte</option>
+									<option>Spor de weekend</option>
+								</Form.Control>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group id="avans">
-                <Form.Label>Avans</Form.Label>
-                <InputGroup>
-                  <FormControl
-                    type="number"
-                    placeholder="Avans"
-                    aria-label="Avans"
-                    aria-describedby="basic-addon2"
-                    value={this.state.value}
-                    onChange={(e) => this.setState({ avans: e.target.value })}
-                  />
+						<Col md={6}>
+							<Form.Group id="avans">
+								<Form.Label>Avans</Form.Label>
+								<InputGroup>
+									<FormControl
+										type="number"
+										placeholder="Avans"
+										aria-label="Avans"
+										aria-describedby="basic-addon2"
+										value={this.state.value}
+										onChange={(e) => this.setState({ avans: e.target.value })}
+									/>
 
-                  <DropdownButton
-                    as={InputGroup.Append}
-                    title={this.state.monedăAvans}
-                    id="monedaavans"
-                  >
-                    <Dropdown.Item
-                      onClick={() =>
-                        this.setState({
-                          monedăAvans: 'RON',
-                        })
-                      }
-                    >
-                      RON
+									<DropdownButton
+										as={InputGroup.Append}
+										title={this.state.monedăAvans}
+										id="monedaavans"
+									>
+										<Dropdown.Item
+											onClick={() =>
+												this.setState({
+													monedăAvans: 'RON',
+												})
+											}
+										>
+											RON
                     </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() =>
-                        this.setState({
-                          monedăAvans: 'EUR',
-                        })
-                      }
-                    >
-                      EUR
+										<Dropdown.Item
+											onClick={() =>
+												this.setState({
+													monedăAvans: 'EUR',
+												})
+											}
+										>
+											EUR
                     </Dropdown.Item>
-                  </DropdownButton>
-                </InputGroup>
-              </Form.Group>
-            </Col>
+									</DropdownButton>
+								</InputGroup>
+							</Form.Group>
+						</Col>
 
-            <Col md={12} />
+						<Col md={12} />
 
-            <Col md={10} />
+						<Col md={10} />
 
-            <Col md={6}>
-              <Form.Group id="ultimazilucru">
-                <Form.Label>Data încetării</Form.Label>
-                <Form.Control
-                  type="date"
-                  placeholder="data"
-                  value={this.state.ultimazilucru}
-                  onChange={(e) => {
-                    this.setState({ ultimazilucru: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
+						<Col md={6}>
+							<Form.Group id="ultimazilucru">
+								<Form.Label>Data încetării</Form.Label>
+								<Form.Control
+									type="date"
+									placeholder="data"
+									value={this.state.ultimazilucru}
+									onChange={(e) => {
+										this.setState({ ultimazilucru: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group id="casasanatate">
-                <Form.Label>Casa de sănătate</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.casăSănătate}
-                  onChange={(e) => {
-                    this.setState({ casăSănătate: e.target.value });
-                  }}
-                >
-                  <option>-</option>
-                  {case_de_sanatate_component}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group id="gradinvaliditate">
-                <Form.Label>Grad invaliditate</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.gradInvalid}
-                  onChange={(e) => {
-                    this.setState({ gradInvalid: e.target.value });
-                  }}
-                >
-                  <option>valid</option>
-                  <option>invalid</option>
-                </Form.Control>
-              </Form.Group>
-            </Col>
+						<Col md={6}>
+							<Form.Group id="casasanatate">
+								<Form.Label>Casa de sănătate</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.casăSănătate}
+									onChange={(e) => {
+										this.setState({ casăSănătate: e.target.value });
+									}}
+								>
+									<option>-</option>
+									{case_de_sanatate_component}
+								</Form.Control>
+							</Form.Group>
+						</Col>
+						<Col md={6}>
+							<Form.Group id="gradinvaliditate">
+								<Form.Label>Grad invaliditate</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.gradInvalid}
+									onChange={(e) => {
+										this.setState({ gradInvalid: e.target.value });
+									}}
+								>
+									<option>valid</option>
+									<option>invalid</option>
+								</Form.Control>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group id="nivelstudii">
-                <Form.Label>Nivel studii</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.nivelStudii}
-                  onChange={(e) => {
-                    this.setState({ nivelStudii: e.target.value });
-                  }}
-                >
-                  <option>-</option>
-                  <option>Gimnaziale</option>
-                  <option>Medii</option>
-                  <option>Superioare</option>
-                </Form.Control>
-              </Form.Group>
-            </Col>
+						<Col md={6}>
+							<Form.Group id="nivelstudii">
+								<Form.Label>Nivel studii</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.nivelStudii}
+									onChange={(e) => {
+										this.setState({ nivelStudii: e.target.value });
+									}}
+								>
+									<option>-</option>
+									<option>Gimnaziale</option>
+									<option>Medii</option>
+									<option>Superioare</option>
+								</Form.Control>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group id="cor">
-                <Form.Label>Cod COR</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="cod COR"
-                  value={this.state.cor}
-                  onChange={(e) => {
-                    this.setState({ cor: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
+						<Col md={6}>
+							<Form.Group id="cor">
+								<Form.Label>Cod COR</Form.Label>
+								<Form.Control
+									type="text"
+									placeholder="cod COR"
+									value={this.state.cor}
+									onChange={(e) => {
+										this.setState({ cor: e.target.value });
+									}}
+								/>
+							</Form.Group>
+						</Col>
 
-            <Col md={6}>
-              <Form.Group id="superior">
-                <Form.Label>Superior</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.superior ? this.state.superior.numeintreg : '-'}
-                  onChange={(e) => this.onChangeSuperior(e)}
-                >
-                  <option>-</option>
-                  {superioriComponent}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-          </Row>
+						<Col md={6}>
+							<Form.Group id="superior">
+								<Form.Label>Superior</Form.Label>
+								<Form.Control
+									as="select"
+									value={this.state.superior ? this.state.superior.numeintreg : '-'}
+									onChange={(e) => this.onChangeSuperior(e)}
+								>
+									<option>-</option>
+									{superioriComponent}
+								</Form.Control>
+							</Form.Group>
+						</Col>
+					</Row>
 
-          <Row>
-            <Col md={6}>
-              <Button
-                variant={!this.state.angajatsel ? 'outline-dark' : 'outline-primary'}
-                onClick={(e) => this.onSubmit(e)}
-                disabled={!this.state.angajatsel}
-              >
-                {this.state.id ? 'Actualizează contract' : 'Adaugă contract'}
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </React.Fragment>
-    );
-  }
+					<Row>
+						<Col md={6}>
+							<Button
+								variant={!this.state.angajatsel ? 'outline-dark' : 'outline-primary'}
+								onClick={(e) => this.onSubmit(e)}
+								disabled={!this.state.angajatsel}
+							>
+								{this.state.id ? 'Actualizează contract' : 'Adaugă contract'}
+							</Button>
+						</Col>
+					</Row>
+				</Form>
+			</React.Fragment>
+		);
+	}
 }
 
 export default Contract;

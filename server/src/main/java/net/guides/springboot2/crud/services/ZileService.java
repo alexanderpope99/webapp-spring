@@ -19,6 +19,38 @@ public class ZileService {
 	@Autowired
 	private SarbatoriService sarbatoriService;
 
+	public String getNumeLunaByNr(int nrLuna) {
+		switch (nrLuna) {
+		case 1:
+			return "Ianuarie";
+		case 2:
+			return "Februarie";
+		case 3:
+			return "Martie";
+		case 4:
+			return "Aprilie";
+		case 5:
+			return "Mai";
+		case 6:
+			return "Iunie";
+		case 7:
+			return "Iulie";
+		case 8:
+			return "August";
+		case 9:
+			return "Septembrie";
+		case 10:
+			return "Octombrie";
+		case 11:
+			return "Noiembrie";
+		case 12:
+			return "Decembrie";
+
+		default:
+			return "Ianuarie";
+		}
+	}
+
 	public long getZileLucratoareInInterval(LocalDate startDate, LocalDate endDate) {
 		List<LocalDate> holidays = sarbatoriService.getZileSarbatoareInIntervalul(startDate, endDate);
 
@@ -64,8 +96,17 @@ public class ZileService {
 		return workingDays;
 	}
 
+	public int getZileSuspendatLucratoare(Contract contract, int luna, int an) {
+		if(contract.getSuspendari().isEmpty()) return 0;
+		
+		LocalDate[] perioadaSuspendare = contract.getPerioadaSuspendat(luna, an);
+
+		if(perioadaSuspendare.length == 0) return 0;
+		else return (int)getZileLucratoareInInterval(perioadaSuspendare[0], perioadaSuspendare[1]);
+	}
+
 	// include sarbatori
-	public int getNrZileLucratoareContract(int luna, int an, Contract contract) {
+	public int getNrZileLucratoareContract(Contract contract, int luna, int an) {
 		LocalDate dataincepere = contract.getDataincepere();
 		LocalDate ultimaZiLucru = contract.getUltimazilucru();
 
@@ -102,36 +143,7 @@ public class ZileService {
 		}
 	} // end of 'get zile lucratoare contract'
 
-	public String getNumeLunaByNr(int nrLuna) {
-		switch (nrLuna) {
-		case 1:
-			return "Ianuarie";
-		case 2:
-			return "Februarie";
-		case 3:
-			return "Martie";
-		case 4:
-			return "Aprilie";
-		case 5:
-			return "Mai";
-		case 6:
-			return "Iunie";
-		case 7:
-			return "Iulie";
-		case 8:
-			return "August";
-		case 9:
-			return "Septembrie";
-		case 10:
-			return "Octombrie";
-		case 11:
-			return "Noiembrie";
-		case 12:
-			return "Decembrie";
-
-		default:
-			return "Ianuarie";
-		}
+	public int getZileContract(Contract contract, int luna, int an) {
+		return getNrZileLucratoareContract(contract, luna, an) - getZileSuspendatLucratoare(contract, luna, an);
 	}
-
 }

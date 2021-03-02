@@ -289,7 +289,6 @@ class COTabel extends React.Component {
       );
 
     if (concedii) {
-			console.log(concedii);
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
       var an;
