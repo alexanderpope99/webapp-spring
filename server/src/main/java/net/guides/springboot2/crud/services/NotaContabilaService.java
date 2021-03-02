@@ -49,8 +49,9 @@ public class NotaContabilaService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
-		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
+	private float getFonduriHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
+		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(societate.getId());
+		if(societate.getAngajati().size() < 50) return 0;
 
 		// contracte.removeIf(contract )
 		ParametriiSalariu ps = parametriiSalariuService.getParametriiSalariu();
@@ -144,7 +145,7 @@ public class NotaContabilaService {
 
 		// * Fond Handicap
 		writerCell = stat.getRow(38).getCell(5);
-		writerCell.setCellValue(getFonduriHandicap(luna, an, idsocietate));
+		writerCell.setCellValue(getFonduriHandicap(luna, an, societate));
 
 		/* ------ ENDING ------ **/
 		FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();

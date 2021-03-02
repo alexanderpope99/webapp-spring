@@ -104,29 +104,27 @@ public class FacturaService {
 
 		FileInputStream file = new FileInputStream(new File(facturaTemplate, "FacturaTemplate.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
-
-		int pictureIdx = workbook.addPicture(societate.getImagine().getData(), Workbook.PICTURE_TYPE_JPEG);
-
-		CreationHelper helper = workbook.getCreationHelper();
-
 		Sheet facturaWb = workbook.getSheetAt(0);
+		Client client = factura.getClient();
+		LocalDate dataExpedierii = factura.getDataexpedierii();
 
-		Drawing<?> drawing = facturaWb.createDrawingPatriarch();
-		
-		ClientAnchor my_anchor = helper.createClientAnchor();
+		if (societate.getImagine() != null) {
+			int pictureIdx = workbook.addPicture(societate.getImagine().getData(), Workbook.PICTURE_TYPE_JPEG);
 
-		Client client=factura.getClient();
-		LocalDate dataExpedierii=factura.getDataexpedierii();
+			CreationHelper helper = workbook.getCreationHelper();
 
-		my_anchor.setCol1(1);
-        my_anchor.setRow1(3);
+			Drawing<?> drawing = facturaWb.createDrawingPatriarch();
 
+			ClientAnchor my_anchor = helper.createClientAnchor();
 
-		Picture  my_picture = drawing.createPicture(my_anchor, pictureIdx);
-		my_picture.resize();
+			my_anchor.setCol1(1);
+			my_anchor.setRow1(3);
 
+			Picture my_picture = drawing.createPicture(my_anchor, pictureIdx);
+			my_picture.resize();
+		}
 
-		Row row=facturaWb.getRow(1);
+		Row row = facturaWb.getRow(1);
 		Cell writerCell = row.getCell(11);
 		writerCell.setCellValue(factura.getSerie());
 		writerCell = row.getCell(13);
@@ -134,76 +132,72 @@ public class FacturaService {
 		writerCell = row.getCell(16);
 		writerCell.setCellValue(dataExpedierii.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
-		row=facturaWb.getRow(8);
+		row = facturaWb.getRow(8);
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(societate.getNume());
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(client.getNumecomplet());
 
-		row=facturaWb.getRow(10);
+		row = facturaWb.getRow(10);
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(societate.getRegcom());
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(client.getNrregcom());
 
-		row=facturaWb.getRow(11);
+		row = facturaWb.getRow(11);
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(societate.getCif());
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(client.getCodfiscal());
 
-		row=facturaWb.getRow(12);
+		row = facturaWb.getRow(12);
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(societate.getAdresa().getAdresa());
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(client.getAdresa().getAdresa());
 
-		if(societate.getContbancar().size()==1)
-		{
-		row=facturaWb.getRow(14);
-		writerCell = row.getCell(4);
-		writerCell.setCellValue(societate.getContbancar().get(0).getIban());
-		row=facturaWb.getRow(15);
-		writerCell = row.getCell(4);
-		writerCell.setCellValue(societate.getContbancar().get(0).getNumebanca());
-		}
-		else if(societate.getContbancar().size()>1)
-		{
-			row=facturaWb.getRow(14);
+		if (societate.getContbancar().size() == 1) {
+			row = facturaWb.getRow(14);
 			writerCell = row.getCell(4);
 			writerCell.setCellValue(societate.getContbancar().get(0).getIban());
-			row=facturaWb.getRow(15);
+			row = facturaWb.getRow(15);
 			writerCell = row.getCell(4);
 			writerCell.setCellValue(societate.getContbancar().get(0).getNumebanca());
-			row=facturaWb.getRow(16);
+		} else if (societate.getContbancar().size() > 1) {
+			row = facturaWb.getRow(14);
+			writerCell = row.getCell(4);
+			writerCell.setCellValue(societate.getContbancar().get(0).getIban());
+			row = facturaWb.getRow(15);
+			writerCell = row.getCell(4);
+			writerCell.setCellValue(societate.getContbancar().get(0).getNumebanca());
+			row = facturaWb.getRow(16);
 			writerCell = row.getCell(4);
 			writerCell.setCellValue(societate.getContbancar().get(1).getIban());
-			row=facturaWb.getRow(17);
+			row = facturaWb.getRow(17);
 			writerCell = row.getCell(4);
 			writerCell.setCellValue(societate.getContbancar().get(1).getNumebanca());
 		}
-		row=facturaWb.getRow(16);
+		row = facturaWb.getRow(16);
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(client.getCont());
-		row=facturaWb.getRow(17);
+		row = facturaWb.getRow(17);
 		writerCell = row.getCell(13);
 		writerCell.setCellValue(client.getBanca());
 
-		row=facturaWb.getRow(18);
+		row = facturaWb.getRow(18);
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(societate.getCapsoc());
-		row=facturaWb.getRow(19);
+		row = facturaWb.getRow(19);
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(societate.getCapsoc());
-		row=facturaWb.getRow(20);
+		row = facturaWb.getRow(20);
 		writerCell = row.getCell(4);
-		writerCell.setCellValue(String.valueOf(parametriiSalariu.getTva())+" %");
+		writerCell.setCellValue(String.valueOf(parametriiSalariu.getTva()) + " %");
 
-		int i=1;
-		float sumFaraTva=0,sumTva=0;
-		for(Produs produs : factura.getProduse())
-		{
-			row=facturaWb.getRow(25+2*i);
+		int i = 1;
+		float sumFaraTva = 0, sumTva = 0;
+		for (Produs produs : factura.getProduse()) {
+			row = facturaWb.getRow(25 + 2 * i);
 			writerCell = row.getCell(1);
 			writerCell.setCellValue(i);
 			writerCell = row.getCell(2);
@@ -213,31 +207,30 @@ public class FacturaService {
 			writerCell = row.getCell(9);
 			writerCell.setCellValue(produs.getCantitate());
 			writerCell = row.getCell(11);
-			writerCell.setCellValue(roundAvoid(produs.getPretUnitar(),2));
+			writerCell.setCellValue(roundAvoid(produs.getPretUnitar(), 2));
 			writerCell = row.getCell(13);
-			writerCell.setCellValue(roundAvoid(produs.getCantitate()*produs.getPretUnitar(),2));
-			sumFaraTva+=produs.getCantitate()*produs.getPretUnitar();
+			writerCell.setCellValue(roundAvoid(produs.getCantitate() * produs.getPretUnitar(), 2));
+			sumFaraTva += produs.getCantitate() * produs.getPretUnitar();
 			writerCell = row.getCell(16);
-			writerCell.setCellValue(roundAvoid((produs.getCantitate()*produs.getPretUnitar())*parametriiSalariu.getTva()/100,2));
-			sumTva+=(produs.getCantitate()*produs.getPretUnitar())*parametriiSalariu.getTva()/100;
+			writerCell.setCellValue(roundAvoid((produs.getCantitate() * produs.getPretUnitar()) * parametriiSalariu.getTva() / 100, 2));
+			sumTva += (produs.getCantitate() * produs.getPretUnitar()) * parametriiSalariu.getTva() / 100;
 			i++;
 		}
 
-		row=facturaWb.getRow(65);
+		row = facturaWb.getRow(65);
 		writerCell = row.getCell(13);
-		writerCell.setCellValue(roundAvoid(sumFaraTva,2));
+		writerCell.setCellValue(roundAvoid(sumFaraTva, 2));
 		writerCell = row.getCell(16);
-		writerCell.setCellValue(roundAvoid(sumTva,2));
+		writerCell.setCellValue(roundAvoid(sumTva, 2));
 
-		row=facturaWb.getRow(68);
+		row = facturaWb.getRow(68);
 		writerCell = row.getCell(13);
-		writerCell.setCellValue(roundAvoid(sumFaraTva+sumTva,2));
-
+		writerCell.setCellValue(roundAvoid(sumFaraTva + sumTva, 2));
 
 		/* ------ ENDING ------ **/
 		// * OUTPUT THE FILE
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + uid));
-		String newFileLocation = String.format("%s/downloads/%d/Factură - %s - %s - %s %s.xlsx", homeLocation, uid, societate.getNume(), factura.getClient().getNume(), factura.getDataexpedierii().toString(),factura.getOraexpedierii());
+		String newFileLocation = String.format("%s/downloads/%d/Factură - %s - %s - %s %s.xlsx", homeLocation, uid, societate.getNume(), factura.getClient().getNume(), factura.getDataexpedierii().toString(), factura.getOraexpedierii());
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);
