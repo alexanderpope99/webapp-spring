@@ -72,4 +72,12 @@ public class Suspendare implements Serializable{
 		panala=suspendare.panala;
 		return this;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }
