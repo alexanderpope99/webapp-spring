@@ -161,7 +161,6 @@ class Societati extends React.Component {
       luna: today.getMonth(),
       an: today.getFullYear(),
       canAddSocietate: this.getAdaugaSocietatePermission(),
-      // user: authService.getCurrentUser(),
     });
   }
 

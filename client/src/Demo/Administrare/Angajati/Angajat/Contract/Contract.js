@@ -151,8 +151,7 @@ class Contract extends React.Component {
 				show: false,
 				modalMessage: '',
 				showSuspendare: false,
-			},
-			this.props.scrollToTopSmooth
+			}
 		);
 	}
 
@@ -583,7 +582,6 @@ class Contract extends React.Component {
 												variant="outline-danger"
 												onClick={() => {
 													popupState.close();
-													console.log('Am șters șmecherie');
 												}}
 												className="mt-2 "
 											>
@@ -640,7 +638,6 @@ class Contract extends React.Component {
 						<Modal.Title>Suspendări Contract</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						Salut
             <Table responsive hover>
 							<thead>
 								<tr>

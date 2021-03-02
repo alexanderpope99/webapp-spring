@@ -11,7 +11,6 @@ import ConcediiMedicale from './ConcediiMedicale/ConcediiMedicale';
 import { getAngajatSel } from '../../../Resources/angajatsel';
 import PersoaneIntretinereTabel from './PersoaneIntretinere/PersoaneIntretinere';
 import BazaCalcul from './BazaCalcul/BazaCalcul';
-import ZileCOAn from './ZileCOAn/ZileCOAn';
 import RapoarteIndividuale from './Rapoarte/RapoarteIndividuale';
 
 /*
