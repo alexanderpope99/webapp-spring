@@ -122,7 +122,7 @@ public class Contract implements Serializable {
 	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CM> concediiMedicale;
 
-	@JsonBackReference(value = "suspendare-contract")
+	// @JsonBackReference(value = "suspendare-contract")
 	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Suspendare> suspendari;
 

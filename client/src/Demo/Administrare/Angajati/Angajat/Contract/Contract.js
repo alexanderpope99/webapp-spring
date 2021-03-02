@@ -35,7 +35,6 @@ class Contract extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
-    this.getSuspendari = this.getSuspendari.bind(this);
     this.addSuspendare = this.addSuspendare.bind(this);
 
     this.state = {
@@ -96,7 +95,7 @@ class Contract extends React.Component {
 
       suspendari: [],
       suspendareDeLa: '',
-      suspendarePânăLa: '',
+      suspendarePanaLa: '',
     };
   }
 
@@ -148,7 +147,7 @@ class Contract extends React.Component {
 
       suspendari: [],
       suspendareDeLa: '',
-      suspendarePânăLa: '',
+      suspendarePanaLa: '',
     });
   }
 
@@ -159,8 +158,7 @@ class Contract extends React.Component {
         modalMessage: '',
         showSuspendare: false,
         showSuspendare2: false,
-      },
-      this.props.scrollToTopSmooth
+      }
     );
   }
 
@@ -236,30 +234,6 @@ class Contract extends React.Component {
     if (centreCost) this.setState({ centreCost: centreCost });
   }
 
-  async getSuspendari() {
-    if (!this.state.id) return;
-    console.log(`${server.address}/suspendare/idc=${this.state.id}`);
-    const suspendari = await axios
-      .get(`${server.address}/suspendare/idc=${this.state.id}`, {
-        headers: authHeader(),
-      })
-      .then((res) => res.data)
-      .catch((err) =>
-        this.setState({
-          showToast: true,
-          toastMessage:
-            'Nu am putut prelua suspendările: ' +
-            (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
-        })
-      );
-    if (suspendari)
-      this.setState({
-        suspendari: suspendari,
-      });
-  }
-
   async fillForm() {
     this.getSuperiori();
     this.getCentreCost();
@@ -301,6 +275,7 @@ class Contract extends React.Component {
           angajat: angajat,
           superior: superior,
           angajatsel: getAngajatSel(),
+					suspendari: contract.suspendari || [],
 
           id: contract.id,
           modelContract: contract.tip || 'Contract de muncă', //text
@@ -343,8 +318,6 @@ class Contract extends React.Component {
             angajat.idpersoana,
             '\tidcontract:',
             contract.id,
-            '\tultimazilucru:',
-            contract.ultimazilucru
           )
       );
     } else {
@@ -425,7 +398,7 @@ class Contract extends React.Component {
         })
       );
 
-    if (suspendare) this.getSuspendari();
+    if (suspendare) this.fillForm();
   }
 
   async deleteSuspendare(id) {
@@ -445,7 +418,7 @@ class Contract extends React.Component {
         })
       );
 
-    if (suspendare) this.getSuspendari();
+    if (suspendare) this.fillForm();
   }
 
   async onSubmit(e) {
@@ -686,9 +659,8 @@ class Contract extends React.Component {
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Mesaj</Modal.Title>
+            <Modal.Title>{this.state.modalMessage}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this.state.modalMessage}</Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={this.handleClose}>
               OK
@@ -696,6 +668,7 @@ class Contract extends React.Component {
           </Modal.Footer>
         </Modal>
 
+				{/* EDIT SUSPENDARE */}
         <Modal
           show={this.state.showSuspendare2}
           onHide={() => this.setState({ showSuspendare2: false })}
@@ -711,7 +684,6 @@ class Contract extends React.Component {
                   <Form.Label>De la</Form.Label>
                   <Form.Control
                     type="date"
-                    min="0"
                     value={this.state.suspendareDeLa}
                     onChange={(e) => this.setState({ suspendareDeLa: e.target.value })}
                   />
@@ -736,8 +708,9 @@ class Contract extends React.Component {
           </Modal.Footer>
         </Modal>
 
+				{/* TABEL SUSPENDARI */}
         <Modal
-          style={this.state.showSuspendare2 ? { filter: 'blur(3px) brightness(0.7)' } : ''}
+          style={this.state.showSuspendare2 ? { filter: 'blur(3px) brightness(0.7)' } : {}}
           size="lg"
           show={this.state.showSuspendare}
           onHide={this.handleClose}
@@ -747,18 +720,17 @@ class Contract extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Row>
-              <Col md={3}>
+              <Col md={5}>
                 <Form.Group>
                   <Form.Label>De la</Form.Label>
                   <Form.Control
                     type="date"
-                    min="0"
                     value={this.state.suspendareDeLa}
                     onChange={(e) => this.setState({ suspendareDeLa: e.target.value })}
                   />
                 </Form.Group>
               </Col>
-              <Col md={3}>
+              <Col md={5}>
                 <Form.Group>
                   <Form.Label>Până la</Form.Label>
                   <Form.Control
@@ -827,8 +799,7 @@ class Contract extends React.Component {
                     <Button
                       variant="outline-info"
                       disabled={!this.state.angajatsel || !this.state.id}
-                      onClick={async () => {
-                        await this.getSuspendari();
+                      onClick={() => {
                         this.setState({ showSuspendare: true });
                       }}
                     >
