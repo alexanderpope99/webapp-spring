@@ -354,7 +354,7 @@ public class RealizariRetineri implements Serializable {
 	}
 
 	public Integer getConeefectuat() {
-		return coneefectuat == null ? 0 : coneefectuat;
+		return coneefectuat == null || coneefectuat < 0 ? 0 : coneefectuat;
 	}
 
 	// ! SETTERS

@@ -255,7 +255,7 @@ public class Societate implements Serializable {
 		this.caiete = caiete;
 	}
 
-	// * Extra
+	// ! OTHER
 
 	public void checkData() throws ResourceNotFoundException {
 		if (nume == null)

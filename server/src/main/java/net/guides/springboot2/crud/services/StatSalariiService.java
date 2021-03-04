@@ -53,6 +53,8 @@ public class StatSalariiService {
 	private COService coService;
 	@Autowired
 	private CMService cmService;
+	@Autowired
+	private NotaContabilaService notaContabilaService;
 
 	@Autowired
 	private SocietateRepository societateRepository;
@@ -746,9 +748,8 @@ public class StatSalariiService {
 			writerCell.setCellValue(0);
 			cellRange = "$E$" + (rowNr + 5) + ":$H$" + (rowNr + 5);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
-			writerCell = row6.createCell(4); // CAM 0.3375%
+			writerCell = row6.createCell(4); // Fond 4% pers cu handicap
 			writerCell.setCellStyle(salariu10Style);
-			writerCell.setCellValue(0);
 			cellRange = "$E$" + (rowNr + 6) + ":$H$" + (rowNr + 6);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
@@ -778,7 +779,7 @@ public class StatSalariiService {
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row6.createCell(8); // Fond 4% pers cu handicap
 			writerCell.setCellStyle(salariu10Style);
-			writerCell.setCellValue(0);
+			writerCell.setCellValue(notaContabilaService.getFondHandicap(luna, an, societate));
 			cellRange = "$I$" + (rowNr + 6) + ":$K$" + (rowNr + 6);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
