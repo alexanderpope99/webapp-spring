@@ -52,7 +52,7 @@ public class NotaContabilaService {
 	public float getFondHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
 		
 		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(societate.getId());
-		if(societate.getAngajati().size() < 50) return 0;
+		// if(societate.getAngajati().size() < 50) return 0;
 
 		ParametriiSalariu ps = parametriiSalariuService.getParametriiSalariu();
 
@@ -149,7 +149,7 @@ public class NotaContabilaService {
 
 		// * Fond Handicap
 		writerCell = stat.getRow(38).getCell(5);
-		writerCell.setCellValue(getFondHandicap(luna, an, societate) * 0.04);
+		writerCell.setCellValue(getFondHandicap(luna, an, societate));
 
 		/* ------ ENDING ------ **/
 		FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
