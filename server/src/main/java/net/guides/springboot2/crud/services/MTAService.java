@@ -142,17 +142,17 @@ public class MTAService {
 			writerCell.setCellValue(realizariRetineri.getRestplata());
 
 			// * CNP/CUI beneficiar
-			writerCell = row.createCell(3);
-			writerCell.setCellStyle(style);
-			writerCell.setCellValue(persoana.getCnp());
+			// writerCell = row.createCell(3);
+			// writerCell.setCellStyle(style);
+			// writerCell.setCellValue(persoana.getCnp());
 
 			// * Nume beneficiar (nume + prenume)
-			writerCell = row.createCell(4);
+			writerCell = row.createCell(3);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue(faraDiacritice(persoana.getNumeIntreg()));
 
 			// * Nr. evidenta plata
-			writerCell = row.createCell(5);
+			writerCell = row.createCell(4);
 			writerCell.setCellStyle(style);
 			writerCell.setCellValue(nrAngajat);
 
@@ -161,12 +161,12 @@ public class MTAService {
 
 		sheet.autoSizeColumn(0);
 		sheet.autoSizeColumn(1);
+		sheet.autoSizeColumn(3);
 		sheet.autoSizeColumn(4);
-		sheet.autoSizeColumn(5);
 
 		// * set borders
 		PropertyTemplate allCellsBordered = new PropertyTemplate();
-		String cellRange = "$A$4:$F$" + (2 + nrAngajat);
+		String cellRange = "$A$4:$E$" + (2 + nrAngajat);
 		allCellsBordered.drawBorders(CellRangeAddress.valueOf(cellRange), BorderStyle.THIN, BorderExtent.ALL);
 		allCellsBordered.applyBorders(sheet);
 
