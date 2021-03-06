@@ -99,13 +99,19 @@ public class ZileService {
 	public int getZileSuspendatLucratoare(Contract contract, int luna, int an) {
 		if(contract.getSuspendari().isEmpty()) return 0;
 		
-		LocalDate[] perioadaSuspendare = contract.getPerioadaSuspendat(luna, an);
+		List<LocalDate[]> perioadeSuspendare = contract.getPerioadaSuspendat(luna, an);
 
-		if(perioadaSuspendare.length == 0) return 0;
-		else return (int)getZileLucratoareInInterval(perioadaSuspendare[0], perioadaSuspendare[1]);
+		if(perioadeSuspendare.isEmpty()) return 0;
+		else {
+			int zileSuspendare = 0;
+			for(LocalDate[] perioada : perioadeSuspendare) {
+				zileSuspendare += this.getZileLucratoareInInterval(perioada[0], perioada[1]);
+			}
+			return zileSuspendare;
+		}
 	}
 
-	// include sarbatori
+	// include sarbatori, nu include suspendate
 	public int getNrZileLucratoareContract(Contract contract, int luna, int an) {
 		LocalDate dataincepere = contract.getDataincepere();
 		LocalDate ultimaZiLucru = contract.getUltimazilucru();

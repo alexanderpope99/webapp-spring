@@ -158,9 +158,7 @@ export default class EmitereFactura extends React.Component {
         serie: factura.serie,
         numar: factura.numar,
         nrAvizInsotire: factura.nravizinsotire,
-        client: factura.client
-          ? { id: factura.client.id, nume: factura.client.nume }
-          : { id: 0, nume: '-' },
+        client: factura.client || { nume: '' },
         titlu: factura.titlu,
         produse: factura.produse,
         dataExpedierii: factura.dataexpedierii,
@@ -183,7 +181,7 @@ export default class EmitereFactura extends React.Component {
     const idClient = e.target.options[selectedIndex].getAttribute('data-key');
     // eslint-disable-next-line eqeqeq
     const client = this.state.clienti.find((c) => c.id == idClient);
-    this.setState({ client: client ? client : { nume: '' } });
+    this.setState({ client: client || { nume: '' } });
   }
 
   adaugaProdus() {
@@ -249,7 +247,7 @@ export default class EmitereFactura extends React.Component {
   async onSubmit() {
     const factura = this.state.factura;
     const nrAvizInsotire = this.state.nrAvizInsotire === '-' ? '' : this.state.nrAvizInsotire;
-    const client = this.state.clienti.find((c) => c.id === this.state.client.id);
+    const client = this.state.client;
 
     if (!client) {
       this.setState({
@@ -586,7 +584,7 @@ export default class EmitereFactura extends React.Component {
             {/* PRODUSE / SERVICII */}
             <Row className="border rounded mt-2 pt-3 pb-2">
               <Col md={12}>
-                <Button onClick={this.adaugaProdus} variant="info" className="pt-1 pb-1">
+                <Button onClick={this.adaugaProdus} variant="warning" className="pt-1 pb-1">
                   Adauga produs/serviciu
                 </Button>
                 <Col md={12}>{produseComponent}</Col>

@@ -189,7 +189,7 @@ public class RealizariRetineriService {
 		int salariuRealizat = Math.round(salariuPeZi * (zileContract - zileCOLucratoare - zileCFPLucratoare - zileCMLucratoare));
 
 		float valCO = (zileCOLucratoare) * salariuPeZi;
-		float totalDrepturi = salariuRealizat + valCM + valCO + primaBruta + totalOreSuplimentare;
+		float totalDrepturi = salariuRealizat + valCM + valCO + primaBruta + totalOreSuplimentare + coNeefectuat;
 
 		float valoareTichete = parametriiSalariu.getValtichet() * nrTichete;
 
@@ -259,6 +259,7 @@ public class RealizariRetineriService {
 			primaBruta = tmpRR.getPrimabruta() == null ? 0 : tmpRR.getPrimabruta();
 			nrTichete = tmpRR.getNrtichete() == null ? 0 : tmpRR.getNrtichete();
 			totalOreSuplimentare = tmpRR.getTotaloresuplimentare() == null ? 0 : tmpRR.getTotaloresuplimentare();
+			coNeefectuat = tmpRR.getConeefectuat();
 		}
 
 		RealizariRetineri oldRealizariRetineri = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, idcontract);
@@ -328,15 +329,15 @@ public class RealizariRetineriService {
 		// ( -1, -1, -1) == foloseste (primaBruta, nrTichete, totalOreSuplimentare) existente
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, -1);
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
 			}
 
 			for (int i = 1; i <= luna; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, -1);
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
 			}
 		} else {
 			for (int i = luna6; i <= luna; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, -1);
+				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
 			}
 		}
 	}
@@ -345,7 +346,7 @@ public class RealizariRetineriService {
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
 		for (Angajat angajat : angajati) {
-			this.recalcRealizariRetineri(luna, an, angajat.getContract().getId(), -1, -1, -1, -1);
+			this.recalcRealizariRetineri(luna, an, angajat.getContract().getId(), -1, -1, -1, 0);
 		}
 	}
 

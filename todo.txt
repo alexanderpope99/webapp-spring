@@ -12,8 +12,6 @@ Pasi de urmat:
 
 	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile: {
 		[
-			Metoda de import:
-
 			Import/Export: Import
 			Select .csv file
 			Header: Yes,
@@ -34,11 +32,11 @@ Pasi de urmat:
 		4.10: Pers. intretinere
 	}
 
-	
-	6. Baza de date se initializeaza automat cand se creeaza primul user
+	6. Baza de date se initializeaza automat (sarbatori, param. sal., etc.) cand se creeaza primul user
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DUMMY DATA FOR CONSISTENCY: 
 
 FLORIN ADRIAN - NIMIC
 GHEORGHE TUDOR - CO 4-17, ZILE INVOIRE 1, TICHETE 0, POPRIRI 100

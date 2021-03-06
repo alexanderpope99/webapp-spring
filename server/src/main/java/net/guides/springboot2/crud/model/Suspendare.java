@@ -26,10 +26,10 @@ public class Suspendare implements Serializable {
 	@Column(name = "dela", nullable = false)
 	private LocalDate dela;
 
-	@Column(name = "panala", nullable = true)
+	@Column(name = "panala")
 	private LocalDate panala;
 
-	@JsonBackReference(value="suspendare-contract")
+	@JsonBackReference(value = "suspendare-contract")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idcontract", nullable = false)
 	private Contract contract;
@@ -37,10 +37,10 @@ public class Suspendare implements Serializable {
 	public Suspendare() {
 	}
 
-	public Suspendare(LocalDate dela, LocalDate panala,Contract contract) {
+	public Suspendare(LocalDate dela, LocalDate panala, Contract contract) {
 		this.dela = dela;
 		this.panala = panala;
-		this.contract=contract;
+		this.contract = contract;
 	}
 
 	public LocalDate getDela() {
@@ -68,8 +68,16 @@ public class Suspendare implements Serializable {
 	}
 
 	public Suspendare update(Suspendare suspendare) {
-		dela=suspendare.dela;
-		panala=suspendare.panala;
+		dela = suspendare.dela;
+		panala = suspendare.panala;
 		return this;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

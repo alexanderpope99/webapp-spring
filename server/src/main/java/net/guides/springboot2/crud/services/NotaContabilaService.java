@@ -49,10 +49,11 @@ public class NotaContabilaService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	private float getFonduriHandicap(int luna, int an, int idsocietate) throws ResourceNotFoundException {
-		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(idsocietate);
+	public float getFondHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
+		
+		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(societate.getId());
+		if(societate.getAngajati().size() < 50) return 0;
 
-		// contracte.removeIf(contract )
 		ParametriiSalariu ps = parametriiSalariuService.getParametriiSalariu();
 
 		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
@@ -61,12 +62,16 @@ public class NotaContabilaService {
 		int cuHandicap = 0;
 
 		for(Contract contract : contracte) {
-			if(contract.getGradinvaliditate().compareTo("invalid") == 0)
+			if(contract.getGradinvaliditate().equals("invalid"))
 				cuHandicap++;
-			else {
-				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * (contract.getZileAngajare(luna, an) / daysInMonth);
+			if(!contract.getTip().equals("Contract de administrare")) {
+				int zileCM = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, contract.getId()).getZilecm();
+
+				int zile = contract.getZileAngajare(luna, an) - zileCM;
+				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * ((float)zile / daysInMonth);
 			}
 		}
+
 		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
 		float fondHandicap = (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
 		return fondHandicap < 0 ? 0 : fondHandicap;
@@ -105,7 +110,7 @@ public class NotaContabilaService {
 		NotaContabilaDTO notaContabila = realizariRetineriRepository.getNotaContabilaByLunaAndAnAndIdsocietate(luna, an, idSocietate);
 		if (notaContabila == null) {
 			workbook.close();
-			throw new ResourceNotFoundException("Nu este salariul calculat pentru idsocietate " + idSocietate + " în " + luna + "/" + an);
+			throw new ResourceNotFoundException("Nu toate salariile sunt calculate in " + luna + " " + an);
 		}
 
 		// * Concedii medicale din fonduri
@@ -144,7 +149,7 @@ public class NotaContabilaService {
 
 		// * Fond Handicap
 		writerCell = stat.getRow(38).getCell(5);
-		writerCell.setCellValue(getFonduriHandicap(luna, an, idsocietate));
+		writerCell.setCellValue(getFondHandicap(luna, an, societate));
 
 		/* ------ ENDING ------ **/
 		FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();

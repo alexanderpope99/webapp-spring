@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +79,8 @@ public class Concediu implements Serializable {
 		this.contract = contract;
 	}
 
+	// ! OTHER
+
 	public boolean overlaps() throws ResourceNotFoundException {
 		if (contract == null)
 			throw new ResourceNotFoundException("Concediul nu are contract");
@@ -108,5 +111,9 @@ public class Concediu implements Serializable {
 		}
 
 		return false;
+	}
+
+	public int getNrZile() {
+		return (int)ChronoUnit.DAYS.between(dela, panala);
 	}
 }
