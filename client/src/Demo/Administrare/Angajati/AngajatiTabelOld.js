@@ -10,6 +10,7 @@ import {
   Tooltip,
   Breadcrumb,
   Toast,
+  Form,
 } from 'react-bootstrap';
 import Aux from '../../../hoc/_Aux';
 import axios from 'axios';
@@ -39,6 +40,7 @@ class AngajatiTabel extends React.Component {
       user: authService.getCurrentUser(),
       angajati: [],
       angajatiComponent: null,
+      normaFiltru: '-',
 
       showToast: false,
       toastMessage: '',
@@ -65,8 +67,8 @@ class AngajatiTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage: 'Nu am putut șterge angajatul PDF: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            ? err.response.data.message
+            : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
@@ -74,7 +76,42 @@ class AngajatiTabel extends React.Component {
   // function to create react component with fetched data
   renderAngajati() {
     this.setState({
-      angajatiComponent: this.state.angajati.map((ang, index) => {
+    });
+  }
+
+  async onRefresh() {
+    const angajati = await axios
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage: 'Nu am putut prelua lista de angajați: ' + (err.response
+            ? err.response.data.message
+            : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+
+    this.setState({
+      angajati: angajati || [],
+    });
+  }
+
+  // filterState() {
+  //   var angajati = [...this.state.angajati];
+  //   if(this.state.normaFiltru !== '-') {
+  //     angajati = angajati.filter(ang => ang.contract.normalucru == this.state.normaFiltru);
+  //   }
+
+  //   return angajati;
+  // }
+
+  render() {
+
+    const angajatiComponent = this.state.angajati
+      // eslint-disable-next-line eqeqeq
+      .filter(ang => this.state.normaFiltru === '-' ? true : ang.contract.normalucru == this.state.normaFiltru)
+      .map((ang, index) => {
         for (let key in ang) {
           if (!ang[key]) ang[key] = '-';
         }
@@ -89,6 +126,7 @@ class AngajatiTabel extends React.Component {
                 ? ang.contract.salariutarifar + ' ' + ang.contract.monedasalariu
                 : 'lipsă contract'}
             </td>
+            <td>{ang.contract.normalucru || '-'}</td>
             <td className="d-inline-flex">
               {/* REALIZARI/RETINERI BUTTON */}
               <OverlayTrigger
@@ -96,23 +134,23 @@ class AngajatiTabel extends React.Component {
                 overlay={
                   <Tooltip id="realizari-retineri" style={{ opacity: '.4' }}>
                     Realizări / Rețineri
-                  </Tooltip>
+                </Tooltip>
                 }
               >
-								<Link to="/forms/realizari-retineri">
-                <Button
-                  disabled={!ang.contract.id}
-                  onClick={() => {
-                    setAngajatSel({
-                      idpersoana: ang.persoana.id,
-                      numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
-                    });
-                  }}
-                  variant="outline-secondary"
-                  className="ml-2 p-1 rounded-circle border-0"
-                >
-                  <FileText size={20} />
-                </Button></Link>
+                <Link to="/forms/realizari-retineri">
+                  <Button
+                    disabled={!ang.contract.id}
+                    onClick={() => {
+                      setAngajatSel({
+                        idpersoana: ang.persoana.id,
+                        numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
+                      });
+                    }}
+                    variant="outline-secondary"
+                    className="ml-2 p-1 rounded-circle border-0"
+                  >
+                    <FileText size={20} />
+                  </Button></Link>
               </OverlayTrigger>
 
               {/* DATE PERSONALE BUTTON */}
@@ -121,22 +159,22 @@ class AngajatiTabel extends React.Component {
                 overlay={
                   <Tooltip id="edit-button" style={{ opacity: '.4' }}>
                     Date personale, contract, concedii, etc.
-                  </Tooltip>
+                </Tooltip>
                 }
               >
-								<Link to="/forms/angajat">
-                <Button
-                  onClick={() => {
-                    setAngajatSel({
-                      idpersoana: ang.persoana.id,
-                      numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
-                    });
-                  }}
-                  variant="outline-secondary"
-                  className="ml-2 p-1 rounded-circle border-0"
-                >
-                  <Info size={20} />
-                </Button></Link>
+                <Link to="/forms/angajat">
+                  <Button
+                    onClick={() => {
+                      setAngajatSel({
+                        idpersoana: ang.persoana.id,
+                        numeintreg: ang.persoana.nume + ' ' + ang.persoana.prenume,
+                      });
+                    }}
+                    variant="outline-secondary"
+                    className="ml-2 p-1 rounded-circle border-0"
+                  >
+                    <Info size={20} />
+                  </Button></Link>
               </OverlayTrigger>
 
               <PopupState variant="popover" popupId="demo-popup-popover">
@@ -147,7 +185,7 @@ class AngajatiTabel extends React.Component {
                       overlay={
                         <Tooltip id="delete-button" style={{ opacity: '.4' }}>
                           Șterge
-                        </Tooltip>
+                      </Tooltip>
                       }
                     >
                       <Button
@@ -172,7 +210,7 @@ class AngajatiTabel extends React.Component {
                       <Box p={2}>
                         <Typography>
                           Sigur ștergeți angajatul {ang.nume} {ang.prenume}?
-                        </Typography>
+                      </Typography>
                         <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
                         <br />
                         <Button
@@ -184,14 +222,14 @@ class AngajatiTabel extends React.Component {
                           className="mt-2 "
                         >
                           Da
-                        </Button>
+                      </Button>
                         <Button
                           variant="outline-persondary"
                           onClick={popupState.close}
                           className="mt-2"
                         >
                           Nu
-                        </Button>
+                      </Button>
                       </Box>
                     </Popover>
                   </div>
@@ -200,31 +238,8 @@ class AngajatiTabel extends React.Component {
             </td>
           </tr>
         );
-      }),
-    });
-  }
+      });
 
-  async onRefresh() {
-    const angajati = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) =>
-        this.setState({
-          showToast: true,
-          toastMessage: 'Nu am putut prelua lista de angajați: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
-        })
-      );
-
-    this.setState({
-      angajati: angajati || [],
-    });
-
-    this.renderAngajati();
-  }
-
-  render() {
     return (
       <Aux>
         <Toast
@@ -241,7 +256,7 @@ class AngajatiTabel extends React.Component {
           <Toast.Body>{this.state.toastMessage}</Toast.Body>
         </Toast>
 
-        
+
         <Row>
           <Col>
             <Breadcrumb style={{ fontSize: '12px' }}>
@@ -251,25 +266,6 @@ class AngajatiTabel extends React.Component {
             <Card>
               <Card.Header className="border-0">
                 <Card.Title as="h5">Angajați</Card.Title>
-                <OverlayTrigger
-                  placement="bottom"
-                  delay={{ show: 250 }}
-                  overlay={
-                    <Tooltip id="refresh-button" style={{ opacity: '.4' }}>
-                      Refresh
-                    </Tooltip>
-                  }
-                >
-                  <Button
-                    variant="outline-info"
-                    size="sm"
-                    style={{ fontSize: '1.25rem', float: 'right' }}
-                    onClick={this.onRefresh}
-                  >
-                    <RotateCw size="25" />
-                    {/* ↺ */}
-                  </Button>
-                </OverlayTrigger>
 
                 <OverlayTrigger
                   placement="bottom"
@@ -289,6 +285,29 @@ class AngajatiTabel extends React.Component {
                     <UserPlus className="m-0 p-0" />
                   </Button>
                 </OverlayTrigger>
+
+                <Row>
+                  <Form.Group as={Col} sm="auto" className="mt-3">
+                    <Form.Label>Normă lucru (ore)</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={this.state.normaFiltru}
+                      onChange={e => this.setState({ normaFiltru: e.target.value })}
+                      default="8"
+                    >
+                      <option>-</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Row>
+
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
@@ -299,10 +318,11 @@ class AngajatiTabel extends React.Component {
                       <th>Prenume</th>
                       <th>Funcție</th>
                       <th>Salariu de baza</th>
+                      <th>Normă lucru (ore)</th>
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>{this.state.angajatiComponent}</tbody>
+                  <tbody>{angajatiComponent}</tbody>
                 </Table>
               </Card.Body>
             </Card>

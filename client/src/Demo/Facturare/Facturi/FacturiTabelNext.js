@@ -122,7 +122,7 @@ class FacturiTabel extends React.Component {
       }
 
       this.setState({
-        facturi: facturi || [],
+        facturi: facturi,
         clientiNume: [...clientiNume],
         proiecteNume: [...proiecteNume],
         aniFacturi: [...aniFacturi],

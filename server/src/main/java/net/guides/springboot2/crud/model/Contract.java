@@ -123,7 +123,6 @@ public class Contract implements Serializable {
 	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CM> concediiMedicale;
 
-	// @JsonBackReference(value = "suspendare-contract")
 	@OneToMany(mappedBy = "contract", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Suspendare> suspendari;
 
@@ -604,7 +603,7 @@ public class Contract implements Serializable {
 		else {
 			int zileSuspendare = 0;
 			for (LocalDate[] perioada : perioadeSuspendari) {
-				zileSuspendare += ChronoUnit.DAYS.between(perioada[0], perioada[1]);
+				zileSuspendare += ChronoUnit.DAYS.between(perioada[0], perioada[1]) + 1;
 			}
 			return zileSuspendare;
 		}
