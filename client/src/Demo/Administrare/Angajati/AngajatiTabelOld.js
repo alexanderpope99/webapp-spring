@@ -26,7 +26,7 @@ import { server } from '../../Resources/server-address';
 import authHeader from '../../../services/auth-header';
 import authService from '../../../services/auth.service';
 
-import { RotateCw, UserPlus, Trash2, Info, FileText } from 'react-feather';
+import { UserPlus, Trash2, Info, FileText } from 'react-feather';
 
 class AngajatiTabel extends React.Component {
   constructor() {
