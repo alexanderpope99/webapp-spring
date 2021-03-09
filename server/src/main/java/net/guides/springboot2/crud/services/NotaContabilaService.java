@@ -58,7 +58,7 @@ public class NotaContabilaService {
 
 		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
 
-		float nrMediuSalariati = 0f;
+		double nrMediuSalariati = 0f;
 		int cuHandicap = 0;
 
 		for(Contract contract : contracte) {
@@ -68,13 +68,13 @@ public class NotaContabilaService {
 				int zileCM = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, contract.getId()).getZilecm();
 
 				int zile = contract.getZileLuna(luna, an) - zileCM;
-				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * ((float)zile / daysInMonth);
+				nrMediuSalariati += ((double)contract.getNormalucru() / 8) * ((double)zile / daysInMonth);
 			}
 		}
-
-		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
-		float fondHandicap = (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
-		return fondHandicap < 0 ? 0 : Math.round(fondHandicap);
+		nrMediuSalariati = Math.round(nrMediuSalariati * 100.00) / 100.00;
+		double nrLocuriHandicap = Math.round((nrMediuSalariati) * 0.04 * 100.00) / 100.00;
+		double fondHandicap = (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
+		return fondHandicap < 0 ? 0 : (int)Math.round(fondHandicap);
 	}
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {

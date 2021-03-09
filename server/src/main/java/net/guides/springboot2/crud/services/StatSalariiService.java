@@ -121,7 +121,6 @@ public class StatSalariiService {
 			CellStyle centered = workbook.createCellStyle();
 			CellStyle font10 = workbook.createCellStyle();
 			CellStyle salariu10Style = workbook.createCellStyle();
-			CellStyle fondHandicapStyle = workbook.createCellStyle();
 
 			Font font7 = workbook.createFont();
 			Font font = workbook.createFont();
@@ -142,9 +141,6 @@ public class StatSalariiService {
 
 			salariu10Style.setFont(font);
 			salariu10Style.setDataFormat(format.getFormat("#,##0"));
-
-			fondHandicapStyle.setFont(font);
-			fondHandicapStyle.setDataFormat(format.getFormat("#,##0.00"));
 
 			nrContractStyle.setAlignment(HorizontalAlignment.RIGHT);
 
@@ -753,7 +749,7 @@ public class StatSalariiService {
 			cellRange = "$E$" + (rowNr + 5) + ":$H$" + (rowNr + 5);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row6.createCell(4); // Fond 4% pers cu handicap
-			writerCell.setCellStyle(fondHandicapStyle);
+			writerCell.setCellStyle(salariu10Style);
 			cellRange = "$E$" + (rowNr + 6) + ":$H$" + (rowNr + 6);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 
@@ -782,7 +778,7 @@ public class StatSalariiService {
 			cellRange = "$I$" + (rowNr + 5) + ":$K$" + (rowNr + 5);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
 			writerCell = row6.createCell(8); // Fond 4% pers cu handicap
-			writerCell.setCellStyle(fondHandicapStyle);
+			writerCell.setCellStyle(salariu10Style);
 			writerCell.setCellValue(notaContabilaService.getFondHandicap(luna, an, societate));
 			cellRange = "$I$" + (rowNr + 6) + ":$K$" + (rowNr + 6);
 			setRegionBorder(CellRangeAddress.valueOf(cellRange), stat);
