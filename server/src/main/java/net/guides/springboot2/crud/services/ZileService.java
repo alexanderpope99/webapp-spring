@@ -120,16 +120,17 @@ public class ZileService {
 			return 0;
 		LocalDate primaZiLunaAn = LocalDate.of(an, luna, 1);
 
-		// daca contractul incepe in luna, an
 		if (ultimaZiLucru != null) {
+			// daca contractul incepe in luna, an
 			if (ultimaZiLucru.getMonthValue() == luna && ultimaZiLucru.getYear() == an) {
 				// daca contractul incepe si se termina in aceeasi luna
 				if (dataincepere.getMonthValue() == luna && dataincepere.getYear() == an) {
 					return (int) getZileLucratoareInInterval(dataincepere, ultimaZiLucru);
 				}
-
+				// contractul se termina in luna, an
 				return (int) getZileLucratoareInInterval(primaZiLunaAn, ultimaZiLucru);
 			}
+			// contractul s-a terminat deja
 			else if (ultimaZiLucru.compareTo(primaZiLunaAn.plusMonths(1)) < 0)
 				return 0;
 		}
@@ -144,8 +145,7 @@ public class ZileService {
 				return 0;
 
 			// activitatea incepe in luna, an
-			else
-				return (int) getZileLucratoareInInterval(dataincepere, ultimaZiLuna);
+			else return (int) getZileLucratoareInInterval(dataincepere, ultimaZiLuna);
 		}
 	} // end of 'get zile lucratoare contract'
 

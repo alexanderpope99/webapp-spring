@@ -129,7 +129,13 @@ public class Contract implements Serializable {
 	public Contract() {
 	}
 
-	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere, PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza, Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Integer salariutarifar, String monedasalariu, String conditiimunca, Boolean pensieprivata, Float cotizatiepensieprivata, Float avans, String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate, String functie, String nivelstudii, String cor, Boolean sindicat, Float cotizatiesindicat, String spor, Boolean pensionar) {
+	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
+			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
+			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Integer salariutarifar,
+			String monedasalariu, String conditiimunca, Boolean pensieprivata, Float cotizatiepensieprivata, Float avans,
+			String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate,
+			String functie, String nivelstudii, String cor, Boolean sindicat, Float cotizatiesindicat, String spor,
+			Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
@@ -480,7 +486,8 @@ public class Contract implements Serializable {
 		if (data == null)
 			throw new ResourceNotFoundException("Data contractului " + numeAngajat + " nu are valoare");
 		if (dataincepere == null)
-			throw new ResourceNotFoundException("Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
+			throw new ResourceNotFoundException(
+					"Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
 		if (calculdeduceri == null)
 			throw new ResourceNotFoundException("Calcul deduceri pentru " + numeAngajat + " nu are valoare");
 		if (normalucru == null)
@@ -515,18 +522,38 @@ public class Contract implements Serializable {
 			if (rr.getLuna() == luna && rr.getAn() == an)
 				return rr;
 		}
-		throw new ResourceNotFoundException(angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an);
+		throw new ResourceNotFoundException(
+				angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an);
 	}
 
 	public int getZileAngajare(int luna, int an) {
-		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth() - getZileSuspendat(luna, an);
+		int daysInMonth = YearMonth.of(an, luna).lengthOfMonth();
+		LocalDate monthStart = LocalDate.of(an, luna, 1);
+		LocalDate monthEnd = LocalDate.of(an, luna, daysInMonth);
 
-		if (luna == data.getMonthValue() && an == data.getYear()) {
-			return daysInMonth - data.getDayOfMonth() + 1;
-		} else if (ultimazilucru != null && luna == ultimazilucru.getMonthValue() && an == ultimazilucru.getYear()) {
-			return daysInMonth - ultimazilucru.getDayOfMonth() + 1;
-		} else
-			return daysInMonth;
+		// contractul s-a terminat deja
+		if (ultimazilucru != null && ultimazilucru.compareTo(monthStart) < 0) {
+			return 0;
+		}
+
+		// contractul a inceput inainte de luna
+		else if (dataincepere.compareTo(monthStart) < 0) {
+			// se termina in luna
+			if (ultimazilucru != null && ultimazilucru.getYear() == an && ultimazilucru.getMonthValue() == luna) {
+				return (int) ChronoUnit.DAYS.between(monthStart, ultimazilucru);
+			} else // nu se termina in luna == cuprinde intreaga luna
+				return daysInMonth;
+		}
+
+		// contractul incepe in luna, an
+		else if (dataincepere.getYear() == an && dataincepere.getMonthValue() == luna) {
+			// contractul se termina in luna
+			if (ultimazilucru != null && ultimazilucru.getYear() == an && ultimazilucru.getMonthValue() == luna) {
+				return (int) ChronoUnit.DAYS.between(dataincepere, ultimazilucru);
+			} else return (int) ChronoUnit.DAYS.between(dataincepere, monthEnd) + 1;
+		}
+
+		else return daysInMonth;
 	}
 
 	public List<LocalDate[]> getPerioadaSuspendat(int luna, int an) {
@@ -548,7 +575,8 @@ public class Contract implements Serializable {
 			// daca suspendarea e pe perioada nedeterminata
 			if (suspendareEnd == null) {
 				// nu include nici o zi din luna
-				if (suspendareStart.compareTo(monthEnd) > 0) continue;
+				if (suspendareStart.compareTo(monthEnd) > 0)
+					continue;
 
 				// suspendarea nu include luna
 				if (suspendareStart.compareTo(monthStart) < 0)
@@ -607,5 +635,9 @@ public class Contract implements Serializable {
 			}
 			return zileSuspendare;
 		}
+	}
+
+	public int getZileLuna(int luna, int an) {
+		return getZileAngajare(luna, an) - getZileSuspendat(luna, an);
 	}
 }

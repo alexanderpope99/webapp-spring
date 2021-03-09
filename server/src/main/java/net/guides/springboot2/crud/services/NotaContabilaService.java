@@ -47,12 +47,12 @@ public class NotaContabilaService {
 	@Autowired
 	private ParametriiSalariuService parametriiSalariuService;
 
-	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
+	private String homeLocation = "server/src/main/java/net/guides/springboot2/crud/";
 
-	public float getFondHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
+	public int getFondHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
 		
 		List<Contract> contracte = contractRepository.findByAngajat_Societate_Id(societate.getId());
-		if(societate.getAngajati().size() < 50) return 0;
+		// if(societate.getAngajati().size() < 50) return 0;
 
 		ParametriiSalariu ps = parametriiSalariuService.getParametriiSalariu();
 
@@ -67,14 +67,14 @@ public class NotaContabilaService {
 			if(!contract.getTip().equals("Contract de administrare")) {
 				int zileCM = realizariRetineriRepository.findByLunaAndAnAndContract_Id(luna, an, contract.getId()).getZilecm();
 
-				int zile = contract.getZileAngajare(luna, an) - zileCM;
+				int zile = contract.getZileLuna(luna, an) - zileCM;
 				nrMediuSalariati += ((float)contract.getNormalucru() / 8) * ((float)zile / daysInMonth);
 			}
 		}
 
 		float nrLocuriHandicap = (float) ((nrMediuSalariati) * 0.04);
 		float fondHandicap = (nrLocuriHandicap - cuHandicap) * ps.getSalariumin();
-		return fondHandicap < 0 ? 0 : fondHandicap;
+		return fondHandicap < 0 ? 0 : Math.round(fondHandicap);
 	}
 
 	public boolean createNotaContabila(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
