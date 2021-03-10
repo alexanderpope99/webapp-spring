@@ -14,6 +14,10 @@ client/src/Demo/Resources/server-address.js
 client/debug.log
 client.rar
 
+*.jar
+*.tar
+*.zip
+
 csv/
 
 macheta.xlsx

@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    volumes:
+      - /postgres:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=fresh
+      - POSTGRES_USER=webadmin
+      - POSTGRES_PASSWORD=webadmin
+
+  api:
+    image: 'api:latest'
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    container_name: api
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fresh
+      - SPRING_DATASOURCE_USERNAME=webadmin
+      - SPRING_DATASOURCE_PASSWORD=webadmin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - 5000:5000
+
+  react:
+    image: 'react:latest'
+    build:
+      context: ../client
+      dockerfile: Dockerfile
+    container_name: react
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
+
