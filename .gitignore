@@ -10,6 +10,8 @@ server/src/main/java/net/guides/springboot2/crud/downloads/
 server/src/main/java/net/guides/springboot2/crud/services/WebParserService.java
 ./src/
 
+console.ingenio.json
+
 client/src/Demo/Resources/server-address.js
 client/debug.log
 client.rar

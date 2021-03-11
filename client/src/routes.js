@@ -34,6 +34,8 @@ const RealizariRetineri = React.lazy(() => import('./Demo/Administrare/Angajati/
 const RealizariRetineriView = React.lazy(() => import('./Demo/Administrare/Angajati/RealizariRetineri/RealizariRetineriView'));
 // 		RAPOARTE
 const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
+// 	CONCEDII
+const ConcediiOdihna = React.lazy(() => import('./Demo/Administrare/Concedii/ConcediiOdihna/ConcediiOdihna'));
 
 // FACTURARE
 const ClientiTabel = React.lazy(() => import('./Demo/Facturare/Clienti/ClientiTabel'));
@@ -101,6 +103,14 @@ const routes = [
     name: 'Realizari / Retineri',
     component: isAngajatSimplu ? RealizariRetineriView : RealizariRetineri,
   },
+
+	// CALENDAR
+	{
+		path: '/concedii/odihna',
+		exact: true,
+		name: 'Concedii Odihna',
+		component: isAngajatSimplu ? null : ConcediiOdihna,
+	},
 
   // RAPOARTE
   {

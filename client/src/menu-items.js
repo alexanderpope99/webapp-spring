@@ -117,6 +117,13 @@ var items = [
         url: '/rapoarte',
         icon: 'feather icon-file-text',
       },
+			{
+				id: 'concedii-odihna',
+        title: 'Concedii odihna',
+        type: 'item',
+        url: '/concedii/odihna',
+        icon: 'feather icon-clock',
+			}
     ],
   },
 
