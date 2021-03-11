@@ -81,6 +81,10 @@ public class Concediu implements Serializable {
 
 	// ! OTHER
 
+	public String getNumeangajat() {
+		return this.contract.getAngajat().getPersoana().getNumeIntreg();
+	}
+
 	public boolean overlaps() throws ResourceNotFoundException {
 		if (contract == null)
 			throw new ResourceNotFoundException("Concediul nu are contract");
