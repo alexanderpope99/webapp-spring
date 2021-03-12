@@ -102,7 +102,7 @@ export default class Concedii extends React.Component {
             headerToolbar={{
               left: 'prevYear,prev,next,nextYear,today',
               center: 'title',
-              right: 'dayGridMonth,timeGridWeek',
+              right: '',
             }}
             locale="ro"
             firstDay="1"
