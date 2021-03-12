@@ -49,19 +49,21 @@ public class FisaIndividualaService {
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
-	public boolean create(int lunaDela, int lunaPanala, int an, int idangajat, int userID) throws IOException, ResourceNotFoundException {
+	public boolean create(int lunaDela, int lunaPanala, int an, int idangajat, int userID)
+			throws IOException, ResourceNotFoundException {
 		ParametriiSalariu parametriiSalariu = parametriiSalariuService.getParametriiSalariu();
 		Angajat angajat = angajatService.findById(idangajat);
 		Persoana persoana = angajat.getPersoana();
 		Contract contract = angajat.getContract();
-		List<RealizariRetineri> realizariRetineri = realizariRetineriService.saveOrGetFromTo(lunaDela, lunaPanala, an, contract.getId());
+		List<RealizariRetineri> realizariRetineri = realizariRetineriService.saveOrGetFromTo(lunaDela, lunaPanala, an,
+				contract.getId());
 
 		String sheetTemplateLocation = homeLocation + "/templates";
 
 		FileInputStream file = new FileInputStream(new File(sheetTemplateLocation, "FisaIndividuala.xlsx"));
 		Workbook workbook = new XSSFWorkbook(file);
 		Sheet sheet = workbook.getSheetAt(0);
-		
+
 		// nume societate:
 		Cell writerCell = sheet.getRow(0).getCell(0);
 		writerCell.setCellValue(angajat.getSocietate().getNume());
@@ -93,8 +95,10 @@ public class FisaIndividualaService {
 		writerCell = row.getCell(12);
 		writerCell.setCellValue(contract.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		// data incetarii activ.
-		writerCell = row.getCell(15);
-		writerCell.setCellValue(contract.getUltimazilucru().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		if (contract.getUltimazilucru() != null) {
+			writerCell = row.getCell(15);
+			writerCell.setCellValue(contract.getUltimazilucru().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		}
 
 		// get styles | create styles
 		CellStyle lunaStyle = sheet.getRow(8).getCell(0).getCellStyle();
@@ -110,19 +114,17 @@ public class FisaIndividualaService {
 		CellStyle emptyBox1 = sheet.getRow(9).getCell(0).getCellStyle();
 		CellStyle emptyBox2 = sheet.getRow(9).getCell(2).getCellStyle();
 
-
-		int salariuDeIncadrareT = 0, zlT = 0, coT = 0, cmT = 0, fnuassT = 0, splT = 0, cfsT = 0, 
-			salariuRealizatT = 0, valoareCoT = 0, cmSocietateT = 0, cmFnuassT = 0, oreSuplT = 0, totalPrimeT = 0, 
-			venitBrutT = 0, venitNetT = 0, casT = 0, cassT = 0, cassFnuassT = 0, dedPersT = 0, impozitT = 0, 
-			alteRetineriT = 0, avansT = 0, restPlataT = 0;
+		int salariuDeIncadrareT = 0, zlT = 0, coT = 0, cmT = 0, fnuassT = 0, splT = 0, cfsT = 0, salariuRealizatT = 0,
+				valoareCoT = 0, cmSocietateT = 0, cmFnuassT = 0, oreSuplT = 0, totalPrimeT = 0, venitBrutT = 0, venitNetT = 0,
+				casT = 0, cassT = 0, cassFnuassT = 0, dedPersT = 0, impozitT = 0, alteRetineriT = 0, avansT = 0, restPlataT = 0;
 
 		// ! TABLE CONTENT
 		Row row1, row2;
 		int index = 0;
 		for (RealizariRetineri rr : realizariRetineri) {
 			List<CM> concediiMedicale = cmService.getCMInLunaAnul(rr.getLuna(), an, contract.getId());
-			row1 = sheet.createRow(8+index);
-			row2 = sheet.createRow(9+index);
+			row1 = sheet.createRow(8 + index);
+			row2 = sheet.createRow(9 + index);
 
 			// luna
 			writerCell = row1.createCell(0);
@@ -139,7 +141,7 @@ public class FisaIndividualaService {
 			writerCell = row2.createCell(1);
 			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(contract.getNormalucru());
-			
+
 			// Salariu de incadrare
 			writerCell = row1.createCell(2);
 			writerCell.setCellStyle(salariu);
@@ -147,7 +149,7 @@ public class FisaIndividualaService {
 			salariuDeIncadrareT += contract.getSalariutarifar();
 			writerCell = row2.createCell(2);
 			writerCell.setCellStyle(emptyBox2);
-			
+
 			// ZL
 			writerCell = row1.createCell(3);
 			writerCell.setCellStyle(centered);
@@ -205,13 +207,13 @@ public class FisaIndividualaService {
 			writerCell = row2.createCell(7);
 			writerCell.setCellStyle(number);
 			writerCell.setCellValue(valcmfnuass);
-			cmFnuassT+= valcmfnuass;
+			cmFnuassT += valcmfnuass;
 
 			// ore supl.
 			writerCell = row1.createCell(8);
 			writerCell.setCellStyle(number);
 			writerCell.setCellValue(rr.getTotaloresuplimentare());
-			oreSuplT+= rr.getTotaloresuplimentare();
+			oreSuplT += rr.getTotaloresuplimentare();
 			// alte drepturi
 			writerCell = row2.createCell(8);
 			writerCell.setCellStyle(number);
@@ -292,23 +294,23 @@ public class FisaIndividualaService {
 			writerCell.setCellValue(rr.getRestplata());
 			restPlataT += rr.getRestplata();
 
-			index+=2;
+			index += 2;
 		}
 
 		// ! TOTAL
-		row1 = sheet.createRow(8+index);
-		row2 = sheet.createRow(9+index);
+		row1 = sheet.createRow(8 + index);
+		row2 = sheet.createRow(9 + index);
 
 		// TOTAL AN
 		writerCell = row1.createCell(0);
 		writerCell.setCellStyle(lunaStyleTotal);
 		writerCell.setCellValue("TOTAL " + an);
-		
+
 		// Salariu de incadrare
 		writerCell = row1.createCell(2);
 		writerCell.setCellStyle(salariuTotal);
 		writerCell.setCellValue(salariuDeIncadrareT);
-		
+
 		// ZL
 		writerCell = row1.createCell(3);
 		writerCell.setCellStyle(centeredTotal);
@@ -434,10 +436,10 @@ public class FisaIndividualaService {
 		borderLeftBottom.setBorderBottom(BorderStyle.THIN);
 		borderLeftBottom.setBorderLeft(BorderStyle.THIN);
 		writerCell.setCellStyle(borderBottom);
-		
+
 		writerCell = row2.createCell(0);
 		writerCell.setCellStyle(borderLeftBottom);
-		
+
 		writerCell = row2.createCell(2);
 		borderLeftBottom.setBorderLeft(BorderStyle.THIN);
 		writerCell.setCellStyle(borderLeftBottom);
@@ -447,7 +449,8 @@ public class FisaIndividualaService {
 		evaluator.evaluateAll();
 		// * OUTPUT THE FILE
 		Files.createDirectories(Paths.get(homeLocation + "downloads/" + userID));
-		String newFileLocation = String.format("%s/downloads/%d/Fisa individuala - %s - %d.xlsx", homeLocation, userID, persoana.getNumeIntreg(), an);
+		String newFileLocation = String.format("%s/downloads/%d/Fisa individuala - %s - %d.xlsx", homeLocation, userID,
+				persoana.getNumeIntreg(), an);
 
 		FileOutputStream outputStream = new FileOutputStream(newFileLocation);
 		workbook.write(outputStream);

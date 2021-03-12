@@ -35,7 +35,7 @@ const RealizariRetineriView = React.lazy(() => import('./Demo/Administrare/Angaj
 // 		RAPOARTE
 const Rapoarte = React.lazy(() => import('./Demo/Rapoarte/Rapoarte'));
 // 	CONCEDII
-const ConcediiOdihna = React.lazy(() => import('./Demo/Administrare/Concedii/ConcediiOdihna/ConcediiOdihna'));
+const Concedii = React.lazy(() => import('./Demo/Administrare/Concedii/Concedii'));
 
 // FACTURARE
 const ClientiTabel = React.lazy(() => import('./Demo/Facturare/Clienti/ClientiTabel'));
@@ -109,7 +109,7 @@ const routes = [
 		path: '/calendar',
 		exact: true,
 		name: 'Calendar',
-		component: isAngajatSimplu ? null : ConcediiOdihna,
+		component: isAngajatSimplu ? null : Concedii,
 	},
 
   // RAPOARTE

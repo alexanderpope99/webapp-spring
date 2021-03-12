@@ -37,6 +37,10 @@ public class CMService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	public List<CM> findBySocietate_Id(int id) {
+		return cmRepository.findByContract_Angajat_Societate_Id(id);
+	}
+
 	public CMDTO save(CMDTO cmDTO) throws ResourceNotFoundException {
 		// convert from DTO to Entity
 		CM cm = modelMapper.map(cmDTO, CM.class);

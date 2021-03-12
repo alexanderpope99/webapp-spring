@@ -35,6 +35,10 @@ public class COService {
 	@Autowired
 	private ContractRepository contractRepository;
 
+	public List<CO> findBySocietate_Id(int id) {
+		return coRepository.findByContract_Angajat_Societate_Id(id);
+	}
+
 	public CO overlaps(CO co, List<CO> concedii) {
 		concedii.removeIf(c -> c.getId() == co.getId());
 		LocalDate dela = co.getDela();
@@ -117,7 +121,7 @@ public class COService {
 		return save(newCoDTO);
 	}
 
-	public Map<String, Boolean> fixConcedii() throws ResourceNotFoundException {
+	public Map<String, Boolean> fixConcedii() {
 		List<CO> co = coRepository.findAll();
 
 		for (CO concediu : co) {

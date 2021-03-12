@@ -80,10 +80,10 @@ public class COController {
 		return coService.fixConcedii();
 	}
 
-	// @PostMapping("/check-overlap")
-	// public CODTO checkIfOverlapsWithExisting(@RequestBody CODTO co) {
-	// 	return coService.overlapsResponse(co);
-	// }
+	@GetMapping("ids={id}")
+	public List<CO> getCoBySocietate_Id(@PathVariable("id") int idsocietate) {
+		return coService.findBySocietate_Id(idsocietate);
+	}
 
 	@PostMapping
 	public CODTO createCO(@RequestBody CODTO co) throws ResourceNotFoundException {

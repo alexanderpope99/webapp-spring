@@ -10,7 +10,9 @@ import net.guides.springboot2.crud.model.CM;
 
 @Repository
 public interface CMRepository extends JpaRepository<CM, Integer> {
-	List<CM> findByContract_IdOrderByDelaDescPanalaDesc(int idcontract);
+	public List<CM> findByContract_IdOrderByDelaDescPanalaDesc(int idcontract);
 
-	List<CM> findByContract_IdAndDelaBetween(int idcontract, LocalDate inceputLuna, LocalDate sfarsitLuna);
+	public List<CM> findByContract_IdAndDelaBetween(int idcontract, LocalDate inceputLuna, LocalDate sfarsitLuna);
+
+	public List<CM> findByContract_Angajat_Societate_Id(int idsocietate);
 }
