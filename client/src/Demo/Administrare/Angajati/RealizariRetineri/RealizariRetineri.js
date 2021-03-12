@@ -18,7 +18,7 @@ import {
   DropdownButton,
   Breadcrumb,
 } from 'react-bootstrap';
-import { Trash2, Info } from 'react-feather';
+import { Trash2, Info, Lock } from 'react-feather';
 
 import Aux from '../../../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
@@ -260,7 +260,8 @@ class RealizariRetineri extends React.Component {
           toastTitle: 'Eroare',
           toastColor: 'white',
           toastMessage:
-            'Nu am putut prelua persoanele din baza de date: ' + (err.response
+            'Nu am putut prelua persoanele din baza de date: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -310,7 +311,8 @@ class RealizariRetineri extends React.Component {
           toastTitle: 'Eroare',
           toastColor: 'white',
           toastMessage:
-            'Nu am putut prelua contractul pentru persoana: ' + (err.response
+            'Nu am putut prelua contractul pentru persoana: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -333,7 +335,8 @@ class RealizariRetineri extends React.Component {
           toastTitle: 'Eroare',
           toastColor: 'white',
           toastMessage:
-            'Nu am putut prelua sau calcula realizari retineri: ' + (err.response
+            'Nu am putut prelua sau calcula realizari retineri: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -383,7 +386,7 @@ class RealizariRetineri extends React.Component {
         zilecfp: data.zilecfp || 0,
         zilecfplucratoare: data.zilecfplucratoare || 0,
         zilec: data.zilec || 0,
-				coneefectuat: data.coneefectuat || 0,
+        coneefectuat: data.coneefectuat || 0,
 
         //* retineri
         idretineri: retineri.id,
@@ -496,7 +499,7 @@ class RealizariRetineri extends React.Component {
       primaBruta: this.state.primabruta || 0,
       nrTichete: this.state.nrtichete || 0,
       totalOreSuplimentare: this.state.totaloresuplimentare || 0,
-			coNeefectuat: this.state.coneefectuat || 0,
+      coNeefectuat: this.state.coneefectuat || 0,
     };
 
     //* 2. recalculare realizariRetineri
@@ -509,7 +512,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut recalcula realizari/retineri: ' + (err.response
+          toastMessage:
+            'Nu am putut recalcula realizari/retineri: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -556,7 +561,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut recalcula realizari/retineri: ' + (err.response
+          toastMessage:
+            'Nu am putut recalcula realizari/retineri: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -593,7 +600,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut recalcula realizari/retineri: ' + (err.response
+          toastMessage:
+            'Nu am putut recalcula realizari/retineri: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -631,7 +640,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut prelua cursul curent: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua cursul curent: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -653,7 +664,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut prelua orele suplimentare: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua orele suplimentare: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -694,7 +707,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut adăuga ore suplimentare: ' + (err.response
+          toastMessage:
+            'Nu am putut adăuga ore suplimentare: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -710,7 +725,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut șterge orele suplimentare: ' + (err.response
+          toastMessage:
+            'Nu am putut șterge orele suplimentare: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -781,7 +798,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut descărca ștatul: ' + (err.response
+          toastMessage:
+            'Nu am putut descărca ștatul: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -805,7 +824,9 @@ class RealizariRetineri extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut prelua ștatul individual: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua ștatul individual: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -1159,9 +1180,34 @@ class RealizariRetineri extends React.Component {
               </Col>
               {/* AN */}
               <Col md={6}>
-                <FormControl as="select" value={this.state.an} onChange={(e) => this.onChangeAn(e)}>
-                  {ani}
-                </FormControl>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    as="select"
+                    value={this.state.an}
+                    onChange={(e) => this.onChangeAn(e)}
+                  >
+                    {ani}
+                  </FormControl>
+                  <InputGroup.Append>
+                    <OverlayTrigger
+                      placement="bottom"
+                      delay={{ show: 250, hide: 250 }}
+                      overlay={
+                        <Tooltip id="update-button" style={{ opacity: '.4' }}>
+                          Închide Luna
+                        </Tooltip>
+                      }
+                    >
+                      <Button
+                        onClick={() => console.log('S-aInchisLuna')}
+                        variant="outline-info"
+                        className="pb-2"
+                      >
+                        <Lock size={20} className="m-0" />
+                      </Button>
+                    </OverlayTrigger>
+                  </InputGroup.Append>
+                </InputGroup>
               </Col>
             </Row>
           </Card.Header>

@@ -119,9 +119,9 @@ var items = [
       },
 			{
 				id: 'concedii-odihna',
-        title: 'Concedii odihna',
+        title: 'Calendar',
         type: 'item',
-        url: '/concedii/odihna',
+        url: '/calendar',
         icon: 'feather icon-clock',
 			}
     ],
