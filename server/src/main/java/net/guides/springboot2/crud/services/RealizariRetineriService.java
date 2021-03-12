@@ -319,6 +319,9 @@ public class RealizariRetineriService {
 
 	// exclude (luna, an) din argument; primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
 	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
+		// get lunile inchise aici
+		// daca luna este inchisa => pass
+
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);

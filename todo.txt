@@ -50,6 +50,7 @@ SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 
 TODO: {
 	VERIFICA DACA LUNA E INCHISA CAND SE RECALCULEAZA PE ULTIMELE 6 LUNI
+	In frontend: recalculeaza ultimele 6 luni: pune textul: "Lunile inchise au ramas nemodificate"
 }
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
