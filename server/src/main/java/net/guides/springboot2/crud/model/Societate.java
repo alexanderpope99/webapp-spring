@@ -93,6 +93,8 @@ public class Societate implements Serializable {
 	@JoinColumn(name = "idimagine", referencedColumnName = "id")
 	private Fisier imagine;
 
+	@OneToMany(mappedBy = "societate",cascade = CascadeType.ALL)
+	private List<LunaInchisa> luniInchise;
 
 	public Societate() {
 	}
@@ -255,6 +257,14 @@ public class Societate implements Serializable {
 		this.caiete = caiete;
 	}
 
+	public List<LunaInchisa> getLuniInchise() {
+		return luniInchise;
+	}
+
+	public void setLuniInchise(List<LunaInchisa> luniInchise) {
+		this.luniInchise = luniInchise;
+	}
+
 	// ! OTHER
 
 	public void checkData() throws ResourceNotFoundException {
@@ -291,6 +301,5 @@ public class Societate implements Serializable {
 		this.fax=newSoc.fax;
 		this.imagine=newSoc.imagine;
 		return this;
-		
 	}
 }

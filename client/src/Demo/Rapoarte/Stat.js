@@ -17,10 +17,12 @@ class Stat extends React.Component {
 
     this.recalcSocietate = this.recalcSocietate.bind(this);
     this.creeazaStatSalarii = this.creeazaStatSalarii.bind(this);
-    // this.download = this.download.bind(this);
+    this.inchideLuna = this.inchideLuna.bind(this);
 
     this.state = {
       socsel: getSocSel(),
+      luni_inchise: [],
+
       luna: '',
       an: '',
       intocmitDe: '',
@@ -38,6 +40,7 @@ class Stat extends React.Component {
     if (!getSocSel()) window.location.href = '/dashboard/societati';
 
     this.setCurrentYearMonth();
+    this.getLuniInchise();
   }
 
   setCurrentYearMonth() {
@@ -49,6 +52,22 @@ class Stat extends React.Component {
       an: an,
       luna: { nume: luna, nr: today.getMonth() + 1 },
     });
+  }
+
+  async getLuniInchise() {
+    await axios
+      .get(`${server.address}/luna-inchisa/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => this.setState({ luni_inchise: res.data || [] }))
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut prelua lunile inchise ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
   }
 
   async creeazaStatSalarii(e, format) {
@@ -69,7 +88,9 @@ class Stat extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut crea ștatul de salarii: ' + (err.response
+          toastMessage:
+            'Nu am putut crea ștatul de salarii: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -110,7 +131,9 @@ class Stat extends React.Component {
           showToast: true,
           toastTitle: 'Eroare',
           toastColor: 'white',
-          toastMessage: 'Nu am putut recalcula realizari/retineri: ' + (err.response
+          toastMessage:
+            'Nu am putut recalcula realizari/retineri: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -131,8 +154,81 @@ class Stat extends React.Component {
     }
   }
 
+	async inchideLuna() {
+    const luna = this.state.luna;
+    const an = this.state.an;
+    const socsel = this.state.socsel;
+
+    const newLuna = {
+      luna: luna.nr,
+      an: an,
+    };
+
+    const lunaInchisa =
+      this.state.luni_inchise.filter((li) => li.luna === luna.nr && li.an === an).length > 0;
+
+    if (lunaInchisa) {
+      let deleted = await axios
+        .delete(`${server.address}/luna-inchisa/${luna.nr}/${an}/${socsel.id}`, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastTitle: 'Eroare',
+            toastColor: 'white',
+            toastMessage:
+              'Nu s-a putut deschide luna: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
+          })
+        );
+      if (deleted) {
+        const newLuniInchise = this.state.luni_inchise.filter(
+          (l) => !(l.luna === luna.nr && l.an === an)
+        );
+        this.setState({
+          showToast: true,
+          toastTitle: `${luna.nume} ${an} deschisă`,
+          luni_inchise: newLuniInchise,
+        });
+        console.log('deschis:', deleted);
+      }
+    } else {
+      let lunaRes = await axios
+        .post(`${server.address}/luna-inchisa/ids=${socsel.id}`, newLuna, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastTitle: 'Eroare',
+            toastColor: 'white',
+            toastMessage:
+              'Nu s-a putut inchide luna: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
+          })
+        );
+      if (lunaRes) {
+        this.setState({
+          showToast: true,
+          toastTitle: `${luna.nume} ${an} închisă`,
+          luni_inchise: [...this.state.luni_inchise, lunaRes],
+        });
+        console.log('inchis:', lunaRes);
+      }
+    }
+  }
+
   render() {
     const luniComponent = luni.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
+
+		const lunaInchisa = this.state.luni_inchise.filter(l => l.luna === this.state.luna.nr && l.an === this.state.an).length > 0;
 
     return (
       <React.Fragment>
@@ -206,7 +302,7 @@ class Stat extends React.Component {
                     </FormControl>
                   </Form.Group>
                 </Col>
-								<Col md={3}>
+                <Col md={3}>
                   <Form.Group controlId="intocmitde">
                     <Form.Control
                       type="text"
@@ -226,7 +322,16 @@ class Stat extends React.Component {
               <Button onClick={(e) => this.creeazaStatSalarii(e, 'XLSX')}>
                 Ștat salarii Excel
               </Button>
-              <Button onClick={this.recalcSocietate}>Recalculează toate salariile</Button>
+              <Button disabled={lunaInchisa} onClick={this.recalcSocietate}>
+                Recalculează toate salariile
+              </Button>
+
+							<Button 
+								variant={lunaInchisa ? 'outline-info' : 'outline-warning'} 
+								onClick={this.inchideLuna}
+							>
+								{lunaInchisa ? 'Deschide luna' : 'Închide luna'}
+							</Button>
             </div>
           </Card.Body>
         </Card>

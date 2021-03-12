@@ -49,7 +49,7 @@ SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TODO: {
-	nr mediu - pers cu handicap * 4%
+	VERIFICA DACA LUNA E INCHISA CAND SE RECALCULEAZA PE ULTIMELE 6 LUNI
 }
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

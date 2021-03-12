@@ -18,7 +18,7 @@ import {
   DropdownButton,
   Breadcrumb,
 } from 'react-bootstrap';
-import { Trash2, Info, Lock } from 'react-feather';
+import { Trash2, Info, Lock, Unlock } from 'react-feather';
 
 import Aux from '../../../../hoc/_Aux';
 import Box from '@material-ui/core/Box';
@@ -52,6 +52,7 @@ class RealizariRetineri extends React.Component {
     this.creeazaStateUltimele6Luni = this.creeazaStateUltimele6Luni.bind(this);
     this.recalcSocietate = this.recalcSocietate.bind(this);
     this.preiaCursCurent = this.preiaCursCurent.bind(this);
+    this.inchideLuna = this.inchideLuna.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -69,6 +70,7 @@ class RealizariRetineri extends React.Component {
       luna: '',
 
       luni: [],
+      luni_inchise: [], // list of objects { luna: Number, an: Number }
 
       selected_angajat: getAngajatSel(),
       lista_angajati: [], // object: {nume, id}
@@ -230,6 +232,7 @@ class RealizariRetineri extends React.Component {
 
     await this.setCurrentYearMonth(); // modifies state.an, state.luna
     this.setPersoane(); // date personale, also fills lista_angajati
+    this.getLuniInchise();
     this.fillForm();
   }
 
@@ -286,6 +289,27 @@ class RealizariRetineri extends React.Component {
     this.setState({
       totalpensiefacultativa: totalpensiefacan,
     });
+  }
+
+  async getLuniInchise() {
+    const li = await axios
+      .get(`${server.address}/luna-inchisa/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastTitle: 'Eroare',
+          toastColor: 'white',
+          toastMessage:
+            'Nu am putut prelua lunile inchise: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+    if (li) {
+      this.setState({ luni_inchise: li });
+    }
   }
 
   async fillForm() {
@@ -867,6 +891,77 @@ class RealizariRetineri extends React.Component {
     } else this.setState({ an: an }, this.fillForm);
   }
 
+  async inchideLuna() {
+    const luna = this.state.luna;
+    const an = this.state.an;
+    const socsel = this.state.socsel;
+
+    const newLuna = {
+      luna: luna.nr,
+      an: an,
+    };
+
+    const lunaInchisa =
+      this.state.luni_inchise.filter((li) => li.luna === luna.nr && li.an === an).length > 0;
+
+    if (lunaInchisa) {
+      let deleted = await axios
+        .delete(`${server.address}/luna-inchisa/${luna.nr}/${an}/${socsel.id}`, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastTitle: 'Eroare',
+            toastColor: 'white',
+            toastMessage:
+              'Nu s-a putut deschide luna: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
+          })
+        );
+      if (deleted) {
+        const newLuniInchise = this.state.luni_inchise.filter(
+          (l) => !(l.luna === luna.nr && l.an === an)
+        );
+        this.setState({
+          showToast: true,
+          toastTitle: `${luna.nume} ${an} deschisă`,
+          luni_inchise: newLuniInchise,
+        });
+        console.log('deschis:', deleted);
+      }
+    } else {
+      let lunaRes = await axios
+        .post(`${server.address}/luna-inchisa/ids=${socsel.id}`, newLuna, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastTitle: 'Eroare',
+            toastColor: 'white',
+            toastMessage:
+              'Nu s-a putut inchide luna: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
+          })
+        );
+      if (lunaRes) {
+        this.setState({
+          showToast: true,
+          toastTitle: `${luna.nume} ${an} închisă`,
+          luni_inchise: [...this.state.luni_inchise, lunaRes],
+        });
+        console.log('inchis:', lunaRes);
+      }
+    }
+  }
+
   render() {
     const this_year = new Date().getFullYear();
 
@@ -952,6 +1047,11 @@ class RealizariRetineri extends React.Component {
       </option>
     ));
 
+    const lunaInchisa =
+      this.state.luni_inchise.filter(
+        (li) => li.luna === this.state.luna.nr && li.an === this.state.an
+      ).length > 0;
+
     return (
       <Aux>
         <Toast
@@ -1018,6 +1118,7 @@ class RealizariRetineri extends React.Component {
               <Col md={1}>
                 <Form.Label> </Form.Label>
                 <Button
+                  disabled={lunaInchisa}
                   className="display-flex m-0"
                   onClick={async () =>
                     await this.addOrasuplimentara(
@@ -1121,13 +1222,9 @@ class RealizariRetineri extends React.Component {
                   </InputGroup>
                 </Form.Group>
 
-                {/* <Form.Group id="impozitdeduspensie">
-                  <Form.Label>Impozit Dedus</Form.Label>
-                  <Form.Control disabled type="number" min="0" value={this.state.impozitdedus} />
-                </Form.Group> */}
-
                 <Form.Label> </Form.Label>
                 <Button
+                  disabled={lunaInchisa}
                   className="mb-3 float-right"
                   onClick={() => {
                     this.setState({ showPensie: false });
@@ -1194,16 +1291,20 @@ class RealizariRetineri extends React.Component {
                       delay={{ show: 250, hide: 250 }}
                       overlay={
                         <Tooltip id="update-button" style={{ opacity: '.4' }}>
-                          Închide Luna
+                          {lunaInchisa ? 'Luna este închisă' : 'Luna este deschisă'}
                         </Tooltip>
                       }
                     >
                       <Button
-                        onClick={() => console.log('S-aInchisLuna')}
-                        variant="outline-info"
+                        onClick={this.inchideLuna}
+                        variant={lunaInchisa ? 'outline-warning' : 'success'}
                         className="pb-2"
                       >
-                        <Lock size={20} className="m-0" />
+                        {lunaInchisa ? (
+                          <Lock size={20} className="m-0" />
+                        ) : (
+                          <Unlock size={20} className="m-0" />
+                        )}
                       </Button>
                     </OverlayTrigger>
                   </InputGroup.Append>
@@ -1301,6 +1402,7 @@ class RealizariRetineri extends React.Component {
                             type="number"
                             min="0"
                             value={this.state.nrtichete || 0}
+                            disabled={lunaInchisa}
                             onChange={(e) => this.setState({ nrtichete: e.target.value })}
                           />
                           <InputGroup.Append>
@@ -1369,6 +1471,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.coneefectuat}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ coneefectuat: e.target.value })}
                         />
                       </Form.Group>
@@ -1380,6 +1483,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.zileinvoire}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ zileinvoire: e.target.value })}
                         />
                       </Form.Group>
@@ -1415,6 +1519,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.primabruta}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ primabruta: e.target.value })}
                         />
                       </Form.Group>
@@ -1435,6 +1540,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.avansnet}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ avansnet: e.target.value })}
                         />
                       </Form.Group>
@@ -1448,9 +1554,6 @@ class RealizariRetineri extends React.Component {
                             min="0"
                             disabled
                             value={this.state.pensiefacangajat}
-                            onChange={(e) =>
-                              this.setState({ pensiefacangajat: e.target.value || 0 })
-                            }
                           />
                           <InputGroup.Append>
                             <Button
@@ -1473,6 +1576,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.pensiealimentara}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ pensiealimentara: e.target.value })}
                         />
                       </Form.Group>
@@ -1484,6 +1588,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.popriri}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ popriri: e.target.value })}
                         />
                       </Form.Group>
@@ -1495,6 +1600,7 @@ class RealizariRetineri extends React.Component {
                           type="number"
                           min="0"
                           value={this.state.imprumuturi}
+                          disabled={lunaInchisa}
                           onChange={(e) => this.setState({ imprumuturi: e.target.value })}
                         />
                       </Form.Group>
@@ -1614,7 +1720,7 @@ class RealizariRetineri extends React.Component {
                   <DropdownButton
                     title="Recalculează"
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                    disabled={!this.state.selected_angajat}
+                    disabled={!this.state.selected_angajat || lunaInchisa}
                     className="mb-3 float-right"
                     onClick={(e) => e.stopPropagation()}
                   >
