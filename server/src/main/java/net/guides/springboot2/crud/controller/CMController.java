@@ -48,6 +48,11 @@ public class CMController {
 		return cmRepository.findByContract_IdOrderByDelaDescPanalaDesc(idcontract);
 	}
 
+	@GetMapping("ids={id}")
+	public List<CM> findBySocietate_Id(@PathVariable("id") int idsocietate) {
+		return cmService.findBySocietate_Id(idsocietate);
+	}
+
 	@GetMapping("testvalcm/l={luna}an={an}idc={idcontract}")
 	public int getValCM(@PathVariable("luna") int luna, @PathVariable("an") int an,
 			@PathVariable("idcontract") int idcontract) {
