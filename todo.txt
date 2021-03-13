@@ -49,8 +49,17 @@ SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TODO: {
-	VERIFICA DACA LUNA E INCHISA CAND SE RECALCULEAZA PE ULTIMELE 6 LUNI
-	In frontend: recalculeaza ultimele 6 luni: pune textul: "Lunile inchise au ramas nemodificate"
+	Nu se poate modifica un concediu dintr-o luna închisă:
+		in frontend: tabel concedii: 
+			- se iau toate luniile inchise
+			- se face map prin toate concediile
+				- se adauga o noua proprietate: un boolean pt a determina daca concediul este sau nu intr-o luna inchisa
+				- daca vreun concediu are dela/panala in luna inchisa: 
+				{
+					- apare un buton Eye in loc de cele 2 butoane de edit/delete
+					- toate campurile sunt disabled
+					- butonul este disabled
+				}
 }
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

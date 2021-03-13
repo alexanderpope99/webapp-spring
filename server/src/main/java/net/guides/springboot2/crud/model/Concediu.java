@@ -117,7 +117,18 @@ public class Concediu implements Serializable {
 		return false;
 	}
 
+	public boolean overlaps(List<LunaInchisa> luniInchise) throws ResourceNotFoundException {
+		if (!overlaps()) {
+			for (LunaInchisa li : luniInchise) {
+				if (dela.getYear() == li.getAn() && li.getLuna() == dela.getMonthValue() || panala.getYear() == li.getAn() && li.getLuna() == panala.getMonthValue())
+					return true;
+			}
+		}
+
+		return false;
+	}
+
 	public int getNrZile() {
-		return (int)ChronoUnit.DAYS.between(dela, panala);
+		return (int) ChronoUnit.DAYS.between(dela, panala);
 	}
 }

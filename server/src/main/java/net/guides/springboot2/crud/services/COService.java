@@ -14,6 +14,7 @@ import net.guides.springboot2.crud.dto.CODTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CO;
 import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.LunaInchisa;
 import net.guides.springboot2.crud.repository.CORepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
 
@@ -29,6 +30,9 @@ public class COService {
 	private SarbatoriService sarbatoriService;
 	@Autowired
 	private RealizariRetineriService realizaiRetineriService;
+
+	@Autowired
+	private LunaInchisaService lunaInchisaService;
 
 	@Autowired
 	private CORepository coRepository;
@@ -81,6 +85,7 @@ public class COService {
 	}
 
 	public CODTO overlapsResponse(CODTO coDTO) {
+		
 		List<CO> concediiExistente = coRepository.findByContract_Id(coDTO.getIdcontract());
 
 		CO co = modelMapper.map(coDTO, CO.class);
@@ -103,9 +108,10 @@ public class COService {
 		Contract contract = contractRepository.findById(coDTO.getIdcontract()).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id:" + coDTO.getIdcontract()));
 
 		co.setContract(contract);
-		// verifica ca nu se suprapune cu alt concediu
-		if (co.overlaps())
-			return null;
+		List<LunaInchisa> luniInchise = lunaInchisaService.findBySocietate_Id(contract.getAngajat().getSocietate().getId());
+		// nu se suprapune cu un alt concediu / nu este intr-o luna inchisa
+		if (co.overlaps(luniInchise))
+			throw new ResourceNotFoundException("Concediul se suprapune cu unul existent sau este intr-o luna închisă");
 
 		coRepository.save(co);
 

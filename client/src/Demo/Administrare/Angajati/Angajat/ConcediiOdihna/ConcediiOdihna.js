@@ -1,7 +1,8 @@
+/* eslint-disable eqeqeq */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
-import { Edit3, Trash2, RotateCw } from 'react-feather';
+import { Edit3, Trash2, RotateCw, Eye } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -16,6 +17,7 @@ import authHeader from '../../../../../services/auth-header';
 import { countWeekendDays } from '../../../../Resources/cm';
 
 import { tip_concedii } from '../../../../Resources/tip-concedii';
+import { getSocSel } from '../../../../Resources/socsel';
 
 const tip_concedii_component = tip_concedii.map((tip, index) => <option key={index}>{tip}</option>);
 
@@ -37,11 +39,12 @@ class COTabel extends React.Component {
 
     this.state = {
       angajat: getAngajatSel(),
+      socsel: getSocSel(),
 
       id: 0,
       today: '',
       an: '',
-      luna: { nume: '-', nr: '-' },
+      luna: { nume: 'Toate', nr: '-' },
       zile_co_disponibile: 21,
 
       ultimul_an: '',
@@ -49,6 +52,7 @@ class COTabel extends React.Component {
       luni_cu_concediu: { '': [] }, // map months to years -> {an_cu_concediu: [...luni_cu_concediu]}
       nr_zile: 0,
       nr_zile_weekend: 0,
+      inchis: false,
 
       co: [],
       coComponent: null,
@@ -81,8 +85,14 @@ class COTabel extends React.Component {
       panala: '',
       nr_zile: 0,
       nr_zile_weekend: 0,
+      inchis: false,
       tip: 'Concediu de odihnă',
     });
+  }
+
+  componentDidMount() {
+    this.setCurrentYear();
+    this.updateAngajatSel();
   }
 
   async updateAngajatSel() {
@@ -95,9 +105,11 @@ class COTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            toastMessage:
+              'Nu am putut prelua angajatul: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       // angajat = {idpersoana, idsocietate, idcontract, idsuperior}
@@ -122,16 +134,31 @@ class COTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua zilele de concediu disponibile: ' + (err.response
+            'Nu am putut prelua zilele de concediu disponibile: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
   }
 
-  componentDidMount() {
-    this.setCurrentYear();
-    this.updateAngajatSel();
+  async getLuniInchise() {
+    const li = await axios
+      .get(`${server.address}/luna-inchisa/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastTitle: 'Eroare',
+          toastColor: 'white',
+          toastMessage:
+            'Nu am putut prelua lunile inchise: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+    if (li) return li;
   }
 
   setCurrentYear() {
@@ -151,7 +178,7 @@ class COTabel extends React.Component {
         if (
           co.dela
             ? co.dela.includes(this.state.an) &&
-              (this.state.luna.nume !== '-'
+              (this.state.luna.nume !== 'Toate'
                 ? Number(co.dela.substring(5, 7)) === this.state.luna.nr
                 : true)
             : true
@@ -166,60 +193,74 @@ class COTabel extends React.Component {
               <th>{formatDate(co.panala)}</th>
               <th>{co.tip}</th>
               <th className="d-inline-flex flex-row justify-content-around">
-                <Button
-                  variant="outline-secondary"
-                  className="ml-2 p-1 rounded-circle border-0"
-                  onClick={() => this.editCO(co)}
-                >
-                  <Edit3 size={20} />
-                </Button>
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-0 p-1 rounded-circle border-0"
-                        {...bindTrigger(popupState)}
-                      >
-                        <Trash2 fontSize="small" />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>Sigur ștergeți concediul?</Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
+                {co.inchis ? (
+                  <Button
+                    variant="outline-secondary"
+                    className="ml-2 p-1 rounded-circle border-0"
+                    onClick={() => this.editCO(co)}
+                  >
+                    <Eye size={20} />
+                  </Button>
+                ) : (
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      className="ml-2 p-1 rounded-circle border-0"
+                      onClick={() => this.editCO(co)}
+                    >
+                      <Edit3 size={20} />
+                    </Button>
+                    <PopupState variant="popover" popupId="demo-popup-popover">
+                      {(popupState) => (
+                        <div>
                           <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteCO(co.id);
+                            variant="outline-secondary"
+                            className="m-0 p-1 rounded-circle border-0"
+                            {...bindTrigger(popupState)}
+                          >
+                            <Trash2 fontSize="small" />
+                          </Button>
+                          <Popover
+                            {...bindPopover(popupState)}
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'center',
                             }}
-                            className="mt-2 "
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'center',
+                            }}
                           >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
+                            <Box p={2}>
+                              <Typography>Sigur ștergeți concediul?</Typography>
+                              <Typography variant="caption">
+                                Datele nu mai pot fi recuperate
+                              </Typography>
+                              <br />
+                              <Button
+                                variant="outline-danger"
+                                onClick={() => {
+                                  popupState.close();
+                                  this.deleteCO(co.id);
+                                }}
+                                className="mt-2 "
+                              >
+                                Da
+                              </Button>
+                              <Button
+                                variant="outline-persondary"
+                                onClick={popupState.close}
+                                className="mt-2"
+                              >
+                                Nu
+                              </Button>
+                            </Box>
+                          </Popover>
+                        </div>
+                      )}
+                    </PopupState>
+                  </div>
+                )}
               </th>
             </tr>
           );
@@ -229,7 +270,7 @@ class COTabel extends React.Component {
   }
 
   onChangeAn(an) {
-    this.setState({ an: an, luna: { nume: '-', nr: '-' } }, this.renderCO);
+    this.setState({ an: an, luna: { nume: 'Toate', nr: '-' } }, this.renderCO);
   }
 
   onChangeMonth(e) {
@@ -246,8 +287,7 @@ class COTabel extends React.Component {
   }
 
   onChangeDela(dela) {
-		this.setState({ dela: dela, validated: true }, this.setNrZile);
-
+    this.setState({ dela: dela, validated: true }, this.setNrZile);
   }
   onChangePanala(panala) {
     this.setState({ panala: panala, validated: true }, this.setNrZile);
@@ -275,18 +315,37 @@ class COTabel extends React.Component {
       return;
     }
 
-    const concedii = await axios
+    var concedii = await axios
       .get(`${server.address}/co/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua concediile de odihnă: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua concediile de odihnă: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
+
+    const luniInchise = await this.getLuniInchise();
+
+    concedii = concedii.map((c) => {
+      const dela = new Date(c.dela);
+      const panala = new Date(c.panala);
+
+      if (
+        luniInchise.filter(
+          (l) =>
+            (l.an == dela.getFullYear() && l.luna == dela.getMonth() + 1) ||
+            (l.an == panala.getFullYear() && l.luna == panala.getMonth() + 1)
+        ).length > 0
+      ) {
+        return { ...c, inchis: true };
+      } else return c;
+    });
 
     if (concedii) {
       var ani_cu_concediu = new Set();
@@ -314,7 +373,6 @@ class COTabel extends React.Component {
         }
       }
       // add current year even if if doesn't have co
-      // ani_cu_concediu.add(2021);
       // convert to array from set
       for (let _an of ani_cu_concediu) {
         luni_cu_concediu[_an] = [...luni_cu_concediu[_an]];
@@ -352,6 +410,7 @@ class COTabel extends React.Component {
           modalTitle: '',
           modalMessage: '',
           validated: true,
+          inchis: false,
         },
         this.props.scrollToTopSmooth
       );
@@ -364,6 +423,7 @@ class COTabel extends React.Component {
         panala: '',
         tip: 'Concediu de odihnă',
         validated: true,
+        inchis: false,
       });
   }
 
@@ -374,7 +434,9 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul de odihnă: ' + (err.response
+          toastMessage:
+            'Nu am putut șterge concediul de odihnă: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -404,7 +466,9 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga concediul de odihnă: ' + (err.response
+          toastMessage:
+            'Nu am putut adăuga concediul de odihnă: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -447,7 +511,9 @@ class COTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza concediul de odihnă: ' + (err.response
+          toastMessage:
+            'Nu am putut actualiza concediul de odihnă: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -494,6 +560,7 @@ class COTabel extends React.Component {
         dela: co.dela.substring(0, 10),
         panala: co.panala.substring(0, 10),
         tip: co.tip,
+        inchis: co.inchis,
 
         isEdit: true,
         show: true,
@@ -543,12 +610,6 @@ class COTabel extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form noValidate onSubmit={this.state.isEdit ? this.updateCO : this.addCO}>
-              {/* <Form.Group id="zilecodisponibile">
-                <Form.Label>
-                  {`${this.state.zile_co_disponibile} zile concediu de odihnă disponibile`}
-                </Form.Label>
-              </Form.Group> */}
-
               <Form.Group id="dela">
                 <Form.Label>Începând cu (inclusiv)</Form.Label>
                 <Form.Control
@@ -560,7 +621,7 @@ class COTabel extends React.Component {
                   className={this.state.validated ? 'form-control' : 'form-control is-invalid'}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Concediul se suprapune cu unul existent
+                  Concediul se suprapune cu unul existent sau este intr-o luna închisă
                 </Form.Control.Feedback>
               </Form.Group>
 
@@ -601,9 +662,9 @@ class COTabel extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <Button
+              disabled={!concediuIsValid || this.state.inchis}
               variant="primary"
               onClick={this.state.isEdit ? this.updateCO : this.addCO}
-              disabled={!concediuIsValid}
             >
               {this.state.isEdit ? 'Acualizează' : 'Adaugă'}
             </Button>

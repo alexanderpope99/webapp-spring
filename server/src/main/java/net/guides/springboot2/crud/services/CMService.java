@@ -14,6 +14,7 @@ import net.guides.springboot2.crud.dto.CMDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.Contract;
+import net.guides.springboot2.crud.model.LunaInchisa;
 import net.guides.springboot2.crud.repository.CMRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
 
@@ -33,6 +34,8 @@ public class CMService {
 	private RealizariRetineriService realizariRetineriService;
 	@Autowired
 	private ContractService contractService;
+	@Autowired
+	private LunaInchisaService lunaInchisaService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -48,9 +51,10 @@ public class CMService {
 		Contract contract = contractRepository.findById(cmDTO.getIdcontract()).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + cmDTO.getIdcontract()));
 		cm.setContract(contract);
 
-		// check if overlaps with existing concedii (odihna + medicale)
-		if (cm.overlaps())
-			return null;
+		List<LunaInchisa> luniInchise = lunaInchisaService.findBySocietate_Id(contract.getAngajat().getSocietate().getId());
+		// nu se suprapune cu un alt concediu / nu este intr-o luna inchisa
+		if (cm.overlaps(luniInchise))
+			throw new ResourceNotFoundException("Concediul se suprapune cu unul existent sau este intr-o luna închisă");
 
 		// save to DB
 		cm = cmRepository.save(cm);

@@ -1,7 +1,8 @@
+/* eslint-disable eqeqeq */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, Table, Button, Modal, Form, Toast } from 'react-bootstrap';
-import { Edit3, RotateCw, Trash2 } from 'react-feather';
+import { Edit3, Eye, RotateCw, Trash2 } from 'react-feather';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
@@ -21,6 +22,7 @@ import {
   getZileFirma,
   countWeekendDays,
 } from '../../../../Resources/cm.js';
+import { getSocSel } from '../../../../Resources/socsel';
 
 class CMTabel extends React.Component {
   constructor() {
@@ -40,9 +42,10 @@ class CMTabel extends React.Component {
 
     this.state = {
       angajat: getAngajatSel(),
+      socsel: getSocSel(),
 
       an: '',
-      luna: { nume: '-', nr: '-' },
+      luna: { nume: 'Toate', nr: '-' },
       ani_cu_concediu: [],
       luni_cu_concediu: { '': [] },
       sarbatori: [],
@@ -87,6 +90,7 @@ class CMTabel extends React.Component {
       urgenta: false,
       conditii: '',
       cnpcopil: '',
+      inchis: false,
 
       // succes modal:
       show_confirm: false,
@@ -131,6 +135,7 @@ class CMTabel extends React.Component {
       urgenta: false,
       conditii: '',
       cnpcopil: '',
+      inchis: false,
     });
   }
 
@@ -153,9 +158,11 @@ class CMTabel extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut prelua angajatul: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            toastMessage:
+              'Nu am putut prelua angajatul: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
       if (angajat) {
@@ -176,7 +183,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua sărbătorile: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua sărbătorile: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -191,7 +200,7 @@ class CMTabel extends React.Component {
   }
 
   onChangeAn(an) {
-    this.setState({ an: an, luna: { nume: '-', nr: '-' } }, this.renderCM);
+    this.setState({ an: an, luna: { nume: 'Toate', nr: '-' } }, this.renderCM);
   }
 
   onChangeMonth(e) {
@@ -285,6 +294,25 @@ class CMTabel extends React.Component {
     );
   }
 
+  async getLuniInchise() {
+    const li = await axios
+      .get(`${server.address}/luna-inchisa/ids=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) =>
+        this.setState({
+          showToast: true,
+          toastTitle: 'Eroare',
+          toastColor: 'white',
+          toastMessage:
+            'Nu am putut prelua lunile inchise: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+    if (li) return li;
+  }
+
   async fillTable() {
     if (!this.state.angajat) {
       this.setState({ cm: [] }, this.renderCM);
@@ -296,7 +324,7 @@ class CMTabel extends React.Component {
       return;
     }
 
-    const cm = await axios
+    var cm = await axios
       .get(`${server.address}/cm/idc=${this.state.angajat.idcontract}`, { headers: authHeader() })
       // eslint-disable-next-line eqeqeq
       .then((res) => (res.status == 200 ? res.data : null))
@@ -310,6 +338,24 @@ class CMTabel extends React.Component {
               : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
+
+    const luniInchise = await this.getLuniInchise();
+
+    cm = cm.map((c) => {
+      const dela = new Date(c.dela);
+      const panala = new Date(c.panala);
+
+      if (
+        luniInchise.filter(
+          (l) =>
+            (l.an == dela.getFullYear() && l.luna == dela.getMonth() + 1) ||
+            (l.an == panala.getFullYear() && l.luna == panala.getMonth() + 1)
+        ).length > 0
+      ) {
+        return { ...c, inchis: true };
+      } else return c;
+    });
+
     if (cm) {
       var ani_cu_concediu = new Set();
       var luni_cu_concediu = {};
@@ -376,7 +422,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut șterge concediul medical: ' + (err.response
+          toastMessage:
+            'Nu am putut șterge concediul medical: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -430,7 +478,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut adăuga concediul: ' + (err.response
+          toastMessage:
+            'Nu am putut adăuga concediul: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -492,7 +542,9 @@ class CMTabel extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut actualiza concediul: ' + (err.response
+          toastMessage:
+            'Nu am putut actualiza concediul: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -557,6 +609,7 @@ class CMTabel extends React.Component {
         codboala: cm.codboala,
         urgenta: cm.urgenta || false,
         conditii: cm.conditii,
+        inchis: cm.inchis,
 
         isEdit: true,
         show: true,
@@ -571,12 +624,14 @@ class CMTabel extends React.Component {
         show_confirm: false,
         modalMessage: '',
         validated: true,
+        inchis: false,
       });
     else
       this.setState({
         show: false,
         isEdit: false,
         validated: true,
+        inchis: false,
       });
   }
   // function to create react component with fetched data
@@ -587,7 +642,7 @@ class CMTabel extends React.Component {
         if (
           cm.dela
             ? cm.dela.includes(this.state.an) &&
-              (this.state.luna.nume !== '-'
+              (this.state.luna.nume !== 'Toate'
                 ? // eslint-disable-next-line eqeqeq
                   cm.dela.substring(5, 7) == this.state.luna.nr
                 : true)
@@ -599,60 +654,74 @@ class CMTabel extends React.Component {
           return (
             <tr key={cm.id}>
               <th className="d-inline-flex flex-row justify-content-around">
-                <Button
-                  variant="outline-secondary"
-                  className="ml-2 p-1 rounded-circle border-0"
-                  onClick={() => this.editCM(cm)}
-                >
-                  <Edit3 size={20} />
-                </Button>
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                  {(popupState) => (
-                    <div>
-                      <Button
-                        variant="outline-secondary"
-                        className="m-0 p-1 rounded-circle border-0"
-                        {...bindTrigger(popupState)}
-                      >
-                        <Trash2 size={20} />
-                      </Button>
-                      <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                      >
-                        <Box p={2}>
-                          <Typography>Sigur ștergeți concediul?</Typography>
-                          <Typography variant="caption">Datele nu mai pot fi recuperate</Typography>
-                          <br />
+                {cm.inchis ? (
+                  <Button
+                    variant="outline-secondary"
+                    className="ml-2 p-1 rounded-circle border-0"
+                    onClick={() => this.editCM(cm)}
+                  >
+                    <Eye size={20} />
+                  </Button>
+                ) : (
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      className="ml-2 p-1 rounded-circle border-0"
+                      onClick={() => this.editCM(cm)}
+                    >
+                      <Edit3 size={20} />
+                    </Button>
+                    <PopupState variant="popover" popupId="demo-popup-popover">
+                      {(popupState) => (
+                        <div>
                           <Button
-                            variant="outline-danger"
-                            onClick={() => {
-                              popupState.close();
-                              this.deleteCM(cm.id);
+                            variant="outline-secondary"
+                            className="m-0 p-1 rounded-circle border-0"
+                            {...bindTrigger(popupState)}
+                          >
+                            <Trash2 size={20} />
+                          </Button>
+                          <Popover
+                            {...bindPopover(popupState)}
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'center',
                             }}
-                            className="mt-2 "
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'center',
+                            }}
                           >
-                            Da
-                          </Button>
-                          <Button
-                            variant="outline-persondary"
-                            onClick={popupState.close}
-                            className="mt-2"
-                          >
-                            Nu
-                          </Button>
-                        </Box>
-                      </Popover>
-                    </div>
-                  )}
-                </PopupState>
+                            <Box p={2}>
+                              <Typography>Sigur ștergeți concediul?</Typography>
+                              <Typography variant="caption">
+                                Datele nu mai pot fi recuperate
+                              </Typography>
+                              <br />
+                              <Button
+                                variant="outline-danger"
+                                onClick={() => {
+                                  popupState.close();
+                                  this.deleteCM(cm.id);
+                                }}
+                                className="mt-2 "
+                              >
+                                Da
+                              </Button>
+                              <Button
+                                variant="outline-persondary"
+                                onClick={popupState.close}
+                                className="mt-2"
+                              >
+                                Nu
+                              </Button>
+                            </Box>
+                          </Popover>
+                        </div>
+                      )}
+                    </PopupState>
+                  </div>
+                )}
               </th>
               <th>{formatDate(cm.dela)}</th>
               <th>{formatDate(cm.panala)}</th>
@@ -799,7 +868,7 @@ class CMTabel extends React.Component {
                     className={this.state.validated ? 'form-control' : 'form-control is-invalid'}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Concediul se suprapune cu unul existent
+                    Concediul se suprapune cu unul existent sau este intr-o luna închisă
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group id="panala" as={Col} md="6">
@@ -1101,7 +1170,7 @@ class CMTabel extends React.Component {
             <Button
               variant="primary"
               onClick={this.state.isEdit ? this.updateCM : this.addCM}
-              disabled={!concediuIsValid}
+              disabled={!concediuIsValid || this.state.inchis}
             >
               {this.state.isEdit ? 'Actualizează' : 'Adaugă'}
             </Button>
