@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.LunaInchisa;
+import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.LunaInchisaRepository;
 
@@ -19,6 +20,12 @@ public class LunaInchisaService {
 
 	@Autowired
 	private SocietateService societateService;
+
+	@Autowired
+	private RealizariRetineriService rrService;
+
+	@Autowired
+	private ContractService contractService;
 
 	public List<LunaInchisa> findAll() {
 		// return repo.findAll(Sort.by(Sort.Direction.DESC, "an", "luna"));
@@ -39,6 +46,11 @@ public class LunaInchisaService {
 
 	public LunaInchisa save(LunaInchisa lunaInchisa, int idsocietate) throws ResourceNotFoundException {
 		Societate societate = societateService.findById(idsocietate);
+		List<RealizariRetineri> salarii = rrService.findByLunaAnSocietate(lunaInchisa.getLuna(), lunaInchisa.getAn(), idsocietate);
+
+		if (contractService.findBySocietate_Id(idsocietate).size() != salarii.size()) 
+			throw new ResourceNotFoundException("Toate salariile trebuie calculate inainte de inchiderea lunii.");
+
 		lunaInchisa.setSocietate(societate);
 		return repo.save(lunaInchisa);
 	}
@@ -55,5 +67,17 @@ public class LunaInchisaService {
 		repo.delete(lunaInchisa);
 		
 		return Boolean.TRUE;
+	}
+
+	public Boolean exists(int luna, int an, int idsocietate) {
+		return repo.existsByLunaAndAnAndSocietate_Id(luna, an, idsocietate);
+	}
+
+	public boolean includes(List<LunaInchisa> luniInchise, int luna, int an, int idsocietate) {
+		for(LunaInchisa lunaInchisa : luniInchise) {
+			if(lunaInchisa.is(luna, an, idsocietate))
+				return true;
+		}
+		return false;
 	}
 }

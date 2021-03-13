@@ -49,6 +49,9 @@ public class RealizariRetineriService {
 	@Autowired
 	private BazacalculService bazacalculService;
 
+	@Autowired
+	private LunaInchisaService lunaInchisaService;
+
 	// REPOSITORIES
 	@Autowired
 	private RealizariRetineriRepository realizariRetineriRepository;
@@ -64,6 +67,10 @@ public class RealizariRetineriService {
 	private float impozitScutit = 0;
 	private float casSalariu = 0;
 	private float cassSalariu = 0;
+
+	public List<RealizariRetineri> findByLunaAnSocietate(int luna, int an, int idsocietate) {
+		return realizariRetineriRepository.findByLunaAndAnAndContract_Angajat_Societate_Id(luna, an, idsocietate);
+	}
 
 	// gets RealizariRetineri from DB + daca nu are BazaCalcul => creeaza una noua, cu datele existente
 	public RealizariRetineri getRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
@@ -317,30 +324,33 @@ public class RealizariRetineriService {
 		return lunaan;
 	}
 
-	// exclude (luna, an) din argument; primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
+	// primaBruta, nrTichete, totalOreSuplimentare raman neschimbate
 	public void recalcRealizariRetineriUltimele6Luni(int luna, int an, int idcontract) throws ResourceNotFoundException {
+		int idsocietate = contractService.findById(idcontract).getAngajat().getSocietate().getId();
 		// get lunile inchise aici
-		// daca luna este inchisa => pass
-
+		
 		int luna6 = 0, an6 = an;
 		if (luna <= 6) {
 			luna6 = 12 - (6 - luna);
 			an6--;
 		} else
 			luna6 = luna - 6;
-
+		
 		// ( -1, -1, -1) == foloseste (primaBruta, nrTichete, totalOreSuplimentare) existente
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
+				if(!lunaInchisaService.exists(i, an6, idsocietate))
+					this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
 			}
 
 			for (int i = 1; i <= luna; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
+				if(!lunaInchisaService.exists(i, an, idsocietate))
+					this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1, 0);
 			}
 		} else {
 			for (int i = luna6; i <= luna; ++i) {
-				this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
+				if(!lunaInchisaService.exists(i, an, idsocietate))
+					this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1, 0);
 			}
 		}
 	}

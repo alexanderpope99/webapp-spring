@@ -15,4 +15,6 @@ public interface LunaInchisaRepository extends JpaRepository<LunaInchisa, Intege
 	public List<LunaInchisa> findBySocietate_Id(int id);
 
 	public Optional<LunaInchisa> findByLunaAndAnAndSocietate_Id(int luna, int an, int idsocietate);
+
+	public Boolean existsByLunaAndAnAndSocietate_Id(int luna, int an, int idsocietate);
 }

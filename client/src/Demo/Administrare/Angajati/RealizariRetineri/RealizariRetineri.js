@@ -598,7 +598,7 @@ class RealizariRetineri extends React.Component {
         showToast: true,
         toastColor: 'lightgreen',
         toastTitle: 'Recalculat',
-        toastMessage: `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. De asemenea, bazele de calcul au fost adaugate.`,
+        toastMessage: `Statul de salarii recalculat pe ultimele 6 luni incepand cu ${luna.nume}. Lunile închise au rămas neschimbate.`,
       });
     }
   }
@@ -788,6 +788,19 @@ class RealizariRetineri extends React.Component {
     );
   }
 
+  newToast(title, message, color) {
+    this.setState({
+      showToast: false,
+      toastTitle: '',
+      toastMessage: '',
+    }, () => this.setState({
+      showToast: true,
+      toastTitle: title,
+      toastMessage: message,
+      toastColor: color,
+    }))
+  }
+
   async downloadStatIndividual(numeintreg, luna, an) {
     const user = authService.getCurrentUser();
     console.log('trying to download...');
@@ -911,27 +924,33 @@ class RealizariRetineri extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.setState({
-            showToast: true,
-            toastTitle: 'Eroare',
-            toastColor: 'white',
-            toastMessage:
-              'Nu s-a putut deschide luna: ' +
-              (err.response
-                ? err.response.data.message
-                : 'Nu s-a putut stabili conexiunea la server'),
-          })
+          this.newToast(
+            'Eroare',
+            'Nu s-a putut deschide luna: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
+            'white')
+          // this.setState({
+          //   showToast: true,
+          //   toastTitle: 'Eroare',
+          //   toastColor: 'white',
+          //   toastMessage:
+          //     'Nu s-a putut deschide luna: ' +
+          //     (err.response
+          //       ? err.response.data.message
+          //       : 'Nu s-a putut stabili conexiunea la server'),
+          // })
         );
       if (deleted) {
         const newLuniInchise = this.state.luni_inchise.filter(
           (l) => !(l.luna === luna.nr && l.an === an)
         );
         this.setState({
-          showToast: true,
-          toastTitle: `${luna.nume} ${an} deschisă`,
+          // showToast: true,
+          // toastTitle: `${luna.nume} ${an} deschisă`,
           luni_inchise: newLuniInchise,
-        });
-        console.log('deschis:', deleted);
+        }, () => this.newToast(
+          `${luna.nume} ${an} deschisă`,
+          '',
+          'white'));
       }
     } else {
       let lunaRes = await axios
@@ -940,24 +959,30 @@ class RealizariRetineri extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-          this.setState({
-            showToast: true,
-            toastTitle: 'Eroare',
-            toastColor: 'white',
-            toastMessage:
-              'Nu s-a putut inchide luna: ' +
-              (err.response
-                ? err.response.data.message
-                : 'Nu s-a putut stabili conexiunea la server'),
-          })
+        this.newToast(
+          'Eroare',
+          'Nu s-a putut închide luna: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
+          'white')
+          // this.setState({
+          //   showToast: true,
+          //   toastTitle: 'Eroare',
+          //   toastColor: 'white',
+          //   toastMessage:
+          //     'Nu s-a putut inchide luna: ' +
+          //     (err.response
+          //       ? err.response.data.message
+          //       : 'Nu s-a putut stabili conexiunea la server'),
+          // })
         );
       if (lunaRes) {
         this.setState({
-          showToast: true,
-          toastTitle: `${luna.nume} ${an} închisă`,
+          // showToast: true,
+          // toastTitle: `${luna.nume} ${an} închisă`,
           luni_inchise: [...this.state.luni_inchise, lunaRes],
-        });
-        console.log('inchis:', lunaRes);
+        }, () => this.newToast(
+          `${luna.nume} ${an} închisă`,
+          '',
+          'white'));
       }
     }
   }
@@ -1125,8 +1150,8 @@ class RealizariRetineri extends React.Component {
                       this.state.nrore,
                       this.state.procent,
                       Number(this.state.nrore) *
-                        (Number(this.state.procent) / 100) *
-                        Number(this.state.salariupeora)
+                      (Number(this.state.procent) / 100) *
+                      Number(this.state.salariupeora)
                     )
                   }
                 >
@@ -1710,8 +1735,8 @@ class RealizariRetineri extends React.Component {
                           disabled
                           value={this.numberWithCommas(
                             Number(this.state.cam) +
-                              Number(this.state.totaldrepturi) +
-                              Number(this.state.valoaretichete)
+                            Number(this.state.totaldrepturi) +
+                            Number(this.state.valoaretichete)
                           )}
                         />
                       </Form.Group>

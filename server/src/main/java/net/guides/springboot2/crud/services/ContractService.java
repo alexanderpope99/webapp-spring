@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,16 @@ public class ContractService {
 	AngajatRepository angajatRepository;
 
 	public Contract findById(int idcontract) throws ResourceNotFoundException {
-		return contractRepository.findById(idcontract)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idcontract));
+		return contractRepository.findById(idcontract).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idcontract));
+	}
+
+	public List<Contract> findBySocietate_Id(int idsocietate) {
+		return contractRepository.findByAngajat_Societate_Id(idsocietate);
 	}
 
 	public Contract saveForAngajat(Contract contract, int idangajat) throws ResourceNotFoundException {
 		contract = contractRepository.save(contract);
-		Angajat angajat = angajatRepository.findById(idangajat)
-				.orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idangajat));
+		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idangajat));
 		angajat.setContract(contract);
 		angajatRepository.save(angajat);
 
@@ -33,7 +37,7 @@ public class ContractService {
 
 	public boolean fixDefaultValuesMissing() {
 
-		var wrapper = new Object(){ boolean value = true; };
+		var wrapper = new Object() { boolean value = true; };
 
 		contractRepository.findAll().forEach(contract -> {
 			try {

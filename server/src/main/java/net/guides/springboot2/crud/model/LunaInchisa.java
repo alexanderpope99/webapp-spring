@@ -83,4 +83,8 @@ public class LunaInchisa implements Serializable {
 		this.an = newItem.an;
 		return this;
 	}
+
+	public boolean is(int luna, int an, int idsocietate) {
+		return this.luna == luna && this.an == an && this.societate.getId() == idsocietate; 
+	}
 }
