@@ -327,10 +327,15 @@ class Stat extends React.Component {
               </Button>
 
 							<Button 
-								variant={lunaInchisa ? 'outline-info' : 'outline-warning'} 
+								variant={lunaInchisa ? 'outline-warning' : 'outline-info'} 
 								onClick={this.inchideLuna}
 							>
-								{lunaInchisa ? 'Deschide luna' : 'Închide luna'}
+								{
+                lunaInchisa ? 
+                  <div>Deschide luna<i className="ml-2 feather icon-unlock"/></div>
+                : 
+                  <div>Închide luna<i className="ml-2 feather icon-lock"/></div>
+                }
 							</Button>
             </div>
           </Card.Body>

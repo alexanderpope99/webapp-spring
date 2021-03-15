@@ -642,10 +642,10 @@ class CMTabel extends React.Component {
         if (
           cm.dela
             ? cm.dela.includes(this.state.an) &&
-              (this.state.luna.nume !== 'Toate'
-                ? // eslint-disable-next-line eqeqeq
-                  cm.dela.substring(5, 7) == this.state.luna.nr
-                : true)
+            (this.state.luna.nume !== 'Toate'
+              ? // eslint-disable-next-line eqeqeq
+              cm.dela.substring(5, 7) == this.state.luna.nr
+              : true)
             : true
         ) {
           for (let key in cm) {
@@ -653,8 +653,8 @@ class CMTabel extends React.Component {
           }
           return (
             <tr key={cm.id}>
-              <th className="d-inline-flex flex-row justify-content-around">
-                {cm.inchis ? (
+              {cm.inchis ? (
+                <tr className="d-inline-flex flex-row justify-content-around">
                   <Button
                     variant="outline-secondary"
                     className="ml-2 p-1 rounded-circle border-0"
@@ -662,11 +662,12 @@ class CMTabel extends React.Component {
                   >
                     <Eye size={20} />
                   </Button>
-                ) : (
-                  <div>
+                </tr>
+              ) : (
+                <tr className="d-inline-flex flex-row justify-content-around">
                     <Button
                       variant="outline-secondary"
-                      className="ml-2 p-1 rounded-circle border-0"
+                      className="ml-2 p-1 rounded-circle border-0 align-self-start"
                       onClick={() => this.editCM(cm)}
                     >
                       <Edit3 size={20} />
@@ -676,7 +677,7 @@ class CMTabel extends React.Component {
                         <div>
                           <Button
                             variant="outline-secondary"
-                            className="m-0 p-1 rounded-circle border-0"
+                            className="m-0 p-1 rounded-circle border-0 align-self-end"
                             {...bindTrigger(popupState)}
                           >
                             <Trash2 size={20} />
@@ -717,12 +718,12 @@ class CMTabel extends React.Component {
                               </Button>
                             </Box>
                           </Popover>
-                        </div>
+                          </div>
                       )}
                     </PopupState>
-                  </div>
-                )}
-              </th>
+                </tr>
+              
+              )}
               <th>{formatDate(cm.dela)}</th>
               <th>{formatDate(cm.panala)}</th>
               <th>{cm.continuare === '-' ? 'Nu' : 'Da'}</th>
@@ -769,8 +770,7 @@ class CMTabel extends React.Component {
     // get baza calcul + zile baza calcul + medie zilnica
     const baza_calcul = await axios
       .get(
-        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${
-          this.state.an
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an
         }/${this.state.codboala.substring(0, 2)}`,
         { headers: authHeader() }
       )
@@ -790,18 +790,18 @@ class CMTabel extends React.Component {
         mediezilnica: baza_calcul.mediezilnica.toFixed(4),
         indemnizatiefirma: Math.round(
           this.state.zilefirma *
-            Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
-            (this.state.procent / 100)
+          Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
+          (this.state.procent / 100)
         ),
         indemnizatiefnuass: Math.round(
           this.state.zilefnuass *
-            Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
-            (this.state.procent / 100)
+          Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
+          (this.state.procent / 100)
         ),
         indemnizatiefaambp: Math.round(
           this.state.zilefaambp *
-            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
-            (this.state.procent / 100)
+          Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+          (this.state.procent / 100)
         ),
       });
     }

@@ -106,9 +106,9 @@ const routes = [
 
 	// CALENDAR
 	{
-		path: '/calendar',
+		path: '/concedii',
 		exact: true,
-		name: 'Calendar',
+		name: 'Concedii',
 		component: isAngajatSimplu ? null : Concedii,
 	},
 

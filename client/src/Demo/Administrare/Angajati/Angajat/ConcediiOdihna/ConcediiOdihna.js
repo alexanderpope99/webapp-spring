@@ -178,9 +178,9 @@ class COTabel extends React.Component {
         if (
           co.dela
             ? co.dela.includes(this.state.an) &&
-              (this.state.luna.nume !== 'Toate'
-                ? Number(co.dela.substring(5, 7)) === this.state.luna.nr
-                : true)
+            (this.state.luna.nume !== 'Toate'
+              ? Number(co.dela.substring(5, 7)) === this.state.luna.nr
+              : true)
             : true
         ) {
           for (let key in co) {
@@ -192,8 +192,8 @@ class COTabel extends React.Component {
               <th>{formatDate(co.dela)}</th>
               <th>{formatDate(co.panala)}</th>
               <th>{co.tip}</th>
-              <th className="d-inline-flex flex-row justify-content-around">
-                {co.inchis ? (
+              {co.inchis ? (
+                <th className="d-inline-flex flex-row justify-content-around">
                   <Button
                     variant="outline-secondary"
                     className="ml-2 p-1 rounded-circle border-0"
@@ -201,67 +201,67 @@ class COTabel extends React.Component {
                   >
                     <Eye size={20} />
                   </Button>
-                ) : (
-                  <div>
-                    <Button
-                      variant="outline-secondary"
-                      className="ml-2 p-1 rounded-circle border-0"
-                      onClick={() => this.editCO(co)}
-                    >
-                      <Edit3 size={20} />
-                    </Button>
-                    <PopupState variant="popover" popupId="demo-popup-popover">
-                      {(popupState) => (
-                        <div>
-                          <Button
-                            variant="outline-secondary"
-                            className="m-0 p-1 rounded-circle border-0"
-                            {...bindTrigger(popupState)}
-                          >
-                            <Trash2 fontSize="small" />
-                          </Button>
-                          <Popover
-                            {...bindPopover(popupState)}
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'center',
-                            }}
-                          >
-                            <Box p={2}>
-                              <Typography>Sigur ștergeți concediul?</Typography>
-                              <Typography variant="caption">
-                                Datele nu mai pot fi recuperate
+                </th>
+              ) : (
+                <th className="d-inline-flex flex-row justify-content-around">
+                  <Button
+                    variant="outline-secondary"
+                    className="ml-2 p-1 rounded-circle border-0"
+                    onClick={() => this.editCO(co)}
+                  >
+                    <Edit3 size={20} />
+                  </Button>
+                  <PopupState variant="popover" popupId="demo-popup-popover">
+                    {(popupState) => (
+                      <div>
+                        <Button
+                          variant="outline-secondary"
+                          className="m-0 p-1 rounded-circle border-0"
+                          {...bindTrigger(popupState)}
+                        >
+                          <Trash2 fontSize="small" />
+                        </Button>
+                        <Popover
+                          {...bindPopover(popupState)}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                        >
+                          <Box p={2}>
+                            <Typography>Sigur ștergeți concediul?</Typography>
+                            <Typography variant="caption">
+                              Datele nu mai pot fi recuperate
                               </Typography>
-                              <br />
-                              <Button
-                                variant="outline-danger"
-                                onClick={() => {
-                                  popupState.close();
-                                  this.deleteCO(co.id);
-                                }}
-                                className="mt-2 "
-                              >
-                                Da
+                            <br />
+                            <Button
+                              variant="outline-danger"
+                              onClick={() => {
+                                popupState.close();
+                                this.deleteCO(co.id);
+                              }}
+                              className="mt-2 "
+                            >
+                              Da
                               </Button>
-                              <Button
-                                variant="outline-persondary"
-                                onClick={popupState.close}
-                                className="mt-2"
-                              >
-                                Nu
+                            <Button
+                              variant="outline-persondary"
+                              onClick={popupState.close}
+                              className="mt-2"
+                            >
+                              Nu
                               </Button>
-                            </Box>
-                          </Popover>
-                        </div>
-                      )}
-                    </PopupState>
-                  </div>
-                )}
-              </th>
+                          </Box>
+                        </Popover>
+                      </div>
+                    )}
+                  </PopupState>
+                </th>
+              )}
             </tr>
           );
         }

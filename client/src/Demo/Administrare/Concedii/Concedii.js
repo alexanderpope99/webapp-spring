@@ -37,8 +37,30 @@ export default class Concedii extends React.Component {
       co = co.map((concediu) => {
         var endDate = new Date(concediu.panala);
         endDate.setDate(endDate.getDate() + 1);
+        var tipConcediu = '';
+        switch (concediu.tip) {
+          case 'Concediu de odihnă':
+            tipConcediu = 'C.O.';
+            break;
+          
+          case 'Concediu fără plată':
+            tipConcediu = 'C.F.P';
+            break;
+
+          case 'Concediu pentru situații speciale':
+            tipConcediu = 'C. Sit. Spec.';
+            break;
+          
+          case 'Concediu pentru studii':
+            tipConcediu = 'C. Studii';
+            break;
+        
+          default:
+            tipConcediu = 'C.O.';
+            break;
+        }
         return {
-          title: concediu.numeangajat + ' - ' + concediu.tip,
+          title: concediu.numeangajat + ' - ' + tipConcediu,
           start: concediu.dela,
           end: endDate.toISOString().substring(0, 10),
         };
@@ -57,7 +79,7 @@ export default class Concedii extends React.Component {
         var endDate = new Date(concediu.panala);
         endDate.setDate(endDate.getDate() + 1);
         return {
-          title: concediu.numeangajat + ' - Concediu Medical',
+          title: concediu.numeangajat + ' - C.M.',
           start: concediu.dela,
           end: endDate.toISOString().substring(0, 10),
 					color: '#a72c51',
@@ -67,7 +89,7 @@ export default class Concedii extends React.Component {
     }
   }
 	
-	tipuriConcedii = ['Concedie de odihnă', 'Concedii medicale'];
+	tipuriConcedii = ['Concedii odihnă', 'Concedii medicale'];
 
   render() {
 

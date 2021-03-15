@@ -928,24 +928,12 @@ class RealizariRetineri extends React.Component {
             'Eroare',
             'Nu s-a putut deschide luna: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
             'white')
-          // this.setState({
-          //   showToast: true,
-          //   toastTitle: 'Eroare',
-          //   toastColor: 'white',
-          //   toastMessage:
-          //     'Nu s-a putut deschide luna: ' +
-          //     (err.response
-          //       ? err.response.data.message
-          //       : 'Nu s-a putut stabili conexiunea la server'),
-          // })
         );
       if (deleted) {
         const newLuniInchise = this.state.luni_inchise.filter(
           (l) => !(l.luna === luna.nr && l.an === an)
         );
         this.setState({
-          // showToast: true,
-          // toastTitle: `${luna.nume} ${an} deschisă`,
           luni_inchise: newLuniInchise,
         }, () => this.newToast(
           `${luna.nume} ${an} deschisă`,
@@ -963,21 +951,9 @@ class RealizariRetineri extends React.Component {
           'Eroare',
           'Nu s-a putut închide luna: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
           'white')
-          // this.setState({
-          //   showToast: true,
-          //   toastTitle: 'Eroare',
-          //   toastColor: 'white',
-          //   toastMessage:
-          //     'Nu s-a putut inchide luna: ' +
-          //     (err.response
-          //       ? err.response.data.message
-          //       : 'Nu s-a putut stabili conexiunea la server'),
-          // })
         );
       if (lunaRes) {
         this.setState({
-          // showToast: true,
-          // toastTitle: `${luna.nume} ${an} închisă`,
           luni_inchise: [...this.state.luni_inchise, lunaRes],
         }, () => this.newToast(
           `${luna.nume} ${an} închisă`,
