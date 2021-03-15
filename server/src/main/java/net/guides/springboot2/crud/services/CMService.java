@@ -62,9 +62,12 @@ public class CMService {
 		// get luna, an from co.dela
 		int luna = cm.getDela().getMonthValue();
 		int an = cm.getDela().getYear();
-
+		// daca nu se termina in aceeasi luna
+		if(cm.getPanala().getYear() != an || cm.getPanala().getMonthValue() != luna) {
+			realizariRetineriService.recalcRealizariRetineri(cm.getPanala().getYear(), cm.getPanala().getMonthValue(), contract.getId());
+		}
 		// update salariu
-		realizariRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1, -1);
+		realizariRetineriService.recalcRealizariRetineri(luna, an, contract.getId());
 
 		// return updated cm
 		cmDTO.setId(cm.getId());
@@ -74,7 +77,6 @@ public class CMService {
 	public CMDTO update(int cmID, CMDTO newCmDTO) throws ResourceNotFoundException {
 		newCmDTO.setId(cmID);
 		return save(newCmDTO);
-
 	}
 
 	public Map<String, Boolean> delete(int cmId) throws ResourceNotFoundException {

@@ -251,6 +251,10 @@ public class RealizariRetineriService {
 		return recalcRealizariRetineri(rrDetails.getLuna(), rrDetails.getAn(), rrDetails.getIdcontract(), rrDetails.getPrimaBruta(), rrDetails.getNrTichete(), rrDetails.getTotalOreSuplimentare(), rrDetails.getCoNeefectuat());
 	}
 
+	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
+		return this.recalcRealizariRetineri(luna, an, idcontract, -1, -1, -1, 0);
+	}
+
 	// ! recalculeaza Realizari Retineri
 	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract, int primaBruta, int nrTichete, int totalOreSuplimentare, int coNeefectuat) throws ResourceNotFoundException {
 		// nu e calculat in (luna, an) => calculeaza/creeaza
@@ -340,17 +344,17 @@ public class RealizariRetineriService {
 		if (luna6 > luna && an6 < an) {
 			for (int i = luna6; i <= 12; ++i) {
 				if(!lunaInchisaService.exists(i, an6, idsocietate))
-					this.recalcRealizariRetineri(i, an6, idcontract, -1, -1, -1, 0);
+					this.recalcRealizariRetineri(i, an6, idcontract);
 			}
 
 			for (int i = 1; i <= luna; ++i) {
 				if(!lunaInchisaService.exists(i, an, idsocietate))
-					this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1, 0);
+					this.recalcRealizariRetineri(i, an, idcontract);
 			}
 		} else {
 			for (int i = luna6; i <= luna; ++i) {
 				if(!lunaInchisaService.exists(i, an, idsocietate))
-					this.recalcRealizariRetineri(i, an, idcontract, -1, -1, -1, 0);
+					this.recalcRealizariRetineri(i, an, idcontract);
 			}
 		}
 	}
@@ -359,7 +363,7 @@ public class RealizariRetineriService {
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNull(idsocietate);
 
 		for (Angajat angajat : angajati) {
-			this.recalcRealizariRetineri(luna, an, angajat.getContract().getId(), -1, -1, -1, 0);
+			this.recalcRealizariRetineri(luna, an, angajat.getContract().getId());
 		}
 	}
 

@@ -154,7 +154,7 @@ class Stat extends React.Component {
     }
   }
 
-	async inchideLuna() {
+  async inchideLuna() {
     const luna = this.state.luna;
     const an = this.state.an;
     const socsel = this.state.socsel;
@@ -192,6 +192,8 @@ class Stat extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: `${luna.nume} ${an} deschisă`,
+          toastMessage: '',
+          toastColor: 'white',
           luni_inchise: newLuniInchise,
         });
         console.log('deschis:', deleted);
@@ -218,6 +220,8 @@ class Stat extends React.Component {
         this.setState({
           showToast: true,
           toastTitle: `${luna.nume} ${an} închisă`,
+          toastMessage: '',
+          toastColor: 'white',
           luni_inchise: [...this.state.luni_inchise, lunaRes],
         });
         console.log('inchis:', lunaRes);
@@ -228,7 +232,7 @@ class Stat extends React.Component {
   render() {
     const luniComponent = luni.map((luna_nume, index) => <option key={index}>{luna_nume}</option>);
 
-		const lunaInchisa = this.state.luni_inchise.filter(l => l.luna === this.state.luna.nr && l.an === this.state.an).length > 0;
+    const lunaInchisa = this.state.luni_inchise.filter(l => l.luna === this.state.luna.nr && l.an === this.state.an).length > 0;
 
     return (
       <React.Fragment>
@@ -326,17 +330,17 @@ class Stat extends React.Component {
                 Recalculează toate salariile
               </Button>
 
-							<Button 
-								variant={lunaInchisa ? 'outline-warning' : 'outline-info'} 
-								onClick={this.inchideLuna}
-							>
-								{
-                lunaInchisa ? 
-                  <div>Deschide luna<i className="ml-2 feather icon-unlock"/></div>
-                : 
-                  <div>Închide luna<i className="ml-2 feather icon-lock"/></div>
+              <Button
+                variant={lunaInchisa ? 'outline-warning' : 'outline-info'}
+                onClick={this.inchideLuna}
+              >
+                {
+                  lunaInchisa ?
+                    <div>Deschide luna<i className="ml-2 feather icon-unlock" /></div>
+                    :
+                    <div>Închide luna<i className="ml-2 feather icon-lock" /></div>
                 }
-							</Button>
+              </Button>
             </div>
           </Card.Body>
         </Card>

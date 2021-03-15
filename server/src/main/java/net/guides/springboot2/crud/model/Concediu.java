@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,14 @@ public class Concediu implements Serializable {
 	public boolean overlaps(List<LunaInchisa> luniInchise) throws ResourceNotFoundException {
 		if (!overlaps()) {
 			for (LunaInchisa li : luniInchise) {
-				if (dela.getYear() == li.getAn() && li.getLuna() == dela.getMonthValue() || panala.getYear() == li.getAn() && li.getLuna() == panala.getMonthValue())
+				LocalDate liStart = LocalDate.of(li.getAn(), li.getLuna(), 1);
+				LocalDate liEnd = LocalDate.of(li.getAn(), li.getLuna(), YearMonth.of(li.getAn(), li.getLuna()).lengthOfMonth());
+				// concediul e in luna
+				if ((dela.getYear() == li.getAn() && li.getLuna() == dela.getMonthValue()) || (panala.getYear() == li.getAn() && li.getLuna() == panala.getMonthValue()))
+					return true;
+
+				// concediul cuprinde luna
+				if (dela.compareTo(liStart) < 0 && panala.compareTo(liEnd) > 0)
 					return true;
 			}
 		}
