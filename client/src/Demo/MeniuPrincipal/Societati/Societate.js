@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Form, Button, Modal, Collapse, Toast,Image } from 'react-bootstrap';
+import { Row, Col, Card, Form, Button, Modal, Collapse, Toast, Image } from 'react-bootstrap';
 import { Download } from 'react-feather';
 import Aux from '../../../hoc/_Aux';
 import CentruCostTabel from './CentruCostTabel';
@@ -45,6 +45,7 @@ class Societate extends React.Component {
       // accordion
       showCentreCost: false,
       showContBancar: false,
+      showImagine: false,
 
       // form data
       id: 0,
@@ -336,9 +337,7 @@ class Societate extends React.Component {
           </Modal.Header>
           <Modal.Footer>
             <Link to="/dashboard/societati">
-              <Button variant="primary">
-                Către societați
-              </Button>
+              <Button variant="primary">Către societați</Button>
             </Link>
             <Button variant="primary" onClick={this.handleClose}>
               Închide
@@ -499,58 +498,83 @@ class Societate extends React.Component {
                     </Form.Group>
 
                     {/* IMAGINE */}
-                    <Form.Group as={Col} md="12">
-                      {this.state.numefisier ? (
-                        <Col>
-                          <ul
-                            className="list-group list-group-flush"
-                            style={{ listStyleType: 'none' }}
+                    <Col md={12}>
+                      <Card className="mt-2">
+                        <Card.Header
+                          style={{ cursor: 'pointer' }}
+                          onClick={() =>
+                            this.setState({
+                              showImagine: !this.state.showImagine,
+                            })
+                          }
+                        >
+                          <Card.Title
+                            as="h5"
+                            aria-controls="accordion1"
+                            aria-expanded={this.state.showImagine}
                           >
-                            <li className="mb-2">
-                              <Image
-                                fluid
-                                style={{ height: 200 }}
-                                src={window.URL.createObjectURL(this.state.fisier)}
-                              />
-                            </li>
-                            <li>
-                              <Button
-                                className="p-2 pl-3 pr-3"
-                                variant="dark"
-                                onClick={() =>
-                                  downloadImagineSocietate(
-                                    this.state.numefisier,
-                                    this.state.idfisier
-                                  )
-                                }
-                              >
-                                {this.state.numefisier} <Download size={20} />
-                              </Button>
-                              <Button
-                                variant="link"
-                                onClick={() =>
-                                  this.setState({
-                                    fisier: undefined,
-                                    numefisier: undefined,
-                                    sterge: true,
-                                  })
-                                }
-                              >
-                                Șterge
-                              </Button>
-                            </li>
-                          </ul>
-                        </Col>
-                      ) : (
-                        <Dropzone
-                          accept="image/*"
-                          inputContent="Imagine / Logo"
-                          onChangeStatus={handleChangeStatus}
-                          maxFiles={1}
-                        />
-                      )}
-                    </Form.Group>
-                  </Row>
+                            Imagine
+                          </Card.Title>
+                        </Card.Header>
+                        <Collapse in={this.state.showImagine}>
+                          <div id="accordion1">
+                            <Card.Body>
+                              <Form.Group as={Col} md="12">
+                                {this.state.numefisier ? (
+                                  <Col>
+                                    <ul
+                                      className="list-group list-group-flush"
+                                      style={{ listStyleType: 'none' }}
+                                    >
+                                      <li className="mb-2">
+                                        <Image
+                                          fluid
+                                          style={{ height: 95, width: 397 }}
+                                          src={window.URL.createObjectURL(this.state.fisier)}
+                                        />
+                                      </li>
+                                      <li>
+                                        <Button
+                                          className="p-2 pl-3 pr-3"
+                                          variant="dark"
+                                          onClick={() =>
+                                            downloadImagineSocietate(
+                                              this.state.numefisier,
+                                              this.state.idfisier
+                                            )
+                                          }
+                                        >
+                                          {this.state.numefisier} <Download size={20} />
+                                        </Button>
+                                        <Button
+                                          variant="link"
+                                          onClick={() =>
+                                            this.setState({
+                                              fisier: undefined,
+                                              numefisier: undefined,
+                                              sterge: true,
+                                            })
+                                          }
+                                        >
+                                          Șterge
+                                        </Button>
+                                      </li>
+                                    </ul>
+                                  </Col>
+                                ) : (
+                                  <Dropzone
+                                    accept="image/*"
+                                    inputContent="Logo Factură"
+                                    onChangeStatus={handleChangeStatus}
+                                    maxFiles={1}
+                                  />
+                                )}
+                              </Form.Group>
+                            </Card.Body>
+                          </div>
+                        </Collapse>
+                      </Card>
+                    </Col>
 
                   {this.state.isEdit ? (
                     <React.Fragment>
@@ -623,6 +647,7 @@ class Societate extends React.Component {
                       </Col>
                     </React.Fragment>
                   ) : null}
+									                </Row>
                   <Row>
                     <Col md={6}>
                       <Button variant="outline-primary" type="submit">

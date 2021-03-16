@@ -82,7 +82,7 @@ public class FisierController {
 	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
 	fisier.setNume(fileName);
-	fisier.setData(file.getBytes());
+	fisier.setData(fisierService.scale(file.getBytes(),397,95));
 	fisier.setType(file.getContentType());
 	fisierRepository.save(fisier);
 	return ResponseEntity.ok(fisier);
