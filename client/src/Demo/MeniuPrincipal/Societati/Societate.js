@@ -62,6 +62,7 @@ class Societate extends React.Component {
       email: '',
       telefon: '',
       fax: '',
+      sterge: false,
 
       centreCost: [], // array containing CentruCost objects
       centruCost: null, // details for add/edit modal
@@ -212,32 +213,34 @@ class Societate extends React.Component {
     const formData = new FormData();
     if (this.state.numefisier) formData.append('file', this.state.fisier);
 
-    if (this.state.existaImagine) {
-      // put
-      await axios
-        .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
-          headers: authHeader(),
-        })
-        .then((res) => res.status === 200)
-        .catch((err) =>
-          this.setState({ showToast: true, toastMessage: err.response.data.message })
-        );
-    } else {
-      //post
-      const file = await axios
-        .post(`${server.address}/fisier/upload`, formData, {
-          headers: authHeader(),
-        })
-        .then((res) => res.data)
-        .catch((err) =>
-          this.setState({
-            showToast: true,
-            toastMessage: err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server',
+    if (!this.state.sterge) {
+      if (this.state.existaImagine) {
+        // put
+        await axios
+          .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
+            headers: authHeader(),
           })
-        );
-      this.setState({ idfisier: file ? file.fileId : null });
+          .then((res) => res.status === 200)
+          .catch((err) =>
+            this.setState({ showToast: true, toastMessage: err.response.data.message })
+          );
+      } else {
+        //post
+        const file = await axios
+          .post(`${server.address}/fisier/upload`, formData, {
+            headers: authHeader(),
+          })
+          .then((res) => res.data)
+          .catch((err) =>
+            this.setState({
+              showToast: true,
+              toastMessage: err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server',
+            })
+          );
+        this.setState({ idfisier: file ? file.fileId : null });
+      }
     }
 
     let adresa_body = {
@@ -266,6 +269,7 @@ class Societate extends React.Component {
 
     const user = authService.getCurrentUser();
     var uri = this.state.idfisier ? `/imageid=${this.state.idfisier}` : '';
+    if (this.state.sterge) uri = '/imageid=0';
     var newSoc;
     if (this.state.isEdit) {
       // put
@@ -311,7 +315,7 @@ class Societate extends React.Component {
       if (status === 'done') {
         console.log(status, file);
 
-        this.setState({ fisier: file, numefisier: file.name });
+        this.setState({ fisier: file, numefisier: file.name, sterge: false });
       }
     };
 
@@ -576,78 +580,78 @@ class Societate extends React.Component {
                       </Card>
                     </Col>
 
-                  {this.state.isEdit ? (
-                    <React.Fragment>
-                      {/* CONT BANCAR */}
-                      <Col md={12}>
-                        <Card className="mt-2">
-                          <Card.Header
-                            style={{ cursor: 'pointer' }}
-                            onClick={() =>
-                              this.setState({
-                                showContBancar: !this.state.showContBancar,
-                              })
-                            }
-                          >
-                            <Card.Title
-                              as="h5"
-                              aria-controls="accordion1"
-                              aria-expanded={this.state.showContBancar}
+                    {this.state.isEdit ? (
+                      <React.Fragment>
+                        {/* CONT BANCAR */}
+                        <Col md={12}>
+                          <Card className="mt-2">
+                            <Card.Header
+                              style={{ cursor: 'pointer' }}
+                              onClick={() =>
+                                this.setState({
+                                  showContBancar: !this.state.showContBancar,
+                                })
+                              }
                             >
-                              Conturi bancare
-                            </Card.Title>
-                          </Card.Header>
+                              <Card.Title
+                                as="h5"
+                                aria-controls="accordion1"
+                                aria-expanded={this.state.showContBancar}
+                              >
+                                Conturi bancare
+                              </Card.Title>
+                            </Card.Header>
 
-                          <Collapse in={this.state.showContBancar}>
-                            <div id="accordion1">
-                              <Card.Body>
-                                <ContBancarTabel />
-                              </Card.Body>
-                            </div>
-                          </Collapse>
-                        </Card>
-                      </Col>
+                            <Collapse in={this.state.showContBancar}>
+                              <div id="accordion1">
+                                <Card.Body>
+                                  <ContBancarTabel />
+                                </Card.Body>
+                              </div>
+                            </Collapse>
+                          </Card>
+                        </Col>
 
-                      {/* CENTRE COST */}
-                      <Col md={12}>
-                        <Card className="mt-2">
-                          <Card.Header
-                            style={{ cursor: 'pointer' }}
-                            onClick={() =>
-                              this.setState({
-                                showCentreCost: !this.state.showCentreCost,
-                              })
-                            }
-                          >
-                            <Card.Title
-                              as="h5"
-                              aria-controls="accordion1"
-                              aria-expanded={this.state.showCentreCost}
+                        {/* CENTRE COST */}
+                        <Col md={12}>
+                          <Card className="mt-2">
+                            <Card.Header
+                              style={{ cursor: 'pointer' }}
+                              onClick={() =>
+                                this.setState({
+                                  showCentreCost: !this.state.showCentreCost,
+                                })
+                              }
                             >
-                              Centre cost
-                            </Card.Title>
-                          </Card.Header>
+                              <Card.Title
+                                as="h5"
+                                aria-controls="accordion1"
+                                aria-expanded={this.state.showCentreCost}
+                              >
+                                Centre cost
+                              </Card.Title>
+                            </Card.Header>
 
-                          <Collapse in={this.state.showCentreCost}>
-                            <div id="accordion1">
-                              <Card.Body>
-                                <CentruCostTabel
-                                  adresaSocietate={{
-                                    id: this.state.idadresa,
-                                    adresa: this.state.adresa,
-                                    localitate: this.state.localitate,
-                                    tipJudet: this.state.tipJudet,
-                                    judet: this.state.judet,
-                                  }}
-                                />
-                              </Card.Body>
-                            </div>
-                          </Collapse>
-                        </Card>
-                      </Col>
-                    </React.Fragment>
-                  ) : null}
-									                </Row>
+                            <Collapse in={this.state.showCentreCost}>
+                              <div id="accordion1">
+                                <Card.Body>
+                                  <CentruCostTabel
+                                    adresaSocietate={{
+                                      id: this.state.idadresa,
+                                      adresa: this.state.adresa,
+                                      localitate: this.state.localitate,
+                                      tipJudet: this.state.tipJudet,
+                                      judet: this.state.judet,
+                                    }}
+                                  />
+                                </Card.Body>
+                              </div>
+                            </Collapse>
+                          </Card>
+                        </Col>
+                      </React.Fragment>
+                    ) : null}
+                  </Row>
                   <Row>
                     <Col md={6}>
                       <Button variant="outline-primary" type="submit">
