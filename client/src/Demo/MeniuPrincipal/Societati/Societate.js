@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Form, Button, Modal, Collapse, Toast } from 'react-bootstrap';
-// import { Download } from 'react-feather';
+import { Row, Col, Card, Form, Button, Modal, Collapse, Toast,Image } from 'react-bootstrap';
+import { Download } from 'react-feather';
 import Aux from '../../../hoc/_Aux';
 import CentruCostTabel from './CentruCostTabel';
 import ContBancarTabel from './ContBancarTabel';
@@ -11,11 +11,11 @@ import { judete, sectoare } from '../../Resources/judete';
 import { server } from '../../Resources/server-address';
 import { getSocSel, setSocSel } from '../../Resources/socsel';
 
-// import { downloadImagineSocietate } from '../../Resources/download';
+import { downloadImagineSocietate } from '../../Resources/download';
 import authHeader from '../../../services/auth-header';
 import authService from '../../../services/auth.service';
 import 'react-dropzone-uploader/dist/styles.css';
-// import Dropzone from 'react-dropzone-uploader';
+import Dropzone from 'react-dropzone-uploader';
 
 const judeteOptions = judete.map((judet, index) => {
   return <option key={index}>{judet}</option>;
@@ -139,28 +139,28 @@ class Societate extends React.Component {
       .then((res) => res.data)
       .catch((err) => console.error(err));
 
-    // if (societate.idimagine) {
-    //   const imagine = await axios
-    //     .get(`${server.address}/fisier/${societate.idimagine}`, { headers: authHeader() })
-    //     .then((res) => res.data)
-    //     .catch((err) => console.error(err));
+    if (societate.idimagine) {
+      const imagine = await axios
+        .get(`${server.address}/fisier/${societate.idimagine}`, { headers: authHeader() })
+        .then((res) => res.data)
+        .catch((err) => console.error(err));
 
-    //   const download = await fetch(`${server.address}/fisier/download/${societate.idimagine}`, {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/octet-stream',
-    //       ...authHeader(),
-    //     },
-    //   })
-    //     .then((res) => (res.ok ? res.blob() : null))
-    //     .catch((err) => console.error(err));
-    //   this.setState({
-    //     fisier: download,
-    //     numefisier: imagine.name,
-    //     idfisier: societate.idimagine,
-    //     existaImagine: true,
-    //   });
-    // }
+      const download = await fetch(`${server.address}/fisier/download/${societate.idimagine}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          ...authHeader(),
+        },
+      })
+        .then((res) => (res.ok ? res.blob() : null))
+        .catch((err) => console.error(err));
+      this.setState({
+        fisier: download,
+        numefisier: imagine.name,
+        idfisier: societate.idimagine,
+        existaImagine: true,
+      });
+    }
 
     if (societate.adresa)
       this.setState(
@@ -208,36 +208,36 @@ class Societate extends React.Component {
       console.log(err);
     }
 
-    // const formData = new FormData();
-    // if (this.state.numefisier) formData.append('file', this.state.fisier);
+    const formData = new FormData();
+    if (this.state.numefisier) formData.append('file', this.state.fisier);
 
-    // if (this.state.existaImagine) {
-    //   // put
-    //   await axios
-    //     .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
-    //       headers: authHeader(),
-    //     })
-    //     .then((res) => res.status === 200)
-    //     .catch((err) =>
-    //       this.setState({ showToast: true, toastMessage: err.response.data.message })
-    //     );
-    // } else {
-    //   //post
-    //   const file = await axios
-    //     .post(`${server.address}/fisier/upload`, formData, {
-    //       headers: authHeader(),
-    //     })
-    //     .then((res) => res.data)
-    //     .catch((err) =>
-    //       this.setState({
-    //         showToast: true,
-    //         toastMessage: err.response
-    //           ? err.response.data.message
-    //           : 'Nu s-a putut stabili conexiunea la server',
-    //       })
-    //     );
-    //   this.setState({ idfisier: file ? file.fileId : null });
-    // }
+    if (this.state.existaImagine) {
+      // put
+      await axios
+        .put(`${server.address}/fisier/${this.state.idfisier}`, formData, {
+          headers: authHeader(),
+        })
+        .then((res) => res.status === 200)
+        .catch((err) =>
+          this.setState({ showToast: true, toastMessage: err.response.data.message })
+        );
+    } else {
+      //post
+      const file = await axios
+        .post(`${server.address}/fisier/upload`, formData, {
+          headers: authHeader(),
+        })
+        .then((res) => res.data)
+        .catch((err) =>
+          this.setState({
+            showToast: true,
+            toastMessage: err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server',
+          })
+        );
+      this.setState({ idfisier: file ? file.fileId : null });
+    }
 
     let adresa_body = {
       id: this.state.idadresa,
@@ -264,8 +264,7 @@ class Societate extends React.Component {
     };
 
     const user = authService.getCurrentUser();
-    // var uri = this.state.idfisier ? `/imageid=${this.state.idfisier}` : '';
-    var uri = '';
+    var uri = this.state.idfisier ? `/imageid=${this.state.idfisier}` : '';
     var newSoc;
     if (this.state.isEdit) {
       // put
@@ -307,13 +306,13 @@ class Societate extends React.Component {
       return sectoareOptions;
     };
 
-    // const handleChangeStatus = ({ file }, status) => {
-    //   if (status === 'done') {
-    //     console.log(status, file);
+    const handleChangeStatus = ({ file }, status) => {
+      if (status === 'done') {
+        console.log(status, file);
 
-    //     this.setState({ fisier: file, numefisier: file.name });
-    //   }
-    // };
+        this.setState({ fisier: file, numefisier: file.name });
+      }
+    };
 
     return (
       <Aux>
@@ -500,7 +499,7 @@ class Societate extends React.Component {
                     </Form.Group>
 
                     {/* IMAGINE */}
-                    {/* <Form.Group as={Col} md="12">
+                    <Form.Group as={Col} md="12">
                       {this.state.numefisier ? (
                         <Col>
                           <ul
@@ -550,7 +549,7 @@ class Societate extends React.Component {
                           maxFiles={1}
                         />
                       )}
-                    </Form.Group> */}
+                    </Form.Group>
                   </Row>
 
                   {this.state.isEdit ? (

@@ -1,8 +1,13 @@
 package net.guides.springboot2.crud.services;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +33,12 @@ public class FisierService {
 
     return fisierRepository.saveAndFlush(fisier);
   }
+
+	public byte[] resizeImage(MultipartFile file) {
+		InputStream in = new ByteArrayInputStream(file.getBytes());
+  	BufferedImage newImage = ImageIO.read(in);
+		return (newImage.getScaledInstance(397, 95, java.awt.Image.SCALE_SMOOTH));
+	}
 
   public Fisier getFile(int id) {
     return fisierRepository.findById(id).get();
