@@ -194,10 +194,15 @@ public class FacturaService {
 		writerCell = row.getCell(4);
 		writerCell.setCellValue(String.valueOf(parametriiSalariu.getTva()) + " %");
 
+    // titlul facturii
+    row = facturaWb.getRow(27);
+    writerCell = row.getCell(2);
+    writerCell.setCellValue(factura.getTitlu());
+
 		int i = 1;
 		float sumFaraTva = 0, sumTva = 0;
 		for (Produs produs : factura.getProduse()) {
-			row = facturaWb.getRow(25 + 2 * i);
+			row = facturaWb.getRow(27 + 2 * i);
 			writerCell = row.getCell(1);
 			writerCell.setCellValue(i);
 			writerCell = row.getCell(2);
