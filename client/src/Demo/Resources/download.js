@@ -31,7 +31,7 @@ async function downloadFactura(fileName, idfactura) {
   // const token = this.state.user.accessToken;
   console.log('trying to download...');
 
-  const blob = await fetch(`${server.address}/factura/file/${idfactura}`, {
+  const blob = await fetch(`${server.address}/oldfactura/file/${idfactura}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/octet-stream',
