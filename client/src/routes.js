@@ -40,12 +40,13 @@ const Concedii = React.lazy(() => import('./Demo/Administrare/Concedii/Concedii'
 // FACTURARE
 const ClientiTabel = React.lazy(() => import('./Demo/Facturare/Clienti/ClientiTabel'));
 const Facturi = React.lazy(() => import('./Demo/Facturare/Facturi/Facturi'));
-const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Facturare/AprobareFacturi/FacturiAprobatorTabel'));
-const FacturiOperatorTabel = React.lazy(() => import('./Demo/Facturare/OperareFacturi/FacturiOperatorTabel'));
 const ActivitatiProiecte = React.lazy(() => import('./Demo/Facturare/Activitati/ActivitatiProiecte'));
 const Caiete = React.lazy(() => import('./Demo/Facturare/Caiete/CaieteTabel'));
-// const ActivitatiTabel = React.lazy(() => import('./Demo/Facturare/Activitati/ActivitatiTabel'));
-// const ProiecteTabel = React.lazy(() => import('./Demo/Facturare/Activitati/ProiecteTabel'));
+
+// FACTURARE FURNIZORI
+const FacturiTabelOld = React.lazy(() => import('./Demo/Facturare/Facturi/FacturiTabelOld'));
+const FacturiAprobatorTabel = React.lazy(() => import('./Demo/Facturare/AprobareFacturi/FacturiAprobatorTabel'));
+const FacturiOperatorTabel = React.lazy(() => import('./Demo/Facturare/OperareFacturi/FacturiOperatorTabel'));
 
 // CONFIGURARE
 const UserTabel = React.lazy(() => import('./Demo/Configurare/Utilizatori/UserTabel'));
@@ -102,6 +103,14 @@ const routes = [
     exact: true,
     name: 'Realizari / Retineri',
     component: isAngajatSimplu ? RealizariRetineriView : RealizariRetineri,
+  },
+
+  // FACTURI OPERATORI
+  {
+    path: '/facturi-furnizori',
+    exact: true,
+    name: 'Facturi furnizori',
+    component: FacturiTabelOld,
   },
 
 	// CALENDAR
@@ -181,18 +190,6 @@ const routes = [
 		name: 'Caiete',
 		component: Caiete,
 	},
-	// {
-	// 	path: '/activitati',
-	// 	exact: true,
-	// 	name: 'Tabel Activitati',
-	// 	component: ActivitatiTabel,
-	// },
-	// {
-	// 	path: '/proiecte',
-	// 	exact: true,
-	// 	name: 'Tabel Proiecte',
-	// 	component: ProiecteTabel,
-	// },
   {
     path: '/tables/angajati',
     exact: true,

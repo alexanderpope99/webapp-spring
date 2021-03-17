@@ -103,7 +103,7 @@ class FacturiAprobatorTabel extends React.Component {
 
   async approveFactura(fact) {
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/aproba`, { headers: authHeader() })
+      .get(`${server.address}/oldfactura/${fact.id}/aproba`, { headers: authHeader() })
       .then((response) => response.status === 200)
       .catch((err) =>
         this.setState({
@@ -126,7 +126,7 @@ class FacturiAprobatorTabel extends React.Component {
 
   async rejectFactura(fact) {
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/respinge`, { headers: authHeader() })
+      .get(`${server.address}/oldfactura/${fact.id}/respinge`, { headers: authHeader() })
       .then((response) => response.status === 200)
       .catch((err) =>
         this.setState({
@@ -148,9 +148,9 @@ class FacturiAprobatorTabel extends React.Component {
   }
 
   async postponeFactura(fact) {
-    console.log(`${server.address}/factura/${fact.id}/amana`);
+    console.log(`${server.address}/oldfactura/${fact.id}/amana`);
     const ok = await axios
-      .get(`${server.address}/factura/${fact.id}/amana`, { headers: authHeader() })
+      .get(`${server.address}/oldfactura/${fact.id}/amana`, { headers: authHeader() })
       .then((response) => response.status === 200)
       .catch((err) =>
         this.setState({
@@ -331,7 +331,7 @@ class FacturiAprobatorTabel extends React.Component {
       );
 
     const fact = await axios
-      .get(`${server.address}/factura/idsocuid/${this.state.socsel.id}&${this.state.user.id}`, {
+      .get(`${server.address}/oldfactura/idsocuid/${this.state.socsel.id}&${this.state.user.id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data)
@@ -389,7 +389,7 @@ class FacturiAprobatorTabel extends React.Component {
       observatii: this.state.observatii || null,
     };
     const ok = await axios
-      .put(`${server.address}/factura/${this.state.id}/obs&codp`, factura_body, {
+      .put(`${server.address}/oldfactura/${this.state.id}/obs&codp`, factura_body, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)
@@ -418,7 +418,7 @@ class FacturiAprobatorTabel extends React.Component {
       observatii: this.state.observatii || null,
     };
     const ok = await axios
-      .put(`${server.address}/factura/${this.state.id}/obs&codp`, factura_body, {
+      .put(`${server.address}/oldfactura/${this.state.id}/obs&codp`, factura_body, {
         headers: authHeader(),
       })
       .then((res) => res.status === 200)

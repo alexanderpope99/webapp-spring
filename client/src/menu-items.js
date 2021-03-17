@@ -165,6 +165,29 @@ var items = [
       },
     ],
   },
+  {
+    id: 'facturi-operatori',
+    title: 'Facturi furnizori',
+    type: 'group',
+    icon: 'icon-group',
+    show: user.roles.includes('ROLE_CONTABIL') || user.roles.includes('ROLE_DIRECTOR') || user.roles.includes('ROLE_OPERATOR'),
+    children: [
+      {
+        id: 'facturi-furnizori',
+        title: 'Facturi furnizori',
+        type: 'item',
+        url: '/facturi-furnizori',
+        icon: 'feather icon-file-text',
+      },
+      {
+        id: 'facturi-aprobare',
+        title: 'Aprobare facturi',
+        type: 'item',
+        url: '/facturi-aprobator',
+        icon: 'feather icon-check',
+      },
+    ]
+  },
 
   // UTILIZATORI
   {
