@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Row, Col, Card, Button, Form, Toast, Modal } from 'react-bootstrap';
 import { Typography } from '@material-ui/core';
+import Zoom from 'react-reveal/Zoom';
+
 import Aux from '../../../hoc/_Aux';
 
 import authHeader from '../../../services/auth-header';
@@ -70,7 +72,9 @@ export default class EmitereFactura extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua clienții: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua clienții: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -82,9 +86,12 @@ export default class EmitereFactura extends React.Component {
     const caiete = await axios
       .get(`${server.address}/caiet/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
-      .catch((err) => this.showError('Nu am putut prelua caietul: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server')));
+      .catch((err) =>
+        this.showError(
+          'Nu am putut prelua caietul: ' +
+            (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server')
+        )
+      );
     if (caiete) {
       this.setState({ caiete: caiete });
     }
@@ -97,7 +104,9 @@ export default class EmitereFactura extends React.Component {
       .catch((err) =>
         this.setState({
           showToast: true,
-          toastMessage: 'Nu am putut prelua clienții: ' + (err.response
+          toastMessage:
+            'Nu am putut prelua clienții: ' +
+            (err.response
               ? err.response.data.message
               : 'Nu s-a putut stabili conexiunea la server'),
         })
@@ -111,9 +120,10 @@ export default class EmitereFactura extends React.Component {
       .get(`${server.address}/proiect/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) =>
-        this.showError('Nu am putut prelua proiectele: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'))
+        this.showError(
+          'Nu am putut prelua proiectele: ' +
+            (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server')
+        )
       );
     if (proiecte) {
       var a = new Set();
@@ -283,9 +293,11 @@ export default class EmitereFactura extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut adăuga factura: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            toastMessage:
+              'Nu am putut adăuga factura: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     } else {
@@ -296,9 +308,11 @@ export default class EmitereFactura extends React.Component {
         .catch((err) =>
           this.setState({
             showToast: true,
-            toastMessage: 'Nu am putut modifica factura: ' + (err.response
-              ? err.response.data.message
-              : 'Nu s-a putut stabili conexiunea la server'),
+            toastMessage:
+              'Nu am putut modifica factura: ' +
+              (err.response
+                ? err.response.data.message
+                : 'Nu s-a putut stabili conexiunea la server'),
           })
         );
     }
@@ -324,12 +338,12 @@ export default class EmitereFactura extends React.Component {
     );
   }
 
-	showError(message) {
-		this.setState({
-			showToast: true,
-			toastMessage: message,
-		});
-	}
+  showError(message) {
+    this.setState({
+      showToast: true,
+      toastMessage: message,
+    });
+  }
 
   render() {
     const { totalFaraTva, totalTva, totalCuTva } = this.getTotal();
@@ -346,102 +360,106 @@ export default class EmitereFactura extends React.Component {
       ));
 
     const produseComponent = this.state.produse.map((produs, index) => (
-      <Row className="border rounded p-0 pt-2 mt-2 mb-2" key={index}>
-        <Col md={12}>
-          <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
-            #{index + 1}
-          </Typography>
-        </Col>
-        <Form.Group as={Col} sm="12">
-          <Form.Label>Denumirea produselor sau serviciilor</Form.Label>
-          <Form.Control
-            required
-            as="textarea"
-            value={produs.denumire}
-            onChange={(e) => this.changeProdusAttribute(produs, 'denumire', e.target.value, index)}
-          />
-        </Form.Group>
-        <Form.Group as={Col} lg="4">
-          <Form.Label>UM</Form.Label>
-          <Form.Control
-            type="text"
-            value={produs.um || ''}
-            onChange={(e) => this.changeProdusAttribute(produs, 'um', e.target.value, index)}
-          />
-        </Form.Group>
-        <Form.Group as={Col} lg="4">
-          <Form.Label>Cantitatea</Form.Label>
-          <Form.Control
-            type="number"
-            value={produs.cantitate}
-            onChange={(e) =>
-              this.changeProdusAttribute(produs, 'cantitate', Number(e.target.value), index)
-            }
-          />
-        </Form.Group>
-        <Form.Group as={Col} lg="4">
-          <Form.Label>Pret unitar</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            value={produs.pretUnitar}
-            onChange={(e) =>
-              this.changeProdusAttribute(produs, 'pretUnitar', Number(e.target.value), index)
-            }
-          />
-        </Form.Group>
-        <Form.Group as={Col} sm="6">
-          <Form.Label>Valoare (fără TVA)</Form.Label>
-          <Form.Control
-            disabled
-            type="number"
-            value={(produs.pretUnitar * produs.cantitate).toFixed(2)}
-          />
-        </Form.Group>
-        <Form.Group as={Col} sm="6">
-          <Form.Label>Valoare TVA</Form.Label>
-          <Form.Control
-            disabled
-            type="text"
-            step="0.01"
-            value={(produs.pretUnitar * produs.cantitate * 0.19).toFixed(2)}
-          />
-        </Form.Group>
+      <Zoom key={index} collapse clear>
+        <Row className="border rounded p-0 pt-2 mt-2 mb-2" key={index}>
+          <Col md={12}>
+            <Typography variant="body1" className="border-bottom mb-3" gutterBottom>
+              #{index + 1}
+            </Typography>
+          </Col>
+          <Form.Group as={Col} sm="12">
+            <Form.Label>Denumirea produselor sau serviciilor</Form.Label>
+            <Form.Control
+              required
+              as="textarea"
+              value={produs.denumire}
+              onChange={(e) =>
+                this.changeProdusAttribute(produs, 'denumire', e.target.value, index)
+              }
+            />
+          </Form.Group>
+          <Form.Group as={Col} lg="4">
+            <Form.Label>UM</Form.Label>
+            <Form.Control
+              type="text"
+              value={produs.um || ''}
+              onChange={(e) => this.changeProdusAttribute(produs, 'um', e.target.value, index)}
+            />
+          </Form.Group>
+          <Form.Group as={Col} lg="4">
+            <Form.Label>Cantitatea</Form.Label>
+            <Form.Control
+              type="number"
+              value={produs.cantitate}
+              onChange={(e) =>
+                this.changeProdusAttribute(produs, 'cantitate', Number(e.target.value), index)
+              }
+            />
+          </Form.Group>
+          <Form.Group as={Col} lg="4">
+            <Form.Label>Pret unitar</Form.Label>
+            <Form.Control
+              type="number"
+              step="0.01"
+              value={produs.pretUnitar}
+              onChange={(e) =>
+                this.changeProdusAttribute(produs, 'pretUnitar', Number(e.target.value), index)
+              }
+            />
+          </Form.Group>
+          <Form.Group as={Col} sm="6">
+            <Form.Label>Valoare (fără TVA)</Form.Label>
+            <Form.Control
+              disabled
+              type="number"
+              value={(produs.pretUnitar * produs.cantitate).toFixed(2)}
+            />
+          </Form.Group>
+          <Form.Group as={Col} sm="6">
+            <Form.Label>Valoare TVA</Form.Label>
+            <Form.Control
+              disabled
+              type="text"
+              step="0.01"
+              value={(produs.pretUnitar * produs.cantitate * 0.19).toFixed(2)}
+            />
+          </Form.Group>
 
-        {/* CONTARE */}
-        <Form.Group as={Col} md="6">
-          <Form.Label>Activitatea</Form.Label>
-          <Form.Control
-            as="select"
-            value={this.state.activitate}
-            onChange={(e) => this.onChangeActivitate(e.target.value)}
-          >
-            <option>-</option>
-            {activitatiComponent}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group as={Col} md="6">
-          <Form.Label>Proiect</Form.Label>
-          <Form.Control
-            disabled={this.state.activitate === '-'}
-            as="select"
-            value={this.state.proiect.nume}
-            onChange={(e) => this.onChangeProiect(e)}
-          >
-            <option>{this.state.activitate === '-' ? '--Selectati activitatea' : '-'}</option>
-            {proiecteComponent}
-          </Form.Control>
-        </Form.Group>
-        <Col md={12}>
-          <Button
-            className="p-1 mb-3 float-right"
-            variant="link"
-            onClick={() => this.stergeProdus(index)}
-          >
-            Șterge produs
-          </Button>
-        </Col>
-      </Row>
+          {/* CONTARE */}
+          <Form.Group as={Col} md="6">
+            <Form.Label>Activitatea</Form.Label>
+            <Form.Control
+              as="select"
+              value={this.state.activitate}
+              onChange={(e) => this.onChangeActivitate(e.target.value)}
+            >
+              <option>-</option>
+              {activitatiComponent}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group as={Col} md="6">
+            <Form.Label>Proiect</Form.Label>
+            <Form.Control
+              disabled={this.state.activitate === '-'}
+              as="select"
+              value={this.state.proiect.nume}
+              onChange={(e) => this.onChangeProiect(e)}
+            >
+              <option>{this.state.activitate === '-' ? '--Selectati activitatea' : '-'}</option>
+              {proiecteComponent}
+            </Form.Control>
+          </Form.Group>
+          <Col md={12}>
+            <Button
+              className="p-1 mb-3 float-right"
+              variant="link"
+              onClick={() => this.stergeProdus(index)}
+            >
+              Șterge produs
+            </Button>
+          </Col>
+        </Row>
+      </Zoom>
     ));
 
     const clientiComponent = this.state.clienti.map((client) => (
