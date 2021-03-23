@@ -7,7 +7,7 @@ public class NotaContabila {
   private float avans = 0f;
   private float cas25 = 0f;
   private float casCM = 0f;
-  private float cas10 = 0f;
+  private float cass10 = 0f;
   private float impozit = 0f;
   private float impozitCM = 0f;
   private float contributieCAM = 0f;
@@ -17,14 +17,14 @@ public class NotaContabila {
   public NotaContabila() {
   }
 
-  public NotaContabila(float cmFirma, float cmFonduri, float salariiDatorate, float avans, float cas25, float casCM, float cas10, float impozit, float impozitCM, float contributieCAM, float fonduriHandicap) {
+  public NotaContabila(float cmFirma, float cmFonduri, float salariiDatorate, float avans, float cas25, float casCM, float cass10, float impozit, float impozitCM, float contributieCAM, float fonduriHandicap) {
     this.cmFirma = cmFirma;
     this.cmFonduri = cmFonduri;
     this.salariiDatorate = salariiDatorate;
     this.avans = avans;
     this.cas25 = cas25;
     this.casCM = casCM;
-    this.cas10 = cas10;
+    this.cass10 = cass10;
     this.impozit = impozit;
     this.impozitCM = impozitCM;
     this.contributieCAM = contributieCAM;
@@ -79,12 +79,12 @@ public class NotaContabila {
     this.casCM = casCM;
   }
 
-  public float getCas10() {
-    return this.cas10;
+  public float getCass10() {
+    return this.cass10;
   }
 
-  public void setCas10(float cas10) {
-    this.cas10 = cas10;
+  public void setCass10(float cass10) {
+    this.cass10 = cass10;
   }
 
   public float getImpozit() {
