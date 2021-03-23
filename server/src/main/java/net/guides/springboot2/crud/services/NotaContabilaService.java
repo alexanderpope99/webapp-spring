@@ -113,42 +113,47 @@ public class NotaContabilaService {
 			throw new ResourceNotFoundException("Nu toate salariile sunt calculate in " + luna + " " + an);
 		}
 
-		// * Concedii medicale din fonduri
+		// * Concedii medicale CM
 		writerCell = stat.getRow(14).getCell(5);
 		long valcm = notaContabila.getValCM();
 		writerCell.setCellValue(valcm);
 
-		// * Salarii datorate personalului
+		// * Concedii medicale din fonduri
 		writerCell = stat.getRow(15).getCell(5);
+		long valcmfonduri = notaContabila.getValCM();
+		writerCell.setCellValue(valcm);
+
+		// * Salarii datorate personalului
+		writerCell = stat.getRow(16).getCell(5);
 		long salDatorat = notaContabila.getSalariuDatorat();
 		writerCell.setCellValue(salDatorat);
 
 		// * Avans
-		writerCell = stat.getRow(21).getCell(5);
+		writerCell = stat.getRow(22).getCell(5);
 		long avans = retineriRepository.getAvansByLunaAndAnByIdsocietate(luna, an, idSocietate);
 		writerCell.setCellValue(avans);
 
 		// * CAS 25% angajat
-		writerCell = stat.getRow(22).getCell(5);
+		writerCell = stat.getRow(23).getCell(5);
 		long cas25 = notaContabila.getCas25() - Math.round(notaContabila.getValCM() * 0.25);
 		writerCell.setCellValue(cas25);
 
 		// * CASS 10% angajat
-		writerCell = stat.getRow(24).getCell(5);
+		writerCell = stat.getRow(25).getCell(5);
 		writerCell.setCellValue(notaContabila.getCass10() - Math.round(notaContabila.getValCM() * 0.065)); 
 
 		// * Impozit
-		writerCell = stat.getRow(25).getCell(5);
+		writerCell = stat.getRow(26).getCell(5);
 		long impozit = notaContabila.getImpozit();
 		writerCell.setCellValue(impozit);
 
 		// * CAM
-		writerCell = stat.getRow(32).getCell(5);
+		writerCell = stat.getRow(33).getCell(5);
 		long cam = notaContabila.getCam();
 		writerCell.setCellValue(cam);
 
 		// * Fond Handicap
-		writerCell = stat.getRow(38).getCell(5);
+		writerCell = stat.getRow(39).getCell(5);
 		writerCell.setCellValue(getFondHandicap(luna, an, societate));
 
 		/* ------ ENDING ------ **/

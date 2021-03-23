@@ -20,12 +20,16 @@ export default class Concedii extends React.Component {
 
       co: [],
       cm: [],
+      sarbatori: [],
+      zileNastere: [],
     };
   }
 
   componentDidMount() {
     this.getConcediiOdihna();
     this.getConcediiMedicale();
+    this.getSarbatori();
+    this.getZileNastere();
   }
 
   async getConcediiOdihna() {
@@ -42,7 +46,7 @@ export default class Concedii extends React.Component {
           case 'Concediu de odihnă':
             tipConcediu = 'C.O.';
             break;
-          
+
           case 'Concediu fără plată':
             tipConcediu = 'C.F.P';
             break;
@@ -50,11 +54,11 @@ export default class Concedii extends React.Component {
           case 'Concediu pentru situații speciale':
             tipConcediu = 'C. Sit. Spec.';
             break;
-          
+
           case 'Concediu pentru studii':
             tipConcediu = 'C. Studii';
             break;
-        
+
           default:
             tipConcediu = 'C.O.';
             break;
@@ -82,18 +86,59 @@ export default class Concedii extends React.Component {
           title: concediu.numeangajat + ' - C.M.',
           start: concediu.dela,
           end: endDate.toISOString().substring(0, 10),
-					color: '#a72c51',
+          color: '#a72c51',
         };
       });
       this.setState({ cm: cm || [] });
     }
   }
-	
-	tipuriConcedii = ['Concedii odihnă', 'Concedii medicale'];
+
+  async getSarbatori() {
+    var sarbatori = await axios
+      .get(`${server.address}/sarbatori/`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+    if (sarbatori) {
+      sarbatori = sarbatori.map((sarb) => {
+        var endDate = new Date(sarb.panala);
+        endDate.setDate(endDate.getDate() + 1);
+        return {
+          title: sarb.nume,
+          start: sarb.dela,
+          end: endDate.toISOString().substring(0, 10),
+          color: '#a72c51',
+        };
+      });
+      this.setState({ sarbatori: sarbatori || [] });
+    }
+  }
+
+  async getZileNastere() {
+    var angajati = await axios
+      .get(`${server.address}/angajat/isd=${this.state.socsel.id}`, { headers: authHeader() })
+      .then((res) => res.data)
+      .catch((err) => console.error(err));
+    if (angajati) {
+      angajati = angajati.map((ang) => {
+        return {
+          title: ang.nume + ' ' + ang.prenume,
+          date: ang.persoana.datanasterii.substring(0, 10),
+          color: '#a72c51',
+        };
+      });
+      this.setState({ zileNastere: angajati || [] });
+    }
+  }
+
+  tipuriConcedii = ['Concedii odihnă', 'Concedii medicale'];
 
   render() {
-
-		const concediiComponent = this.state.tip === 2 ? [...this.state.co, ...this.state.cm] : this.state.tip ? this.state.cm : this.state.co;
+    const concediiComponent =
+      this.state.tip === 2
+        ? [...this.state.co, ...this.state.cm]
+        : this.state.tip
+        ? this.state.cm
+        : this.state.co;
 
     return (
       <Card>
@@ -101,18 +146,20 @@ export default class Concedii extends React.Component {
           <Card.Title as="h5">Concedii</Card.Title>
 
           <Row>
-            <Form.Group as={Col} sm="6" className="mt-3">
-              <Form.Control
+            <Form as={Col} sm="6" className="mt-3">
+              {/* <Form.Control
                 as="select"
                 value={this.tipuriConcedii[this.state.tip]}
                 onChange={(e) => this.setState({ tip: e.target.options.selectedIndex })}
 								defaultValue="Toate"
-              >
-                <option>Concedii odihna</option>
-                <option>Concedii medicale</option>
-                <option>Toate</option>
-              </Form.Control>
-            </Form.Group>
+              > */}
+              <Form.Check custom type="switch" label="Sărbători" />
+              <Form.Check custom type="switch" label="Zile de naștere" />
+              <Form.Check custom type="switch" label="Concedii de odihnă" />
+              <Form.Check custom type="switch" label="Concedii medicale" />
+              <Form.Check custom type="switch" label="Concedii fără plată" />
+              {/* </Form.Control> */}
+            </Form>
           </Row>
         </Card.Header>
         <Card.Body>
