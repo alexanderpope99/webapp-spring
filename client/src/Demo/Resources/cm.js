@@ -303,7 +303,7 @@ function getZileFirma(dela, panala, cod, sarbatori) {
     if (nr_zile_lucratoare <= 3) return [nr_zile_lucratoare, 0, 0];
     zilefirma = 3 - getFreeDays(dela, addDays(dela, 2), sarbatori);
     zilefnuass = 0;
-    zilefaambp = nr_zile - zilefirma - getFreeDays(addDays(dela, 2), panala, sarbatori);
+    zilefaambp = nr_zile - zilefirma - getFreeDays(addDays(dela, 3), panala, sarbatori);
   }
   else if (
     cod === '51' ||

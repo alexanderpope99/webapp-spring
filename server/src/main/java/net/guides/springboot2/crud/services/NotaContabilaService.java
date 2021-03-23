@@ -18,11 +18,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.guides.springboot2.crud.dto.NotaContabila;
 import net.guides.springboot2.crud.dto.NotaContabilaDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Adresa;
 import net.guides.springboot2.crud.model.Contract;
 import net.guides.springboot2.crud.model.ParametriiSalariu;
+import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.model.Societate;
 import net.guides.springboot2.crud.repository.AdresaRepository;
 import net.guides.springboot2.crud.repository.ContractRepository;
@@ -48,6 +50,32 @@ public class NotaContabilaService {
 	private ParametriiSalariuService parametriiSalariuService;
 
 	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
+
+  public NotaContabila getNotaContabilaDTO(int luna, int an, int idsocietate) {
+    float cmFirma = 0f,
+          cmFonduri = 0f,
+          salariiDatorate = 0f;
+
+    float avans = 0f,
+          cas25 = 0f,
+          casCM = 0f,
+          cass10 = 0f,
+          impozit = 0f,
+          impozitCM = 0f;
+
+    List<RealizariRetineri> salarii = realizariRetineriRepository.findByLunaAndAnAndContract_Angajat_Societate_Id(luna, an, idsocietate);
+    for(RealizariRetineri salariu : salarii) {
+      cmFirma += salariu.getValcmsocietate();
+      cmFonduri += salariu.getValcmfnuass();
+      salariiDatorate += salariu.getTotaldrepturi();
+
+      avans += salariu.getRetineri().getAvansnet();
+    }
+    salariiDatorate -= cmFirma;
+
+
+    return new NotaContabila();
+  }
 
 	public int getFondHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
 		
