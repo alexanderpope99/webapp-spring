@@ -283,6 +283,7 @@ function getZileFirma(dela, panala, cod, sarbatori) {
 
   let nr_zile = (panala.getTime() - dela.getTime()) / (1000 * 3600 * 24) + 1;
   let nr_zile_lucratoare = nr_zile - getFreeDays(dela, panala, sarbatori);
+  
   let zilefirma = 0;
   let zilefnuass = 0;
   let zilefaambp = 0;
@@ -294,17 +295,17 @@ function getZileFirma(dela, panala, cod, sarbatori) {
     cod === '13' ||
     cod === '14'
   ) {
-    if (nr_zile_lucratoare <= 5) return [nr_zile_lucratoare, 0, 0];
+    if (nr_zile <= 5) return [nr_zile_lucratoare, 0, 0];
     zilefirma = 5 - getFreeDays(dela, addDays(dela, 4), sarbatori);
-    zilefnuass = nr_zile - 5 - getFreeDays(addDays(dela, 4), panala, sarbatori);
+    zilefnuass = nr_zile - 5 - getFreeDays(addDays(dela, 5), panala, sarbatori);
   }
-  if (cod === '02' || cod === '03' || cod === '04') {
+  else if (cod === '02' || cod === '03' || cod === '04') {
     if (nr_zile_lucratoare <= 3) return [nr_zile_lucratoare, 0, 0];
     zilefirma = 3 - getFreeDays(dela, addDays(dela, 2), sarbatori);
     zilefnuass = 0;
     zilefaambp = nr_zile - zilefirma - getFreeDays(addDays(dela, 2), panala, sarbatori);
   }
-  if (
+  else if (
     cod === '51' ||
     cod === '07' ||
     cod === '08' ||
