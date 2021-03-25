@@ -49,7 +49,7 @@ public class NotaContabilaService {
 	@Autowired
 	private ParametriiSalariuService parametriiSalariuService;
 
-	private String homeLocation = "server/src/main/java/net/guides/springboot2/crud/";
+	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public int getFondHandicap(int luna, int an, Societate societate) throws ResourceNotFoundException {
 
