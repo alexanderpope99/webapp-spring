@@ -39,6 +39,7 @@ class CMTabel extends React.Component {
     this.onChangeCodboala = this.onChangeCodboala.bind(this);
     this.onChangeProcent = this.onChangeProcent.bind(this);
     this.getBazaCalculCM = this.getBazaCalculCM.bind(this);
+    this.setNrZile = this.setNrZile.bind(this);
 
     this.state = {
       angajat: getAngajatSel(),
@@ -309,6 +310,18 @@ class CMTabel extends React.Component {
     this.setState({
       [tipzile]: nrzile,
       [tipindemnizatie]: indemnizatie,
+    });
+  }
+
+  onChangeContinuare(isContinuare) {
+    this.setState({
+      continuare: isContinuare,
+      zilefirma: 0,
+      zilefnuass: 0,
+      zilefaambp: 0,
+      indemnizatiefirma: 0,
+      indemnizatiefnuass: 0,
+      indemnizatiefaambp: 0,
     });
   }
 
@@ -778,18 +791,18 @@ class CMTabel extends React.Component {
   // uses [this.state.an, this.state.luna]
   async getBazaCalculCM() {
     if (!this.state.angajat || !this.state.dela || !this.state.panala) {
-      console.log('dela/panala neselectat');
       return;
     }
 
     let luna = this.state.dela.substring(5, 7);
 
+    const datainceput = this.state.datainceput ? `di=${this.state.datainceput}` : '';
     // get baza calcul + zile baza calcul + medie zilnica
     const baza_calcul = await axios
       .get(
         `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${
           this.state.an
-        }/${this.state.codboala.substring(0, 2)}`,
+        }/${this.state.codboala.substring(0, 2)}/${datainceput}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
@@ -797,8 +810,10 @@ class CMTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua baza calcul, nr zile și media zilnică\n' +
-            err.response.data.message,
+            'Nu am putut prelua baza calcul, nr zile și media zilnică' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (baza_calcul) {
@@ -914,7 +929,8 @@ class CMTabel extends React.Component {
                     label="Continuare"
                     checked={this.state.continuare}
                     onChange={(e) => {
-                      this.setState({ continuare: e.target.checked });
+                      // this.setState({ continuare: e.target.checked });
+                      this.onChangeContinuare(e.target.checked);
                     }}
                   />
                 </Form.Group>
@@ -1001,6 +1017,7 @@ class CMTabel extends React.Component {
                     {procentComponent}
                   </Form.Control>
                 </Form.Group>
+
                 <Row className="border rounded pt-3 pb-3 m-3">
                   <Form.Group id="bazacalcul" as={Col} md="6">
                     <Form.Label>Bază calcul (RON)</Form.Label>
@@ -1047,76 +1064,89 @@ class CMTabel extends React.Component {
                     <Button onClick={this.getBazaCalculCM}>Calculează automat</Button>
                   </Form.Group>
                 </Row>
-                <Form.Group id="zilefirma" as={Col} md="6">
-                  <Form.Label>Zile suportate de firmă</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    max="5"
-                    value={this.state.zilefirma}
-                    onChange={(e) => {
-                      // this.setState({ zilefirma: e.target.value });
-                      this.onChangeNrZile('zilefirma', 'indemnizatiefirma', e.target.value);
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="indemnizatiefirma" as={Col} md="6">
-                  <Form.Label>Indemnizație firmă</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    step="0.0001"
-                    value={this.state.indemnizatiefirma}
-                    onChange={(e) => {
-                      this.setState({ indemnizatiefirma: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="zilefnuass" as={Col} md="6">
-                  <Form.Label>Zile FNUASS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    value={this.state.zilefnuass}
-                    onChange={(e) => {
-                      // this.setState({ zilefnuass: e.target.value });
-                      this.onChangeNrZile('zilefnuass', 'indemnizatiefnuass', e.target.value);
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="indemnizatiefnuass" as={Col} md="6">
-                  <Form.Label>Indemnizație FNUASS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    value={this.state.indemnizatiefnuass}
-                    onChange={(e) => {
-                      this.setState({ indemnizatiefnuass: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="zilefaambp" as={Col} md="6">
-                  <Form.Label>Zile FAAMBP</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min="0"
-                    value={this.state.zilefaambp}
-                    onChange={(e) => {
-                      // this.setState({ zilefaambp: e.target.value });
-                      this.onChangeNrZile('zilefaambp', 'indemnizatiefaambp', e.target.value);
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="indemnizatiefaambp" as={Col} md="6">
-                  <Form.Label>Indemnizație FAAMBP</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={this.state.indemnizatiefaambp}
-                    onChange={(e) => {
-                      this.setState({ indemnizatiefaambp: e.target.value });
-                    }}
-                  />
-                </Form.Group>
+
+                <Row className="border rounded pt-3 pb-3 m-3">
+                  <Form.Group id="zilefirma" as={Col} md="6">
+                    <Form.Label>Zile suportate de firmă</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      max="5"
+                      value={this.state.zilefirma}
+                      onChange={(e) => {
+                        // this.setState({ zilefirma: e.target.value });
+                        this.onChangeNrZile('zilefirma', 'indemnizatiefirma', e.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="indemnizatiefirma" as={Col} md="6">
+                    <Form.Label>Indemnizație firmă</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      step="0.0001"
+                      value={this.state.indemnizatiefirma}
+                      onChange={(e) => {
+                        this.setState({ indemnizatiefirma: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="zilefnuass" as={Col} md="6">
+                    <Form.Label>Zile FNUASS</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      value={this.state.zilefnuass}
+                      onChange={(e) => {
+                        // this.setState({ zilefnuass: e.target.value });
+                        this.onChangeNrZile('zilefnuass', 'indemnizatiefnuass', e.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="indemnizatiefnuass" as={Col} md="6">
+                    <Form.Label>Indemnizație FNUASS</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      value={this.state.indemnizatiefnuass}
+                      onChange={(e) => {
+                        this.setState({ indemnizatiefnuass: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="zilefaambp" as={Col} md="6">
+                    <Form.Label>Zile FAAMBP</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      value={this.state.zilefaambp}
+                      onChange={(e) => {
+                        // this.setState({ zilefaambp: e.target.value });
+                        this.onChangeNrZile('zilefaambp', 'indemnizatiefaambp', e.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="indemnizatiefaambp" as={Col} md="6">
+                    <Form.Label>Indemnizație FAAMBP</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={this.state.indemnizatiefaambp}
+                      onChange={(e) => {
+                        this.setState({ indemnizatiefaambp: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-0" as={Col} md="6">
+                    <Button
+                      onClick={this.setNrZile}
+                      class="p-0 m-0"
+                      variant="link"
+                      disabled={this.state.continuare}
+                    >
+                      Recalculează zilele
+                    </Button>
+                  </Form.Group>
+                </Row>
                 <Form.Group id="codindemnizatie" as={Col} md="6">
                   <Form.Label>Cod indemnizație</Form.Label>
                   <Form.Control
