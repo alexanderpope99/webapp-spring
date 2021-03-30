@@ -264,6 +264,9 @@ public class MTAService {
 			// * Details 3
 			row.append(',');
 
+      // * not USED left intentionally blank
+      row.append(',');
+
 			// * Processing date [YYMMDD]
 			LocalDate today = LocalDate.now();
 			String yymmdd = String.valueOf(an).substring(2);

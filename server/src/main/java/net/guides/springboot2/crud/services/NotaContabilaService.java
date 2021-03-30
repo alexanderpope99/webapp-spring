@@ -89,6 +89,7 @@ public class NotaContabilaService {
 
     List<RealizariRetineri> salarii = realizariRetineriRepository.findByLunaAndAnAndContract_Angajat_Societate_Id(luna,
         an, societate.getId());
+
     for (RealizariRetineri salariu : salarii) {
       cmFirma += salariu.getValcmsocietate();
       cmFonduri += salariu.getValcmfnuass();
@@ -100,8 +101,10 @@ public class NotaContabilaService {
       impozit += salariu.getImpozit();
       contributieCAM += salariu.getCam();
     }
+    
     salariiDatorate -= cmFirma;
     casCM = Math.round(cmFirma * ps.getCas() / 100);
+    cas25 -= casCM;
     impozitCM = Math.round(cmFirma * ps.getImpozit() / 100);
     impozit -= impozitCM;
     fondHandicap = this.getFondHandicap(luna, an, societate);
