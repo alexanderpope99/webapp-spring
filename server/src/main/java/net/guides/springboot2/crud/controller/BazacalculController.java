@@ -47,9 +47,14 @@ public class BazacalculController {
 		return bazacalculRepository.findByAngajat_IdpersoanaOrderByAnDescLunaDesc(ida);
 	}
 
-	@GetMapping("cm/{ida}/mo={luna}&y={an}/{codboala}")
-	public BazaCalculCMDTO getBazaCalculCMDTO(@PathVariable("ida") int ida, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("codboala") String codboala) {
-		return bazaCalculService.getBazaCalculCMDTO(luna, an, ida, codboala);
+  @GetMapping("cm/{ida}/mo={luna}&y={an}/{codboala}")
+	public BazaCalculCMDTO getBazaCalculCMDTO(@PathVariable("ida") int ida, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("codboala") String codboala) throws ResourceNotFoundException {
+		return bazaCalculService.getBazaCalculCMDTO(luna, an, ida, codboala, null);
+	}
+
+	@GetMapping("cm/{ida}/mo={luna}&y={an}/{codboala}/di={datainceput}")
+	public BazaCalculCMDTO getBazaCalculCMDTOContinuare(@PathVariable("ida") int ida, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("codboala") String codboala, @PathVariable("datainceput") String datainceput) throws ResourceNotFoundException {
+		return bazaCalculService.getBazaCalculCMDTO(luna, an, ida, codboala, datainceput);
 	}
 
 	@GetMapping("ida={ida}/mo={luna}&y={an}")

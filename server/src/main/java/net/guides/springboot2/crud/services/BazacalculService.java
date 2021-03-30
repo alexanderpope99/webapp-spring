@@ -1,5 +1,6 @@
 package net.guides.springboot2.crud.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import net.guides.springboot2.crud.dto.BazacalculDTO;
 import net.guides.springboot2.crud.exception.ResourceNotFoundException;
 import net.guides.springboot2.crud.model.Angajat;
 import net.guides.springboot2.crud.model.Bazacalcul;
+import net.guides.springboot2.crud.model.CM;
 import net.guides.springboot2.crud.model.RealizariRetineri;
 import net.guides.springboot2.crud.repository.AngajatRepository;
 import net.guides.springboot2.crud.repository.BazacalculRepository;
@@ -22,6 +24,15 @@ public class BazacalculService {
 	private BazacalculRepository bazacalculRepository;
 	@Autowired
 	private AngajatRepository angajatRepository;
+
+  @Autowired
+  private AngajatService angajatService;
+
+  @Autowired
+  private ZileService zileService;
+
+  @Autowired
+  private CMService cmService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -97,7 +108,10 @@ public class BazacalculService {
 			return null;
 		}
 
-		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, (int) realizariRetineri.getZilelucrate(), (int) realizariRetineri.getSalariurealizat(), angajat);
+    int zileLucratoare = zileService.getZileLucratoareInLunaAnul(luna, an);
+    int salariuRealizat = realizariRetineri.getSalariurealizat() + realizariRetineri.getValco() + realizariRetineri.getValcm();
+
+		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, zileLucratoare, salariuRealizat, angajat);
 		return bazacalculRepository.save(bazaCalcul);
 	}
 
@@ -114,12 +128,22 @@ public class BazacalculService {
 		if (oldBazacalcul == null)
 			return this.saveBazacalcul(realizariRetineri);
 
-		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, realizariRetineri.getZilelucrate(), realizariRetineri.getSalariurealizat(), angajat);
+    int zileLucratoare = zileService.getZileLucratoareInLunaAnul(luna, an);
+    int salariuRealizat = realizariRetineri.getSalariurealizat() + realizariRetineri.getValco() + realizariRetineri.getValcm();
+
+		Bazacalcul bazaCalcul = new Bazacalcul(luna, an, zileLucratoare, salariuRealizat, angajat);
 		bazaCalcul.setId(oldBazacalcul.getId());
 		return bazacalculRepository.save(bazaCalcul);
 	}
 
-	public BazaCalculCMDTO getBazaCalculCMDTO(int luna, int an, int idangajat, String codboala) {
+	public BazaCalculCMDTO getBazaCalculCMDTO(int luna, int an, int idangajat, String codboala, String datainceput) throws ResourceNotFoundException {
+    // concediul e in continuare
+    if(datainceput != null) {
+      int idcontract = angajatService.findById(idangajat).getContract().getId();
+      // preia bazacalcul de la concediul care are [dela] == [datainceput] 
+      CM cmInitial = cmService.findByContract_IdAndDela(idcontract, LocalDate.parse(datainceput));
+      return new BazaCalculCMDTO(cmInitial.getBazacalcul(), cmInitial.getZilebazacalcul(), cmInitial.getMediezilnica());
+    }
 
 		List<Bazacalcul> bazeUltimele6Luni = this.getBazaCalculUltimele6Luni(luna, an, idangajat);
 

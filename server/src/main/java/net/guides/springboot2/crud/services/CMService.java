@@ -44,6 +44,10 @@ public class CMService {
 		return cmRepository.findByContract_Angajat_Societate_Id(id);
 	}
 
+  public CM findByContract_IdAndDela(int idcontract, LocalDate dela) throws ResourceNotFoundException {
+    return cmRepository.findByContract_IdAndDela(idcontract, dela).orElseThrow(() -> new ResourceNotFoundException("Nu exista concediu medical care incepe la " + dela.toString()));
+  }
+
 	public CMDTO save(CMDTO cmDTO) throws ResourceNotFoundException {
 		// convert from DTO to Entity
 		CM cm = modelMapper.map(cmDTO, CM.class);

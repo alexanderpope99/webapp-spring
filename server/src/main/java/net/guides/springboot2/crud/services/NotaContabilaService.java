@@ -171,6 +171,10 @@ public class NotaContabilaService {
     writerCell = stat.getRow(23).getCell(5);
     writerCell.setCellValue(notaContabila.getCas25());
 
+    // * CAS angajat CM
+    writerCell = stat.getRow(24).getCell(5);
+    writerCell.setCellValue(notaContabila.getCasCM());
+
     // * CASS 10% angajat
     writerCell = stat.getRow(25).getCell(5);
     writerCell.setCellValue(notaContabila.getCass10());
@@ -178,6 +182,10 @@ public class NotaContabilaService {
     // * Impozit
     writerCell = stat.getRow(26).getCell(5);
     writerCell.setCellValue(notaContabila.getImpozit());
+
+    // * Impozit CM
+    writerCell = stat.getRow(27).getCell(5);
+    writerCell.setCellValue(notaContabila.getImpozitCM());
 
     // * CAM
     writerCell = stat.getRow(33).getCell(5);

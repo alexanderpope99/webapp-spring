@@ -16,9 +16,6 @@ import javax.persistence.Table;
 public class Bazacalcul implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public Bazacalcul() {
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -40,6 +37,9 @@ public class Bazacalcul implements Serializable {
 	@JoinColumn(name = "idangajat")
 	private Angajat angajat;
 
+  public Bazacalcul() {
+	}
+
 	public Bazacalcul(int luna, int an, int zilelucrate, int salariurealizat, Angajat angajat) {
 		this.luna = luna;
 		this.an = an;
@@ -47,7 +47,6 @@ public class Bazacalcul implements Serializable {
 		this.salariurealizat = salariurealizat;
 		this.angajat = angajat;
 	}
-
 
 	public int getId() {
 		return this.id;
