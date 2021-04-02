@@ -1,0 +1,7 @@
+calcul automat baza calcul la CM:
+  zile lucrate = toate zilele lucratoare din luna
+  salariu realizat = salariurealizat(din stat) + valoare_co + valoare_cm
+
+daca e in continuare:
+  preia baza calcul din cm initial
+  zilele nu se mai calculeaza automat

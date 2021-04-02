@@ -2,6 +2,7 @@ package net.guides.springboot2.crud.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,6 @@ public interface CMRepository extends JpaRepository<CM, Integer> {
 	public List<CM> findByContract_IdAndDelaBetween(int idcontract, LocalDate inceputLuna, LocalDate sfarsitLuna);
 
 	public List<CM> findByContract_Angajat_Societate_Id(int idsocietate);
+
+  public Optional<CM> findByContract_IdAndDela(int idcontract, LocalDate dela);
 }

@@ -39,6 +39,7 @@ class CMTabel extends React.Component {
     this.onChangeCodboala = this.onChangeCodboala.bind(this);
     this.onChangeProcent = this.onChangeProcent.bind(this);
     this.getBazaCalculCM = this.getBazaCalculCM.bind(this);
+    this.setNrZile = this.setNrZile.bind(this);
 
     this.state = {
       angajat: getAngajatSel(),
@@ -226,7 +227,6 @@ class CMTabel extends React.Component {
   }
 
   setNrZile() {
-    // Math.round(this.state.zilefirma * baza_calcul.mediezilnica)
     let panala = this.state.panala;
     let dela = this.state.dela;
     var nr_zile = 0,
@@ -248,29 +248,37 @@ class CMTabel extends React.Component {
         this.state.codboala.substring(0, 2),
         this.state.sarbatori
       );
+
       if (this.state.mediezilnica) {
         indemnizatiefirma = Math.round(
-          (zilefirma * this.state.mediezilnica * this.state.procent) / 100
+          zilefirma * this.state.mediezilnica * (this.state.procent / 100)
         );
         indemnizatiefnuass = Math.round(
-          (zilefnuass * this.state.mediezilnica * this.state.procent) / 100
+          zilefnuass * this.state.mediezilnica * (this.state.procent / 100)
         );
         indemnizatiefaambp = Math.round(
-          (zilefaambp * this.state.mediezilnica * this.state.procent) / 100
+          zilefaambp * this.state.mediezilnica * (this.state.procent / 100)
         );
       }
     }
 
-    this.setState({
-      nr_zile: nr_zile,
-      nr_zile_weekend: nr_zile_weekend,
-      zilefirma: zilefirma,
-      zilefnuass: zilefnuass,
-      zilefaambp: zilefaambp,
-      indemnizatiefirma: indemnizatiefirma,
-      indemnizatiefnuass: indemnizatiefnuass,
-      indemnizatiefaambp: indemnizatiefaambp,
-    });
+    if (this.state.continuare) {
+      this.setState({
+        nr_zile: nr_zile,
+        nr_zile_weekend: nr_zile_weekend,
+      });
+    } else {
+      this.setState({
+        nr_zile: nr_zile,
+        nr_zile_weekend: nr_zile_weekend,
+        zilefirma: zilefirma,
+        zilefnuass: zilefnuass,
+        zilefaambp: zilefaambp,
+        indemnizatiefirma: indemnizatiefirma,
+        indemnizatiefnuass: indemnizatiefnuass,
+        indemnizatiefaambp: indemnizatiefaambp,
+      });
+    }
   }
 
   onChangeCodboala(cod) {
@@ -292,6 +300,29 @@ class CMTabel extends React.Component {
       },
       this.setNrZile
     );
+  }
+
+  onChangeNrZile(tipzile, tipindemnizatie, nrzile) {
+    const indemnizatie = Math.round(
+      nrzile * (this.state.mediezilnica || 0) * (this.state.procent / 100)
+    );
+
+    this.setState({
+      [tipzile]: nrzile,
+      [tipindemnizatie]: indemnizatie,
+    });
+  }
+
+  onChangeContinuare(isContinuare) {
+    this.setState({
+      continuare: isContinuare,
+      zilefirma: 0,
+      zilefnuass: 0,
+      zilefaambp: 0,
+      indemnizatiefirma: 0,
+      indemnizatiefnuass: 0,
+      indemnizatiefaambp: 0,
+    });
   }
 
   async getLuniInchise() {
@@ -642,10 +673,10 @@ class CMTabel extends React.Component {
         if (
           cm.dela
             ? cm.dela.includes(this.state.an) &&
-            (this.state.luna.nume !== 'Toate'
-              ? // eslint-disable-next-line eqeqeq
-              cm.dela.substring(5, 7) == this.state.luna.nr
-              : true)
+              (this.state.luna.nume !== 'Toate'
+                ? // eslint-disable-next-line eqeqeq
+                  cm.dela.substring(5, 7) == this.state.luna.nr
+                : true)
             : true
         ) {
           for (let key in cm) {
@@ -665,64 +696,63 @@ class CMTabel extends React.Component {
                 </tr>
               ) : (
                 <tr className="d-inline-flex flex-row justify-content-around">
-                    <Button
-                      variant="outline-secondary"
-                      className="ml-2 p-1 rounded-circle border-0 align-self-start"
-                      onClick={() => this.editCM(cm)}
-                    >
-                      <Edit3 size={20} />
-                    </Button>
-                    <PopupState variant="popover" popupId="demo-popup-popover">
-                      {(popupState) => (
-                        <div>
-                          <Button
-                            variant="outline-secondary"
-                            className="m-0 p-1 rounded-circle border-0 align-self-end"
-                            {...bindTrigger(popupState)}
-                          >
-                            <Trash2 size={20} />
-                          </Button>
-                          <Popover
-                            {...bindPopover(popupState)}
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'center',
-                            }}
-                          >
-                            <Box p={2}>
-                              <Typography>Sigur ștergeți concediul?</Typography>
-                              <Typography variant="caption">
-                                Datele nu mai pot fi recuperate
-                              </Typography>
-                              <br />
-                              <Button
-                                variant="outline-danger"
-                                onClick={() => {
-                                  popupState.close();
-                                  this.deleteCM(cm.id);
-                                }}
-                                className="mt-2 "
-                              >
-                                Da
-                              </Button>
-                              <Button
-                                variant="outline-persondary"
-                                onClick={popupState.close}
-                                className="mt-2"
-                              >
-                                Nu
-                              </Button>
-                            </Box>
-                          </Popover>
-                          </div>
-                      )}
-                    </PopupState>
+                  <Button
+                    variant="outline-secondary"
+                    className="ml-2 p-1 rounded-circle border-0 align-self-start"
+                    onClick={() => this.editCM(cm)}
+                  >
+                    <Edit3 size={20} />
+                  </Button>
+                  <PopupState variant="popover" popupId="demo-popup-popover">
+                    {(popupState) => (
+                      <div>
+                        <Button
+                          variant="outline-secondary"
+                          className="m-0 p-1 rounded-circle border-0 align-self-end"
+                          {...bindTrigger(popupState)}
+                        >
+                          <Trash2 size={20} />
+                        </Button>
+                        <Popover
+                          {...bindPopover(popupState)}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                        >
+                          <Box p={2}>
+                            <Typography>Sigur ștergeți concediul?</Typography>
+                            <Typography variant="caption">
+                              Datele nu mai pot fi recuperate
+                            </Typography>
+                            <br />
+                            <Button
+                              variant="outline-danger"
+                              onClick={() => {
+                                popupState.close();
+                                this.deleteCM(cm.id);
+                              }}
+                              className="mt-2 "
+                            >
+                              Da
+                            </Button>
+                            <Button
+                              variant="outline-persondary"
+                              onClick={popupState.close}
+                              className="mt-2"
+                            >
+                              Nu
+                            </Button>
+                          </Box>
+                        </Popover>
+                      </div>
+                    )}
+                  </PopupState>
                 </tr>
-              
               )}
               <th>{formatDate(cm.dela)}</th>
               <th>{formatDate(cm.panala)}</th>
@@ -761,17 +791,18 @@ class CMTabel extends React.Component {
   // uses [this.state.an, this.state.luna]
   async getBazaCalculCM() {
     if (!this.state.angajat || !this.state.dela || !this.state.panala) {
-      console.log('dela/panala neselectat');
       return;
     }
 
     let luna = this.state.dela.substring(5, 7);
 
+    const datainceput = this.state.datainceput ? `di=${this.state.datainceput}` : '';
     // get baza calcul + zile baza calcul + medie zilnica
     const baza_calcul = await axios
       .get(
-        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${this.state.an
-        }/${this.state.codboala.substring(0, 2)}`,
+        `${server.address}/bazacalcul/cm/${this.state.angajat.idpersoana}/mo=${luna}&y=${
+          this.state.an
+        }/${this.state.codboala.substring(0, 2)}/${datainceput}`,
         { headers: authHeader() }
       )
       .then((res) => res.data)
@@ -779,8 +810,10 @@ class CMTabel extends React.Component {
         this.setState({
           showToast: true,
           toastMessage:
-            'Nu am putut prelua baza calcul, nr zile și media zilnică\n' +
-            err.response.data.message,
+            'Nu am putut prelua baza calcul, nr zile și media zilnică' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
         })
       );
     if (baza_calcul) {
@@ -790,18 +823,18 @@ class CMTabel extends React.Component {
         mediezilnica: baza_calcul.mediezilnica.toFixed(4),
         indemnizatiefirma: Math.round(
           this.state.zilefirma *
-          Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
-          (this.state.procent / 100)
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
+            (this.state.procent / 100)
         ),
         indemnizatiefnuass: Math.round(
           this.state.zilefnuass *
-          Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
-          (this.state.procent / 100)
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(4) *
+            (this.state.procent / 100)
         ),
         indemnizatiefaambp: Math.round(
           this.state.zilefaambp *
-          Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
-          (this.state.procent / 100)
+            Number.parseFloat(baza_calcul.mediezilnica).toFixed(2) *
+            (this.state.procent / 100)
         ),
       });
     }
@@ -896,7 +929,8 @@ class CMTabel extends React.Component {
                     label="Continuare"
                     checked={this.state.continuare}
                     onChange={(e) => {
-                      this.setState({ continuare: e.target.checked });
+                      // this.setState({ continuare: e.target.checked });
+                      this.onChangeContinuare(e.target.checked);
                     }}
                   />
                 </Form.Group>
@@ -983,6 +1017,7 @@ class CMTabel extends React.Component {
                     {procentComponent}
                   </Form.Control>
                 </Form.Group>
+
                 <Row className="border rounded pt-3 pb-3 m-3">
                   <Form.Group id="bazacalcul" as={Col} md="6">
                     <Form.Label>Bază calcul (RON)</Form.Label>
@@ -1029,77 +1064,93 @@ class CMTabel extends React.Component {
                     <Button onClick={this.getBazaCalculCM}>Calculează automat</Button>
                   </Form.Group>
                 </Row>
-                <Form.Group id="zilefirma" as={Col} md="6">
-                  <Form.Label>Zile suportate de firmă</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.zilefirma}
-                    onChange={(e) => {
-                      this.setState({ zilefirma: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="indemnizatiefirma" as={Col} md="6">
-                  <Form.Label>Indemnizație firmă</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.indemnizatiefirma}
-                    onChange={(e) => {
-                      this.setState({ indemnizatiefirma: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="zilefnuass" as={Col} md="6">
-                  <Form.Label>Zile FNUASS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.zilefnuass}
-                    onChange={(e) => {
-                      this.setState({ zilefnuass: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="indemnizatiefnuass" as={Col} md="6">
-                  <Form.Label>Indemnizație FNUASS</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.indemnizatiefnuass}
-                    onChange={(e) => {
-                      this.setState({ indemnizatiefnuass: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="zilefaambp" as={Col} md="6">
-                  <Form.Label>Zile FAAMBP</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.zilefaambp}
-                    onChange={(e) => {
-                      this.setState({ zilefaambp: e.target.value });
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group id="indemnizatiefaambp" as={Col} md="6">
-                  <Form.Label>Indemnizație FAAMBP</Form.Label>
-                  <Form.Control
-                    type="number"
-                    disabled
-                    value={this.state.indemnizatiefaambp}
-                    onChange={(e) => {
-                      this.setState({ indemnizatiefaambp: e.target.value });
-                    }}
-                  />
-                </Form.Group>
+
+                <Row className="border rounded pt-3 pb-3 m-3">
+                  <Form.Group id="zilefirma" as={Col} md="6">
+                    <Form.Label>Zile suportate de firmă</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      max="5"
+                      value={this.state.zilefirma}
+                      onChange={(e) => {
+                        // this.setState({ zilefirma: e.target.value });
+                        this.onChangeNrZile('zilefirma', 'indemnizatiefirma', e.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="indemnizatiefirma" as={Col} md="6">
+                    <Form.Label>Indemnizație firmă</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      step="0.0001"
+                      value={this.state.indemnizatiefirma}
+                      onChange={(e) => {
+                        this.setState({ indemnizatiefirma: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="zilefnuass" as={Col} md="6">
+                    <Form.Label>Zile FNUASS</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      value={this.state.zilefnuass}
+                      onChange={(e) => {
+                        // this.setState({ zilefnuass: e.target.value });
+                        this.onChangeNrZile('zilefnuass', 'indemnizatiefnuass', e.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="indemnizatiefnuass" as={Col} md="6">
+                    <Form.Label>Indemnizație FNUASS</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      value={this.state.indemnizatiefnuass}
+                      onChange={(e) => {
+                        this.setState({ indemnizatiefnuass: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="zilefaambp" as={Col} md="6">
+                    <Form.Label>Zile FAAMBP</Form.Label>
+                    <Form.Control
+                      type="number"
+                      min="0"
+                      value={this.state.zilefaambp}
+                      onChange={(e) => {
+                        // this.setState({ zilefaambp: e.target.value });
+                        this.onChangeNrZile('zilefaambp', 'indemnizatiefaambp', e.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group id="indemnizatiefaambp" as={Col} md="6">
+                    <Form.Label>Indemnizație FAAMBP</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={this.state.indemnizatiefaambp}
+                      onChange={(e) => {
+                        this.setState({ indemnizatiefaambp: e.target.value });
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-0" as={Col} md="6">
+                    <Button
+                      onClick={this.setNrZile}
+                      class="p-0 m-0"
+                      variant="link"
+                      disabled={this.state.continuare}
+                    >
+                      Recalculează zilele
+                    </Button>
+                  </Form.Group>
+                </Row>
                 <Form.Group id="codindemnizatie" as={Col} md="6">
                   <Form.Label>Cod indemnizație</Form.Label>
                   <Form.Control
                     type="text"
-                    // disabled
                     value={this.state.codindemnizatie}
                     onChange={(e) => {
                       this.setState({ codindemnizatie: e.target.value });
