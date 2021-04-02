@@ -42,19 +42,24 @@ import net.guides.springboot2.crud.repository.SocietateRepository;
 
 @Service
 public class FoaiePontajService {
-	@Autowired
-	private RealizariRetineriService realizariRetineriService;
-	@Autowired
-	private ZileService zileService;
-	@Autowired
-	private SarbatoriService sarbatoriService;
+
+	private final RealizariRetineriService realizariRetineriService;
+	private final ZileService zileService;
+	private final SarbatoriService sarbatoriService;
+
+	private final SocietateRepository societateRepository;
+	private final AngajatRepository angajatRepository;
 
 	@Autowired
-	private SocietateRepository societateRepository;
-	@Autowired
-	private AngajatRepository angajatRepository;
+	public FoaiePontajService(RealizariRetineriService realizariRetineriService, ZileService zileService, SarbatoriService sarbatoriService, SocietateRepository societateRepository, AngajatRepository angajatRepository) {
+		this.realizariRetineriService = realizariRetineriService;
+		this.zileService = zileService;
+		this.sarbatoriService = sarbatoriService;
+		this.societateRepository = societateRepository;
+		this.angajatRepository = angajatRepository;
+	}
 
-	private String homeLocation = "src/main/java/net/guides/springboot2/crud/";
+	private final String homeLocation = "src/main/java/net/guides/springboot2/crud/";
 
 	public boolean createFoaiePontaj(int luna, int an, int idsocietate, int userID)
 			throws IOException, ResourceNotFoundException {
@@ -94,6 +99,7 @@ public class FoaiePontajService {
 				for (LocalDate sarbatoare : sarbatori) {
 					if (sarbatoare.compareTo(_zi) == 0) {
 						ziLibera[i] = true;
+						break;
 					}
 				}
 			}
