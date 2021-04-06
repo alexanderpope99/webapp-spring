@@ -227,6 +227,7 @@ public class RealizariRetineriService {
 		rr.setValco(Math.round(valCO));
 		rr.setZilecontract(zileContract);
 		rr.setConeefectuat(coNeefectuat);
+    rr.setSalariudebaza(contract.getSalariutarifar());
 
 		return rr;
 	} // ! END OF calcRealizariRetineri
@@ -251,6 +252,7 @@ public class RealizariRetineriService {
 		return recalcRealizariRetineri(rrDetails.getLuna(), rrDetails.getAn(), rrDetails.getIdcontract(), rrDetails.getPrimaBruta(), rrDetails.getNrTichete(), rrDetails.getTotalOreSuplimentare(), rrDetails.getCoNeefectuat());
 	}
 
+  // wrapper
 	public RealizariRetineri recalcRealizariRetineri(int luna, int an, int idcontract) throws ResourceNotFoundException {
 		return this.recalcRealizariRetineri(luna, an, idcontract, -1, -1, -1, 0);
 	}

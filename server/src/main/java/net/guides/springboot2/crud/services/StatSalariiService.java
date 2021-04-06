@@ -95,6 +95,7 @@ public class StatSalariiService {
 			else if (angajatiScutitiImpozit == 2)
 				angajati = angajatRepository.findBySocietate_IdAndContract_CalculdeduceriAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate, false);
 
+      // filter by ultimazilucru
 			angajati.removeIf(angajat -> {
 				LocalDate ultimaZiLucru = angajat.getContract().getUltimazilucru();
 				if (ultimaZiLucru != null) {
@@ -105,7 +106,18 @@ public class StatSalariiService {
 					else
 						return false;
 				} else
-					return false;
+            return false;
+			});
+
+      // filter by data inceput activitate
+      angajati.removeIf(angajat -> {
+				LocalDate primaZiLucru = angajat.getContract().getDataincepere();
+        if (primaZiLucru.getYear() > an)
+          return true;
+        else if (primaZiLucru.getYear() == an)
+          return primaZiLucru.getMonthValue() > luna;
+        else
+          return false;
 			});
 
 			String statTemplateLocation = homeLocation + "/templates";
@@ -205,9 +217,9 @@ public class StatSalariiService {
 				writerCell.setCellValue(contract.getNr());
 
 				// * SALARIU
-				salariuWriter = row1.createCell(4); // salariu din contract
+				salariuWriter = row1.createCell(4); // salariu din contract in momentul in care s-a calculat
 				salariuWriter.setCellStyle(salariuStyle);
-				salariuWriter.setCellValue(contract.getSalariutarifar());
+				salariuWriter.setCellValue(realizariRetineri.getSalariudebaza());
 				salariuWriter = row2.createCell(4); // sume incluse ...
 				salariuWriter.setCellValue(0);
 				salariuWriter = row3.createCell(4); // spor weekend
@@ -1062,9 +1074,9 @@ public class StatSalariiService {
 			writerCell.setCellValue(contract.getNr());
 
 			// * SALARIU
-			salariuWriter = row1.getCell(4); // salariu din contract
+			salariuWriter = row1.getCell(4); // salariu din contract in momentul in care s-a calculat
 			salariuWriter.setCellStyle(salariuStyle);
-			salariuWriter.setCellValue(contract.getSalariutarifar());
+			salariuWriter.setCellValue(realizariRetineri.getSalariudebaza());
 			salariuWriter = row2.getCell(4); // sume incluse ...
 			salariuWriter.setCellValue(0);
 			salariuWriter = row3.getCell(4); // spor weekend

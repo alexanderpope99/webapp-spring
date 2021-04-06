@@ -34,6 +34,8 @@ public class RealizariRetineri implements Serializable {
 	private Integer luna;
 	@Column(name = "an", nullable = false)
 	private Integer an;
+  @Column(name ="salariudebaza")
+  private Integer salariudebaza;
 	@Column(name = "nrtichete", nullable = false)
 	private Integer nrtichete = 0;
 	@Column(name = "zileco", nullable = false)
@@ -535,6 +537,16 @@ public class RealizariRetineri implements Serializable {
 	public void setConeefectuat(Integer coneefectuat) {
 		this.coneefectuat = coneefectuat;
 	}
+
+  public Integer getSalariudebaza() {
+    if(salariudebaza != null)
+      return salariudebaza;
+    else return contract.getSalariutarifar();
+  } // exista pt. a pastra in state salariul in cazul in care se modifica salariul din contract.
+
+  public void setSalariudebaza(Integer salariudebaza) {
+    this.salariudebaza = salariudebaza;
+  }
 
 	// ! OTHER
 

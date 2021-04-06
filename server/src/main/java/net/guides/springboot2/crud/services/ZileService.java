@@ -128,7 +128,7 @@ public class ZileService {
 					return (int) getZileLucratoareInInterval(dataincepere, ultimaZiLucru) - 1;
 				}
 				// contractul se termina in luna, an
-				return (int) getZileLucratoareInInterval(primaZiLunaAn, ultimaZiLucru) - 1;
+				return (int) getZileLucratoareInInterval(primaZiLunaAn, ultimaZiLucru);
 			}
 			// contractul s-a terminat deja
 			else if (ultimaZiLucru.compareTo(primaZiLunaAn.plusMonths(1)) < 0)
