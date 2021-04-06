@@ -328,7 +328,7 @@ class RealizariRetineriView extends React.Component {
         functie: contract.functie || 0,
         duratazilucru: contract.normalucru || 0,
         normalucru: data.norma || 0, // zile lucratoare in luna respectiva
-        salariubrut: contract.salariutarifar || 0,
+        salariubrut: data.salariudebaza || 0,
         orelucrate: data.orelucrate || 0,
         salariupezi: data.salariupezi || 0,
         salariupeora: data.salariupeora || 0,
