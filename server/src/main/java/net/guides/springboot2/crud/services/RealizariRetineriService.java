@@ -227,7 +227,8 @@ public class RealizariRetineriService {
 		rr.setValco(Math.round(valCO));
 		rr.setZilecontract(zileContract);
 		rr.setConeefectuat(coNeefectuat);
-    rr.setSalariudebaza(contract.getSalariutarifar());
+		rr.setSalariudebaza(contract.getSalariutarifar());
+		rr.setFunctie(contract.getFunctie());
 
 		return rr;
 	} // ! END OF calcRealizariRetineri
