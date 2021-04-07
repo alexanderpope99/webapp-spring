@@ -555,6 +555,8 @@ public class RealizariRetineri implements Serializable {
     }
 
     public String getFunctie() {
+        if(functie == null)
+            return contract.getFunctie();
         return functie;
     }
 

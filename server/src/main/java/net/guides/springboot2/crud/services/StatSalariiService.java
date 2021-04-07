@@ -208,7 +208,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(persoana.getNume() + " " + persoana.getPrenume());
 				functieWriter = row2.createCell(1); // functie
 				functieWriter.setCellStyle(functieStyle);
-				functieWriter.setCellValue(contract.getFunctie());
+				functieWriter.setCellValue(realizariRetineri.getFunctie());
 				writerCell = row3.createCell(1); // cnp
 				writerCell.setCellValue(persoana.getCnp());
 

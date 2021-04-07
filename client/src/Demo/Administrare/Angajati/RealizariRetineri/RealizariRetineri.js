@@ -371,7 +371,7 @@ class RealizariRetineri extends React.Component {
       this.setState({
         an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
         luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
-        functie: contract.functie || 0,
+        functie: data.functie || '',
         duratazilucru: contract.normalucru || 0,
         salariubrut: contract.salariutarifar || 0,
         idcontract: contract.id || 0,
@@ -394,7 +394,7 @@ class RealizariRetineri extends React.Component {
         //* realizari
         an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
         luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
-        functie: contract.functie || 0,
+        functie: data.functie || '',
         duratazilucru: contract.normalucru || 0,
         normalucru: data.norma || 0, // zile lucratoare in luna respectiva
         salariubrut: data.salariudebaza || 0,
