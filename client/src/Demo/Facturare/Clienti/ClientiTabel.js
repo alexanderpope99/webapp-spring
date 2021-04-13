@@ -24,6 +24,11 @@ export default class ClientiTabel extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
+    if(!getSocSel()) {
+      window.location.href = '/dashboard/societati';
+      return;
+    }
+
     this.state = {
       socsel: getSocSel(),
 

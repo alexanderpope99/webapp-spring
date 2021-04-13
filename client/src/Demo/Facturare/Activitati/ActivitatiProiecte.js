@@ -16,6 +16,11 @@ export default class Facturi extends React.Component {
     this.tabelActivitati = React.createRef();
     this.tabelProiecte = React.createRef();
 
+    if(!getSocSel()) {
+      window.location.href = '/dashboard/societati';
+      return;
+    }
+
     this.state = {
       socsel: getSocSel(),
 

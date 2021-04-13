@@ -25,6 +25,11 @@ export default class CaieteTabel extends React.Component {
     this.showError = this.showError.bind(this);
     this.renderTable = this.renderTable.bind(this);
 
+    if(!getSocSel()) {
+      window.location.href = '/dashboard/societati';
+      return;
+    }
+
     this.state = {
       showToast: false,
       toastMessage: '',

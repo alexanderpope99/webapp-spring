@@ -33,6 +33,11 @@ class FacturiTabel extends React.Component {
     this.changeSortOrder = this.changeSortOrder.bind(this);
     this.getStatusColor = this.getStatusColor.bind(this);
 
+    if(!getSocSel()) {
+      window.location.href = '/dashboard/societati';
+      return;
+    }
+
     this.state = {
       socsel: getSocSel(),
       factura: [],

@@ -42,6 +42,11 @@ class FacturiAprobatorTabel extends React.Component {
     this.getStatusColor = this.getStatusColor.bind(this);
     this.exitCloseApprover = this.exitCloseApprover.bind(this);
 
+    if(!getSocSel()) {
+      window.location.href = '/dashboard/societati';
+      return;
+    }
+
     this.state = {
       socsel: getSocSel(),
       factura: [],
