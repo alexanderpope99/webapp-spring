@@ -39,4 +39,8 @@ public class Role implements Serializable {
 	public void setName(ERole name) {
 		this.name = name;
 	}
+
+  public boolean is(Role role) {
+  return this.name == role.name;
+  }
 }

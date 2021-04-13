@@ -1,5 +1,7 @@
 package net.guides.springboot2.crud.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +11,12 @@ import net.guides.springboot2.crud.repository.RoleRepository;
 
 @Service
 public class RoleService {
+	private final RoleRepository roleRepository;
+
 	@Autowired
-	private RoleRepository roleRepository;
+	public RoleService(RoleRepository roleRepository) {
+		this.roleRepository = roleRepository;
+	}
 
 	public void init() {
 		if (roleRepository.count() == 0) {
@@ -23,7 +29,14 @@ public class RoleService {
 	}
 
 	public void addOperator() {
-		if(roleRepository.count() < 5)
-			roleRepository.save(new Role(ERole.ROLE_OPERATOR));
+		// if(roleRepository.count() < 5)
+		// 	roleRepository.save(new Role(ERole.ROLE_OPERATOR));
+		List<Role> roles = roleRepository.findAll();
+    Role operator = new Role(ERole.ROLE_OPERATOR);
+    for(Role role : roles) {
+      if(role.is(operator))
+        return;
+    }
+    roleRepository.save(operator);
 	}
 }

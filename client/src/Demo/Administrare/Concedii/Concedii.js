@@ -29,7 +29,7 @@ export default class Concedii extends React.Component {
     this.getConcediiOdihna();
     this.getConcediiMedicale();
     this.getSarbatori();
-    this.getZileNastere();
+    // this.getZileNastere();
   }
 
   async getConcediiOdihna() {
@@ -115,7 +115,7 @@ export default class Concedii extends React.Component {
 
   async getZileNastere() {
     var angajati = await axios
-      .get(`${server.address}/angajat/isd=${this.state.socsel.id}`, { headers: authHeader() })
+      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
       .then((res) => res.data)
       .catch((err) => console.error(err));
     if (angajati) {
