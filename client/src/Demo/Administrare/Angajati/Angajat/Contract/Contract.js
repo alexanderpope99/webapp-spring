@@ -159,7 +159,7 @@ class Contract extends React.Component {
       modalMessage: '',
       showSuspendare: false,
       showSuspendare2: false,
-    });
+    }, this.props.scrollToTopSmooth);
   }
 
   getNumeNorma(nrOre) {

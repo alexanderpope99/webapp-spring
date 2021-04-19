@@ -121,14 +121,14 @@ public class ZileService {
 		LocalDate primaZiLunaAn = LocalDate.of(an, luna, 1);
 
 		if (ultimaZiLucru != null) {
-			// daca contractul incepe in luna, an
+			// daca contractul se termina in luna, an
 			if (ultimaZiLucru.getMonthValue() == luna && ultimaZiLucru.getYear() == an) {
-				// daca contractul incepe si se termina in aceeasi luna
+				// daca contractul se si termina in aceeasi luna
 				if (dataincepere.getMonthValue() == luna && dataincepere.getYear() == an) {
 					return (int) getZileLucratoareInInterval(dataincepere, ultimaZiLucru) - 1;
 				}
-				// contractul se termina in luna, an
-				return (int) getZileLucratoareInInterval(primaZiLunaAn, ultimaZiLucru);
+
+				return (int) getZileLucratoareInInterval(primaZiLunaAn, ultimaZiLucru) - 1;
 			}
 			// contractul s-a terminat deja
 			else if (ultimaZiLucru.compareTo(primaZiLunaAn.plusMonths(1)) < 0)

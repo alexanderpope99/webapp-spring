@@ -73,7 +73,7 @@ public class FacturaService {
 		return facturaRepository.findNumarFactura();
 	}
 
-	public Factura save(Factura newFactura) throws ResourceNotFoundException {
+	public Factura save(Factura newFactura) {
 		for (Produs produs : newFactura.getProduse()) {
 			produs.setFactura(newFactura);
 		}
