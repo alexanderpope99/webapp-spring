@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { Card, Row, Col, Form } from 'react-bootstrap';
+import { Card, Form, Row, Col } from 'react-bootstrap';
 
 import { server } from '../../Resources/server-address';
 import authHeader from '../../../services/auth-header';
@@ -106,67 +106,55 @@ export default class Concedii extends React.Component {
           title: sarb.nume,
           start: sarb.dela,
           end: endDate.toISOString().substring(0, 10),
-          color: '#a72c51',
+          display: 'background'
         };
       });
       this.setState({ sarbatori: sarbatori || [] });
     }
   }
 
-  async getZileNastere() {
-    var angajati = await axios
-      .get(`${server.address}/angajat/ids=${this.state.socsel.id}`, { headers: authHeader() })
-      .then((res) => res.data)
-      .catch((err) => console.error(err));
-    if (angajati) {
-      angajati = angajati.map((ang) => {
-        return {
-          title: ang.nume + ' ' + ang.prenume,
-          date: ang.persoana.datanasterii.substring(0, 10),
-          color: '#a72c51',
-        };
-      });
-      this.setState({ zileNastere: angajati || [] });
-    }
+  onChangeTip(e) {
+    console.log(e.target.selectedIndex);
+
   }
 
-  tipuriConcedii = ['Concedii odihnă', 'Concedii medicale'];
+  tipuriConcediu = ['Concedii Odihnă', 'Concedii Medicale', 'Toate'];
 
   render() {
+    // tip: 2 = all, 1 = cm, 0 = co
     const concediiComponent =
       this.state.tip === 2
         ? [...this.state.co, ...this.state.cm]
         : this.state.tip
-        ? this.state.cm
-        : this.state.co;
+          ? this.state.cm
+          : this.state.co;
+      concediiComponent.push(...this.state.sarbatori);
 
     return (
       <Card>
         <Card.Header>
           <Card.Title as="h5">Concedii</Card.Title>
-
-          <Row>
-            <Form as={Col} sm="6" className="mt-3">
-              {/* <Form.Control
-                as="select"
-                value={this.tipuriConcedii[this.state.tip]}
-                onChange={(e) => this.setState({ tip: e.target.options.selectedIndex })}
-								defaultValue="Toate"
-              > */}
-              <Form.Check custom type="switch" label="Sărbători" />
-              <Form.Check custom type="switch" label="Zile de naștere" />
-              <Form.Check custom type="switch" label="Concedii de odihnă" />
-              <Form.Check custom type="switch" label="Concedii medicale" />
-              <Form.Check custom type="switch" label="Concedii fără plată" />
-              {/* </Form.Control> */}
-            </Form>
-          </Row>
         </Card.Header>
         <Card.Body>
+          <Row>
+            <Col md="3">
+              <Form.Group>
+                <Form.Label>Tip Concediu</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.tipuriConcediu[this.state.tip]}
+                  onChange={(e) => this.setState({ tip: e.target.selectedIndex })}
+                >
+                  <option>Concedii Odihnă</option>
+                  <option>Concedii Medicale</option>
+                  <option>Toate</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
             initialView="dayGridMonth"
-            // 0 is default, will go to ConcediiOdihna, 1 is the other value -> goes to ConcediiMedicale
             events={concediiComponent}
             headerToolbar={{
               left: 'prevYear,prev,next,nextYear,today',
@@ -179,7 +167,7 @@ export default class Concedii extends React.Component {
             showNonCurrentDates={false}
           />
         </Card.Body>
-      </Card>
+      </Card >
     );
   }
 }
