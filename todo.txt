@@ -1,40 +1,3 @@
-########### DE MUTAT BAZA DE DATE DIN SQL SERVER IN POSTGRES ###########
-Pasi de urmat:
-	0. In SQL Server -> Tools -> Option -> Query Results -> SQL Server -> Results to grid -> ☑ Include column headers...
-
-	1. Ruleaza script-ul 'createnewtables.sql' in sql server:
-			New Query -> paste createnewtables.sql
-
-	2. Ruleaza script-ul 'createcsv.sql'  in sql server (de preferat cate un select pe rand)
-		2.1 Click dreapta pe fereastra cu tabel pentru export in csv -> Save results as
-
-	3. Baza de date trebuie sa nu aiba alte inregistrari in tabelele care se importa
-
-	4. Importa datele din csv in postgres in aceeasi ordine in care au fost create csv-urile: {
-		[
-			Import/Export: Import
-			Select .csv file
-			Header: Yes,
-			Delimiter: ;
-		]
-
-		4.0: Sterge NULL din toate csv-urile
-
-		4.1: Adrese
-		4.2: Societati
-		4.3: Acte de identitate
-		4.4: Persoane
-		4.5: Cont bancar -> in postgres->import->columns :: doar [id, iban]
-		4.6: Contracte
-		4.7: Angajati -> in postgres->import->columns :: doar [idpersoana, idcontract, idsocietate]
-		4.8: Concedii odihna
-		4.9: Concedii medicale
-		4.10: Pers. intretinere
-	}
-
-	6. Baza de date se initializeaza automat (sarbatori, param. sal., etc.) cand se creeaza primul user
-
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DUMMY DATA FOR CONSISTENCY: 
 
@@ -49,17 +12,7 @@ SOARE CAMELIA - CO 4-10, CM 11-17 TUBERCULOZA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TODO: {
-	Nu se poate modifica un concediu dintr-o luna închisă:
-		in frontend: tabel concedii: 
-			- se iau toate luniile inchise
-			- se face map prin toate concediile
-				- se adauga o noua proprietate: un boolean pt a determina daca concediul este sau nu intr-o luna inchisa
-				- daca vreun concediu are dela/panala in luna inchisa: 
-				{
-					- apare un buton Eye in loc de cele 2 butoane de edit/delete
-					- toate campurile sunt disabled
-					- butonul este disabled
-				}
+	IN MTA: doar daca SALARIU > 0
 }
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
