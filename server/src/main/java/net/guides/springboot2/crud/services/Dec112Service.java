@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -66,6 +67,31 @@ public class Dec112Service {
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 		if (angajati.isEmpty())
 			throw new ResourceNotFoundException("Societatea nu are angajați");
+
+          // filter by ultimazilucru
+			angajati.removeIf(angajat -> {
+				LocalDate ultimaZiLucru = angajat.getContract().getUltimazilucru();
+				if (ultimaZiLucru != null) {
+					if (ultimaZiLucru.getYear() < an)
+						return true;
+					else if (ultimaZiLucru.getYear() == an)
+						return ultimaZiLucru.getMonthValue() < luna;
+					else
+						return false;
+				} else
+            return false;
+			});
+
+      // filter by data inceput activitate
+      angajati.removeIf(angajat -> {
+				LocalDate primaZiLucru = angajat.getContract().getDataincepere();
+        if (primaZiLucru.getYear() > an)
+          return true;
+        else if (primaZiLucru.getYear() == an)
+          return primaZiLucru.getMonthValue() > luna;
+        else
+          return false;
+			});
 
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 		try {
