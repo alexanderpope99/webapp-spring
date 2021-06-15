@@ -206,10 +206,22 @@ public class COService {
 		return zileC(luna, an, cs);
 	}
 
+	public int getZileCSLucratoare(int luna, int an, int idcontract) {
+		List<CO> cs = coRepository.findByContract_IdAndTip(idcontract, "Concediu pentru studii");
+
+		return zileCLucratoare(luna, an, cs);
+	}
+
 	public int getZileST(int luna, int an, int idcontract) {
 		List<CO> st = coRepository.findByContract_IdAndTip(idcontract, "Concediu pentru situații speciale");
 
-		return zileC(luna, an, st);
+		return zileCLucratoare(luna, an, st);
+	}
+
+	public int getZileSTLucratoare(int luna, int an, int idcontract) {
+		List<CO> st = coRepository.findByContract_IdAndTip(idcontract, "Concediu pentru situații speciale");
+
+		return zileCLucratoare(luna, an, st);
 	}
 
 	public int getZileCO(int luna, int an, int idcontract) {

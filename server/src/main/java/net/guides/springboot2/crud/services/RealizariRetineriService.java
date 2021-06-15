@@ -167,11 +167,14 @@ public class RealizariRetineriService {
 
 		int zileCO = 0, zileCOLucratoare = 0;
 		int zileCFP = 0, zileCFPLucratoare = 0;
+		int zileCS = 0, zileST = 0;
 		if (zileCOTotal > 0) {
 			zileCO = coService.getZileCO(luna, an, idcontract);
 			zileCOLucratoare = coService.getZileCOLucratoare(luna, an, idcontract);
 			zileCFP = coService.getZileCFP(luna, an, idcontract);
 			zileCFPLucratoare = coService.getZileCFPLucratoare(luna, an, idcontract);
+			zileCS = coService.getZileCSLucratoare(luna, an ,idcontract);
+			zileST = coService.getZileSTLucratoare(luna, an, idcontract);
 		}
 		int zileCM = cmService.getZileCM(luna, an, idcontract);
 		int valCM = 0, zileCMLucratoare = 0;
@@ -187,7 +190,7 @@ public class RealizariRetineriService {
 		int norma = zileService.getZileLucratoareInLunaAnul(luna, an);
 		int duratazilucru = contract.getNormalucru();
 
-		int zileLucrate = zileContract - zileCOLucratoare - zileCMLucratoare - zileCFPLucratoare;
+		int zileLucrate = zileContract - zileCOLucratoare - zileCMLucratoare - zileCFPLucratoare - zileST - zileCS;
 		int oreLucrate = zileLucrate * duratazilucru;
 
 		float salariuPeZi = (float) contract.getSalariutarifar() / norma;
@@ -229,6 +232,8 @@ public class RealizariRetineriService {
 		rr.setConeefectuat(coNeefectuat);
 		rr.setSalariudebaza(contract.getSalariutarifar());
 		rr.setFunctie(contract.getFunctie());
+		rr.setZilest(zileST);
+		rr.setZilecs(zileCS);
 
 		return rr;
 	} // ! END OF calcRealizariRetineri
