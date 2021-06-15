@@ -242,10 +242,12 @@ public class StatSalariiService {
 				stat.addMergedRegion(new CellRangeAddress(rowNr, rowNr, 6, 7));
 				writerCell = row1.createCell(6); // ZL
 				writerCell.setCellStyle(centered);
+				int zileCS = coService.getZileCS(luna, an, idcontract);
+				int zileST = coService.getZileST(luna, an, idcontract);
 				writerCell.setCellValue(realizariRetineri.getZilelucrate());
 				writerCell = row2.createCell(6); // CS
 				writerCell.setCellStyle(centered);
-				writerCell.setCellValue(coService.getZileCS(luna, an, idcontract));
+				writerCell.setCellValue(zileCS);
 				writerCell = row2.createCell(7); // CO
 				writerCell.setCellStyle(centered);
 				writerCell.setCellValue(realizariRetineri.getZilecolucratoare());
@@ -254,7 +256,7 @@ public class StatSalariiService {
 				writerCell.setCellValue(realizariRetineri.getZilecfplucratoare());
 				writerCell = row3.createCell(7); // ST
 				writerCell.setCellStyle(centered);
-				writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
+				writerCell.setCellValue(zileST);
 
 				// * ZILE CM
 				int zilecmfnuass = cmService.getZilecmFNUASS(concediiMedicale);
@@ -1099,10 +1101,12 @@ public class StatSalariiService {
 			writerCell = row1.getCell(6); // ZL
 			writerCell.setCellStyle(centered);
 			writerCell.setCellStyle(centered);
+			int zileCS = coService.getZileCS(luna, an, idcontract);
+			int zileST = coService.getZileST(luna, an, idcontract);
 			writerCell.setCellValue(realizariRetineri.getZilelucrate());
 			writerCell = row2.getCell(6); // CS
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(coService.getZileCS(luna, an, idcontract));
+			writerCell.setCellValue(zileCS);
 			writerCell = row2.getCell(7); // CO
 			writerCell.setCellStyle(centered);
 			writerCell.setCellValue(realizariRetineri.getZilecolucratoare());
@@ -1111,7 +1115,7 @@ public class StatSalariiService {
 			writerCell.setCellValue(realizariRetineri.getZilecfplucratoare());
 			writerCell = row3.getCell(7); // ST
 			writerCell.setCellStyle(centered);
-			writerCell.setCellValue(coService.getZileST(luna, an, idcontract));
+			writerCell.setCellValue(zileST);
 
 			// * ZILE CM
 			int zilecmfnuass = cmService.getZilecmFNUASS(concediiMedicale);

@@ -129,6 +129,12 @@ public class RealizariRetineri implements Serializable {
     @Column(name = "coneefectuat")
     private Integer coneefectuat = 0;
 
+    @Column(name = "zilest")
+    private Integer zilest;
+
+    @Column(name = "zilecs")
+    private Integer zilecs;
+
     @JsonBackReference(value = "stat-contract")
     @ManyToOne
     @JoinColumn(name = "idcontract", referencedColumnName = "id", nullable = false)
@@ -562,6 +568,22 @@ public class RealizariRetineri implements Serializable {
 
     public void setFunctie(String functie) {
         this.functie = functie;
+    }
+
+    public Integer getZilecs() {
+        return zilecs == null ? 0 : zilecs;
+    }
+
+    public void setZilecs(Integer zilecs) {
+        this.zilecs = zilecs;
+    }
+
+    public Integer getZilest() {
+        return zilest == null ? 0 : zilest;
+    }
+
+    public void setZilest(Integer zilest) {
+        this.zilest = zilest;
     }
 
     // ! OTHER
