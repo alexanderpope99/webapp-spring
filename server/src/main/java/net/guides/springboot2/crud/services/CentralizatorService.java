@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.time.Period;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -670,6 +671,8 @@ public class CentralizatorService {
 				sumavn+=realizariRetineri.getVenitnet();
 				writerCell = row.createCell(9);
 				writerCell.setCellValue(realizariRetineri.getImpozit());
+        writerCell = row.createCell(10);
+				writerCell.setCellValue(realizariRetineri.getContract().getDataincepere().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 				nrCrt++;
 				nrRow++;
 			}
