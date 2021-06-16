@@ -11,6 +11,7 @@ import NotaContabila from './NotaContabila.js';
 import Tichete from './Tichete.js';
 import ListaAngajati from './ListaAngajati.js';
 import Centralizator from './Centralizator.js';
+import RaportConcedii from './RaportConcedii';
 
 class Rapoarte extends React.Component {
   constructor() {
@@ -36,6 +37,7 @@ class Rapoarte extends React.Component {
         <Tichete />
         <ListaAngajati />
         <Centralizator />
+        <RaportConcedii />
       </Aux>
     );
   }

@@ -85,6 +85,11 @@ public class SocietateController {
 		return listaAngajatiService.createListaAngajati(luna, an, ids, uid);
 	}
 
+  @GetMapping("/raport/concedii/{ids}/y={an}/{uid}")
+	public boolean createRaportConcedii(@PathVariable("ids") int ids, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
+		return centralizatorService.creaazaRaportConcedii(an, ids, uid);
+	}
+
 	@GetMapping("/raport/centralizator/{pentru}/{tip}/{ids}/mo={luna}&y={an}/{uid}")
 	public boolean createCentralizator(@PathVariable("pentru") int pentru,@PathVariable("tip") int tip,@PathVariable("ids") int ids, @PathVariable("luna") int luna, @PathVariable("an") int an, @PathVariable("uid") int uid) throws IOException, ResourceNotFoundException {
 		if(pentru==1 && tip==1)
