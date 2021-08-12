@@ -31,7 +31,7 @@ public class Contract implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	@Column(name = "tip", nullable = false)
 	private String tip;
 	@Column(name = "nr", nullable = false)
@@ -129,13 +129,43 @@ public class Contract implements Serializable {
 	public Contract() {
 	}
 
+	public Contract(Contract contract) {
+		this.tip = contract.getTip();
+		this.nr = contract.getNr();
+		this.marca = contract.getMarca();
+		this.data = contract.getData();
+		this.dataincepere = contract.getDataincepere();
+		this.functiedebaza = contract.isFunctiedebaza();
+		this.calculdeduceri = contract.isCalculdeduceri();
+		this.studiisuperioare = contract.isStudiisuperioare();
+		this.normalucru = contract.getNormalucru();
+		this.salariutarifar = contract.getSalariutarifar();
+		this.monedasalariu = contract.getMonedasalariu();
+		this.conditiimunca = contract.getConditiimunca();
+		this.pensieprivata = contract.isPensieprivata();
+		this.cotizatiepensieprivata = contract.getCotizatiepensieprivata();
+		this.avans = contract.getAvans();
+		this.monedaavans = contract.getMonedaavans();
+		this.zilecoan = contract.getZilecoan();
+		this.ultimazilucru = contract.getUltimazilucru();
+		this.casasanatate = contract.getCasasanatate();
+		this.gradinvaliditate = contract.getGradinvaliditate();
+		this.functie = contract.getFunctie();
+		this.nivelstudii = contract.getNivelstudii();
+		this.cor = contract.getCor();
+		this.sindicat = contract.isSindicat();
+		this.cotizatiesindicat = contract.getCotizatiesindicat();
+		this.spor = contract.getSpor();
+		this.pensionar = contract.isPensionar();
+	}
+
 	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
-			PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
-			Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Integer salariutarifar,
-			String monedasalariu, String conditiimunca, Boolean pensieprivata, Float cotizatiepensieprivata, Float avans,
-			String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate,
-			String functie, String nivelstudii, String cor, Boolean sindicat, Float cotizatiesindicat, String spor,
-			Boolean pensionar) {
+					PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
+					Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Integer salariutarifar,
+					String monedasalariu, String conditiimunca, Boolean pensieprivata, Float cotizatiepensieprivata, Float avans,
+					String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate,
+					String functie, String nivelstudii, String cor, Boolean sindicat, Float cotizatiesindicat, String spor,
+					Boolean pensionar) {
 		this.tip = tip;
 		this.nr = nr;
 		this.marca = marca;
@@ -169,11 +199,11 @@ public class Contract implements Serializable {
 		this.pensionar = pensionar;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

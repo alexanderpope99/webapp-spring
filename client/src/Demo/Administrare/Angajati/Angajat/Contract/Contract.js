@@ -32,10 +32,12 @@ class Contract extends React.Component {
   constructor() {
     super();
     this.handleClose = this.handleClose.bind(this);
+    this.handleCloseNewContract = this.handleCloseNewContract.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.hasRequired = this.hasRequired.bind(this);
     this.fillForm = this.fillForm.bind(this);
     this.addSuspendare = this.addSuspendare.bind(this);
+    this.addNewContract = this.addNewContract.bind(this);
 
     this.state = {
       socsel: getSocSel(),
@@ -97,6 +99,11 @@ class Contract extends React.Component {
       suspendareDeLa: '',
       suspendarePanaLa: '',
       suspendareId: '',
+
+      newContractModal: {
+        show: false,
+        dataModificarii: new Date().toISOString().substring(0, 10),
+      },
     };
   }
 
@@ -150,6 +157,11 @@ class Contract extends React.Component {
       suspendareDeLa: '',
       suspendarePanaLa: '',
       suspendareId: '',
+
+      newContractModal: {
+        show: false,
+        dataModificarii: new Date().toISOString().substring(0, 10),
+      },
     });
   }
 
@@ -160,6 +172,15 @@ class Contract extends React.Component {
       showSuspendare: false,
       showSuspendare2: false,
     }, this.props.scrollToTopSmooth);
+  }
+
+  handleCloseNewContract() {
+    this.setState({
+      newContractModal: {
+        ...this.state.newContractModal,
+        show: false,
+      }
+    })
   }
 
   getNumeNorma(nrOre) {
@@ -262,9 +283,9 @@ class Contract extends React.Component {
       let contract = angajat.contract;
       let superior = angajat.superior
         ? {
-            id: angajat.superior.persoana.id,
-            numeintreg: angajat.superior.persoana.nume + ' ' + angajat.superior.persoana.prenume,
-          }
+          id: angajat.superior.persoana.id,
+          numeintreg: angajat.superior.persoana.nume + ' ' + angajat.superior.persoana.prenume,
+        }
         : null;
       let centruCost = contract.centrucost
         ? { id: contract.centrucost.id, nume: contract.centrucost.nume }
@@ -373,10 +394,10 @@ class Contract extends React.Component {
 
   async addSuspendare(deLa, PanaLa) {
 
-		if(!deLa) {
-			this.setState({showToast: true, toastMessage: 'Selectați o data de începere a suspendării'});
-			return;
-		}
+    if (!deLa) {
+      this.setState({ showToast: true, toastMessage: 'Selectați o data de începere a suspendării' });
+      return;
+    }
 
     var suspendare = await axios
       .post(
@@ -592,6 +613,89 @@ class Contract extends React.Component {
     this.setState({ centruCost: { id: Number(idcentrucost), nume: e.target.value } });
   }
 
+  async addNewContract() {
+    if (!this.hasRequired()) return;
+
+    let contbancar_body;
+    if (this.state.idcontbancar)
+      contbancar_body = {
+        id: this.state.idcontbancar,
+        iban: this.state.iban,
+        numebanca: this.state.numebanca,
+      };
+    else
+      contbancar_body = {
+        iban: this.state.iban,
+        numebanca: this.state.numebanca,
+      };
+
+    let centrucost_body = this.getCentruCostById(this.state.centruCost);
+
+    const contract_body = {
+      tip: this.state.modelContract || null,
+      nr: this.state.numărContract || null,
+      marca: this.state.marca || null,
+      data: this.state.dataContract || null,
+      dataincepere: this.state.dataIncepere || null,
+      centrucost: centrucost_body, //centrucost.id || null,
+      idechipa: null, //echipa.id || null,
+      iddepartament: null, //departament.id || null,
+      functiedebaza: this.state.functieBaza,
+      calculdeduceri: this.state.calculdeduceri,
+      studiisuperioare: this.state.studiiSuperioare,
+      normalucru: this.state.normăLucru.nrOre || null,
+      salariutarifar: this.state.salariu || null,
+      monedasalariu: this.state.monedăSalariu || 'RON',
+      contbancar: contbancar_body,
+      conditiimunca: this.state.condițiiMuncă || null,
+      sindicat: this.state.sindicat,
+      cotizatiesindicat: this.state.cotizațieSindicat || null,
+      pensieprivata: this.state.pensiePrivată,
+      cotizatiepensieprivata: this.state.cotizațiePensie || null,
+      avans: this.state.avans || null,
+      monedaavans: this.state.monedăAvans || 'RON',
+      zilecoan: this.state.zileCOan || 21,
+      ultimazilucru: this.state.ultimazilucru === '' ? null : this.state.ultimazilucru || null,
+      casasanatate: this.state.casăSănătate || null,
+      gradinvaliditate: this.state.gradInvalid || null,
+      functie: this.state.funcție || null,
+      nivelstudii: this.state.nivelStudii || null,
+      cor: this.state.cor || null,
+      pensionar: this.state.pensionar,
+      spor: this.state.spor || null,
+    };
+    const newContractRequest = {
+      contract: contract_body,
+      idangajat: this.state.angajatsel.idpersoana,
+      dataModificarii: this.state.newContractModal.dataModificarii,
+    }
+    // post la /istoric-contract/add-new-contract
+    const ok = await axios
+      .post(
+        `${server.address}/istoric-contract/add-new-contract`,
+        newContractRequest,
+        { headers: authHeader() }
+      ).then(res => res.data)
+      .catch(err =>
+        this.setState({
+          showToast: true,
+          toastMessage:
+            'Nu am putut adăuga contractul: ' +
+            (err.response
+              ? err.response.data.message
+              : 'Nu s-a putut stabili conexiunea la server'),
+        })
+      );
+
+    if (ok) {
+      this.handleCloseNewContract();
+      this.setState({
+        show: true,
+        modalMessage: 'Contract actualizat 💾. Contractul vechi a fost salvat in istoricul de contracte.'
+      });
+    }
+  }
+
   render() {
     const superioriComponent = this.state.superiori.map((superior) => (
       <option key={superior.id} data-key={superior.id}>
@@ -695,8 +799,8 @@ class Contract extends React.Component {
             {/* <Button variant="light">Repara scriind valori predefinite</Button> */}
           </Toast.Body>
         </Toast>
-				
-				{/* CONFIRM MODAL */}
+
+        {/* CONFIRM MODAL */}
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>{this.state.modalMessage}</Modal.Title>
@@ -719,7 +823,6 @@ class Contract extends React.Component {
             <Modal.Title>Modifică Suspendarea</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {' '}
             <Row>
               <Col md={6}>
                 <Form.Group>
@@ -804,6 +907,34 @@ class Contract extends React.Component {
               <tbody>{tabel_sus}</tbody>
             </Table>
           </Modal.Body>
+        </Modal>
+
+        {/* DATA MODIFICARII */}
+        <Modal show={this.state.newContractModal.show} onHide={this.handleCloseNewContract}>
+          <Modal.Header closeButton>
+            <Modal.Title>Data modificării</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <Col md={12}>
+                <Form.Group>
+                  <Form.Label>Data modificării</Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={this.state.newContractModal.dataModificarii}
+                    onChange={(e) => this.setState({
+                      newContractModal: { ...this.state.newContractModal, dataModificarii: e.target.value }
+                    })}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={this.addNewContract}>
+              Modifică
+            </Button>
+          </Modal.Footer>
         </Modal>
 
         <Form onSubmit={(e) => this.onSubmit(e)}>
@@ -1129,36 +1260,6 @@ class Contract extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Col>
-            {/* <Col md={6}>
-              <Form.Group controlId="echipa">
-                <Form.Label>Echipa</Form.Label>
-                <Typeahead
-                  id="optiune-echipa"
-                  options={['echipa test']}
-                  allowNew
-                  newSelectionPrefix="Adaugă"
-                  value={this.state.echipa || ''}
-                  onChange={(selected) => {
-                    this.setState({ echipa: selected });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="departament">
-                <Form.Label>Departament</Form.Label>
-                <Typeahead
-                  id="optiune-departament"
-                  options={['departament test']}
-                  allowNew
-                  newSelectionPrefix="Adaugă"
-                  value={this.state.departament}
-                  onChange={(selected) => {
-                    this.setState({ departament: selected });
-                  }}
-                />
-              </Form.Group>
-            </Col> */}
 
             <Col md={12} />
             <Col md={1}>
@@ -1387,7 +1488,15 @@ class Contract extends React.Component {
                 onClick={(e) => this.onSubmit(e)}
                 disabled={!this.state.angajatsel}
               >
-                {this.state.id ? 'Actualizează contract' : 'Adaugă contract'}
+                {this.state.id ? 'Modifică' : 'Adaugă contract'}
+              </Button>
+
+              <Button
+                variant={!this.state.angajatsel ? 'outline-dark' : 'outline-primary'}
+                onClick={() => this.setState({ newContractModal: { ...this.state.newContractModal, show: true } })}
+                disabled={!this.state.angajatsel && !this.state.id}
+              >
+                Salvează ca și contract nou
               </Button>
             </Col>
           </Row>

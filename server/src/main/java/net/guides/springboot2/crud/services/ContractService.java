@@ -26,6 +26,10 @@ public class ContractService {
 		return contractRepository.findByAngajat_Societate_Id(idsocietate);
 	}
 
+	public Contract save(Contract contract) {
+		return contractRepository.save(contract);
+	}
+
 	public Contract saveForAngajat(Contract contract, int idangajat) throws ResourceNotFoundException {
 		contract = contractRepository.save(contract);
 		Angajat angajat = angajatRepository.findById(idangajat).orElseThrow(() -> new ResourceNotFoundException("Nu există contract cu id: " + idangajat));

@@ -12,16 +12,7 @@ import { getAngajatSel } from '../../../Resources/angajatsel';
 import PersoaneIntretinereTabel from './PersoaneIntretinere/PersoaneIntretinere';
 import BazaCalcul from './BazaCalcul/BazaCalcul';
 import RapoarteIndividuale from './Rapoarte/RapoarteIndividuale';
-
-/*
-	? how it works now:
-	*	Angajat.js displays, and preselects, sessionStorage.selectedAngajat :: {numeintreg, idpersoana}
-	* * * * *
-	* fetch data when focusing tabs
-	* * * * *
-	* in EditPersoana -> selecting angajat calls setAngajatSel
-	* * * * *
-*/
+import IstoricContracte from './IstoricContracte/IstoricContracte';
 
 class Angajat extends React.Component {
   constructor() {
@@ -41,6 +32,7 @@ class Angajat extends React.Component {
     this.bc = React.createRef();
     this.zc = React.createRef();
     this.rapoarte = React.createRef();
+    this.istoricContracte = React.createRef();
 
     this.state = {
       socsel: getSocSel(),
@@ -113,6 +105,11 @@ class Angajat extends React.Component {
     this.setState({ angajatsel: getAngajatSel() });
   }
 
+  async onFocusIstoricContracte() {
+    await this.istoricContracte.current.getIstoricContracte();
+    this.setState({ angajatsel: getAngajatSel() });
+  }
+
   render() {
     return (
       <Aux>
@@ -166,6 +163,7 @@ class Angajat extends React.Component {
                 else if (key === 'bc') this.onFocusBC();
                 else if (key === 'zc') this.onFocusZC();
                 else if (key === 'rapoarte') this.onFocusRapoarte();
+                else if (key === 'istoric-contract') this.onFocusIstoricContracte();
               }}
             >
               <Tab eventKey="date-personale" title="Date personale">
@@ -199,9 +197,6 @@ class Angajat extends React.Component {
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
-              {/* <Tab eventKey="zc" title="Zile CO An">
-                <ZileCOAn ref={this.zc} scrollToTopSmooth={this.scrollToTopSmooth} />
-              </Tab> */}
 
               <Tab eventKey="rapoarte" title="Rapoarte">
                 <RapoarteIndividuale
@@ -209,19 +204,14 @@ class Angajat extends React.Component {
                   scrollToTopSmooth={this.scrollToTopSmooth}
                 />
               </Tab>
+
+              <Tab eventKey="istoric-contract" title="Istoric Contracte">
+                <IstoricContracte
+                  ref={this.istoricContracte}
+                  scrollToTopSmooth={this.scrollToTopSmooth}
+                />
+              </Tab>
             </Tabs>
-            <Button
-              onClick={() =>
-                window.scrollTo({
-                  top: 0,
-                  left: 0,
-                  behavior: 'smooth',
-                })
-              }
-              className="float-center"
-            >
-              TO TOP
-            </Button>
           </Col>
         </Row>
       </Aux>
