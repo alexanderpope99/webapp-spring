@@ -1496,7 +1496,7 @@ class Contract extends React.Component {
                 onClick={() => this.setState({ newContractModal: { ...this.state.newContractModal, show: true } })}
                 disabled={!this.state.angajatsel && !this.state.id}
               >
-                Salvează ca și contract nou
+                Modifică drept contract nou
               </Button>
             </Col>
           </Row>

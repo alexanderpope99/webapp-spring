@@ -88,7 +88,7 @@ public class CMService {
 
 		cmRepository.delete(cm);
 
-		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(), cm.getContract().getId(), -1, -1, -1, -1);
+		realizariRetineriService.recalcRealizariRetineri(cm.getDela().getMonthValue(), cm.getDela().getYear(), cm.getContract().getId());
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
