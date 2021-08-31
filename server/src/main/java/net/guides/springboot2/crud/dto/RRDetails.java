@@ -8,18 +8,9 @@ public class RRDetails {
 	int nrTichete;
 	int totalOreSuplimentare;
 	int coNeefectuat;
+	Boolean actualizeazaContract;
 
 	public RRDetails() {
-	}
-
-	public RRDetails(int idcontract, int luna, int an, int primaBruta, int nrTichete, int totalOreSuplimentare, int coNeefectuat) {
-		this.idcontract = idcontract;
-		this.luna = luna;
-		this.an = an;
-		this.primaBruta = primaBruta;
-		this.nrTichete = nrTichete;
-		this.totalOreSuplimentare = totalOreSuplimentare;
-		this.coNeefectuat = coNeefectuat;
 	}
 
 	public int getIdcontract() {
@@ -76,5 +67,15 @@ public class RRDetails {
 
 	public void setConeefectuat(int coNeefectuat) {
 		this.coNeefectuat = coNeefectuat;
+	}
+
+	public Boolean getActualizeazaContract() {
+		if (actualizeazaContract == null)
+			return true;
+		return actualizeazaContract;
+	}
+
+	public void setActualizeazaContract(Boolean actualizeazaContract) {
+		this.actualizeazaContract = actualizeazaContract;
 	}
 }

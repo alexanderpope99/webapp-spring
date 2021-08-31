@@ -68,6 +68,7 @@ class RealizariRetineri extends React.Component {
 
       an: '',
       luna: '',
+      actualizeazaContract: false,
 
       luni: [],
       luni_inchise: [], // list of objects { luna: Number, an: Number }
@@ -372,7 +373,6 @@ class RealizariRetineri extends React.Component {
         an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
         luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
         functie: data.functie || '',
-        duratazilucru: contract.normalucru || 0,
         salariubrut: contract.salariutarifar || 0,
         idcontract: contract.id || 0,
       });
@@ -395,7 +395,7 @@ class RealizariRetineri extends React.Component {
         an_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(0, 4) : '',
         luna_inceput_contract: contract.dataincepere ? contract.dataincepere.substring(5, 7) : '',
         functie: data.functie || '',
-        duratazilucru: contract.normalucru || 0,
+        duratazilucru: data.normalucru || 0,
         normalucru: data.norma || 0, // zile lucratoare in luna respectiva
         salariubrut: data.salariudebaza || 0,
         orelucrate: data.orelucrate || 0,
@@ -524,10 +524,10 @@ class RealizariRetineri extends React.Component {
       nrTichete: this.state.nrtichete || 0,
       totalOreSuplimentare: this.state.totaloresuplimentare || 0,
       coNeefectuat: this.state.coneefectuat || 0,
+      actualizeazaContract: this.state.actualizeazaContract,
     };
 
     //* 2. recalculare realizariRetineri
-    // console.log(this.state.idcontract);
     const data = await axios
       .put(`${server.address}/realizariretineri/update/calc`, rrDetails, { headers: authHeader() })
       .then((res) => (res.status === 200 ? res.data : null))
@@ -947,10 +947,10 @@ class RealizariRetineri extends React.Component {
         })
         .then((res) => res.data)
         .catch((err) =>
-        this.newToast(
-          'Eroare',
-          'Nu s-a putut închide luna: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
-          'white')
+          this.newToast(
+            'Eroare',
+            'Nu s-a putut închide luna: ' + (err.response ? err.response.data.message : 'Nu s-a putut stabili conexiunea la server'),
+            'white')
         );
       if (lunaRes) {
         this.setState({
@@ -1718,11 +1718,32 @@ class RealizariRetineri extends React.Component {
                       </Form.Group>
                     </Col>
                   </Row>
+                </Col>
+
+                <Col className="d-flex justify-content-end align-items-center pt-2">
+                  <Form.Check
+                    custom
+                    type="checkbox"
+                    id="actualizeaza-contract-checkbox"
+                    className="pr-3"
+                    size="xl"
+                    label="Folosește contractul curent"
+                    checked={this.state.actualizeazaContract || false}
+                    onChange={(e) => {
+                      this.setState({ actualizeazaContract: e.target.checked });
+                    }}
+                  />
+                  <Button
+                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
+                    disabled={!this.state.selected_angajat}
+                    onClick={this.getStatIndividual}
+                  >
+                    Stat salariat individual
+                  </Button>
                   <DropdownButton
                     title="Recalculează"
                     variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
                     disabled={!this.state.selected_angajat || lunaInchisa}
-                    className="mb-3 float-right"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Dropdown.Item eventKey="1" onClick={this.onSubmit}>
@@ -1736,14 +1757,8 @@ class RealizariRetineri extends React.Component {
                       Toți angajații
                     </Dropdown.Item>
                   </DropdownButton>
-                  <Button
-                    variant={this.state.selected_angajat ? 'primary' : 'outline-dark'}
-                    disabled={!this.state.selected_angajat}
-                    onClick={this.getStatIndividual}
-                    className="float-right mb-3"
-                  >
-                    Stat salariat individual
-                  </Button>
+
+
                 </Col>
 
                 {/* DETALII */}

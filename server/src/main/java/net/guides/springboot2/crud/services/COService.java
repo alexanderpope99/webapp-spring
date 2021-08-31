@@ -116,7 +116,7 @@ public class COService {
 		coRepository.save(co);
 
 		// update salariu
-		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId(), -1, -1, -1, -1);
+		realizaiRetineriService.recalcRealizariRetineri(luna, an, contract.getId());
 
 		coDTO.setId(co.getId());
 		return coDTO;
@@ -145,7 +145,7 @@ public class COService {
 
 		coRepository.delete(co);
 
-		realizaiRetineriService.recalcRealizariRetineri(co.getDela().getMonthValue(), co.getDela().getYear(), co.getContract().getId(), -1, -1, -1, -1);
+		realizaiRetineriService.recalcRealizariRetineri(co.getDela().getMonthValue(), co.getDela().getYear(), co.getContract().getId());
 
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);

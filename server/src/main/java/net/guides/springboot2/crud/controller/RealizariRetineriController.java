@@ -45,7 +45,6 @@ public class RealizariRetineriController {
 	public RealizariRetineri getRealizariRetineriByIdpersoana(@PathVariable("id") int idpersoana,
 			@PathVariable("luna") Integer luna, @PathVariable("an") Integer an)
 			throws ResourceNotFoundException {
-		// get contract of persoana
 		int idcontract = angajatRepository.findIdcontractByIdpersoana(idpersoana);
 		return realizariRetineriService.getRealizariRetineri(luna, an, idcontract);
 
@@ -64,7 +63,6 @@ public class RealizariRetineriController {
 	@PutMapping("update/calc")
 	public RealizariRetineri recalcRealizariRetineri(@RequestBody RRDetails rrDetails)
 			throws ResourceNotFoundException {
-		
 		return realizariRetineriService.recalcRealizariRetineri(rrDetails);
 	}
 

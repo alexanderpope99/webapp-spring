@@ -38,6 +38,12 @@ public class RealizariRetineri implements Serializable {
     private Integer salariudebaza;
     @Column(name = "functie")
     private String functie;
+    @Column(name = "normalucru")
+    private Integer normalucru;
+    @Column(name = "functiedebaza")
+    private Boolean functiedebaza;
+    @Column(name = "calculdeduceri")
+    private Boolean calculdeduceri;
 
     @Column(name = "nrtichete", nullable = false)
     private Integer nrtichete = 0;
@@ -568,6 +574,36 @@ public class RealizariRetineri implements Serializable {
 
     public void setFunctie(String functie) {
         this.functie = functie;
+    }
+
+    public Integer getNormalucru() {
+        if (normalucru == null)
+            return contract.getNormalucru();
+        return normalucru;
+    }
+
+    public void setNormalucru(Integer normalucru) {
+        this.normalucru = normalucru;
+    }
+
+    public Boolean getCalculdeduceri() {
+        if (calculdeduceri == null)
+            return contract.isCalculdeduceri();
+        return calculdeduceri;
+    }
+
+    public void setCalculdeduceri(Boolean calculdeduceri) {
+        this.calculdeduceri = calculdeduceri;
+    }
+
+    public Boolean getFunctiedebaza() {
+        if (functiedebaza == null)
+            return contract.isFunctiedebaza();
+        return functiedebaza;
+    }
+
+    public void setFunctiedebaza(Boolean functiedebaza) {
+        this.functiedebaza = functiedebaza;
     }
 
     public Integer getZilecs() {

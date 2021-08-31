@@ -130,73 +130,44 @@ public class Contract implements Serializable {
 	}
 
 	public Contract(Contract contract) {
-		this.tip = contract.getTip();
-		this.nr = contract.getNr();
-		this.marca = contract.getMarca();
-		this.data = contract.getData();
-		this.dataincepere = contract.getDataincepere();
-		this.functiedebaza = contract.isFunctiedebaza();
-		this.calculdeduceri = contract.isCalculdeduceri();
-		this.studiisuperioare = contract.isStudiisuperioare();
-		this.normalucru = contract.getNormalucru();
-		this.salariutarifar = contract.getSalariutarifar();
-		this.monedasalariu = contract.getMonedasalariu();
-		this.conditiimunca = contract.getConditiimunca();
-		this.pensieprivata = contract.isPensieprivata();
-		this.cotizatiepensieprivata = contract.getCotizatiepensieprivata();
-		this.avans = contract.getAvans();
-		this.monedaavans = contract.getMonedaavans();
-		this.zilecoan = contract.getZilecoan();
-		this.ultimazilucru = contract.getUltimazilucru();
-		this.casasanatate = contract.getCasasanatate();
-		this.gradinvaliditate = contract.getGradinvaliditate();
-		this.functie = contract.getFunctie();
-		this.nivelstudii = contract.getNivelstudii();
-		this.cor = contract.getCor();
-		this.sindicat = contract.isSindicat();
-		this.cotizatiesindicat = contract.getCotizatiesindicat();
-		this.spor = contract.getSpor();
-		this.pensionar = contract.isPensionar();
-	}
-
-	public Contract(String tip, String nr, String marca, LocalDate data, LocalDate dataincepere,
-					PunctDeLucru punctdelucru, CentruCost centrucost, Echipa echipa, Departament departament, Boolean functiedebaza,
-					Boolean calculdeduceri, Boolean studiisuperioare, Integer normalucru, Integer salariutarifar,
-					String monedasalariu, String conditiimunca, Boolean pensieprivata, Float cotizatiepensieprivata, Float avans,
-					String monedaavans, Integer zilecoan, LocalDate ultimazilucru, String casasanatate, String gradinvaliditate,
-					String functie, String nivelstudii, String cor, Boolean sindicat, Float cotizatiesindicat, String spor,
-					Boolean pensionar) {
-		this.tip = tip;
-		this.nr = nr;
-		this.marca = marca;
-		this.data = data;
-		this.dataincepere = dataincepere;
-		this.punctdelucru = punctdelucru;
-		this.centrucost = centrucost;
-		this.echipa = echipa;
-		this.departament = departament;
-		this.functiedebaza = functiedebaza;
-		this.calculdeduceri = calculdeduceri;
-		this.studiisuperioare = studiisuperioare;
-		this.normalucru = normalucru;
-		this.salariutarifar = salariutarifar;
-		this.monedasalariu = monedasalariu;
-		this.conditiimunca = conditiimunca;
-		this.pensieprivata = pensieprivata;
-		this.cotizatiepensieprivata = cotizatiepensieprivata;
-		this.avans = avans;
-		this.monedaavans = monedaavans;
-		this.zilecoan = zilecoan;
-		this.ultimazilucru = ultimazilucru;
-		this.casasanatate = casasanatate;
-		this.gradinvaliditate = gradinvaliditate;
-		this.functie = functie;
-		this.nivelstudii = nivelstudii;
-		this.cor = cor;
-		this.sindicat = sindicat;
-		this.cotizatiesindicat = cotizatiesindicat;
-		this.spor = spor;
-		this.pensionar = pensionar;
+		this.id = contract.getId();
+		this.tip = contract.tip;
+		this.nr = contract.nr;
+		this.marca = contract.marca;
+		this.data = contract.data;
+		this.dataincepere = contract.dataincepere;
+		this.functiedebaza = contract.functiedebaza;
+		this.calculdeduceri = contract.calculdeduceri;
+		this.studiisuperioare = contract.studiisuperioare;
+		this.normalucru = contract.normalucru;
+		this.salariutarifar = contract.salariutarifar;
+		this.monedasalariu = contract.monedasalariu;
+		this.conditiimunca = contract.conditiimunca;
+		this.pensieprivata = contract.pensieprivata;
+		this.cotizatiepensieprivata = contract.cotizatiepensieprivata;
+		this.avans = contract.avans;
+		this.monedaavans = contract.monedaavans;
+		this.zilecoan = contract.zilecoan;
+		this.ultimazilucru = contract.ultimazilucru;
+		this.casasanatate = contract.casasanatate;
+		this.gradinvaliditate = contract.gradinvaliditate;
+		this.functie = contract.functie;
+		this.nivelstudii = contract.nivelstudii;
+		this.cor = contract.cor;
+		this.sindicat = contract.sindicat;
+		this.cotizatiesindicat = contract.cotizatiesindicat;
+		this.spor = contract.spor;
+		this.pensionar = contract.pensionar;
+		this.centrucost = contract.centrucost;
+		this.punctdelucru = contract.punctdelucru;
+		this.echipa = contract.echipa;
+		this.departament = contract.departament;
+		this.contbancar = contract.contbancar;
+		this.angajat = contract.angajat;
+		this.realizariRetineri = contract.realizariRetineri;
+		this.concediiOdihna = contract.concediiOdihna;
+		this.concediiMedicale = contract.concediiMedicale;
+		this.suspendari = contract.suspendari;
 	}
 
 	public Integer getId() {
@@ -517,7 +488,7 @@ public class Contract implements Serializable {
 			throw new ResourceNotFoundException("Data contractului " + numeAngajat + " nu are valoare");
 		if (dataincepere == null)
 			throw new ResourceNotFoundException(
-					"Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
+				"Data incepere activitate din contractul lui " + numeAngajat + " nu are valoare");
 		if (calculdeduceri == null)
 			throw new ResourceNotFoundException("Calcul deduceri pentru " + numeAngajat + " nu are valoare");
 		if (normalucru == null)
@@ -553,7 +524,7 @@ public class Contract implements Serializable {
 				return rr;
 		}
 		throw new ResourceNotFoundException(
-				angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an);
+			angajat.getPersoana().getNumeIntreg() + " nu are salariul calculat in luna " + luna + " " + an);
 	}
 
 	public int getZileAngajare(int luna, int an) {
@@ -581,9 +552,7 @@ public class Contract implements Serializable {
 			if (ultimazilucru != null && ultimazilucru.getYear() == an && ultimazilucru.getMonthValue() == luna) {
 				return (int) ChronoUnit.DAYS.between(dataincepere, ultimazilucru);
 			} else return (int) ChronoUnit.DAYS.between(dataincepere, monthEnd) + 1;
-		}
-
-		else return daysInMonth;
+		} else return daysInMonth;
 	}
 
 	public List<LocalDate[]> getPerioadaSuspendat(int luna, int an) {
@@ -669,5 +638,37 @@ public class Contract implements Serializable {
 
 	public int getZileLuna(int luna, int an) {
 		return getZileAngajare(luna, an) - getZileSuspendat(luna, an);
+	}
+
+	public Contract copyWithoutReferences(Contract contract) {
+		this.tip = contract.getTip();
+		this.nr = contract.getNr();
+		this.marca = contract.getMarca();
+		this.data = contract.getData();
+		this.dataincepere = contract.getDataincepere();
+		this.functiedebaza = contract.isFunctiedebaza();
+		this.calculdeduceri = contract.isCalculdeduceri();
+		this.studiisuperioare = contract.isStudiisuperioare();
+		this.normalucru = contract.getNormalucru();
+		this.salariutarifar = contract.getSalariutarifar();
+		this.monedasalariu = contract.getMonedasalariu();
+		this.conditiimunca = contract.getConditiimunca();
+		this.pensieprivata = contract.isPensieprivata();
+		this.cotizatiepensieprivata = contract.getCotizatiepensieprivata();
+		this.avans = contract.getAvans();
+		this.monedaavans = contract.getMonedaavans();
+		this.zilecoan = contract.getZilecoan();
+		this.ultimazilucru = contract.getUltimazilucru();
+		this.casasanatate = contract.getCasasanatate();
+		this.gradinvaliditate = contract.getGradinvaliditate();
+		this.functie = contract.getFunctie();
+		this.nivelstudii = contract.getNivelstudii();
+		this.cor = contract.getCor();
+		this.sindicat = contract.isSindicat();
+		this.cotizatiesindicat = contract.getCotizatiesindicat();
+		this.spor = contract.getSpor();
+		this.pensionar = contract.isPensionar();
+
+		return this;
 	}
 }
