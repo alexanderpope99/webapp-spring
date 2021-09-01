@@ -93,6 +93,7 @@ public class AngajatService {
 	public List<Angajat> getAngajatiContracteValide(int idsocietate, int an, int luna) {
 		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
 
+		// filter by ultimazilucru
 		angajati.removeIf(angajat -> {
 			LocalDate ultimaZiLucru = angajat.getContract().getUltimazilucru();
 			if (ultimaZiLucru != null) {
@@ -106,7 +107,19 @@ public class AngajatService {
 				return false;
 		});
 
+		// filter by data inceput activitate
+		angajati.removeIf(angajat -> {
+			LocalDate primaZiLucru = angajat.getContract().getDataincepere();
+			if (primaZiLucru.getYear() > an)
+				return true;
+			else if (primaZiLucru.getYear() == an)
+				return primaZiLucru.getMonthValue() > luna;
+			else
+				return false;
+		});
+
+
 		return angajati;
 	}
-  
+
 }

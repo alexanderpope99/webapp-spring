@@ -40,6 +40,8 @@ public class TicheteService {
 	@Autowired
 	private ContractService contractService;
 	@Autowired
+	private AngajatService angajatService;
+	@Autowired
 	private RealizariRetineriService realizariRetineriService;
 	@Autowired
 	private AngajatRepository angajatRepository;
@@ -65,7 +67,7 @@ public class TicheteService {
 	public boolean createRaportTichete(int luna, int an, int idsocietate, int userID) throws IOException, ResourceNotFoundException {
 
 		Societate societate = societateRepository.findById(idsocietate).orElseThrow(() -> new ResourceNotFoundException("Nu există societate cu id: " + idsocietate));
-		List<Angajat> angajati = angajatRepository.findBySocietate_IdAndContract_IdNotNullOrderByPersoana_NumeAscPersoana_PrenumeAsc(idsocietate);
+		List<Angajat> angajati = angajatService.getAngajatiContracteValide(idsocietate, an, luna);
 		String lunaNume = zileService.getNumeLunaByNr(luna);
 
 		String raportTicheteTemplateLocation = homeLocation + "/templates";
